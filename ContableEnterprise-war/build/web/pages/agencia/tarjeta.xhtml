@@ -1,0 +1,288 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html  xmlns="http://www.w3.org/1999/xhtml"
+       xmlns:h="http://xmlns.jcp.org/jsf/html"
+       xmlns:ui="http://xmlns.jcp.org/jsf/facelets" ng-app="jsTarjeta"
+       xmlns:c="http://java.sun.com/jsp/jstl/core"
+       >
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Web Contable - #{login.razonSocial}</title>
+        <!-- Bootstrap core CSS-->
+        <link href="../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+        <link href="../../css/sb-admin.css" rel="stylesheet" />
+        <link href="../../css/font-awesome-animation.min.css" rel="stylesheet" />
+        <!-- Custom fonts for this template-->
+        <link href="../../vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+        <!-- Page level plugin CSS-->
+
+        <!-- Custom styles for this template-->
+        <script type="text/javascript" src="../../vendor/jquery/jquery.min.js"></script>
+        <script type="text/javascript" src="../../js/angular.js" />
+        <script type="text/javascript" src="../../js/angular-animate.js" />
+        <script type="text/javascript" src="../../js/angular-sanitize.js" />
+        <script type="text/javascript" src="../../js/ui-bootstrap-tpls.js" />
+         <script src="../../js/smart-table.min.js"></script>
+        <script type="text/javascript" src="../../js/agencia/tarjeta.js" />
+
+
+    </head>
+
+    <body class="fixed-nav bg-light" id="page-top" onload="onload();" >
+        <!-- Navigation-->
+
+        <nav class="navbar navbar-expand-lg navbar-light bg-default fixed-top static-top" id="mainNav">
+            <h:commandLink class="navbar-brand" action="index">Web Contable - #{login.razonSocial}</h:commandLink>
+            <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive" >
+                <ui:include src="../../pages/menu.xhtml" />
+            </div>
+        </nav>
+
+        <div class="content-wrapper" ng-controller="frmTarjeta">
+            <div class="container-fluid">
+                <!-- Breadcrumbs-->
+                <ol class="breadcrumb">   
+                    <li class="breadcrumb-item active">
+                        Agencia
+                    </li>
+                    <li class="breadcrumb-item active"><strong>Tarjetas de Credito</strong></li>
+
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                </ol>
+
+                <!-- Icon Cards-->
+                <form name="myForm" >
+                    <div id="form" class="row">
+                        <div class="col-lg-12">
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    <div class="row">
+                                        <div class="col-sm">
+                                            <i class="fa fa-home"></i>Datos Generales
+                                        </div>
+                                        <div class="col-sm ">
+                                            <div class="btn-group row pull-right">
+                                                <c:if test="#{tarjetaCredito.formulario.crear== tarjetaCredito.formulario.PERMITIR}">
+                                                    <button type="button" class="btn btn-success" ng-click="nuevo()"><span class="fa fa-plus"></span> Nuevo</button>
+                                                </c:if>
+                                                <button type="button" class="btn btn-warning" ng-click="cancelar()"><span class="fa fa-undo"></span> Cancelar</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <span ng-show="loading" class="alert alert-info"><i class="fa fa-gear faa-spin animated" ></i>  Cargando...</span>
+                                <div class="alert alert-success" role="alert" ng-show="showRestfulSuccess">
+                                    <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">&times;</a>
+
+                                    {{ showRestfulMessage}}
+                                </div>
+
+                                <div class="alert alert-danger" role="alert" ng-show="showRestfulError">
+                                    <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">&times;</a>
+                                    {{ showRestfulMessage}}
+                                </div>
+                                <div class="container animated fadeIn" id="tableData" ng-show="showTable" >
+                                    <br />
+                                    <div class="form-group row">
+                                        <label for="txtEmail" class=" col-form-label col-sm-2 text-right">Busqueda</label>
+                                        <div class="col-sm-6">
+                                            <input type="text"  ng-model="busqueda" class="form-control" placeholder="Ingrese el valor a buscar"  name="" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <table st-table="display_records"  st-safe-src="mainGrid" class="table table-hover table-sm table-responsive ">
+                                            <thead >
+                                                <tr>
+                                                    <th class="text-nowrap">Sigla</th>
+                                                    <th class="text-nowrap">Denominacion</th>
+                                                    <!--<th class="text-nowrap">Cta. Mon/Ext</th>
+                                                    <th class="text-nowrap">Cta. Mon/Nac</th>-->
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr st-select-row="row" st-select-mode="multiple" ng-repeat="row in display_records| filter:busqueda">
+                                                    <td>{{row.sigla | uppercase }} </td>
+                                                    <td>{{row.denominacion | uppercase}} </td>
+                                                    <!--<td>{{row.planCuentaMonExt}} </td>
+                                                    <td>{{row.planCuentaMonNac}} </td> -->
+                                                    <td>
+                                                        <c:if test="#{tarjetaCredito.formulario.actualizar== tarjetaCredito.formulario.PERMITIR}">
+                                                            <button type="button" title="Editar" class="btn btn-info" ng-click="edit(row)"><i class="fa fa-pencil"></i></button>
+                                                        </c:if>
+                                                        <!--<button type="button" title="Ver" class="btn btn-default" ng-click="ver(row.idTarjetaCredito)" data-toggle="modal" data-target="#verForm"><i class="fa fa-search"></i></button> -->
+                                                        <!--<button type="button" title="Eliminar" class="btn btn-danger"><i class="fa fa-remove"></i></button>-->
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                            <!--<tfoot>
+                                                <tr>
+                                                    <td colspan="10" class="text-center">
+                                                        <div st-items-by-page="itemsByPage" st-pagination="" st-template="pagination.custom.html"></div>
+                                                    </td>
+                                                </tr>
+                                            </tfoot>-->
+                                        </table>
+                                    </div>
+                                </div><!-- fin del listadoCtrl -->
+
+                                <!-- Contenido Formulario-->
+                                <div id="formData" class="container animated fadeIn"   ng-show="showForm" >
+
+                                    <input type="text" ng-show="false"  name="txtIdEmpleado"  ng-model="frmNew.idTarjetaCredito" />
+                                    <input type="hidden" id="hdUrl" name="hdUrl" value="#{tarjetaCredito.formulario.restful}"/>
+                                    <input type="hidden" id="hdToken" name="hdToken" value="#{sessionView.token}"/>
+
+                                    <br />
+                                    <div class="form-group row">
+                                        <label for="txtSigla" class="col-form-label col-sm-2 text-right">Sigla</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control" name="txtSigla"   required="true" maxlength="4" ng-model="frmNew.sigla"/>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="txtDenominacion" class=" col-form-label col-sm-2 text-right">Denominaci&oacute;n</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control" name="txtDenominacion" required="required" maxlength="64" ng-model="frmNew.denominacion"/>
+                                        </div>
+                                    </div>
+
+                                    <script type="text/ng-template" id="customTemplate.html">
+                                        <a href="#"  class=" list-group-item-action">
+                                        <span  class=" list-group-item-action" ng-bind-html="match.label | uibTypeaheadHighlight:query"></span>
+                                        </a>
+                                    </script>
+
+                                    <!--
+                                    <div class="form-group row">
+                                        <label for="txtPlanCuentaMonExt" class="col-form-label text-right col-sm-2 mb-0">Cuenta Moneda Extranjera </label>
+                                        <div class="col-sm-4">
+                                            <input type="text" ng-model="ctaMonExt" placeholder="Cuenta Moneda Extranjera"
+                                                   uib-typeahead="cuenta as cuenta.name for cuenta in comboCuenta | filter:{name:$viewValue}"
+                                                   class="form-control" typeahead-show-hint="true" typeahead-min-length="0" 
+                                                   typeahead-template-url="customTemplate.html" required="required"
+                                                   />
+                                            <strong>{{ctaMonExt.id}}</strong>
+                                        </div>
+
+
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="txtPlanCuentaMonNac" class="col-form-label text-right col-sm-2 mb-0">Cuenta Moneda Nacional</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" ng-model="ctaMonNac" placeholder="Cuenta Moneda Nacional"
+                                                   uib-typeahead="cuenta as cuenta.name for cuenta in comboCuenta | filter:{name:$viewValue}"
+                                                   class="form-control" typeahead-show-hint="true" typeahead-min-length="0" 
+                                                   typeahead-template-url="customTemplate.html" required="required"
+                                                   />
+                                            <strong>{{ctaMonNac.id}}</strong>
+                                        </div>
+                                    </div>-->
+                                            
+                                    
+
+                                    <c:if test="#{planCuentas.formulario.crear== planCuentas.formulario.PERMITIR}">
+                                        <div class="modal-footer" ng-show="showBtnNuevo">
+                                            <button   class="btn btn-primary" ng-click="save()"  value="Guardar"><span class="fa fa-save"></span>Guardar</button>
+                                        </div>
+                                    </c:if>                                    
+
+                                    <c:if test="#{planCuentas.formulario.actualizar== planCuentas.formulario.PERMITIR}">
+                                        <div class="modal-footer" ng-show="showBtnActualizar">
+                                            <button type="button" class="btn btn-primary" ng-click="update()" value="Actualizar"> <span class="fa fa-edit"></span>Actualizar</button>
+                                        </div>
+                                    </c:if>
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <!-- Example DataTables Card-->
+
+            </div>
+            <!-- /.container-fluid-->
+            <!-- /.content-wrapper-->
+
+            <!-- View Modal -->
+            <!-- Logout Modal-->
+            <div class="modal fade" id="verForm" tabindex="-1" role="dialog" aria-labelledby="verForm" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="verForm">Ver : {{verForm.nombre}}</h5>
+                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body"> 
+                            <div class="modal-body">
+                                <dl class="dl-horizontal">
+                                    <dt>Nombre</dt>
+                                    <dd>{{verForm.nombre}}</dd>
+                                    <dt>Apellido</dt>
+                                    <dd>{{verForm.apellido}}</dd>
+                                    <dt>Email</dt>
+                                    <dd>{{verForm.email}}</dd>
+                                    <dt>Telefono</dt>
+                                    <dd>{{verForm.telefono}}</dd>
+                                    <dt>Fecha Alta</dt>
+                                    <dd>{{verForm.fechaAlta}}</dd>
+                                    <dt>Estado</dt>
+                                    <dd>{{verForm.status}}</dd>
+                                </dl>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cerrar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End View Modal -->
+
+            <ui:include src="../../pages/footer.xhtml" />
+
+            <!-- Scroll to Top Button-->
+            <a class="scroll-to-top rounded" href="#page-top">
+                <i class="fa fa-angle-up"></i>
+            </a>
+
+            <!-- Bootstrap core JavaScript-->
+            <script src="../../vendor/jquery/jquery.min.js"></script>
+            <script src="../../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+            <!-- Core plugin JavaScript-->
+            <script src="../../vendor/jquery-easing/jquery.easing.min.js"></script>
+            <!-- Page level plugin JavaScript-->
+            <!-- Custom scripts for all pages-->
+            <script src="../../js/sb-admin.min.js"></script>
+            <!-- Custom scripts for this page-->
+
+        </div>
+        <script>
+                                        function onload() {
+                                            $('body').toggleClass('fixed-nav');
+                                            $('nav').toggleClass('fixed-top static-top');
+                                        }
+                                        ;
+
+        </script>
+    </body>
+
+</html>
+
+

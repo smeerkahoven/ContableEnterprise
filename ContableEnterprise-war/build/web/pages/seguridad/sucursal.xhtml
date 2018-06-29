@@ -1,0 +1,296 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html  xmlns="http://www.w3.org/1999/xhtml"
+       xmlns:h="http://xmlns.jcp.org/jsf/html"
+       xmlns:ui="http://xmlns.jcp.org/jsf/facelets" ng-app="jsSucursal"
+       xmlns:c="http://java.sun.com/jsp/jstl/core"
+       >
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Web Contable - #{login.razonSocial}</title>
+        <!-- Bootstrap core CSS-->
+        <link href="../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+        <link href="../../css/sb-admin.css" rel="stylesheet" />
+        <link href="../../css/font-awesome-animation.min.css" rel="stylesheet" />
+        <!-- Custom fonts for this template-->
+        <link href="../../vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+        <!-- Page level plugin CSS-->
+
+        <!-- Custom styles for this template-->
+        <script type="text/javascript" src="../../js/angular.min.js" />
+        <script type="text/javascript" src="../../js/ui-bootstrap-tpls.js" />
+        <script src="../../js/smart-table.min.js"></script>
+        <script type="text/javascript" src="../../js/seguridad/sucursal.js" />
+
+
+    </head>
+
+    <body class="fixed-nav bg-light" id="page-top" onload="onload();" >
+        <!-- Navigation-->
+
+        <nav class="navbar navbar-expand-lg navbar-light bg-default fixed-top static-top" id="mainNav">
+            <h:commandLink class="navbar-brand" action="index">Web Contable - #{login.razonSocial}</h:commandLink>
+            <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive" >
+                <ui:include src="../../pages/menu.xhtml" />
+            </div>
+        </nav>
+
+        <div class="content-wrapper" ng-controller="frSucursal">
+            <div class="container-fluid">
+                <!-- Breadcrumbs-->
+                <ol class="breadcrumb">   
+                    <li class="breadcrumb-item active">
+                        Seguridad
+                    </li>
+                    <li class="breadcrumb-item active"><strong>Sucursal</strong></li>
+
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                </ol>
+
+                <!-- Icon Cards-->
+                <h:form id="myForm" >
+                    <div id="form" class="row">
+                        <div class="col-lg-12">
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    <div class="row">
+                                        <div class="col-sm">
+                                            <i class="fa fa-home"></i>Datos Generales
+                                        </div>
+                                        <div class="col-sm">
+                                            <div class="btn-group row pull-right">
+                                                <button type="button" class="btn btn-success" ng-click="nuevo()"><span class="fa fa-plus"></span> Nuevo</button>
+                                                <hr class="half-rule"/>
+                                                <button type="button" class="btn btn-warning" ng-click="cancelar()"><span class="fa fa-undo"></span> Cancelar</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <span ng-show="loading" class="alert alert-info"><i class="fa fa-gear faa-spin animated" ></i>  Cargando...</span>
+                                <div class="container animated fadeIn" id="tableData" ng-show="showTable" >
+                                    <br />
+                                    <div class="form-group row">
+                                        <label for="txtEmail" class=" col-form-label col-sm-2 text-right">Busqueda</label>
+                                        <div class="col-sm-4">
+                                            <input type="text"  ng-model="busqueda" class="form-control" placeholder="Ingrese el valor a buscar"  name="" />
+                                        </div>
+                                    </div>
+
+                                    <c:if test="#{not empty empresa.successMessage}">
+                                        <div id="divSuccess" class="alert alert-success col" role="alert">
+                                            <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">&times;</a>
+                                            #{empresa.successMessage}
+                                        </div>
+                                    </c:if>
+
+                                    <c:if id="divError" test="#{not empty empresa.errorMessage}">
+                                        <div class="alert alert-warning col" role="alert" >
+                                            <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">&times;</a>
+                                            #{empresa.errorMessage}
+                                        </div>
+                                    </c:if>
+
+
+                                    <table st-table="display_records"  st-safe-src="data" class="table table-hover table-sm table-responsive">
+                                        <thead >
+                                            <tr>
+                                                <th>Nombre Sucursal</th>
+                                                <th>Direccion</th>
+                                                <th>Email</th>
+                                                <th>Telefono Fijo</th>
+                                                <th>Telefono Celular</th>
+
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr st-select-row="row" st-select-mode="multiple" ng-repeat="row in display_records| filter:busqueda">
+                                                <td>{{row.razonSocial}} </td>
+                                                <td>{{row.direccion}} </td>
+                                                <td>{{row.email}} </td>
+                                                <td>{{row.telefonoFijo}} </td>
+                                                <td>{{row.telefonoCelular}} </td>
+
+                                                <td>
+                                                    <div class="btn-group" role="group" aria-label="...">
+                                                        <button type="button" title="Editar" class="btn btn-info" ng-click="editar(row.idEmpresa)"><i class="fa fa-pencil"></i></button>
+                                                        <button type="button" title="Ver" class="btn btn-default" ng-click="ver(row.idEmpresa)" data-toggle="modal" data-target="#verForm"><i class="fa fa-search"></i></button>
+                                                        <!--<button type="button" title="Eliminar" class="btn btn-danger"><i class="fa fa-remove"></i></button>-->
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td colspan="10" class="text-center">
+                                                    <div st-items-by-page="itemsByPage" st-pagination="" st-template="pagination.custom.html"></div>
+                                                </td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div><!-- fin del listadoCtrl -->
+
+                                <!-- Contenido Formulario-->
+                                <div id="formData" class="container animated fadeIn" ng-show="showForm" >
+
+
+
+                                    <div class="alert alert-danger" role="alert" ng-show="showRestfulError">
+                                        {{ showRestfulMessage}}
+                                    </div>
+
+                                    <input type="text" ng-show="false"  name="txtIdEmpresa" id="txtIdEmpresa" ng-model="formData.idEmpresa" />
+                                    <input type="hidden" id="hdUrl" name="hdUrl" value="#{empresa.formSucursal.restful}"/>
+                                    <input type="hidden" id="hdToken" name="hdToken" value="#{sessionView.token}"/>
+
+                                    <br />
+                                    <div class="form-group row">
+                                        <label for="txtRazonSocial" class="col-form-label col-sm-2 text-right">Nombre Sucursal</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control" id="txtRazonSocial" name="txtRazonSocial" required="required" maxlength="128" ng-model="formData.razonSocial"/>
+                                        </div>
+
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="txtDireccion" class=" col-form-label col-sm-2 text-right">Dirección</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control" id="txtDireccion" name="txtDireccion" required="required" maxlength="255" ng-model="formData.direccion"/>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group row">
+                                        <label for="txtTelefonoCelular" class="col-form-label text-right col-sm-2 mb-0">Celular </label>
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control col" id="txtTelefonoCelular"  name="txtTelefonoCelular"  
+                                                   required="required" valid-number="valid-number" maxlength="8" ng-model="formData.telefonoCelular"/>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="txtTelefonoFijo" class="col-form-label col-sm-2 text-right">Telefono Fijo</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control col" id="txtTelefonoFijo"  name="txtTelefonoFijo"
+                                                   required="required" maxlength="10" ng-model="formData.telefonoFijo"/>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="txtEmail" class=" col-form-label col-sm-2 text-right">Email</label>
+                                        <div class="col-sm-4">
+                                            <input type="email" class="form-control col" id="txtEmail" name="txtEmail"  placeholder="ejemplo@email.com" maxlength="255" ng-model="formData.email"/>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="txtPaginaWeb" class="col-form-label col-sm-2 text-right">Página Web</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control col" id="txtPaginaWeb" name="txtPaginaWeb" maxlength="128" ng-model="formData.pagineWeb" />
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group row">
+                                        <label for="txtNroIata" class="col-form-label col-sm-2 text-right">Numero IATA</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control col" id="txtNroIata" name="txtPaginaWeb"  
+                                                   maxlength="12" ng-model="formData.nroIata"/>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="modal-footer" ng-show="showNuevo">
+                                        <h:commandButton class="btn btn-primary fa-save" action="#{empresa.guardarSucursal()}" value="Guardar"></h:commandButton>
+                                    </div>                                     
+
+                                    <div class="modal-footer" ng-show="showEditar">
+                                        <h:commandButton class="btn btn-primary fa-edit" action="#{empresa.actualizarSucursal()}" value="Actualizar"  ></h:commandButton>
+                                    </div> 
+                                </div>
+                                <div class="card-footer small text-muted"></div>
+                            </div>
+                        </div>
+                    </div>
+                </h:form>
+                <!-- Example DataTables Card-->
+
+            </div>
+            <!-- /.container-fluid-->
+            <!-- /.content-wrapper-->
+
+            <!-- View Modal -->
+            <!-- Logout Modal-->
+            <div class="modal fade" id="verForm" tabindex="-1" role="dialog" aria-labelledby="verForm" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="verForm">Ver : {{verForm.razonSocial}}</h5>
+                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body"> 
+                            <div class="modal-body">
+                                <dl class="dl-horizontal">
+                                    <dt>Nombre Sucursal</dt>
+                                    <dd>{{verForm.razonSocial}}</dd>
+                                    <dt>Direccion</dt>
+                                    <dd>{{verForm.direccion}}</dd>
+                                    <dt>Email</dt>
+                                    <dd>{{verForm.email}}</dd>
+                                    <dt>Telefono Fijo</dt>
+                                    <dd>{{verForm.telefonoFijo}}</dd>
+                                    <dt>Telefono Celular</dt>
+                                    <dd>{{verForm.telefonoCelular}}</dd>
+                                </dl>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cerrar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End View Modal -->
+
+            <ui:include src="../../pages/footer.xhtml" />
+
+            <!-- Scroll to Top Button-->
+            <a class="scroll-to-top rounded" href="#page-top">
+                <i class="fa fa-angle-up"></i>
+            </a>
+
+            <!-- Bootstrap core JavaScript-->
+            <script src="../../vendor/jquery/jquery.min.js"></script>
+            <script src="../../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+            <!-- Core plugin JavaScript-->
+            <script src="../../vendor/jquery-easing/jquery.easing.min.js"></script>
+            <!-- Page level plugin JavaScript-->
+            <!-- Custom scripts for all pages-->
+            <script src="../../js/sb-admin.min.js"></script>
+            <!-- Custom scripts for this page-->
+
+        </div>
+        <script>
+                                        function onload() {
+                                            $('body').toggleClass('fixed-nav');
+                                            $('nav').toggleClass('fixed-top static-top');
+                                        }
+                                        ;
+
+        </script>
+    </body>
+
+</html>
+
+

@@ -1,0 +1,292 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html  xmlns="http://www.w3.org/1999/xhtml"
+       xmlns:h="http://xmlns.jcp.org/jsf/html"
+       xmlns:ui="http://xmlns.jcp.org/jsf/facelets" ng-app="jsPersonal"
+       xmlns:c="http://java.sun.com/jsp/jstl/core"
+       >
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Web Contable - #{login.razonSocial}</title>
+        <!-- Bootstrap core CSS-->
+        <link href="../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+        <link href="../../css/sb-admin.css" rel="stylesheet" />
+        <link href="../../css/font-awesome-animation.min.css" rel="stylesheet" />
+        <!-- Custom fonts for this template-->
+        <link href="../../vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+        <!-- Page level plugin CSS-->
+
+        <!-- Custom styles for this template-->
+        <script type="text/javascript" src="../../js/angular.min.js" />
+        <script type="text/javascript" src="../../js/ui-bootstrap-tpls.js" />
+        <script src="../../js/smart-table.min.js"></script>
+        <script type="text/javascript" src="../../js/seguridad/personal.js" />
+
+
+    </head>
+
+    <body class="fixed-nav bg-light" id="page-top" onload="onload();" >
+        <!-- Navigation-->
+
+        <nav class="navbar navbar-expand-lg navbar-light bg-default fixed-top static-top" id="mainNav">
+            <h:commandLink class="navbar-brand" action="index">Web Contable - #{login.razonSocial}</h:commandLink>
+            <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive" >
+                <ui:include src="../../pages/menu.xhtml" />
+            </div>
+        </nav>
+
+        <div class="content-wrapper" ng-controller="frmPersonal">
+            <div class="container-fluid">
+                <!-- Breadcrumbs-->
+                <ol class="breadcrumb">   
+                    <li class="breadcrumb-item active">
+                        Seguridad
+                    </li>
+                    <li class="breadcrumb-item active"><strong>Personal</strong></li>
+
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                </ol>
+
+                <!-- Icon Cards-->
+                <form name="myForm" >
+                    <div id="form" class="row">
+                        <div class="col-lg-12">
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    <div class="row">
+                                        <div class="col-sm">
+                                            <i class="fa fa-home"></i>Datos Generales
+                                        </div>
+                                        <div class="col-sm ">
+                                            <div class="btn-group row pull-right">
+                                                <c:if test="#{personal.formulario.crear== personal.formulario.PERMITIR}">
+                                                    <button type="button" class="btn btn-success" ng-click="nuevo()"><span class="fa fa-plus"></span> Nuevo</button>
+                                                </c:if>
+                                                <button type="button" class="btn btn-warning" ng-click="cancelar()"><span class="fa fa-undo"></span> Cancelar</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <span ng-show="loading" class="alert alert-info"><i class="fa fa-gear faa-spin animated" ></i>  Cargando...</span>
+                                <div class="alert alert-success" role="alert" ng-show="showRestfulSuccess">
+                                    <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">&times;</a>
+
+                                    {{ showRestfulMessage}}
+                                </div>
+
+                                <div class="alert alert-danger" role="alert" ng-show="showRestfulError">
+                                    <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">&times;</a>
+                                    {{ showRestfulMessage}}
+                                </div>
+                                <div class="container animated fadeIn" id="tableData" ng-show="showTable" >
+                                    <br />
+                                    <div class="form-group row">
+                                        <label for="txtEmail" class=" col-form-label col-sm-2 text-right">Busqueda</label>
+                                        <div class="col-sm-6">
+                                            <input type="text"  ng-model="busqueda" class="form-control" placeholder="Ingrese el valor a buscar"  name="" />
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <table st-table="display_records"  st-safe-src="data" class="table table-hover table-sm table-responsive ">
+                                            <thead >
+                                                <tr>
+                                                    <th class="text-nowrap">Nombre</th>
+                                                    <th class="text-nowrap">Apellido</th>
+                                                    <th class="text-nowrap">Email</th>
+                                                    <th class="text-nowrap">Telefono</th>
+                                                    <th class="text-nowrap">Sucursal</th>
+                                                    <th class="text-nowrap">Fecha Creacion</th>
+                                                    <th class="text-nowrap">Estado</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr st-select-row="row" st-select-mode="multiple" ng-repeat="row in display_records| filter:busqueda">
+                                                    <td  >{{row.nombre}} </td>
+                                                    <td>{{row.apellido}} </td>
+                                                    <td>{{row.email}} </td>
+                                                    <td>{{row.telefono}} </td>
+                                                    <td>{{row.razonSocial}} </td>
+                                                    <td>{{row.fechaAlta| date : 'MM/dd/yyyy'}} </td>
+                                                    <td>{{row.status}} </td>
+
+
+                                                    <td>
+                                                        <button type="button" title="Editar" class="btn btn-info" ng-click="editar(row.idEmpleado)"><i class="fa fa-pencil"></i></button>
+                                                        <button type="button" title="Ver" class="btn btn-default" ng-click="ver(row.idEmpleado)" data-toggle="modal" data-target="#verForm"><i class="fa fa-search"></i></button>
+                                                        <!--<button type="button" title="Eliminar" class="btn btn-danger"><i class="fa fa-remove"></i></button>-->
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <td colspan="10" class="text-center">
+                                                        <div st-items-by-page="itemsByPage" st-pagination="" st-template="pagination.custom.html"></div>
+                                                    </td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+
+
+                                </div><!-- fin del listadoCtrl -->
+
+                                <!-- Contenido Formulario-->
+                                <div id="formData" class="container animated fadeIn"   ng-show="showForm" >
+
+                                    <input type="text" ng-show="false"  name="txtIdEmpleado"  ng-model="formData.idEmpleado" />
+                                    <input type="hidden" id="hdUrl" name="hdUrl" value="#{personal.formulario.restful}"/>
+                                    <input type="hidden" id="hdToken" name="hdToken" value="#{sessionView.token}"/>
+                                    <input type="hidden" id="txtFechaAlta" name="txtFechaAlta" ng-model="formData.fechaAlta"/>
+                                    <input type="hidden" id="txtFechaBaja" name="txtFechaBaja" ng-model="formData.fechaBaja"/>
+
+                                    <br />
+                                    <div class="form-group row">
+                                        <label for="txtNombre" class="col-form-label col-sm-2 text-right">Nombre</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control" name="txtNombre"   required="true" maxlength="64" ng-model="formData.nombre"/>
+                                        </div>
+
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="txtApellido" class=" col-form-label col-sm-2 text-right">Apellido</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control" name="txtApellido" required="required" maxlength="64" ng-model="formData.apellido"/>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group row">
+                                        <label for="txtTelefono" class="col-form-label text-right col-sm-2 mb-0">Celular </label>
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control col" id="txtTelefonoCelular"  name="txtTelefono"  
+                                                   required="required" valid-number="valid-number"  onkeypress="return isNumberKey(event)" maxlength="10" ng-model="formData.telefono"/>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="txtStatus" class="col-form-label col-sm-2 text-right">Estado</label>
+                                        <div class="col-sm-4">
+                                            <select name="txtStatus" class="form-control" ng-model="formData.status" required="required">
+                                                <option style="display:none" value="">seleccione un estado</option>
+                                                <option value="ACTIVO" selected="selected">Activo</option>
+                                                <option value="INACTIVO">Inactivo</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="txtEmail" class=" col-form-label col-sm-2 text-right">Email</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control" name="txtEmail" required="required" maxlength="128"
+                                                   ng-model="formData.email" placeholder="ejemplo@mail.com"/>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="txtSucursal" class="col-form-label col-sm-2 text-right">Sucursal</label>
+                                        <div class="col-sm-4">
+                                            <select class="form-control" id="txtSucursal" ng-model="formData.idEmpresa" required="required"
+                                                    ng-options="option.id as option.name for option in sucursales">
+                                                <option style="display:none" value="">seleccione una sucursal</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="modal-footer" ng-show="showNuevo">
+                                        <button  class="btn btn-primary" ng-click="guardar()"  value="Guardar">Guardar</button>
+                                    </div>                                     
+
+                                    <div class="modal-footer" ng-show="showEditar">
+                                        <button type="button" class="btn btn-primary" ng-click="actualizar()" value="Actualizar">Actualizar</button>
+                                    </div> 
+                                </div>
+                                <div class="card-footer small text-muted"></div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+                <!-- Example DataTables Card-->
+
+            </div>
+            <!-- /.container-fluid-->
+            <!-- /.content-wrapper-->
+
+            <!-- View Modal -->
+            <!-- Logout Modal-->
+            <div class="modal fade" id="verForm" tabindex="-1" role="dialog" aria-labelledby="verForm" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="verForm">Ver : {{verForm.nombre}}</h5>
+                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div class="modal-body"> 
+                            <div class="modal-body">
+                                <dl class="dl-horizontal">
+                                    <dt>Nombre</dt>
+                                    <dd>{{verForm.nombre}}</dd>
+                                    <dt>Apellido</dt>
+                                    <dd>{{verForm.apellido}}</dd>
+                                    <dt>Email</dt>
+                                    <dd>{{verForm.email}}</dd>
+                                    <dt>Telefono</dt>
+                                    <dd>{{verForm.telefono}}</dd>
+                                    <dt>Fecha Alta</dt>
+                                    <dd>{{verForm.fechaAlta}}</dd>
+                                    <dt>Estado</dt>
+                                    <dd>{{verForm.status}}</dd>
+                                </dl>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cerrar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- End View Modal -->
+
+            <ui:include src="../../pages/footer.xhtml" />
+
+            <!-- Scroll to Top Button-->
+            <a class="scroll-to-top rounded" href="#page-top">
+                <i class="fa fa-angle-up"></i>
+            </a>
+
+            <!-- Bootstrap core JavaScript-->
+            <script src="../../vendor/jquery/jquery.min.js"></script>
+            <script src="../../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+            <!-- Core plugin JavaScript-->
+            <script src="../../vendor/jquery-easing/jquery.easing.min.js"></script>
+            <!-- Page level plugin JavaScript-->
+            <!-- Custom scripts for all pages-->
+            <script src="../../js/sb-admin.min.js"></script>
+            <!-- Custom scripts for this page-->
+
+        </div>
+        <script>
+                                        function onload() {
+                                            $('body').toggleClass('fixed-nav');
+                                            $('nav').toggleClass('fixed-top static-top');
+                                        }
+                                        ;
+
+        </script>
+    </body>
+
+</html>
+
+

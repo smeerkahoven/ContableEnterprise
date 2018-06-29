@@ -1,0 +1,371 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html  xmlns="http://www.w3.org/1999/xhtml"
+       xmlns:h="http://xmlns.jcp.org/jsf/html"
+       xmlns:ui="http://xmlns.jcp.org/jsf/facelets" ng-app="jsRoles"
+       xmlns:c="http://java.sun.com/jsp/jstl/core"
+       >
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Web Contable - #{login.razonSocial}</title>
+        <!-- Bootstrap core CSS-->
+        <link href="../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+        <link href="../../css/sb-admin.css" rel="stylesheet" />
+        <link href="../../css/font-awesome-animation.min.css" rel="stylesheet" />
+        <!-- Custom fonts for this template-->
+        <link href="../../vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+        <!-- Page level plugin CSS-->
+
+        <!-- Custom styles for this template-->
+        <script type="text/javascript" src="../../js/angular.min.js" />
+        <script type="text/javascript" src="../../js/ui-bootstrap-tpls.js" />
+        <script src="../../js/smart-table.min.js"></script>
+        <script type="text/javascript" src="../../js/seguridad/roles.js" />
+
+
+    </head>
+
+    <body class="fixed-nav bg-light" id="page-top" onload="onload();" >
+        <!-- Navigation-->
+
+        <nav class="navbar navbar-expand-lg navbar-light bg-default fixed-top static-top" id="mainNav">
+            <h:commandLink class="navbar-brand" action="index">Web Contable - #{login.razonSocial}</h:commandLink>
+            <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive" >
+                <ui:include src="../../pages/menu.xhtml" />
+            </div>
+        </nav>
+
+        <div class="content-wrapper" ng-controller="frmRoles">
+            <div class="container-fluid">
+                <!-- Breadcrumbs-->
+                <ol class="breadcrumb">   
+                    <li class="breadcrumb-item active">
+                        Seguridad
+                    </li>
+                    <li class="breadcrumb-item active"><strong>Roles</strong></li>
+
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                </ol>
+
+                <!-- Icon Cards-->
+                <div id="form" class="row">
+                    <div class="col-lg-12">
+                        <div class="card mb-4" >
+                            <div class="card-header">
+                                <div class="row">
+                                    <div class="col-sm">
+                                        <i class="fa fa-home"></i>Datos Generales
+                                    </div>
+                                    <div class="col-sm">
+                                        <div class="btn-group row pull-right">
+                                            <c:if test="#{personal.formulario.crear== personal.formulario.PERMITIR}">
+                                                <button type="button" class="btn btn-success" ng-click="nuevo()"><span class="fa fa-plus"></span> Nuevo</button>
+                                            </c:if>
+                                            <hr class="half-rule"/>
+                                            <button type="button" class="btn btn-warning" ng-click="cancelar()"><span class="fa fa-undo"></span> Cancelar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <span ng-show="loading" class="alert alert-info"><i class="fa fa-gear faa-spin animated" ></i>  Cargando...</span>
+                            <div class="alert alert-success" role="alert" ng-show="showRestfulSuccess">
+                                <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">&times;</a>
+                                {{ showRestfulMessage}}
+                            </div>
+
+                            <div class="alert alert-danger" role="alert" ng-show="showRestfulError">
+                                <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">&times;</a>
+                                {{ showRestfulMessage}}
+                            </div>
+
+                            <div class="container animated fadeIn" id="tableData" ng-show="showTable" >
+                                <br />
+                                <div class="form-group row">
+                                    <div class="col">
+                                        <label for="txtBusqueda" class=" col-form-label col-sm-2 text-right">Busqueda</label>
+                                        <div class="col-sm-6">
+                                            <input type="text"  ng-model="busqueda" class="form-control" placeholder="Ingrese el valor a buscar"  name="" />
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="frmConfirmation">
+                                    <div class="modal-dialog modal-md">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h4 class="modal-title" id="myModalLabel">Confirmar</h4>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                            </div>
+                                            <div class="modal-body"> 
+                                                <dl class="dl-horizontal">
+                                                    Desea elimnar el registro ?  <strong> {{nombreDelete}}</strong> 
+                                                </dl>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" id="modal-btn-si" ng-click="delete()"  data-dismiss="modal">Si</button>
+                                                <button type="button" class="btn btn-primary" id="modal-btn-no"  data-dismiss="modal">No</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <table st-table="display_records"  st-safe-src="mainGrid" class="table table-hover table-sm table-responsive">
+                                    <thead >
+                                        <tr>
+                                            <th>Rol</th>
+                                            <th>Estado</th>
+                                            <th>Fecha Alta</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr st-select-row="row" st-select-mode="multiple" ng-repeat="row in display_records| filter:busqueda">
+                                            <td><i class="fa fa-fw fa-{{row.moduloClassMenu}}"></i> {{ row.nombre}} </td>
+                                            <td ng-class="row.status">{{row.status}} </td>
+                                            <td >{{row.fechaAlta}} </td>
+                                            <td>
+                                                <div class="btn-group" role="group" aria-label="...">
+                                                    <button type="button" title="Editar" class="btn btn-info" ng-click="editar(row.idRol)"><i class="fa fa-pencil"></i></button>
+                                                    <!--<button type="button" title="Ver" class="btn btn-default" ng-click="ver(row.idEmpleado)" data-toggle="modal" data-target="#verForm"><i class="fa fa-search"></i></button> -->
+                                                    <button type="button" title="Eliminar" class="btn btn-danger" data-toggle="modal" data-target="#frmConfirmation" ng-click="modalEliminar(row.idRol, row.nombre)"><i class="fa fa-remove"></i></button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="10" class="text-center">
+                                                <div st-items-by-page="itemsByPage" st-pagination="" st-template="pagination.custom.html"></div>
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div><!-- fin del listadoCtrl -->
+
+                            <input type="hidden" id="hdUrl" name="hdUrl" value="#{rol.formulario.restful}"/>
+                            <input type="hidden" id="hdToken" name="hdToken" value="#{sessionView.token}"/>
+
+
+                            <!-- Contenido Formulario-->
+                            <form id="formNew" name="formNew"> 
+                                <div  id="formNew" class="container animated fadeIn"   ng-show="showFormNew" >
+                                    <br />
+                                    <div class="form-group row">
+                                        <label for="txtNombre" class="col-form-label col-sm-2 text-right">Nombre</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control" name="txtNombre" required="true" maxlength="32" ng-model="formDataNew.nombre"/>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="txtStatus" class="col-form-label col-sm-2 text-right">Estado</label>
+                                        <div class="col-sm-4">
+                                            <select name="txtStatus" class="form-control" ng-model="formDataNew.status" required="required">
+                                                <option style="display:none" value="">seleccione un estado</option>
+                                                <option value="ACTIVO" selected="selected">Activo</option>
+                                                <option value="INACTIVO">Inactivo</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col">
+                                            <table class="table table-responsive"  >
+                                                <thead>
+                                                    <tr>                                                      
+                                                        <th>Modulo</th>
+                                                        <th> Estado</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr  data-target="#tbl-{{ row.idModulo}}"
+                                                         ng-repeat="row in formDataNew">
+                                                        <td><i class="fa fa-fw fa-{{row.moduloClassMenu}}"></i> {{ row.moduloNombre}}
+                                                            <div class="ml-5"   id="tbl-{{row.idModulo}}">
+                                                                <table class="table table-sm table-primary table-hover">
+                                                                    <thead>
+                                                                        <th>Formulario</th>
+                                                                        <th>Estado</th>
+                                                                        <th>Acceder</th>
+                                                                        <th>Actualizar</th>
+                                                                        <th>Buscar</th>
+                                                                        <th>Crear</th>
+                                                                        <th>Eliminar</th>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr ng-repeat="c in row.flist">
+                                                                            <td>{{c.formularioNombre}}</td>
+                                                                            <td>{{c.formularioStatus}}</td>
+                                                                            <td><input class="form-control" type="checkbox" ng-true-value="1" ng-false-value="0" ng-checked="c.rolAcceder" ng-model="c.rolAcceder" /></td>
+                                                                            <td><input class="form-control" type="checkbox" ng-true-value="1" ng-false-value="0" ng-checked="c.rolActualizar" ng-model="c.rolActualizar" /></td>
+                                                                            <td><input class="form-control" type="checkbox" ng-true-value="1" ng-false-value="0" ng-checked="c.rolBuscar" ng-model="c.rolBuscar"/></td>
+                                                                            <td><input class="form-control" type="checkbox" ng-true-value="1" ng-false-value="0" ng-checked="c.rolCrear" ng-model="c.rolCrear"/></td>
+                                                                            <td><input class="form-control" type="checkbox" ng-true-value="1" ng-false-value="0" ng-checked="c.rolEliminar" ng-model="c.rolEliminar"/></td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                                <div  >
+                                                                    {{c.formularioNombre}}
+                                                                </div>
+                                                            </div>
+
+                                                        </td>
+                                                        <td>{{ row.moduloStatus}}</td>
+
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer" >
+                                        <c:if test="#{rol.formulario.crear== aeropuerto.formulario.PERMITIR}">
+                                            <button  class="btn btn-primary" ng-click="guardar()"  value="Guardar"><span class="fa fa-save"></span>Guardar</button>
+                                        </c:if>
+
+                                    </div>                                     
+                                </div>
+                            </form>
+
+
+
+
+
+                            <form id="formEdit" name="formEdit">
+                                <div  id="formDataEdit" class="container animated fadeIn"   ng-show="showFormEdit" >
+                                    <input type="hidden" id="txtFechaAlta" name="txtFechaAlta" ng-model="formDataEdit.fechaAlta"/>
+                                    <input type="hidden" id="txtFechaBaja" name="txtFechaBaja" ng-model="formDataEdit.fechaBaja"/>
+                                    <input type="hidden" id="txtFechaBaja" name="txtIdRol" ng-model="formDataEdit.idRol"/>
+
+                                    <br />
+                                    <div class="form-group row">
+                                        <label for="txtNombre" class="col-form-label col-sm-2 text-right">Nombre</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control" name="txtNombre"   
+                                                   required="true" maxlength="32" ng-model="formDataEdit.nombre"/>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="txtStatus" class="col-form-label col-sm-2 text-right">Estado</label>
+                                        <div class="col-sm-4">
+                                            <select name="txtStatus" class="form-control" ng-model="formDataEdit.status" required="required">
+                                                <option style="display:none" value="">seleccione un estado</option>
+                                                <option value="ACTIVO" selected="selected">Activo</option>
+                                                <option value="INACTIVO">Inactivo</option>
+                                            </select>
+                                        </div>
+
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col">
+                                            <table class="table table-responsive"  >
+                                                <thead>
+                                                    <tr>                                                      
+                                                        <th>Modulo</th>
+                                                        <th> Estado</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr  data-target="#tbl-{{ row.idModulo}}"
+                                                         ng-repeat="row in formDataEdit.permisos">
+                                                        <td><i class="fa fa-fw fa-{{row.moduloClassMenu}}"></i> {{ row.moduloNombre}}
+                                                            <div class="ml-5"   id="tbl-{{row.idModulo}}">
+                                                                <table class="table table-sm table-primary table-hover">
+                                                                    <thead>
+                                                                        <th>Formulario</th>
+                                                                        <th>Estado</th>
+                                                                        <th>Acceder</th>
+                                                                        <th>Actualizar</th>
+                                                                        <th>Buscar</th>
+                                                                        <th>Crear</th>
+                                                                        <th>Eliminar</th>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr ng-repeat="c in row.flist">
+                                                                            <td>{{c.formularioNombre}}</td>
+                                                                            <td>{{c.formularioStatus}}</td>
+                                                                            <td><input class="form-control" type="checkbox" ng-true-value="1" ng-false-value="0" ng-checked="c.rolAcceder" ng-model="c.rolAcceder" /></td>
+                                                                            <td><input class="form-control" type="checkbox" ng-true-value="1" ng-false-value="0" ng-checked="c.rolActualizar" ng-model="c.rolActualizar"/></td>
+                                                                            <td><input class="form-control" type="checkbox" ng-true-value="1" ng-false-value="0" ng-checked="c.rolBuscar" ng-model="c.rolBuscar" /></td>
+                                                                            <td><input class="form-control" type="checkbox" ng-true-value="1" ng-false-value="0" ng-checked="c.rolCrear" ng-model="c.rolCrear" /></td>
+                                                                            <td><input class="form-control" type="checkbox" ng-true-value="1" ng-false-value="0" ng-checked="c.rolEliminar" ng-model="c.rolEliminar" /></td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                                <div  >
+                                                                    {{c.formularioNombre}}
+                                                                </div>
+                                                            </div>
+
+                                                        </td>
+                                                        <td>{{ row.moduloStatus}}</td>
+
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <c:if test="#{rol.formulario.actualizar== aeropuerto.formulario.PERMITIR}">
+                                            <button type="button" class="btn btn-primary" ng-click="update()" value="Actualizar"><span class="fa fa-pencil"></span>Actualizar</button>
+                                        </c:if>
+                                    </div>
+                                </div>  
+                            </form>
+
+                            <div class="card-footer small text-muted"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Example DataTables Card-->
+
+            </div>
+            <!-- /.container-fluid-->
+            <!-- /.content-wrapper-->
+
+            <!-- View Modal -->
+            <!-- Logout Modal-->
+
+            <!-- End View Modal -->
+
+            <ui:include src="../../pages/footer.xhtml" />
+
+            <!-- Scroll to Top Button-->
+            <a class="scroll-to-top rounded" href="#page-top">
+                <i class="fa fa-angle-up"></i>
+            </a>
+
+            <!-- Bootstrap core JavaScript-->
+            <script src="../../vendor/jquery/jquery.min.js"></script>
+            <script src="../../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+            <!-- Core plugin JavaScript-->
+            <script src="../../vendor/jquery-easing/jquery.easing.min.js"></script>
+            <!-- Page level plugin JavaScript-->
+            <!-- Custom scripts for all pages-->
+            <script src="../../js/sb-admin.min.js"></script>
+            <!-- Custom scripts for this page-->
+
+        </div>
+        <script>
+                                                function onload() {
+                                                $('body').toggleClass('fixed-nav');
+                                                $('nav').toggleClass('fixed-top static-top');
+                                                }
+                                                ;
+
+        </script>
+    </body>
+
+</html>
+
+

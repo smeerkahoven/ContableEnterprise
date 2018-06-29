@@ -1,0 +1,97 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    >
+
+    <f:view>
+        <h:form >
+            <ul class="navbar-nav navbar-sidenav" id="menuAccordion">
+                <c:forEach var="modulo" items="#{menu.menuList}">
+                    <c:if test="#{ not empty modulo.urlAcceso }">
+                        <li class="nav-item" data-toggle="tooltip" data-placement="right" title="#{modulo.nombre}">
+                            <h:commandLink class="nav-link" action="#{modulo.urlAcceso}">
+                                <i class="fa fa-fw fa-#{modulo.classMenu}"></i>
+                                <h:outputLabel class="nav-link-text">#{modulo.nombre}</h:outputLabel>
+                            </h:commandLink>                                                    
+                        </li>
+                    </c:if>
+
+                    <c:if test="#{ empty modulo.urlAcceso }">
+                        <li class="nav-item card-header "  data-toggle="tooltip" data-placement="right" title="#{modulo.nombre}">
+
+                            <a class="nav-link nav-link-collapse collapsed " data-toggle="collapse" href="#collapse#{modulo.nombre}" data-parent="#menuAccordion">
+                                <i class="fa fa-fw fa-#{modulo.classMenu}"></i>#{modulo.nombre}
+                            </a>  
+
+                            <ul class="sidenav-second-level collapse" id="collapse#{modulo.nombre}">
+                                <c:forEach var="submenu" items="#{modulo.submenus}">
+                                    <li class="nav-item">
+                                        <h:commandLink class="list-group-item m-t-0 m-b-2"  action="#{menu.navegar(submenu.action)}" value="#{submenu.nombre}">
+                                            
+                                        </h:commandLink> 
+                                    </li> 
+                                </c:forEach>
+                            </ul>
+                        </li>
+                    </c:if>
+
+                </c:forEach>
+            </ul>
+        </h:form>
+        <!-- Barra Superior que muestra las alertas -->
+        <ul class="navbar-nav sidenav-toggler">
+            <li class="nav-item">
+                <a class="nav-link text-center" id="sidenavToggler">
+                    <i class="fa fa-fw fa-angle-left"></i>
+                </a>
+            </li>
+        </ul>
+
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" id="alertsDropdown" href="#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fa fa-fw fa-user"></i>                        
+                </a>
+                <ul class="dropdown-menu dropdown-user  dropdown-menu-right">
+                    <li ><a class="dropdown-item " href="#"><i class="fa fa-user fa-fw"></i> Perfil de Usuario</a>
+                    </li>
+                    <li class="divider"></li>
+                    <li ><a class="dropdown-item " href="#"><i class="fa fa-gear fa-fw"></i> Configuracion</a>
+                    </li>                        
+                </ul>
+            </li>                  
+            <li class="nav-item">
+                <a class="nav-link" data-toggle="modal" data-target="#exampleModal">
+                    <i class="fa fa-fw fa-sign-out"></i>Salir</a>
+
+            </li>
+        </ul>   
+
+
+        <!-- Logout Modal-->
+        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Salir del Sistema?</h5>
+                        <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">Esta seguro de salir del Sistema?</div>
+                    <div class="modal-footer">
+                        <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
+                        <h:form>
+                            <h:commandLink  class="btn btn-primary" action="#{login.logout}">Salir</h:commandLink>
+                        </h:form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </f:view>
+</ui:composition>

@@ -1,0 +1,369 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html  xmlns="http://www.w3.org/1999/xhtml"
+       xmlns:h="http://xmlns.jcp.org/jsf/html"
+       xmlns:ui="http://xmlns.jcp.org/jsf/facelets" ng-app="jsPlanCuentas"
+       xmlns:c="http://java.sun.com/jsp/jstl/core"
+       >
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>Web Contable - <h:outputLabel>#{login.razonSocial}</h:outputLabel></title>
+        <!-- Bootstrap core CSS-->
+        <link href="../../css/plan-cuentas.css" rel="stylesheet" type="text/css" />
+        <link href="../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+        <link href="../../css/sb-admin.css" rel="stylesheet" />
+        <link href="../../css/font-awesome-animation.min.css" rel="stylesheet" />
+        <!-- Custom fonts for this template-->
+        <link href="../../vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css" />
+
+        <!-- Page level plugin CSS-->
+
+        <!-- Custom styles for this template-->
+        <script type="text/javascript" src="../../vendor/jquery/jquery.min.js"></script>
+        <script type="text/javascript" src="../../js/angular.js" />
+        <script type="text/javascript" src="../../js/angular-animate.js" />
+        <script type="text/javascript" src="../../js/angular-sanitize.js" />
+        <script type="text/javascript" src="../../js/ui-bootstrap-tpls.js" />
+        <script src="../../js/smart-table.min.js"></script>
+        <script type="text/javascript" src="../../js/contabilidad/plan-cuentas.js" />
+
+
+    </head>
+
+    <body class="fixed-nav bg-light" id="page-top" onload="onload();" >
+        <!-- Navigation-->
+
+        <nav class="navbar navbar-expand-lg navbar-light bg-default fixed-top static-top" id="mainNav">
+            <h:commandLink class="navbar-brand" action="index">Web Contable - #{login.razonSocial}</h:commandLink>
+            <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarResponsive" >
+                <ui:include src="../../pages/menu.xhtml" />
+            </div>
+        </nav>
+
+        <div class="content-wrapper" ng-controller="frmPlanCuentas"  >
+            <div class="container-fluid">
+                <!-- Breadcrumbs-->
+                <ol class="breadcrumb">   
+                    <li class="breadcrumb-item active">
+                        Contabilidad
+                    </li>
+                    <li class="breadcrumb-item active"><strong>Cuentas del Plan</strong></li>
+
+                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                </ol>
+
+                <!-- Icon Cards-->
+
+                <div id="form" class="row">
+                    <div class="col-lg-12">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <div class="row">
+                                    <div class="col">
+                                        <i class="fa fa-home"></i>Datos Generales
+                                    </div>
+                                    <div class="col ">
+                                        <form name="myForm" ></form>
+                                        <div class="btn-group row pull-right">
+                                            <c:if test="#{planCuentas.formulario.crear== aeropuerto.formulario.PERMITIR}">
+                                                <div ng-show="showBtnNuevoForm">
+                                                    <button type="button" class="btn btn-success" ng-click="nuevo()" title="Nuevo Marco"><span class="fa fa-plus"></span> Nuevo</button>
+                                                </div>
+                                            </c:if>
+
+                                            <hr class="half-rule"/>
+                                            <div>
+                                                <button type="button" class="btn btn-warning" ng-click="cancelar()"><span class="fa fa-undo"></span> Cancelar</button>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="frmConfirmation">
+                                <div class="modal-dialog modal-md">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title" id="myModalLabel">Confirmar</h4>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        </div>
+                                        <div class="modal-body"> 
+                                            <dl class="dl-horizontal">
+                                                Desea elimnar el registro <strong> {{nombreEliminar}}</strong> ?
+                                            </dl>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" id="modal-btn-si" ng-click="delete()"  data-dismiss="modal">Si</button>
+                                            <button type="button" class="btn btn-primary" id="modal-btn-no"  data-dismiss="modal">No</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <span ng-show="loading" class="alert alert-info"><i class="fa fa-gear faa-spin animated" ></i>  Cargando...</span>
+                            <div class="alert alert-success" role="alert" ng-show="showRestfulSuccess">
+                                <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">&times;</a>
+
+                                {{ showRestfulMessage}}
+                            </div>
+
+                            <div class="alert alert-danger" role="alert" ng-show="showRestfulError">
+                                <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">&times;</a>
+                                {{ showRestfulMessage}}
+                            </div>
+                            <div class="container animated fadeIn" id="tableData" ng-show="showTable" >
+                                <br />
+
+
+                                <!--
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="10" class="text-center">
+                                            <div st-items-by-page="itemsByPage" st-pagination="" st-template="../pagination.custom.html"></div>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                                -->
+
+                            </div><!-- fin del listadoCtrl -->
+
+
+                            <div  class="container animated fadeIn" id="tableData" ng-show="showTable">
+                                <table class="table-nested table-hover ">
+                                    <thead>
+                                        <tr>
+                                            <th class="cell-input">
+                                            </th>
+                                            <th class="cell-name">
+                                                Nombre Cuenta
+                                            </th>
+                                            <th class="cell-c1">
+                                                Numero Cuenta
+                                            </th>
+                                            <th class="cell-c2">
+                                                Nivel
+                                            </th>
+                                            <th class="cell-c3">
+                                                Accion
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody ng-class="{opened: item.opened}" ng-include="'table_tree.html'"
+                                           ng-repeat="item in mainGrid"></tbody>
+                                </table>
+                                <script id="table_tree.html" type="text/ng-template">
+                                    <tr ng-class="{parent: item.children, selected : item.idPlanCuentas=== selectedId}"
+                                    ng-model="item" ng-click="getItem(item)">
+                                    <td class="cell-input">
+                                    </td>
+                                    <td class="cell-name"
+                                    ng-click="item.opened = !item.opened &amp;&amp; item.children != undefined">
+                                    <div class="indent" style="padding-left: {{20*level}}px"></div>
+                                    {{item.nombreCuenta}}
+                                    </td>
+                                    <td class="cell-c1">
+                                    {{item.idPlanCuentas}}
+                                    </td>
+                                    <td class="cell-c2">
+                                    {{item.nivel}}
+                                    </td>
+                                    <td class="cell-c3" align="right">
+                                    <button ng-show="showBtnAdicionar(item.nivel);" type="button" title="Adicionar" class="btn btn-success" ng-click="add(item)"><i class="fa fa-plus"></i></button>
+
+                                    <c:if test="${planCuentas.formulario.actualizar== planCuentas.formulario.PERMITIR }">
+                                    <button type="button" title="Editar" class="btn btn-info" ng-click="edit(item)"><i class="fa fa-pencil"></i></button>
+                                    </c:if>
+
+                                    <c:if test="#{planCuentas.formulario.eliminar== planCuentas.formulario.PERMITIR}">
+                                    <button ng-show="item.nivel == 5" type="button" title="Eliminar" class="btn btn-danger" data-toggle="modal" data-target="#frmConfirmation" ng-click="modalEliminar(item.idPlanCuentas, item.nombreCuenta)"><i class="fa fa-remove"></i></button>
+                                    </c:if>
+
+                                    </td>
+                                    </tr>
+                                    <tr class="children" ng-if="item.children &amp;&amp; item.children.length &gt; 0">
+                                    <td colspan="5">
+                                    <table class="table-nested table-hover" >
+                                    <tbody ng-class="{opened: item.opened}" ng-include="'table_tree.html'"
+                                    ng-init="level = level + 1" ng-repeat="item in item.children">
+                                    </tbody>                                             
+                                    </table>
+                                    </td>
+                                    </tr>
+                                </script>
+                            </div>
+
+                            <!-- Contenido Formulario-->
+                            <form name="formNewTransaction" id="formNewTransaction">
+                                <div  class="container animated fadeIn"   ng-show="showFormNewTransaction" >
+                                    <input type="hidden" id="hdUrl" name="hdUrl" value="#{planCuentas.formulario.restful}"/>
+                                    <input type="hidden" id="hdFormName" name="hdFormName" value="#{planCuentas.formulario.nombre}" ng-model="formName"/>
+                                    <input type="hidden" id="hdToken" name="hdToken" value="#{sessionView.token}"/>
+                                    <input type="hidden" id="txtIdEmpresa" name="idEmpresa" value="{frmNewTransaction.idEmpresa}" ng-model="frmNewTransaction.idEmpresa"/>
+                                    <input type="hidden" id="hdAplicaMovimiento" name="aplicaMovimiento" value="{frmNewTransaction.aplicaMovimiento}" ng-model="frmNewTransaction.aplicaMovimiento"/>
+                                    <input type="hidden" id="hdIdPlanCuentaPadre" name="idPlanCuentaPadre" value="{frmNewTransaction.idPlanCuentaPadre}" ng-model="frmNewTransaction.idPlanCuentaPadre"/>
+                                    <input type="hidden" id="hdMarcoCuenta" name="marcoCuenta" value="{frmNewTransaction.marco}" ng-model="frmNewTransaction.marco"/>
+
+                                    <br />
+                                    <div class="form-group row">
+                                        <label for="txtCodigo" class="col-form-label col-sm-3 text-right">N&uacute;mero de la Cuenta</label>
+                                        <div class="col-sm-4">
+                                            <input ng-disabled="showBtnActualizar" autofocus="autofocus" type="text" class="form-control" name="txtCodigo" 
+                                                   required="required" maxlength="12" 
+                                                   ng-model="frmNewTransaction.idPlanCuentas"/>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="txtCuenta" class=" col-form-label col-sm-3 text-right">Cuenta (Denominaci&oacute;n)</label>
+                                        <div class="col-sm-4" >
+                                            <input type="text" class="form-control" name="txtCuenta" required="required" 
+                                                   maxlength="40" ng-model="frmNewTransaction.nombreCuenta"/>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="txtNombre" class=" col-form-label col-sm-3 text-right">Aplica Movimiento por</label>
+                                        <div class="col-sm-4">
+                                            <label for="txtAplicaMovimiento" class="col-form-label text-left" ><strong>{{frmNewTransaction.aplicaMovimientoNombre}}</strong></label>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="txtNivel" class=" col-form-label col-sm-3 text-right">Nivel</label>
+                                        <div class="col-4">
+                                            <label for="txtNivel" class="col-form-label text-left" ><strong>{{frmNewTransaction.nivel}}</strong></label>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="form-group row" ng-show="frmNewTransaction.aplicaMovimiento == 'T'">
+                                        <label for="txtNombre" class=" col-form-label col-sm-3 text-right">Mantenimiento de Valor</label>
+                                        <div class="col-sm-4">
+                                            <select name="txtStatus" class="form-control" ng-model="frmNewTransaction.mantenimientoValor" >
+                                                <option style="display:none" value="">seleccione una opcion</option>
+                                                <option value="UFV" >UFV</option>
+                                                <option value="MON">Moneda</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <script type="text/ng-template" id="customTemplate.html">
+                                        <a href="#"  class=" list-group-item-action">
+                                        <span  class=" list-group-item-action" ng-bind-html="match.label | uibTypeaheadHighlight:query"></span>
+                                        </a>
+                                    </script>
+
+
+                                    <div class="form-group row">
+                                        <label for="txtNombre" class=" col-form-label col-sm-3 text-right">Cuenta de Ajuste (AITB) </label>
+                                        <div class="col-sm-4">
+                                            <input type="text" ng-model="frmNewTransaction.itb" placeholder="Cuenta AITB"
+                                                   uib-typeahead="cuenta as cuenta.name for cuenta in comboAitb | filter:{name:$viewValue}"
+                                                   class="form-control" typeahead-show-hint="true" typeahead-min-length="0" 
+                                                   typeahead-template-url="customTemplate.html" required="required"
+                                                   />
+                                            <strong>{{frmNewTransaction.itb.id}}</strong>
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="form-group row">
+                                        <label for="txtMarco" class=" col-form-label col-sm-3 text-right">Marco de la Cuenta</label>
+                                        <div class="col-sm-4">
+                                            <input type="text"  name="txtMarco" class="form-control" disabled="true" maxlength="40" ng-model="frmNewTransaction.marcoNombre"/>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="txtNombre" class=" col-form-label col-sm-3 text-right">Cuenta para efectos de Mayorizaci&oacute;n</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control" disabled="true" name="txtIdPlanCuentaPadreNombre"  maxlength="40" ng-model="frmNewTransaction.idPlanCuentaPadreNombre"/>
+                                        </div>
+                                    </div>
+
+
+
+                                    <div class="form-group row" ng-show="frmNewTransaction.aplicaMovimiento == 'T'">
+                                        <label for="txtMoneda" class=" col-form-label col-sm-3 text-right" >Moneda</label>
+                                        <div class="col-sm-4">
+                                            <select name="txtMoneda" class="form-control" ng-model="frmNewTransaction.moneda" >
+                                                <option style="display:none" value="">seleccione una opcion</option>
+                                                <option value="B" selected="selected">Bolivianos</option>
+                                                <option value="D">Dolar</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+
+                                    <c:if test="#{planCuentas.formulario.crear== planCuentas.formulario.PERMITIR}">
+                                        <div class="modal-footer" ng-show="showBtnNuevo">
+                                            <button   class="btn btn-primary" ng-click="save()"  value="Guardar"><span class="fa fa-save"></span>Guardar</button>
+                                        </div>
+                                    </c:if>                                    
+
+                                    <c:if test="#{planCuentas.formulario.actualizar== planCuentas.formulario.PERMITIR}">
+                                        <div class="modal-footer" ng-show="showBtnActualizar">
+                                            <button type="button" class="btn btn-primary" ng-click="update()" value="Actualizar"> <span class="fa fa-edit"></span>Actualizar</button>
+                                        </div>
+                                    </c:if>
+
+                                </div>
+                            </form>
+                            <div class="card-footer small text-muted"></div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Example DataTables Card-->
+
+            </div>
+            <!-- /.container-fluid-->
+            <!-- /.content-wrapper-->
+
+            <!-- View Modal -->
+            <!-- Logout Modal-->
+            <!-- End View Modal -->
+
+            <ui:include src="../../pages/footer.xhtml" />
+
+            <!-- Scroll to Top Button-->
+            <a class="scroll-to-top rounded" href="#page-top">
+                <i class="fa fa-angle-up"></i>
+            </a>
+
+            <!-- Bootstrap core JavaScript-->
+            <script src="../../vendor/jquery/jquery.min.js"></script>
+            <script src="../../vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+            <!-- Core plugin JavaScript-->
+            <script src="../../vendor/jquery-easing/jquery.easing.min.js"></script>
+            <!-- Page level plugin JavaScript-->
+            <!-- Custom scripts for all pages-->
+            <script src="../../js/sb-admin.min.js"></script>
+            <!-- Custom scripts for this page-->
+
+        </div>
+        <script>
+                                                function onload() {
+                                                $('body').toggleClass('fixed-nav');
+                                                $('nav').toggleClass('fixed-top static-top');
+                                                }
+                                                ;
+
+        </script>
+    </body>
+
+</html>
+
+
