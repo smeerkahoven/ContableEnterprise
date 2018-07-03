@@ -29,6 +29,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "PlanCuentas.findAll", query = "SELECT p FROM PlanCuentas p WHERE p.idEmpresa=:idEmpresa ORDER BY p.idPlanCuentas, p.cuenta, p.nivel asc"),
     //@NamedQuery(name = "PlanCuentas.findAll", query = "SELECT p ,(select c.cuenta from PlanCuentas c where p.idPlanCuentas=c.idPlanCuentas ) as idPlanCuentaPadreNombre FROM PlanCuentas p ORDER BY p.idPlanCuentas, p.cuenta, p.nivel asc"),
     @NamedQuery(name = "PlanCuentas.forCombo", query = "SELECT p.idPlanCuentas,p.cuenta FROM PlanCuentas p WHERE p.nivel = 5 AND p.idEmpresa=:idEmpresa  Order by p.cuenta"),
+    @NamedQuery(name = "PlanCuentas.forComboPlan", query = "SELECT p FROM PlanCuentas p WHERE p.idEmpresa=:idEmpresa and p.idPlanCuentaPadre= (SELECT q.idPlanCuentas FROM PlanCuentas q WHERE q.cuenta like :cuenta ) ORDER BY p.idPlanCuentas, p.cuenta, p.nivel asc"),
     @NamedQuery(name = "PlanCuentas.forSearch", query = "SELECT p.idPlanCuentas,p.cuenta FROM PlanCuentas p WHERE p.nivel < 5 Order by p.cuenta"),
     
 })

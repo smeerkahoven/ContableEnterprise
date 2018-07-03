@@ -25,6 +25,8 @@ public interface PlanCuentasRemote extends DaoRemote {
 
     public List<Object[]> getForCombo(Empresa idEmpresa);
 
+    public List<PlanCuentas> getForCombo(Empresa idEmpresa, PlanCuentas p);
+
     public List<PlanCuentas> get(Empresa idEmpresa);
 
 }

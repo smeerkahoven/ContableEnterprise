@@ -58,7 +58,7 @@ public class Login implements LoginRemote {
         }
 
         //
-        if (aux.getStatus().equals(Status.INACTIVE)) {
+        if (aux.getStatus().equals(Status.INACTIVO)) {
             ejbLogger.add(Accion.LOGIN, u.getUserName(), Navegacion.LOGIN, u.getIp());
             ejbLogger.add(u.getIp(), intento, u.getUserName());
             return ResponseCode.USUARIO_INACTIVO;
@@ -73,7 +73,7 @@ public class Login implements LoginRemote {
         try {
             UserToken t = new UserToken();
             t.setIdToken(u.getToken_url());
-            t.setStatus(Status.INACTIVE);
+            t.setStatus(Status.INACTIVO);
             t.setUserName(u.getUserName());
             t.setFechaToken(DateContable.getCurrentDate());
 

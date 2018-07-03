@@ -5,8 +5,7 @@
  */
 package com.agencia.entities;
 
-import com.contabilidad.entities.PlanCuentas;
-import com.seguridad.control.entities.Empresa;
+import com.seguridad.control.entities.Entidad;
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -14,8 +13,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -31,11 +28,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Bancos.findAll", query = "SELECT b FROM Bancos b")})
-public class Bancos implements Serializable {
+public class Bancos extends Entidad {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Basic(optional = false)
     @Column(name = "id_banco")
     private Integer idBanco;
     
@@ -54,22 +52,14 @@ public class Bancos implements Serializable {
     @Column(name = "contacto", length = 40)
     private String contacto;
     
-    @Column(name = "abreviacion" , length = 12)
+    @Column(name = "abreviacion", length = 12)
     private String abreviacion;
+    
+    @Column(name = "nit" ,length = 16)
+    private String nit;
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
-
     @Column(name = "email", length = 128)
     private String email;
-    
-    @JoinColumn(name = "id_empresa", referencedColumnName = "id_empresa")
-    @ManyToOne
-    private Empresa idEmpresa;
-    @JoinColumn(name = "cuenta_mon_nac", referencedColumnName = "id_plan_cuentas")
-    @ManyToOne
-    private PlanCuentas cuentaMonNac;
-    @JoinColumn(name = "cuenta_mon_ext", referencedColumnName = "id_plan_cuentas")
-    @ManyToOne
-    private PlanCuentas cuentaMonExt;
 
     public Bancos() {
     }
@@ -134,36 +124,20 @@ public class Bancos implements Serializable {
         this.abreviacion = abreviacion;
     }
 
+    public String getNit() {
+        return nit;
+    }
+
+    public void setNit(String nit) {
+        this.nit = nit;
+    }
+
     public String getEmail() {
         return email;
     }
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public Empresa getIdEmpresa() {
-        return idEmpresa;
-    }
-
-    public void setIdEmpresa(Empresa idEmpresa) {
-        this.idEmpresa = idEmpresa;
-    }
-
-    public PlanCuentas getCuentaMonNac() {
-        return cuentaMonNac;
-    }
-
-    public void setCuentaMonNac(PlanCuentas cuentaMonNac) {
-        this.cuentaMonNac = cuentaMonNac;
-    }
-
-    public PlanCuentas getCuentaMonExt() {
-        return cuentaMonExt;
-    }
-
-    public void setCuentaMonExt(PlanCuentas cuentaMonExt) {
-        this.cuentaMonExt = cuentaMonExt;
     }
 
     @Override

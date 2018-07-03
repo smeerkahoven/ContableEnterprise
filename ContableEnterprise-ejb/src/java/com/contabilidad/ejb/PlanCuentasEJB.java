@@ -127,4 +127,15 @@ public class PlanCuentasEJB implements PlanCuentasRemote {
         return l;
     }
 
+    @Override
+    public List<PlanCuentas> getForCombo(Empresa idEmpresa, PlanCuentas p) {
+        Query q = em.createNamedQuery("PlanCuentas.forComboPlan", PlanCuentas.class);
+        q.setParameter("idEmpresa", idEmpresa.getIdEmpresa());
+        q.setParameter("cuenta",p.getCuenta());
+        
+        List<PlanCuentas> l = q.getResultList();
+
+        return l;
+    }
+
 }

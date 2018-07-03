@@ -18,6 +18,8 @@ public enum  ResponseCode implements Serializable {
     USUARIO_NO_AUTORIZADO ( 102 ),
     USUARIO_INEXISTENTE (103),
     USUARIO_INACTIVO (104),
+    USUARIO_EXISTS (105),
+    USUARIO_AVAILABLE (106),
     
     RESTFUL_ERROR (200),
     RESTFUL_SUCCESS (201),
