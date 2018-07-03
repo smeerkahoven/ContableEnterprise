@@ -10,13 +10,14 @@ import com.seguridad.control.entities.User;
 import javax.inject.Named;
 import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
+import javax.enterprise.context.RequestScoped;
 
 /**
  *
  * @author xeio
  */
 @Named(value = "sessionView")
-@SessionScoped
+@RequestScoped
 public class SessionManagedBean implements Serializable {
 
     private String token;

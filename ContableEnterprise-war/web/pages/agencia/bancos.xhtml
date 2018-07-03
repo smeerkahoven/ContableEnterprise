@@ -32,7 +32,7 @@
 
     </head>
 
-    <body class="fixed-nav bg-light" id="page-top" onload="onload();" >
+    <body class="fixed-nav bg-light" id="page-top" onload="onload();" ng-controller="frmBancos">
         <!-- Navigation-->
 
         <nav class="navbar navbar-expand-lg navbar-light bg-default fixed-top static-top" id="mainNav">
@@ -45,7 +45,9 @@
             </div>
         </nav>
 
-        <div class="content-wrapper" ng-controller="frmBancos">
+
+
+        <div class="content-wrapper" >
             <div class="container-fluid">
                 <!-- Breadcrumbs-->
                 <ol class="breadcrumb">   
@@ -83,7 +85,6 @@
                                 <span ng-show="loading" class="alert alert-info"><i class="fa fa-gear faa-spin animated" ></i>  Cargando...</span>
                                 <div class="alert alert-success" role="alert" ng-show="showRestfulSuccess">
                                     <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">&times;</a>
-
                                     {{ showRestfulMessage}}
                                 </div>
 
@@ -109,8 +110,7 @@
                                                     <th class="text-nowrap">Telefono</th>
                                                     <th class="text-nowrap">Celular</th>
                                                     <th class="text-nowrap">Contacto</th>
-                                                    <th class="text-nowrap">Cta. Mon/Ext</th>
-                                                    <th class="text-nowrap">Cta. Mon/Nac</th>
+                                                    <th class="text-nowrap">NIT</th>
                                                     <th class="text-nowrap">Email</th>
                                                 </tr>
                                             </thead>
@@ -121,16 +121,19 @@
                                                     <td>{{row.telefono}} </td>
                                                     <td>{{row.celular}} </td>
                                                     <td>{{row.contacto}} </td>
-                                                    <td>{{row.planCuentaMonExt}} </td>
-                                                    <td>{{row.planCuentaMonNac}} </td>
+                                                    <td>{{row.nit}} </td>
                                                     <td>{{row.email}} </td>
                                                     <td>
                                                         <c:if test="#{bancos.formulario.actualizar== bancos.formulario.PERMITIR}">
                                                             <button type="button" title="Editar" class="btn btn-info" ng-click="edit(row)"><i class="fa fa-pencil"></i></button>
                                                         </c:if>
+
+                                                        <c:if test="#{bancos.formulario.actualizar== bancos.formulario.PERMITIR}">
+                                                            <button type="button" title="Asociar Cuenta" class="btn btn-warning" ng-click="link(row)"  data-toggle="modal" data-target="#frmLink"><i class="fa fa-list-alt"></i></button>
+                                                        </c:if>
                                                         <!--<button type="button" title="Ver" class="btn btn-default" ng-click="ver(row.idTarjetaCredito)" data-toggle="modal" data-target="#verForm"><i class="fa fa-search"></i></button> -->
                                                         <c:if test="#{bancos.formulario.eliminar== bancos.formulario.PERMITIR}">
-                                                            <button type="button" title="Eliminar" class="btn btn-danger"><i class="fa fa-remove"></i></button>
+                                                            <button type="button" title="Eliminar" class="btn btn-danger" data-target="#frmConfirmation" ng-click="deleteBanco(row,'delete')" data-toggle="modal"><i class="fa fa-remove"></i></button>
                                                         </c:if>
                                                     </td>
                                                 </tr>
@@ -169,28 +172,28 @@
                                             <input type="text" class="form-control" name="txtDireccion" required="required" maxlength="64" ng-model="frmNew.direccion"/>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="form-group row">
                                         <label for="txtTelefono" class=" col-form-label col-sm-2 text-right">Telefono</label>
                                         <div class="col-sm-4">
                                             <input type="text" class="form-control" name="txtTelefono" maxlength="10" valid-number="valid-number" ng-model="frmNew.telefono"/>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="form-group row">
                                         <label for="txtCelular" class=" col-form-label col-sm-2 text-right">Celular</label>
                                         <div class="col-sm-4">
                                             <input type="text" class="form-control" name="txtCelular"  maxlength="12" valid-number="valid-number" ng-model="frmNew.celular"/>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="form-group row">
                                         <label for="txtDireccion" class=" col-form-label col-sm-2 text-right">Contacto</label>
                                         <div class="col-sm-4">
                                             <input type="text" class="form-control" name="txtDireccion"  maxlength="40" ng-model="frmNew.contacto"/>
                                         </div>
                                     </div>
-                                    
+
                                     <div class="form-group row">
                                         <label for="txtAbreviacion" class=" col-form-label col-sm-2 text-right">Abreviaci&oacute;n</label>
                                         <div class="col-sm-4">
@@ -204,41 +207,13 @@
                                             <input type="email" class="form-control" name="txtEmail"  maxlength="128" ng-model="frmNew.email"/>
                                         </div>
                                     </div>
-                                    
-                                    <script type="text/ng-template" id="customTemplate.html">
-                                        <a href="#"  class=" list-group-item-action">
-                                        <span  class=" list-group-item-action" ng-bind-html="match.label | uibTypeaheadHighlight:query"></span>
-                                        </a>
-                                    </script>
-
-                                    
-                                    <div class="form-group row">
-                                        <label for="txtPlanCuentaMonExt" class="col-form-label text-right col-sm-2 mb-0">Cuenta Moneda Extranjera </label>
-                                        <div class="col-sm-4">
-                                            <input type="text" ng-model="ctaMonExt" placeholder="Cuenta Moneda Extranjera"
-                                                   uib-typeahead="cuenta as cuenta.name for cuenta in comboCuenta | filter:{name:$viewValue}"
-                                                   class="form-control" typeahead-show-hint="true" typeahead-min-length="0" 
-                                                   typeahead-template-url="customTemplate.html" required="required"
-                                                   />
-                                            <strong>{{ctaMonExt.id}}</strong>
-                                        </div>
-
-
-                                    </div>
 
                                     <div class="form-group row">
-                                        <label for="txtPlanCuentaMonNac" class="col-form-label text-right col-sm-2 mb-0">Cuenta Moneda Nacional</label>
+                                        <label for="txtNit" class="col-form-label text-right col-sm-2 mb-0">NIT</label>
                                         <div class="col-sm-4">
-                                            <input type="text" ng-model="ctaMonNac" placeholder="Cuenta Moneda Nacional"
-                                                   uib-typeahead="cuenta as cuenta.name for cuenta in comboCuenta | filter:{name:$viewValue}"
-                                                   class="form-control" typeahead-show-hint="true" typeahead-min-length="0" 
-                                                   typeahead-template-url="customTemplate.html" required="required"
-                                                   />
-                                            <strong>{{ctaMonNac.id}}</strong>
+                                            <input type="text" class="form-control" name="txtNit"  valid-number="valid-number" maxlength="16" ng-model="frmNew.nit"/>
                                         </div>
                                     </div>
-
-
 
                                     <c:if test="#{bancos.formulario.crear== bancos.formulario.PERMITIR}">
                                         <div class="modal-footer" ng-show="showBtnNuevo">
@@ -251,8 +226,6 @@
                                             <button type="button" class="btn btn-primary" ng-click="update()" value="Actualizar"> <span class="fa fa-edit"></span>Actualizar</button>
                                         </div>
                                     </c:if>
-
-
                                 </div>
                             </div>
                         </div>
@@ -265,36 +238,111 @@
             <!-- /.content-wrapper-->
 
             <!-- View Modal -->
+
             <!-- Logout Modal-->
-            <div class="modal fade" id="verForm" tabindex="-1" role="dialog" aria-labelledby="verForm" aria-hidden="true">
+            <div class="modal hide fade" id="frmLink" tabindex="-1" role="dialog" aria-labelledby="verForm" aria-hidden="true">
                 <div class="modal-dialog" role="document">
+                    <div class="container">
+                        <form id="formLink" name="formLink">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="verForm">Enlazar  : <strong> {{frmLink.nombre}}</strong> </h5>
+                                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                </div>
+
+                                <span ng-show="linkLoading" class="alert alert-info"><i class="fa fa-gear faa-spin animated" ></i>  Cargando...</span>
+                                <div class="alert alert-success" role="alert" ng-show="showLinkRestfulSuccess">
+                                    <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">&times;</a>
+                                    {{ showLinkRestfulMessage}}
+                                </div>
+
+                                <div class="alert alert-danger" role="alert" ng-show="showLinkRestfulError">
+                                    <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">&times;</a>
+                                    {{ showLinkRestfulMessage}}
+                                </div>
+
+                                <br/>
+
+                                <script type="text/ng-template" id="customTemplate.html">
+                                    <a href="#"  class=" list-group-item-action">
+                                    <span  class=" list-group-item-action" ng-bind-html="match.label | uibTypeaheadHighlight:query"></span>
+                                    </a>
+                                </script>
+
+                                <div class="form-group row">
+                                    <label for="txtDescripcion" class=" col-form-label col-sm-4 text-right">Descripcion</label>
+                                    <div class="col-sm-5">
+                                        <input type="text" name="txtDescripcion" required="required" class="form-control" maxlength="32" ng-model="frmNewLink.descripcion"/>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="txtNombre" class=" col-form-label col-sm-4 text-right">Cuenta de Bancos </label>
+                                    <div class="col-sm-6">
+
+                                        <input type="text" ng-model="frmNewLink.cuenta" placeholder="Cuenta Banco"
+                                               uib-typeahead="cuenta as cuenta.name for cuenta in comboCuentasBanco | filter:{name:$viewValue}"
+                                               class="form-control col" typeahead-show-hint="true" typeahead-min-length="0" 
+                                               typeahead-template-url="customTemplate.html" required="required"/>
+                                        <strong>{{frmNewLink.cuenta.id}}</strong>
+                                    </div>
+                                    <div class="col-sm-1">
+                                        <button   class="btn btn-primary" ng-click="addlink()"  title="Anadir"><span class="fa fa-plus"></span></button>
+                                    </div>
+                                </div>
+
+                                <div class="container-fluid">
+                                    <table st-table="display_records_cuenta"  st-safe-src="cuentaBancoGrid" class="table table-hover table-sm table-responsive ">
+                                        <thead >
+                                            <tr>
+                                                <th class="text-nowrap">Nro Cuenta</th>
+                                                <th class="text-nowrap">Cuenta</th>
+                                                <th class="text-nowrap">Descripcion</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr st-select-row="row" st-select-mode="multiple" ng-repeat="row in display_records_cuenta| filter:busqueda">
+                                                <td>{{row[0]}} </td>
+                                                <td>{{row[1]}} </td>
+                                                <td>{{row[5]}} </td>
+                                                <td>
+                                                    <!--<button type="button" title="Ver" class="btn btn-default" ng-click="ver(row.idTarjetaCredito)" data-toggle="modal" data-target="#verForm"><i class="fa fa-search"></i></button> -->
+                                                    <c:if test="#{bancos.formulario.eliminar== bancos.formulario.PERMITIR}">
+                                                        <button type="button" title="Eliminar" class="btn btn-danger" data-target="#frmConfirmation" 
+                                                                data-toggle="modal" ng-click="deleteLink(row, 'delete-link')"><i class="fa fa-remove"></i></button>
+                                                    </c:if>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cerrar</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="frmConfirmation"  data-focus-on="input:first">
+                <div class="modal-dialog modal-md">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="verForm">Ver : {{verForm.nombre}}</h5>
-                            <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">×</span>
-                            </button>
+                            <h4 class="modal-title" id="myModalLabel">Confirmar</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                         </div>
                         <div class="modal-body"> 
-                            <div class="modal-body">
-                                <dl class="dl-horizontal">
-                                    <dt>Nombre</dt>
-                                    <dd>{{verForm.nombre}}</dd>
-                                    <dt>Apellido</dt>
-                                    <dd>{{verForm.apellido}}</dd>
-                                    <dt>Email</dt>
-                                    <dd>{{verForm.email}}</dd>
-                                    <dt>Telefono</dt>
-                                    <dd>{{verForm.telefono}}</dd>
-                                    <dt>Fecha Alta</dt>
-                                    <dd>{{verForm.fechaAlta}}</dd>
-                                    <dt>Estado</dt>
-                                    <dd>{{verForm.status}}</dd>
-                                </dl>
-                            </div>
+                            <dl class="dl-horizontal">
+                                Desea elimnar el registro ?  <strong> {{nombreEliminar}}</strong> 
+                            </dl>
                         </div>
                         <div class="modal-footer">
-                            <button class="btn btn-secondary" type="button" data-dismiss="modal">Cerrar</button>
+                            <button type="button" class="btn btn-default" id="modal-btn-si" ng-click="delete(methodEliminar)"  data-dismiss="modal">Si</button>
+                            <button type="button" class="btn btn-primary" id="modal-btn-no"  data-dismiss="modal">No</button>
                         </div>
                     </div>
                 </div>

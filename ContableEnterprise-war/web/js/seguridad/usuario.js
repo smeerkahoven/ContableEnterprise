@@ -54,7 +54,6 @@ angular.module('jsUsuario.controllers', []).controller('frmUsuario', ['$scope', 
                         $scope.roles = response.data.content;
 
                     $scope.loading = false;
-
                 } else {
                     $scope.showRestfulMessage = response.data.content;
                     $scope.showRestfulError = true;
@@ -72,13 +71,10 @@ angular.module('jsUsuario.controllers', []).controller('frmUsuario', ['$scope', 
         $scope.getData('personal', $scope.empleados);
         $scope.getData('roles', $scope.roles);
 
-
-
         $scope.guardar = function () {
             if (!$scope.myForm.$valid)
                 return;
             $scope.loading = true;
-            console.log(angular.toJson($scope.formData));
             $http({
                 method: 'POST',
                 url: url.value + 'guardar',
@@ -98,7 +94,6 @@ angular.module('jsUsuario.controllers', []).controller('frmUsuario', ['$scope', 
                     $scope.showRestfulError = true;
                     $scope.showForm = true;
                 }
-
             }, function (error) {
                 $scope.loading = false;
                 $scope.showRestfulMessage = error;
@@ -106,8 +101,6 @@ angular.module('jsUsuario.controllers', []).controller('frmUsuario', ['$scope', 
                 $scope.showForm = true;
             });
         }
-
-
 
         $scope.nuevo = function () {
             $scope.formData = {};
@@ -129,7 +122,6 @@ angular.module('jsUsuario.controllers', []).controller('frmUsuario', ['$scope', 
         $scope.cancelar = function () {
             $scope.showForm = false;
             $scope.showTable = true;
-
             $scope.userLength = false;
             $scope.userExists = false;
             $scope.userAgree = false;
@@ -140,7 +132,6 @@ angular.module('jsUsuario.controllers', []).controller('frmUsuario', ['$scope', 
             $scope.comando = query;
             $scope.opcion = opcion;
         }
-
 
         $scope.update = function (query) {
             $scope.loading = true;
@@ -161,12 +152,10 @@ angular.module('jsUsuario.controllers', []).controller('frmUsuario', ['$scope', 
                     $scope.showRestfulError = true;
                     $scope.showForm = false;
                 }
-
             }, function (error) {
                 $scope.showRestfulMessage = error.statusText;
                 $scope.showRestfulError = true;
                 $scope.loading = false;
-
             });
         }
 
@@ -174,19 +163,32 @@ angular.module('jsUsuario.controllers', []).controller('frmUsuario', ['$scope', 
         $scope.validar = function () {
             if ($scope.formData.username === undefined)
                 return;
+            $scope.userExists = false;
+            $scope.userAgree = false;
             if ($scope.formData.username.length < 4) {
                 $scope.userLength = true;
                 $scope.userExists = false;
                 $scope.userAgree = false;
-            } else
-            if ($scope.formData.username === 'admin') {
-                $scope.userExists = true;
-                $scope.userAgree = false;
-                $scope.userLength = false;
             } else {
-                $scope.userExists = false;
-                $scope.userAgree = true;
-                $scope.userLength = false;
+                $scope.loading = true;
+                $http({
+                    method: 'POST',
+                    url: url.value + 'validate',
+                    data: {token: token.value, content: {username: $scope.formData.username}},
+                    headers: {'Content-Type': 'application/json'}
+                }).then(function (response) {
+                    if (response.data.code === 105) {//exissts
+                        $scope.userExists = true;
+                    } else {
+                        $scope.userAgree = true;
+                    }
+                    $scope.loading = false;
+
+                }, function (error) {
+                    $scope.showRestfulMessage = error.statusText;
+                    $scope.showRestfulError = true;
+                    $scope.loading = false;
+                });
             }
         }
 

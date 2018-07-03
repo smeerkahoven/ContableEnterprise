@@ -110,6 +110,9 @@ public class LoginManagedBean implements Serializable {
                     case USUARIO_NO_AUTORIZADO:
                         errorMessage = mensaje.getProperty(BeanMensaje.USUARIO_NO_AUTORIZADO);
                         return Navegacion.LOGIN;
+                    case USUARIO_INACTIVO :
+                        errorMessage = mensaje.getProperty(BeanMensaje.USUARIO_INACTIVO);
+                        return Navegacion.LOGIN;
                     case USUARIO_AUTORIZADO:
 
                         if (acceder(u)) {
@@ -147,12 +150,12 @@ public class LoginManagedBean implements Serializable {
                 return false;
             }
 
-            UserToken ut = getUserToken(u, Status.ACTIVE);
+            UserToken ut = getUserToken(u, Status.ACTIVO);
             ejbUsuario.insert(ut);
             
             //u= ejbUsuario.get(u);
 
-            UserLogin ul = getUserLogin(u, Status.ACTIVE);
+            UserLogin ul = getUserLogin(u, Status.ACTIVO);
             ul.setIdUserLogin(ejbUsuario.insert(ul));
 
             SessionUtils.setSession(SessionUtils.SESION_USUARIO, u);
