@@ -7,13 +7,11 @@ package com.services.agencia;
 
 import com.agencia.control.remote.TarjetaCreditoRemote;
 import com.agencia.entities.TarjetaCredito;
-import com.contabilidad.entities.PlanCuentas;
 import com.contabilidad.remote.PlanCuentasRemote;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.response.json.PlanCuentasJSON;
 import com.response.json.TarjetaCreditoJSON;
 import com.seguridad.control.entities.User;
 import com.seguridad.control.entities.UserToken;
@@ -23,7 +21,6 @@ import com.seguridad.control.remote.UsuarioRemote;
 import com.seguridad.utils.Accion;
 import com.seguridad.utils.ResponseCode;
 import com.seguridad.utils.Status;
-import com.services.contabilidad.ContabilidadResource;
 import com.services.seguridad.EmpresaServices;
 import com.services.seguridad.util.RestRequest;
 import com.services.seguridad.util.RestResponse;
@@ -93,7 +90,7 @@ public class TarjetasCreditoResource {
                 System.out.println(request.getToken());
                 UserToken t = ejbUsuario.get(new UserToken(request.getToken()));
                 if (t != null) {
-                    if (t.getStatus().equals(Status.ACTIVE)) {
+                    if (t.getStatus().equals(Status.ACTIVO)) {
 
                         List<TarjetaCredito> l = ejbTarjeta.get();
 
@@ -142,7 +139,7 @@ public class TarjetasCreditoResource {
                 UserToken t = ejbUsuario.get(new UserToken(request.getToken()));
                 User u = ejbUsuario.get(new User(t.getUserName()));
                 if (t != null) {
-                    if (t.getStatus().equals(Status.ACTIVE)) {
+                    if (t.getStatus().equals(Status.ACTIVO)) {
 
                         List<Object[]> l = ejbPlanCuentas.getForCombo(u.getIdEmpleado().getIdEmpresa());
 
@@ -196,7 +193,7 @@ public class TarjetasCreditoResource {
                 System.out.println(request.getToken());
                 UserToken t = ejbUsuario.get(new UserToken(request.getToken()));
                 if (t != null) {
-                    if (t.getStatus().equals(Status.ACTIVE)) {
+                    if (t.getStatus().equals(Status.ACTIVO)) {
 
                         TarjetaCreditoJSON json = new TarjetaCreditoJSON();
                         Gson gson = new GsonBuilder().create();
@@ -253,7 +250,7 @@ public class TarjetasCreditoResource {
                 System.out.println(request.getToken());
                 UserToken t = ejbUsuario.get(new UserToken(request.getToken()));
                 if (t != null) {
-                    if (t.getStatus().equals(Status.ACTIVE)) {
+                    if (t.getStatus().equals(Status.ACTIVO)) {
 
                         TarjetaCreditoJSON json = new TarjetaCreditoJSON();
                         Gson gson = new GsonBuilder().create();

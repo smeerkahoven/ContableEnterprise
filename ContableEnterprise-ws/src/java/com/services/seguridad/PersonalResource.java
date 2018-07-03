@@ -99,7 +99,7 @@ public class PersonalResource {
                 System.out.println(request.getToken());
                 UserToken t = ejbUsuario.get(new UserToken(request.getToken()));
                 if (t != null) {
-                    if (t.getStatus().equals(Status.ACTIVE)) {
+                    if (t.getStatus().equals(Status.ACTIVO)) {
 
                         Empleado e = new Empleado();
                         HashMap<String, Object> h = (HashMap<String, Object>) request.getContent();
@@ -149,7 +149,7 @@ public class PersonalResource {
                 System.out.println(request.getToken());
                 UserToken t = ejbUsuario.get(new UserToken(request.getToken()));
                 if (t != null) {
-                    if (t.getStatus().equals(Status.ACTIVE)) {
+                    if (t.getStatus().equals(Status.ACTIVO)) {
 
                         r.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
                         r.setContent(EmpleadoJSON.convertToJSON(ejbEmpleado.get()) );
@@ -194,7 +194,7 @@ public class PersonalResource {
                 System.out.println(request.getToken());
                 UserToken t = ejbUsuario.get(new UserToken(request.getToken()));
                 if (t != null) {
-                    if (t.getStatus().equals(Status.ACTIVE)) {
+                    if (t.getStatus().equals(Status.ACTIVO)) {
 
                         EmpleadoJSON e = new EmpleadoJSON();
 
@@ -250,7 +250,7 @@ public class PersonalResource {
                 System.out.println(request.getToken());
                 UserToken t = ejbUsuario.get(new UserToken(request.getToken()));
                 if (t != null) {
-                    if (t.getStatus().equals(Status.ACTIVE)) {
+                    if (t.getStatus().equals(Status.ACTIVO)) {
                         List<Empresa> l = ejbEmpresa.get("Empresa.findEmpresaForCombo");
                         ArrayList lst = new ArrayList();
                         Iterator i = l.iterator() ;
@@ -305,7 +305,7 @@ public class PersonalResource {
                 System.out.println(request.getToken());
                 UserToken t = ejbUsuario.get(new UserToken(request.getToken()));
                 if (t != null) {
-                    if (t.getStatus().equals(Status.ACTIVE)) {
+                    if (t.getStatus().equals(Status.ACTIVO)) {
 
                         EmpleadoJSON e = new EmpleadoJSON();
 

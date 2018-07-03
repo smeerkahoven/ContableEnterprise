@@ -93,7 +93,7 @@ public class EmpresaServices {
                 System.out.println(request.getToken());
                 UserToken t = ejbUsuario.get(new UserToken(request.getToken()));
                 if (t != null) {
-                    if (t.getStatus().equals(Status.ACTIVE)) {
+                    if (t.getStatus().equals(Status.ACTIVO)) {
                         Empresa e = new Empresa();
                         e.setTipo(Empresa.SUCURSAL);
 

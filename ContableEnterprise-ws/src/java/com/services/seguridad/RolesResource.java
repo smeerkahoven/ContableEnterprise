@@ -85,7 +85,7 @@ public class RolesResource {
                 System.out.println(request.getToken());
                 UserToken t = ejbUsuario.get(new UserToken(request.getToken()));
                 if (t != null) {
-                    if (t.getStatus().equals(Status.ACTIVE)) {
+                    if (t.getStatus().equals(Status.ACTIVO)) {
 
                         List<Object[]> l = ejbRol.get(queries.getPropertie(Queries.GET_MODULO_NUEVO));
                         LinkedList<ModuloJSON> lm = new LinkedList<>();
@@ -137,7 +137,7 @@ public class RolesResource {
                 System.out.println(request.getToken());
                 UserToken t = ejbUsuario.get(new UserToken(request.getToken()));
                 if (t != null) {
-                    if (t.getStatus().equals(Status.ACTIVE)) {
+                    if (t.getStatus().equals(Status.ACTIVO)) {
                         Rol rol = new Rol();
                         HashMap<String, Object> h = (HashMap<String, Object>) request.getContent();
                         rol.setIdRol(((BigDecimal) h.get("idRol")).intValue());
@@ -196,7 +196,7 @@ public class RolesResource {
                 System.out.println(request.getToken());
                 UserToken t = ejbUsuario.get(new UserToken(request.getToken()));
                 if (t != null) {
-                    if (t.getStatus().equals(Status.ACTIVE)) {
+                    if (t.getStatus().equals(Status.ACTIVO)) {
 
                         guardarPermisos(request.getContent());
 
@@ -249,7 +249,7 @@ public class RolesResource {
                 System.out.println(request.getToken());
                 UserToken t = ejbUsuario.get(new UserToken(request.getToken()));
                 if (t != null) {
-                    if (t.getStatus().equals(Status.ACTIVE)) {
+                    if (t.getStatus().equals(Status.ACTIVO)) {
 
                         updatePermisos(request.getContent());
 
@@ -299,7 +299,7 @@ public class RolesResource {
                 System.out.println(request.getToken());
                 UserToken t = ejbUsuario.get(new UserToken(request.getToken()));
                 if (t != null) {
-                    if (t.getStatus().equals(Status.ACTIVE)) {
+                    if (t.getStatus().equals(Status.ACTIVO)) {
 
                         HashMap<String, Object> hmap = (HashMap<String, Object>) request.getContent();
                         Rol rol = new Rol();
@@ -355,7 +355,7 @@ public class RolesResource {
                 System.out.println(request.getToken());
                 UserToken t = ejbUsuario.get(new UserToken(request.getToken()));
                 if (t != null) {
-                    if (t.getStatus().equals(Status.ACTIVE)) {
+                    if (t.getStatus().equals(Status.ACTIVO)) {
 
                         List<Rol> l = ejbRol.get();
 

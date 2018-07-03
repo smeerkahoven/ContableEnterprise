@@ -84,7 +84,7 @@ public class AeropuertoResource {
                 System.out.println(request.getToken());
                 UserToken t = ejbUsuario.get(new UserToken(request.getToken()));
                 if (t != null) {
-                    if (t.getStatus().equals(Status.ACTIVE)) {
+                    if (t.getStatus().equals(Status.ACTIVO)) {
 
                         List<Aeropuerto> l = ejbAeropuerto.get();
 
@@ -131,7 +131,7 @@ public class AeropuertoResource {
                 System.out.println(request.getToken());
                 UserToken t = ejbUsuario.get(new UserToken(request.getToken()));
                 if (t != null) {
-                    if (t.getStatus().equals(Status.ACTIVE)) {
+                    if (t.getStatus().equals(Status.ACTIVO)) {
                         Aeropuerto a = new Aeropuerto();
                         HashMap<String, Object> h = (HashMap<String, Object>) request.getContent();
                         a.setIdAeropuerto((String) h.get("idAeropuerto"));
@@ -180,7 +180,7 @@ public class AeropuertoResource {
                 System.out.println(request.getToken());
                 UserToken t = ejbUsuario.get(new UserToken(request.getToken()));
                 if (t != null) {
-                    if (t.getStatus().equals(Status.ACTIVE)) {
+                    if (t.getStatus().equals(Status.ACTIVO)) {
 
                         HashMap<String, Object> hmap = (HashMap<String, Object>) request.getContent();
 
@@ -234,7 +234,7 @@ public class AeropuertoResource {
                 System.out.println(request.getToken());
                 UserToken t = ejbUsuario.get(new UserToken(request.getToken()));
                 if (t != null) {
-                    if (t.getStatus().equals(Status.ACTIVE)) {
+                    if (t.getStatus().equals(Status.ACTIVO)) {
 
                         HashMap<String, Object> hmap = (HashMap<String, Object>) request.getContent();
                         Aeropuerto a = new Aeropuerto();
@@ -286,7 +286,7 @@ public class AeropuertoResource {
                 System.out.println(request.getToken());
                 UserToken t = ejbUsuario.get(new UserToken(request.getToken()));
                 if (t != null) {
-                    if (t.getStatus().equals(Status.ACTIVE)) {
+                    if (t.getStatus().equals(Status.ACTIVO)) {
 
                         Aeropuerto a = new Aeropuerto();
 

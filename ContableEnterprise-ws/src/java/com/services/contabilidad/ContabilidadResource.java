@@ -112,7 +112,7 @@ public class ContabilidadResource {
                 User u = ejbUsuario.get(new User(t.getUserName()));
 
                 if (t != null) {
-                    if (t.getStatus().equals(Status.ACTIVE)) {
+                    if (t.getStatus().equals(Status.ACTIVO)) {
 
                         List<PlanCuentas> l = ejbPlanCuentas.get(u.getIdEmpleado().getIdEmpresa());
                         List<PlanCuentasJSON> json = getPlanCuentasJSon(l);
@@ -170,7 +170,7 @@ public class ContabilidadResource {
                 User u = ejbUsuario.get(new User(t.getUserName()));
 
                 if (t != null) {
-                    if (t.getStatus().equals(Status.ACTIVE)) {
+                    if (t.getStatus().equals(Status.ACTIVO)) {
 
                         List<Object[]> l = ejbPlanCuentas.getForCombo(u.getIdEmpleado().getIdEmpresa());
 
@@ -224,7 +224,7 @@ public class ContabilidadResource {
                 System.out.println(request.getToken());
                 UserToken t = ejbUsuario.get(new UserToken(request.getToken()));
                 if (t != null) {
-                    if (t.getStatus().equals(Status.ACTIVE)) {
+                    if (t.getStatus().equals(Status.ACTIVO)) {
 
                         PlanCuentasJSON pc = new PlanCuentasJSON();
                         Gson gson = new GsonBuilder().create();
@@ -281,7 +281,7 @@ public class ContabilidadResource {
                 System.out.println(request.getToken());
                 UserToken t = ejbUsuario.get(new UserToken(request.getToken()));
                 if (t != null) {
-                    if (t.getStatus().equals(Status.ACTIVE)) {
+                    if (t.getStatus().equals(Status.ACTIVO)) {
 
                         PlanCuentasJSON pc = new PlanCuentasJSON();
                         Gson gson = new GsonBuilder().create();
@@ -337,7 +337,7 @@ public class ContabilidadResource {
                 System.out.println(request.getToken());
                 UserToken t = ejbUsuario.get(new UserToken(request.getToken()));
                 if (t != null) {
-                    if (t.getStatus().equals(Status.ACTIVE)) {
+                    if (t.getStatus().equals(Status.ACTIVO)) {
 
                         //TODO
                         // Hay q revisar que no existan transacciones para la cuenta
@@ -397,7 +397,7 @@ public class ContabilidadResource {
                 System.out.println(request.getToken());
                 UserToken t = ejbUsuario.get(new UserToken(request.getToken()));
                 if (t != null) {
-                    if (t.getStatus().equals(Status.ACTIVE)) {
+                    if (t.getStatus().equals(Status.ACTIVO)) {
 
                         PlanCuentasJSON pc = new PlanCuentasJSON();
                         Gson gson = new GsonBuilder().create();

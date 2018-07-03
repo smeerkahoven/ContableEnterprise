@@ -10,6 +10,8 @@ package com.services.seguridad.util;
  * @author xeio
  */
 public class RestResponse {
+    
+    public static final String BANCO_CUENTA_RELACION = "BANCO_CUENTA_RELACION";
 
     public static final String RESTFUL_ERROR = "RESTFUL_ERROR";
     public static final String RESTFUL_SUCCESS = "RESTFUL_SUCCESS";
