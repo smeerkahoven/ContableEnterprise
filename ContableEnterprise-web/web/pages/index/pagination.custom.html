@@ -1,0 +1,10 @@
+<nav ng-if="pages.length >= 2">
+    <ul  class="pagination">
+        <li class="page-item"><a class="page-link" ng-click="selectPage(1)">Primero</a></li>
+        <li class="page-item"><a class="page-link" ng-click="selectPage(currentPage - 1)">&lt;</a></li>
+        <li class="page-item"><a ><page-select></page-select> </a></li>
+        <li class="page-item"><a class="page-link" >de {{numPages}}</a></li>
+        <li class="page-item"><a class="page-link" ng-click="selectPage(currentPage + 1)">&gt;</a></li>
+        <li class="page-item"><a class="page-link" ng-click="selectPage(numPages)">Ultimo</a></li>
+    </ul>
+</nav>

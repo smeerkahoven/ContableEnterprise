@@ -1,0 +1,51 @@
+<ui:composition 
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://xmlns.jcp.org/jsf/core"
+    xmlns:h="http://xmlns.jcp.org/jsf/html"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+    xmlns:c="http://java.sun.com/jsp/jstl/core"
+    >
+
+    <f:view>
+        <h:form >
+            <!-- .aside-menu -->
+            <section class="aside-menu has-scrollable">
+                <!-- .stacked-menu -->
+                <nav id="stacked-menu" class="stacked-menu">
+                    <!-- .menu -->
+                    <ul class="menu">
+                        <c:forEach var="modulo" items="#{menu.menuList}">
+                            <c:if test="#{ not empty modulo.urlAcceso }">
+                                <li class="menu-item has-child" title="#{modulo.nombre}">
+                                    <h:commandLink class="menu-link" action="#{modulo.urlAcceso}">
+                                        <i class="menu-icon fa fa-#{modulo.classMenu}"></i>
+                                        <h:outputLabel class="menu-text">#{modulo.nombre}</h:outputLabel>
+                                    </h:commandLink>                                                    
+                                </li>
+                            </c:if>
+
+                            <c:if test="#{ empty modulo.urlAcceso }">
+                                <li class="menu-item has-child"  title="#{modulo.nombre}">
+                                    <a class="menu-link" href="#" >
+                                        <span class="menu-icon fa fa-#{modulo.classMenu}"></span>
+                                        <span class="menu-text">#{modulo.nombre}</span>
+                                    </a>  
+                                    <ul class="menu" id="collapse#{modulo.nombre}">
+                                        <c:forEach var="submenu" items="#{modulo.submenus}">
+                                            <li class="menu-item">
+                                                <h:commandLink class="menu-link"  action="#{menu.navegar(submenu.action)}" value="#{submenu.nombre}"></h:commandLink> 
+                                            </li> 
+                                        </c:forEach>
+                                    </ul>
+                                </li>
+                            </c:if>
+                        </c:forEach>
+                    </ul>
+                    <!-- /.menu -->
+                </nav>
+                <!-- /.stacked-menu -->
+            </section>
+            <!-- /.aside-menu -->
+        </h:form>
+    </f:view>
+</ui:composition>

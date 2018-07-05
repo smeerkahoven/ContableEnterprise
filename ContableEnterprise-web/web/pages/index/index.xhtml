@@ -1,0 +1,206 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      lang="eng">
+    <h:head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <!-- End Required meta tags -->
+
+        <!-- FAVICONS -->
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/apple-touch-icon.png" />
+        <link rel="shortcut icon" href="../../assets/favicon.ico" />
+        <meta name="theme-color" content="#3063A0" />
+        <!-- End FAVICONS -->
+        <script src="../../assets/vendor/pace/pace.min.js"></script>
+        <!-- BEGIN BASE STYLES -->
+        <link rel="stylesheet" href="../../assets/vendor/pace/pace.min.css" />
+        <link rel="stylesheet" href="../../assets/vendor/bootstrap/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="../../assets/vendor/open-iconic/css/open-iconic-bootstrap.min.css"/>
+        <link rel="stylesheet" href="../../assets/vendor/fontawesome/css/fontawesome.all.css"/>
+        <!-- END BASE STYLES -->
+        <!-- BEGIN PLUGINS STYLES -->
+        <link rel="stylesheet" href="../../assets/vendor/flatpickr/flatpickr.min.css"/>
+        <!-- END PLUGINS STYLES -->
+        <!-- BEGIN THEME STYLES -->
+        <link rel="stylesheet" href="../../assets/stylesheets/main.min.css"/>
+        <link rel="stylesheet" href="../../assets/stylesheets/custom.css"/>
+        <!-- END THEME STYLES -->
+        <title>Web Contable - #{login.razonSocial}</title>
+    </h:head>
+    <h:body>
+        <!-- .app -->
+        <div class="app">
+            <!-- .app-header -->
+            <header class="app-header">
+                <!-- .top-bar -->
+                <ui:include src="top-bar.xhtml" />
+                <!-- /.top-bar -->
+            </header>
+            <!-- /.app-header -->
+
+            <!-- .app-aside -->
+            <aside class="app-aside">
+                <!-- .aside-content -->
+                <div class="aside-content">
+                    <!-- .aside-menu -->
+                    <ui:include src="menu.xhtml" />
+                    <!-- /.aside-menu -->
+                </div>
+                <!-- /.aside-content -->
+            </aside>
+            <!-- /.app-aside -->
+            <!-- .app-main -->
+            <main class="app-main">
+                <!-- .wrapper -->
+                <div class="wrapper">
+                    <!-- .page -->
+                    <div class="page">
+                        <!-- .page-inner -->
+                        <div class="page-inner">
+                            <!-- .page-title-bar -->
+                            <header class="page-title-bar">
+                                <p class="lead">
+                                    <span class="font-weight-bold">Hola, #{login.empleado.nombre}</span>
+                                    <span class="d-block text-muted">He aqu&iacute; alguna informaci&oacute;n &uacute;til para el d&iacute;a de hoy.</span>
+                                </p>
+                            </header>
+                            <!-- /.page-title-bar -->
+                            <!-- .page-section -->
+                            <div class="page-section">
+                                <!-- .section-block -->
+                                <div class="section-block">
+                                    <!-- metric row -->
+                                    <div class="metric-row">
+                                        <div class="col-lg-9">
+                                            <div class="metric-row metric-flush">
+                                                <!-- metric column -->
+                                                <div class="col">
+                                                    <!-- .metric -->
+                                                    <a href="user-teams.html" class="metric metric-bordered align-items-center">
+                                                        <h2 class="metric-label"> Teams </h2>
+                                                        <p class="metric-value h3">
+                                                            <sub>
+                                                                <i class="oi oi-people"></i>
+                                                            </sub>
+                                                            <span class="value">8</span>
+                                                        </p>
+                                                    </a>
+                                                    <!-- /.metric -->
+                                                </div>
+                                                <!-- /metric column -->
+                                                <!-- metric column -->
+                                                <div class="col">
+                                                    <!-- .metric -->
+                                                    <a href="user-projects.html" class="metric metric-bordered align-items-center">
+                                                        <h2 class="metric-label"> Projects </h2>
+                                                        <p class="metric-value h3">
+                                                            <sub>
+                                                                <i class="oi oi-fork"></i>
+                                                            </sub>
+                                                            <span class="value">12</span>
+                                                        </p>
+                                                    </a>
+                                                    <!-- /.metric -->
+                                                </div>
+                                                <!-- /metric column -->
+                                                <!-- metric column -->
+                                                <div class="col">
+                                                    <!-- .metric -->
+                                                    <a href="user-tasks.html" class="metric metric-bordered align-items-center">
+                                                        <h2 class="metric-label"> Active Tasks </h2>
+                                                        <p class="metric-value h3">
+                                                            <sub>
+                                                                <i class="fa fa-tasks"></i>
+                                                            </sub>
+                                                            <span class="value">64</span>
+                                                        </p>
+                                                    </a>
+                                                    <!-- /.metric -->
+                                                </div>
+                                                <!-- /metric column -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- /metric row -->
+                                </div>
+                                <!-- /.section-block -->
+                                <!-- grid row -->
+                                <div class="row">
+                                    <!-- grid column -->
+                                    <!-- /grid column -->
+                                    <!-- grid column -->
+                                    <div class="col-12 col-lg-6 col-xl-4">
+                                        <!-- .card -->
+                                        <section class="card card-fluid">
+                                            <!-- .card-footer -->
+                                            <div class="card-footer">
+                                                <div class="card-footer-item">
+                                                    <i class="fa fa-fw fa-circle text-indigo"></i> 100%
+                                                    <div class="text-muted small"> Assigned </div>
+                                                </div>
+                                                <div class="card-footer-item">
+                                                    <i class="fa fa-fw fa-circle text-purple"></i> 75%
+                                                    <div class="text-muted small"> Completed </div>
+                                                </div>
+                                                <div class="card-footer-item">
+                                                    <i class="fa fa-fw fa-circle text-teal"></i> 60%
+                                                    <div class="text-muted small"> Active </div>
+                                                </div>
+                                            </div>
+                                            <!-- /.card-footer -->
+                                        </section>
+                                        <!-- /.card -->
+                                    </div>
+                                    <!-- /grid column -->
+                                </div>
+                                <!-- /grid row -->
+                            </div>
+                            <!-- /.page-section -->
+                        </div>
+                        <!-- /.page-inner -->
+                    </div>
+                    <!-- /.page -->
+                </div>
+                <!-- .app-footer -->
+                <ui:include src="footer.xhtml" />
+                <!-- /.app-footer -->
+                <!-- /.wrapper -->
+            </main>
+            <!-- /.app-main -->
+        </div>
+        <!-- /.app -->
+        <!-- BEGIN BASE JS -->
+        <script src="../../assets/vendor/jquery/jquery.min.js"></script>
+        <script src="../../assets/vendor/bootstrap/js/popper.min.js"></script>
+        <script src="../../assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+        <!-- END BASE JS -->
+        <!-- BEGIN PLUGINS JS -->
+        <script src="../../assets/vendor/stacked-menu/stacked-menu.min.js"></script>
+        <script src="../../assets/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+        <!-- END PLUGINS JS -->
+        <!-- BEGIN THEME JS -->
+        <script src="../../assets/javascript/main.min.js"></script>
+        <!-- END THEME JS -->
+        <!-- BEGIN PAGE LEVEL JS -->
+        <!-- END PAGE LEVEL JS -->
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script>
+            window.dataLayer = window.dataLayer || [];
+
+            function gtag()
+            {
+                dataLayer.push(arguments);
+            }
+            gtag('js', new Date());
+            gtag('config', 'UA-116692175-1');
+        </script>
+    </h:body>
+</html>
+
