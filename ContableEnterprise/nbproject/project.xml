@@ -16,7 +16,7 @@
                     <path-in-war>/</path-in-war>
                 </library>
                 <library>
-                    <file>${reference.ContableEnterprise-war.dist-ear}</file>
+                    <file>${reference.ContableEnterprise-web.dist-ear}</file>
                     <path-in-war>/</path-in-war>
                 </library>
             </web-module-additional-libraries>
@@ -31,7 +31,7 @@
                 <id>dist-ear</id>
             </reference>
             <reference>
-                <foreign-project>ContableEnterprise-war</foreign-project>
+                <foreign-project>ContableEnterprise-web</foreign-project>
                 <artifact-type>j2ee_ear_archive</artifact-type>
                 <script>build.xml</script>
                 <target>dist-ear</target>
