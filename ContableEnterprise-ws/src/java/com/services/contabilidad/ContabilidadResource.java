@@ -12,7 +12,6 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.response.json.PlanCuentasJSON;
-import com.seguridad.control.ejb.LoggerEJB;
 import com.seguridad.control.entities.User;
 import com.seguridad.control.entities.UserToken;
 import com.seguridad.control.exception.CRUDException;
