@@ -348,7 +348,7 @@ public class LoginManagedBean implements Serializable {
             SessionUtils.setSession(SessionUtils.SESION_MENU, null);
         }
 
-        System.out.println("SEsion del usuario :" + (User) SessionUtils.getSession(SessionUtils.SESION_USUARIO));
+        System.out.println("Sesion del usuario :" + (User) SessionUtils.getSession(SessionUtils.SESION_USUARIO));
         return Navegacion.LOGIN;
     }
 

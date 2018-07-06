@@ -15,21 +15,21 @@ import javax.enterprise.context.RequestScoped;
  *
  * @author xeio
  */
-@Named(value = "rol")
+@Named(value = "sucursal")
 @RequestScoped
-public class RolManagedBean {
+public class SucursalManagedBean {
+
+    /**
+     * Creates a new instance of SucursalManagedBean
+     */
+    public SucursalManagedBean() {
+    }
 
     private Formulario formulario;
 
     @PostConstruct
     public void init() {
-        this.formulario = SessionUtils.getFormulario(Formulario.ROLES);
-    }
-
-    /**
-     * Creates a new instance of RolManagedBean
-     */
-    public RolManagedBean() {
+        this.formulario = SessionUtils.getFormulario(Formulario.SUCURSAL);
     }
 
     public Formulario getFormulario() {

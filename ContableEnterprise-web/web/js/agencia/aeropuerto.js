@@ -21,6 +21,7 @@ angular.module('jsAeropuerto.controllers', []).controller('frmAeropuerto', ['$sc
 
         var token = document.getElementsByName("hdToken")[0];
         var url = document.getElementsByName("hdUrl")[0];
+        var myForm = document.getElementsByName("myForm")[0];
 
         $scope.showRestfulMessage = '';
         $scope.showRestfulError = false;
@@ -197,7 +198,7 @@ angular.module('jsAeropuerto.controllers', []).controller('frmAeropuerto', ['$sc
             $scope.showTable = false;
             $scope.showRestfulSuccess = false;
             $scope.showRestfulError = false;
-
+            myForm.reset();
         }
 
         $scope.cancelar = function () {

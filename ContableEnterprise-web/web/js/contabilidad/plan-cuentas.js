@@ -49,7 +49,6 @@ angular.module('jsPlanCuentas.controllers', []).controller('frmPlanCuentas', ['$
                 data: {token: token.value, content: ''},
                 headers: {'Content-Type': 'application/json'}
             }).then(function (response) {
-                console.log(url.value + method);
                 if (response.data.code === 201) {
                     if (method === 'all') {
                         $scope.mainGrid = response.data.content;
@@ -61,13 +60,11 @@ angular.module('jsPlanCuentas.controllers', []).controller('frmPlanCuentas', ['$
                         $scope.comboAitb = response.data.content;
                     }
                 } else {
-                    console.log("Error aqui" +rl.value + method);
                     $scope.showRestfulMessage = response.data.content;
                     $scope.showRestfulError = true;
                     return {};
                 }
             }, function (error) {
-                console.log("url.value + method Error de Respuesta");
                 $scope.showRestfulMessage = error;
                 $scope.showRestfulError = true;
             });
@@ -171,7 +168,11 @@ angular.module('jsPlanCuentas.controllers', []).controller('frmPlanCuentas', ['$
 
         $scope.get = function (id) {
             $scope.loading = true;
-            var data = {idPlanCuentas: id};
+            var data = {};
+            if (id.nivel == 1)
+                data = {idPlanCuentas: id.idPlanCuentas};
+            else
+                data = {idPlanCuentas: id.idPlanCuentaPadre};
             $http({
                 method: 'POST',
                 url: url.value + 'get',
@@ -261,7 +262,7 @@ angular.module('jsPlanCuentas.controllers', []).controller('frmPlanCuentas', ['$
 
 
         $scope.edit = function (item) {
-            $scope.get(item.idPlanCuentaPadre);
+            $scope.get(item);
             $scope.showLoading = true;
             $scope.showBtnNuevo = false;
             $scope.showBtnActualizar = true;

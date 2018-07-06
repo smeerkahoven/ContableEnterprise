@@ -29,8 +29,6 @@ import javax.faces.context.FacesContext;
 @RequestScoped
 public class EmpresaManagedBean implements Serializable {
 
-    
-
     private String errorMessage;
 
     private String successMessage;
@@ -50,6 +48,8 @@ public class EmpresaManagedBean implements Serializable {
 
     private Empresa data;
 
+    private Formulario formulario;
+
     @PostConstruct
     public void init() {
         try {
@@ -57,6 +57,8 @@ public class EmpresaManagedBean implements Serializable {
             e.setTipo(Empresa.PRINCIPAL);
             data = ejbEmpresa.getPrincipal(data);
             System.out.print(data);
+
+            this.formulario = SessionUtils.getFormulario(Formulario.EMPRESA);
 
             this.formSucursal = SessionUtils.getFormulario(Formulario.SUCURSAL);
         } catch (CRUDException ex) {
@@ -67,6 +69,14 @@ public class EmpresaManagedBean implements Serializable {
 
     public EmpresaManagedBean() {
 
+    }
+
+    public Formulario getFormulario() {
+        return formulario;
+    }
+
+    public void setFormulario(Formulario formulario) {
+        this.formulario = formulario;
     }
 
     public Empresa getData() {

@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html  xmlns="http://www.w3.org/1999/xhtml"
        xmlns:h="http://xmlns.jcp.org/jsf/html"
-       xmlns:ui="http://xmlns.jcp.org/jsf/facelets" ng-app="jsAeropuerto"
+       xmlns:ui="http://xmlns.jcp.org/jsf/facelets" ng-app="jsEmpresa"
        xmlns:c="http://java.sun.com/jsp/jstl/core"
        >
     <head>
@@ -13,7 +13,7 @@
         <meta name="author" content="" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <!-- End Required meta tags -->
-        <title>Web Contable - #{login.razonSocial}</title>
+        <title>Web Contable1 - #{login.razonSocial}</title>
         <!-- FAVICONS -->
         <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/apple-touch-icon.png" />
         <link rel="shortcut icon" href="../../assets/favicon.ico" />
@@ -35,7 +35,7 @@
         <script type="text/javascript" src="../../js/angular.min.js" />
         <script type="text/javascript" src="../../js/ui-bootstrap-tpls.js" />
         <script type="text/javascript" src="../../js/smart-table.min.js" />
-        <script type="text/javascript" src="../../js/agencia/aeropuerto.js" />
+        <script type="text/javascript" src="../../js/seguridad/empresa.js" />
 
         <title>Web Contable - #{login.razonSocial} </title>
     </head>
@@ -61,7 +61,7 @@
             </aside>
             <!-- /.app-aside -->
             <!-- .app-main -->
-            <main class="app-main" ng-controller="frmAeropuerto">
+            <main class="app-main" ng-controller="frmEmpresa">
                 <!-- .wrapper -->
                 <div class="wrapper">
                     <!-- .page -->
@@ -74,19 +74,13 @@
                                     <ol class="breadcrumb">
                                         <li class="breadcrumb-item active">
                                             <a href="#">
-                                                <i class="breadcrumb-icon fa fa-angle-left mr-2"></i>#{aeropuerto.formulario.modulo}
+                                                <i class="breadcrumb-icon fa fa-angle-left mr-2"></i>#{empresa.formulario.modulo}
                                             </a>
                                         </li>
                                     </ol>
                                 </nav>
                                 <div class="d-md-flex">
-                                    <h1 class="page-title mr-sm-auto"> #{aeropuerto.formulario.nombre}</h1>
-                                    <div class="dt-button btn-group">
-                                        <c:if test="#{aeropuerto.formulario.crear== aeropuerto.formulario.PERMITIR}">
-                                            <button type="button" class="btn btn-success buttons-html5" tabindex="0" ng-click="nuevo()"><span class="fa fa-plus"></span> Nuevo</button>
-                                        </c:if>
-                                        <button type="button" class="btn btn-warning buttons-html5" tabindex="0" ng-click="cancelar()"><span class="fa fa-undo"></span> Cancelar</button>
-                                    </div>
+                                    <h1 class="page-title mr-sm-auto"> #{empresa.formulario.nombre}</h1>
                                 </div>
                             </header>
                             <!-- /.page-title-bar -->
@@ -128,7 +122,73 @@
                                             <!-- .fieldset -->
                                             <fieldset>
                                                 <!-- Contenido Formulario-->
+                                                <div class="form-group row">
+                                                    <label for="txtRazonSocial" class="col-form-label col-sm-4 text-right">Nombre Sucursal</label>
+                                                    <div class="col-sm-4">
+                                                        <input type="text" class="form-control" id="txtRazonSocial" name="txtRazonSocial" 
+                                                               required="required" maxlength="255" value="#{empresa.data.razonSocial}" />
+                                                    </div>
+                                                </div>
 
+                                                <div class="form-group row">
+                                                    <label for="txtDireccion" class=" col-form-label col-sm-4 text-right">Dirección</label>
+                                                    <div class="col-sm-4">
+                                                        <input type="text" class="form-control" id="txtDireccion" name="txtDireccion"  
+                                                               required="required" maxlength="255" value="#{empresa.data.direccion}" />
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    <label for="txtNIT" class="col-form-label col-sm-4 text-right">NIT</label>
+                                                    <div class="col-sm-4">
+                                                        <input type="text" class="form-control" id="txtNIT" name="txtNIT" onkeypress="return isNumberKey(event)" 
+                                                               required="required" maxlength="15"  value="#{empresa.data.nit}"/></div>
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    <label for="txtTelefonoFijo" class="col-form-label col-sm-4 text-right">Telefono</label>
+                                                    <div class="col-sm-4">
+                                                        <input type="text" class="form-control col" id="txtTelefonoFijo"  name="txtTelefonoFijo" 
+                                                               onkeypress="return isNumberKey(event)" maxlength="10" value="#{empresa.data.telefonoFijo}" />
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    <label for="txtTelefonoCelular" class="col-form-label text-right col-sm-4 mb-0">Celular </label>
+                                                    <div class="col-sm-4">
+                                                        <input type="text" class="form-control col" id="txtTelefonoCelular"  name="txtTelefonoCelular"
+                                                               required="required" onkeypress="return isNumberKey(event)" maxlength="8" value="#{empresa.data.telefonoCelular}"/>
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    <label for="txtNroIata" class="col-form-label col-sm-4 text-right">Numero IATA</label>
+                                                    <div class="col-sm-4">
+                                                        <input type="text" class="form-control col" id="txtNroIata"   name="txtNroIata" 
+                                                               required="required" onkeypress="return isNumberKey(event)" maxlength="12" value="#{empresa.data.nroIata}"/>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    <label for="txtEmail" class=" col-form-label col-sm-4 text-right">Email</label>
+                                                    <div class="col-sm-4">
+                                                        <input type="email" class="form-control col" id="txtEmail" name="txtEmail"  placeholder="ejemplo@email.com" maxlength="255" value="#{empresa.data.email}" />
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    <label for="txtPaginaWeb" class="col-form-label col-sm-4 text-right">Página Web</label>
+                                                    <div class="col-sm-4">
+                                                        <input id="txtPaginaWeb" name="txtPaginaWeb" class="form-control col" required="required"  maxlength="128" value="#{empresa.data.paginaWeb}"></input>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-actions">
+                                                    <div class="form-group row modal-footer">
+                                                        <span ><h:commandButton class="btn btn-primary fa fa-save" action="#{empresa.guardar()}" value="Guardar" ></h:commandButton></span>
+                                                    </div>
+                                                </div>
                                                 <!-- /Contenido Formulario -->
                                                 <!-- /.form-group -->
                                             </fieldset>
@@ -191,7 +251,9 @@
         <!-- BEGIN PAGE LEVEL JS -->
         <!-- END PAGE LEVEL JS -->
         <!-- Global site tag (gtag.js) - Google Analytics -->
+
     </h:body>
+
 </html>
 
 
