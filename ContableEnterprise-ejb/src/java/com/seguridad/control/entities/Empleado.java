@@ -75,11 +75,22 @@ public class Empleado implements Serializable {
     private String status;
 
     @JoinColumn(name = "id_empresa", referencedColumnName = "id_empresa")
-    @ManyToOne (optional = false)
+    @ManyToOne(optional = false)
     private Empresa idEmpresa;
-    
-    public Empleado(int idEmpleado){
-        this.idEmpleado = idEmpleado ;
+
+    @Column(name = "cargo", length = 45)
+    private String cargo;
+
+    public Empleado(int idEmpleado) {
+        this.idEmpleado = idEmpleado;
+    }
+
+    public String getCargo() {
+        return cargo;
+    }
+
+    public void setCargo(String cargo) {
+        this.cargo = cargo;
     }
 
     public Empleado() {
