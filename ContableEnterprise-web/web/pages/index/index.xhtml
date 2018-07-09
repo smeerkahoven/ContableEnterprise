@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
-      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets" ng-app="jsIndex"
       lang="eng">
     <h:head>
         <meta charset="utf-8" />
@@ -24,6 +24,7 @@
         <link rel="stylesheet" href="../../assets/vendor/bootstrap/css/bootstrap.min.css" />
         <link rel="stylesheet" href="../../assets/vendor/open-iconic/css/open-iconic-bootstrap.min.css"/>
         <link rel="stylesheet" href="../../assets/vendor/fontawesome/css/fontawesome.all.css"/>
+        <link rel="stylesheet" href="../../assets/vendor/font-awesome/css/font-awesome.min.css"  />
         <!-- END BASE STYLES -->
         <!-- BEGIN PLUGINS STYLES -->
         <link rel="stylesheet" href="../../assets/vendor/flatpickr/flatpickr.min.css"/>
@@ -31,6 +32,10 @@
         <!-- BEGIN THEME STYLES -->
         <link rel="stylesheet" href="../../assets/stylesheets/main.min.css"/>
         <link rel="stylesheet" href="../../assets/stylesheets/custom.css"/>
+        <script type="text/javascript" src="../../js/angular.min.js" />
+        <script type="text/javascript" src="../../js/ui-bootstrap-tpls.js" />
+        <script type="text/javascript" src="../../js/smart-table.min.js" />
+        <script type="text/javascript" src="../../js/index/index.js" />
         <!-- END THEME STYLES -->
         <title>Web Contable - #{login.razonSocial}</title>
     </h:head>
@@ -57,7 +62,7 @@
             </aside>
             <!-- /.app-aside -->
             <!-- .app-main -->
-            <main class="app-main">
+            <main class="app-main" ng-controller="frmIndex">
                 <!-- .wrapper -->
                 <div class="wrapper">
                     <!-- .page -->
@@ -79,53 +84,47 @@
                                     <!-- metric row -->
                                     <div class="metric-row">
                                         <div class="col-lg-9">
-                                            <div class="metric-row metric-flush">
-                                                <!-- metric column -->
-                                                <div class="col">
-                                                    <!-- .metric -->
-                                                    <a href="user-teams.html" class="metric metric-bordered align-items-center">
-                                                        <h2 class="metric-label"> Teams </h2>
-                                                        <p class="metric-value h3">
-                                                            <sub>
-                                                                <i class="oi oi-people"></i>
-                                                            </sub>
-                                                            <span class="value">8</span>
-                                                        </p>
-                                                    </a>
-                                                    <!-- /.metric -->
+                                            <h:form id="frmUfv">`
+                                                <div class="metric-row metric-flush" ng-show="showFactores" >
+
+                                                    <!-- metric column -->
+                                                    <input type="hidden" id="hdToken" name="hdToken" value="#{sessionView.token}"/>
+                                                    <input type="hidden" id="hdUrlFactores" name="hdUrlFactores" value="#{factores.formulario.restful}"/>
+                                                    <input type="hidden" id="hdToken" name="hdFormName" value="index"/>
+                                                    <div class="col">
+                                                        <!-- .metric -->
+                                                        <h:commandLink action="factores" class="metric metric-bordered align-items-center">
+                                                            <h2 class="metric-label"> Valor UFV </h2>
+                                                            <h2 class="metric-label"> {{ufv.fecha}}</h2>
+                                                            <p class="metric-value h3">
+                                                                <sub>
+                                                                    <strong>Bs.</strong>
+                                                                </sub>
+                                                                <span class="value">{{ufv.valor}}</span>
+                                                            </p>
+                                                        </h:commandLink >
+                                                        <!-- /.metric -->
+                                                    </div>
+                                                    <!-- /metric column -->
+                                                    <!-- metric column -->
+                                                    <div class="col">
+                                                        <!-- .metric -->
+                                                        <h:commandLink action="factores" class="metric metric-bordered align-items-center">
+                                                            <h2 class="metric-label"> Valor Dolar </h2>
+                                                            <h2 class="metric-label"> {{dollar.fecha}}</h2>
+                                                            <p class="metric-value h3">
+                                                                <sub>
+                                                                    <strong>Bs.</strong>
+                                                                </sub>
+
+                                                                <span class="value">{{dollar.valor}}</span>
+                                                            </p>
+                                                        </h:commandLink >
+                                                        <!-- /.metric -->
+                                                    </div>
+                                                    <!-- /metric column -->
                                                 </div>
-                                                <!-- /metric column -->
-                                                <!-- metric column -->
-                                                <div class="col">
-                                                    <!-- .metric -->
-                                                    <a href="user-projects.html" class="metric metric-bordered align-items-center">
-                                                        <h2 class="metric-label"> Projects </h2>
-                                                        <p class="metric-value h3">
-                                                            <sub>
-                                                                <i class="oi oi-fork"></i>
-                                                            </sub>
-                                                            <span class="value">12</span>
-                                                        </p>
-                                                    </a>
-                                                    <!-- /.metric -->
-                                                </div>
-                                                <!-- /metric column -->
-                                                <!-- metric column -->
-                                                <div class="col">
-                                                    <!-- .metric -->
-                                                    <a href="user-tasks.html" class="metric metric-bordered align-items-center">
-                                                        <h2 class="metric-label"> Active Tasks </h2>
-                                                        <p class="metric-value h3">
-                                                            <sub>
-                                                                <i class="fa fa-tasks"></i>
-                                                            </sub>
-                                                            <span class="value">64</span>
-                                                        </p>
-                                                    </a>
-                                                    <!-- /.metric -->
-                                                </div>
-                                                <!-- /metric column -->
-                                            </div>
+                                            </h:form>
                                         </div>
                                     </div>
                                     <!-- /metric row -->
@@ -172,9 +171,9 @@
                 <ui:include src="footer.xhtml" />
                 <!-- /.app-footer -->
                 <!-- Logout Form -->
-                 <ui:include src="logout.xhtml" />
-                 <!-- /Logout Form -->
-                 
+                <ui:include src="logout.xhtml" />
+                <!-- /Logout Form -->
+
                 <!-- /.wrapper -->
             </main>
             <!-- /.app-main -->
@@ -196,14 +195,14 @@
         <!-- END PAGE LEVEL JS -->
         <!-- Global site tag (gtag.js) - Google Analytics -->
         <script>
-            window.dataLayer = window.dataLayer || [];
+                                                                    window.dataLayer = window.dataLayer || [];
 
-            function gtag()
-            {
-                dataLayer.push(arguments);
-            }
-            gtag('js', new Date());
-            gtag('config', 'UA-116692175-1');
+                                                                    function gtag()
+                                                                    {
+                                                                        dataLayer.push(arguments);
+                                                                    }
+                                                                    gtag('js', new Date());
+                                                                    gtag('config', 'UA-116692175-1');
         </script>
     </h:body>
 </html>

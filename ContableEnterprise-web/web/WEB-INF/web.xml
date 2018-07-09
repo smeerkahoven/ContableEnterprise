@@ -32,11 +32,11 @@
     </welcome-file-list>
     <error-page>
     <error-code>404</error-code>
-    <location>/error404.xhtml</location>
+    <location>/pages/index/error404.xhtml</location>
 </error-page> 
 
  <error-page>
     <error-code>500</error-code>
-    <location>/error500.xhtml</location>
+    <location>/pages/index/error500.xhtml</location>
 </error-page> 
 </web-app>

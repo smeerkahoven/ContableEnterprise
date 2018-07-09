@@ -24,6 +24,7 @@ public class Formulario implements Serializable {
     public static final String PLAN_CUENTAS = "plan-cuentas";
     public static final String TARJETA_CREDITO = "tarjeta-credito";
     public static final String BANCOS = "bancos";
+    public static final String FACTORES = "factores";
 
     public int PERMITIR = 1;
     public int DENEGAR = 0;

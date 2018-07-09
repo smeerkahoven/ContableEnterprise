@@ -47,6 +47,7 @@ and open the template in the editor.
                     <!-- .form-group -->
                     <h:outputLabel value="#{login.razonSocial}">
                     </h:outputLabel>
+                    <br />
                     <h:panelGroup class="wrap-input100 m-b-10 p-t-10 bg-danger text-white"
                                   rendered="#{ not empty login.errorMessage}"> 
                         <h:outputLabel value="#{login.errorMessage}">
@@ -56,9 +57,8 @@ and open the template in the editor.
                     <div class="form-group">
                         <div class="form-label-group">
                             <h:inputText class="form-control" id="username" a:placeholder="Usuario" 
-                                         a:autofocus="true" required="" value="#{login.usuario}"></h:inputText>
-
-
+                                         a:autofocus="true" required="" value="#{login.usuario}">
+                            </h:inputText>
                             <label for="inputUser">Usuario</label>
                         </div>
                     </div>

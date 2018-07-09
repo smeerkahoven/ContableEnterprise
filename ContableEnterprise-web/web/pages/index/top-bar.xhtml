@@ -8,143 +8,143 @@
     >
 
     <f:view>
-        <header class="app-header">
-            <!-- .top-bar -->
-            <div class="top-bar">
-                <!-- .top-bar-brand -->
-                <div class="top-bar-brand">
-                    <a href="index.html">
-                        <img src="../../assets/images/agencia-index.png" height="32" alt=""/>
-                    </a>
-                    <span><h5>#{login.razonSocial}</h5></span>
-                </div>
-                <!-- /.top-bar-brand -->
-                <!-- .top-bar-list -->
-                <div class="top-bar-list">
-                    <!-- .top-bar-item -->
-                    <div class="top-bar-item px-2 d-md-none d-lg-none d-xl-none">
-                        <!-- toggle menu -->
-                        <button class="hamburger hamburger-squeeze" type="button" data-toggle="aside" aria-label="Menu" aria-controls="navigation">
-                            <span class="hamburger-box">
-                                <span class="hamburger-inner"></span>
-                            </span>
-                        </button>
-                        <!-- /toggle menu -->
+        <h:form>
+            <header class="app-header">
+                <!-- .top-bar -->
+                <div class="top-bar">
+                    <!-- .top-bar-brand -->
+                    <div class="top-bar-brand">
+                        <h:commandLink action="index" ><img src="../../assets/images/agencia-index.png" height="32" alt=""/>
+                        </h:commandLink>
+                        <span><h5>#{login.razonSocial}</h5></span>
                     </div>
-                    <!-- /.top-bar-item -->
-                    <!-- .top-bar-item -->
-
-                    <!-- /.top-bar-item -->
-                    <!-- .top-bar-item -->
-                    <div class="top-bar-item top-bar-item-right px-0 d-none d-sm-flex">
-                        <!-- .nav -->
-                        <ul class="header-nav nav">
-                            <!-- .nav-item -->
-                            <!-- /.nav-item -->
-                            <!-- .nav-item -->
-                            <!-- /.nav-item -->
-                            <!-- .nav-item -->
-                            <li class="nav-item dropdown header-nav-dropdown">
-                                <a class="nav-link" href="index.html#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    <span class="oi oi-grid-three-up"></span>
-                                </a>
-                                <div class="dropdown-arrow"></div>
-                                <!-- .dropdown-menu -->
-                                <div class="dropdown-menu dropdown-menu-rich dropdown-menu-right">
-                                    <!-- .dropdown-sheets -->
-                                    <div class="dropdown-sheets">
-                                        <!-- .dropdown-sheet-item -->
-                                        <div class="dropdown-sheet-item">
-                                            <a href="index.html#" class="tile-wrapper">
-                                                <span class="tile tile-lg bg-indigo">
-                                                    <i class="oi oi-people"></i>
-                                                </span>
-                                                <span class="tile-peek">Teams</span>
-                                            </a>
-                                        </div>
-                                        <!-- /.dropdown-sheet-item -->
-                                        <!-- .dropdown-sheet-item -->
-                                        <div class="dropdown-sheet-item">
-                                            <a href="index.html#" class="tile-wrapper">
-                                                <span class="tile tile-lg bg-teal">
-                                                    <i class="oi oi-fork"></i>
-                                                </span>
-                                                <span class="tile-peek">Projects</span>
-                                            </a>
-                                        </div>
-                                        <!-- /.dropdown-sheet-item -->
-                                        <!-- .dropdown-sheet-item -->
-                                        <div class="dropdown-sheet-item">
-                                            <a href="index.html#" class="tile-wrapper">
-                                                <span class="tile tile-lg bg-pink">
-                                                    <i class="fa fa-tasks"></i>
-                                                </span>
-                                                <span class="tile-peek">Tasks</span>
-                                            </a>
-                                        </div>
-                                        <!-- /.dropdown-sheet-item -->
-                                        <!-- .dropdown-sheet-item -->
-                                        <div class="dropdown-sheet-item">
-                                            <a href="index.html#" class="tile-wrapper">
-                                                <span class="tile tile-lg bg-yellow">
-                                                    <i class="oi oi-fire"></i>
-                                                </span>
-                                                <span class="tile-peek">Feeds</span>
-                                            </a>
-                                        </div>
-                                        <!-- /.dropdown-sheet-item -->
-                                        <!-- .dropdown-sheet-item -->
-                                        <div class="dropdown-sheet-item">
-                                            <a href="index.html#" class="tile-wrapper">
-                                                <span class="tile tile-lg bg-cyan">
-                                                    <i class="oi oi-document"></i>
-                                                </span>
-                                                <span class="tile-peek">Files</span>
-                                            </a>
-                                        </div>
-                                        <!-- /.dropdown-sheet-item -->
-                                    </div>
-                                    <!-- .dropdown-sheets -->
-                                </div>
-                                <!-- .dropdown-menu -->
-                            </li>
-                            <!-- /.nav-item -->
-                        </ul>
-                        <!-- /.nav -->
-                        <!-- .btn-account -->
-                        <div class="dropdown">
-                            <button class="btn-account d-none d-md-flex" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="user-avatar">
-                                    <img src="../../assets/images/avatars/profile.jpg" alt=""/>
-                                </span>
-                                <span class="account-summary pr-lg-4 d-none d-lg-block">
-                                    <span class="account-name">#{login.empleado.nombre} #{login.empleado.apellido}</span>
-                                    <span class="account-description">#{login.empleado.cargo}</span>
+                    <!-- /.top-bar-brand -->
+                    <!-- .top-bar-list -->
+                    <div class="top-bar-list">
+                        <!-- .top-bar-item -->
+                        <div class="top-bar-item px-2 d-md-none d-lg-none d-xl-none">
+                            <!-- toggle menu -->
+                            <button class="hamburger hamburger-squeeze" type="button" data-toggle="aside" aria-label="Menu" aria-controls="navigation">
+                                <span class="hamburger-box">
+                                    <span class="hamburger-inner"></span>
                                 </span>
                             </button>
-                            <div class="dropdown-arrow dropdown-arrow-left"></div>
-                            <!-- .dropdown-menu -->
-                            <div class="dropdown-menu">
-                                <h6 class="dropdown-header d-none d-md-block d-lg-none"> Beni Arisandi </h6>
-                                <a class="dropdown-item" data-toggle="modal" data-target="#logoutModal">
-                                    <span class="dropdown-icon oi oi-person"></span> Profile</a>
-                                <a class="dropdown-item" data-toggle="modal" data-target="#logoutModal">
-                                    <span class="dropdown-icon oi oi-account-logout"></span> Logout</a>
-                                <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="index.html#">Help Center</a>
-                                <a class="dropdown-item" href="index.html#">Ask Forum</a>
-                                <a class="dropdown-item" href="index.html#">Keyboard Shortcuts</a>
-                            </div>
-                            <!-- /.dropdown-menu -->
+                            <!-- /toggle menu -->
                         </div>
-                        <!-- /.btn-account -->
+                        <!-- /.top-bar-item -->
+                        <!-- .top-bar-item -->
+
+                        <!-- /.top-bar-item -->
+                        <!-- .top-bar-item -->
+                        <div class="top-bar-item top-bar-item-right px-0 d-none d-sm-flex">
+                            <!-- .nav -->
+                            <ul class="header-nav nav">
+                                <!-- .nav-item -->
+                                <!-- /.nav-item -->
+                                <!-- .nav-item -->
+                                <!-- /.nav-item -->
+                                <!-- .nav-item -->
+                                <li class="nav-item dropdown header-nav-dropdown">
+                                    <a class="nav-link" href="index.html#" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <span class="oi oi-grid-three-up"></span>
+                                    </a>
+                                    <div class="dropdown-arrow"></div>
+                                    <!-- .dropdown-menu -->
+                                    <div class="dropdown-menu dropdown-menu-rich dropdown-menu-right">
+                                        <!-- .dropdown-sheets -->
+                                        <div class="dropdown-sheets">
+                                            <!-- .dropdown-sheet-item -->
+                                            <div class="dropdown-sheet-item">
+                                                <a href="index.html#" class="tile-wrapper">
+                                                    <span class="tile tile-lg bg-indigo">
+                                                        <i class="oi oi-people"></i>
+                                                    </span>
+                                                    <span class="tile-peek">Teams</span>
+                                                </a>
+                                            </div>
+                                            <!-- /.dropdown-sheet-item -->
+                                            <!-- .dropdown-sheet-item -->
+                                            <div class="dropdown-sheet-item">
+                                                <a href="index.html#" class="tile-wrapper">
+                                                    <span class="tile tile-lg bg-teal">
+                                                        <i class="oi oi-fork"></i>
+                                                    </span>
+                                                    <span class="tile-peek">Projects</span>
+                                                </a>
+                                            </div>
+                                            <!-- /.dropdown-sheet-item -->
+                                            <!-- .dropdown-sheet-item -->
+                                            <div class="dropdown-sheet-item">
+                                                <a href="index.html#" class="tile-wrapper">
+                                                    <span class="tile tile-lg bg-pink">
+                                                        <i class="fa fa-tasks"></i>
+                                                    </span>
+                                                    <span class="tile-peek">Tasks</span>
+                                                </a>
+                                            </div>
+                                            <!-- /.dropdown-sheet-item -->
+                                            <!-- .dropdown-sheet-item -->
+                                            <div class="dropdown-sheet-item">
+                                                <a href="index.html#" class="tile-wrapper">
+                                                    <span class="tile tile-lg bg-yellow">
+                                                        <i class="oi oi-fire"></i>
+                                                    </span>
+                                                    <span class="tile-peek">Feeds</span>
+                                                </a>
+                                            </div>
+                                            <!-- /.dropdown-sheet-item -->
+                                            <!-- .dropdown-sheet-item -->
+                                            <div class="dropdown-sheet-item">
+                                                <a href="index.html#" class="tile-wrapper">
+                                                    <span class="tile tile-lg bg-cyan">
+                                                        <i class="oi oi-document"></i>
+                                                    </span>
+                                                    <span class="tile-peek">Files</span>
+                                                </a>
+                                            </div>
+                                            <!-- /.dropdown-sheet-item -->
+                                        </div>
+                                        <!-- .dropdown-sheets -->
+                                    </div>
+                                    <!-- .dropdown-menu -->
+                                </li>
+                                <!-- /.nav-item -->
+                            </ul>
+                            <!-- /.nav -->
+                            <!-- .btn-account -->
+                            <div class="dropdown">
+                                <button class="btn-account d-none d-md-flex" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="user-avatar">
+                                        <img src="../../assets/images/avatars/profile.jpg" alt=""/>
+                                    </span>
+                                    <span class="account-summary pr-lg-4 d-none d-lg-block">
+                                        <span class="account-name">#{login.empleado.nombre} #{login.empleado.apellido}</span>
+                                        <span class="account-description">#{login.empleado.cargo}</span>
+                                    </span>
+                                </button>
+                                <div class="dropdown-arrow dropdown-arrow-left"></div>
+                                <!-- .dropdown-menu -->
+                                <div class="dropdown-menu">
+                                    <h6 class="dropdown-header d-none d-md-block d-lg-none"> Beni Arisandi </h6>
+                                    <a class="dropdown-item" data-toggle="modal" data-target="#logoutModal">
+                                        <span class="dropdown-icon oi oi-person"></span> Profile</a>
+                                    <a class="dropdown-item" data-toggle="modal" data-target="#logoutModal">
+                                        <span class="dropdown-icon oi oi-account-logout"></span> Logout</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="index.html#">Help Center</a>
+                                    <a class="dropdown-item" href="index.html#">Ask Forum</a>
+                                    <a class="dropdown-item" href="index.html#">Keyboard Shortcuts</a>
+                                </div>
+                                <!-- /.dropdown-menu -->
+                            </div>
+                            <!-- /.btn-account -->
+                        </div>
+                        <!-- /.top-bar-item -->
                     </div>
-                    <!-- /.top-bar-item -->
+                    <!-- /.top-bar-list -->
                 </div>
-                <!-- /.top-bar-list -->
-            </div>
-            <!-- /.top-bar -->
-        </header>
-        
+                <!-- /.top-bar -->
+            </header>
+        </h:form>
     </f:view>
 </ui:composition>

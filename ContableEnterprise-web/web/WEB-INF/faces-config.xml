@@ -30,8 +30,8 @@
             <to-view-id>pages/index/index.xhtml?faces-redirect=true</to-view-id>
             <redirect />
         </navigation-case>
-                
     </navigation-rule>
+
     <navigation-rule>
         <from-view-id>*</from-view-id>
         <navigation-case>
@@ -89,15 +89,6 @@
     <navigation-rule>
         <from-view-id>*</from-view-id>
         <navigation-case>
-            <from-outcome>plan-cuentas</from-outcome>
-            <to-view-id>pages/contabilidad/plan-cuentas.xhtml?faces-redirect=true</to-view-id>
-            <redirect />
-        </navigation-case>
-    </navigation-rule>
-    
-    <navigation-rule>
-        <from-view-id>*</from-view-id>
-        <navigation-case>
             <from-outcome>tarjeta-credito</from-outcome>
             <to-view-id>pages/agencia/tarjeta.xhtml?faces-redirect=true</to-view-id>
             <redirect />
@@ -109,6 +100,25 @@
         <navigation-case>
             <from-outcome>bancos</from-outcome>
             <to-view-id>pages/agencia/bancos.xhtml?faces-redirect=true</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    
+    <navigation-rule>
+        <from-view-id>*</from-view-id>
+        <navigation-case>
+            <from-outcome>plan-cuentas</from-outcome>
+            <to-view-id>pages/contabilidad/plan-cuentas.xhtml?faces-redirect=true</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>*</from-view-id>
+        <navigation-case>
+            <from-outcome>factores</from-outcome>
+            <to-view-id>pages/contabilidad/factores.xhtml?faces-redirect=true</to-view-id>
             <redirect />
         </navigation-case>
     </navigation-rule>
