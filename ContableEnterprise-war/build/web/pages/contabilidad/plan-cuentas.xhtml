@@ -180,15 +180,16 @@
                                     </td>
                                     <td class="cell-c3" align="right">
                                     <button ng-show="showBtnAdicionar(item.nivel);" type="button" title="Adicionar" class="btn btn-success" ng-click="add(item)"><i class="fa fa-plus"></i></button>
-
+                                    <div class="btn-group" role="group" aria-label="...">
                                     <c:if test="${planCuentas.formulario.actualizar== planCuentas.formulario.PERMITIR }">
+                                    
                                     <button type="button" title="Editar" class="btn btn-info" ng-click="edit(item)"><i class="fa fa-pencil"></i></button>
                                     </c:if>
 
                                     <c:if test="#{planCuentas.formulario.eliminar== planCuentas.formulario.PERMITIR}">
                                     <button ng-show="item.nivel == 5" type="button" title="Eliminar" class="btn btn-danger" data-toggle="modal" data-target="#frmConfirmation" ng-click="modalEliminar(item.idPlanCuentas, item.nombreCuenta)"><i class="fa fa-remove"></i></button>
                                     </c:if>
-
+                                    </div>
                                     </td>
                                     </tr>
                                     <tr class="children" ng-if="item.children &amp;&amp; item.children.length &gt; 0">

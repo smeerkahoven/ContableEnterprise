@@ -11,8 +11,16 @@
             <to-view-id>/index.xhtml?faces-redirect=true</to-view-id>
             <redirect />
         </navigation-case>
-                
     </navigation-rule>
+    
+    <navigation-rule>
+        <navigation-case>
+            <from-outcome>login</from-outcome>
+            <to-view-id>/login.xhtml?faces-redirect=true</to-view-id>
+            <redirect />
+        </navigation-case> 
+    </navigation-rule>                
+
         
     <navigation-rule>
         <from-view-id>pages/*</from-view-id>

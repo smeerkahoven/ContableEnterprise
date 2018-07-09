@@ -197,6 +197,7 @@ angular.module('jsAeropuerto.controllers', []).controller('frmAeropuerto', ['$sc
             $scope.showTable = false;
             $scope.showRestfulSuccess = false;
             $scope.showRestfulError = false;
+            $scope.myForm.$pristine() ;
 
         }
 

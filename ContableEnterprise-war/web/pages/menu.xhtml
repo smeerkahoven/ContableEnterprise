@@ -20,7 +20,7 @@
                     </c:if>
 
                     <c:if test="#{ empty modulo.urlAcceso }">
-                        <li class="nav-item card-header "  data-toggle="tooltip" data-placement="right" title="#{modulo.nombre}">
+                        <li class="nav-link"  data-toggle="tooltip" data-placement="right" title="#{modulo.nombre}">
 
                             <a class="nav-link nav-link-collapse collapsed " data-toggle="collapse" href="#collapse#{modulo.nombre}" data-parent="#menuAccordion">
                                 <i class="fa fa-fw fa-#{modulo.classMenu}"></i>#{modulo.nombre}

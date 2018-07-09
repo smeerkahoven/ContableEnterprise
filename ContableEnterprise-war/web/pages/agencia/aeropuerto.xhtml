@@ -13,7 +13,7 @@
         <meta name="author" content="" />
         <title>Web Contable - #{login.razonSocial} </title>
         <!-- Bootstrap core CSS-->
-        <link href="../../vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+        <link href="../../vendor/bootstrap/css/bootstrap.css" rel="stylesheet" />
         <link href="../../css/sb-admin.css" rel="stylesheet" />
         <link href="../../css/font-awesome-animation.min.css" rel="stylesheet" />
         <!-- Custom fonts for this template-->
@@ -49,11 +49,9 @@
                     <li class="breadcrumb-item active">
                         Agencia
                     </li>
-                    <li class="breadcrumb-item active"><strong>Aeropuerto</strong></li>
+                    <li class="breadcrumb-item active"><strong>#{aeropuerto.formulario.nombre}</strong></li>
 
-                    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
+                   
                 </ol>
 
                 <!-- Icon Cards-->
@@ -63,9 +61,7 @@
                             <div class="card mb-4">
                                 <div class="card-header">
                                     <div class="row">
-                                        <div class="col-sm">
-                                            <i class="fa fa-home"></i>Datos Generales
-                                        </div>
+                                        <i class="fa fa-home"></i><h4> #{aeropuerto.formulario.nombre}</h4>
                                         <div class="col-sm">
                                             <div class="btn-group row pull-right">
                                                 <c:if test="#{aeropuerto.formulario.crear== aeropuerto.formulario.PERMITIR}">
