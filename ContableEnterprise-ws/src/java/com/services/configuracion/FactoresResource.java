@@ -3,17 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.services.agencia;
+package com.services.configuracion;
 
-import com.agencia.control.remote.TarjetaCreditoRemote;
-import com.agencia.entities.TarjetaCredito;
-import com.contabilidad.remote.PlanCuentasRemote;
+import com.configuracion.entities.CambioDolar;
+import com.configuracion.entities.CambioUfv;
+import com.configuracion.remote.CambioRemote;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.response.json.TarjetaCreditoJSON;
-import com.seguridad.control.entities.User;
+import com.response.json.CambioJSON;
 import com.seguridad.control.entities.UserToken;
 import com.seguridad.control.exception.CRUDException;
 import com.seguridad.control.remote.LoggerRemote;
@@ -24,63 +23,79 @@ import com.seguridad.utils.Status;
 import com.services.seguridad.EmpresaServices;
 import com.services.seguridad.util.RestRequest;
 import com.services.seguridad.util.RestResponse;
-import com.util.resource.ComboSelect;
 import com.util.resource.Mensajes;
-import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
-import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
 import javax.ws.rs.core.MediaType;
+import jdk.nashorn.internal.parser.JSONParser;
 
 /**
  * REST Web Service
  *
  * @author xeio
  */
-@Path("tarjetas-credito")
-public class TarjetasCreditoResource {
-
-    @Context
-    private UriInfo context;
+@Path("factores")
+public class FactoresResource {
 
     @EJB
     private UsuarioRemote ejbUsuario;
 
     @EJB
-    private TarjetaCreditoRemote ejbTarjeta;
+    private CambioRemote ejbCambio;
 
     @EJB
     private LoggerRemote ejbLogger;
 
-    @EJB
-    private PlanCuentasRemote ejbPlanCuentas;
+    @Context
+    private UriInfo context;
 
     /**
-     * Creates a new instance of TarjetasCreditoResource
+     * Creates a new instance of FactoresResource
      */
-    public TarjetasCreditoResource() {
+    public FactoresResource() {
     }
 
     /**
      * Retrieves representation of an instance of
-     * com.services.agencia.TarjetasCreditoResource
+     * com.services.configuracion.FactoresResource
      *
      * @return an instance of java.lang.String
      */
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    public String getJson() {
+        //TODO return proper representation object
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * PUT method for updating or creating an instance of FactoresResource
+     *
+     * @param content representation for the resource
+     */
+    @PUT
+    @Consumes(MediaType.APPLICATION_JSON)
+    public void putJson(String content) {
+    }
+
     @POST
-    @Path("all")
+    @Path("dollar/all")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public RestResponse getPlanCuentasAll(final RestRequest request) {
+    public RestResponse getDollaAll(final RestRequest request) {
 
         Mensajes m = Mensajes.getMensajes().getMensajes();
         RestResponse r = new RestResponse();
@@ -89,13 +104,21 @@ public class TarjetasCreditoResource {
             if (request.getToken() != null && !request.getToken().isEmpty()) {
                 System.out.println(request.getToken());
                 UserToken t = ejbUsuario.get(new UserToken(request.getToken()));
+
                 if (t != null) {
                     if (t.getStatus().equals(Status.ACTIVO)) {
 
-                        List<TarjetaCredito> l = ejbTarjeta.get();
+                        List<CambioDolar> l = ejbCambio.get(new CambioDolar(), "CambioDolar.findAll");
+
+                        Iterator i = l.iterator();
+                        List<CambioJSON> list = new ArrayList<>();
+                        while (i.hasNext()) {
+                            CambioJSON aux = CambioJSON.toJSON((CambioDolar) i.next());
+                            list.add(aux);
+                        }
 
                         r.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
-                        r.setContent(l);
+                        r.setContent(list);
 
                         ejbLogger.add(Accion.ACCESS, t.getUserName(), request.getFormName(), "");
 
@@ -115,6 +138,7 @@ public class TarjetasCreditoResource {
 
         } catch (CRUDException ex) {
             Logger.getLogger(EmpresaServices.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
             r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
             r.setContent(m.getProperty(RestResponse.RESTFUL_ERROR));
         }
@@ -123,10 +147,10 @@ public class TarjetasCreditoResource {
     }
 
     @POST
-    @Path("combo")
+    @Path("dollar/today")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public RestResponse getCombo(final RestRequest request) {
+    public RestResponse getDollarToday(final RestRequest request) {
 
         Mensajes m = Mensajes.getMensajes().getMensajes();
         RestResponse r = new RestResponse();
@@ -135,22 +159,185 @@ public class TarjetasCreditoResource {
             if (request.getToken() != null && !request.getToken().isEmpty()) {
                 System.out.println(request.getToken());
                 UserToken t = ejbUsuario.get(new UserToken(request.getToken()));
-                User u = ejbUsuario.get(new User(t.getUserName()));
+
                 if (t != null) {
                     if (t.getStatus().equals(Status.ACTIVO)) {
 
-                        List<Object[]> l = ejbPlanCuentas.getForCombo(u.getIdEmpleado().getIdEmpresa());
+                        CambioDolar dollarToday = (CambioDolar) ejbCambio.get(new CambioDolar(new Date()));
 
-                        ArrayList hm = new ArrayList();
-                        for (Object[] o : l) {
-                            ComboSelect cm = new ComboSelect();
-                            cm.setId((BigInteger) o[0]);
-                            cm.setName((String) o[1]);
-                            hm.add(cm);
+                        CambioJSON today = CambioJSON.toJSON(dollarToday);
+
+                        r.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
+                        r.setContent(today);
+
+                        ejbLogger.add(Accion.ACCESS, t.getUserName(), request.getFormName(), "");
+
+                        return r;
+                    } else {
+                        r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+                        r.setContent(m.getProperty(RestResponse.RESTFUL_TOKEN_MANDATORY));
+                    }
+                } else {
+                    r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+                    r.setContent(m.getProperty(RestResponse.RESTFUL_TOKEN_MANDATORY));
+                }
+            } else {
+                r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+                r.setContent(m.getProperty(RestResponse.RESTFUL_TOKEN_MANDATORY));
+            }
+
+        } catch (CRUDException ex) {
+            Logger.getLogger(EmpresaServices.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
+            r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+            r.setContent(m.getProperty(RestResponse.RESTFUL_ERROR));
+        }
+
+        return r;
+    }
+
+    @POST
+    @Path("dollar/update")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public RestResponse dollarUpdate(final RestRequest request) {
+
+        Mensajes m = Mensajes.getMensajes().getMensajes();
+        RestResponse r = new RestResponse();
+        try {
+            /*Verificamos el ID token*/
+            if (request.getToken() != null && !request.getToken().isEmpty()) {
+                System.out.println(request.getToken());
+                UserToken t = ejbUsuario.get(new UserToken(request.getToken()));
+
+                if (t != null) {
+                    if (t.getStatus().equals(Status.ACTIVO)) {
+
+                        CambioJSON json = new CambioJSON();
+                        Gson gson = new GsonBuilder().create();
+                        JsonParser parser = new JsonParser();
+                        JsonObject object = parser.parse((String) request.getContent()).getAsJsonObject();
+                        json = gson.fromJson(object.toString(), CambioJSON.class);
+
+                        CambioDolar c = CambioJSON.toCambioDolar(json);
+
+                        ejbCambio.update(c);
+
+                        r.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
+                        r.setContent(m.getProperty(RestResponse.RESTFUL_SUCCESS));
+
+                        ejbLogger.add(Accion.ACCESS, t.getUserName(), request.getFormName(), "");
+
+                        return r;
+                    } else {
+                        r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+                        r.setContent(m.getProperty(RestResponse.RESTFUL_TOKEN_MANDATORY));
+                    }
+                } else {
+                    r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+                    r.setContent(m.getProperty(RestResponse.RESTFUL_TOKEN_MANDATORY));
+                }
+            } else {
+                r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+                r.setContent(m.getProperty(RestResponse.RESTFUL_TOKEN_MANDATORY));
+            }
+
+        } catch (CRUDException ex) {
+            Logger.getLogger(EmpresaServices.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
+            r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+            r.setContent(m.getProperty(RestResponse.RESTFUL_ERROR));
+        }
+
+        return r;
+    }
+
+    @POST
+    @Path("ufv/update")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public RestResponse ufvUpdate(final RestRequest request) {
+
+        Mensajes m = Mensajes.getMensajes().getMensajes();
+        RestResponse r = new RestResponse();
+        try {
+            /*Verificamos el ID token*/
+            if (request.getToken() != null && !request.getToken().isEmpty()) {
+                System.out.println(request.getToken());
+                UserToken t = ejbUsuario.get(new UserToken(request.getToken()));
+
+                if (t != null) {
+                    if (t.getStatus().equals(Status.ACTIVO)) {
+
+                        CambioJSON json = new CambioJSON();
+                        Gson gson = new GsonBuilder().create();
+                        JsonParser parser = new JsonParser();
+                        JsonObject object = parser.parse((String) request.getContent()).getAsJsonObject();
+                        json = gson.fromJson(object.toString(), CambioJSON.class);
+
+                        CambioUfv c = CambioJSON.toCambioUfv(json);
+
+                        ejbCambio.update(c);
+
+                        r.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
+                        r.setContent(m.getProperty(RestResponse.RESTFUL_SUCCESS));
+
+                        ejbLogger.add(Accion.ACCESS, t.getUserName(), request.getFormName(), "");
+
+                        return r;
+                    } else {
+                        r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+                        r.setContent(m.getProperty(RestResponse.RESTFUL_TOKEN_MANDATORY));
+                    }
+                } else {
+                    r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+                    r.setContent(m.getProperty(RestResponse.RESTFUL_TOKEN_MANDATORY));
+                }
+            } else {
+                r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+                r.setContent(m.getProperty(RestResponse.RESTFUL_TOKEN_MANDATORY));
+            }
+
+        } catch (CRUDException ex) {
+            Logger.getLogger(EmpresaServices.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
+            r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+            r.setContent(m.getProperty(RestResponse.RESTFUL_ERROR));
+        }
+
+        return r;
+    }
+
+    @POST
+    @Path("ufv/all")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public RestResponse getUFVAll(final RestRequest request) {
+
+        Mensajes m = Mensajes.getMensajes().getMensajes();
+        RestResponse r = new RestResponse();
+        try {
+            /*Verificamos el ID token*/
+            if (request.getToken() != null && !request.getToken().isEmpty()) {
+                System.out.println(request.getToken());
+                UserToken t = ejbUsuario.get(new UserToken(request.getToken()));
+
+                if (t != null) {
+                    if (t.getStatus().equals(Status.ACTIVO)) {
+
+                        List<CambioUfv> l = ejbCambio.get(new CambioUfv(), "CambioUfv.findAll");
+
+                        Iterator i = l.iterator();
+                        List<CambioJSON> list = new ArrayList<>();
+                        while (i.hasNext()) {
+                            CambioJSON aux = CambioJSON.toJSON((CambioUfv) i.next());
+                            list.add(aux);
                         }
 
                         r.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
-                        r.setContent(hm);
+                        r.setContent(list);
+
+                        ejbLogger.add(Accion.ACCESS, t.getUserName(), request.getFormName(), "");
 
                         return r;
                     } else {
@@ -168,6 +355,7 @@ public class TarjetasCreditoResource {
 
         } catch (CRUDException ex) {
             Logger.getLogger(EmpresaServices.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
             r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
             r.setContent(m.getProperty(RestResponse.RESTFUL_ERROR));
         }
@@ -176,10 +364,10 @@ public class TarjetasCreditoResource {
     }
 
     @POST
-    @Path("save")
+    @Path("ufv/today")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public RestResponse savePlanCuentas(final RestRequest request) {
+    public RestResponse getUFVToday(final RestRequest request) {
 
         Mensajes m = Mensajes.getMensajes().getMensajes();
         RestResponse r = new RestResponse();
@@ -188,25 +376,20 @@ public class TarjetasCreditoResource {
             if (request.getToken() != null && !request.getToken().isEmpty()) {
                 System.out.println(request.getToken());
                 UserToken t = ejbUsuario.get(new UserToken(request.getToken()));
+
                 if (t != null) {
                     if (t.getStatus().equals(Status.ACTIVO)) {
 
-                        TarjetaCreditoJSON json = new TarjetaCreditoJSON();
-                        Gson gson = new GsonBuilder().create();
-                        JsonParser parser = new JsonParser();
-                        JsonObject object = parser.parse((String) request.getContent()).getAsJsonObject();
-                        json = gson.fromJson(object.toString(), TarjetaCreditoJSON.class);
+                        CambioUfv ufvToday = (CambioUfv) ejbCambio.get(new CambioUfv(new Date()));
 
-                        TarjetaCredito tc = TarjetaCreditoJSON.toTarjetaCredito(json);
-                        ejbTarjeta.insert(tc);
+                        CambioJSON today = CambioJSON.toJSON(ufvToday);
 
                         r.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
-                        r.setContent(m.getProperty(RestResponse.RESTFUL_SUCCESS));
+                        r.setContent(today);
 
-                        ejbLogger.add(Accion.INSERT, t.getUserName(), request.getFormName(), "");
+                        ejbLogger.add(Accion.ACCESS, t.getUserName(), request.getFormName(), "");
 
                         return r;
-
                     } else {
                         r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
                         r.setContent(m.getProperty(RestResponse.RESTFUL_TOKEN_MANDATORY));
@@ -222,77 +405,11 @@ public class TarjetasCreditoResource {
 
         } catch (CRUDException ex) {
             Logger.getLogger(EmpresaServices.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
             r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
             r.setContent(m.getProperty(RestResponse.RESTFUL_ERROR));
         }
 
         return r;
-
-    }
-
-    @POST
-    @Path("update")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public RestResponse updatePlanCuentas(final RestRequest request) {
-
-        Mensajes m = Mensajes.getMensajes().getMensajes();
-        RestResponse r = new RestResponse();
-        try {
-            /*Verificamos el ID token*/
-            if (request.getToken() != null && !request.getToken().isEmpty()) {
-                System.out.println(request.getToken());
-                UserToken t = ejbUsuario.get(new UserToken(request.getToken()));
-                if (t != null) {
-                    if (t.getStatus().equals(Status.ACTIVO)) {
-
-                        TarjetaCreditoJSON json = new TarjetaCreditoJSON();
-                        Gson gson = new GsonBuilder().create();
-                        JsonParser parser = new JsonParser();
-                        JsonObject object = parser.parse((String) request.getContent()).getAsJsonObject();
-                        json = gson.fromJson(object.toString(), TarjetaCreditoJSON.class);
-
-                        TarjetaCredito pcu = TarjetaCreditoJSON.toTarjetaCredito(json);
-                        ejbTarjeta.update(pcu);
-
-                        ejbLogger.add(Accion.UPDATE, t.getUserName(), request.getFormName(), "");
-
-                        r.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
-                        r.setContent(m.getProperty(RestResponse.RESTFUL_SUCCESS));
-
-                        return r;
-
-                    } else {
-                        r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
-                        r.setContent(m.getProperty(RestResponse.RESTFUL_TOKEN_MANDATORY));
-                    }
-                } else {
-                    r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
-                    r.setContent(m.getProperty(RestResponse.RESTFUL_TOKEN_MANDATORY));
-                }
-            } else {
-                r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
-                r.setContent(m.getProperty(RestResponse.RESTFUL_TOKEN_MANDATORY));
-            }
-
-        } catch (CRUDException ex) {
-            Logger.getLogger(EmpresaServices.class.getName()).log(Level.SEVERE, null, ex);
-            r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
-            r.setContent(m.getProperty(RestResponse.RESTFUL_ERROR));
-        }
-
-        return r;
-
-    }
-
-    /**
-     * PUT method for updating or creating an instance of
-     * TarjetasCreditoResource
-     *
-     * @param content representation for the resource
-     */
-    @PUT
-    @Consumes(MediaType.APPLICATION_JSON)
-    public void putJson(String content) {
     }
 }

@@ -128,8 +128,6 @@ public class BancosResource {
             r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
             r.setContent(m.getProperty(RestResponse.RESTFUL_ERROR));
         }
-        r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
-        r.setContent(m.getProperty(RestResponse.RESTFUL_ERROR));
 
         return r;
     }
@@ -187,8 +185,6 @@ public class BancosResource {
             r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
             r.setContent(m.getProperty(RestResponse.RESTFUL_ERROR));
         }
-        r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
-        r.setContent(m.getProperty(RestResponse.RESTFUL_ERROR));
 
         return r;
     }
@@ -243,8 +239,6 @@ public class BancosResource {
             r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
             r.setContent(m.getProperty(RestResponse.RESTFUL_ERROR));
         }
-        r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
-        r.setContent(m.getProperty(RestResponse.RESTFUL_ERROR));
 
         return r;
 
@@ -300,8 +294,6 @@ public class BancosResource {
             r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
             r.setContent(m.getProperty(RestResponse.RESTFUL_ERROR));
         }
-        r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
-        r.setContent(m.getProperty(RestResponse.RESTFUL_ERROR));
 
         return r;
 
@@ -363,8 +355,6 @@ public class BancosResource {
             r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
             r.setContent(m.getProperty(RestResponse.RESTFUL_ERROR));
         }
-        r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
-        r.setContent(m.getProperty(RestResponse.RESTFUL_ERROR));
 
         return r;
     }
@@ -420,8 +410,6 @@ public class BancosResource {
             r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
             r.setContent(m.getProperty(RestResponse.RESTFUL_ERROR));
         }
-        r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
-        r.setContent(m.getProperty(RestResponse.RESTFUL_ERROR));
 
         return r;
     }
@@ -477,8 +465,6 @@ public class BancosResource {
             r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
             r.setContent(m.getProperty(RestResponse.RESTFUL_ERROR));
         }
-        r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
-        r.setContent(m.getProperty(RestResponse.RESTFUL_ERROR));
 
         return r;
     }
