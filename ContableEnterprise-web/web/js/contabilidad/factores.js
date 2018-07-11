@@ -64,6 +64,8 @@ angular.module('jsFactores.controllers', []).controller('frmFactores', ['$scope'
         }
 
         $scope.update = function (method) {
+            console.log(method);
+            console.log($scope.myForm);
             if (!$scope.myForm.$valid)
                 return;
             $http({

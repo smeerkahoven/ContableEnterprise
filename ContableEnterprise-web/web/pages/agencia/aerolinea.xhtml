@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html  xmlns="http://www.w3.org/1999/xhtml"
        xmlns:h="http://xmlns.jcp.org/jsf/html"
-       xmlns:ui="http://xmlns.jcp.org/jsf/facelets" ng-app="jsFactores"
+       xmlns:ui="http://xmlns.jcp.org/jsf/facelets" ng-app="jsAeropuerto"
        xmlns:c="http://java.sun.com/jsp/jstl/core"
        >
     <head>
@@ -35,7 +35,7 @@
         <script type="text/javascript" src="../../js/angular.min.js" />
         <script type="text/javascript" src="../../js/ui-bootstrap-tpls.js" />
         <script type="text/javascript" src="../../js/smart-table.min.js" />
-        <script type="text/javascript" src="../../js/contabilidad/factores.js" />
+        <script type="text/javascript" src="../../js/agencia/aeropuerto.js" />
 
         <title>Web Contable - #{login.razonSocial} </title>
     </head>
@@ -61,7 +61,7 @@
             </aside>
             <!-- /.app-aside -->
             <!-- .app-main -->
-            <main class="app-main" ng-controller="frmFactores">
+            <main class="app-main" ng-controller="frmAeropuerto">
                 <!-- .wrapper -->
                 <div class="wrapper">
                     <!-- .page -->
@@ -74,15 +74,15 @@
                                     <ol class="breadcrumb">
                                         <li class="breadcrumb-item active">
                                             <a href="#">
-                                                <i class="breadcrumb-icon fa fa-angle-left mr-2"></i>#{factores.formulario.modulo}
+                                                <i class="breadcrumb-icon fa fa-angle-left mr-2"></i>#{aeropuerto.formulario.modulo}
                                             </a>
                                         </li>
                                     </ol>
                                 </nav>
                                 <div class="d-md-flex">
-                                    <h1 class="page-title mr-sm-auto"> #{factores.formulario.nombre}</h1>
+                                    <h1 class="page-title mr-sm-auto"> #{aeropuerto.formulario.nombre}</h1>
                                     <div class="dt-button btn-group">
-                                        <c:if test="#{factores.formulario.crear== factores.formulario.PERMITIR}">
+                                        <c:if test="#{aeropuerto.formulario.crear== aeropuerto.formulario.PERMITIR}">
                                             <button type="button" class="btn btn-success buttons-html5" tabindex="0" ng-click="nuevo()"><span class="fa fa-plus"></span> Nuevo</button>
                                         </c:if>
                                         <button type="button" class="btn btn-warning buttons-html5" tabindex="0" ng-click="cancelar()"><span class="fa fa-undo"></span> Cancelar</button>
@@ -116,20 +116,12 @@
                                         <!-- /Mensaje Error -->
                                         <!-- .form-group -->
                                         <!-- Tabla Contenido -->
-
-
-                                        <div  id="tableData" ng-show="showTable" class="form-group row">
-
-                                            <div class="form-group col">
-                                                <header class="card-header">
-                                                    <div class="d-flex align-items-center">
-                                                        <span class="mr-auto">Factor Dolar</span>
-                                                    </div>
-                                                </header>
-                                                <table st-table="dollarRecords"  ng-show="showTable"  st-safe-src="dolarGrid" 
+                                        <div  id="tableData" ng-show="showTable" >
+                                            <div class="form-group row">
+                                                <table st-table="display_records"  ng-show="showTable"  st-safe-src="mainGrid" 
                                                        class="table  table-hover table-responsive">
                                                     <thead >
-                                                        <c:if test="#{factores.formulario.buscar == factores.formulario.PERMITIR}">
+                                                        <c:if test="#{aeropuerto.formulario.buscar == aeropuerto.formulario.PERMITIR}">
                                                             <tr>
                                                                 <th colspan="4">
                                                                     <!-- .input-group -->
@@ -146,86 +138,22 @@
                                                             </tr>
                                                         </c:if>
                                                         <tr>
-                                                            <th>Fecha</th>
-                                                            <th>Valor Bs.</th>
+                                                            <th>Codigo</th>
+                                                            <th>Aeropuerto/ Ciudad/ Pais</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr st-select-row="row" st-select-mode="multiple" ng-repeat="row in dollarRecords">
-                                                            <td>{{row.fecha}} </td>
-                                                            <td>{{row.valor}} </td>
+                                                        <tr st-select-row="row" st-select-mode="multiple" ng-repeat="row in display_records">
+                                                            <td>{{row.idAeropuerto}} </td>
+                                                            <td>{{row.nombre}} </td>
                                                             <td>
                                                                 <div class="btn-group" >
-                                                                    <c:if test="${factores.formulario.actualizar== factores.formulario.PERMITIR }">
-                                                                        <button type="button" title="Editar" class="btn btn-sm btn-info" ng-click="edit(row, 'dollar')"><i class="fa fa-pencil"></i></button>
+                                                                    <c:if test="${aeropuerto.formulario.actualizar== aeropuerto.formulario.PERMITIR }">
+                                                                        <button type="button" title="Editar" class="btn btn-sm btn-info" ng-click="edit(row.idAeropuerto)"><i class="fa fa-pencil"></i></button>
                                                                     </c:if>
 
-                                                                    <c:if test="#{factores.formulario.eliminar== factores.formulario.PERMITIR}">
-                                                                        <!--
+                                                                    <c:if test="#{aeropuerto.formulario.eliminar== aeropuerto.formulario.PERMITIR}">
                                                                         <button type="button" title="Eliminar" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#frmConfirmation" ng-click="modalEliminar(row.idAeropuerto, row.nombre)"><i class="fa fa-remove"></i></button>
-                                                                        -->
-                                                                    </c:if>
-                                                                    <!--<button type="button" title="Ver" class="btn btn-default" ng-click="ver(row.idEmpleado)" data-toggle="modal" data-target="#verForm"><i class="fa fa-search"></i></button>-->
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                    <tfoot>
-                                                        <tr>
-                                                            <td colspan="10" class="text-center">
-                                                                <div class="container" st-items-by-page="itemsByPage" st-pagination="" st-template="../index/pagination.custom.html"></div>
-                                                            </td>
-                                                        </tr>
-                                                    </tfoot>
-                                                </table>
-                                            </div>
-
-
-
-                                            <div class="form-group col">
-                                                <header class="card-header">
-                                                    <div class="d-flex align-items-center">
-                                                        <span class="mr-auto">Factor UFV</span>
-                                                    </div>
-                                                </header>
-                                                <table st-table="ufvRecords"  ng-show="showTable"  st-safe-src="ufvGrid" 
-                                                       class="table  table-hover table-responsive">
-                                                    <thead >
-                                                        <c:if test="#{factores.formulario.buscar == factores.formulario.PERMITIR}">
-                                                            <tr>
-                                                                <th colspan="4">
-                                                                    <!-- .input-group -->
-                                                                    <div class="input-group has-clearable">
-                                                                        <div class="input-group-prepend">
-                                                                            <span class="input-group-text">
-                                                                                <span class="oi oi-magnifying-glass"></span>
-                                                                            </span>
-                                                                        </div>
-                                                                        <input st-search="" id="table-search" class="form-control placeholder-shown" placeholder="Busqueda" type="text" /> 
-                                                                    </div>
-                                                                    <!-- /.input-group -->
-                                                                </th>
-                                                            </tr>
-                                                        </c:if>
-                                                        <tr>
-                                                            <th>Fecha</th>
-                                                            <th>Valor Bs.</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr st-select-row="row" st-select-mode="multiple" ng-repeat="row in ufvRecords">
-                                                            <td>{{row.fecha}} </td>
-                                                            <td>{{row.valor}} </td>
-                                                            <td>
-                                                                <div class="btn-group" >
-                                                                    <c:if test="${factores.formulario.actualizar== factores.formulario.PERMITIR }">
-                                                                        <button type="button" title="Editar" class="btn btn-sm btn-info" ng-click="edit(row, 'ufv')"><i class="fa fa-pencil"></i></button>
-                                                                    </c:if>
-
-                                                                    <c:if test="#{factores.formulario.eliminar== factores.formulario.PERMITIR}">
-                                                                        <!--
-                                                                        <button type="button" title="Eliminar" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#frmConfirmation" ng-click="modalEliminar(row.idAeropuerto, row.nombre)"><i class="fa fa-remove"></i></button>
-                                                                        -->
                                                                     </c:if>
                                                                     <!--<button type="button" title="Ver" class="btn btn-default" ng-click="ver(row.idEmpleado)" data-toggle="modal" data-target="#verForm"><i class="fa fa-search"></i></button>-->
                                                                 </div>
@@ -243,54 +171,46 @@
                                             </div>
                                         </div>
                                         <!-- /Tabla Contenido -->
-                                        <form name="myForm" ng-show="showForm">
+                                        <form name="myForm">
                                             <!-- .form -->
+
                                             <!-- .fieldset -->
                                             <fieldset>
                                                 <!-- Contenido Formulario-->
-                                                <div id="formData" class="container animated fadeIn"    >
-                                                    <input type="hidden" id="hdUrl" name="hdUrl" value="#{factores.formulario.restful}"/>
+                                                <div id="formData" class="container animated fadeIn"   ng-show="showForm" >
+                                                    <input type="text" ng-show="false"  name="txtIdAeropuerto"  ng-model="formData.idAeropuerto" />
+                                                    <input type="hidden" id="hdUrl" name="hdUrl" value="#{aeropuerto.formulario.restful}"/>
                                                     <input type="hidden" id="hdToken" name="hdToken" value="#{sessionView.token}"/>
-                                                    <input type="hidden" id="hdToken" name="hdFormName" value="#{factores.formulario.nombre}"/>
+                                                    <input type="hidden" id="hdToken" name="hdFormName" value="#{aeropuerto.formulario.nombre}"/>
                                                     <!--<input type="hidden" id="txtFechaAlta" name="txtFechaAlta" ng-model="formData.fechaAlta"/>-->
                                                     <!--<input type="hidden" id="txtFechaBaja" name="txtFechaBaja" ng-model="formData.fechaBaja"/>-->
                                                     <br />
                                                     <div class="form-group row">
-                                                        <label for="txtFecha" class="col-form-label col-sm-2 text-right">Fecha</label>
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Codigo</label>
                                                         <div class="col-sm-4">
-                                                            <input type="text" class="form-control " name="txtFecha" required="true" disabled="true" maxlength="10" ng-model="formData.fecha"/>
+                                                            <input type="text" class="form-control " name="txtCodigo" required="true" maxlength="4" ng-model="formData.idAeropuerto"/>
                                                         </div>
                                                     </div>
 
                                                     <div class="form-group row">
-                                                        <label for="txtValor" class=" col-form-label col-sm-2 text-right">Valor</label>
+                                                        <label for="txtNombre" class=" col-form-label col-sm-2 text-right">Aeropuerto/Ciudad/Pais</label>
                                                         <div class="col-sm-4">
-
-                                                            <input type="number" class="form-control" name="myDecimal" placeholder="Decimal" ng-model="formData.valor" ng-pattern="/^[0-9]+(\.[0-9]{1,5})?$/" step="0.00001" required="" />
-
-                                                            <span class="help-block" ng-show="!myForm.myDecimal.$valid">
-                                                                Invalid!
-                                                            </span>
-
-
+                                                            <input type="text" class="form-control" name="txtNombre" required="required" maxlength="64" ng-model="formData.nombre"/>
                                                         </div>
                                                     </div>
 
 
                                                     <div class="form-actions">
-                                                        <c:if test="#{factores.formulario.crear== factores.formulario.PERMITIR}">
-                                                            <!--
+                                                        <c:if test="#{aeropuerto.formulario.crear== aeropuerto.formulario.PERMITIR}">
                                                             <div class="modal-footer" ng-show="showBtnNuevo">
                                                                 <button  class="btn btn-primary" ng-click="save()"  value="Guardar"><span class="fa fa-save"></span>Guardar</button>
                                                             </div>
-                                                            -->
                                                         </c:if>                                    
 
-                                                        <c:if test="#{factores.formulario.actualizar== factores.formulario.PERMITIR}">
-                                                            <div class="modal-footer">
-                                                                <button type="button" class="btn btn-primary" ng-click="update(method)" value="Actualizar"> <span class="fa fa-edit"></span>Actualizar</button>
+                                                        <c:if test="#{aeropuerto.formulario.actualizar== aeropuerto.formulario.PERMITIR}">
+                                                            <div class="modal-footer" ng-show="showBtnEditar">
+                                                                <button type="button" class="btn btn-primary" ng-click="update()" value="Actualizar"> <span class="fa fa-edit"></span>Actualizar</button>
                                                             </div>
-
                                                         </c:if>
                                                     </div>
                                                 </div>

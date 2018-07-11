@@ -35,6 +35,7 @@
         <script type="text/javascript" src="../../js/angular.min.js" />
         <script type="text/javascript" src="../../js/ui-bootstrap-tpls.js" />
         <script type="text/javascript" src="../../js/smart-table.min.js" />
+        <script type="text/javascript" src="../../js/jquery.min.js" />
         <script type="text/javascript" src="../../js/index/index.js" />
         <!-- END THEME STYLES -->
         <title>Web Contable - #{login.razonSocial}</title>
@@ -130,6 +131,79 @@
                                     <!-- /metric row -->
                                 </div>
                                 <!-- /.section-block -->
+                                <button id="openModalButton" hidden="true" data-toggle="modal" data-target="#dollarModalDangerAlert">Open Modal</button>
+
+                                <!-- Alert Danger Modal -->
+                                <div class="modal modal-alert fade" id="dollarModalDangerAlert" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalAlertDangerLabel" aria-hidden="true">
+                                    <!-- .modal-dialog -->
+                                    <div class="modal-dialog" role="document">
+                                        <!-- .modal-content -->
+                                        <div class="modal-content">
+                                            <!-- .modal-header -->
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">
+                                                    <i class="fa fa-exclamation-triangle text-red mr-1"></i> Factor Dolar no iniciado </h5>
+                                            </div>
+                                            <!-- /.modal-header -->
+                                            <!-- .modal-body -->
+
+                                            <!--Mensaje Success -->
+                                            <div class="alert alert-success" role="alert" ng-show="dollarModalSuccess">
+                                                <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">&times;</a>
+                                                {{ dollarModalMessage}}
+                                            </div>
+                                            <!--/Mensaje Success -->
+
+                                            <!--Mensaje Error -->
+                                            <div class="alert alert-danger" role="alert" ng-show="dollarModalError">
+                                                <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">&times;</a>
+                                                {{ dollarModalMessage}}
+                                            </div>
+                                            <!-- /Mensaje Error -->
+                                            <h:form id="myForm" >
+                                                <div class="modal-body">
+                                                    <div class="form-group row">
+                                                        <label for="txtFecha" class=" col-form-label col-sm-2 text-right">Fecha:</label>
+                                                        <label for="txtFecha" class=" col-form-label col-sm-2 text-right"><strong>{{ fechaHoy}}</strong></label>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label for="txtValor" class=" col-form-label col-sm-2 text-right">Valor</label>
+                                                        <div class="col-sm-4">
+
+                                                            <input type="number" class="form-control" name="txtValueDolar" placeholder="0.00" 
+                                                                   ng-model="valorDolar" 
+                                                                   ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01" required="" />
+
+                                                            <span class="badge badge-danger" ng-show="!myForm.txtValueDolar.$valid">
+                                                                Invalid!
+                                                            </span>
+
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- /.modal-body -->
+                                                <!-- .modal-footer -->
+                                                <div class="modal-footer">
+                                                    <button type="button" ng-show="showBtnGuardarDolarFactor" ng-disabled="!myForm.txtValueDolar.$valid" class="btn btn-success" 
+                                                            ng-click="guardar()">Guardar</button>
+
+                                                    <button id="closeModalButton" ng-show="showBtnCerrarDolarFactor"  class="btn btn-light" 
+                                                            data-dismiss="modal">Cerrar</button>
+
+                                                </div>
+                                            </h:form>
+                                            <!-- /.modal-footer -->
+                                        </div>
+                                        <!-- /.modal-content -->
+                                    </div>
+                                    <!-- /.modal-dialog -->
+                                </div>
+                                <!-- /.modal -->
+
+
+
+
                                 <!-- grid row -->
                                 <div class="row">
                                     <!-- grid column -->
@@ -195,14 +269,14 @@
         <!-- END PAGE LEVEL JS -->
         <!-- Global site tag (gtag.js) - Google Analytics -->
         <script>
-                                                                    window.dataLayer = window.dataLayer || [];
+                                                        window.dataLayer = window.dataLayer || [];
 
-                                                                    function gtag()
-                                                                    {
-                                                                        dataLayer.push(arguments);
-                                                                    }
-                                                                    gtag('js', new Date());
-                                                                    gtag('config', 'UA-116692175-1');
+                                                        function gtag()
+                                                        {
+                                                            dataLayer.push(arguments);
+                                                        }
+                                                        gtag('js', new Date());
+                                                        gtag('config', 'UA-116692175-1');
         </script>
     </h:body>
 </html>
