@@ -5,6 +5,8 @@
  */
 package com.configuracion.remote;
 
+import com.configuracion.entities.CambioDolar;
+import com.seguridad.control.exception.CRUDException;
 import com.seguridad.control.remote.DaoRemote;
 import javax.ejb.Remote;
 
@@ -15,4 +17,5 @@ import javax.ejb.Remote;
 @Remote
 public interface CambioRemote  extends DaoRemote{
     
+        public CambioDolar get(String fecha, String query) throws CRUDException ;
 }

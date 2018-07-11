@@ -20,7 +20,6 @@ import javax.persistence.Query;
  *
  * @author xeio
  */
-
 @Stateless
 public class CambioEJB implements CambioRemote {
 
@@ -29,13 +28,28 @@ public class CambioEJB implements CambioRemote {
 
     @Override
     public void update(Entidad e) throws CRUDException {
-        em.merge(e) ;
+        em.merge(e);
     }
 
     @Override
     public int insert(Entidad e) throws CRUDException {
 
-        em.persist(e);
+        boolean merge = false;
+        if (e instanceof CambioDolar) {
+            if (em.find(CambioDolar.class, ((CambioDolar) e).getFecha()) != null) {
+                em.merge(e);
+                merge = true;
+            }
+        } else if (e instanceof CambioUfv) {
+            if (em.find(CambioDolar.class, ((CambioUfv) e).getFecha()) != null) {
+                em.merge(e);
+                merge = true;
+            }
+        }
+
+        if (!merge) {
+            em.persist(e);
+        }
 
         em.flush();
 
@@ -50,29 +64,36 @@ public class CambioEJB implements CambioRemote {
         } else if (e instanceof CambioUfv) {
             return em.find(CambioUfv.class, ((CambioUfv) e).getFecha());
         }
-        
+
         return null;
     }
 
     @Override
     public Entidad get(String q) throws CRUDException {
-       
-        
+
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
     @Override
     public List get(Entidad e, String q) throws CRUDException {
-        
-         Query query = em.createNamedQuery(q);
-        
-        return query.getResultList() ;
-        
+
+        Query query = em.createNamedQuery(q);
+
+        return query.getResultList();
+
     }
 
     @Override
     public void remove(Entidad e) throws CRUDException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public CambioDolar get(String fecha, String query) {
+        Query q = em.createNamedQuery(query);
+        q.setParameter("fecha", fecha);
+
+        return (CambioDolar) q.getSingleResult();
     }
 
 }

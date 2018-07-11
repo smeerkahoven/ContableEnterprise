@@ -46,7 +46,7 @@ public class CambioJSON implements Serializable {
     
     public static CambioJSON toJSON (CambioDolar c) {
         CambioJSON json = new CambioJSON();
-        json.setFecha(DateContable.getDateFormat(c.getFecha(), "yyyy/MM/dd"));
+        json.setFecha(DateContable.getDateFormat(c.getFecha(), "dd/MM/yyyy"));
         json.setValor(c.getValor());
         
         return json ;
@@ -54,7 +54,7 @@ public class CambioJSON implements Serializable {
     
     public static CambioJSON toJSON (CambioUfv c) {
         CambioJSON json = new CambioJSON();
-        json.setFecha(DateContable.getDateFormat(c.getFecha(), "yyyy/MM/dd"));
+        json.setFecha(DateContable.getDateFormat(c.getFecha(), "dd/MM/yyyy"));
         json.setValor(c.getValor());
         
         return json ;
@@ -62,7 +62,7 @@ public class CambioJSON implements Serializable {
     
     public static CambioDolar toCambioDolar(CambioJSON json) {
         CambioDolar c = new  CambioDolar();
-        DateFormat dt = new SimpleDateFormat("yyyy/MM/dd");
+        DateFormat dt = new SimpleDateFormat("dd/MM/yyyy");
         try {
             c.setFecha(dt.parse(json.getFecha()));
             c.setValor(json.getValor());
@@ -75,7 +75,7 @@ public class CambioJSON implements Serializable {
     
     public static CambioUfv toCambioUfv(CambioJSON json) {
         CambioUfv c = new  CambioUfv();
-        DateFormat dt = new SimpleDateFormat("yyyy/MM/dd");
+        DateFormat dt = new SimpleDateFormat("dd/MM/yyyy");
         try {
             c.setFecha(dt.parse(json.getFecha()));
             c.setValor(json.getValor());

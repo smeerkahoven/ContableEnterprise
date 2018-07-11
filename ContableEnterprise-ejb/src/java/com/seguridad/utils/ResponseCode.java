@@ -23,7 +23,9 @@ public enum  ResponseCode implements Serializable {
     
     RESTFUL_ERROR (200),
     RESTFUL_SUCCESS (201),
-    RESTFUL_WARNING(202)
+    RESTFUL_WARNING(202),
+    
+    VALOR_DOLAR_NO_ESTABLECIDO (301)
     ;
 
     private final int code ;
