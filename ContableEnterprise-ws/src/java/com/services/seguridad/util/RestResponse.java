@@ -12,12 +12,14 @@ package com.services.seguridad.util;
 public class RestResponse {
     
     public static final String BANCO_CUENTA_RELACION = "BANCO_CUENTA_RELACION";
-
+    public static final String VALOR_DOLAR_NO_ESTABLECIDO = "VALOR_DOLAR_NO_ESTABLECIDO" ; 
+    
     public static final String RESTFUL_ERROR = "RESTFUL_ERROR";
     public static final String RESTFUL_SUCCESS = "RESTFUL_SUCCESS";
     public static final String RESTFUL_WARNING = "RESTFUL_WARNING";
     public static final String RESTFUL_TOKEN_MANDATORY = "RESTFUL_TOKEN_MANDATORY";
     public static final String RESTFUL_TOKEN_EXPIRED = "RESTFUL_TOKEN_EXPIRED";
+
 
     private int code;
 

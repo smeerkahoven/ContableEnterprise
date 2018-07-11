@@ -18,12 +18,19 @@ import com.seguridad.control.exception.CRUDException;
 import com.seguridad.control.remote.LoggerRemote;
 import com.seguridad.control.remote.UsuarioRemote;
 import com.seguridad.utils.Accion;
+import com.seguridad.utils.DateContable;
 import com.seguridad.utils.ResponseCode;
 import com.seguridad.utils.Status;
 import com.services.seguridad.EmpresaServices;
 import com.services.seguridad.util.RestRequest;
 import com.services.seguridad.util.RestResponse;
 import com.util.resource.Mensajes;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -162,8 +169,26 @@ public class FactoresResource {
 
                 if (t != null) {
                     if (t.getStatus().equals(Status.ACTIVO)) {
+                        Date d = DateContable.getCurrentDate();
 
-                        CambioDolar dollarToday = (CambioDolar) ejbCambio.get(new CambioDolar(new Date()));
+                        //Date date = Date.from(LocalDate.atStartOfDay(ZoneId.systemDefault()).toInstant());
+                        LocalDate localDate = LocalDate.now();
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                        Date date = new SimpleDateFormat("dd/MM/yyyy").parse(localDate.format(formatter));
+
+                        CambioDolar dollarToday = (CambioDolar) ejbCambio.get(new CambioDolar(date));
+
+                        if (dollarToday == null) {
+                            r.setCode(ResponseCode.VALOR_DOLAR_NO_ESTABLECIDO.getCode());
+                            r.setContent(RestResponse.VALOR_DOLAR_NO_ESTABLECIDO);
+
+                            return r;
+                        } else if (dollarToday.getValor().intValue() == 0 ) {
+                            r.setCode(ResponseCode.VALOR_DOLAR_NO_ESTABLECIDO.getCode());
+                            r.setContent(RestResponse.VALOR_DOLAR_NO_ESTABLECIDO);
+
+                            return r ;
+                        }
 
                         CambioJSON today = CambioJSON.toJSON(dollarToday);
 
@@ -191,6 +216,8 @@ public class FactoresResource {
             ex.printStackTrace();
             r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
             r.setContent(m.getProperty(RestResponse.RESTFUL_ERROR));
+        } catch (ParseException ex) {
+            Logger.getLogger(FactoresResource.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return r;
@@ -222,6 +249,63 @@ public class FactoresResource {
                         CambioDolar c = CambioJSON.toCambioDolar(json);
 
                         ejbCambio.update(c);
+
+                        r.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
+                        r.setContent(m.getProperty(RestResponse.RESTFUL_SUCCESS));
+
+                        ejbLogger.add(Accion.ACCESS, t.getUserName(), request.getFormName(), "");
+
+                        return r;
+                    } else {
+                        r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+                        r.setContent(m.getProperty(RestResponse.RESTFUL_TOKEN_MANDATORY));
+                    }
+                } else {
+                    r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+                    r.setContent(m.getProperty(RestResponse.RESTFUL_TOKEN_MANDATORY));
+                }
+            } else {
+                r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+                r.setContent(m.getProperty(RestResponse.RESTFUL_TOKEN_MANDATORY));
+            }
+
+        } catch (CRUDException ex) {
+            Logger.getLogger(EmpresaServices.class.getName()).log(Level.SEVERE, null, ex);
+            ex.printStackTrace();
+            r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+            r.setContent(m.getProperty(RestResponse.RESTFUL_ERROR));
+        }
+
+        return r;
+    }
+
+    @POST
+    @Path("dollar/save")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public RestResponse dollarSave(final RestRequest request) {
+
+        Mensajes m = Mensajes.getMensajes().getMensajes();
+        RestResponse r = new RestResponse();
+        try {
+            /*Verificamos el ID token*/
+            if (request.getToken() != null && !request.getToken().isEmpty()) {
+                System.out.println(request.getToken());
+                UserToken t = ejbUsuario.get(new UserToken(request.getToken()));
+
+                if (t != null) {
+                    if (t.getStatus().equals(Status.ACTIVO)) {
+
+                        CambioJSON json = new CambioJSON();
+                        Gson gson = new GsonBuilder().create();
+                        JsonParser parser = new JsonParser();
+                        JsonObject object = parser.parse((String) request.getContent()).getAsJsonObject();
+                        json = gson.fromJson(object.toString(), CambioJSON.class);
+
+                        CambioDolar c = CambioJSON.toCambioDolar(json);
+                        c.setFecha(new Date());
+
+                        ejbCambio.insert(c);
 
                         r.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
                         r.setContent(m.getProperty(RestResponse.RESTFUL_SUCCESS));
