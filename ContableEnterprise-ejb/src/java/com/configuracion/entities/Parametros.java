@@ -30,6 +30,16 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Parametros.find", query = "SELECT p FROM Parametros p where p.idParametro =:idParametro")
 })
 public class Parametros extends Entidad {
+    
+    public static final String COMBO_CUENTA_VENTAS_AEROLINEA = "COMBO_CUENTA_VENTAS_AEROLINEA" ;
+    public static final String COMBO_CUENTA_COMISIONES_AEROLINEA = "COMBO_CUENTA_COMISIONES_AEROLINEA" ;
+    public static final String COMBO_CUENTA_DEVOLUCIONES_AEROLINEA = "COMBO_CUENTA_DEVOLUCIONES_AEROLINEA" ;
+    public static final String URL_CAMBIO_UFV = "URL_CAMBIO_UFV" ;
+    public static final String URL_CAMBIO_DOLAR="URL_CAMBIO_DOLAR";
+    //------------SISTEMA------------------------------//
+    public static final String SYSTEM_NAME="SYSTEM_NAME";
+    public static final String SYSTEM_DESCRIPTION="SYSTEM_DESCRIPTION";
+    public static final String SYSTEM_VERSION="SYSTEM_VERSION";
 
     private static final long serialVersionUID = 1L;
     @Id

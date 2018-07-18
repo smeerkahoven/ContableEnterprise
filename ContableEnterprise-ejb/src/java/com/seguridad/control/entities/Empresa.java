@@ -7,12 +7,15 @@ package com.seguridad.control.entities;
 
 import java.io.Serializable;
 import java.util.List;
+import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -68,6 +71,10 @@ public class Empresa implements Serializable {
     @Column(name = "tipo")
     private String tipo;
 
+    @Lob
+    @Basic(fetch = FetchType.EAGER)
+    @Column(name = "logo")
+    private byte[] logo;
 
     public Empresa() {
     }
@@ -81,6 +88,14 @@ public class Empresa implements Serializable {
         this.razonSocial = razonSocial;
         this.nit = nit;
         this.telefonoFijo = telefonoFijo;
+    }
+
+    public byte[] getLogo() {
+        return logo;
+    }
+
+    public void setLogo(byte[] logo) {
+        this.logo = logo;
     }
 
     public Integer getIdEmpresa() {

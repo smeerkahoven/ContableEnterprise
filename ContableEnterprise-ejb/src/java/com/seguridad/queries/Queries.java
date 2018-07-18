@@ -26,6 +26,9 @@ public class Queries {
     public final static String GET_MODULO_EDIT="GET_MODULO_EDIT";
     public final static String GET_MODULO_NUEVO="GET_MODULO_NUEVO";
     public final static String GET_BANCO_CUENTA_LINK="GET_BANCO_CUENTA_LINK";
+    
+    //removes
+    public final static String DELETE_IMPUESTO_AEROLINEA="DELETE_IMPUESTO_AEROLINEA";
 
     private static Queries queries;
     

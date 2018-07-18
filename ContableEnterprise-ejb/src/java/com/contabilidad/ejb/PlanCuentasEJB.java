@@ -110,7 +110,7 @@ public class PlanCuentasEJB implements PlanCuentasRemote {
     }
 
     @Override
-    public List<Object[]> getForCombo(Empresa idEmpresa) {
+    public List<Object[]> getForCombo(Empresa idEmpresa)  throws CRUDException {
         Query q = em.createNamedQuery("PlanCuentas.forCombo", PlanCuentas.class);
         q.setParameter("idEmpresa", idEmpresa.getIdEmpresa());
         List<Object[]> l = q.getResultList();
@@ -119,7 +119,7 @@ public class PlanCuentasEJB implements PlanCuentasRemote {
     }
 
     @Override
-    public List<PlanCuentas> get(Empresa idEmpresa) {
+    public List<PlanCuentas> get(Empresa idEmpresa) throws CRUDException  {
         Query q = em.createNamedQuery("PlanCuentas.findAll", PlanCuentas.class);
         q.setParameter("idEmpresa", idEmpresa.getIdEmpresa());
         List<PlanCuentas> l = q.getResultList();
@@ -128,10 +128,21 @@ public class PlanCuentasEJB implements PlanCuentasRemote {
     }
 
     @Override
-    public List<PlanCuentas> getForCombo(Empresa idEmpresa, PlanCuentas p) {
+    public List<PlanCuentas> getForCombo(Empresa idEmpresa, PlanCuentas p) throws CRUDException  {
         Query q = em.createNamedQuery("PlanCuentas.forComboPlan", PlanCuentas.class);
         q.setParameter("idEmpresa", idEmpresa.getIdEmpresa());
         q.setParameter("cuenta",p.getCuenta());
+        
+        List<PlanCuentas> l = q.getResultList();
+
+        return l;
+    }
+    
+     @Override
+    public List<PlanCuentas> getForComboIdPLan(Empresa idEmpresa, PlanCuentas p) throws CRUDException  {
+        Query q = em.createNamedQuery("PlanCuentas.forComboIdPlan", PlanCuentas.class);
+        q.setParameter("idEmpresa", idEmpresa.getIdEmpresa());
+        q.setParameter("idPlanCuentas",p.getIdPlanCuentas());
         
         List<PlanCuentas> l = q.getResultList();
 

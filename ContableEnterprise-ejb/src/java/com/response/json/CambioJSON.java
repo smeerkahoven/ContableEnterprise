@@ -22,10 +22,8 @@ import java.util.logging.Logger;
  */
 public class CambioJSON implements Serializable {
 
-    
-    
-    private String fecha ;
-    private BigDecimal valor ;
+    private String fecha;
+    private BigDecimal valor;
 
     public String getFecha() {
         return fecha;
@@ -42,26 +40,26 @@ public class CambioJSON implements Serializable {
     public void setValor(BigDecimal valor) {
         this.valor = valor;
     }
-    
-    
-    public static CambioJSON toJSON (CambioDolar c) {
+
+    public static CambioJSON toJSON(CambioDolar c) {
         CambioJSON json = new CambioJSON();
         json.setFecha(DateContable.getDateFormat(c.getFecha(), "dd/MM/yyyy"));
         json.setValor(c.getValor());
-        
-        return json ;
+
+        return json;
     }
-    
-    public static CambioJSON toJSON (CambioUfv c) {
+
+    public static CambioJSON toJSON(CambioUfv c) {
         CambioJSON json = new CambioJSON();
-        json.setFecha(DateContable.getDateFormat(c.getFecha(), "dd/MM/yyyy"));
-        json.setValor(c.getValor());
-        
-        return json ;
+        if (c != null) {
+            json.setFecha(DateContable.getDateFormat(c.getFecha(), "dd/MM/yyyy"));
+            json.setValor(c.getValor());
+        }
+        return json;
     }
-    
+
     public static CambioDolar toCambioDolar(CambioJSON json) {
-        CambioDolar c = new  CambioDolar();
+        CambioDolar c = new CambioDolar();
         DateFormat dt = new SimpleDateFormat("dd/MM/yyyy");
         try {
             c.setFecha(dt.parse(json.getFecha()));
@@ -69,12 +67,12 @@ public class CambioJSON implements Serializable {
         } catch (ParseException ex) {
             Logger.getLogger(CambioJSON.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        return c ;
+
+        return c;
     }
-    
+
     public static CambioUfv toCambioUfv(CambioJSON json) {
-        CambioUfv c = new  CambioUfv();
+        CambioUfv c = new CambioUfv();
         DateFormat dt = new SimpleDateFormat("dd/MM/yyyy");
         try {
             c.setFecha(dt.parse(json.getFecha()));
@@ -82,8 +80,8 @@ public class CambioJSON implements Serializable {
         } catch (ParseException ex) {
             Logger.getLogger(CambioJSON.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        return c ;
+
+        return c;
     }
-    
+
 }

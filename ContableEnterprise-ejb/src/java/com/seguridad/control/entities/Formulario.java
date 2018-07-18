@@ -5,6 +5,8 @@
  */
 package com.seguridad.control.entities;
 
+import com.reportes.entities.Reportes;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -69,6 +71,9 @@ public class Formulario extends Entidad {
     @JoinColumn(name = "id_modulo", referencedColumnName = "id_modulo")
     @ManyToOne(optional = false)
     private Modulo idModulo;
+    
+    @OneToMany(mappedBy = "idFormulario")
+    private List<Reportes> reportesList = new ArrayList<>();
 
     public Formulario() {
     }

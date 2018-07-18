@@ -23,10 +23,12 @@ public interface PlanCuentasRemote extends DaoRemote {
 
     public List<Object[]> getForCombo() throws CRUDException;
 
-    public List<Object[]> getForCombo(Empresa idEmpresa);
+    public List<Object[]> getForCombo(Empresa idEmpresa) throws CRUDException ;
 
-    public List<PlanCuentas> getForCombo(Empresa idEmpresa, PlanCuentas p);
+    public List<PlanCuentas> getForCombo(Empresa idEmpresa, PlanCuentas p) throws CRUDException ;
 
-    public List<PlanCuentas> get(Empresa idEmpresa);
+    public List<PlanCuentas> get(Empresa idEmpresa) throws CRUDException ;
+    
+    public List<PlanCuentas> getForComboIdPLan(Empresa idEmpresa, PlanCuentas p) throws CRUDException ;
 
 }
