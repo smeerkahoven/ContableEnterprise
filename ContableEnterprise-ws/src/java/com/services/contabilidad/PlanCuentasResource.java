@@ -39,6 +39,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 
 /**
@@ -47,7 +48,7 @@ import javax.ws.rs.core.MediaType;
  * @author xeio
  */
 @Path("contabilidad")
-public class ContabilidadResource {
+public class PlanCuentasResource {
 
     @Context
     private UriInfo context;
@@ -64,12 +65,12 @@ public class ContabilidadResource {
     /**
      * Creates a new instance of ContabilidadResource
      */
-    public ContabilidadResource() {
+    public PlanCuentasResource() {
     }
 
     /**
      * Retrieves representation of an instance of
-     * com.services.contabilidad.ContabilidadResource
+ com.services.contabilidad.PlanCuentasResource
      *
      * @return an instance of java.lang.String
      */
@@ -81,7 +82,7 @@ public class ContabilidadResource {
     }
 
     /**
-     * PUT method for updating or creating an instance of ContabilidadResource
+     * PUT method for updating or creating an instance of PlanCuentasResource
      *
      * @param content representation for the resource
      */
@@ -137,7 +138,7 @@ public class ContabilidadResource {
             }
 
         } catch (CRUDException ex) {
-            Logger.getLogger(EmpresaServices.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PlanCuentasResource.class.getName()).log(Level.SEVERE, null, ex);
             r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
             r.setContent(m.getProperty(RestResponse.RESTFUL_ERROR));
         }
@@ -176,6 +177,63 @@ public class ContabilidadResource {
                             ComboSelect cm = new ComboSelect();
                             cm.setId((BigInteger) o[0]);
                             cm.setName((String) o[1]);
+                            hm.add(cm);
+                        }
+
+                        r.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
+                        r.setContent(hm);
+
+                        return r;
+                    } else {
+                        r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+                        r.setContent(m.getProperty(RestResponse.RESTFUL_TOKEN_MANDATORY));
+                    }
+                } else {
+                    r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+                    r.setContent(m.getProperty(RestResponse.RESTFUL_TOKEN_MANDATORY));
+                }
+            } else {
+                r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+                r.setContent(m.getProperty(RestResponse.RESTFUL_TOKEN_MANDATORY));
+            }
+
+        } catch (CRUDException ex) {
+            Logger.getLogger(PlanCuentasResource.class.getName()).log(Level.SEVERE, null, ex);
+            r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+            r.setContent(m.getProperty(RestResponse.RESTFUL_ERROR));
+        }
+
+        return r;
+    }
+    
+    @POST
+    @Path("plan-cuentas/combo-plan/{cuenta}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public RestResponse getComboPlan(final RestRequest request, @PathParam("cuenta") BigInteger cuenta) {
+
+        Mensajes m = Mensajes.getMensajes().getMensajes();
+        RestResponse r = new RestResponse();
+        try {
+            /*Verificamos el ID token*/
+            if (request.getToken() != null && !request.getToken().isEmpty()) {
+                System.out.println(request.getToken());
+                UserToken t = ejbUsuario.get(new UserToken(request.getToken()));
+                User u = ejbUsuario.get(new User(t.getUserName()));
+                if (t != null) {
+                    if (t.getStatus().equals(Status.ACTIVO)) {
+
+                        // Este plan de cuenta ya debe estar creado
+                        PlanCuentas p = new PlanCuentas();
+                        p.setIdPlanCuentas(cuenta);
+
+                        List<PlanCuentas> l = ejbPlanCuentas.getForComboIdPLan(u.getIdEmpleado().getIdEmpresa(), p);
+
+                        ArrayList hm = new ArrayList();
+                        for (PlanCuentas o : l) {
+                            ComboSelect cm = new ComboSelect();
+                            cm.setId(o.getIdPlanCuentas());
+                            cm.setName(o.getCuenta());
                             hm.add(cm);
                         }
 
@@ -251,7 +309,7 @@ public class ContabilidadResource {
             }
 
         } catch (CRUDException ex) {
-            Logger.getLogger(EmpresaServices.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PlanCuentasResource.class.getName()).log(Level.SEVERE, null, ex);
             r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
             r.setContent(m.getProperty(RestResponse.RESTFUL_ERROR));
         }
@@ -306,7 +364,7 @@ public class ContabilidadResource {
             }
 
         } catch (CRUDException ex) {
-            Logger.getLogger(EmpresaServices.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PlanCuentasResource.class.getName()).log(Level.SEVERE, null, ex);
             r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
             r.setContent(m.getProperty(RestResponse.RESTFUL_ERROR));
         }
@@ -363,7 +421,7 @@ public class ContabilidadResource {
             }
 
         } catch (CRUDException ex) {
-            Logger.getLogger(EmpresaServices.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PlanCuentasResource.class.getName()).log(Level.SEVERE, null, ex);
             r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
             r.setContent(m.getProperty(RestResponse.RESTFUL_ERROR));
         }
@@ -417,7 +475,7 @@ public class ContabilidadResource {
             }
 
         } catch (CRUDException ex) {
-            Logger.getLogger(EmpresaServices.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(PlanCuentasResource.class.getName()).log(Level.SEVERE, null, ex);
             r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
             r.setContent(m.getProperty(RestResponse.RESTFUL_ERROR));
         }

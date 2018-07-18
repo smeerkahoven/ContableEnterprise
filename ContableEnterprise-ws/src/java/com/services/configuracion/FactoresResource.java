@@ -183,11 +183,11 @@ public class FactoresResource {
                             r.setContent(RestResponse.VALOR_DOLAR_NO_ESTABLECIDO);
 
                             return r;
-                        } else if (dollarToday.getValor().intValue() == 0 ) {
+                        } else if (dollarToday.getValor().intValue() == 0) {
                             r.setCode(ResponseCode.VALOR_DOLAR_NO_ESTABLECIDO.getCode());
                             r.setContent(RestResponse.VALOR_DOLAR_NO_ESTABLECIDO);
 
-                            return r ;
+                            return r;
                         }
 
                         CambioJSON today = CambioJSON.toJSON(dollarToday);
@@ -466,7 +466,13 @@ public class FactoresResource {
 
                         CambioUfv ufvToday = (CambioUfv) ejbCambio.get(new CambioUfv(new Date()));
 
-                        CambioJSON today = CambioJSON.toJSON(ufvToday);
+                        CambioJSON today ;
+                        if (ufvToday != null) {
+                            today = CambioJSON.toJSON(ufvToday);
+                        }else {
+                            today= new CambioJSON();
+                        }
+                        
 
                         r.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
                         r.setContent(today);
