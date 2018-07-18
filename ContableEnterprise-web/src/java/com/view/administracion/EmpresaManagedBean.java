@@ -11,7 +11,11 @@ import com.seguridad.control.exception.CRUDException;
 import com.seguridad.control.remote.EmpresaRemote;
 import com.view.menu.Formulario;
 import com.view.resources.Mensajes;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -19,7 +23,11 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.application.FacesMessage;
+import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
+import javax.faces.validator.ValidatorException;
+import javax.servlet.http.Part;
 
 /**
  *
@@ -38,6 +46,8 @@ public class EmpresaManagedBean implements Serializable {
     private Mensajes m;
 
     private Formulario formSucursal;
+
+    private Part file;
 
     static final long serialVersionUID = 42L;
     /**
@@ -67,8 +77,34 @@ public class EmpresaManagedBean implements Serializable {
 
     }
 
+    public void validateFile(FacesContext ctx,
+            UIComponent comp,
+            Object value) {
+        List<FacesMessage> msgs = new ArrayList<FacesMessage>();
+        Part file = (Part) value;
+        //KB m
+        if ((file.getSize()/1024/1024) > 1024) {
+            msgs.add(new FacesMessage("Ingrese un archivo de Max 1 MB"));
+        }
+        if (!"image/png".equals(file.getContentType())  &&
+                (!"image/jpg".equals(file.getContentType()) ) ) {
+            msgs.add(new FacesMessage("Ingrese un archivo con extension JPG o PNG"));
+        }
+        if (!msgs.isEmpty()) {
+            throw new ValidatorException(msgs);
+        }
+    }
+
     public EmpresaManagedBean() {
 
+    }
+
+    public Part getFile() {
+        return file;
+    }
+
+    public void setFile(Part file) {
+        this.file = file;
     }
 
     public Formulario getFormulario() {
@@ -102,6 +138,19 @@ public class EmpresaManagedBean implements Serializable {
             data.setNroIata(params.get("txtNroIata"));
             data.setEmail(params.get("txtEmail"));
             data.setPaginaWeb(params.get("txtPaginaWeb"));
+            
+            try {
+                long size = file.getSize();
+                InputStream input = file.getInputStream();
+                byte[] buffer = new byte[(int) size];
+                input.read(buffer, 0, (int)size);
+                input.close();
+                
+                data.setLogo(buffer);
+            } catch (IOException ex) {
+                Logger.getLogger(EmpresaManagedBean.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
 
             ejbEmpresa.update(data);
             successMessage = m.getProperty(Mensajes.DATOS_GUARDADOS_EXITOSAMENTE);

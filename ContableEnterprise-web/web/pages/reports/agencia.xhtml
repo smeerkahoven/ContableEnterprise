@@ -117,80 +117,32 @@
                                         <!-- /Mensaje Error -->
                                         <!-- .form-group -->
                                         <!-- Tabla Contenido -->
-                                        <div class="section-block text-center text-sm-left">
-                                            <h3 class="section-title pt-0"> Visual links </h3>
-                                            <!-- .visual-picker -->
-                                            <a href="form-basic.html#" class="visual-picker visual-picker-sm has-peek px-3">
-                                                <!-- .visual-picker-figure -->
-                                                <div class="visual-picker-figure">
-                                                    <!-- .visual-picker-content -->
-                                                    <span class="visual-picker-content">
-                                                        <span class="tile tile-sm bg-info">
-                                                            <i class="oi oi-person"></i>
-                                                        </span>
-                                                    </span>
-                                                    <!-- /.visual-picker-content -->
-                                                </div>
-                                                <!-- /.visual-picker-figure -->
-                                                <!-- .visual-picker-peek -->
-                                                <span class="visual-picker-peek">Accounts</span>
-                                            </a>
-                                            <!-- /.visual-picker -->
-                                            <!-- .visual-picker -->
-                                            <a href="form-basic.html#" class="visual-picker visual-picker-sm has-peek px-3">
-                                                <!-- .visual-picker-figure -->
-                                                <div class="visual-picker-figure">
-                                                    <!-- .visual-picker-content -->
-                                                    <span class="visual-picker-content">
-                                                        <span class="tile tile-sm bg-danger">
-                                                            <i class="fa fa-money-bill-alt"></i>
-                                                        </span>
-                                                    </span>
-                                                    <!-- /.visual-picker-content -->
-                                                </div>
-                                                <!-- /.visual-picker-figure -->
-                                                <!-- .visual-picker-peek -->
-                                                <span class="visual-picker-peek">My Wallet</span>
-                                            </a>
-                                            <!-- /.visual-picker -->
-                                            <!-- .visual-picker -->
-                                            <a href="form-basic.html#" class="visual-picker visual-picker-sm has-peek px-3">
-                                                <!-- .visual-picker-figure -->
-                                                <div class="visual-picker-figure">
-                                                    <!-- .visual-picker-content -->
-                                                    <span class="visual-picker-content">
-                                                        <span class="tile tile-sm bg-success">
-                                                            <i class="oi oi-people"></i>
-                                                        </span>
-                                                    </span>
-                                                    <!-- /.visual-picker-content -->
-                                                </div>
-                                                <!-- /.visual-picker-figure -->
-                                                <!-- .visual-picker-peek -->
-                                                <span class="visual-picker-peek">Teams</span>
-                                            </a>
-                                            <!-- /.visual-picker -->
-                                            <!-- .visual-picker -->
-                                            <a href="form-basic.html#" class="visual-picker visual-picker-sm has-peek px-3">
-                                                <!-- .visual-picker-figure -->
-                                                <div class="visual-picker-figure">
-                                                    <!-- .visual-picker-content -->
-                                                    <span class="visual-picker-content">
-                                                        <span class="tile tile-sm bg-warning">
-                                                            <i class="oi oi-question-mark"></i>
-                                                        </span>
-                                                    </span>
-                                                    <!-- /.visual-picker-content -->
-                                                </div>
-                                                <!-- /.visual-picker-figure -->
-                                                <!-- .visual-picker-peek -->
-                                                <span class="visual-picker-peek">Help Center</span>
-                                            </a>
-                                            <!-- /.visual-picker -->
-                                        </div>
+                                        <h:form target="_blank">
+                                            <div class="section-block text-center text-sm-left">
+                                                <!-- .visual-picker -->
+                                                <c:forEach var="item" items="#{reporteAgencia.listaReportes}" >
+
+                                                    <h:commandLink class="visual-picker visual-picker-sm has-peek px-3" actionListener="#{reporteAgencia.verReporteAerolinea(item.path)}">
+                                                        <!-- .visual-picker-figure -->
+                                                        <div class="visual-picker-figure">
+                                                            <!-- .visual-picker-content -->
+                                                            <span class="visual-picker-content">
+                                                                <span class="tile tile-sm bg-info">
+                                                                    <h:outputLabel class="fa ${item.icon}"></h:outputLabel>
+                                                                </span>
+                                                            </span>
+                                                            <!-- /.visual-picker-content -->
+                                                        </div>
+                                                        <!-- /.visual-picker-figure -->
+                                                        <!-- .visual-picker-peek -->
+                                                        <h:outputLabel class="visual-picker-peek" value="${item.nombre}"></h:outputLabel>
+                                                    </h:commandLink>
+
+                                                </c:forEach>
+                                            </div>
+                                        </h:form>
                                         <!-- /.section-block -->
                                         <!-- /Tabla Contenido -->
-
                                         <!-- /.form -->
                                     </div>
                                     <!-- /.card-body -->

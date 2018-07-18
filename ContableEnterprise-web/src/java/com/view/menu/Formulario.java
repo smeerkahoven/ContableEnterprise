@@ -28,7 +28,7 @@ public class Formulario implements Serializable {
     public static final String AEROLINEA = "aerolinea";
     //---REPORTES
     public static final String REPORTES_AGENCIA = "reportes-agencia";
-    
+
     public int PERMITIR = 1;
     public int DENEGAR = 0;
 
@@ -42,6 +42,15 @@ public class Formulario implements Serializable {
     private int crear;
     private String restful;
     private String status;
+    private Integer idFormulario;
+
+    public Integer getIdFormulario() {
+        return idFormulario;
+    }
+
+    public void setIdFormulario(Integer idFormulario) {
+        this.idFormulario = idFormulario;
+    }
 
     public String getModulo() {
         return modulo;

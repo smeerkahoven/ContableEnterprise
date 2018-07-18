@@ -23,11 +23,12 @@
      tb_empresa.`email` AS tb_empresa_email,
      tb_empresa.`pagina_web` AS tb_empresa_pagina_web,
      tb_empresa.`nro_iata` AS tb_empresa_nro_iata,
-     tb_empresa.`tipo` AS tb_empresa_tipo
+     tb_empresa.`tipo` AS tb_empresa_tipo,
+     tb_empresa.`logo` AS tb_empresa_logo
 FROM
      `tb_empresa` tb_empresa
 WHERE
-     tb_empresa.id_empresa = $P{EMPRESA_ID}]]>
+      tb_empresa.id_empresa = $P{EMPRESA_ID}]]>
 	</queryString>
 	<field name="tb_empresa_id_empresa" class="java.lang.Integer"/>
 	<field name="tb_empresa_razon_social" class="java.lang.String"/>
@@ -39,6 +40,7 @@ WHERE
 	<field name="tb_empresa_pagina_web" class="java.lang.String"/>
 	<field name="tb_empresa_nro_iata" class="java.lang.String"/>
 	<field name="tb_empresa_tipo" class="java.lang.String"/>
+	<field name="tb_empresa_logo" class="java.awt.Image"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -57,10 +59,6 @@ WHERE
 				</textElement>
 				<textFieldExpression><![CDATA[$F{tb_empresa_razon_social}]]></textFieldExpression>
 			</textField>
-			<image>
-				<reportElement x="7" y="2" width="81" height="66" uuid="9bf46b8b-61ca-42cc-af8c-61bbb3615333"/>
-				<imageExpression><![CDATA["/home/xeio/proyectos/netbeans/repository/ContableEnterprise-web/web/assets/images/agencia-inicio.png"]]></imageExpression>
-			</image>
 			<textField>
 				<reportElement x="88" y="14" width="189" height="13" uuid="9e44d815-1519-4cbc-9b85-00dab841d583"/>
 				<textElement>
@@ -91,6 +89,17 @@ WHERE
 			</textField>
 			<textField pattern="EEEEE dd MMMMM yyyy">
 				<reportElement x="388" y="2" width="184" height="14" uuid="9d3da0b7-1839-434c-b35b-b5996f7bf27a"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="6" y="2" width="82" height="66" uuid="afdd5dbf-6818-4fdd-bb35-15be0b994d5d"/>
+				<imageExpression><![CDATA[$F{tb_empresa_logo}]]></imageExpression>
+			</image>
+			<textField pattern="HH.mm.ss">
+				<reportElement x="472" y="15" width="100" height="14" uuid="715b0222-40a9-4274-99d1-d33a9c87f81a"/>
 				<textElement textAlignment="Right">
 					<font size="8"/>
 				</textElement>

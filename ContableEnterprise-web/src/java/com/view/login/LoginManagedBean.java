@@ -239,6 +239,8 @@ public class LoginManagedBean implements Serializable {
         f.setCrear((int) o[9]);
         f.setEliminar((int) o[10]);
         f.setModulo((String) o[0]);
+        
+        f.setIdFormulario((Integer) o[13]);
 
         return f;
     }
