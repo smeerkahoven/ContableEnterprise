@@ -30,6 +30,7 @@
         <!-- END BASE STYLES -->
         <!-- BEGIN PLUGINS STYLES -->
         <link rel="stylesheet" href="../../assets/vendor/flatpickr/flatpickr.min.css"/>
+        <link rel="stylesheet" href="../../css/main.css"  />
         <!-- END PLUGINS STYLES -->
         <!-- BEGIN THEME STYLES -->
         <link rel="stylesheet" href="../../assets/stylesheets/main.min.css"/>
@@ -103,21 +104,21 @@
                                         <!-- /Mensaje Cargando -->
 
                                         <!--Mensaje Success -->
-                                        <div class="alert alert-success" role="alert" ng-show="showRestfulSuccess">
+                                        <div class="alert alert-success ng-hide" role="alert" ng-show="showRestfulSuccess">
                                             <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">&times;</a>
                                             {{ showRestfulMessage}}
                                         </div>
                                         <!--/Mensaje Success -->
 
                                         <!--Mensaje Error -->
-                                        <div class="alert alert-danger" role="alert" ng-show="showRestfulError">
+                                        <div class="alert alert-danger ng-hide" role="alert" ng-show="showRestfulError">
                                             <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">&times;</a>
                                             {{ showRestfulMessage}}
                                         </div>
                                         <!-- /Mensaje Error -->
                                         <!-- .form-group -->
                                         <!-- Tabla Contenido -->
-                                        <div  id="tableData" ng-show="showTable" >
+                                        <div  id="tableData" ng-show="showTable" class="ng-hide">
                                             <div class="form-group row">
                                                 <table class="table-nested table-hover ">
                                                     <thead>
@@ -161,16 +162,16 @@
                                                     <button ng-show="showBtnAdicionar(item.nivel);" type="button" title="Adicionar" class="btn btn-sm btn-success" ng-click="add(item)"><i class="fa fa-plus"></i></button>
 
                                                     <div class="btn-group" role="group" aria-label="...">
-                                                    
+
                                                     <c:if test="${planCuentas.formulario.actualizar== planCuentas.formulario.PERMITIR }">
                                                     <button type="button" title="Editar" class="btn btn-sm btn-info" ng-click="edit(item)"><i class="fa fa-pencil"></i></button>
                                                     </c:if>
-                                                    
+
                                                     <c:if test="#{planCuentas.formulario.eliminar== planCuentas.formulario.PERMITIR}">
                                                     <button ng-show="item.nivel == 5" type="button" title="Eliminar" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#frmConfirmation" ng-click="modalEliminar(item.idPlanCuentas, item.nombreCuenta)"><i class="fa fa-remove"></i></button>
                                                     </c:if>
                                                     </div>
-                                                    
+
                                                     </td>
                                                     </tr>
                                                     <tr class="children" ng-if="item.children &amp;&amp; item.children.length &gt; 0">
@@ -188,7 +189,7 @@
                                         <!-- /Tabla Contenido -->
                                         <form name="formNewTransaction" id="formNewTransaction">
                                             <fieldset>
-                                                <div  class="container animated fadeIn"   ng-show="showFormNewTransaction" >
+                                                <div  class="container animated ng-hide"   ng-show="showFormNewTransaction" >
                                                     <input type="hidden" id="hdUrl" name="hdUrl" value="#{planCuentas.formulario.restful}"/>
                                                     <input type="hidden" id="hdFormName" name="hdFormName" value="#{planCuentas.formulario.nombre}" ng-model="formName"/>
                                                     <input type="hidden" id="hdToken" name="hdToken" value="#{sessionView.token}"/>
@@ -243,9 +244,9 @@
                                                     </div>
 
                                                     <script type="text/ng-template" id="customTemplate.html">
-                                                        <a href="#"  class=" list-group-item-action">
-                                                        <span  class=" list-group-item-action" ng-bind-html="match.label | uibTypeaheadHighlight:query"></span>
-                                                        </a>
+                                                        <div class="tt-suggestion tt-selectable">
+                                                        <span class=""  ng-bind-html="match.label | uibTypeaheadHighlight:query"></span>
+                                                        </div>
                                                     </script>
 
 
@@ -277,7 +278,7 @@
                                                     </div>
 
 
-                                                    <div class="form-group row" ng-show="frmNewTransaction.aplicaMovimiento == 'T'">
+                                                    <div class="form-group row ng-hide" ng-show="frmNewTransaction.aplicaMovimiento == 'T'">
                                                         <label for="txtMoneda" class=" col-form-label col-sm-3 text-right" >Moneda</label>
                                                         <div class="col-sm-4">
                                                             <select name="txtMoneda" class="form-control" ng-model="frmNewTransaction.moneda" >
@@ -288,17 +289,17 @@
                                                         </div>
                                                     </div>
                                                     <div class="form-actions">
-                                                            <c:if test="#{planCuentas.formulario.crear== planCuentas.formulario.PERMITIR}">
-                                                                <div class="modal-footer" ng-show="showBtnNuevo">
-                                                                    <button   class="btn btn-primary" ng-click="save()"  value="Guardar"><span class="fa fa-save"></span>Guardar</button>
-                                                                </div>
-                                                            </c:if>                                    
+                                                        <c:if test="#{planCuentas.formulario.crear== planCuentas.formulario.PERMITIR}">
+                                                            <div class="modal-footer" ng-show="showBtnNuevo">
+                                                                <button   class="btn btn-primary" ng-click="save()"  value="Guardar"><span class="fa fa-save"></span>Guardar</button>
+                                                            </div>
+                                                        </c:if>                                    
 
-                                                            <c:if test="#{planCuentas.formulario.actualizar== planCuentas.formulario.PERMITIR}">
-                                                                <div class="modal-footer" ng-show="showBtnActualizar">
-                                                                    <button type="button" class="btn btn-primary" ng-click="update()" value="Actualizar"> <span class="fa fa-edit"></span>Actualizar</button>
-                                                                </div>
-                                                            </c:if>
+                                                        <c:if test="#{planCuentas.formulario.actualizar== planCuentas.formulario.PERMITIR}">
+                                                            <div class="modal-footer" ng-show="showBtnActualizar">
+                                                                <button type="button" class="btn btn-primary" ng-click="update()" value="Actualizar"> <span class="fa fa-edit"></span>Actualizar</button>
+                                                            </div>
+                                                        </c:if>
                                                     </div>
                                                 </div>
                                             </fieldset>

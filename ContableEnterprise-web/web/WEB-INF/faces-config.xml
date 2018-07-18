@@ -104,6 +104,15 @@
         </navigation-case>
     </navigation-rule>
     
+    <navigation-rule>
+        <from-view-id>*</from-view-id>
+        <navigation-case>
+            <from-outcome>aerolinea</from-outcome>
+            <to-view-id>pages/agencia/aerolinea.xhtml?faces-redirect=true</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
     
     <navigation-rule>
         <from-view-id>*</from-view-id>
@@ -123,4 +132,13 @@
         </navigation-case>
     </navigation-rule>
     
+    <!-- reportes -->
+    <navigation-rule>
+        <from-view-id>*</from-view-id>
+        <navigation-case>
+            <from-outcome>reportes-agencia</from-outcome>
+            <to-view-id>pages/reports/agencia.xhtml?faces-redirect=true</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
 </faces-config>

@@ -29,6 +29,7 @@
         <!-- END BASE STYLES -->
         <!-- BEGIN PLUGINS STYLES -->
         <link rel="stylesheet" href="../../assets/vendor/flatpickr/flatpickr.min.css"/>
+        <link rel="stylesheet" href="../../css/main.css"  />
         <!-- END PLUGINS STYLES -->
         <!-- BEGIN THEME STYLES -->
         <link rel="stylesheet" href="../../assets/stylesheets/main.min.css"/>
@@ -102,21 +103,21 @@
                                         <!-- /Mensaje Cargando -->
 
                                         <!--Mensaje Success -->
-                                        <div class="alert alert-success" role="alert" ng-show="showRestfulSuccess">
+                                        <div class="alert alert-success ng-hide" role="alert" ng-show="showRestfulSuccess">
                                             <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">&times;</a>
                                             {{ showRestfulMessage}}
                                         </div>
                                         <!--/Mensaje Success -->
 
                                         <!--Mensaje Error -->
-                                        <div class="alert alert-danger" role="alert" ng-show="showRestfulError">
+                                        <div class="alert alert-danger ng-hide" role="alert" ng-show="showRestfulError">
                                             <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">&times;</a>
                                             {{ showRestfulMessage}}
                                         </div>
                                         <!-- /Mensaje Error -->
                                         <!-- .form-group -->
                                         <!-- Tabla Contenido -->
-                                        <div  id="tableData" ng-show="showTable" >
+                                        <div  id="tableData" ng-show="showTable" class="ng-hide" >
                                             <div class="form-group row">
                                                 <table st-table="display_records"  st-safe-src="data" class="table table-hover table-sm table-responsive">
                                                     <thead >
@@ -181,7 +182,7 @@
                                             <!-- .fieldset -->
                                             <fieldset>
                                                 <!-- Contenido Formulario-->
-                                                <div id="formData" class="container animated fadeIn"   ng-show="showForm" >
+                                                <div id="formData" class="container animated ng-hide"   ng-show="showForm" >
 
                                                     <input type="hidden" id="hdUrl" name="hdUrl" value="#{usuario.formulario.restful}"/>
                                                     <input type="hidden" id="hdToken" name="hdToken" value="#{sessionView.token}"/>

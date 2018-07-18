@@ -5,6 +5,8 @@
  */
 package com.view.login;
 
+import com.configuracion.entities.Parametros;
+import com.configuracion.remote.ParametrosRemote;
 import com.security.SessionUtils;
 import com.seguridad.control.LoggerContable;
 import com.seguridad.control.entities.Empleado;
@@ -23,6 +25,7 @@ import com.seguridad.utils.ResponseCode;
 import com.seguridad.utils.Status;
 import com.service.resource.TokenService;
 import com.view.administracion.EmpresaManagedBean;
+import com.view.agencia.AerolineaManagedBean;
 import com.view.menu.Formulario;
 import com.view.menu.Menu;
 import com.view.resources.Mensajes;
@@ -34,6 +37,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.ManagedBean;
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.context.FacesContext;
@@ -46,8 +50,10 @@ import javax.servlet.http.HttpServletRequest;
  */
 @Named(value = "login")
 @ManagedBean
-@RequestScoped()
+@RequestScoped
 public class LoginManagedBean implements Serializable {
+
+    private Parametros systemName, systemVersion, systemDescription;
 
     static final long serialVersionUID = 42L;
 
@@ -68,7 +74,22 @@ public class LoginManagedBean implements Serializable {
     @EJB
     private UsuarioRemote ejbUsuario;
 
+    @EJB
+    private ParametrosRemote ejbParametros;
+
     private Empleado empleado;
+
+    @PostConstruct
+    public void init() {
+        try {
+            this.systemName = (Parametros) ejbParametros.get(new Parametros(Parametros.SYSTEM_NAME));
+            this.systemDescription = (Parametros) ejbParametros.get(new Parametros(Parametros.SYSTEM_DESCRIPTION));
+            this.systemVersion = (Parametros) ejbParametros.get(new Parametros(Parametros.SYSTEM_VERSION));
+
+        } catch (CRUDException ex) {
+            Logger.getLogger(AerolineaManagedBean.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     public Empleado getEmpleado() {
 
@@ -168,7 +189,7 @@ public class LoginManagedBean implements Serializable {
             //u= ejbUsuario.get(u);
             UserLogin ul = getUserLogin(u, Status.ACTIVO);
             ul.setIdUserLogin(ejbUsuario.insert(ul));
-            
+
             User sessionUser = ejbUsuario.get(u);
             sessionUser.setToken_url(u.getToken_url());
             sessionUser.setIp(u.getIp());
@@ -217,8 +238,8 @@ public class LoginManagedBean implements Serializable {
         f.setBuscar((int) o[8]);
         f.setCrear((int) o[9]);
         f.setEliminar((int) o[10]);
-        f.setModulo((String)o[0]);
-        
+        f.setModulo((String) o[0]);
+
         return f;
     }
 
@@ -366,6 +387,30 @@ public class LoginManagedBean implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Parametros getSystemName() {
+        return systemName;
+    }
+
+    public void setSystemName(Parametros systemName) {
+        this.systemName = systemName;
+    }
+
+    public Parametros getSystemVersion() {
+        return systemVersion;
+    }
+
+    public void setSystemVersion(Parametros systemVersion) {
+        this.systemVersion = systemVersion;
+    }
+
+    public Parametros getSystemDescription() {
+        return systemDescription;
+    }
+
+    public void setSystemDescription(Parametros systemDescription) {
+        this.systemDescription = systemDescription;
     }
 
 }

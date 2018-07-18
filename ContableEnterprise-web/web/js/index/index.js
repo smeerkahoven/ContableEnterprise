@@ -30,13 +30,11 @@ angular.module('jsIndex.controllers', []).controller('frmIndex', ['$scope', '$ht
         var token = document.getElementsByName("hdToken")[0];
         var formName = document.getElementsByName("hfFormName")[0];
         //modal dolar
-        $scope.dollarModalSuccess = false;
-        $scope.dollarModalError = false;
-
-
         $scope.showFactores = false;
         $scope.fechaHoy = hoy();
-        console.log(hoy());
+
+        $scope.dollarModalSuccess = false;
+        $scope.dollarModalError = false;
 
         $scope.getDataFactor = function (method) {
             return $http({
@@ -45,7 +43,6 @@ angular.module('jsIndex.controllers', []).controller('frmIndex', ['$scope', '$ht
                 data: {token: token.value, content: '', formName: formName},
                 headers: {'Content-Type': 'application/json'}
             }).then(function (response) {
-                console.log(response);
                 if (response.data.code === 201) {
                     if (method === 'dollar') {
                         $scope.dollar = response.data.content;
@@ -60,13 +57,11 @@ angular.module('jsIndex.controllers', []).controller('frmIndex', ['$scope', '$ht
                     document.getElementById("openModalButton").click();
                 }
             }, function (error) {
-                console.log(error);
             });
         }
 
         $scope.guardar = function () {
             var data = {fecha: $scope.fechaHoy, valor: $scope.valorDolar};
-            console.log(data);
             $scope.showBtnCerrarDolarFactor = true;
             $scope.showBtnGuardarDolarFactor = false;
             return $http({
@@ -75,7 +70,6 @@ angular.module('jsIndex.controllers', []).controller('frmIndex', ['$scope', '$ht
                 data: {token: token.value, content: angular.toJson(data), formName: formName},
                 headers: {'Content-Type': 'application/json'}
             }).then(function (response) {
-                console.log(response);
                 if (response.data.code === 201) {
                     $scope.dollarModalMessage = response.data.content;
                     $scope.dollarModalSuccess = true;
@@ -89,7 +83,7 @@ angular.module('jsIndex.controllers', []).controller('frmIndex', ['$scope', '$ht
         }
 
         $scope.getDataFactor('dollar');
-        $scope.getDataFactor('ufv');
+         $scope.getDataFactor('ufv');
 
     }
 ]);

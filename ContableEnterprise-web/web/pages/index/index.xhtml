@@ -19,16 +19,6 @@
         <meta name="theme-color" content="#3063A0" />
         <!-- End FAVICONS -->
         <script src="../../assets/vendor/pace/pace.min.js"></script>
-        <!-- BEGIN BASE STYLES -->
-        <link rel="stylesheet" href="../../assets/vendor/pace/pace.min.css" />
-        <link rel="stylesheet" href="../../assets/vendor/bootstrap/css/bootstrap.min.css" />
-        <link rel="stylesheet" href="../../assets/vendor/open-iconic/css/open-iconic-bootstrap.min.css"/>
-        <link rel="stylesheet" href="../../assets/vendor/fontawesome/css/fontawesome.all.css"/>
-        <link rel="stylesheet" href="../../assets/vendor/font-awesome/css/font-awesome.min.css"  />
-        <!-- END BASE STYLES -->
-        <!-- BEGIN PLUGINS STYLES -->
-        <link rel="stylesheet" href="../../assets/vendor/flatpickr/flatpickr.min.css"/>
-        <!-- END PLUGINS STYLES -->
         <!-- BEGIN THEME STYLES -->
         <link rel="stylesheet" href="../../assets/stylesheets/main.min.css"/>
         <link rel="stylesheet" href="../../assets/stylesheets/custom.css"/>
@@ -38,6 +28,19 @@
         <script type="text/javascript" src="../../js/jquery.min.js" />
         <script type="text/javascript" src="../../js/index/index.js" />
         <!-- END THEME STYLES -->
+        <!-- BEGIN BASE STYLES -->
+        <link rel="stylesheet" href="../../assets/vendor/pace/pace.min.css" />
+        <link rel="stylesheet" href="../../assets/vendor/bootstrap/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="../../assets/vendor/open-iconic/css/open-iconic-bootstrap.min.css"/>
+        <link rel="stylesheet" href="../../assets/vendor/fontawesome/css/fontawesome.all.css"/>
+        <link rel="stylesheet" href="../../assets/vendor/font-awesome/css/font-awesome.min.css"  />
+        <link rel="stylesheet" href="../../css/main.css"  />
+
+        <!-- END BASE STYLES -->
+        <!-- BEGIN PLUGINS STYLES -->
+        <link rel="stylesheet" href="../../assets/vendor/flatpickr/flatpickr.min.css"/>
+        <!-- END PLUGINS STYLES -->
+
         <title>Web Contable - #{login.razonSocial}</title>
     </h:head>
     <h:body>
@@ -85,13 +88,13 @@
                                     <!-- metric row -->
                                     <div class="metric-row">
                                         <div class="col-lg-9">
-                                            <h:form id="frmUfv">`
-                                                <div class="metric-row metric-flush" ng-show="showFactores" >
+                                            <h:form id="frmUfv">
+                                                <input type="hidden" id="hdToken" name="hdToken" value="#{sessionView.token}"/>
+                                                <input type="hidden" id="hdUrlFactores" name="hdUrlFactores" value="#{factores.formulario.restful}"/>
+                                                <input type="hidden" id="hdToken" name="hdFormName" value="index"/>
+                                                <div class="metric-row metric-flush ng-hide" ng-show="showFactores" >
 
                                                     <!-- metric column -->
-                                                    <input type="hidden" id="hdToken" name="hdToken" value="#{sessionView.token}"/>
-                                                    <input type="hidden" id="hdUrlFactores" name="hdUrlFactores" value="#{factores.formulario.restful}"/>
-                                                    <input type="hidden" id="hdToken" name="hdFormName" value="index"/>
                                                     <div class="col">
                                                         <!-- .metric -->
                                                         <h:commandLink action="factores" class="metric metric-bordered align-items-center">

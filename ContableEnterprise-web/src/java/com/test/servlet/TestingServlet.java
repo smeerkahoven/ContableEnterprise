@@ -86,7 +86,7 @@ public class TestingServlet extends HttpServlet {
             out.println("<h1>Servlet TestingServlet at " + request.getContextPath() + "</h1>");
 
             //crearEmpresa(out);
-            //crearModulo(out);
+            crearModulo(out);
             crearFormulario(out);
             //crearRol(out);
             //crearUsuario(out);
@@ -317,7 +317,7 @@ public class TestingServlet extends HttpServlet {
 
     private void crearRolFormulario(PrintWriter out) {
         RolFormulario rf = new RolFormulario();
-        rf.setIdFormularios(new Formulario(12));
+        rf.setIdFormularios(new Formulario(14));
         rf.setIdRol(new Rol(1));
         rf.setAcceder(new Short("1"));
         rf.setActualizar(new Short("1"));
@@ -337,10 +337,10 @@ public class TestingServlet extends HttpServlet {
     private void crearFormulario(PrintWriter out) {
         Formulario f = new Formulario();
         f.setFechaAlta(DateContable.getCurrentDate());
-        f.setIdModulo(new Modulo(4));
-        f.setNombre("Factores");
-        f.setUrlAcceso("factores");
-        f.setRestfulUrl("http://localhost:8080/ContableEnterprise-ws/ws-api/factores/");
+        f.setIdModulo(new Modulo(5));
+        f.setNombre("Agencia");
+        f.setUrlAcceso("reportes/agencia");
+        f.setRestfulUrl("http://localhost:8080/ContableEnterprise-ws/ws-api/reportes/agencia");
         f.setStatus("ACTIVO");
 
         try {
@@ -355,7 +355,7 @@ public class TestingServlet extends HttpServlet {
         try {
             Modulo m = new Modulo();
             m.setFechaAlta(DateContable.getCurrentDate());
-            m.setNombre("Contabilidad");
+            m.setNombre("Reportes");
             m.setStatus("ACTIVE");
             m.setClassMenu("");
 

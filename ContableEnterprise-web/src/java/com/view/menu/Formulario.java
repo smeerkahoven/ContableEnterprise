@@ -25,7 +25,10 @@ public class Formulario implements Serializable {
     public static final String TARJETA_CREDITO = "tarjeta-credito";
     public static final String BANCOS = "bancos";
     public static final String FACTORES = "factores";
-
+    public static final String AEROLINEA = "aerolinea";
+    //---REPORTES
+    public static final String REPORTES_AGENCIA = "reportes-agencia";
+    
     public int PERMITIR = 1;
     public int DENEGAR = 0;
 

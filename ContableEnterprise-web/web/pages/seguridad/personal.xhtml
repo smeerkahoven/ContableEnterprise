@@ -26,6 +26,7 @@
         <link rel="stylesheet" href="../../assets/vendor/open-iconic/css/open-iconic-bootstrap.min.css"/>
         <link rel="stylesheet" href="../../assets/vendor/fontawesome/css/fontawesome.all.css"/>
         <link rel="stylesheet" href="../../assets/vendor/font-awesome/css/font-awesome.min.css"  />
+        <link rel="stylesheet" href="../../css/main.css"  />
         <!-- END BASE STYLES -->
         <!-- BEGIN PLUGINS STYLES -->
         <link rel="stylesheet" href="../../assets/vendor/flatpickr/flatpickr.min.css"/>
@@ -102,21 +103,21 @@
                                         <!-- /Mensaje Cargando -->
 
                                         <!--Mensaje Success -->
-                                        <div class="alert alert-success" role="alert" ng-show="showRestfulSuccess">
+                                        <div class="alert alert-success ng-hide" role="alert" ng-show="showRestfulSuccess">
                                             <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">&times;</a>
                                             {{ showRestfulMessage}}
                                         </div>
                                         <!--/Mensaje Success -->
 
                                         <!--Mensaje Error -->
-                                        <div class="alert alert-danger" role="alert" ng-show="showRestfulError">
+                                        <div class="alert alert-danger ng-hide" role="alert" ng-show="showRestfulError">
                                             <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">&times;</a>
                                             {{ showRestfulMessage}}
                                         </div>
                                         <!-- /Mensaje Error -->
                                         <!-- .form-group -->
                                         <!-- Tabla Contenido -->
-                                        <div  id="tableData" ng-show="showTable" >
+                                        <div  id="tableData" ng-show="showTable" class="ng-hide" >
                                             <table st-table="display_records"  st-safe-src="data" class="table table-hover table-sm table-responsive ">
                                                 <thead >
                                                     <c:if test="#{personal.formulario.buscar == personal.formulario.PERMITIR}">
@@ -177,7 +178,7 @@
                                             <!-- .fieldset -->
                                             <!-- Contenido Formulario-->
                                             <fieldset>
-                                                <div id="formData" class="container animated fadeIn"   ng-show="showForm" >
+                                                <div id="formData" class="container animated ng-hide"   ng-show="showForm" >
 
                                                     <input type="text" ng-show="false"  name="txtIdEmpleado"  ng-model="formData.idEmpleado" />
                                                     <input type="hidden" id="hdUrl" name="hdUrl" value="#{personal.formulario.restful}"/>
