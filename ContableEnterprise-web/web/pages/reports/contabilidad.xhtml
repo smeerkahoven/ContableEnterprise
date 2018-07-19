@@ -74,15 +74,15 @@
                                     <ol class="breadcrumb">
                                         <li class="breadcrumb-item active">
                                             <a href="#">
-                                                <i class="breadcrumb-icon fa fa-angle-left mr-2"></i>#{reporteAgencia.formulario.modulo}
+                                                <i class="breadcrumb-icon fa fa-angle-left mr-2"></i>#{reporteContabilidad.formulario.modulo}
                                             </a>
                                         </li>
                                     </ol>
                                 </nav>
                                 <div class="d-md-flex">
-                                    <h1 class="page-title mr-sm-auto"> #{reporteAgencia.formulario.nombre}</h1>
+                                    <h1 class="page-title mr-sm-auto"> #{reporteContabilidad.formulario.nombre}</h1>
                                     <!--<div class="dt-button btn-group">
-                                        <c:if test="#{aeropuerto.formulario.crear== aeropuerto.formulario.PERMITIR}">
+                                        <c:if test="#{reporteContabilidad.formulario.crear== reporteContabilidad.formulario.PERMITIR}">
                                             <button type="button" class="btn btn-success buttons-html5" tabindex="0" ng-click="nuevo()"><span class="fa fa-plus"></span> Nuevo</button>
                                         </c:if>
                                         <button type="button" class="btn btn-warning buttons-html5" tabindex="0" ng-click="cancelar()"><span class="fa fa-undo"></span> Cancelar</button>
@@ -120,9 +120,9 @@
                                         <h:form target="_blank">
                                             <div class="section-block text-center text-sm-left">
                                                 <!-- .visual-picker -->
-                                                <c:forEach var="item" items="#{reporteAgencia.listaReportes}" >
+                                                <c:forEach var="item" items="#{reporteContabilidad.listaReportes}" >
 
-                                                    <h:commandLink class="visual-picker visual-picker has-peek px-3" actionListener="#{reporteAgencia.verReporteAerolinea(item.path)}">
+                                                    <h:commandLink class="visual-picker visual-picker has-peek px-3" actionListener="#{reporteContabilidad.verReporte(item.path)}">
                                                         <!-- .visual-picker-figure -->
                                                         <div class="visual-picker-figure">
                                                             <!-- .visual-picker-content -->
@@ -135,7 +135,7 @@
                                                         </div>
                                                         <!-- /.visual-picker-figure -->
                                                         <!-- .visual-picker-peek -->
-                                                        <h:outputLabel class="visual-picker-peek" value="${item.nombre}"></h:outputLabel>
+                                                        <h:outputLabel class="visual-picker-peek" value="${item.nombre}" ></h:outputLabel>
                                                     </h:commandLink>
 
                                                 </c:forEach>

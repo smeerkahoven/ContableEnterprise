@@ -317,7 +317,7 @@ public class TestingServlet extends HttpServlet {
 
     private void crearRolFormulario(PrintWriter out) {
         RolFormulario rf = new RolFormulario();
-        rf.setIdFormularios(new Formulario(14));
+        rf.setIdFormularios(new Formulario(15));
         rf.setIdRol(new Rol(1));
         rf.setAcceder(new Short("1"));
         rf.setActualizar(new Short("1"));
@@ -338,9 +338,9 @@ public class TestingServlet extends HttpServlet {
         Formulario f = new Formulario();
         f.setFechaAlta(DateContable.getCurrentDate());
         f.setIdModulo(new Modulo(5));
-        f.setNombre("Agencia");
-        f.setUrlAcceso("reportes/agencia");
-        f.setRestfulUrl("http://localhost:8080/ContableEnterprise-ws/ws-api/reportes/agencia");
+        f.setNombre("Contabilidad");
+        f.setUrlAcceso("reportes/contabilidad");
+        f.setRestfulUrl("http://localhost:8080/ContableEnterprise-ws/ws-api/reportes/contabilidad");
         f.setStatus("ACTIVO");
 
         try {

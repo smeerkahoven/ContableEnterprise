@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.reports.agencia;
+package com.reports;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,11 +23,7 @@ import net.sf.jasperreports.engine.JasperRunManager;
  */
 public class ReportViewer {
 
-    public void mostrarReport(String path) {
-
-    }
-
-    void mostrarReport(String subreporte, String path, Connection conn, FacesContext facesContext) {
+    public void mostrarReport(String subreporte, String path, Connection conn, FacesContext facesContext) {
         try {
             ///---
             HashMap hash = new HashMap<Object, Object>();

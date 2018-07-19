@@ -28,6 +28,7 @@ public class Formulario implements Serializable {
     public static final String AEROLINEA = "aerolinea";
     //---REPORTES
     public static final String REPORTES_AGENCIA = "reportes-agencia";
+    public static final String REPORTES_CONTABILIDAD = "reportes-contabilidad";
 
     public int PERMITIR = 1;
     public int DENEGAR = 0;

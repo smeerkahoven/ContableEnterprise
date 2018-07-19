@@ -3,11 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.reports.agencia;
+package com.reports;
 
-import com.reports.ReportViewer;
 import com.reportes.entities.Reportes;
 import com.reportes.remote.ReportAgenciaRemote;
+import com.reports.agencia.ReporteAgenciaMBean;
 import com.security.SessionUtils;
 import com.seguridad.control.exception.CRUDException;
 import com.view.menu.Formulario;
@@ -20,8 +20,6 @@ import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.ejb.EJB;
-import javax.inject.Named;
-import javax.enterprise.context.RequestScoped;
 import javax.faces.context.FacesContext;
 import javax.sql.DataSource;
 
@@ -29,39 +27,35 @@ import javax.sql.DataSource;
  *
  * @author xeio
  */
-@Named(value = "reporteAgencia")
-@RequestScoped
-public class ReporteAgenciaMBean {
-
+public abstract class ReporteHandler {
+  
     @EJB
-    private ReportAgenciaRemote ejbReporte;
-
-    @Resource(mappedName = "jdbc/db_travel")
-    private DataSource datasource;
-
-    private List<Reportes> listaReportes = new LinkedList<>();
-
-    private Formulario formulario;
-
-    /**
-     * Creates a new instance of ReporteAgenciaMBean
-     */
-    public ReporteAgenciaMBean() {
-    }
-
-    @PostConstruct
-    public void init() {
-        try {
-            this.formulario = SessionUtils.getFormulario(Formulario.REPORTES_AGENCIA);
-            this.listaReportes = ejbReporte.get(new com.seguridad.control.entities.Formulario(this.formulario.getIdFormulario()));
-        } catch (CRUDException ex) {
-            Logger.getLogger(ReporteAgenciaMBean.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-    /**/
+    protected ReportAgenciaRemote ejbReporte;
     
+    @Resource(mappedName = "jdbc/db_travel")
+    protected DataSource datasource;
+    
+    protected List<Reportes> listaReportes = new LinkedList<>();
 
-    public void verReporteAerolinea(String reportPath) {
+    protected Formulario formulario;
+    
+    protected String idFormulario;
+    
+    
+    public ReporteHandler(){
+        
+    }
+    
+    public ReporteHandler(String idFormulario){
+        this.idFormulario = idFormulario;
+    }
+
+  
+    /**
+     * 
+     * @param reportPath 
+     */
+    public void verReporte(String reportPath) {
 
         try {
             FacesContext facesContext = FacesContext.getCurrentInstance();
@@ -79,6 +73,23 @@ public class ReporteAgenciaMBean {
         }
     }
 
+    public String getIdFormulario() {
+        return idFormulario;
+    }
+
+    public void setIdFormulario(String idFormulario) {
+        this.idFormulario = idFormulario;
+    }
+    
+    
+    public List<Reportes> getListaReportes() {
+        return listaReportes;
+    }
+
+    public void setListaReportes(List<Reportes> listaReportes) {
+        this.listaReportes = listaReportes;
+    }
+
     public Formulario getFormulario() {
         return formulario;
     }
@@ -86,13 +97,7 @@ public class ReporteAgenciaMBean {
     public void setFormulario(Formulario formulario) {
         this.formulario = formulario;
     }
-
-    public List<Reportes> getListaReportes() {
-        return listaReportes;
-    }
-
-    public void setListaReportes(LinkedList<Reportes> listaReportes) {
-        this.listaReportes = listaReportes;
-    }
-
+    
+    
+    
 }
