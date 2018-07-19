@@ -159,12 +159,15 @@
                                                     {{item.nivel}}
                                                     </td>
                                                     <td class="cell-c3" align="right">
-                                                    <button ng-show="showBtnAdicionar(item.nivel);" type="button" title="Adicionar" class="btn btn-sm btn-success" ng-click="add(item)"><i class="fa fa-plus"></i></button>
+                                                    
 
                                                     <div class="btn-group" role="group" aria-label="...">
 
+                                                    <button ng-show="showBtnAdicionar(item.nivel);" type="button" title="Adicionar" class="btn btn-sm btn-success" ng-click="add(item)"><i class="fa fa-plus"></i></button>
+                                                        
                                                     <c:if test="${planCuentas.formulario.actualizar== planCuentas.formulario.PERMITIR }">
                                                     <button type="button" title="Editar" class="btn btn-sm btn-info" ng-click="edit(item)"><i class="fa fa-pencil"></i></button>
+                                                    
                                                     </c:if>
 
                                                     <c:if test="#{planCuentas.formulario.eliminar== planCuentas.formulario.PERMITIR}">
@@ -342,6 +345,9 @@
                 <ui:include src="../index/footer.xhtml" />
                 <!-- /.app-footer -->
                 <!-- /.wrapper -->
+                <!-- Logout Form -->
+                <ui:include src="../index/logout.xhtml" />
+                <!-- /Logout Form -->
             </main>
             <!-- /.app-main -->
         </div>

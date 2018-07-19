@@ -13,7 +13,7 @@
         <meta name="author" content="" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <!-- End Required meta tags -->
-        <title>Web Contable - #{login.razonSocial}</title>
+        <title>#{login.systemName} - #{login.razonSocial}</title>
         <!-- FAVICONS -->
         <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/apple-touch-icon.png" />
         <link rel="shortcut icon" href="../../assets/favicon.ico" />
@@ -38,7 +38,7 @@
         <script type="text/javascript" src="../../js/smart-table.min.js" />
         <script type="text/javascript" src="../../js/seguridad/roles.js" />
 
-        <title>Web Contable - #{login.razonSocial} </title>
+        <title>#{login.systemName} - #{login.razonSocial} </title>
     </head>
     <h:body>
         <!-- .app -->
@@ -381,6 +381,9 @@
                 <ui:include src="../index/footer.xhtml" />
                 <!-- /.app-footer -->
                 <!-- /.wrapper -->
+                <!-- Logout Form -->
+                <ui:include src="../index/logout.xhtml" />
+                <!-- /Logout Form -->
             </main>
             <!-- /.app-main -->
         </div>
