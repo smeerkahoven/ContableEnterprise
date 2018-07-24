@@ -27,6 +27,7 @@ import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Schedule;
 import javax.ejb.Stateless;
+import javax.net.ssl.HttpsURLConnection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -45,7 +46,7 @@ public class UFVScheduler implements UFVSchedulerLocal {
     @EJB
     private CambioRemote ejbCambio;
 
-    @Schedule(dayOfWeek = "*", month = "*", hour = "*", dayOfMonth = "*", year = "*", minute = "*", second = "*/30")
+    //@Schedule(dayOfWeek = "*", month = "*", hour = "*", dayOfMonth = "*", year = "*", minute = "*", second = "*/5")
     @Override
     public void checkUFVFactor() {
                 Date today = new Date();
@@ -70,13 +71,13 @@ public class UFVScheduler implements UFVSchedulerLocal {
     }
 
     private double obtenerUFVValor() {
-        //System.out.println("Timer event: " + new Date());
+        System.out.println("obtenerUFVValor Timer event: " + new Date());
         HttpURLConnection connection = null;
         String path = "https://www.bcb.gob.bo/librerias/indicadores/ufv/ultimo.php";
         //String path = "https://www.bcb.gob.bo/librerias/indicadores/dolar/bolsin.php";
         try {
             Parametros p;
-            p = (Parametros) ejbParametros.get(new Parametros("URL_CAMBIO_UFV"));
+            p = (Parametros) ejbParametros.get(new Parametros(Parametros.URL_CAMBIO_UFV));
             URI uri = new URI(p.getValor());
             URL url = new URL(uri.toURL().toString());
             URLConnection yc = url.openConnection();

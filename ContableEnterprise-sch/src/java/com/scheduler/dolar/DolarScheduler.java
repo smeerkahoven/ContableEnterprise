@@ -16,11 +16,11 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.security.cert.Certificate;
 import java.util.Date;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
@@ -28,6 +28,8 @@ import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ejb.Schedule;
 import javax.ejb.Stateless;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLPeerUnverifiedException;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -46,10 +48,10 @@ public class DolarScheduler implements DolarSchedulerLocal {
     @EJB
     private CambioRemote ejbCambio;
 
-    @Schedule(dayOfWeek = "*", month = "*", hour = "*", dayOfMonth = "*", year = "*", minute = "*", second = "*/30")
+    //@Schedule(dayOfWeek = "*", month = "*", hour = "*", dayOfMonth = "*", year = "*", minute = "*", second = "*/15")
     @Override
     public void checkDolarFactor() {
-        //System.out.println("Timer event: " + new Date());
+        System.out.println("checkDolarFactor Timer event: " + new Date());
 
         Date today = new Date();
         String stoday = DateContable.getDateFormat(today, "yyyy/MM/dd");
@@ -58,11 +60,11 @@ public class DolarScheduler implements DolarSchedulerLocal {
         try {
             dolarToday = (CambioDolar) ejbCambio.get(new CambioDolar(today));
             if (dolarToday == null) {
-                double dolarT = obtenerValorDolar() ;
+                double dolarT = obtenerValorDolar();
                 CambioDolar d = new CambioDolar();
                 d.setFecha(today);
                 d.setValor(new BigDecimal(dolarT));
-                
+
                 ejbCambio.insert(d);
             }
 
@@ -73,7 +75,7 @@ public class DolarScheduler implements DolarSchedulerLocal {
     }
 
     private double obtenerValorDolar() {
-        HttpURLConnection connection = null;
+        HttpsURLConnection connection = null;
         //String path = "https://www.bcb.gob.bo/librerias/indicadores/ufv/ultimo.php";
         //String path = "https://www.bcb.gob.bo/librerias/indicadores/dolar/bolsin.php";
 
@@ -84,18 +86,19 @@ public class DolarScheduler implements DolarSchedulerLocal {
             URI uri = new URI(p.getValor());
             URL url = new URL(uri.toURL().toString());
             URLConnection yc = url.openConnection();
-            connection = (HttpURLConnection) url.openConnection();
-            BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
+            connection = (HttpsURLConnection) url.openConnection();
+            print_https_cert(connection);
+            /*BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
             String inputLine;
             StringBuffer content = new StringBuffer();
             while ((inputLine = in.readLine()) != null) {
                 content.append(inputLine);
                 //System.out.println(inputLine);
             }
+             */
+            //in.close();
 
-            in.close();
-
-            Document doc = Jsoup.parse(content.toString());
+            /*Document doc = Jsoup.parse(content.toString());
             String title = doc.title();
             //String body = doc.body().text();
             //System.out.printf("Body: %s", body);
@@ -113,12 +116,43 @@ public class DolarScheduler implements DolarSchedulerLocal {
 
                     }
                 }
-            }
+            }*/
         } catch (CRUDException | URISyntaxException | IOException ex) {
             Logger.getLogger(DolarScheduler.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return 0;
+
+    }
+
+    private void print_https_cert(HttpsURLConnection con) {
+
+        if (con != null) {
+
+            try {
+
+                System.out.println("Response Code : " + con.getResponseCode());
+                System.out.println("Cipher Suite : " + con.getCipherSuite());
+                System.out.println("\n");
+
+                Certificate[] certs = con.getServerCertificates();
+                for (Certificate cert : certs) {
+                    System.out.println("Cert Type : " + cert.getType());
+                    System.out.println("Cert Hash Code : " + cert.hashCode());
+                    System.out.println("Cert Public Key Algorithm : "
+                            + cert.getPublicKey().getAlgorithm());
+                    System.out.println("Cert Public Key Format : "
+                            + cert.getPublicKey().getFormat());
+                    System.out.println("\n");
+                }
+
+            } catch (SSLPeerUnverifiedException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
 
     }
 
