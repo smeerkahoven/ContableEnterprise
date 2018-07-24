@@ -13,7 +13,7 @@
         <meta name="author" content="" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <!-- End Required meta tags -->
-        <title>#{login.systemName} - #{login.razonSocial}</title>
+        <title>#{login.systemName.valor} - #{login.razonSocial}</title>
         <!-- FAVICONS -->
         <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/apple-touch-icon.png" />
         <link rel="shortcut icon" href="../../assets/favicon.ico" />
@@ -37,7 +37,6 @@
         <script type="text/javascript" src="../../js/smart-table.min.js" />
         <script type="text/javascript" src="../../js/reports/agencia.js" />
 
-        <title>#{login.systemName}- #{login.razonSocial} </title>
     </head>
     <h:body>
         <!-- .app -->
@@ -103,14 +102,14 @@
                                         <!-- /Mensaje Cargando -->
 
                                         <!--Mensaje Success -->
-                                        <div class="alert alert-success" role="alert" ng-show="showRestfulSuccess">
+                                        <div class="alert alert-success ng-hide" role="alert" ng-show="showRestfulSuccess">
                                             <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">&times;</a>
                                             {{ showRestfulMessage}}
                                         </div>
                                         <!--/Mensaje Success -->
 
                                         <!--Mensaje Error -->
-                                        <div class="alert alert-danger" role="alert" ng-show="showRestfulError">
+                                        <div class="alert alert-danger ng-hide" role="alert" ng-show="showRestfulError">
                                             <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">&times;</a>
                                             {{ showRestfulMessage}}
                                         </div>

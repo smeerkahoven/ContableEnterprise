@@ -6,7 +6,6 @@
 package com.view.menu;
 
 import com.security.SessionUtils;
-import com.view.login.LoginManagedBean;
 import java.io.Serializable;
 import java.util.ArrayList;
 import javax.enterprise.context.RequestScoped;

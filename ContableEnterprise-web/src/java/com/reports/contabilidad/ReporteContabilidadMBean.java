@@ -28,9 +28,11 @@ public class ReporteContabilidadMBean extends ReporteHandler {
      * Creates a new instance of ReporteContabilidadMBean
      */
     public ReporteContabilidadMBean() {
+        this.formName = "reportes-contabilidad" ;
     }
 
     @PostConstruct
+    @Override
     public void init() {
         try {
             this.formulario = SessionUtils.getFormulario(com.view.menu.Formulario.REPORTES_CONTABILIDAD);

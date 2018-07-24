@@ -42,18 +42,17 @@ angular.module('jsPersonal.controllers', []).controller('frmPersonal', ['$scope'
             }).then(function (response) {
                 if (response.data.code === 201) {
                     $scope.data = response.data.content;
-                    $scope.loading = false;
+                    console.log($scope.data);
                 } else {
-                    console.log('getdata');
                     $scope.showRestfulMessage = response.data.content;
                     $scope.showRestfulError = true;
                 }
-
+                $scope.loading = false;
             }, function (error) {
                 $scope.showRestfulMessage = error;
                 $scope.showRestfulError = true;
             });
-            
+
             $http({
                 method: 'POST',
                 url: url.value + 'sucursales',
@@ -61,13 +60,13 @@ angular.module('jsPersonal.controllers', []).controller('frmPersonal', ['$scope'
                 headers: {'Content-Type': 'application/json'}
             }).then(function (response) {
                 if (response.data.code === 201) {
-                    
-                    
+
+
                     $scope.sucursales = response.data.content;
                     $scope.formData.idEmpresa = $scope.sucursales[0].id;
                     $scope.loading = false;
                     console.log($scope.sucursales);
-                    
+
                     console.log($scope.formData);
                 } else {
                     $scope.showRestfulMessage = response.data.content;
@@ -78,7 +77,7 @@ angular.module('jsPersonal.controllers', []).controller('frmPersonal', ['$scope'
                 $scope.showRestfulMessage = error;
                 $scope.showRestfulError = true;
             });
-            
+
         }
         $scope.getData();
 
@@ -158,17 +157,11 @@ angular.module('jsPersonal.controllers', []).controller('frmPersonal', ['$scope'
                     headers: {'Content-Type': 'application/json'}
                 }).then(function (response) {
                     if (response.data.code === 201) {
+                        console.log(response.data.content);
                         $scope.formData = response.data.content;
-                        
-                        console.log($scope.formData);
-                        //document.getElementById($scope.formData.idEmpresa).selected = "true" ; 
-                        //document.getElementById("txtEmpresa").value = $scope.formData.idEmpresa ; 
-                        //console.log(document.getElementById($scope.formData.idEmpresa));
                         $scope.showForm = true;
                         $scope.showTable = false;
                         $scope.loading = false;
-                        //document.getElementById("txtEmpresa").options[1].selected= 'selected' ;//= $scope.formData.idEmpresa ;
-                    
                     } else {
                         $scope.showRestfulMessage = response.data.content;
                         $scope.showRestfulError = true;
@@ -178,8 +171,6 @@ angular.module('jsPersonal.controllers', []).controller('frmPersonal', ['$scope'
                     $scope.showRestfulMessage = error;
                     $scope.showRestfulError = true;
                 });
-                
-                // 11:30 rodrigo farias
             }
         }
 
@@ -200,7 +191,7 @@ angular.module('jsPersonal.controllers', []).controller('frmPersonal', ['$scope'
                     }
 
                 }, function (error) {
-                    $scope.showRestfulMessage = response.data.content;
+                    $scope.showRestfulMessage = error;
                     $scope.showRestfulError = true;
                 });
             }

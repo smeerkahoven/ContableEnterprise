@@ -6,14 +6,13 @@
 package com.view.agencia;
 
 import com.configuracion.entities.Parametros;
-import com.configuracion.remote.ParametrosRemote;
 import com.security.SessionUtils;
 import com.seguridad.control.exception.CRUDException;
+import com.view.ViewManagedBean;
 import com.view.menu.Formulario;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
-import javax.ejb.EJB;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 
@@ -23,36 +22,26 @@ import javax.enterprise.context.RequestScoped;
  */
 @Named(value = "aerolinea")
 @RequestScoped
-public class AerolineaManagedBean {
-    @EJB
-    private ParametrosRemote ejbParametros;
+public class AerolineaManagedBean extends ViewManagedBean {
 
-    private Parametros comboVentas , comboComisiones, comboDevoluciones ; 
-    
-    private Formulario formulario;
+    private Parametros comboVentas, comboComisiones, comboDevoluciones;
 
     /**
      * Creates a new instance of AerolineaManagedBean
      */
     public AerolineaManagedBean() {
+        this.formName = "aerolinea";
     }
 
-    public Formulario getFormulario() {
-        return formulario;
-    }
-
-    public void setFormulario(Formulario formulario) {
-        this.formulario = formulario;
-    }
-    
-     @PostConstruct
+    @PostConstruct
     public void init() {
         try {
-            this.formulario = SessionUtils.getFormulario(Formulario.AEROLINEA);
-            this.comboVentas = (Parametros)ejbParametros.get(new Parametros(Parametros.COMBO_CUENTA_VENTAS_AEROLINEA));
-            this.comboComisiones = (Parametros)ejbParametros.get(new Parametros(Parametros.COMBO_CUENTA_COMISIONES_AEROLINEA));
-            this.comboDevoluciones = (Parametros)ejbParametros.get(new Parametros(Parametros.COMBO_CUENTA_DEVOLUCIONES_AEROLINEA));
-            
+
+            this.formulario = SessionUtils.getFormulario(this.formName);
+            this.comboVentas = (Parametros) ejbParametros.get(new Parametros(Parametros.COMBO_CUENTA_VENTAS_AEROLINEA));
+            this.comboComisiones = (Parametros) ejbParametros.get(new Parametros(Parametros.COMBO_CUENTA_COMISIONES_AEROLINEA));
+            this.comboDevoluciones = (Parametros) ejbParametros.get(new Parametros(Parametros.COMBO_CUENTA_DEVOLUCIONES_AEROLINEA));
+
         } catch (CRUDException ex) {
             Logger.getLogger(AerolineaManagedBean.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -81,8 +70,4 @@ public class AerolineaManagedBean {
     public void setComboDevoluciones(Parametros comboDevoluciones) {
         this.comboDevoluciones = comboDevoluciones;
     }
-
-    
-    
-
 }

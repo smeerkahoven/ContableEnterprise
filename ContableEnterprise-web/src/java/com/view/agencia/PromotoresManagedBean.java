@@ -3,9 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.view.contabilidad;
+package com.view.agencia;
 
+import com.security.SessionUtils;
 import com.view.ViewManagedBean;
+import javax.annotation.PostConstruct;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 
@@ -13,17 +15,15 @@ import javax.enterprise.context.RequestScoped;
  *
  * @author xeio
  */
-@Named(value = "planCuentas")
+@Named(value = "promotores")
 @RequestScoped
-public class PlanCuentasManagedBean extends ViewManagedBean {
-
-    static final long serialVersionUID = 42L;
+public class PromotoresManagedBean extends ViewManagedBean {
 
     /**
-     * Creates a new instance of PlanCuentasManagedBean
+     * Creates a new instance of PromotoresManagedBean
      */
-    public PlanCuentasManagedBean() {
-        this.formName = "plan-cuentas" ;
+    public PromotoresManagedBean() {
+        this.formName = "promotores" ;
     }
-
+    
 }

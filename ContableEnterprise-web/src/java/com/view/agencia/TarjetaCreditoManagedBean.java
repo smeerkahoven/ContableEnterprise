@@ -6,6 +6,7 @@
 package com.view.agencia;
 
 import com.security.SessionUtils;
+import com.view.ViewManagedBean;
 import com.view.menu.Formulario;
 import javax.annotation.PostConstruct;
 import javax.inject.Named;
@@ -17,27 +18,14 @@ import javax.enterprise.context.RequestScoped;
  */
 @Named(value = "tarjetaCredito")
 @RequestScoped
-public class TarjetaCreditoManagedBean {
+public class TarjetaCreditoManagedBean extends ViewManagedBean{
 
-    private Formulario formulario;
 
     /**
      * Creates a new instance of TarjetaCreditoManagedBean
      */
     public TarjetaCreditoManagedBean() {
-    }
-
-    @PostConstruct
-    public void init() {
-        this.formulario = SessionUtils.getFormulario(Formulario.TARJETA_CREDITO);
-    }
-
-    public Formulario getFormulario() {
-        return formulario;
-    }
-
-    public void setFormulario(Formulario formulario) {
-        this.formulario = formulario;
+        this.formName = "tarjeta-credito";
     }
 
 }

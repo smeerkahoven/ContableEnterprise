@@ -6,6 +6,7 @@
 package com.view.administracion;
 
 import com.security.SessionUtils;
+import com.view.ViewManagedBean;
 import com.view.menu.Formulario;
 import javax.annotation.PostConstruct;
 import javax.inject.Named;
@@ -17,10 +18,9 @@ import javax.enterprise.context.Dependent;
  */
 @Named(value = "personal")
 @Dependent
-public class PersonalManagedBean {
+public class PersonalManagedBean extends ViewManagedBean {
     
     static final long serialVersionUID = 42L;
-
 
     private String errorMessage;
 
@@ -28,17 +28,11 @@ public class PersonalManagedBean {
 
     private String warningMessage;
 
-    private Formulario formulario;
-
     /**
      * Creates a new instance of Personal
      */
     public PersonalManagedBean() {
-    }
-
-    @PostConstruct
-    public void init() {
-        this.formulario = SessionUtils.getFormulario(Formulario.PERSONAL);
+        this.formName = "personal";
     }
 
     public String getErrorMessage() {
@@ -63,14 +57,6 @@ public class PersonalManagedBean {
 
     public void setWarningMessage(String warningMessage) {
         this.warningMessage = warningMessage;
-    }
-
-    public Formulario getFormulario() {
-        return formulario;
-    }
-
-    public void setFormulario(Formulario formulario) {
-        this.formulario = formulario;
     }
 
 }

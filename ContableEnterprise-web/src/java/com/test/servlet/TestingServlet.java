@@ -86,7 +86,7 @@ public class TestingServlet extends HttpServlet {
             out.println("<h1>Servlet TestingServlet at " + request.getContextPath() + "</h1>");
 
             //crearEmpresa(out);
-            crearModulo(out);
+            //crearModulo(out);
             crearFormulario(out);
             //crearRol(out);
             //crearUsuario(out);

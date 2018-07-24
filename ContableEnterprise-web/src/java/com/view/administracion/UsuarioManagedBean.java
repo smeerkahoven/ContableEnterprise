@@ -6,6 +6,7 @@
 package com.view.administracion;
 
 import com.security.SessionUtils;
+import com.view.ViewManagedBean;
 import com.view.menu.Formulario;
 import javax.annotation.PostConstruct;
 import javax.inject.Named;
@@ -17,29 +18,15 @@ import javax.enterprise.context.RequestScoped;
  */
 @Named(value = "usuario")
 @RequestScoped
-public class UsuarioManagedBean {
+public class UsuarioManagedBean extends ViewManagedBean {
 
     static final long serialVersionUID = 42L;
-
-    private Formulario formulario;
 
     /**
      * Creates a new instance of UsuarioManagedBean
      */
     public UsuarioManagedBean() {
-    }
-
-    @PostConstruct
-    public void init() {
-        this.formulario = SessionUtils.getFormulario(Formulario.USUARIO);
-    }
-
-    public Formulario getFormulario() {
-        return formulario;
-    }
-
-    public void setFormulario(Formulario formulario) {
-        this.formulario = formulario;
+        this.formName= "usuario";
     }
 
 }

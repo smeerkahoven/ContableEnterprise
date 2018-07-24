@@ -9,6 +9,7 @@ import com.security.SessionUtils;
 import com.seguridad.control.entities.Empresa;
 import com.seguridad.control.exception.CRUDException;
 import com.seguridad.control.remote.EmpresaRemote;
+import com.view.ViewManagedBean;
 import com.view.menu.Formulario;
 import com.view.resources.Mensajes;
 import java.io.IOException;
@@ -35,7 +36,7 @@ import javax.servlet.http.Part;
  */
 @Named(value = "empresa")
 @RequestScoped
-public class EmpresaManagedBean implements Serializable {
+public class EmpresaManagedBean extends ViewManagedBean {
 
     private String errorMessage;
 
@@ -57,8 +58,6 @@ public class EmpresaManagedBean implements Serializable {
     private EmpresaRemote ejbEmpresa;
 
     private Empresa data;
-
-    private Formulario formulario;
 
     @PostConstruct
     public void init() {
@@ -83,11 +82,11 @@ public class EmpresaManagedBean implements Serializable {
         List<FacesMessage> msgs = new ArrayList<FacesMessage>();
         Part file = (Part) value;
         //KB m
-        if ((file.getSize()/1024/1024) > 1024) {
+        if ((file.getSize() / 1024 / 1024) > 1024) {
             msgs.add(new FacesMessage("Ingrese un archivo de Max 1 MB"));
         }
-        if (!"image/png".equals(file.getContentType())  &&
-                (!"image/jpg".equals(file.getContentType()) ) ) {
+        if (!"image/png".equals(file.getContentType())
+                && (!"image/jpg".equals(file.getContentType()))) {
             msgs.add(new FacesMessage("Ingrese un archivo con extension JPG o PNG"));
         }
         if (!msgs.isEmpty()) {
@@ -96,7 +95,7 @@ public class EmpresaManagedBean implements Serializable {
     }
 
     public EmpresaManagedBean() {
-
+        this.formName = "empresa" ;
     }
 
     public Part getFile() {
@@ -105,14 +104,6 @@ public class EmpresaManagedBean implements Serializable {
 
     public void setFile(Part file) {
         this.file = file;
-    }
-
-    public Formulario getFormulario() {
-        return formulario;
-    }
-
-    public void setFormulario(Formulario formulario) {
-        this.formulario = formulario;
     }
 
     public Empresa getData() {
@@ -138,19 +129,18 @@ public class EmpresaManagedBean implements Serializable {
             data.setNroIata(params.get("txtNroIata"));
             data.setEmail(params.get("txtEmail"));
             data.setPaginaWeb(params.get("txtPaginaWeb"));
-            
+
             try {
                 long size = file.getSize();
                 InputStream input = file.getInputStream();
                 byte[] buffer = new byte[(int) size];
-                input.read(buffer, 0, (int)size);
+                input.read(buffer, 0, (int) size);
                 input.close();
-                
+
                 data.setLogo(buffer);
             } catch (IOException ex) {
                 Logger.getLogger(EmpresaManagedBean.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
 
             ejbEmpresa.update(data);
             successMessage = m.getProperty(Mensajes.DATOS_GUARDADOS_EXITOSAMENTE);

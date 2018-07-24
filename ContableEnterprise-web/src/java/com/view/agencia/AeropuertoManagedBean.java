@@ -5,9 +5,7 @@
  */
 package com.view.agencia;
 
-import com.security.SessionUtils;
-import com.view.menu.Formulario;
-import javax.annotation.PostConstruct;
+import com.view.ViewManagedBean;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 
@@ -17,29 +15,15 @@ import javax.enterprise.context.RequestScoped;
  */
 @Named(value = "aeropuerto")
 @RequestScoped
-public class AeropuertoManagedBean {
+public class AeropuertoManagedBean extends ViewManagedBean{
 
     static final long serialVersionUID = 42L;
-
-    private Formulario formulario;
 
     /**
      * Creates a new instance of AeropuertoManagedBean
      */
     public AeropuertoManagedBean() {
-    }
-
-    @PostConstruct
-    public void init() {
-        this.formulario = SessionUtils.getFormulario(Formulario.AEROPUERTO);
-    }
-
-    public Formulario getFormulario() {
-        return formulario;
-    }
-
-    public void setFormulario(Formulario formulario) {
-        this.formulario = formulario;
+        this.formName = "aeropuerto" ;
     }
 
 }

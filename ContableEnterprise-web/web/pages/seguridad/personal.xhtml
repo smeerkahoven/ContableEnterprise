@@ -13,7 +13,7 @@
         <meta name="author" content="" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <!-- End Required meta tags -->
-        <title>#{login.systemName} - #{login.razonSocial}</title>
+        <title>#{login.systemName.valor} - #{login.razonSocial}</title>
         <!-- FAVICONS -->
         <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/apple-touch-icon.png" />
         <link rel="shortcut icon" href="../../assets/favicon.ico" />
@@ -38,7 +38,6 @@
         <script type="text/javascript" src="../../js/smart-table.min.js" />
         <script type="text/javascript" src="../../js/seguridad/personal.js" />
 
-        <title>#{login.systemName} - #{login.razonSocial} </title>
     </head>
     <h:body>
         <!-- .app -->
@@ -198,6 +197,24 @@
                                                         <label for="txtApellido" class=" col-form-label col-sm-2 text-right">Apellido</label>
                                                         <div class="col-sm-4">
                                                             <input type="text" class="form-control" name="txtApellido" required="required" maxlength="64" ng-model="formData.apellido"/>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group row">
+                                                        <label for="txtCargo" class=" col-form-label col-sm-2 text-right">Cargo</label>
+                                                        <div class="col-sm-4">
+                                                            <input type="text" class="form-control" name="txtCargo" required="required" maxlength="45" ng-model="formData.cargo"/>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group row">
+                                                        <label for="txtSexo" class="col-form-label col-sm-2 text-right">Sexo</label>
+                                                        <div class="col-sm-4">
+                                                            <select name="txtSexo" class="form-control" ng-model="formDataNew.sexo" required="required">
+                                                                <option style="display:none" value="">seleccione un sexo</option>
+                                                                <option value="H" >Hombre</option>
+                                                                <option value="M">Mujer</option>
+                                                            </select>
                                                         </div>
                                                     </div>
 

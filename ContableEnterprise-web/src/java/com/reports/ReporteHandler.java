@@ -8,8 +8,7 @@ package com.reports;
 import com.reportes.entities.Reportes;
 import com.reportes.remote.ReportAgenciaRemote;
 import com.reports.agencia.ReporteAgenciaMBean;
-import com.security.SessionUtils;
-import com.seguridad.control.exception.CRUDException;
+import com.view.ViewManagedBean;
 import com.view.menu.Formulario;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -17,7 +16,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.faces.context.FacesContext;
@@ -27,7 +25,7 @@ import javax.sql.DataSource;
  *
  * @author xeio
  */
-public abstract class ReporteHandler {
+public abstract class ReporteHandler extends ViewManagedBean {
   
     @EJB
     protected ReportAgenciaRemote ejbReporte;
@@ -37,7 +35,6 @@ public abstract class ReporteHandler {
     
     protected List<Reportes> listaReportes = new LinkedList<>();
 
-    protected Formulario formulario;
     
     protected String idFormulario;
     

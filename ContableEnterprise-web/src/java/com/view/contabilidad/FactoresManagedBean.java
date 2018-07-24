@@ -6,6 +6,7 @@
 package com.view.contabilidad;
 
 import com.security.SessionUtils;
+import com.view.ViewManagedBean;
 import com.view.menu.Formulario;
 import javax.annotation.PostConstruct;
 import javax.inject.Named;
@@ -17,26 +18,13 @@ import javax.enterprise.context.RequestScoped;
  */
 @Named(value = "factores")
 @RequestScoped
-public class FactoresManagedBean {
+public class FactoresManagedBean extends ViewManagedBean {
 
-     private Formulario formulario;
     /**
      * Creates a new instance of FactoresManagedBean
      */
     public FactoresManagedBean() {
+        this.formName = "factores" ;
     }
     
-    @PostConstruct
-    public void init() {
-        this.formulario = SessionUtils.getFormulario(Formulario.FACTORES);
-    }
-
-    public Formulario getFormulario() {
-        return formulario;
-    }
-
-    public void setFormulario(Formulario formulario) {
-        this.formulario = formulario;
-    }
-
 }

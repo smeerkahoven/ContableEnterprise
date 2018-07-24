@@ -6,6 +6,7 @@
 package com.view.administracion;
 
 import com.security.SessionUtils;
+import com.view.ViewManagedBean;
 import com.view.menu.Formulario;
 import javax.annotation.PostConstruct;
 import javax.inject.Named;
@@ -17,27 +18,13 @@ import javax.enterprise.context.RequestScoped;
  */
 @Named(value = "sucursal")
 @RequestScoped
-public class SucursalManagedBean {
+public class SucursalManagedBean extends ViewManagedBean {
 
     /**
      * Creates a new instance of SucursalManagedBean
      */
     public SucursalManagedBean() {
-    }
-
-    private Formulario formulario;
-
-    @PostConstruct
-    public void init() {
-        this.formulario = SessionUtils.getFormulario(Formulario.SUCURSAL);
-    }
-
-    public Formulario getFormulario() {
-        return formulario;
-    }
-
-    public void setFormulario(Formulario formulario) {
-        this.formulario = formulario;
+        this.formName = "sucursal";
     }
 
 }
