@@ -9,7 +9,6 @@ import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -81,8 +80,19 @@ public class Empleado implements Serializable {
     @Column(name = "cargo", length = 45)
     private String cargo;
 
+    @Column(name = "sexo", length = 1)
+    private String sexo;
+
     public Empleado(int idEmpleado) {
         this.idEmpleado = idEmpleado;
+    }
+
+    public String getSexo() {
+        return sexo;
+    }
+
+    public void setSexo(String sexo) {
+        this.sexo = sexo;
     }
 
     public String getCargo() {

@@ -83,7 +83,7 @@ public class EmpleadoEJB implements EmpleadoRemote {
 
     @Override
     public List<Object[]> getForCombo() throws CRUDException {
-        Query q = em.createNamedQuery("Empleado.forCombo", Empleado.class);
+        Query q = em.createNativeQuery(queries.getPropertie(Queries.GET_EMPLEADOS_COMBO_USUARIO));
         List<Object[]> l = q.getResultList();
         
         return l ;

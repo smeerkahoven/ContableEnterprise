@@ -12,6 +12,9 @@ import com.seguridad.control.entities.Formulario;
 import com.seguridad.control.exception.CRUDException;
 import java.util.List;
 import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 
 /**
  *
@@ -20,6 +23,8 @@ import javax.ejb.Stateless;
 @Stateless
 public class ReportAgenciaEJB implements ReportAgenciaRemote {
 
+    @PersistenceContext
+    private EntityManager em ;
     @Override
     public void update(Entidad e) throws CRUDException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -52,7 +57,10 @@ public class ReportAgenciaEJB implements ReportAgenciaRemote {
 
     @Override
     public List<Reportes> get(Formulario f) throws CRUDException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Query query = em.createNamedQuery("Reportes.findAllReportes", Reportes.class);
+        query.setParameter("idFormulario", f);
+        
+        return query.getResultList() ;
     }
     
 }

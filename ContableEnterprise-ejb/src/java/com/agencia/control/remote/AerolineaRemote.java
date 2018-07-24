@@ -16,6 +16,7 @@ import javax.ejb.Remote;
  *
  * @author xeio
  */
+
 @Remote
 public interface AerolineaRemote extends DaoRemote {
 

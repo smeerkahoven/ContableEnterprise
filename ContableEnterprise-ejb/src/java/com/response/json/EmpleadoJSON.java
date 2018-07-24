@@ -30,6 +30,8 @@ public class EmpleadoJSON implements Serializable {
     private String status;
     private int idEmpresa;
     private String razonSocial;
+    private String sexo;
+    private String cargo;
     
     public EmpleadoJSON(){
         
@@ -46,6 +48,8 @@ public class EmpleadoJSON implements Serializable {
         this.status = e.getStatus();
         this.idEmpresa = e.getIdEmpresa().getIdEmpresa();
         this.razonSocial = e.getIdEmpresa().getRazonSocial();
+        this.sexo =  e.getSexo();
+        this.cargo = e.getCargo();
     }
 
     public static List<EmpleadoJSON> convertToJSON(List<Empleado> l) {
@@ -74,10 +78,30 @@ public class EmpleadoJSON implements Serializable {
         emp.setApellido(e.getApellido());
         emp.setStatus(e.getStatus());
         emp.setTelefono(e.getTelefono());
+        emp.setCargo(e.getCargo());
+        emp.setSexo(e.getSexo());
         
         return emp ;
     }
 
+    public String getSexo() {
+        return sexo;
+    }
+
+    public void setSexo(String sexo) {
+        this.sexo = sexo;
+    }
+
+    public String getCargo() {
+        return cargo;
+    }
+
+    public void setCargo(String cargo) {
+        this.cargo = cargo;
+    }
+
+    
+    
     public int getIdEmpleado() {
         return idEmpleado;
     }

@@ -8,15 +8,13 @@ package com.agencia.control.ejb;
 import com.agencia.control.remote.AerolineaRemote;
 import com.agencia.entities.Aerolinea;
 import com.agencia.entities.AerolineaImpuesto;
+import com.seguridad.control.FacadeEJB;
 import com.seguridad.control.LoggerContable;
 import com.seguridad.control.entities.Entidad;
 import com.seguridad.control.exception.CRUDException;
-import com.seguridad.queries.Queries;
 import java.util.List;
 import java.util.logging.Level;
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 /**
@@ -24,12 +22,7 @@ import javax.persistence.Query;
  * @author xeio
  */
 @Stateless
-public class AerolineaEJB implements AerolineaRemote {
-
-    @PersistenceContext
-    private EntityManager em;
-
-    private Queries queries = Queries.getQueries();
+public class AerolineaEJB extends FacadeEJB implements AerolineaRemote {
 
     @Override
     public void update(Entidad e) throws CRUDException {

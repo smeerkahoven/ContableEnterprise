@@ -23,6 +23,7 @@ public class Queries {
     public final static String GET_EMPRESA_PRINCIPAL = "GET_EMPRESA_PRINCIPAL";
     public final static String GET_SUCURSALES = "GET_SUCURSALES";
     public final static String GET_EMPLEADOS="GET_EMPLEADOS";
+    public final static String GET_EMPLEADOS_COMBO_USUARIO = "GET_EMPLEADOS_COMBO_USUARIO";
     public final static String GET_MODULO_EDIT="GET_MODULO_EDIT";
     public final static String GET_MODULO_NUEVO="GET_MODULO_NUEVO";
     public final static String GET_BANCO_CUENTA_LINK="GET_BANCO_CUENTA_LINK";
