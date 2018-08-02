@@ -203,20 +203,24 @@
                                                         <span  class=" list-group-item-action" ng-bind-html="match.label | uibTypeaheadHighlight:query"></span>
                                                         </a>
                                                     </script>
-
-                                                    <div class="form-actions">
-                                                        <c:if test="#{tarjetaCredito.formulario.crear== tarjetaCredito.formulario.PERMITIR}">
-                                                            <div class="modal-footer" ng-show="showBtnNuevo">
-                                                                <button   class="btn  btn-primary" ng-click="save()"  value="Guardar"><span class="fa fa-save"></span>Guardar</button>
+                                                    
+                                                    <div class="form-group">
+                                                        <c:if test="#{tarjetaCredito.formulario.crear== promotores.formulario.PERMITIR}">
+                                                            <div class="row" ng-show="showBtnNuevo">
+                                                                <label for="txtNombre" class="col-form-label col-sm-2 text-right" ></label>
+                                                                <button  class="btn btn-primary" ng-click="save()"  value="Guardar"><span class="fa fa-save"></span> Guardar</button>
                                                             </div>
                                                         </c:if>                                    
 
-                                                        <c:if test="#{tarjetaCredito.formulario.actualizar== tarjetaCredito.formulario.PERMITIR}">
-                                                            <div class="modal-footer" ng-show="showBtnActualizar">
-                                                                <button type="button" class="btn btn-primary" ng-click="update()" value="Actualizar"> <span class="fa fa-edit"></span>Actualizar</button>
+                                                        <c:if test="#{tarjetaCredito.formulario.actualizar== promotores.formulario.PERMITIR}">
+                                                            <div class="row" ng-show="showBtnActualizar">
+                                                                <label for="txtNombre" class="col-form-label col-sm-2 text-right" ></label>
+                                                                <button type="button" class="btn btn-primary" ng-click="update()" value="Actualizar"> <span class="fa fa-edit"></span> Actualizar</button>
                                                             </div>
                                                         </c:if>
                                                     </div>
+
+                                                    
                                                 </div>
                                                 <!-- /Contenido Formulario -->
                                                 <!-- /.form-group -->
@@ -245,7 +249,7 @@
                                             </dl>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-default" id="modal-btn-si" ng-click="eliminar()"  data-dismiss="modal">Si</button>
+                                            <button type="button" class="btn btn-default" id="modal-btn-si" ng-click="delete()"  data-dismiss="modal">Si</button>
                                             <button type="button" class="btn btn-primary" id="modal-btn-no"  data-dismiss="modal">No</button>
                                         </div>
                                     </div>

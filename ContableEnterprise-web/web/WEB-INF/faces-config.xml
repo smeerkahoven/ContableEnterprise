@@ -33,7 +33,7 @@
     </navigation-rule>
 
     <navigation-rule>
-        <from-view-id>*</from-view-id>
+        <from-view-id>pages/*</from-view-id>
         <navigation-case>
             <from-outcome>empresa</from-outcome>
             <to-view-id>pages/seguridad/empresa.xhtml?faces-redirect=true</to-view-id>
@@ -42,7 +42,7 @@
     </navigation-rule>
     
     <navigation-rule>
-        <from-view-id>*</from-view-id>
+        <from-view-id>pages/*</from-view-id>
         <navigation-case>
             <from-outcome>sucursal</from-outcome>
             <to-view-id>pages/seguridad/sucursal.xhtml?faces-redirect=true</to-view-id>
@@ -51,7 +51,7 @@
     </navigation-rule>
     
     <navigation-rule>
-        <from-view-id>*</from-view-id>
+        <from-view-id>pages/*</from-view-id>
         <navigation-case>
             <from-outcome>personal</from-outcome>
             <to-view-id>pages/seguridad/personal.xhtml?faces-redirect=true</to-view-id>
@@ -60,7 +60,7 @@
     </navigation-rule>
     
     <navigation-rule>
-        <from-view-id>*</from-view-id>
+        <from-view-id>pages/*</from-view-id>
         <navigation-case>
             <from-outcome>usuario</from-outcome>
             <to-view-id>pages/seguridad/usuario.xhtml?faces-redirect=true</to-view-id>
@@ -69,7 +69,7 @@
     </navigation-rule>
     
     <navigation-rule>
-        <from-view-id>*</from-view-id>
+        <from-view-id>pages/*</from-view-id>
         <navigation-case>
             <from-outcome>roles</from-outcome>
             <to-view-id>pages/seguridad/roles.xhtml?faces-redirect=true</to-view-id>
@@ -78,7 +78,7 @@
     </navigation-rule>
     
     <navigation-rule>
-        <from-view-id>*</from-view-id>
+        <from-view-id>pages/*</from-view-id>
         <navigation-case>
             <from-outcome>aeropuerto</from-outcome>
             <to-view-id>pages/agencia/aeropuerto.xhtml?faces-redirect=true</to-view-id>
@@ -87,7 +87,7 @@
     </navigation-rule>
     
     <navigation-rule>
-        <from-view-id>*</from-view-id>
+        <from-view-id>pages/*</from-view-id>
         <navigation-case>
             <from-outcome>tarjeta-credito</from-outcome>
             <to-view-id>pages/agencia/tarjeta.xhtml?faces-redirect=true</to-view-id>
@@ -96,7 +96,7 @@
     </navigation-rule>
     
     <navigation-rule>
-        <from-view-id>*</from-view-id>
+        <from-view-id>pages/*</from-view-id>
         <navigation-case>
             <from-outcome>bancos</from-outcome>
             <to-view-id>pages/agencia/bancos.xhtml?faces-redirect=true</to-view-id>
@@ -105,7 +105,7 @@
     </navigation-rule>
     
     <navigation-rule>
-        <from-view-id>*</from-view-id>
+        <from-view-id>pages/*</from-view-id>
         <navigation-case>
             <from-outcome>aerolinea</from-outcome>
             <to-view-id>pages/agencia/aerolinea.xhtml?faces-redirect=true</to-view-id>
@@ -113,8 +113,8 @@
         </navigation-case>
     </navigation-rule>
     
-     <navigation-rule>
-        <from-view-id>*</from-view-id>
+    <navigation-rule>
+        <from-view-id>pages/*</from-view-id>
         <navigation-case>
             <from-outcome>promotores</from-outcome>
             <to-view-id>pages/agencia/promotores.xhtml?faces-redirect=true</to-view-id>
@@ -124,7 +124,17 @@
     
     
     <navigation-rule>
-        <from-view-id>*</from-view-id>
+        <from-view-id>pages/*</from-view-id>
+        <navigation-case>
+            <from-outcome>clientes</from-outcome>
+            <to-view-id>pages/agencia/cliente.xhtml?faces-redirect=true</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    
+    <navigation-rule>
+        <from-view-id>pages/*</from-view-id>
         <navigation-case>
             <from-outcome>plan-cuentas</from-outcome>
             <to-view-id>pages/contabilidad/plan-cuentas.xhtml?faces-redirect=true</to-view-id>
@@ -133,7 +143,7 @@
     </navigation-rule>
     
     <navigation-rule>
-        <from-view-id>*</from-view-id>
+        <from-view-id>pages/*</from-view-id>
         <navigation-case>
             <from-outcome>factores</from-outcome>
             <to-view-id>pages/contabilidad/factores.xhtml?faces-redirect=true</to-view-id>
@@ -143,7 +153,7 @@
     
     <!-- reportes -->
     <navigation-rule>
-        <from-view-id>*</from-view-id>
+        <from-view-id>pages/*</from-view-id>
         <navigation-case>
             <from-outcome>reportes-agencia</from-outcome>
             <to-view-id>pages/reports/agencia.xhtml?faces-redirect=true</to-view-id>
@@ -152,7 +162,7 @@
     </navigation-rule>
     
     <navigation-rule>
-        <from-view-id>*</from-view-id>
+        <from-view-id>pages/*</from-view-id>
         <navigation-case>
             <from-outcome>reportes-contabilidad</from-outcome>
             <to-view-id>pages/reports/contabilidad.xhtml?faces-redirect=true</to-view-id>

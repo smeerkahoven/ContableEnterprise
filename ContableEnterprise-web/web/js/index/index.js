@@ -23,6 +23,19 @@ var hoy = function () {
 
 var app = angular.module("jsIndex", ['jsIndex.controllers']);
 
+app.directive('myEnter', function(){
+   return function(scope, element, attrs){
+       element.bind("keydown keypress", function(event){
+           if (event.which ===13){
+               scope.$apply(function(){
+                   scope.$eval(attrs.myEnter);
+               });
+               event.preventDefault();
+           }
+       })
+   } 
+});
+
 angular.module('jsIndex.controllers', []).controller('frmIndex', ['$scope', '$http',
     function ($scope, $http) {
 
@@ -41,7 +54,8 @@ angular.module('jsIndex.controllers', []).controller('frmIndex', ['$scope', '$ht
                 method: 'POST',
                 url: urlFactores.value + method + '/today',
                 data: {token: token.value, content: '', formName: formName},
-                headers: {'Content-Type': 'application/json'}
+                headers: {'Content-Type': 'application/json'},
+                contentType: "application/x-www-form-urlencoded"
             }).then(function (response) {
                 if (response.data.code === 201) {
                     if (method === 'dollar') {

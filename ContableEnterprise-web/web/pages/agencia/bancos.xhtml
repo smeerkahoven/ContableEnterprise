@@ -149,7 +149,7 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr st-select-row="row" st-select-mode="multiple" ng-repeat="row in display_records| filter:busqueda">
+                                                        <tr st-select-row="row" st-select-mode="multiple" ng-repeat="row in display_records | filter:busqueda">
                                                             <td>{{row.nombre}} </td>
                                                             <td>{{row.direccion}} </td>
                                                             <td>{{row.telefono}} </td>
@@ -191,6 +191,7 @@
                                                 <div id="formData" class="container animated ng-hide"   ng-show="showForm" >
                                                     <input type="text" ng-show="false"  name="txtIdEmpleado"  ng-model="frmNew.idBanco" />
                                                     <input type="hidden" id="hdUrl" name="hdUrl" value="#{bancos.formulario.restful}"/>
+                                                    <input type="hidden" id="hdUrlEmpresa" name="hdUrlEmpresa" value="#{empresa.formulario.restful}"/>
                                                     <input type="hidden" id="hdFormName" name="hdFormName" value="#{bancos.formulario.nombre}" ng-model="formName"/>
                                                     <input type="hidden" id="hdToken" name="hdToken" value="#{sessionView.token}"/>
                                                     <div class="form-group row">
@@ -250,18 +251,20 @@
                                                     </div>
 
                                                     <!-- Botones Formulario -->
-                                                    <div class="form-actions">
-                                                        <c:if test="#{bancos.formulario.crear== bancos.formulario.PERMITIR}">
-                                                            <div class="modal-footer" ng-show="showBtnNuevo">
-                                                                <button   class="btn btn-primary" ng-click="save()"  value="Guardar"><span class="fa fa-save"></span>Guardar</button>
+                                                    <div class="form-group">
+                                                        <c:if test="#{banco.formulario.crear== banco.formulario.PERMITIR}">
+                                                            <div class="row" ng-show="showBtnNuevo">
+                                                                <label for="txtNombre" class="col-form-label col-sm-2 text-right" ></label>
+                                                                <button  class="btn btn-primary" ng-click="save()"  value="Guardar"><span class="fa fa-save"></span> Guardar</button>
                                                             </div>
                                                         </c:if>                                    
 
-                                                        <c:if test="#{bancos.formulario.actualizar== bancos.formulario.PERMITIR}">
-                                                            <div class="modal-footer" ng-show="showBtnActualizar">
-                                                                <button type="button" class="btn btn-primary" ng-click="update()" value="Actualizar"> <span class="fa fa-edit"></span>Actualizar</button>
+                                                        <c:if test="#{banco.formulario.actualizar== banco.formulario.PERMITIR}">
+                                                            <div class="row" ng-show="showBtnActualizar">
+                                                                <label for="txtNombre" class="col-form-label col-sm-2 text-right" ></label>
+                                                                <button type="button" class="btn btn-primary" ng-click="update()" value="Actualizar"> <span class="fa fa-edit"></span> Actualizar</button>
                                                             </div>
-                                                        </c:if>   
+                                                        </c:if>
                                                     </div>
                                                     <!-- /Botones Formulario -->
                                                 </div>
@@ -285,7 +288,7 @@
                                         <form id="formLink" name="formLink">
                                             <div class="modal-content">
                                                 <div class="modal-header">
-                                                    <h5 class="modal-title" id="verForm">Enlazar  : <strong> {{frmLink.nombre}}</strong> </h5>
+                                                    <h5 class="modal-title" id="verForm">Asociar  : <strong> {{frmLink.nombre}}</strong> </h5>
                                                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                                                         <span aria-hidden="true">×</span>
                                                     </button>
@@ -313,22 +316,44 @@
                                                 <div class="form-group row">
                                                     <label for="txtDescripcion" class=" col-form-label col-sm-4 text-right">Descripcion</label>
                                                     <div class="col-sm-5">
-                                                        <input type="text" name="txtDescripcion" required="required" class="form-control" maxlength="32" ng-model="frmNewLink.descripcion"/>
+                                                        <input type="text" name="txtDescripcion" autofocus="" 
+                                                               required="required" class="form-control" maxlength="32" 
+                                                               ng-model="frmNewLink.descripcion"/>
+                                                        <span class="alert-danger" ng-show="!formLink.txtDescripcion.$valid"  >
+                                                            Debe ingresar un valor
+                                                        </span>
                                                     </div>
+
                                                 </div>
 
                                                 <div class="form-group row">
-                                                    <label for="txtNombre" class=" col-form-label col-sm-4 text-right">Cuenta de Bancos </label>
-                                                    <div class="col-sm-6">
+                                                    <label for="txtNombre" class=" col-form-label col-sm-4 text-right">Entidad</label>
+                                                    <div class="col-sm-6 line">
+                                                        <select class="form-control" ng-model="idEmpresa" ng-change="getComboCuentas('combo', idEmpresa)">
+                                                            <option ng-repeat="empresa in comboEmpresa" value="{{empresa.id}}"
+                                                                    label="{{empresa.name}}" >
+                                                            </option>
+                                                        </select>
 
-                                                        <input type="text" ng-model="frmNewLink.cuenta" placeholder="Cuenta Banco"
-                                                               uib-typeahead="cuenta as cuenta.name for cuenta in comboCuentasBanco | filter:{name:$viewValue}"
-                                                               class="form-control col" typeahead-show-hint="true" typeahead-min-length="0" 
-                                                               typeahead-template-url="customTemplate.html" required="required"/>
-                                                        <strong>{{frmNewLink.cuenta.id}}</strong>
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="form-group row">
+                                                    <label for="txtNombre" class=" col-form-label col-sm-4 text-right">Cuentas de Bancos</label>
+                                                    <div class="col-sm-6">
+                                                        <div ng-show="loadingCuentas">
+                                                            <i class="fa fa-gear fa-spin animated"   ></i>
+                                                        </div>
+                                                        <select class="form-control" ng-model="frmNewLink.cuenta" ng-change="">
+                                                            <option ng-repeat="cuenta in comboCuentasBanco" value="{{cuenta.id}}"
+                                                                    label="{{cuenta.name}}" >
+                                                            </option>
+                                                        </select>    
                                                     </div>
                                                     <div class="col-sm-1">
-                                                        <button   class="btn btn-sm btn-primary" ng-click="addlink()"  title="Anadir"><span class="fa fa-plus"></span></button>
+                                                        <button   class="btn btn-sm btn-primary" ng-click="addlink()"  
+                                                                  title="Anadir" ng-show="frmNewLink.cuenta &amp;&amp; frmNewLink.descripcion" ><span class="fa fa-plus"></span></button>
                                                     </div>
                                                 </div>
 
@@ -342,9 +367,9 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            <tr st-select-row="row" st-select-mode="multiple" ng-repeat="row in display_records_cuenta| filter:busqueda">
-                                                                <td>{{row[0]}} </td>
-                                                                <td>{{row[1]}} </td>
+                                                            <tr st-select-row="row" st-select-mode="multiple" ng-repeat="row in display_records_cuenta | filter:busqueda">
+                                                                <td>{{row[2]}} </td>
+                                                                <td>{{row[3]}} </td>
                                                                 <td>{{row[5]}} </td>
                                                                 <td>
                                                                     <!--<button type="button" title="Ver" class="btn btn-default" ng-click="ver(row.idTarjetaCredito)" data-toggle="modal" data-target="#verForm"><i class="fa fa-search"></i></button> -->
@@ -382,7 +407,7 @@
                                             </dl>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-default" id="modal-btn-si" ng-click="eliminar()"  data-dismiss="modal">Si</button>
+                                            <button type="button" class="btn btn-default" id="modal-btn-si" ng-click="delete()"  data-dismiss="modal">Si</button>
                                             <button type="button" class="btn btn-primary" id="modal-btn-no"  data-dismiss="modal">No</button>
                                         </div>
                                     </div>

@@ -117,10 +117,10 @@
                                     <!-- /Mensaje Error -->
 
                                     <!-- Tabla Contenido -->
-                                    <div class="card-body ng-hide" id="tableData" ng-show="showTable">
+                                    <div class="card-body ng-hide table-responsive" id="tableData" ng-show="showTable">
                                         <div class="form-group row">
                                             <table st-table="display_records"  st-safe-src="mainGrid" 
-                                                   class="table  table-hover table-responsive">
+                                                   class="table  table-hover ">
                                                 <thead >
                                                     <c:if test="#{aerolinea.formulario.buscar == aerolinea.formulario.PERMITIR}">
                                                         <tr>
@@ -164,7 +164,7 @@
                                                                 </c:if>
 
                                                                 <c:if test="#{aerolinea.formulario.eliminar== aerolinea.formulario.PERMITIR}">
-                                                                    <button type="button" title="Eliminar" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#frmConfirmation" ng-click="modalEliminar('', row.idAerolinea, row.nombre)"><i class="fa fa-remove"></i></button>
+                                                                    <button type="button" title="Eliminar" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#frmConfirmation" ng-click="modalEliminar(row.idAerolinea, row.nombre, 'delete')"><i class="fa fa-remove"></i></button>
                                                                 </c:if>
                                                                 <!--<button type="button" title="Ver" class="btn btn-default" ng-click="ver(row.idEmpleado)" data-toggle="modal" data-target="#verForm"><i class="fa fa-search"></i></button>-->
                                                             </div>
@@ -207,13 +207,19 @@
                                                         <label for="txtCodigoLinea" class="col-sm-3 text-right" >Codigo Linea Aerea</label>
                                                         <div class="col-sm-6">
                                                             <input type="text" class="form-control " name="txtCodigoLinea" required="required" maxlength="2" ng-model="formData.numero"/>
+                                                            <span class="alert-danger" ng-show="!myForm.txtCodigoLinea.$valid"  >
+                                                                Debe ingresar un valor
+                                                            </span>
                                                         </div>
                                                     </div>
 
                                                     <div class="form-group row">
-                                                        <label for="txtIata" class="col-sm-3 text-right" >N&uacute;mero IATA</label>
+                                                        <label for="txtIata" class="col-sm-3 text-right" >C&oacute;digo IATA</label>
                                                         <div class="col-sm-6">
                                                             <input type="text" class="form-control " name="txtIata" required="required" maxlength="4" ng-model="formData.iata"/>
+                                                            <span class="alert-danger" ng-show="!myForm.txtIata.$valid"  >
+                                                                Debe ingresar un valor
+                                                            </span>
                                                         </div>
                                                     </div>
 
@@ -222,6 +228,9 @@
                                                         <label for="txtNombre" class="col-sm-3 text-right" >Nombre L&iacute;nea A&eacute;rea</label>
                                                         <div class="col-sm-6">
                                                             <input type="text" class="form-control " name="txtNombre" required="required" maxlength="64" ng-model="formData.nombre"/>
+                                                            <span class="alert-danger" ng-show="!myForm.txtNombre.$valid"  >
+                                                                Debe ingresar un valor
+                                                            </span>
                                                         </div>
                                                     </div>
 
@@ -229,6 +238,9 @@
                                                         <label for="txtNit" class="col-sm-3 text-right" >NIT</label>
                                                         <div class="col-sm-6">
                                                             <input type="text" class="form-control " name="txtNit" required="required" maxlength="15" validate-number="" ng-model="formData.nit"/>
+                                                            <span class="alert-danger" ng-show="!myForm.txtNit.$valid"  >
+                                                                Debe ingresar un NIT
+                                                            </span>
                                                         </div>
                                                     </div>
 
@@ -236,6 +248,9 @@
                                                         <label for="txtEmitirFacturaA" class="col-sm-3 text-right" >Emitir Factura a *</label>
                                                         <div class="col-sm-6">
                                                             <input type="text" class="form-control " name="txtEmitirFacturaA" required="required" maxlength="32"  ng-model="formData.emitirFacturaA"/>
+                                                            <span class="alert-danger" ng-show="!myForm.txtEmitirFacturaA.$valid"  >
+                                                                Debe ingresar a quien se debe Emitir Factura
+                                                            </span>
                                                         </div>
                                                     </div>
 
@@ -243,41 +258,41 @@
                                                     <div class="form-group row">
                                                         <label for="txtRepresentante" class="col-sm-3 text-right" >Representante</label>
                                                         <div class="col-sm-6">
-                                                            <input type="text" class="form-control " name="txtNombre" required="required" maxlength="64" ng-model="formData.representante"/>
+                                                            <input type="text" class="form-control " name="txtRepresentante"  maxlength="64" ng-model="formData.representante"/>
                                                         </div>
                                                     </div>
 
                                                     <div class="form-group row">
                                                         <label for="txtDireccion" class="col-sm-3 text-right" >Direcci&oacute;n</label>
                                                         <div class="col-sm-6">
-                                                            <input type="text" class="form-control " name="txtDireccion" required="required" maxlength="256" ng-model="formData.direccion"/>
+                                                            <input type="text" class="form-control " name="txtDireccion"  maxlength="256" ng-model="formData.direccion"/>
                                                         </div>
                                                     </div>
 
                                                     <div class="form-group row">
                                                         <label for="txtTelefono" class="col-sm-3 text-right" >Tel&eacute;fono</label>
                                                         <div class="col-sm-6">
-                                                            <input type="text" class="form-control " name="txtTelefono" required="required" maxlength="32" ng-model="formData.telefono"/>
+                                                            <input type="text" class="form-control " name="txtTelefono"  maxlength="32" ng-model="formData.telefono"/>
                                                         </div>
                                                     </div>
 
                                                     <div class="form-group row">
                                                         <label for="txtCelular" class="col-sm-3 text-right" >Nro. Celular</label>
                                                         <div class="col-sm-6">
-                                                            <input type="text" class="form-control " name="txtCelular" required="required" maxlength="32" ng-model="formData.celular"/>
-                                                            <span class="alert-danger" ng-show="!myForm.txtCelular.$valid"  >
+                                                            <input type="text" class="form-control " name="txtCelular"  maxlength="32" ng-model="formData.celular"/>
+                                                            <!--<span class="alert-danger" ng-show="!myForm.txtCelular.$valid"  >
                                                                 Debe ingresar un numero de Celular valido
-                                                            </span> 
+                                                            </span> --> 
                                                         </div>
                                                     </div>
 
                                                     <div class="form-group row">
                                                         <label for="txtEmail" class="col-sm-3 text-right" >Email</label>
                                                         <div class="col-sm-6">
-                                                            <input type="email" class="form-control " name="txtEmail" required="required" maxlength="128" ng-model="formData.email"/>
-                                                            <span class="alert-danger" ng-show="!myForm.txtEmail.$valid"  >
+                                                            <input type="email" class="form-control " name="txtEmail"  maxlength="128" ng-model="formData.email"/>
+                                                            <!--<span class="alert-danger" ng-show="!myForm.txtEmail.$valid"  >
                                                                 Debe ingresar un Email valido
-                                                            </span>
+                                                            </span>-->
                                                         </div>
                                                     </div>
 
@@ -286,7 +301,6 @@
                                                         <label for="txtPersonaContacto" class="col-sm-3 text-right" >Persona de Contacto</label>
                                                         <div class="col-sm-6">
                                                             <input type="text" class="form-control" name="txtPersonaContacto"  maxlength="64" ng-model="formData.personaContacto"/>
-
                                                         </div>
                                                     </div>
 
@@ -331,7 +345,7 @@
                                                         <div class="col-sm-9">
                                                             <div class="form-inline">
                                                                 <input type="number" class="form-control col-sm-2 " name="txtComisionPromInt" placeholder="0.00" 
-                                                                       ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01" required="" 
+                                                                       ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="1.00" max="99" required=""  min="0"
                                                                        ng-model="formData.comisionPromInt" />
                                                                 <label >&nbsp;&nbsp;sobre&nbsp;&nbsp;</label>
                                                                 <div class="custom-control custom-control-inline custom-radio">
@@ -341,7 +355,7 @@
                                                                 </div>
                                                                 <div class="custom-control custom-control-inline custom-radio">
                                                                     <input type="radio" class="custom-control-input" id="rdNetoInt" name="rdComisionPromIntTipo"
-                                                                           ng-model="formData.comisionPromIntTipo" value="N" />
+                                                                           ng-model="formData.comisionPromIntTipo" value="N" ng-checked="true" />
                                                                     <label class="custom-control-label" for="rdNetoInt" >Neto</label>
                                                                 </div>
                                                             </div>
@@ -354,8 +368,8 @@
                                                         <div class="col-sm-9">
                                                             <div class="form-inline">
                                                                 <input type="number" class="form-control col-sm-2 " name="txtComisionPromNac" placeholder="0.00" 
-                                                                       ng-model="formData.comisionPromNac" 
-                                                                       ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01" required="" />
+                                                                       ng-model="formData.comisionPromNac" step="1.00" max="99" min="0"
+                                                                       ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/"  required="" />
                                                                 <label >&nbsp;&nbsp;sobre&nbsp;&nbsp;</label>
                                                                 <div class="custom-control custom-control-inline custom-radio">
                                                                     <input type="radio" class="custom-control-input" id="rdTotalNac" name="rdComisionPromNacTipo"
@@ -364,7 +378,7 @@
                                                                 </div>
                                                                 <div class="custom-control custom-control-inline custom-radio">
                                                                     <input type="radio" class="custom-control-input" id="rdNetoNac" name="rdComisionPromNacTipo"
-                                                                           ng-model="formData.comisionPromNacTipo" value="N" />
+                                                                           ng-model="formData.comisionPromNacTipo" value="N" ng-checked="true" />
                                                                     <label class="custom-control-label" for="rdNetoNac" >Neto</label>
                                                                 </div>
                                                             </div>
@@ -416,27 +430,35 @@
                                                 <!-- Contenido Formulario-->
                                                 <div id="formData" class="container animated fadeIn"    >
 
+                                                    <span class="alert-danger"  ng-show="!formData.boletosMonNac &amp;&amp; !formData.boletosMonExt"  >
+                                                        Debe ingresar al menos una moneda
+                                                    </span>
+
                                                     <div class="form-group row ">
-                                                        <label  class="col-sm-3 text-right" >Boletos en Monedas Nacional</label>
+                                                        <label  class="col-sm-3 text-right" >Boletos en Moneda Nacional</label>
                                                         <div class="col-sm-6">
                                                             <div class="custom-control custom-control-inline custom-checkbox">
                                                                 <input type="checkbox" class="custom-control-input" id="chkBoletosMonNac"  
-                                                                       ng-checked="formData.boletosMonNac" ng-model="formData.boletosMonNac" />
+                                                                       ng-checked="formData.boletosMonNac" ng-model="formData.boletosMonNac" 
+                                                                       ng-click="formData.moneda = 'B';" />
                                                                 <label class="custom-control-label" for="chkBoletosMonNac"></label>
                                                             </div>    
                                                         </div>
                                                     </div>
 
                                                     <div class="form-group row ">
-                                                        <label  class="col-sm-3 text-right" >Boletos en Monedas Extranjera</label>
+                                                        <label  class="col-sm-3 text-right" >Boletos en Moneda Extranjera</label>
                                                         <div class="col-sm-6">
                                                             <div class="custom-control custom-control-inline custom-checkbox">
                                                                 <input type="checkbox" class="custom-control-input" id="chkBoletosMonExt"  
-                                                                       ng-checked="formData.boletosMonExt" ng-model="formData.boletosMonExt" />
+                                                                       ng-checked="formData.boletosMonExt" ng-model="formData.boletosMonExt" 
+                                                                       ng-click="formData.moneda = 'D';" />
                                                                 <label class="custom-control-label" for="chkBoletosMonExt"></label>
                                                             </div>    
                                                         </div>
                                                     </div>
+
+
 
                                                     <div class="form-group row">
                                                         <label for="txtCodigoLinea" class="col-sm-3 text-right" > Moneda Preferencial</label>
@@ -460,16 +482,35 @@
                                                     <div class="form-group row">
                                                         <label for="txtNombre" class=" col-form-label col-sm-3 text-right">Ventas Moneda Nacional </label>
                                                         <div class="col-sm-5">
-                                                            <input type="text" ng-model="formData.ctaVentasMonNac" placeholder="Cuenta Aerea Moneda Nacional"
+                                                            <input type="text" ng-model="formData.ctaVentasMonNac" placeholder="Cuenta Ventas Moneda Nacional"
                                                                    uib-typeahead="cuenta as cuenta.name for cuenta in comboVentas | filter:{name:$viewValue}"
                                                                    class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="0" 
-                                                                   typeahead-template-url="customTemplate.html" required="required"
+                                                                   typeahead-template-url="customTemplate.html" 
                                                                    />
-                                                            <strong>{{formData.ctaVentasMonNac.id}}</strong>
-                                                            <span class="alert-danger"  ng-show="showErrorCtaVentasMonNac"  >
-                                                                Debe ingresar una cuenta valida
-                                                            </span> 
                                                         </div>
+
+                                                        <a title="Adicionar" class="btn btn-sm btn-success" ng-click="updateAddCuentaVenta('V', 'N')" ng-show="showBtnEditar &amp;&amp; formData.ctaVentasMonNac.id" >
+                                                            <i class=" fa fa-plus text-white"></i>
+                                                        </a>
+
+                                                        <a title="Adicionar" class="btn btn-sm btn-success" ng-click="addCuentaVenta('V', 'N')" ng-show="showBtnNuevo &amp;&amp; formData.ctaVentasMonNac.id" >
+                                                            <i class=" fa fa-plus text-white" ></i>
+                                                        </a>
+
+                                                        <a  class="btn btn-sm btn-info" ng-click="showUpdateAddCuenta('Cuentas Ventas en Moneda Nacional', 'V', 'N')" ng-show="showBtnEditar" data-toggle="modal"  
+                                                            data-target="#frmAerolineaCuenta"
+                                                            data-placement="top" title="Revisar las Cuentas de Ventas en Moneda Nacional">
+                                                            <i class=" fa fa-search text-white"></i>
+                                                        </a>
+
+                                                        <a  class="btn btn-sm btn-info" ng-click="showAddCuentaVenta(formData.listCtaVentasMonNac,'Cuentas Ventas en Moneda Nacional')" ng-show="showBtnNuevo" data-toggle="modal"  
+                                                            data-target="#frmAerolineaCuenta"
+                                                            data-placement="top" title="Revisar las Cuentas de Ventas en Moneda Nacional">
+                                                            <i class=" fa fa-search text-white"></i>
+                                                        </a>
+
+                                                        <span ng-show="loadingAddCuentaVenta" ><i class="loader loader-sm" ></i>.</span>
+
                                                     </div>
 
                                                     <div class="form-group row">
@@ -478,13 +519,31 @@
                                                             <input type="text" ng-model="formData.ctaVentasMonExt" placeholder="Cuenta Aerea Moneda Extranjera"
                                                                    uib-typeahead="cuenta as cuenta.name for cuenta in comboVentas | filter:{name:$viewValue}"
                                                                    class="form-control" typeahead-show-hint="true" typeahead-min-length="0" 
-                                                                   typeahead-template-url="customTemplate.html" required="required"
+                                                                   typeahead-template-url="customTemplate.html" 
                                                                    />
-                                                            <strong>{{formData.ctaVentasMonExt.id}}</strong>
-                                                            <span class="alert-danger"  ng-show="showErrorCtaVentasMonExt"  >
-                                                                Debe ingresar una cuenta valida
-                                                            </span> 
                                                         </div>
+                                                        <a title="Adicionar" class="btn btn-sm btn-success" ng-click="updateAddCuentaVentaExt(formData.ctaVentasMonExt,'V', 'E')" ng-show="showBtnEditar &amp;&amp; formData.ctaVentasMonExt.id" >
+                                                            <i class=" fa fa-plus text-white"></i>
+                                                            </a>
+
+                                                            <a title="Adicionar" class="btn btn-sm btn-success" ng-click="addCuentaVentaExt('V', 'E')" ng-show="showBtnNuevo &amp;&amp; formData.ctaVentasMonExt.id" >
+                                                            <i class=" fa fa-plus text-white" ></i>
+                                                            </a>
+
+                                                            <a  class="btn btn-sm btn-info" ng-click="showUpdateAddCuenta('Cuentas Ventas en Moneda Extranjera', 'V', 'E')" ng-show="showBtnEditar" data-toggle="modal"  
+                                                            data-target="#frmAerolineaCuenta"
+                                                            data-placement="top" title="Revisar las Cuentas de Ventas en Moneda Extranjera">
+                                                            <i class=" fa fa-search text-white"></i>
+                                                            </a>
+
+                                                            <a  class="btn btn-sm btn-info" ng-click="showAddCuentaVenta(formData.listCtaVentasMonExt,'Cuentas Ventas en Moneda Extranjera')" ng-show="showBtnNuevo" data-toggle="modal"  
+                                                            data-target="#frmAerolineaCuenta"
+                                                            data-placement="top" title="Revisar las Cuentas de Ventas en Moneda Extranjera">
+                                                            <i class=" fa fa-search text-white"></i>
+                                                            </a>
+
+                                                            <span ng-show="loadingAddCuentaVentaExt" ><i class="loader loader-sm" ></i>.</span>
+
                                                     </div>
 
                                                     <div class="form-group row">
@@ -493,13 +552,30 @@
                                                             <input type="text" ng-model="formData.ctaComisionMonNac" placeholder="Cuenta Comision Moneda Nacional"
                                                                    uib-typeahead="cuenta as cuenta.name for cuenta in comboComisiones | filter:{name:$viewValue}"
                                                                    class="form-control" typeahead-show-hint="true" typeahead-min-length="0" 
-                                                                   typeahead-template-url="customTemplate.html" required="required"
-                                                                   />
-                                                            <strong>{{formData.ctaComisionMonNac.id}}</strong>
-                                                            <span class="alert-danger"  ng-show="showErrorCtaComisionMonNac"  >
-                                                                Debe ingresar una cuenta valida
-                                                            </span> 
+                                                                   typeahead-template-url="customTemplate.html" 
+                                                                   />                                                             
                                                         </div>
+                                                        <a title="Adicionar" class="btn btn-sm btn-success" ng-click="updateAddCuentaComisionNac(formData.ctaComisionMonNac,'C', 'N')" ng-show="showBtnEditar &amp;&amp; formData.ctaComisionMonNac.id" >
+                                                            <i class=" fa fa-plus text-white"></i>
+                                                            </a>
+
+                                                            <a title="Adicionar" class="btn btn-sm btn-success" ng-click="addCuentaComisionNac('C', 'N')" ng-show="showBtnNuevo &amp;&amp; formData.ctaComisionMonNac.id" >
+                                                            <i class=" fa fa-plus text-white" ></i>
+                                                            </a>
+
+                                                            <a  class="btn btn-sm btn-info" ng-click="showUpdateAddCuenta('Cuentas de Comisiones en Moneda Nacional', 'C', 'N')" ng-show="showBtnEditar" data-toggle="modal"  
+                                                            data-target="#frmAerolineaCuenta"
+                                                            data-placement="top" title="Revisar las Cuentas de Comisiones en Moneda Nacional">
+                                                            <i class=" fa fa-search text-white"></i>
+                                                            </a>
+
+                                                            <a  class="btn btn-sm btn-info" ng-click="showAddCuentaVenta(formData.listCtaComisionMonNac,'Cuentas Comisiones en Moneda Nacional')" ng-show="showBtnNuevo" data-toggle="modal"  
+                                                            data-target="#frmAerolineaCuenta"
+                                                            data-placement="top" title="Revisar las Cuentas de Comisiones en Moneda Nacional">
+                                                            <i class=" fa fa-search text-white"></i>
+                                                            </a>
+
+                                                            <span ng-show="loadingAddCuentaComisionNac" ><i class="loader loader-sm" ></i>.</span>
                                                     </div>
 
                                                     <div class="form-group row">
@@ -508,13 +584,29 @@
                                                             <input type="text" ng-model="formData.ctaComisionMonExt" placeholder="Cuenta Comision Moneda Extranjera"
                                                                    uib-typeahead="cuenta as cuenta.name for cuenta in comboComisiones | filter:{name:$viewValue}"
                                                                    class="form-control" typeahead-show-hint="true" typeahead-min-length="0" 
-                                                                   typeahead-template-url="customTemplate.html" required="required"
+                                                                   typeahead-template-url="customTemplate.html" 
                                                                    />
-                                                            <strong>{{formData.ctaComisionMonExt.id}}</strong>
-                                                            <span class="alert-danger"  ng-show="showErrorCtaComisionMonExt"  >
-                                                                Debe ingresar una cuenta valida
-                                                            </span>
                                                         </div>
+                                                            <a title="Adicionar" class="btn btn-sm btn-success" ng-click="updateAddCuentaComisionExt(formData.ctaComisionMonExt,'C', 'E')" ng-show="showBtnEditar &amp;&amp; formData.ctaComisionMonExt.id" >
+                                                            <i class=" fa fa-plus text-white"></i>
+                                                            </a>
+
+                                                            <a title="Adicionar" class="btn btn-sm btn-success" ng-click="addCuentaComisionExt('C', 'E')" ng-show="showBtnNuevo &amp;&amp; formData.ctaComisionMonExt.id" >
+                                                            <i class=" fa fa-plus text-white" ></i>
+                                                            </a>
+
+                                                            <a  class="btn btn-sm btn-info" ng-click="showUpdateAddCuenta('Cuentas de Comisiones en Moneda Extranjera', 'C', 'E')" ng-show="showBtnEditar" data-toggle="modal"  
+                                                            data-target="#frmAerolineaCuenta"
+                                                            data-placement="top" title="Revisar las Cuentas de Comisiones en Moneda Extranjera">
+                                                            <i class=" fa fa-search text-white"></i>
+                                                            </a>
+
+                                                            <a  class="btn btn-sm btn-info" ng-click="showAddCuentaVenta(formData.listCtaComisionMonExt,'Cuentas Comisiones en Moneda Extranjera')" ng-show="showBtnNuevo" data-toggle="modal"  
+                                                            data-target="#frmAerolineaCuenta"
+                                                            data-placement="top" title="Revisar las Cuentas de Comisiones en Moneda Extranjera">
+                                                            <i class=" fa fa-search text-white"></i>
+                                                            </a>
+                                                             <span ng-show="loadingAddCuentaComisionExt" ><i class="loader loader-sm" ></i>.</span>
                                                     </div>
 
                                                     <div class="form-group row">
@@ -523,13 +615,30 @@
                                                             <input type="text" ng-model="formData.ctaDevolucionMonNac" placeholder="Cuenta Devoluciones Moneda Nacional"
                                                                    uib-typeahead="cuenta as cuenta.name for cuenta in comboDevoluciones | filter:{name:$viewValue}"
                                                                    class="form-control" typeahead-show-hint="true" typeahead-min-length="0" 
-                                                                   typeahead-template-url="customTemplate.html" required="required"
-                                                                   />
-                                                            <strong>{{formData.ctaDevolucionMonNac.id}}</strong>
-                                                            <span class="alert-danger"  ng-show="showErrorCtaDevolucionMonNac"  >
-                                                                Debe ingresar una cuenta valida
-                                                            </span>
+                                                                   typeahead-template-url="customTemplate.html" 
+                                                                   />                                                            
                                                         </div>
+                                                            <a title="Adicionar" class="btn btn-sm btn-success" ng-click="updateAddCuentaDevolucionNac(formData.ctaDevolucionMonNac,'D', 'N')" ng-show="showBtnEditar &amp;&amp; formData.ctaDevolucionMonNac.id" >
+                                                            <i class=" fa fa-plus text-white"></i>
+                                                            </a>
+
+                                                            <a title="Adicionar" class="btn btn-sm btn-success" ng-click="addCuentaDevolucionNac('D', 'N')" ng-show="showBtnNuevo &amp;&amp; formData.ctaDevolucionMonNac.id" >
+                                                            <i class=" fa fa-plus text-white" ></i>
+                                                            </a>
+
+                                                            <a  class="btn btn-sm btn-info" ng-click="showUpdateAddCuenta('Cuentas de Devoluciones en Moneda Nacional', 'D', 'N')" ng-show="showBtnEditar" data-toggle="modal"  
+                                                            data-target="#frmAerolineaCuenta"
+                                                            data-placement="top" title="Revisar las Cuentas de Devoluciones en Moneda Nacional">
+                                                            <i class=" fa fa-search text-white"></i>
+                                                            </a>
+
+                                                            <a  class="btn btn-sm btn-info" ng-click="showAddCuentaVenta(formData.listCtaDevolucionMonNac,'Cuentas Devoluciones en Moneda Nacional')" ng-show="showBtnNuevo" data-toggle="modal"  
+                                                            data-target="#frmAerolineaCuenta"
+                                                            data-placement="top" title="Revisar las Cuentas de Devoluciones en Moneda Nacional">
+                                                            <i class=" fa fa-search text-white"></i>
+                                                            </a>
+                                                        
+                                                             <span ng-show="loadingAddCuentaDevolucionNac" ><i class="loader loader-sm" ></i>.</span>
                                                     </div>
 
                                                     <div class="form-group row">
@@ -538,13 +647,29 @@
                                                             <input type="text" ng-model="formData.ctaDevolucionMonExt" placeholder="Cuenta Devoluciones Moneda Extranjera"
                                                                    uib-typeahead="cuenta as cuenta.name for cuenta in comboDevoluciones | filter:{name:$viewValue}"
                                                                    class="form-control" typeahead-show-hint="true" typeahead-min-length="0" 
-                                                                   typeahead-template-url="customTemplate.html" required="required"
-                                                                   />
-                                                            <strong>{{formData.ctaDevolucionMonExt.id}}</strong>
-                                                            <span class="alert-danger"  ng-show="showErrorCtaDevolucionMonExt"  >
-                                                                Debe ingresar una cuenta valida
-                                                            </span>
+                                                                   typeahead-template-url="customTemplate.html" 
+                                                                   />                                                            
                                                         </div>
+                                                            <a title="Adicionar" class="btn btn-sm btn-success" ng-click="updateAddCuentaDevolucionExt(formData.ctaDevolucionMonExt,'D', 'E')" ng-show="showBtnEditar &amp;&amp; formData.ctaDevolucionMonExt.id" >
+                                                            <i class=" fa fa-plus text-white"></i>
+                                                            </a>
+
+                                                            <a title="Adicionar" class="btn btn-sm btn-success" ng-click="addCuentaDevolucionExt('D', 'E')" ng-show="showBtnNuevo &amp;&amp; formData.ctaDevolucionMonExt.id" >
+                                                            <i class=" fa fa-plus text-white" ></i>
+                                                            </a>
+
+                                                            <a  class="btn btn-sm btn-info" ng-click="showUpdateAddCuenta('Cuentas de Devoluciones en Moneda Extranjera', 'D', 'E')" ng-show="showBtnEditar" data-toggle="modal"  
+                                                            data-target="#frmAerolineaCuenta"
+                                                            data-placement="top" title="Revisar las Cuentas de Devoluciones en Moneda Extranjera">
+                                                            <i class=" fa fa-search text-white"></i>
+                                                            </a>
+
+                                                            <a  class="btn btn-sm btn-info" ng-click="showAddCuentaVenta(formData.listCtaDevolucionMonExt,'Cuentas Devoluciones en Moneda Extranjera')" ng-show="showBtnNuevo" data-toggle="modal"  
+                                                            data-target="#frmAerolineaCuenta"
+                                                            data-placement="top" title="Revisar las Cuentas de Devoluciones en Moneda Extranjera">
+                                                            <i class=" fa fa-search text-white"></i>
+                                                            </a>
+                                                            <span ng-show="loadingAddCuentaDevolucionExt" ><i class="loader loader-sm" ></i>.</span>
                                                     </div>
                                                 </div>
                                                 <!-- /.form-group -->
@@ -564,7 +689,7 @@
                                                 <div id="formData" class="container animated fadeIn" >
 
                                                     <div class="form-group row ">
-                                                        <label  class="col-sm-3 text-right" >Impuesto Sobre Valor Neto</label>
+                                                        <label  class="col-sm-3 text-right" >Impuesto (BO) Sobre Valor Neto</label>
                                                         <div class="col-sm-6">
                                                             <div class="custom-control custom-control-inline custom-checkbox">
                                                                 <input type="checkbox" class="custom-control-input" id="chkImpuestoValorNeto" 
@@ -585,8 +710,9 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="form-group row ">
-                                                        <label  class="col-sm-3 text-right" >Cargos No Fiscales Neto</label>
+                                                    <!-- Este se debe quitar -->
+                                                    <!--<div class="form-group row ">
+                                                        <label  class="col-sm-3 text-right" >Cargos No Fiscales Total</label>
                                                         <div class="col-sm-6">
                                                             <div class="custom-control custom-control-inline custom-checkbox">
                                                                 <input type="checkbox" class="custom-control-input" id="chkCargoNoFiscal" 
@@ -595,19 +721,20 @@
                                                             </div>    
                                                         </div>
                                                     </div>
+                                                    -->
 
                                                     <div class="form-group row ">
-                                                        <label  class="col-sm-3 text-right" >Otros Impuestos<small>(Max 5)</small></label>
+                                                        <label  class="col-sm-3 text-right" >Otros Impuestos</label>
                                                         <div class="col-sm">
                                                             <div class="form-inline">
 
                                                                 <input type="text" class="form-control" name="txtOtrosImpuestos" maxlength="16" ng-model="formData.otrosImpuestos" />
 
-                                                                <a title="Editar" class="btn btn-sm btn-success" ng-click="updateAddImpuesto()" ng-show="showBtnActualizar">
+                                                                <a title="Ingresar" class="btn btn-sm btn-success" ng-click="updateAddImpuesto()" ng-show="showBtnEditar">
                                                                     <i class=" fa fa-plus text-white"></i>
                                                                 </a>
 
-                                                                <a title="Editar" class="btn btn-sm btn-success" ng-click="addImpuesto()" ng-show="showBtnNuevo">
+                                                                <a title="Ingresar" class="btn btn-sm btn-success" ng-click="addImpuesto()" ng-show="showBtnNuevo">
                                                                     <i class=" fa fa-plus text-white"></i>
                                                                 </a>
 
@@ -625,7 +752,7 @@
                                                                     <tbody>
                                                                         <tr st-select-row="row" st-select-mode="multiple" ng-repeat="row in tbImpuestos">
                                                                             <td>{{row.nombre}}</td>
-                                                                            <td><button type="button" title="Eliminar" class="btn btn-sm btn-danger" ng-show="showBtnActualizar" ng-click="modalEliminar(row.idAerolineaImpuesto, row.nombre, 'impuesto-')" 
+                                                                            <td><button type="button" title="Eliminar" class="btn btn-sm btn-danger" ng-show="showBtnEditar" ng-click="modalEliminar(row.idAerolineaImpuesto, row.nombre, 'impuesto-delete')" 
                                                                                         data-toggle="modal" data-target="#frmConfirmation"><i class="fa fa-remove"></i> </button>
                                                                             </td>
                                                                         </tr>
@@ -637,18 +764,20 @@
                                                     </div>
 
                                                     <!-- Botones Formulario -->
-                                                    <div class="form-actions">
+                                                    <div class="form-group">
                                                         <c:if test="#{aerolinea.formulario.crear== aerolinea.formulario.PERMITIR}">
-                                                            <div class="modal-footer" ng-show="showBtnNuevo">
-                                                                <button   class="btn btn-primary" ng-click="save()"  value="Guardar"><span class="fa fa-save"></span>Guardar</button>
+                                                            <div class="row" ng-show="showBtnNuevo">
+                                                                <label for="txtNombre" class="col-form-label col-sm-3 text-right" ></label>
+                                                                <button  class="btn btn-primary" ng-click="save()"  value="Guardar"><span class="fa fa-save"></span> Guardar</button>
                                                             </div>
                                                         </c:if>                                    
 
                                                         <c:if test="#{aerolinea.formulario.actualizar== aerolinea.formulario.PERMITIR}">
-                                                            <div class="modal-footer" ng-show="showBtnActualizar">
-                                                                <button type="button" class="btn btn-primary" ng-click="update()" value="Actualizar"> <span class="fa fa-edit"></span>Actualizar</button>
+                                                            <div class="row" ng-show="showBtnEditar">
+                                                                <label for="txtNombre" class="col-form-label col-sm-3 text-right" ></label>
+                                                                <button type="button" class="btn btn-primary" ng-click="update()" value="Actualizar"> <span class="fa fa-edit"></span> Actualizar</button>
                                                             </div>
-                                                        </c:if>   
+                                                        </c:if>
                                                     </div>
                                                     <!-- /Botones Formulario -->
                                                 </div>
@@ -664,6 +793,73 @@
                                 <!-- /.card -->
                             </div>
                             <!-- /.page-section -->
+
+                            <!-- Modal ShowCuentas -->
+                            <div class="modal hide fade" id="frmAerolineaCuenta" tabindex="-1" role="dialog" aria-labelledby="verForm" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="container">
+                                        <form id="formLink" name="frmAerolineaCuenta">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="verForm">Aerolinea  : <strong> {{frmFormAerolineaCuentaName}}</strong> </h5>
+                                                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">×</span>
+                                                    </button>
+                                                </div>
+
+                                                <span ng-show="linkLoading" class="alert alert-info"><i class="fa fa-gear faa-spin animated" ></i>  Cargando...</span>
+                                                <div class="alert alert-success" role="alert" ng-show="showLinkRestfulSuccess">
+                                                    <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">&times;</a>
+                                                    {{ showLinkRestfulMessage}}
+                                                </div>
+
+                                                <div class="alert alert-danger" role="alert" ng-show="showLinkRestfulError">
+                                                    <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">&times;</a>
+                                                    {{ showLinkRestfulMessage}}
+                                                </div>
+
+                                                <br/>
+
+                                                <div class="container">
+                                                    <div class="row table-responsive ">
+                                                        <table st-table="display_records_cuenta"  st-safe-src="formAerolineaCuentaList" class="table table-hover table-sm ">
+                                                            <thead >
+                                                                <tr>
+                                                                    <th class="text-nowrap">Nombre Cuenta</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr st-select-row="row" st-select-mode="multiple" ng-repeat="row in display_records_cuenta| filter:busqueda">
+                                                                    <td>{{row.nombreCuenta}} </td>
+                                                                    <td>
+                                                                        <!--<button type="button" title="Ver" class="btn btn-default" ng-click="ver(row.idTarjetaCredito)" data-toggle="modal" data-target="#verForm"><i class="fa fa-search"></i></button> -->
+                                                                        <c:if test="#{aerolinea.formulario.eliminar== aerolinea.formulario.PERMITIR}">
+                                                                            <button type="button" title="Eliminar" class="btn btn-sm btn-danger" ng-show="showBtnEditar" data-target="#frmConfirmation" 
+                                                                                    data-toggle="modal" ng-click="modalEliminar(row.idAerolineaCuenta, row.nombreCuenta, 'delete-cuenta')"><i class="fa fa-remove"></i></button>
+                                                                        </c:if>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                            <tfoot>
+                                                                <tr>
+                                                                    <td colspan="10" class="text-center">
+                                                                        <div class="container" st-items-by-page="itemsByPage" st-pagination="" st-template="../index/pagination.custom.html"></div>
+                                                                    </td>
+                                                                </tr>
+                                                            </tfoot>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cerrar</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <!-- /Modal Show Cuentas -->
 
                             <!-- Modal Eliminar -->
                             <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="frmConfirmation">

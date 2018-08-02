@@ -159,7 +159,6 @@ angular.module('jsUsuario.controllers', []).controller('frmUsuario', ['$scope', 
             });
         }
 
-
         $scope.validar = function () {
             if ($scope.formData.username === undefined)
                 return;

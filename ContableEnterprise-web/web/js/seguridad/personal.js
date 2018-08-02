@@ -114,7 +114,6 @@ angular.module('jsPersonal.controllers', []).controller('frmPersonal', ['$scope'
         $scope.actualizar = function () {
             if (!$scope.myForm.$valid)
                 return;
-            console.log(angular.toJson($scope.formData));
             $scope.loading = true;
             $http({
                 method: 'POST',
@@ -149,6 +148,8 @@ angular.module('jsPersonal.controllers', []).controller('frmPersonal', ['$scope'
             $scope.showEditar = true;
             $scope.showNuevo = false;
             $scope.showError = false;
+            $scope.showRestfulError = false ;
+            $scope.showRestfulSuccess = false ;
             if (id > 0) {
                 $http({
                     method: 'POST',
@@ -175,7 +176,6 @@ angular.module('jsPersonal.controllers', []).controller('frmPersonal', ['$scope'
         }
 
         $scope.ver = function (id) {
-            console.log(id);
             if (id > 0) {
                 $http({
                     method: 'POST',
@@ -203,6 +203,8 @@ angular.module('jsPersonal.controllers', []).controller('frmPersonal', ['$scope'
             $scope.showNuevo = true;
             $scope.showEditar = false;
             $scope.showTable = false;
+            $scope.showRestfulError = false ;
+            $scope.showRestfulSuccess = false ;
         }
 
         $scope.cancelar = function () {

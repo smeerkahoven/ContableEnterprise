@@ -69,11 +69,16 @@ angular.module('jsAeropuerto.controllers', []).controller('frmAeropuerto', ['$sc
 
         $scope.getData('all', $scope.data);
 
+        $scope.hideMessagesBox = function () {
+            $scope.showRestfulSuccess = false;
+            $scope.showRestfulError = false;
+        }
+
         $scope.save = function () {
             if (!$scope.myForm.$valid)
                 return;
             $scope.loading = true;
-            
+
             $http({
                 method: 'POST',
                 url: url.value + 'save',
@@ -136,12 +141,12 @@ angular.module('jsAeropuerto.controllers', []).controller('frmAeropuerto', ['$sc
 
 
         $scope.delete = function () {
-           
+
             $scope.loading = true;
             $http({
                 method: 'POST',
                 url: url.value + 'delete',
-                data: {token: token.value, content: { idAeropuerto : $scope.idEliminar} },
+                data: {token: token.value, content: {idAeropuerto: $scope.idEliminar}},
                 headers: {'Content-Type': 'application/json'}
             }).then(function (response) {
                 $scope.loading = false;
@@ -168,27 +173,27 @@ angular.module('jsAeropuerto.controllers', []).controller('frmAeropuerto', ['$sc
             $scope.showTable = false;
             $scope.showError = false;
             $scope.showForm = false;
-                $http({
-                    method: 'POST',
-                    url: url.value + 'get',
-                    data: {token: token.value, content: {idAeropuerto: id}},
-                    headers: {'Content-Type': 'application/json'}
-                }).then(function (response) {
-                    $scope.loading = false;
-                    if (response.data.code === 201) {
-                        $scope.formData = response.data.content;
-                        $scope.showForm = true;
-                        $scope.showBtnEditar = true ;
-                        $scope.showBtnNuevo = false ;
-                    } else {
-                        $scope.showRestfulMessage = response.data.content;
-                        $scope.showRestfulError = true;
-                    }
-                }, function (error) {
-                    $scope.showRestfulMessage = error;
+            $http({
+                method: 'POST',
+                url: url.value + 'get',
+                data: {token: token.value, content: {idAeropuerto: id}},
+                headers: {'Content-Type': 'application/json'}
+            }).then(function (response) {
+                $scope.loading = false;
+                if (response.data.code === 201) {
+                    $scope.formData = response.data.content;
+                    $scope.showForm = true;
+                    $scope.showBtnEditar = true;
+                    $scope.showBtnNuevo = false;
+                } else {
+                    $scope.showRestfulMessage = response.data.content;
                     $scope.showRestfulError = true;
-                    $scope.loading = false;
-                });
+                }
+            }, function (error) {
+                $scope.showRestfulMessage = error;
+                $scope.showRestfulError = true;
+                $scope.loading = false;
+            });
         }
 
         $scope.nuevo = function () {
@@ -204,6 +209,7 @@ angular.module('jsAeropuerto.controllers', []).controller('frmAeropuerto', ['$sc
         $scope.cancelar = function () {
             $scope.showForm = false;
             $scope.showTable = true;
+            $scope.hideMessagesBox();
         }
 
         $scope.modalEliminar = function (id, nombre) {
@@ -214,8 +220,8 @@ angular.module('jsAeropuerto.controllers', []).controller('frmAeropuerto', ['$sc
     }
 ]);
 
-app.filter('myStrictFilter', function($filter){
-    return function(input, predicate){
+app.filter('myStrictFilter', function ($filter) {
+    return function (input, predicate) {
         return $filter('filter')(input, predicate, true);
     }
 });

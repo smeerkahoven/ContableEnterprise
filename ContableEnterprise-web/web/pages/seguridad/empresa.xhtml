@@ -4,6 +4,7 @@
        xmlns:h="http://xmlns.jcp.org/jsf/html"
        xmlns:ui="http://xmlns.jcp.org/jsf/facelets" ng-app="jsEmpresa"
        xmlns:c="http://java.sun.com/jsp/jstl/core"
+       xmlns:f="http://java.sun.com/jsf/core"
        >
     <head>
         <meta charset="utf-8" />
@@ -192,20 +193,22 @@
                                                 </div>
 
                                                 <div class="form-group row">
-                                                    <label for="tf3" class="col-form-label col-sm-4 text-right">Logotipo</label>
-                                                    <div class="custom-file col-sm-4">
-                                                        <h:inputFile class="custom-file-input" id="imgLogo" 
+                                                    <label for="imgLogo" class="col-form-label col-sm-4 text-right">Logotipo</label>
+                                                    <div class=" col-sm-4">
+                                                        <h:inputFile class="form-control col custom-file-input" id="imgLogo" 
                                                                      required="" value="#{empresa.file}" validator="#{empresa.validateFile}" />
-                                                        <label class="custom-file-label" for="tf3">Choose file</label>
+                                                        <label class=" form-control col custom-file-label " for="imgLogo">Choose file</label>
                                                     </div>
                                                 </div>
 
-
-                                                <div class="form-actions">
-                                                    <div class="form-group row modal-footer">
-                                                        <h:commandButton class="btn btn-primary fa fa-save" action="#{empresa.guardar()}" value="Guardar" ></h:commandButton>
-                                                    </div>
+                                                
+                                                <div class="form-group row">
+                                                    <label  class="col-form-label col-sm-4"></label>
+                                                    <h:commandButton class="btn btn-primary text-right" action="#{empresa.guardar()}" value="Guardar"  ></h:commandButton>
                                                 </div>
+
+                                                    
+
                                                 <!-- /Contenido Formulario -->
                                                 <!-- /.form-group -->
                                             </fieldset>

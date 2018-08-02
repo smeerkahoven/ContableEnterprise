@@ -175,10 +175,10 @@ angular.module('jsTarjeta.controllers', []).controller('frmTarjeta', ['$scope', 
             $scope.showTable = false;
             $scope.showError = false;
             $scope.showForm = true;
-            $scope.frmNew = row ;
-            $scope.loading = false ;
-            $scope.showBtnActualizar=true ;
-            $scope.showBtnNuevo = false ;
+            $scope.frmNew = row;
+            $scope.loading = false;
+            $scope.showBtnActualizar = true;
+            $scope.showBtnNuevo = false;
         }
 
         $scope.nuevo = function () {
@@ -188,13 +188,19 @@ angular.module('jsTarjeta.controllers', []).controller('frmTarjeta', ['$scope', 
             $scope.showTable = false;
             $scope.showRestfulSuccess = false;
             $scope.showRestfulError = false;
-            $scope.frmNew= {} ;
+            $scope.frmNew = {};
 
+        }
+
+        $scope.hideMessagesBox = function () {
+            $scope.showRestfulSuccess = false;
+            $scope.showRestfulError = false;
         }
 
         $scope.cancelar = function () {
             $scope.showForm = false;
             $scope.showTable = true;
+            $scope.hideMessagesBox();
         }
 
         $scope.modalEliminar = function (id, nombre) {

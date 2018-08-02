@@ -19,6 +19,7 @@ angular.module('jsPlanCuentas.controllers', []).controller('frmPlanCuentas', ['$
         $scope.showAll = false;
         var token = document.getElementsByName("hdToken")[0];
         var url = document.getElementsByName("hdUrl")[0];
+        var urlEmpresa = document.getElementsByName("hdUrlEmpresa")[0];
         var formName = document.getElementsByName("hdFormName")[0].value;
 
         $scope.showRestfulMessage = '';
@@ -33,6 +34,7 @@ angular.module('jsPlanCuentas.controllers', []).controller('frmPlanCuentas', ['$
         $scope.frmPlanCuentas = {};
         $scope.mainGrid = {};
         $scope.comboAitb = {};
+        $scope.comboEmpresa = [];
 
         $scope.showForm = false;
         $scope.showTable = false;
@@ -40,12 +42,13 @@ angular.module('jsPlanCuentas.controllers', []).controller('frmPlanCuentas', ['$
 
         $scope.itemsByPage = 15;
 
-        $scope.getData = function (method) {
+        $scope.getData = function (method, value) {
+            //return;
             $scope.loading = true;
             //console.log(formName);
             return $http({
                 method: 'POST',
-                url: url.value + method,
+                url: url.value + method + "/" + $scope.idEmpresa,
                 data: {token: token.value, content: ''},
                 headers: {'Content-Type': 'application/json'}
             }).then(function (response) {
@@ -55,9 +58,7 @@ angular.module('jsPlanCuentas.controllers', []).controller('frmPlanCuentas', ['$
                         $scope.showTable = true;
                         $scope.showAll = true;
                         $scope.loading = false;
-                    }
-                    if (method === 'combo') {
-                        $scope.comboAitb = response.data.content;
+                        $scope.getDataAitb('combo');
                     }
                 } else {
                     $scope.showRestfulMessage = response.data.content;
@@ -70,8 +71,33 @@ angular.module('jsPlanCuentas.controllers', []).controller('frmPlanCuentas', ['$
             });
         }
 
+        $scope.getDataAitb = function (method) {
+            //return;
+            $scope.loading = true;
+            //console.log(formName);
+            return $http({
+                method: 'POST',
+                url: url.value + method + "/" + $scope.idEmpresa,
+                data: {token: token.value, content: ''},
+                headers: {'Content-Type': 'application/json'}
+            }).then(function (response) {
+                if (response.data.code === 201) {
+
+                    $scope.comboAitb = response.data.content;
+                    $scope.loading = false;
+                } else {
+                    $scope.showRestfulMessage = response.data.content;
+                    $scope.showRestfulError = true;
+                    return {};
+                }
+            }, function (error) {
+                $scope.showRestfulMessage = error;
+                $scope.showRestfulError = true;
+            });
+        }
+
         $scope.save = function () {
-            if (!$scope.formNewTransaction.$valid) {
+            if (!$scope.myForm.$valid) {
                 return;
             }
             $scope.frmNewTransaction.ctaItb = $scope.frmNewTransaction.itb.id;
@@ -169,10 +195,8 @@ angular.module('jsPlanCuentas.controllers', []).controller('frmPlanCuentas', ['$
         $scope.get = function (id) {
             $scope.loading = true;
             var data = {};
-            if (id.nivel == 1)
-                data = {idPlanCuentas: id.idPlanCuentas};
-            else
-                data = {idPlanCuentas: id.idPlanCuentaPadre};
+            data = {idPlanCuentas: id.idPlanCuentas};
+
             $http({
                 method: 'POST',
                 url: url.value + 'get',
@@ -182,7 +206,7 @@ angular.module('jsPlanCuentas.controllers', []).controller('frmPlanCuentas', ['$
                 if (response.data.code === 201) {
                     //console.log(response.data.content);
                     $scope.frmPlanCuentas = response.data.content;
-                    $scope.frmNewTransaction.idPlanCuentaPadreNombre = $scope.frmPlanCuentas.nombreCuenta;
+                    $scope.frmNewTransaction.nroPlanCuentaPadreNombre = $scope.frmPlanCuentas.nroPlanCuentaPadreNombre;
                 } else {
                     $scope.showRestfulMessage = response.data.content;
                     $scope.showRestfulError = true;
@@ -197,10 +221,15 @@ angular.module('jsPlanCuentas.controllers', []).controller('frmPlanCuentas', ['$
         };
 
         $scope.nuevo = function () {
-            $scope.showForm = true;
+            $scope.showFormNewTransaction = true;
             $scope.showBtnNuevo = true;
             $scope.showBtnEditar = false;
             $scope.showTable = false;
+            $scope.showRestfulSuccess = false;
+            $scope.showRestfulError = false;
+        }
+
+        $scope.hideMessagesBox = function () {
             $scope.showRestfulSuccess = false;
             $scope.showRestfulError = false;
         }
@@ -209,6 +238,7 @@ angular.module('jsPlanCuentas.controllers', []).controller('frmPlanCuentas', ['$
             $scope.showForm = false;
             $scope.showTable = true;
             $scope.showFormNewTransaction = false;
+            $scope.hideMessagesBox();
         }
 
         $scope.modalEliminar = function (id, nombre) {
@@ -223,7 +253,7 @@ angular.module('jsPlanCuentas.controllers', []).controller('frmPlanCuentas', ['$
         }
 
         $scope.getItem = function (item) {
-            $scope.selectedId = item.idPlanCuentas;
+            $scope.selectedId = item.idPlanCuenta;
         }
 
         $scope.add = function (item) {
@@ -234,9 +264,9 @@ angular.module('jsPlanCuentas.controllers', []).controller('frmPlanCuentas', ['$
             $scope.showBtnActualizar = false;
             $scope.showBtnNuevoForm = false;
             $scope.frmNewTransaction.idEmpresa = item.idEmpresa;
-            $scope.frmNewTransaction.idPlanCuentas = $scope.getLastIdPlanCuentas(item);
-            $scope.frmNewTransaction.idPlanCuentaPadre = item.idPlanCuentas;
-            $scope.frmNewTransaction.idPlanCuentaPadreNombre = item.nombreCuenta;
+            $scope.frmNewTransaction.nroPlanCuenta = $scope.getLastNroPlanCuentas(item);
+            $scope.frmNewTransaction.nroPlanCuentaPadre = item.nroPlanCuenta;
+            $scope.frmNewTransaction.nroPlanCuentaPadreNombre = item.nombreCuenta;
             $scope.frmNewTransaction.nombreCuenta = '';
             $scope.frmNewTransaction.nivel = item.nivel + 1;
             $scope.frmNewTransaction.marco = item.marco;
@@ -260,7 +290,6 @@ angular.module('jsPlanCuentas.controllers', []).controller('frmPlanCuentas', ['$
             $scope.showLoading = false;
         }
 
-
         $scope.edit = function (item) {
             $scope.get(item);
             $scope.showLoading = true;
@@ -272,7 +301,9 @@ angular.module('jsPlanCuentas.controllers', []).controller('frmPlanCuentas', ['$
             $scope.showBtnNuevoForm = false;
             $scope.frmNewTransaction.idEmpresa = item.idEmpresa;
             $scope.frmNewTransaction.idPlanCuentas = item.idPlanCuentas;
-            $scope.frmNewTransaction.idPlanCuentaPadre = item.idPlanCuentaPadre;
+            $scope.frmNewTransaction.nroPlanCuenta = item.nroPlanCuenta;
+            $scope.frmNewTransaction.nroPlanCuentaPadre = item.nroPlanCuentaPadre;
+            $scope.frmNewTransaction.nroPlanCuentaPadreNombre = item.nroPlanCuentaPadreNombre;
             $scope.frmNewTransaction.nombreCuenta = item.nombreCuenta;
             $scope.frmNewTransaction.nivel = item.nivel;
             $scope.frmNewTransaction.marco = item.marco;
@@ -293,6 +324,8 @@ angular.module('jsPlanCuentas.controllers', []).controller('frmPlanCuentas', ['$
             $scope.showFormNewTransaction = true;
             $scope.showTable = false;
             $scope.showLoading = false;
+
+            $scope.hideMessagesBox();
         }
 
         $scope.findCta = function (cta, input) {
@@ -304,25 +337,51 @@ angular.module('jsPlanCuentas.controllers', []).controller('frmPlanCuentas', ['$
                 }
             }
         }
+        
 
-        $scope.getLastIdPlanCuentas = function (item) {
+        $scope.getLastNroPlanCuentas = function (item) {
             if (item.children != undefined && item.children.length > 0) {
                 var idlast = 0;
                 for (var i in item.children) {
-                    idlast = item.children[i].idPlanCuentas;
+                    idlast = item.children[i].nroPlanCuenta;
                 }
                 return idlast + 1;
             } else {
                 if (item.nivel <= 3) {
-                    return (item.idPlanCuentas * 1000) + 1
+                    return (item.nroPlanCuenta * 1000) + 1
                 } else {
-                    return (item.idPlanCuentas * 1000) + 1
+                    return (item.nroPlanCuenta * 1000) + 1
                 }
             }
         }
 
-        $scope.getData('all', $scope.data);
-        $scope.getData('combo', $scope.data);
+        $scope.getComboEmpresas = function (method) {
+            $scope.loading = true;
+            //console.log(formName);
+            return $http({
+                method: 'POST',
+                url: urlEmpresa.value + "all-combo",
+                data: {token: token.value, content: ''},
+                headers: {'Content-Type': 'application/json'}
+            }).then(function (response) {
+                if (response.data.code === 201) {
+                    $scope.comboEmpresa = response.data.content;
+                    $scope.showTable = true;
+                } else {
+                    $scope.showRestfulMessage = response.data.content;
+                    $scope.showRestfulError = true;
+                }
+                $scope.loading = false;
+            }, function (error) {
+                $scope.showRestfulMessage = error;
+                $scope.showRestfulError = true;
+                $scope.loading = false;
+            });
+        }
+        $scope.getComboEmpresas();
+
+        //$scope.getData('all', $scope.data);
+        //$scope.getData('combo', $scope.data);
     }
 ]);
 

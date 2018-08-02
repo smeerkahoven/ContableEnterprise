@@ -30,6 +30,7 @@
         <!-- BEGIN PLUGINS STYLES -->
         <link rel="stylesheet" href="../../assets/vendor/flatpickr/flatpickr.min.css"/>
         <link rel="stylesheet" href="../../css/main.css"  />
+        
         <!-- END PLUGINS STYLES -->
         <!-- BEGIN THEME STYLES -->
         <link rel="stylesheet" href="../../assets/stylesheets/main.min.css"/>
@@ -117,8 +118,8 @@
                                         <!-- .form-group -->
                                         <!-- Tabla Contenido -->
                                         <div  id="tableData" ng-show="showTable" class="ng-hide" >
-                                            <div class="form-group row">
-                                                <table st-table="display_records"  st-safe-src="data" class="table table-hover table-sm table-responsive">
+                                            <div class="form-group row table-responsive">
+                                                <table st-table="display_records"  st-safe-src="data" class="table table-hover table-sm ">
                                                     <thead >
                                                         <c:if test="#{usuario.formulario.buscar == usuario.formulario.PERMITIR}">
                                                             <tr>
@@ -140,7 +141,6 @@
                                                             <th>Usuario</th>
                                                             <th>Estado</th>
                                                             <th>Fecha Alta</th>
-                                                            <th>Fecha Baja</th>
                                                             <th>Rol</th>
                                                             <th>Nombre Personal</th>
                                                         </tr>
@@ -148,9 +148,8 @@
                                                     <tbody>
                                                         <tr st-select-row="row" st-select-mode="multiple" ng-repeat="row in display_records| filter:busqueda">
                                                             <td>{{row.username}} </td>
-                                                            <td><span ng-class="row.status"> {{row.status}}</span> </td>
+                                                            <td><span ng-class="row.status == 'INACTIVO' ? 'value-inactivo' : ''"> {{row.status}}</span> </td>
                                                             <td>{{row.fechaAlta}} </td>
-                                                            <td>{{row.fechaBaja}} </td>
                                                             <td>{{row.nombreRol}} </td>
                                                             <td>{{row.nombreEmpleado}} </td>
                                                             <td>
@@ -334,11 +333,11 @@
                                         </div>
                                         <div class="modal-body"> 
                                             <dl class="dl-horizontal">
-                                                Desea elimnar el registro <strong> {{nombreEliminar}}</strong>  ?
+                                                Desea desactivar el registro <strong> {{nombreEliminar}}</strong>  ?
                                             </dl>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-default" id="modal-btn-si" ng-click="eliminar()"  data-dismiss="modal">Si</button>
+                                            <button type="button" class="btn btn-default" id="modal-btn-si" ng-click="update()"  data-dismiss="modal">Si</button>
                                             <button type="button" class="btn btn-primary" id="modal-btn-no"  data-dismiss="modal">No</button>
                                         </div>
                                     </div>

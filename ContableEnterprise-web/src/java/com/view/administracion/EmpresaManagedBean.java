@@ -63,7 +63,7 @@ public class EmpresaManagedBean extends ViewManagedBean {
     public void init() {
         try {
             Empresa e = new Empresa();
-            e.setTipo(Empresa.PRINCIPAL);
+            e.setTipo(Empresa.CENTRAL);
             data = ejbEmpresa.getPrincipal(data);
             System.out.print(data);
 
@@ -81,6 +81,11 @@ public class EmpresaManagedBean extends ViewManagedBean {
             Object value) {
         List<FacesMessage> msgs = new ArrayList<FacesMessage>();
         Part file = (Part) value;
+        
+        if (file == null){
+            msgs.add(new FacesMessage("Ingrese un archivo de Imagen"));
+            throw new ValidatorException(msgs);
+        }
         //KB m
         if ((file.getSize() / 1024 / 1024) > 1024) {
             msgs.add(new FacesMessage("Ingrese un archivo de Max 1 MB"));
@@ -94,8 +99,9 @@ public class EmpresaManagedBean extends ViewManagedBean {
         }
     }
 
+
     public EmpresaManagedBean() {
-        this.formName = "empresa" ;
+        this.formName = "empresa";
     }
 
     public Part getFile() {
@@ -138,15 +144,18 @@ public class EmpresaManagedBean extends ViewManagedBean {
                 input.close();
 
                 data.setLogo(buffer);
+
             } catch (IOException ex) {
-                Logger.getLogger(EmpresaManagedBean.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(EmpresaManagedBean.class
+                        .getName()).log(Level.SEVERE, null, ex);
             }
 
             ejbEmpresa.update(data);
             successMessage = m.getProperty(Mensajes.DATOS_GUARDADOS_EXITOSAMENTE);
 
         } catch (CRUDException ex) {
-            Logger.getLogger(EmpresaManagedBean.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EmpresaManagedBean.class
+                    .getName()).log(Level.SEVERE, null, ex);
             errorMessage = m.getProperty(Mensajes.ERROR_ACTUALIZAR_DATOS);
         }
     }
@@ -172,7 +181,8 @@ public class EmpresaManagedBean extends ViewManagedBean {
             successMessage = m.getProperty(Mensajes.DATOS_GUARDADOS_EXITOSAMENTE);
 
         } catch (CRUDException ex) {
-            Logger.getLogger(EmpresaManagedBean.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EmpresaManagedBean.class
+                    .getName()).log(Level.SEVERE, null, ex);
             errorMessage = m.getProperty(Mensajes.ERROR_ACTUALIZAR_DATOS);
         }
     }
@@ -199,7 +209,8 @@ public class EmpresaManagedBean extends ViewManagedBean {
             successMessage = m.getProperty(Mensajes.DATOS_GUARDADOS_EXITOSAMENTE);
 
         } catch (CRUDException ex) {
-            Logger.getLogger(EmpresaManagedBean.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EmpresaManagedBean.class
+                    .getName()).log(Level.SEVERE, null, ex);
             errorMessage = m.getProperty(Mensajes.ERROR_ACTUALIZAR_DATOS);
         }
     }

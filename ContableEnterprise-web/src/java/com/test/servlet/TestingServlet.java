@@ -375,7 +375,7 @@ public class TestingServlet extends HttpServlet {
         e.setEmail("golondrina@tours.com");
         e.setPaginaWeb("www.golondrina.com");
         e.setNroIata("1231256");
-        e.setTipo("PRINCIPAL");
+        e.setTipo("CENTRAL");
 
         try {
             e.setIdEmpresa(1);

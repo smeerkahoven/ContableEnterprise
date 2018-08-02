@@ -22,6 +22,7 @@ angular.module('jsAerolinea.controllers', []).controller('frmAerolinea',
 
                 var token = document.getElementsByName("hdToken")[0];
                 var url = document.getElementsByName("hdUrl")[0];
+                var formName = document.getElementsByName("hdFormName")[0];
                 var urlPlan = document.getElementsByName("hdUrlPlanCuentas")[0];
                 var urlCuentaVentas = document.getElementsByName("hdComboPlanVentas")[0];
                 var urlCuentaComisiones = document.getElementsByName("hdComboPlanComisiones")[0];
@@ -44,6 +45,7 @@ angular.module('jsAerolinea.controllers', []).controller('frmAerolinea',
 
                 $scope.getData = function (method) {
                     $scope.loading = true;
+                    $scope.showBtnNuevo = false;
                     return $http({
                         method: 'POST',
                         url: url.value + method,
@@ -61,6 +63,7 @@ angular.module('jsAerolinea.controllers', []).controller('frmAerolinea',
                             }
 
                             $scope.loading = false;
+                            $scope.showBtnNuevo = true;
                         } else {
                             $scope.showRestfulMessage = response.data.content;
                             $scope.showRestfulError = true;
@@ -126,11 +129,11 @@ angular.module('jsAerolinea.controllers', []).controller('frmAerolinea',
 
                 $scope.save = function () {
                     if (!$scope.myForm.$valid) {
-                       swal("hola  que tal");
+                        $scope.showAlert('Error de Verificacion', 'Verifique los mensajes de los valores requeridos')
                         return;
                     }
                     if ($scope.formHasError()) {
-                        swal("hola  que tal");
+                        $scope.showAlert('Error de Verificacion', 'Verifique los mensajes de los valores requeridos')
                         return;
                     }
 
@@ -145,7 +148,7 @@ angular.module('jsAerolinea.controllers', []).controller('frmAerolinea',
                     $http({
                         method: 'POST',
                         url: url.value + 'save',
-                        data: {token: token.value, content: angular.toJson($scope.formData)},
+                        data: {token: token.value, content: angular.toJson($scope.formData) , formName : formName.value},
                         headers: {'Content-Type': 'application/json'}
                     }).then(function (response) {
 
@@ -189,7 +192,7 @@ angular.module('jsAerolinea.controllers', []).controller('frmAerolinea',
                     $http({
                         method: 'POST',
                         url: url.value + 'update-impuestos-insert',
-                        data: {token: token.value, content: angular.toJson(data)},
+                        data: {token: token.value, content: angular.toJson(data) , formName : formName.value},
                         headers: {'Content-Type': 'application/json'}
                     }).then(function (response) {
                         if (response.data.code === 201) {
@@ -228,47 +231,36 @@ angular.module('jsAerolinea.controllers', []).controller('frmAerolinea',
                 }
 
                 $scope.formHasError = function () {
-                    return ($scope.showErrorCtaComisionMonExt ||
-                            $scope.showErrorCtaComisionMonNac ||
-                            $scope.showErrorCtaDevolucionMonExt ||
-                            $scope.showErrorCtaDevolucionMonNac ||
-                            $scope.showErrorCtaVentasMonExt ||
-                            $scope.showErrorCtaVentasMonNac);
+                    return (
+                            (!$scope.formData.boletosMonNac && !$scope.formData.boletosMonExt));
 
                 }
-                
-                $scope.showAlert = function (title,message) {
+
+                $scope.showAlert = function (title, message) {
                     swal({
-                        title : title,
-                        text : message,
-                        type : 'error',
-                        closeOnConfirm : true
-                    }) ;
+                        title: title,
+                        text: message,
+                        type: 'error',
+                        closeOnConfirm: true
+                    });
                 }
 
                 $scope.update = function () {
                     if (!$scope.myForm.$valid) {
-                       $scope.showAlert('Error de Verificacion', 'Verifique los mensajes de los valores requeridos')
+                        $scope.showAlert('Error de Verificacion', 'Verifique los mensajes de los valores requeridos');
                         return;
                     }
                     if ($scope.formHasError()) {
-                       $scope.showAlert('Error de Verificacion', 'Verifique los mensajes de los valores requeridos')
+                        $scope.showAlert('Error de Verificacion', 'Verifique los mensajes de los valores requeridos');
                         return;
                     }
 
                     $scope.loading = true;
 
-                    $scope.formData.ctaVentasMonExt = $scope.formData.ctaVentasMonExt.id;
-                    $scope.formData.ctaVentasMonNac = $scope.formData.ctaVentasMonNac.id;
-                    $scope.formData.ctaComisionMonExt = $scope.formData.ctaComisionMonExt.id;
-                    $scope.formData.ctaComisionMonNac = $scope.formData.ctaComisionMonNac.id;
-                    $scope.formData.ctaDevolucionMonExt = $scope.formData.ctaDevolucionMonExt.id;
-                    $scope.formData.ctaDevolucionMonNac = $scope.formData.ctaDevolucionMonNac.id;
-
                     $http({
                         method: 'POST',
                         url: url.value + 'update',
-                        data: {token: token.value, content: angular.toJson($scope.formData)},
+                        data: {token: token.value, content: angular.toJson($scope.formData) , formName : formName.value},
                         headers: {'Content-Type': 'application/json'}
                     }).then(function (response) {
                         $scope.loading = false;
@@ -292,20 +284,382 @@ angular.module('jsAerolinea.controllers', []).controller('frmAerolinea',
                     });
                 };
 
+                $scope.addCuentaVenta = function (p_tipo, p_moneda) {
+                    var cuenta = {
+                        tipo: p_tipo,
+                        moneda: p_moneda,
+                        idPlanCuentas: $scope.formData.ctaVentasMonNac.id,
+                        nombreCuenta: $scope.formData.ctaVentasMonNac.name
+                    }
+
+                    if ($scope.formData.listCtaVentasMonNac === undefined) {
+                        $scope.formData.listCtaVentasMonNac = [];
+                        $scope.formData.listCtaVentasMonNac.push(cuenta);
+                    } else {
+
+                        for (var i in $scope.formData.listCtaVentasMonNac) {
+                            if ($scope.formData.listCtaVentasMonNac[i].idPlanCuentas ===
+                                    $scope.formData.ctaVentasMonNac.id) {
+                                $scope.showAlert("Error", "El registro ya existe. Ingrese otro valor");
+                                return;
+                            }
+                            $scope.formData.listCtaVentasMonNac.push(cuenta);
+                        }
+                    }
+                    $scope.formData.ctaVentasMonNac = '';
+                }
+
+                $scope.addCuentaVentaExt = function (p_tipo, p_moneda) {
+                    var cuenta = {
+                        tipo: p_tipo,
+                        moneda: p_moneda,
+                        idPlanCuentas: $scope.formData.ctaVentasMonExt.id,
+                        nombreCuenta: $scope.formData.ctaVentasMonExt.name
+                    }
+
+                    if ($scope.formData.listCtaVentasMonExt === undefined) {
+                        $scope.formData.listCtaVentasMonExt = [];
+                        $scope.formData.listCtaVentasMonExt.push(cuenta);
+                    } else {
+
+                        for (var i in $scope.formData.listCtaVentasMonExt) {
+                            if ($scope.formData.listCtaVentasMonExt[i].idPlanCuentas ===
+                                    $scope.formData.ctaVentasMonExt.id) {
+                                $scope.showAlert("Error", "El registro ya existe. Ingrese otro valor");
+                                return;
+                            }
+                            $scope.formData.listCtaVentasMonExt.push(cuenta);
+                        }
+                    }
+                    $scope.formData.ctaVentasMonExt = '';
+                }
+
+                $scope.addCuentaComisionNac = function (p_tipo, p_moneda) {
+                    var cuenta = {
+                        tipo: p_tipo,
+                        moneda: p_moneda,
+                        idPlanCuentas: $scope.formData.ctaComisionMonNac.id,
+                        nombreCuenta: $scope.formData.ctaComisionMonNac.name
+                    }
+
+                    if ($scope.formData.listCtaComisionMonNac === undefined) {
+                        $scope.formData.listCtaComisionMonNac = [];
+                        $scope.formData.listCtaComisionMonNac.push(cuenta);
+                    } else {
+
+                        for (var i in $scope.formData.listCtaComisionMonNac) {
+                            if ($scope.formData.listCtaComisionMonNac[i].idPlanCuentas ===
+                                    $scope.formData.listCtaComisionMonNac.id) {
+                                $scope.showAlert("Error", "El registro ya existe. Ingrese otro valor");
+                                return;
+                            }
+
+                            $scope.formData.listCtaComisionMonNac.push(cuenta);
+                        }
+                    }
+                    $scope.formData.ctaComisionMonNac = '';
+                }
+
+                $scope.addCuentaComisionExt = function (p_tipo, p_moneda) {
+                    var cuenta = {
+                        tipo: p_tipo,
+                        moneda: p_moneda,
+                        idPlanCuentas: $scope.formData.ctaComisionMonExt.id,
+                        nombreCuenta: $scope.formData.ctaComisionMonExt.name
+                    }
+
+                    if ($scope.formData.listCtaComisionMonExt === undefined) {
+                        $scope.formData.listCtaComisionMonExt = [];
+                        $scope.formData.listCtaComisionMonExt.push(cuenta);
+                    } else {
+
+                        for (var i in $scope.formData.listCtaComisionMonExt) {
+                            if ($scope.formData.listCtaComisionMonExt[i].idPlanCuentas ===
+                                    $scope.formData.ctaComisionMonExt.id) {
+                                $scope.showAlert("Error", "El registro ya existe. Ingrese otro valor");
+                                return;
+                            }
+                            $scope.formData.listCtaComisionMonExt.push(cuenta);
+                        }
+                    }
+                    $scope.formData.ctaComisionMonExt = '';
+                }
+
+                $scope.addCuentaDevolucionNac = function (p_tipo, p_moneda) {
+                    var cuenta = {
+                        tipo: p_tipo,
+                        moneda: p_moneda,
+                        idPlanCuentas: $scope.formData.ctaDevolucionMonNac.id,
+                        nombreCuenta: $scope.formData.ctaDevolucionMonNac.name
+                    }
+
+                    if ($scope.formData.listCtaDevolucionMonNac === undefined) {
+                        $scope.formData.listCtaDevolucionMonNac = [];
+                        $scope.formData.listCtaDevolucionMonNac.push(cuenta);
+                    } else {
+
+                        for (var i in $scope.formData.listCtaDevolucionMonNac) {
+                            if ($scope.formData.listCtaDevolucionMonNac[i].idPlanCuentas ===
+                                    $scope.formData.listCtaDevolucionMonNac.id) {
+                                $scope.showAlert("Error", "El registro ya existe. Ingrese otro valor");
+                                return;
+                            }
+
+                            $scope.formData.listCtaDevolucionMonNac.push(cuenta);
+                        }
+                    }
+                    $scope.formData.ctaDevolucionMonNac = '';
+                }
+
+                $scope.addCuentaDevolucionExt = function (p_tipo, p_moneda) {
+                    var cuenta = {
+                        tipo: p_tipo,
+                        moneda: p_moneda,
+                        idPlanCuentas: $scope.formData.ctaDevolucionMonExt.id,
+                        nombreCuenta: $scope.formData.ctaDevolucionMonExt.name
+                    }
+
+                    if ($scope.formData.listCtaDevolucionMonExt === undefined) {
+                        $scope.formData.listCtaDevolucionMonExt = [];
+                        $scope.formData.listCtaDevolucionMonExt.push(cuenta);
+                    } else {
+
+                        for (var i in $scope.formData.listCtaDevolucionMonExt) {
+                            if ($scope.formData.listCtaDevolucionMonExt[i].idPlanCuentas ===
+                                    $scope.formData.ctaDevolucionMonExt.id) {
+                                $scope.showAlert("Error", "El registro ya existe. Ingrese otro valor");
+                                return;
+                            }
+                            $scope.formData.listCtaDevolucionMonExt.push(cuenta);
+                        }
+                    }
+                    $scope.formData.ctaDevolucionMonExt = '';
+                }
+
+                $scope.updateAddCuentaVenta = function (p_tipo, p_moneda) {
+                    $scope.loadingAddCuentaVenta = true;
+                    var data = {
+                        idAerolinea: $scope.formData.idAerolinea,
+                        tipo: p_tipo,
+                        moneda: p_moneda,
+                        idPlanCuentas: $scope.formData.ctaVentasMonNac.id
+                    }
+                    return $http({
+                        method: 'POST',
+                        url: url.value + 'save-cuenta',
+                        data: {token: token.value, content: angular.toJson(data) , formName : formName.value},
+                        headers: {'Content-Type': 'application/json'}
+                    }).then(function (response) {
+                        if (response.data.code === 201) {
+                            $scope.formData.ctaVentasMonNac = '';
+                        } else if (response.data.code == 200) {
+                            $scope.showAlert("Error", response.data.content);
+                        }
+                        $scope.loadingAddCuentaVenta = false;
+                    }, function (error) {
+                        $scope.showRestfulMessage = error;
+                        $scope.showRestfulError = true;
+                    });
+                }
+
+                $scope.updateAddCuentaVentaExt = function (p_planCuentas, p_tipo, p_moneda) {
+                    $scope.loadingAddCuentaVentaExt = true;
+                    var data = {
+                        idAerolinea: $scope.formData.idAerolinea,
+                        tipo: p_tipo,
+                        moneda: p_moneda,
+                        idPlanCuentas: p_planCuentas.id
+                    }
+                    return $http({
+                        method: 'POST',
+                        url: url.value + 'save-cuenta',
+                        data: {token: token.value, content: angular.toJson(data), formName : formName.value},
+                        headers: {'Content-Type': 'application/json'}
+                    }).then(function (response) {
+                        if (response.data.code === 201) {
+                            $scope.formData.ctaVentasMonExt = '';
+                        } else if (response.data.code == 200) {
+                            $scope.showAlert("Error", response.data.content);
+                        }
+                        $scope.loadingAddCuentaVentaExt = false;
+                    }, function (error) {
+                        $scope.showRestfulMessage = error;
+                        $scope.showRestfulError = true;
+                    });
+                }
+
+                $scope.updateAddCuentaComisionNac = function (p_planCuentas,p_tipo, p_moneda) {
+                    $scope.loadingAddCuentaComisionNac = true;
+                    var data = {
+                        idAerolinea: $scope.formData.idAerolinea,
+                        tipo: p_tipo,
+                        moneda: p_moneda,
+                        idPlanCuentas: p_planCuentas.id
+                    }
+                    
+                    return $http({
+                        method: 'POST',
+                        url: url.value + 'save-cuenta',
+                        data: {token: token.value, content: angular.toJson(data) ,formName : formName.value},
+                        headers: {'Content-Type': 'application/json'}
+                    }).then(function (response) {
+                        if (response.data.code === 201) {
+                            $scope.formData.ctaComisionMonNac = '';
+                        } else if (response.data.code == 200) {
+                            $scope.showAlert("Error", response.data.content);
+                        }
+                        $scope.loadingAddCuentaComisionNac = false;
+                    }, function (error) {
+                        $scope.showRestfulMessage = error;
+                        $scope.showRestfulError = true;
+                    });
+                }
+
+                $scope.updateAddCuentaComisionExt = function (p_planCuentas, p_tipo, p_moneda) {
+                    $scope.loadingAddCuentaComisionExt = true;
+                    var data = {
+                        idAerolinea: $scope.formData.idAerolinea,
+                        tipo: p_tipo,
+                        moneda: p_moneda,
+                        idPlanCuentas: p_planCuentas.id
+                    }
+                                        
+                    return $http({
+                        method: 'POST',
+                        url: url.value + 'save-cuenta',
+                        data: {token: token.value, content: angular.toJson(data) ,formName : formName.value},
+                        headers: {'Content-Type': 'application/json'}
+                    }).then(function (response) {
+                        if (response.data.code === 201) {
+                            $scope.formData.ctaComisionMonExt = '';
+                        } else if (response.data.code === 200) {
+                            $scope.showAlert("Error", response.data.content);
+                        }
+                        $scope.loadingAddCuentaComisionExt = false;
+                    }, function (error) {
+                        $scope.showRestfulMessage = error;
+                        $scope.showRestfulError = true;
+                    });
+                }
+
+                $scope.updateAddCuentaDevolucionNac = function (p_planCuentas,p_tipo, p_moneda) {
+                    $scope.loadingAddCuentaDevolucionNac = true;
+                    var data = {
+                        idAerolinea: $scope.formData.idAerolinea,
+                        tipo: p_tipo,
+                        moneda: p_moneda,
+                        idPlanCuentas: p_planCuentas.id
+                    }
+                    return $http({
+                        method: 'POST',
+                        url: url.value + 'save-cuenta',
+                        data: {token: token.value, content: angular.toJson(data) ,formName : formName.value},
+                        headers: {'Content-Type': 'application/json'}
+                    }).then(function (response) {
+                        if (response.data.code === 201) {
+                            $scope.formData.ctaDevolucionMonNac = '';
+                        } else if (response.data.code == 200) {
+                            $scope.showAlert("Error", response.data.content);
+                        }
+                        $scope.loadingAddCuentaDevolucionNac = false;
+                    }, function (error) {
+                        $scope.showRestfulMessage = error;
+                        $scope.showRestfulError = true;
+                    });
+                }
+
+                $scope.updateAddCuentaDevolucionExt = function (p_planCuentas, p_tipo, p_moneda) {
+                    $scope.loadingAddCuentaDevolucionExt = true;
+                    var data = {
+                        idAerolinea: $scope.formData.idAerolinea,
+                        tipo: p_tipo,
+                        moneda: p_moneda,
+                        idPlanCuentas: p_planCuentas.id
+                    }
+                    return $http({
+                        method: 'POST',
+                        url: url.value + 'save-cuenta',
+                        data: {token: token.value, content: angular.toJson(data) ,formName : formName.value},
+                        headers: {'Content-Type': 'application/json'}
+                    }).then(function (response) {
+                        if (response.data.code === 201) {
+                            $scope.formData.ctaDevolucionMonExt = '';
+                        } else if (response.data.code == 200) {
+                            $scope.showAlert("Error", response.data.content);
+                        }
+                        $scope.loadingAddCuentaDevolucionExt = false;
+                    }, function (error) {
+                        $scope.showRestfulMessage = error;
+                        $scope.showRestfulError = true;
+                    });
+                }
+
+                $scope.showAddCuentaVenta = function (list, formName) {
+                    $scope.formAerolineaCuentaList = list;
+                    $scope.frmFormAerolineaCuentaName = formName;
+                }
+
+                $scope.showUpdateAddCuenta = function (formName, tipo, moneda) {
+                    $scope.frmFormAerolineaCuentaName = formName;
+                    $scope.frmFormAerolineaCuentaTipo = tipo;
+                    $scope.frmFormAerolineaMoneda = moneda;
+                    $scope.linkLoading = true;
+                    $scope.showLinkRestfulError = false;
+                    $scope.showLinkRestfulSuccess = false;
+
+                    var urlComision = url.value + 'get-cuentas/' + $scope.formData.idAerolinea + "/" + tipo + '/' + moneda;
+                    return $http({
+                        method: 'POST',
+                        url: urlComision,
+                        data: {token: token.value, content: ''},
+                        headers: {'Content-Type': 'application/json'}
+                    }).then(function (response) {
+                        if (response.data.code === 201) {
+                            $scope.formAerolineaCuentaList = response.data.content;
+                            $scope.linkLoading = false;
+                        } else {
+                            $scope.showLinkRestfulMessage = response.data.content;
+                            $scope.showLinkRestfulSuccess = true;
+                            return {};
+                        }
+                    }, function (error) {
+                        $scope.showLinkRestfulMessage = error;
+                        $scope.showLinkRestfulSuccess = true;
+                    });
+                }
+
                 $scope.delete = function (method) {
                     $scope.loading = true;
-                    var data = {idAerolineaImpuesto: $scope.modalConfirmation.id};
+
+                    if ($scope.modalConfirmation.method === 'impuesto-delete') {
+                        var data = {idAerolineaImpuesto: $scope.modalConfirmation.id};
+
+                    } else if ($scope.modalConfirmation.method === 'delete-cuenta') {
+                        var data = {idAerolineaCuenta: $scope.modalConfirmation.id};
+                    } else {
+                        var data = {idAerolinea: $scope.modalConfirmation.id};
+                    }
                     $http({
                         method: 'POST',
-                        url: url.value + method + 'delete',
-                        data: {token: token.value, content: angular.toJson(data)},
+                        url: url.value + method,
+                        data: {token: token.value, content: angular.toJson(data),formName : formName.value},
                         headers: {'Content-Type': 'application/json'}
                     }).then(function (response) {
                         $scope.loading = false;
                         if (response.data.code === 201) {
                             $scope.showRestfulMessage = response.data.content;
                             $scope.showRestfulSuccess = true;
-                            $scope.getImpuestos();
+
+                            if ($scope.modalConfirmation.method === 'impuesto-delete') {
+                                $scope.getImpuestos();
+                            } else if ($scope.modalConfirmation.method == 'delete-cuenta') {
+                                $scope.showUpdateAddCuenta($scope.frmFormAerolineaCuentaName,
+                                        $scope.frmFormAerolineaCuentaTipo,
+                                        $scope.frmFormAerolineaMoneda)
+                            } else {
+                                $scope.getData('all', $scope.data);
+                            }
+
                         } else {
                             $scope.showRestfulMessage = response.data.content;
                             $scope.showRestfulError = true;
@@ -323,7 +677,9 @@ angular.module('jsAerolinea.controllers', []).controller('frmAerolinea',
                     $scope.showTable = false;
                     $scope.showForm = true;
                     $scope.showBtnNuevo = false;
-                    $scope.showBtnActualizar = true;
+                    $scope.showBtnEditar = true;
+                    $scope.showRestfulSuccess = false;
+                    $scope.showRestfulError = false;
 
                     $scope.formData = item;
                     $scope.formData.ctaVentasMonNac = $scope.findCta(item.ctaVentasMonNac, $scope.comboVentas);
@@ -332,7 +688,6 @@ angular.module('jsAerolinea.controllers', []).controller('frmAerolinea',
                     $scope.formData.ctaComisionMonExt = $scope.findCta(item.ctaComisionMonExt, $scope.comboComisiones);
                     $scope.formData.ctaDevolucionMonExt = $scope.findCta(item.ctaDevolucionMonExt, $scope.comboDevoluciones);
                     $scope.formData.ctaDevolucionMonNac = $scope.findCta(item.ctaDevolucionMonNac, $scope.comboDevoluciones);
-                    console.log($scope.formData);
 
                 }
 
@@ -341,32 +696,35 @@ angular.module('jsAerolinea.controllers', []).controller('frmAerolinea',
                     $scope.showBtnNuevo = true;
                     $scope.showBtnEditar = false;
                     $scope.showTable = false;
+                    $scope.hideMessagesBox();
+                    $scope.formData = {};
+                }
+
+                $scope.hideMessagesBox = function () {
                     $scope.showRestfulSuccess = false;
                     $scope.showRestfulError = false;
-                    $scope.formData = {};
-                    console.log($scope.formData);
                 }
 
                 $scope.cancelar = function () {
                     $scope.showForm = false;
                     $scope.showTable = true;
+                    $scope.hideMessagesBox();
                 }
 
                 $scope.findCta = function (cta, input) {
                     var i = 0;
-                    for (i; i < input.length; i++) {
-                        if (input[i].id == cta) {
-                            //console.log(input[i]);
-                            return input[i];
+                    if (input) {
+                        for (i; i < input.length; i++) {
+                            if (input[i].id == cta) {
+                                //console.log(input[i]);
+                                return input[i];
+                            }
                         }
                     }
                 }
 
-
                 $scope.modalEliminar = function (idx, nombrex, methodx) {
-
                     $scope.modalConfirmation = {id: idx, nombre: nombrex, method: methodx};
-                    console.log($scope.modalConfirmation);
                 }
 
                 $scope.getData('all', $scope.data);
@@ -374,6 +732,8 @@ angular.module('jsAerolinea.controllers', []).controller('frmAerolinea',
                 $scope.getPlanCuentas(urlCuentaVentas.value, 'ventas');
                 $scope.getPlanCuentas(urlCuentaComisiones.value, 'comisiones');
                 $scope.getPlanCuentas(urlCuentaDevoluciones.value, 'devoluciones');
+
+
 
                 $scope.$watch('formData.ctaVentasMonNac.id', function (now, old) {
                     if (now == undefined) {

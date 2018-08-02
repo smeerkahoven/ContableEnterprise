@@ -84,9 +84,7 @@
                                 <div class="d-md-flex">
                                     <h1 class="page-title mr-sm-auto"> #{planCuentas.formulario.nombre}</h1>
                                     <div class="dt-button btn-group">
-                                        <c:if test="#{planCuentas.formulario.crear== planCuentas.formulario.PERMITIR}">
-                                            <button type="button" class="btn btn-success buttons-html5" tabindex="0" ng-click="nuevo()"><span class="fa fa-plus"></span> Nuevo</button>
-                                        </c:if>
+
                                         <button type="button" class="btn btn-warning buttons-html5" tabindex="0" ng-click="cancelar()"><span class="fa fa-undo"></span> Cancelar</button>
                                     </div>
                                 </div>
@@ -120,6 +118,18 @@
                                         <!-- Tabla Contenido -->
                                         <div  id="tableData" ng-show="showTable" class="ng-hide">
                                             <div class="form-group row">
+
+                                                <div class="row col-8">
+                                                    <label for="txtNombre" class=" col-form-label col-sm-3 text-right">Entidad : </label>
+                                                    <select class="form-control col-sm-8" ng-model="idEmpresa" ng-change="getData('all',empresa.idEmpresa)">
+                                                        <option ng-repeat="empresa in comboEmpresa" value="{{empresa.id}}"
+                                                                label="{{empresa.name}}" >
+
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                                <hr></hr>
+
                                                 <table class="table-nested table-hover ">
                                                     <thead>
                                                         <tr>
@@ -143,7 +153,7 @@
                                                            ng-repeat="item in mainGrid"></tbody>
                                                 </table>
                                                 <script id="table_tree.html" type="text/ng-template">
-                                                    <tr ng-class="{parent: item.children, selected : item.idPlanCuentas=== selectedId}"
+                                                    <tr ng-class="{parent: item.children, selected : item.nroPlanCuenta=== selectedId}"
                                                     ng-model="item" ng-click="getItem(item)">
                                                     <td class="cell-input">
                                                     </td>
@@ -153,28 +163,25 @@
                                                     {{item.nombreCuenta}}
                                                     </td>
                                                     <td class="cell-c1">
-                                                    {{item.idPlanCuentas}}
+                                                    {{item.nroPlanCuenta}}
                                                     </td>
                                                     <td class="cell-c2">
                                                     {{item.nivel}}
                                                     </td>
                                                     <td class="cell-c3" align="right">
-                                                    
+
 
                                                     <div class="btn-group" role="group" aria-label="...">
 
-                                                    <button ng-show="showBtnAdicionar(item.nivel);" type="button" title="Adicionar" class="btn btn-sm btn-success" ng-click="add(item)"><i class="fa fa-plus"></i></button>
-                                                        
                                                     <c:if test="${planCuentas.formulario.actualizar== planCuentas.formulario.PERMITIR }">
                                                     <button type="button" title="Editar" class="btn btn-sm btn-info" ng-click="edit(item)"><i class="fa fa-pencil"></i></button>
-                                                    
                                                     </c:if>
-
                                                     <c:if test="#{planCuentas.formulario.eliminar== planCuentas.formulario.PERMITIR}">
                                                     <button ng-show="item.nivel == 5" type="button" title="Eliminar" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#frmConfirmation" ng-click="modalEliminar(item.idPlanCuentas, item.nombreCuenta)"><i class="fa fa-remove"></i></button>
                                                     </c:if>
+                                                    <button ng-show="showBtnAdicionar(item.nivel);" type="button" title="Adicionar" class="btn btn-sm btn-success" ng-click="add(item)"><i class="fa fa-plus"></i></button>
                                                     </div>
-
+                                                    
                                                     </td>
                                                     </tr>
                                                     <tr class="children" ng-if="item.children &amp;&amp; item.children.length &gt; 0">
@@ -190,24 +197,25 @@
                                             </div>
                                         </div>
                                         <!-- /Tabla Contenido -->
-                                        <form name="formNewTransaction" id="formNewTransaction">
+                                        <form name="myForm" id="myForm">
                                             <fieldset>
                                                 <div  class="container animated ng-hide"   ng-show="showFormNewTransaction" >
                                                     <input type="hidden" id="hdUrl" name="hdUrl" value="#{planCuentas.formulario.restful}"/>
+                                                    <input type="hidden" id="hdUrlEmpresa" name="hdUrlEmpresa" value="#{empresa.formulario.restful}"/>
                                                     <input type="hidden" id="hdFormName" name="hdFormName" value="#{planCuentas.formulario.nombre}" ng-model="formName"/>
                                                     <input type="hidden" id="hdToken" name="hdToken" value="#{sessionView.token}"/>
                                                     <input type="hidden" id="txtIdEmpresa" name="idEmpresa" value="{frmNewTransaction.idEmpresa}" ng-model="frmNewTransaction.idEmpresa"/>
                                                     <input type="hidden" id="hdAplicaMovimiento" name="aplicaMovimiento" value="{frmNewTransaction.aplicaMovimiento}" ng-model="frmNewTransaction.aplicaMovimiento"/>
-                                                    <input type="hidden" id="hdIdPlanCuentaPadre" name="idPlanCuentaPadre" value="{frmNewTransaction.idPlanCuentaPadre}" ng-model="frmNewTransaction.idPlanCuentaPadre"/>
+                                                    <input type="hidden" id="hdNroPlanCuentaPadre" name="nroPlanCuentaPadre" value="{frmNewTransaction.nroPlanCuentaPadre}" ng-model="frmNewTransaction.nroPlanCuentaPadre"/>
                                                     <input type="hidden" id="hdMarcoCuenta" name="marcoCuenta" value="{frmNewTransaction.marco}" ng-model="frmNewTransaction.marco"/>
 
                                                     <br />
                                                     <div class="form-group row">
                                                         <label for="txtCodigo" class="col-form-label col-sm-3 text-right">N&uacute;mero de la Cuenta</label>
                                                         <div class="col-sm-4">
-                                                            <input ng-disabled="showBtnActualizar" autofocus="autofocus" type="text" class="form-control" name="txtCodigo" 
+                                                            <input ng-disabled="true"  type="text" class="form-control" name="txtCodigo" 
                                                                    required="required" maxlength="12" 
-                                                                   ng-model="frmNewTransaction.idPlanCuentas"/>
+                                                                   ng-model="frmNewTransaction.nroPlanCuenta"/>
                                                         </div>
 
                                                     </div>
@@ -215,8 +223,11 @@
                                                     <div class="form-group row">
                                                         <label for="txtCuenta" class=" col-form-label col-sm-3 text-right">Cuenta (Denominaci&oacute;n)</label>
                                                         <div class="col-sm-4" >
-                                                            <input type="text" class="form-control" name="txtCuenta" required="required" 
+                                                            <input type="text" class="form-control" autofocus="autofocus" name="txtCuenta" required="required" 
                                                                    maxlength="40" ng-model="frmNewTransaction.nombreCuenta"/>
+                                                             <span class="alert-danger" ng-show="!myForm.txtCuenta.$valid">
+                                                                Debe ingresar un Nombre a la Cuenta
+                                                            </span>
                                                         </div>
                                                     </div>
 
@@ -261,7 +272,9 @@
                                                                    class="form-control" typeahead-show-hint="true" typeahead-min-length="0" 
                                                                    typeahead-template-url="customTemplate.html" required="required"
                                                                    />
-                                                            <strong>{{frmNewTransaction.itb.id}}</strong>
+                                                            <span class="alert-danger" ng-show="!frmNewTransaction.itb.id">
+                                                                Debe ingresar una Cuenta de Ajuste ITB valida
+                                                            </span>
                                                         </div>
                                                     </div>
 
@@ -276,7 +289,7 @@
                                                     <div class="form-group row">
                                                         <label for="txtNombre" class=" col-form-label col-sm-3 text-right">Cuenta para efectos de Mayorizaci&oacute;n</label>
                                                         <div class="col-sm-4">
-                                                            <input type="text" class="form-control" disabled="true" name="txtIdPlanCuentaPadreNombre"  maxlength="40" ng-model="frmNewTransaction.idPlanCuentaPadreNombre"/>
+                                                            <input type="text" class="form-control" disabled="true" name="txtNroPlanCuentaPadreNombre"  maxlength="40" ng-model="frmNewTransaction.nroPlanCuentaPadreNombre"/>
                                                         </div>
                                                     </div>
 
@@ -291,19 +304,25 @@
                                                             </select>
                                                         </div>
                                                     </div>
-                                                    <div class="form-actions">
+                                                    <!-- Botones Formulario -->
+                                                    <div class="form-group">
                                                         <c:if test="#{planCuentas.formulario.crear== planCuentas.formulario.PERMITIR}">
-                                                            <div class="modal-footer" ng-show="showBtnNuevo">
-                                                                <button   class="btn btn-primary" ng-click="save()"  value="Guardar"><span class="fa fa-save"></span>Guardar</button>
+                                                            <div class="row" ng-show="showBtnNuevo">
+                                                                <label for="txtNombre" class="col-form-label col-sm-3 text-right" ></label>
+                                                                <button  class="btn btn-primary" ng-click="save()"  value="Guardar"><span class="fa fa-save"></span> Guardar</button>
                                                             </div>
                                                         </c:if>                                    
 
                                                         <c:if test="#{planCuentas.formulario.actualizar== planCuentas.formulario.PERMITIR}">
-                                                            <div class="modal-footer" ng-show="showBtnActualizar">
-                                                                <button type="button" class="btn btn-primary" ng-click="update()" value="Actualizar"> <span class="fa fa-edit"></span>Actualizar</button>
+                                                            <div class="row" ng-show="showBtnActualizar">
+                                                                <label for="txtNombre" class="col-form-label col-sm-3 text-right" ></label>
+                                                                <button type="button" class="btn btn-primary" ng-click="update()" value="Actualizar"> <span class="fa fa-edit"></span> Actualizar</button>
                                                             </div>
                                                         </c:if>
                                                     </div>
+                                                    <!-- Botones Formulario -->
+
+
                                                 </div>
                                             </fieldset>
                                         </form>
@@ -329,7 +348,7 @@
                                             </dl>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-default" id="modal-btn-si" ng-click="eliminar()"  data-dismiss="modal">Si</button>
+                                            <button type="button" class="btn btn-default" id="modal-btn-si" ng-click="delete()"  data-dismiss="modal">Si</button>
                                             <button type="button" class="btn btn-primary" id="modal-btn-no"  data-dismiss="modal">No</button>
                                         </div>
                                     </div>

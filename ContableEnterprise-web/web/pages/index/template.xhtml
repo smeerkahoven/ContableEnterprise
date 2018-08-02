@@ -32,9 +32,12 @@
         <!-- END PLUGINS STYLES -->
         <!-- BEGIN THEME STYLES -->
         <link rel="stylesheet" href="../../assets/stylesheets/main.min.css"/>
+        <link rel="stylesheet" href="../../assets/vendor/sweetalert/css/sweetalert.css"/>
+        
         <script type="text/javascript" src="../../js/angular.min.js" />
         <script type="text/javascript" src="../../js/ui-bootstrap-tpls.js" />
         <script type="text/javascript" src="../../js/smart-table.min.js" />
+        <script type="text/javascript" src="../../assets/vendor/sweetalert/js/sweetalert.min.js"/>
         <script type="text/javascript" src="../../js/agencia/aeropuerto.js" />
 
         <!--CORRIGE ng-show -->
@@ -118,9 +121,9 @@
                                         <!-- .form-group -->
                                         <!-- Tabla Contenido -->
                                         <div  id="tableData" class="ng-hide" ng-show="showTable" >
-                                            <div class="form-group row">
+                                            <div class="form-group row table-responsive">
                                                 <table st-table="display_records"    st-safe-src="mainGrid" 
-                                                       class="table  table-hover table-responsive">
+                                                       class="table  table-hover ">
                                                     <thead >
                                                         <c:if test="#{aeropuerto.formulario.buscar == aeropuerto.formulario.PERMITIR}">
                                                             <tr>

@@ -9,7 +9,6 @@
 	<parameter name="PATH_SUBREPORTE" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA["agencia/aerolinea.jasper"]]></defaultValueExpression>
 	</parameter>
-	
 	<queryString>
 		<![CDATA[SELECT
      tb_empresa.`id_empresa` AS tb_empresa_id_empresa,
@@ -65,7 +64,7 @@ WHERE
 				<textFieldExpression><![CDATA["Direccion: "+$F{tb_empresa_direccion}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="88" y="26" width="109" height="13" uuid="e6a45d44-8b6b-4a2c-b98d-d9abc3cfbaa9"/>
+				<reportElement x="88" y="26" width="238" height="13" uuid="e6a45d44-8b6b-4a2c-b98d-d9abc3cfbaa9"/>
 				<textElement>
 					<font size="8"/>
 				</textElement>

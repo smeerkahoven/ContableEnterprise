@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html  xmlns="http://www.w3.org/1999/xhtml"
        xmlns:h="http://xmlns.jcp.org/jsf/html"
-       xmlns:ui="http://xmlns.jcp.org/jsf/facelets" ng-app="jsAeropuerto"
+       xmlns:ui="http://xmlns.jcp.org/jsf/facelets" ng-app="jsPromotores"
        xmlns:c="http://java.sun.com/jsp/jstl/core"
        >
     <head>
@@ -32,10 +32,13 @@
         <!-- END PLUGINS STYLES -->
         <!-- BEGIN THEME STYLES -->
         <link rel="stylesheet" href="../../assets/stylesheets/main.min.css"/>
+        <link rel="stylesheet" href="../../assets/vendor/sweetalert/css/sweetalert.css"/>
+
         <script type="text/javascript" src="../../js/angular.min.js" />
         <script type="text/javascript" src="../../js/ui-bootstrap-tpls.js" />
         <script type="text/javascript" src="../../js/smart-table.min.js" />
-        <script type="text/javascript" src="../../js/agencia/aeropuerto.js" />
+        <script type="text/javascript" src="../../js/agencia/promotores.js" />
+        <script type="text/javascript" src="../../assets/vendor/sweetalert/js/sweetalert.min.js"/>
 
         <!--CORRIGE ng-show -->
         <link rel="stylesheet" href="../../css/main.css"  />
@@ -62,7 +65,7 @@
             </aside>
             <!-- /.app-aside -->
             <!-- .app-main -->
-            <main class="app-main" ng-controller="frmAeropuerto">
+            <main class="app-main" ng-controller="frmPromotores">
                 <!-- .wrapper -->
                 <div class="wrapper">
                     <!-- .page -->
@@ -75,16 +78,16 @@
                                     <ol class="breadcrumb">
                                         <li class="breadcrumb-item active">
                                             <a href="#">
-                                                <i class="breadcrumb-icon fa fa-angle-left mr-2"></i>#{aeropuerto.formulario.modulo}
+                                                <i class="breadcrumb-icon fa fa-angle-left mr-2"></i>#{promotores.formulario.modulo}
                                             </a>
                                         </li>
                                     </ol>
                                 </nav>
                                 <div class="d-md-flex">
-                                    <h1 class="page-title mr-sm-auto"> #{aeropuerto.formulario.nombre}</h1>
+                                    <h1 class="page-title mr-sm-auto"> #{promotores.formulario.nombre}</h1>
                                     <div class="dt-button btn-group">
-                                        <c:if test="#{aeropuerto.formulario.crear== aeropuerto.formulario.PERMITIR}">
-                                            <button type="button" class="btn btn-success buttons-html5" tabindex="0" ng-click="nuevo()"><span class="fa fa-plus"></span> Nuevo</button>
+                                        <c:if test="#{promotores.formulario.crear== promotores.formulario.PERMITIR}">
+                                            <button id="btnNuevo" type="button" class="btn btn-success buttons-html5" tabindex="0" ng-click="nuevo()"><span class="fa fa-plus"></span> Nuevo</button>
                                         </c:if>
                                         <button type="button" class="btn btn-warning buttons-html5" tabindex="0" ng-click="cancelar()"><span class="fa fa-undo"></span> Cancelar</button>
                                     </div>
@@ -122,7 +125,7 @@
                                                 <table st-table="display_records"    st-safe-src="mainGrid" 
                                                        class="table  table-hover table-responsive">
                                                     <thead >
-                                                        <c:if test="#{aeropuerto.formulario.buscar == aeropuerto.formulario.PERMITIR}">
+                                                        <c:if test="#{promotores.formulario.buscar == promotores.formulario.PERMITIR}">
                                                             <tr>
                                                                 <th colspan="4">
                                                                     <!-- .input-group -->
@@ -139,22 +142,30 @@
                                                             </tr>
                                                         </c:if>
                                                         <tr>
-                                                            <th>Codigo</th>
-                                                            <th>Aeropuerto/ Ciudad/ Pais</th>
+                                                            <th>Estado</th>
+                                                            <th>Nombre</th>
+                                                            <th>Apellido</th>
+                                                            <th>Direcci&oacute;n</th>
+                                                            <th>Tel&eacute;fono</th>
+                                                            <th>Celular</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         <tr st-select-row="row" st-select-mode="multiple" ng-repeat="row in display_records">
-                                                            <td>{{row.idAeropuerto}} </td>
+                                                            <td ng-class="row.estado=='I' ?'value-inactivo':'' ">{{row.estado=='A'?'ACTIVO':'INACTIVO'}} </td>
                                                             <td>{{row.nombre}} </td>
+                                                            <td>{{row.apellido}} </td>
+                                                            <td>{{row.direccion}} </td>
+                                                            <td>{{row.telefono}} </td>
+                                                            <td>{{row.celular}} </td>
                                                             <td>
                                                                 <div class="btn-group" >
-                                                                    <c:if test="${aeropuerto.formulario.actualizar== aeropuerto.formulario.PERMITIR }">
-                                                                        <button type="button" title="Editar" class="btn btn-sm btn-info" ng-click="edit(row.idAeropuerto)"><i class="fa fa-pencil"></i></button>
+                                                                    <c:if test="${promotores.formulario.actualizar== promotores.formulario.PERMITIR }">
+                                                                        <button type="button" title="Editar" class="btn btn-sm btn-info" ng-click="edit(row)"><i class="fa fa-pencil"></i></button>
                                                                     </c:if>
 
-                                                                    <c:if test="#{aeropuerto.formulario.eliminar== aeropuerto.formulario.PERMITIR}">
-                                                                        <button type="button" title="Eliminar" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#frmConfirmation" ng-click="modalEliminar(row.idAeropuerto, row.nombre)"><i class="fa fa-remove"></i></button>
+                                                                    <c:if test="#{promotores.formulario.eliminar== promotores.formulario.PERMITIR}">
+                                                                        <button type="button" title="Eliminar" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#frmConfirmation" ng-click="modalEliminar(row.idPromotor, row.nombre)"><i class="fa fa-remove"></i></button>
                                                                     </c:if>
                                                                     <!--<button type="button" title="Ver" class="btn btn-default" ng-click="ver(row.idEmpleado)" data-toggle="modal" data-target="#verForm"><i class="fa fa-search"></i></button>-->
                                                                 </div>
@@ -171,46 +182,288 @@
                                                 </table>
                                             </div>
                                         </div>
-                                        <!-- /Tabla Contenido -->
-                                        <form name="myForm">
+                                        <!-- /Tabla Contenido --><!--class="needs-validation" novalidate="" -->
+                                        <form name="myForm" id="myForm"  >
                                             <!-- .form -->
 
                                             <!-- .fieldset -->
                                             <fieldset>
                                                 <!-- Contenido Formulario-->
                                                 <div id="formData" class="container animated fadeIn ng-hide"   ng-show="showForm" >
-                                                    <input type="text" ng-show="false"  name="txtIdAeropuerto"  ng-model="formData.idAeropuerto" />
-                                                    <input type="hidden" id="hdUrl" name="hdUrl" value="#{aeropuerto.formulario.restful}"/>
+                                                    <input type="text" ng-show="false"  name="txtIdPromotor"  ng-model="formData.idPromotor" />
+                                                    <input type="hidden" id="hdUrl" name="hdUrl" value="#{promotores.formulario.restful}"/>
+                                                    <input type="hidden" id="hdUrlEmpresa" name="hdUrlEmpresa" value="#{empresa.formulario.restful}"/>
+                                                    <input type="hidden" id="hdUrlAerolinea" name="hdUrlAerolinea" value="#{aerolinea.formulario.restful}"/>
                                                     <input type="hidden" id="hdToken" name="hdToken" value="#{sessionView.token}"/>
-                                                    <input type="hidden" id="hdToken" name="hdFormName" value="#{aeropuerto.formulario.nombre}"/>
+                                                    <input type="hidden" id="hdToken" name="hdFormName" value="#{promotores.formulario.nombre}"/>
                                                     <!--<input type="hidden" id="txtFechaAlta" name="txtFechaAlta" ng-model="formData.fechaAlta"/>-->
                                                     <!--<input type="hidden" id="txtFechaBaja" name="txtFechaBaja" ng-model="formData.fechaBaja"/>-->
-                                                    <br />
+
+
+
                                                     <div class="form-group row">
-                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Codigo</label>
-                                                        <div class="col-sm-4">
-                                                            <input type="text" class="form-control " name="txtCodigo" required="true" maxlength="4" ng-model="formData.idAeropuerto"/>
+                                                        <label for="txtSucursal" class=" col-form-label col-sm-3 text-right">Agencia</label>
+                                                        <div class="col-sm-6">
+                                                            <input type="text" ng-model="formData.idEmpresa" placeholder="Seleccione una Agencia"
+                                                                   uib-typeahead="sucursal as sucursal.name for sucursal in comboSucursales | filter:{name:$viewValue}"
+                                                                   typeahead-min-length="0"
+                                                                   typeahead-template-url="customTemplate.html"
+                                                                   typeahead-show-hint="true"
+                                                                   class="form-control"                                                                    
+                                                                   />
+                                                        
+                                                            <span class="alert-danger"  ng-show="!formData.idEmpresa.id"  >
+                                                                Debe ingresar una Agencia v&aacute;lida.
+                                                            </span>
                                                         </div>
                                                     </div>
 
                                                     <div class="form-group row">
-                                                        <label for="txtNombre" class=" col-form-label col-sm-2 text-right">Aeropuerto/Ciudad/Pais</label>
-                                                        <div class="col-sm-4">
-                                                            <input type="text" class="form-control" name="txtNombre" required="required" maxlength="64" ng-model="formData.nombre"/>
+                                                        <label for="txtTipo" class="col-form-label col-sm-3 text-right">Tipo</label>
+                                                        <div class="col-sm-6">
+                                                            <select name="txtTipo" class="form-control" ng-model="formData.tipo" required="required">
+                                                                <option style="display:none" value="">seleccione una opcion</option>
+                                                                <option value="P" selected="selected">Promotor</option>
+                                                                <option value="C">Counter</option>
+                                                            </select>
+                                                            <span class="alert-danger"  ng-show="!myForm.txtTipo.$valid"  >
+                                                                Debe seleccionar una opcion.
+                                                         </span>
+                                                        </div>
+                                                         
+                                                    </div>
+
+                                                    <div class="form-group row">
+                                                        <label for="txtNombre" class=" col-form-label col-sm-3 text-right">Nombre</label>
+                                                        <div class="col-sm-6">
+                                                            <input type="text" class="form-control" name="txtNombre" required="required" 
+                                                                   maxlength="64" ng-model="formData.nombre"/>
+                                                            <span class="alert-danger"  ng-show="!formData.nombre"  >
+                                                                Debe ingresar un valor
+                                                         </span>
+                                                        </div>
+                                                        
+                                                    </div>
+
+                                                    <div class="form-group row">
+                                                        <label for="txtApellido" class=" col-form-label col-sm-3 text-right">Apellidos</label>
+                                                        <div class="col-sm-6">
+                                                            <input type="text" class="form-control" name="txtApellido" required="required" 
+                                                                   maxlength="64" ng-model="formData.apellido"/>
+                                                             <span class="alert-danger"  ng-show="!myForm.txtApellido.$valid"  >
+                                                                Debe ingresar un valor.
+                                                         </span>
+                                                        </div>
+                                                       
+                                                    </div>
+
+                                                    <div class="form-group row">
+                                                        <label for="txtStatus" class="col-form-label col-sm-3 text-right">Estado</label>
+                                                        <div class="col-sm-6">
+                                                            <select name="txtStatus" class="form-control" ng-model="formData.estado" required="required">
+                                                                <option style="display:none" value="">seleccione una opcion</option>
+                                                                <option value="A" selected="selected">Activo</option>
+                                                                <option value="I">Inactivo</option>
+                                                            </select>
+                                                            <span class="alert-danger"  ng-show="!myForm.txtStatus.$valid"  >
+                                                                Debe seleccionar una opcion.
+                                                         </span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group row">
+                                                        <label for="txtSexo" class="col-form-label col-sm-3 text-right">Sexo</label>
+                                                        <div class="col-sm-6">
+                                                            <select name="txtSexo" class="form-control" ng-model="formData.sexo" required="required">
+                                                                <option style="display:none" value="">seleccione una opcion</option>
+                                                                <option value="H" selected="selected">Hombre</option>
+                                                                <option value="M">Mujer</option>
+                                                            </select>
+                                                            <span class="alert-danger"  ng-show="!myForm.txtSexo.$valid"  >
+                                                                Debe seleccionar una opcion.
+                                                         </span>
                                                         </div>
                                                     </div>
 
 
-                                                    <div class="form-actions">
-                                                        <c:if test="#{aeropuerto.formulario.crear== aeropuerto.formulario.PERMITIR}">
-                                                            <div class="modal-footer" ng-show="showBtnNuevo">
-                                                                <button  class="btn btn-primary" ng-click="save()"  value="Guardar"><span class="fa fa-save"></span>Guardar</button>
+
+                                                    <div class="form-group row">
+                                                        <label for="txtCi" class=" col-form-label col-sm-3 text-right">Carnet de Identidad</label>
+                                                        <div class="col-sm-6">
+                                                            <input type="text" class="form-control" name="txtCi"
+                                                                   maxlength="12" ng-model="formData.ci" required="required"/>
+                                                            <span class="alert-danger"  ng-show="!myForm.txtCi.$valid"  >
+                                                                Debe ingresar un valor.
+                                                         </span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group row">
+                                                        <label for="txtDireccion" class=" col-form-label col-sm-3 text-right">Direcci&oacute;n</label>
+                                                        <div class="col-sm-6">
+                                                            <input type="text" class="form-control" name="txtDireccion"
+                                                                   maxlength="128" ng-model="formData.direccion"/>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group row">
+                                                        <label for="txtTelefono" class=" col-form-label col-sm-3 text-right">Tel&eacute;fono</label>
+                                                        <div class="col-sm-6">
+                                                            <input type="text" class="form-control" name="txtTelefono"
+                                                                   maxlength="12" ng-model="formData.telefono"/>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group row">
+                                                        <label for="txtCelular" class=" col-form-label col-sm-3 text-right">Celular</label>
+                                                        <div class="col-sm-6">
+                                                            <input type="text" class="form-control" name="txtCelular" 
+                                                                   maxlength="12" ng-model="formData.celular"/>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group row">
+                                                        <label for="txtEmail" class=" col-form-label col-sm-3 text-right">Email</label>
+                                                        <div class="col-sm-6">
+                                                            <input type="email" class="form-control" name="txtEmail" 
+                                                                   maxlength="12" ng-model="formData.email"/>
+                                                        </div>
+                                                    </div>
+
+                                                    <script type="text/ng-template" id="customTemplate.html">
+                                                        <div class="tt-suggestion tt-selectable">
+                                                        <span class=""  ng-bind-html="match.label | uibTypeaheadHighlight:query"></span>
+                                                        </div>
+                                                    </script>
+
+                                                    <div class="form-group row">
+                                                        <label for="txtCodigoLinea" class="col-sm-3 text-right" > Comision Aerolinea Nacional </label>
+                                                        <div class="col-sm-8">
+                                                            <div class="form-inline">
+                                                                <input type="text" ng-model="formData.comisionNacional" placeholder="Seleccione una Aerolinea"
+                                                                       uib-typeahead="sucursal as sucursal.nombreAerolinea for sucursal in gridNacionales | filter:{nombreAerolinea:$viewValue}"
+                                                                       class="form-control" typeahead-show-hint="true" typeahead-min-length="0" 
+                                                                       typeahead-template-url="customTemplate.html" 
+                                                                       />
+                                                                <input type="number" class="form-control col-sm-2" name="txtComisionInt" placeholder="0.00 %" 
+                                                                       ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="1.00" max="99"
+                                                                       ng-model="formData.comisionNacionalMonto" data-toggle="tooltip" 
+                                                                       data-placement="top" title="El Porcentaje se aplica sobre el Total" />
+
+                                                                <a title="Adicionar" class="btn btn-sm btn-success" ng-click="updateAddComisionNacional()" ng-show="showBtnEditar &#38;&#38; formData.comisionNacional.idAerolinea &#38;&#38; formData.comisionNacionalMonto" >
+                                                                    <i class=" fa fa-plus text-white"></i>
+                                                                </a>
+
+                                                                <a title="Adicionar" class="btn btn-sm btn-success" ng-click="addComisionNacional()" ng-show="showBtnNuevo &#38;&#38; formData.comisionNacional.idAerolinea &#38;&#38; formData.comisionNacionalMonto" >
+                                                                    <i class=" fa fa-plus text-white" ></i>
+                                                                </a>
+
+                                                                <a  class="btn btn-sm btn-info" ng-click="showComisionUpdate('Aerolineas Nacionales', 'B')" ng-show="showBtnEditar" data-toggle="modal"  data-target="#frmAerolineaComision"
+                                                                    data-placement="top" title="Revisar las Aerolineas Nacionales y sus Comisiones">
+                                                                    <i class=" fa fa-search text-white"></i>
+                                                                </a>
+
+                                                                <a  class="btn btn-sm btn-info" ng-click="showComisionAerolinea(formData.listComisionNacional, 'Aerolineas Nacionales')" ng-show="showBtnNuevo" data-toggle="modal"  data-target="#frmAerolineaComision"
+                                                                    data-placement="top" title="Revisar las Aerolineas Nacionales y sus Comisiones">
+                                                                    <i class=" fa fa-search text-white"></i>
+                                                                </a>
+
+                                                                <span ng-show="loadingAddComisionNac" ><i class="loader loader-sm" ></i>.</span>
+                                                                <!--
+
+                                                                <span class="alert-danger"  ng-show="(!formData.comisionNacional.idAerolinea &#38;&#38; !formData.comisionNacionalMonto) || !formData.comisionNacional.idAerolinea"  >
+                                                                    Ingrese una aerolinea v&aacute;lida.
+                                                                </span> 
+
+                                                                <span class="alert-danger"  ng-show="formData.comisionNacional.idAerolinea &#38;&#38; !formData.comisionNacionalMonto"  >
+                                                                    Ingrese un monto v&aacute;lido.
+                                                                </span> 
+
+                                                                -->
+
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group row">
+                                                        <label for="txtCodigoLinea" class="col-sm-3 text-right" > Comision Aerolinea Internacional </label>
+                                                        <div class="col-sm-8">
+                                                            <div class="form-inline">
+                                                                <input type="text" ng-model="formData.comisionInternacional" placeholder="Seleccione una Aerolinea"
+                                                                       uib-typeahead="sucursal as sucursal.nombreAerolinea for sucursal in gridInternacionales | filter:{nombreAerolinea:$viewValue}"
+                                                                       class="form-control" typeahead-show-hint="true" typeahead-min-length="0" 
+                                                                       typeahead-template-url="customTemplate.html"
+                                                                       />
+                                                                <input type="number" class="form-control col-sm-2" name="txtComisionInt" placeholder="0.00 %" 
+                                                                       ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="1.00" max="99"
+                                                                       ng-model="formData.comisionInternacionalMonto" data-toggle="tooltip" data-placement="top" title="El Porcentaje se aplica sobre el Total" />
+
+                                                                <a title="Ingresar" class="btn btn-sm btn-success" ng-click="updateAddComisionInternacional()" ng-show="showBtnEditar &#38;&#38; formData.comisionInternacional.idAerolinea &#38;&#38; formData.comisionInternacionalMonto" >
+                                                                    <i class=" fa fa-plus text-white"></i>
+                                                                </a>
+
+                                                                <a title="Adicionar" class="btn btn-sm btn-success" ng-click="addComisionInternacional()" ng-show="showBtnNuevo &#38;&#38; formData.comisionInternacional.idAerolinea &#38;&#38; formData.comisionInternacionalMonto">
+                                                                    <i class=" fa fa-plus text-white" ></i>
+                                                                </a>
+
+                                                                <a  class="btn btn-sm btn-info" ng-click="showComisionUpdate('Aerolineas Internacionales', 'D')" ng-show="showBtnEditar" data-toggle="modal"  data-target="#frmAerolineaComision"
+                                                                    data-placement="top" title="Revisar las Aerolineas Internacionales y sus Comisiones">
+                                                                    <i class=" fa fa-search text-white"></i>
+                                                                </a>
+                                                                
+                                                                 <a  class="btn btn-sm btn-info" ng-click="showComisionAerolinea(formData.listComisionInternacional, 'Aerolineas Internacionales')" ng-show="showBtnNuevo" data-toggle="modal"  data-target="#frmAerolineaComision"
+                                                                    data-placement="top" title="Revisar las Aerolineas Nacionales y sus Comisiones">
+                                                                    <i class=" fa fa-search text-white"></i>
+                                                                </a>
+
+                                                                <span ng-show="loadingAddComisionInt" ><i class="loader loader-sm" ></i>.</span>
+                                                                <!--
+                                                                <span class="alert-danger"  ng-show="(!formData.comisionInternacional.idAerolinea &#38;&#38; !formData.comisionInternacionalMonto) || !formData.comisionInternacional.idAerolinea"  >
+                                                                    Ingrese una aerolinea v&aacute;lida.
+                                                                </span> 
+
+                                                                <span class="alert-danger"  ng-show="formData.comisionInternacional.idAerolinea &#38;&#38; !formData.comisionInternacionalMonto"  >
+                                                                    Ingrese un monto v&aacute;lido.
+                                                                </span>
+                                                                -->
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div class="form-group row ">
+                                                        <label  class="col-sm-3 text-right" >Reporta Total de Ventas</label>
+                                                        <div class="col-sm-6">
+                                                            <div class="custom-control custom-control-inline custom-checkbox">
+                                                                <input type="checkbox" class="custom-control-input" id="chkReportaTotalVentas" 
+                                                                       ng-checked="formData.reportaTotalVentas" ng-model="formData.reportaTotalVentas" />
+                                                                <label class="custom-control-label" for="chkReportaTotalVentas"></label>
+                                                            </div>    
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group row">
+                                                        <label for="txtObservaciones" class=" col-form-label col-sm-3 text-right">Observaciones</label>
+                                                        <div class="col-sm-6">
+                                                            <input type="text" class="form-control" name="txtObservaciones"  
+                                                                   maxlength="128" ng-model="formData.observaciones"/>
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div class="form-group">
+                                                        <c:if test="#{promotores.formulario.crear== promotores.formulario.PERMITIR}">
+                                                            <div class="row" ng-show="showBtnNuevo">
+                                                                <label for="txtNombre" class="col-form-label col-sm-3 text-right" ></label>
+                                                                <button  class="btn btn-primary" ng-click="save()"  value="Guardar"><span class="fa fa-save"></span> Guardar</button>
                                                             </div>
                                                         </c:if>                                    
 
-                                                        <c:if test="#{aeropuerto.formulario.actualizar== aeropuerto.formulario.PERMITIR}">
-                                                            <div class="modal-footer" ng-show="showBtnEditar">
-                                                                <button type="button" class="btn btn-primary" ng-click="update()" value="Actualizar"> <span class="fa fa-edit"></span>Actualizar</button>
+                                                        <c:if test="#{promotores.formulario.actualizar== promotores.formulario.PERMITIR}">
+                                                            <div class="row" ng-show="showBtnEditar">
+                                                                <label for="txtNombre" class="col-form-label col-sm-3 text-right" ></label>
+                                                                <button type="button" class="btn btn-primary" ng-click="update()" value="Actualizar"> <span class="fa fa-edit"></span> Actualizar</button>
                                                             </div>
                                                         </c:if>
                                                     </div>
@@ -227,6 +480,73 @@
                             </div>
                             <!-- /.page-section -->
 
+                            <!-- /Modal Enlazar -->
+                            <div class="modal hide fade" id="frmAerolineaComision" tabindex="-1" role="dialog" aria-labelledby="verForm" aria-hidden="true">
+                                <div class="modal-dialog" role="document">
+                                    <div class="container">
+                                        <form id="formLink" name="frmAerolineaComision">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="verForm">Comisiones  : <strong> {{frmFormComisionName}}</strong> </h5>
+                                                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">×</span>
+                                                    </button>
+                                                </div>
+
+                                                <span ng-show="linkLoading" class="alert alert-info"><i class="fa fa-gear faa-spin animated" ></i>  Cargando...</span>
+                                                <div class="alert alert-success" role="alert" ng-show="showLinkRestfulSuccess">
+                                                    <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">&times;</a>
+                                                    {{ showLinkRestfulMessage}}
+                                                </div>
+
+                                                <div class="alert alert-danger" role="alert" ng-show="showLinkRestfulError">
+                                                    <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">&times;</a>
+                                                    {{ showLinkRestfulMessage}}
+                                                </div>
+
+                                                <br/>
+
+                                                <div class="container">
+                                                    <table st-table="display_records_cuenta"  st-safe-src="formComisionesList" class="table table-hover table-sm table-responsive ">
+                                                        <thead >
+                                                            <tr>
+                                                                <th class="text-nowrap">L&iacute;nea A&eacute;rea</th>
+                                                                <th class="text-nowrap">Comisi&oacute;n</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr st-select-row="row" st-select-mode="multiple" ng-repeat="row in display_records_cuenta| filter:busqueda">
+                                                                <td>{{row.nombreAerolinea}} </td>
+                                                                <td>{{row.montoComision}} </td>
+                                                                <td>
+                                                                    <!--<button type="button" title="Ver" class="btn btn-default" ng-click="ver(row.idTarjetaCredito)" data-toggle="modal" data-target="#verForm"><i class="fa fa-search"></i></button> -->
+                                                                    <c:if test="#{promotores.formulario.eliminar== promotores.formulario.PERMITIR}">
+                                                                        <button type="button" title="Eliminar" class="btn btn-sm btn-danger" ng-show="showBtnEditar" data-target="#frmConfirmation" 
+                                                                                data-toggle="modal" ng-click="modalEliminar(row.idComisionPromotor, row.nombreAerolinea, 'delete-comision')"><i class="fa fa-remove"></i></button>
+                                                                    </c:if>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                        <tfoot>
+                                                            <tr>
+                                                                <td colspan="10" class="text-center">
+                                                                    <div class="container" st-items-by-page="itemsByPage" st-pagination="" st-template="../index/pagination.custom.html"></div>
+                                                                </td>
+                                                            </tr>
+                                                        </tfoot>
+                                                    </table>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cerrar</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <!-- /Modal Enlazar -->
+
                             <!-- Modal Eliminar -->
                             <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="frmConfirmation">
                                 <div class="modal-dialog modal-md">
@@ -237,11 +557,11 @@
                                         </div>
                                         <div class="modal-body"> 
                                             <dl class="dl-horizontal">
-                                                Desea elimnar el registro <strong> {{nombreEliminar}}</strong>  ?
+                                                Desea elimnar el registro <strong> {{modalConfirmation.nombre}}</strong>  ?
                                             </dl>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-default" id="modal-btn-si" ng-click="eliminar()"  data-dismiss="modal">Si</button>
+                                            <button type="button" class="btn btn-default" id="modal-btn-si" ng-click="delete()"  data-dismiss="modal">Si</button>
                                             <button type="button" class="btn btn-primary" id="modal-btn-no"  data-dismiss="modal">No</button>
                                         </div>
                                     </div>
@@ -258,7 +578,7 @@
                 <!-- /.app-footer -->
                 <!-- /.wrapper -->
                 <!-- Logout Form -->
-                <ui:include src="logout.xhtml" />
+                <ui:include src="../index/logout.xhtml" />
                 <!-- /Logout Form -->
             </main>
             <!-- /.app-main -->
@@ -279,6 +599,7 @@
         <!-- BEGIN PAGE LEVEL JS -->
         <!-- END PAGE LEVEL JS -->
         <!-- Global site tag (gtag.js) - Google Analytics -->
+
     </h:body>
 </html>
 

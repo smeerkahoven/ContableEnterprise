@@ -19,6 +19,7 @@ angular.module('jsBancos.controllers', []).controller('frmBancos', ['$scope', '$
 
         var token = document.getElementsByName("hdToken")[0];
         var url = document.getElementsByName("hdUrl")[0];
+        var urlEmpresa = document.getElementsByName("hdUrlEmpresa")[0];
         var frmName = document.getElementsByName("hdFrmName")[0];
 
         $scope.showRestfulMessage = '';
@@ -35,8 +36,9 @@ angular.module('jsBancos.controllers', []).controller('frmBancos', ['$scope', '$
 
         $scope.itemsByPage = 15;
 
-        $scope.getData = function (method) {
+        $scope.getData = function (method, id) {
             $scope.loading = true;
+
             return $http({
                 method: 'POST',
                 url: url.value + method,
@@ -54,9 +56,6 @@ angular.module('jsBancos.controllers', []).controller('frmBancos', ['$scope', '$
                         $scope.showForm = true;
                     }
 
-                    if (method === 'combo') {
-                        $scope.comboCuentasBanco = response.data.content;
-                    }
 
                     $scope.loading = false;
                 } else {
@@ -67,6 +66,51 @@ angular.module('jsBancos.controllers', []).controller('frmBancos', ['$scope', '$
             }, function (error) {
                 $scope.showRestfulMessage = error;
                 $scope.showRestfulError = true;
+            });
+        }
+
+        $scope.getComboCuentas = function (method, id) {
+            $scope.loadingCuentas = true ;
+            return $http({
+                method: 'POST',
+                url: url.value + method + '/' + id,
+                data: {token: token.value, content: ''},
+                headers: {'Content-Type': 'application/json'}
+            }).then(function (response) {
+                if (response.data.code === 201) {
+                    $scope.comboCuentasBanco = response.data.content;
+
+                } else {
+                    $scope.showRestfulMessage = response.data.content;
+                    $scope.showRestfulError = true;
+                }
+                $scope.loadingCuentas = false ;
+            }, function (error) {
+                $scope.showRestfulMessage = error;
+                $scope.showRestfulError = true;
+                $scope.loadingCuentas = false ;
+            });
+        }
+
+        $scope.getDataEmpresa = function (method) {
+            $scope.linkLoading = true;
+            return $http({
+                method: 'POST',
+                url: urlEmpresa.value + 'all-combo',
+                data: {token: token.value, content: ''},
+                headers: {'Content-Type': 'application/json'}
+            }).then(function (response) {
+                if (response.data.code === 201) {
+                    $scope.comboEmpresa = response.data.content;
+                } else {
+                    $scope.showLinkRestfulMessage = response.data.content;
+                    $scope.showLinkRestfulError = true;
+                    return {};
+                }
+                $scope.linkLoading = false;
+            }, function (error) {
+                $scope.showLinkRestfulMessage = error;
+                $scope.showLinkRestfulError = true;
             });
         }
 
@@ -164,14 +208,14 @@ angular.module('jsBancos.controllers', []).controller('frmBancos', ['$scope', '$
             });
         };
 
-
         $scope.addlink = function () {
             if (!$scope.formLink.$valid)
                 return;
 
             $scope.linkLoading = true;
-            $scope.frmNewLink.idPlanCuentas = $scope.frmNewLink.cuenta.id;
-            var data = {idBanco: $scope.frmNewLink.idBanco, idPlanCuentas: $scope.frmNewLink.idPlanCuentas, descripcion: $scope.frmNewLink.descripcion};
+            var data = {idBanco: $scope.frmNewLink.idBanco, 
+                    idPlanCuentas: $scope.frmNewLink.cuenta, 
+                    descripcion: $scope.frmNewLink.descripcion};
             $http({
                 method: 'POST',
                 url: url.value + 'add-link',
@@ -203,14 +247,10 @@ angular.module('jsBancos.controllers', []).controller('frmBancos', ['$scope', '$
             $scope.linkLoading = true;
             $scope.loading = true;
             var data = {};
-            if (method === 'delete-link')
-                data = $scope.linkDelete;
-            else
-                data = {idBanco: $scope.idEliminar};
 
             $http({
                 method: 'POST',
-                url: url.value + method,
+                url: url.value + $scope.methodEliminar + "/" + $scope.idEliminar,
                 data: {token: token.value, content: angular.toJson(data)},
                 headers: {'Content-Type': 'application/json'}
             }).then(function (response) {
@@ -220,14 +260,13 @@ angular.module('jsBancos.controllers', []).controller('frmBancos', ['$scope', '$
                         $scope.showLinkRestfulMessage = response.data.content;
                         $scope.showLinkRestfulSuccess = true;
                         $scope.linkLoading = false;
-                        $scope.loading = false;
+                        $scope.link($scope.frmLink);
                     } else {
                         $scope.getData('all');
                         $scope.showRestfulMessage = response.data.content;
                         $scope.showRestfulSuccess = true;
                         $scope.loading = false;
                     }
-
                 } else {
                     if (method === 'delete-link') {
                         $scope.showLinkRestfulMessage = response.data.content;
@@ -268,13 +307,20 @@ angular.module('jsBancos.controllers', []).controller('frmBancos', ['$scope', '$
             $scope.showTable = false;
             $scope.showRestfulSuccess = false;
             $scope.showRestfulError = false;
+            $scope.hideMessagesBox();
             $scope.frmNew = {};
 
+        }
+
+        $scope.hideMessagesBox = function () {
+            $scope.showRestfulSuccess = false;
+            $scope.showRestfulError = false;
         }
 
         $scope.cancelar = function () {
             $scope.showForm = false;
             $scope.showTable = true;
+            $scope.hideMessagesBox();
         }
 
         $scope.modalEliminar = function (id, nombre, method) {
@@ -284,11 +330,11 @@ angular.module('jsBancos.controllers', []).controller('frmBancos', ['$scope', '$
         }
 
         $scope.deleteLink = function (row, method) {
-            $scope.idEliminar = row[4];
-            $scope.nombreEliminar = row[1] + " " + row[5];
+            $scope.idEliminar = row[0];
+            $scope.nombreEliminar = row[2] + " " + row[3] + " Desc:" + row[5];
             $scope.methodEliminar = method;
 
-            $scope.linkDelete = {idPlanCuentas: row[0], idEmpresa: row[2], idBanco: row[3], idCuentaBanco: row[4]};
+            $scope.linkDelete = {idCuentaBanco: row[0]};
         }
 
         $scope.deleteBanco = function (row, method) {
@@ -299,7 +345,8 @@ angular.module('jsBancos.controllers', []).controller('frmBancos', ['$scope', '$
 
 
         $scope.getData('all');
-        $scope.getData('combo');
+        //$scope.getData('combo');
+        $scope.getDataEmpresa();
     }
 ]);
 
