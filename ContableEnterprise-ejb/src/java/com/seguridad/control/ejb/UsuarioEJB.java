@@ -5,6 +5,8 @@
  */
 package com.seguridad.control.ejb;
 
+import com.seguridad.control.FacadeEJB;
+import com.seguridad.control.FacadeEJBFirst;
 import com.seguridad.control.LoggerContable;
 import com.seguridad.control.encryption.EncryptionContable;
 import com.seguridad.control.entities.User;
@@ -27,17 +29,10 @@ import javax.persistence.Query;
  * @author Cheyo
  */
 @Stateless
-public class UsuarioEJB implements UsuarioRemote {
+public class UsuarioEJB extends FacadeEJBFirst implements UsuarioRemote {
 
-    private Queries propertie ;
-    
-    @PersistenceContext
-    private EntityManager em;
-    
-    private String mensaje ;
-    
-    public  String autenticar(User u){
-        return "" ;
+    public String autenticar(User u) {
+        return "";
     }
 
     @Override
@@ -45,27 +40,27 @@ public class UsuarioEJB implements UsuarioRemote {
         Query q = em.createNamedQuery("User.findUserName", User.class);
         q.setParameter("user_name", u.getUserName());
         List<User> l = q.getResultList();
-        
-        for( User usr :  l ){
-            return usr ;
-        }       
+
+        for (User usr : l) {
+            return usr;
+        }
 
         return null;
     }
 
-       @Override
+    @Override
     public UserToken get(UserToken u) throws CRUDException {
-        UserToken t = em.find( UserToken.class, u.getIdToken()) ;
-        
+        UserToken t = em.find(UserToken.class, u.getIdToken());
+
         if (t == null) {
-               String message = Thread.currentThread().getStackTrace()[1].getMethodName() + ":" + u.getIdToken() + " not found";
+            String message = Thread.currentThread().getStackTrace()[1].getMethodName() + ":" + u.getIdToken() + " not found";
             //LoggerContable.log(message, e, L
             throw new CRUDException(message);
-        }else {
-            return t ;
+        } else {
+            return t;
         }
     }
-    
+
     @Override
     public boolean update(User e) throws CRUDException {
         em.merge(e);
@@ -74,7 +69,7 @@ public class UsuarioEJB implements UsuarioRemote {
     }
 
     @Override
-    public int insert(User e) throws CRUDException {        
+    public int insert(User e) throws CRUDException {
         e.setPassword(EncryptionContable.encrypt(e.getPassword()));
         em.persist(e);
         em.flush();
@@ -93,7 +88,7 @@ public class UsuarioEJB implements UsuarioRemote {
     public int insert(UserLogin u) throws CRUDException {
         em.persist(u);
         em.flush();
-        return u.getIdUserLogin() ;
+        return u.getIdUserLogin();
     }
 
     @Override
@@ -105,31 +100,30 @@ public class UsuarioEJB implements UsuarioRemote {
 
     @Override
     public List<Object[]> get(String query) throws CRUDException {
-        
-        propertie= Queries.getQueries() ;
-        Query q =  em.createNativeQuery(propertie.getPropertie(query)) ;
-       
+
+        queries = Queries.getQueries();
+        Query q = em.createNativeQuery(queries.getPropertie(query));
+
         List<Object[]> l = q.getResultList();
-        
-        return l ;
+
+        return l;
     }
 
     @Override
     public List<Object[]> get(String query, HashMap<String, Object> param) throws CRUDException {
-        
-        propertie= Queries.getQueries() ;
-        Query q =  em.createNativeQuery(propertie.getPropertie(query)) ;
-       
-        
+
+        queries = Queries.getQueries();
+        Query q = em.createNativeQuery(queries.getPropertie(query));
+
         param.entrySet().forEach((Map.Entry<String, Object> entry) -> {
             String key = entry.getKey();
             Object value = entry.getValue();
             q.setParameter(key, value);
         });
-        
+
         List<Object[]> l = q.getResultList();
-        
-        return l ;
+
+        return l;
     }
 
     @Override
@@ -141,26 +135,20 @@ public class UsuarioEJB implements UsuarioRemote {
 
     @Override
     public List<User> get() throws CRUDException {
-        
-        Query q =em.createNamedQuery("User.findAll", User.class);
-        return (List<User>)q.getResultList();
-        
+
+        Query q = em.createNamedQuery("User.findAll", User.class);
+        return (List<User>) q.getResultList();
+
     }
 
     @Override
     public boolean update(User e, String query) throws CRUDException {
-        Query q = em.createNamedQuery(query) ;
+        Query q = em.createNamedQuery(query);
         q.setParameter("p", e.getUserName());
-        
-        q.executeUpdate() ; 
-        
-        return true ;
-    }
 
- 
-    
-    
-    
-    
+        q.executeUpdate();
+
+        return true;
+    }
 
 }

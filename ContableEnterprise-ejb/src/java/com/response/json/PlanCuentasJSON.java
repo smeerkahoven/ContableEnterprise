@@ -18,9 +18,11 @@ import java.util.List;
 public class PlanCuentasJSON {
 
     private int idEmpresa;
-    private BigInteger idPlanCuentas;
+    private Integer idPlanCuentas;
     private String nombreCuenta;
-    private BigInteger idPlanCuentaPadre;
+    private BigInteger nroPlanCuenta;
+    private BigInteger nroPlanCuentaPadre;
+    private String nroPlanCuentaPadreNombre;
     private int nivel;
     private String marco;
     private String marcoNombre;
@@ -49,10 +51,6 @@ public class PlanCuentasJSON {
 
     public PlanCuentasJSON() {
     }
-    
-    public PlanCuentasJSON(BigInteger idPlanCuentas){
-        this.idPlanCuentas = idPlanCuentas ;
-    }
 
     private static String getMarcoNombreFromMarco(String marco) {
         switch (marco) {
@@ -69,23 +67,24 @@ public class PlanCuentasJSON {
         return "";
     }
 
-    private static String getAplicaMovimientoNombreValor(String v){
-        switch (v){
-            case "T" :
+    private static String getAplicaMovimientoNombreValor(String v) {
+        switch (v) {
+            case "T":
                 return "Transaccion";
             case "M":
                 return "Mayorizacion";
-                    
+
         }
-        return"" ;
+        return "";
     }
-    
+
     public static PlanCuentasJSON createJson(PlanCuentas p) {
         PlanCuentasJSON json = new PlanCuentasJSON();
         json.setIdEmpresa(p.getIdEmpresa());
-        json.setIdPlanCuentaPadre(p.getIdPlanCuentaPadre());
         json.setIdPlanCuentas(p.getIdPlanCuentas());
         json.setNivel(p.getNivel());
+        json.setNroPlanCuenta(p.getNroPlanCuenta());
+        json.setNroPlanCuentaPadre(p.getNroPlanCuentaPadre());
         json.setNombreCuenta(p.getCuenta());
         json.setMarco(p.getMarco());
         json.setMarcoNombre(PlanCuentasJSON.getMarcoNombreFromMarco(p.getMarco()));
@@ -101,9 +100,10 @@ public class PlanCuentasJSON {
         PlanCuentas pc = new PlanCuentas();
         pc.setIdEmpresa(json.getIdEmpresa());
         pc.setIdPlanCuentas(json.getIdPlanCuentas());
-        pc.setIdPlanCuentaPadre(json.getIdPlanCuentaPadre());
         pc.setCuenta(json.getNombreCuenta());
         pc.setNivel(json.getNivel());
+        pc.setNroPlanCuenta(json.getNroPlanCuenta());
+        pc.setNroPlanCuentaPadre(json.getNroPlanCuentaPadre());
         pc.setMarco(json.getMarco());
         pc.setMoneda(json.getMoneda());
         pc.setMantenimientoValor(json.getMantenimientoValor());
@@ -186,28 +186,12 @@ public class PlanCuentasJSON {
         this.idEmpresa = idEmpresa;
     }
 
-    public BigInteger getIdPlanCuentas() {
-        return idPlanCuentas;
-    }
-
-    public void setIdPlanCuentas(BigInteger idPlanCuentas) {
-        this.idPlanCuentas = idPlanCuentas;
-    }
-
     public String getNombreCuenta() {
         return nombreCuenta;
     }
 
     public void setNombreCuenta(String nombreCuenta) {
         this.nombreCuenta = nombreCuenta;
-    }
-
-    public BigInteger getIdPlanCuentaPadre() {
-        return idPlanCuentaPadre;
-    }
-
-    public void setIdPlanCuentaPadre(BigInteger idPlanCuentaPadre) {
-        this.idPlanCuentaPadre = idPlanCuentaPadre;
     }
 
     public int getNivel() {
@@ -224,6 +208,38 @@ public class PlanCuentasJSON {
 
     public void setChildren(List<PlanCuentasJSON> cuentas) {
         this.children = cuentas;
+    }
+
+    public Integer getIdPlanCuentas() {
+        return idPlanCuentas;
+    }
+
+    public void setIdPlanCuentas(Integer idPlanCuentas) {
+        this.idPlanCuentas = idPlanCuentas;
+    }
+
+    public BigInteger getNroPlanCuenta() {
+        return nroPlanCuenta;
+    }
+
+    public void setNroPlanCuenta(BigInteger nroPlanCuenta) {
+        this.nroPlanCuenta = nroPlanCuenta;
+    }
+
+    public BigInteger getNroPlanCuentaPadre() {
+        return nroPlanCuentaPadre;
+    }
+
+    public void setNroPlanCuentaPadre(BigInteger nroPlanCuentaPadre) {
+        this.nroPlanCuentaPadre = nroPlanCuentaPadre;
+    }
+
+    public String getNroPlanCuentaPadreNombre() {
+        return nroPlanCuentaPadreNombre;
+    }
+
+    public void setNroPlanCuentaPadreNombre(String nroPlanCuentaPadreNombre) {
+        this.nroPlanCuentaPadreNombre = nroPlanCuentaPadreNombre;
     }
 
 }

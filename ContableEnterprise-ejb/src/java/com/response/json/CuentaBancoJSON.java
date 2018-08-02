@@ -16,7 +16,6 @@ public class CuentaBancoJSON {
 
     private BigInteger idPlanCuentas;
     private String cuenta;
-    private int idEmpresa;
     private int idBanco;
     private int idCuentaBanco;
     private String descripcion;
@@ -26,7 +25,6 @@ public class CuentaBancoJSON {
         c.setDescripcion(json.getDescripcion());
         c.setIdBanco(json.getIdBanco());
         c.setIdCuentaBanco(json.getIdCuentaBanco());
-        c.setIdEmpresa(json.getIdEmpresa());
         c.setIdPlanCuentas(json.getIdPlanCuentas());
         
         return c ;
@@ -37,7 +35,6 @@ public class CuentaBancoJSON {
         json.setCuenta(c.getDescripcion());
         json.setIdBanco(c.getIdBanco());
         json.setIdCuentaBanco(c.getIdCuentaBanco());
-        json.setIdEmpresa(c.getIdEmpresa());
         json.setIdPlanCuentas(c.getIdPlanCuentas());
         return json ;
     }
@@ -56,14 +53,6 @@ public class CuentaBancoJSON {
 
     public void setCuenta(String cuenta) {
         this.cuenta = cuenta;
-    }
-
-    public int getIdEmpresa() {
-        return idEmpresa;
-    }
-
-    public void setIdEmpresa(int idEmpresa) {
-        this.idEmpresa = idEmpresa;
     }
 
     public int getIdBanco() {

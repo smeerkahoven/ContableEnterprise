@@ -18,7 +18,6 @@ import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -29,12 +28,13 @@ import javax.persistence.Transient;
 @Entity
 @Table(name = "tb_empresa")
 @NamedQueries({
-    @NamedQuery(name = "Empresa.findEmpresaForCombo", query = "SELECT e.idEmpresa, e.razonSocial FROM Empresa e")
+    @NamedQuery(name = "Empresa.findEmpresaForCombo", query = "SELECT e.idEmpresa, e.razonSocial, e.tipo FROM Empresa e"),
+        @NamedQuery(name = "Empresa.findAll", query = "SELECT e FROM Empresa e")
 })
 public class Empresa implements Serializable {
 
     @Transient
-    public final static String PRINCIPAL = "PRINCIPAL";
+    public final static String CENTRAL = "CENTRAL";
     @Transient
     public final static String SUCURSAL = "SUCURSAL";
 
@@ -68,7 +68,7 @@ public class Empresa implements Serializable {
     @Column(name = "nro_iata")
     private String nroIata;
 
-    @Column(name = "tipo")
+    @Column(name = "tipo", updatable = false)
     private String tipo;
 
     @Lob

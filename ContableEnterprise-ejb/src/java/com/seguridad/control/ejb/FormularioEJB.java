@@ -5,6 +5,7 @@
  */
 package com.seguridad.control.ejb;
 
+import com.seguridad.control.FacadeEJB;
 import com.seguridad.control.LoggerContable;
 import com.seguridad.control.entities.Entidad;
 import com.seguridad.control.entities.Formulario;
@@ -21,11 +22,8 @@ import javax.persistence.PersistenceContext;
  * @author Cheyo
  */
 @Stateless
-public class FormularioEJB implements FormularioRemote{
+public class FormularioEJB extends FacadeEJB implements FormularioRemote{
 
-    @PersistenceContext 
-    private EntityManager em ;
-    
     @Override
     public void update(Entidad e) throws CRUDException {
         em.merge(e);
@@ -71,6 +69,11 @@ public class FormularioEJB implements FormularioRemote{
 
     @Override
     public List get(Entidad e, String q) throws CRUDException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List get() throws CRUDException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

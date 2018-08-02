@@ -5,15 +5,14 @@
  */
 package com.seguridad.control.ejb;
 
+import com.seguridad.control.FacadeEJB;
+import com.seguridad.control.FacadeEJBFirst;
 import com.seguridad.control.entities.Rol;
 import com.seguridad.control.entities.RolFormulario;
 import com.seguridad.control.exception.CRUDException;
 import com.seguridad.control.remote.RolRemoto;
-import com.seguridad.queries.Queries;
 import java.util.List;
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 /**
@@ -21,12 +20,7 @@ import javax.persistence.Query;
  * @author Cheyo
  */
 @Stateless
-public class RolEJB implements RolRemoto {
-
-    private Queries querie = Queries.getQueries();
-
-    @PersistenceContext
-    private EntityManager em;
+public class RolEJB extends FacadeEJBFirst implements RolRemoto {
 
     @Override
     public Rol get(Rol e) throws CRUDException {

@@ -25,6 +25,8 @@ public interface EmpresaRemote {
     
     public List<Empresa> get(String q) throws CRUDException ;
     
+    public List getAll() throws CRUDException ;
+    
     public boolean update(Empresa e) throws CRUDException ;
     
     public int insert (Empresa e) throws CRUDException ;

@@ -5,6 +5,7 @@
  */
 package com.seguridad.control.entities;
 
+import com.seguridad.control.exception.CRUDException;
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -153,5 +154,12 @@ public class RolFormulario extends Entidad {
     public String toString() {
         return "com.seguridad.control.entities.RolFormulario[ idRolFormulario=" + idRolFormulario + " ]";
     }
+
+    @Override
+    public int getId() throws CRUDException {
+        return this.getIdRolFormulario();
+    }
+    
+    
     
 }

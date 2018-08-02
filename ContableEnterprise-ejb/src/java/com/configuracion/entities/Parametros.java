@@ -6,6 +6,7 @@
 package com.configuracion.entities;
 
 import com.seguridad.control.entities.Entidad;
+import com.seguridad.control.exception.CRUDException;
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -100,5 +101,11 @@ public class Parametros extends Entidad {
     public String toString() {
         return "com.configuracion.entities.Parametros[ idParametro=" + idParametro + " ]";
     }
+
+    @Override
+    public int getId() throws CRUDException {
+        return 0 ;
+    }
+    
     
 }

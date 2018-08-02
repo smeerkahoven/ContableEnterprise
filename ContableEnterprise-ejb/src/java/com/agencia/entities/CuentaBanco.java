@@ -6,6 +6,7 @@
 package com.agencia.entities;
 
 import com.seguridad.control.entities.Entidad;
+import com.seguridad.control.exception.CRUDException;
 import java.math.BigInteger;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -26,8 +27,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "cnt_cuenta_banco")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "CuentaBanco.findAll", query = "SELECT c FROM CuentaBanco c"),
-    @NamedQuery(name = "CuentaBanco.countCuentasByBanco" , query = "SELECT count(c.idCuentaBanco) FROM CuentaBanco c WHERE c.idBanco=:idBanco")
+    @NamedQuery(name = "CuentaBanco.findAll", query = "SELECT c FROM CuentaBanco c")
+    ,
+    @NamedQuery(name = "CuentaBanco.countCuentasByBanco", query = "SELECT count(c.idCuentaBanco) FROM CuentaBanco c WHERE c.idBanco=:idBanco")
 })
 public class CuentaBanco extends Entidad {
 
@@ -40,9 +42,6 @@ public class CuentaBanco extends Entidad {
 
     @Column(name = "id_plan_cuentas")
     private BigInteger idPlanCuentas;
-
-    @Column(name = "id_empresa")
-    private Integer idEmpresa;
 
     @Column(name = "id_banco")
     private Integer idBanco;
@@ -67,14 +66,6 @@ public class CuentaBanco extends Entidad {
 
     public void setIdPlanCuentas(BigInteger idPlanCuentas) {
         this.idPlanCuentas = idPlanCuentas;
-    }
-
-    public Integer getIdEmpresa() {
-        return idEmpresa;
-    }
-
-    public void setIdEmpresa(Integer idEmpresa) {
-        this.idEmpresa = idEmpresa;
     }
 
     public Integer getIdBanco() {
@@ -120,6 +111,11 @@ public class CuentaBanco extends Entidad {
     @Override
     public String toString() {
         return "com.agencia.entities.CuentaBanco[ idCuentaBanco=" + idCuentaBanco + " ]";
+    }
+
+    @Override
+    public int getId() throws CRUDException {
+        return this.getIdCuentaBanco();
     }
 
 }

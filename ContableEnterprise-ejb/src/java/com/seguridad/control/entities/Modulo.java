@@ -5,6 +5,7 @@
  */
 package com.seguridad.control.entities;
 
+import com.seguridad.control.exception.CRUDException;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -163,5 +164,12 @@ public class Modulo extends Entidad {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    @Override
+    public int getId() throws CRUDException {
+        return this.getIdModulo();
+    }
+    
+    
 
 }

@@ -7,6 +7,7 @@ package com.contabilidad.ejb;
 
 import com.contabilidad.entities.PlanCuentas;
 import com.contabilidad.remote.PlanCuentasRemote;
+import com.seguridad.control.FacadeEJB;
 import com.seguridad.control.LoggerContable;
 import com.seguridad.control.entities.Empresa;
 import com.seguridad.control.entities.Entidad;
@@ -14,8 +15,6 @@ import com.seguridad.control.exception.CRUDException;
 import java.util.List;
 import java.util.logging.Level;
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 /**
@@ -23,10 +22,7 @@ import javax.persistence.Query;
  * @author xeio
  */
 @Stateless
-public class PlanCuentasEJB implements PlanCuentasRemote {
-
-    @PersistenceContext
-    private EntityManager em;
+public class PlanCuentasEJB extends FacadeEJB implements PlanCuentasRemote {
 
     @Override
     public void update(Entidad e) throws CRUDException {
@@ -148,5 +144,7 @@ public class PlanCuentasEJB implements PlanCuentasRemote {
 
         return l;
     }
+    
+    
 
 }

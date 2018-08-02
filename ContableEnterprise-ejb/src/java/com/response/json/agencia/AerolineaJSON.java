@@ -53,6 +53,12 @@ public class AerolineaJSON implements Serializable {
     private Boolean modalidadBoleto;
     private Boolean registraPnr;
     private List<AerolineaImpuestoJSON> aerolineaImpuestoList = new LinkedList<>();
+    private List<AerolineaCuentaJSON> listCtaVentasMonNac = new LinkedList<>();
+    private List<AerolineaCuentaJSON> listCtaVentasMonExt = new LinkedList<>();
+    private List<AerolineaCuentaJSON> listCtaComisionMonNac = new LinkedList<>();
+    private List<AerolineaCuentaJSON> listCtaComisionMonExt = new LinkedList<>();
+    private List<AerolineaCuentaJSON> listCtaDevolucionMonNac = new LinkedList<>();
+    private List<AerolineaCuentaJSON> listCtaDevolucionMonExt = new LinkedList<>();
 
     public AerolineaJSON() {
 
@@ -60,8 +66,8 @@ public class AerolineaJSON implements Serializable {
 
     public static Aerolinea toAerolinea(AerolineaJSON json) {
         Aerolinea a = new Aerolinea();
-        a.setBoletosMonExt(a.getBoletosMonExt());
-        a.setBoletosMonNac(a.getBoletosMonNac());
+        a.setBoletosMonExt(json.getBoletosMonExt());
+        a.setBoletosMonNac(json.getBoletosMonNac());
         a.setBsp(json.getBsp());
         a.setCargoNoFiscal(json.getCargoNoFiscal());
         a.setCelular(json.getCelular());
@@ -96,6 +102,54 @@ public class AerolineaJSON implements Serializable {
         a.setTelefono(json.getTelefono());
 
         return a;
+    }
+
+    public List<AerolineaCuentaJSON> getListCtaVentasMonNac() {
+        return listCtaVentasMonNac;
+    }
+
+    public void setListCtaVentasMonNac(List<AerolineaCuentaJSON> listCtaVentasMonNac) {
+        this.listCtaVentasMonNac = listCtaVentasMonNac;
+    }
+
+    public List<AerolineaCuentaJSON> getListCtaVentasMonExt() {
+        return listCtaVentasMonExt;
+    }
+
+    public void setListCtaVentasMonExt(List<AerolineaCuentaJSON> listCtaVentasMonExt) {
+        this.listCtaVentasMonExt = listCtaVentasMonExt;
+    }
+
+    public List<AerolineaCuentaJSON> getListCtaComisionMonNac() {
+        return listCtaComisionMonNac;
+    }
+
+    public void setListCtaComisionMonNac(List<AerolineaCuentaJSON> listCtaComisionMonNac) {
+        this.listCtaComisionMonNac = listCtaComisionMonNac;
+    }
+
+    public List<AerolineaCuentaJSON> getListCtaComisionMonExt() {
+        return listCtaComisionMonExt;
+    }
+
+    public void setListCtaComisionMonExt(List<AerolineaCuentaJSON> listCtaComisionMonExt) {
+        this.listCtaComisionMonExt = listCtaComisionMonExt;
+    }
+
+    public List<AerolineaCuentaJSON> getListCtaDevolucionMonNac() {
+        return listCtaDevolucionMonNac;
+    }
+
+    public void setListCtaDevolucionMonNac(List<AerolineaCuentaJSON> listCtaDevolucionMonNac) {
+        this.listCtaDevolucionMonNac = listCtaDevolucionMonNac;
+    }
+
+    public List<AerolineaCuentaJSON> getListCtaDevolucionMonExt() {
+        return listCtaDevolucionMonExt;
+    }
+
+    public void setListCtaDevolucionMonExt(List<AerolineaCuentaJSON> listCtaDevolucionMonExt) {
+        this.listCtaDevolucionMonExt = listCtaDevolucionMonExt;
     }
 
     public Integer getIdAerolinea() {

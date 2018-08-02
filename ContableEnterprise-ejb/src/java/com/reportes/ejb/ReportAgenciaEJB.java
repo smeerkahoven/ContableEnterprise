@@ -7,6 +7,7 @@ package com.reportes.ejb;
 
 import com.reportes.entities.Reportes;
 import com.reportes.remote.ReportAgenciaRemote;
+import com.seguridad.control.FacadeEJB;
 import com.seguridad.control.entities.Entidad;
 import com.seguridad.control.entities.Formulario;
 import com.seguridad.control.exception.CRUDException;
@@ -21,10 +22,8 @@ import javax.persistence.Query;
  * @author xeio
  */
 @Stateless
-public class ReportAgenciaEJB implements ReportAgenciaRemote {
+public class ReportAgenciaEJB extends FacadeEJB implements ReportAgenciaRemote {
 
-    @PersistenceContext
-    private EntityManager em ;
     @Override
     public void update(Entidad e) throws CRUDException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -61,6 +60,11 @@ public class ReportAgenciaEJB implements ReportAgenciaRemote {
         query.setParameter("idFormulario", f);
         
         return query.getResultList() ;
+    }
+
+    @Override
+    public List get() throws CRUDException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

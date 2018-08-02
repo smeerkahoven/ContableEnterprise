@@ -8,7 +8,8 @@ package com.contabilidad.remote;
 import com.contabilidad.entities.PlanCuentas;
 import com.seguridad.control.entities.Empresa;
 import com.seguridad.control.exception.CRUDException;
-import com.seguridad.control.remote.DaoRemote;
+import com.seguridad.control.remote.DaoRemoteFacade;
+import java.util.HashMap;
 import java.util.List;
 import javax.ejb.Remote;
 
@@ -17,7 +18,7 @@ import javax.ejb.Remote;
  * @author xeio
  */
 @Remote
-public interface PlanCuentasRemote extends DaoRemote {
+public interface PlanCuentasRemote extends DaoRemoteFacade {
 
     public List<PlanCuentas> get() throws CRUDException;
 
@@ -31,4 +32,8 @@ public interface PlanCuentasRemote extends DaoRemote {
     
     public List<PlanCuentas> getForComboIdPLan(Empresa idEmpresa, PlanCuentas p) throws CRUDException ;
 
+    @Override
+    public void remove(String nativeQuery, HashMap<String, Object> parameters) throws CRUDException;
+
+    
 }

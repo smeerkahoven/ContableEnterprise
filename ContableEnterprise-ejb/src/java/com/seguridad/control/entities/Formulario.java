@@ -6,6 +6,7 @@
 package com.seguridad.control.entities;
 
 import com.reportes.entities.Reportes;
+import com.seguridad.control.exception.CRUDException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -180,5 +181,11 @@ public class Formulario extends Entidad {
     public void setRolFormularioList(List<RolFormulario> rolFormularioList) {
         this.rolFormularioList = rolFormularioList;
     }
+
+    @Override
+    public int getId() throws CRUDException {
+        return this.getIdFormulario();
+    }
+    
     
 }

@@ -6,7 +6,7 @@
 package com.agencia.entities;
 
 import com.seguridad.control.entities.Entidad;
-import java.io.Serializable;
+import com.seguridad.control.exception.CRUDException;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -16,7 +16,6 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -164,5 +163,12 @@ public class Bancos extends Entidad {
     public String toString() {
         return "com.agencia.entities.Bancos[ idBanco=" + idBanco + " ]";
     }
+
+    @Override
+    public int getId() throws CRUDException {
+        return this.getIdBanco();
+    }
+    
+    
     
 }

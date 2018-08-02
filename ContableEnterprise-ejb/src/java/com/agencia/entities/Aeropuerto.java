@@ -6,6 +6,7 @@
 package com.agencia.entities;
 
 import com.seguridad.control.entities.Entidad;
+import com.seguridad.control.exception.CRUDException;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -81,5 +82,11 @@ public class Aeropuerto extends Entidad {
     public String toString() {
         return "com.agencia.entities.Aeropuerto[ idAeropuerto=" + idAeropuerto + " ]";
     }
+
+    @Override
+    public int getId() throws CRUDException {
+        return 0;
+    }
+    
     
 }

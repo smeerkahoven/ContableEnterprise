@@ -6,6 +6,7 @@
 package com.agencia.entities;
 
 import com.seguridad.control.entities.Entidad;
+import com.seguridad.control.exception.CRUDException;
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -108,5 +109,11 @@ public class AerolineaImpuesto extends Entidad {
     public String toString() {
         return "com.agencia.entities.AerolineaImpuesto[ idAerolineaImpuesto=" + idAerolineaImpuesto + " ]";
     }
+
+    @Override
+    public int getId() throws CRUDException {
+        return this.getIdAerolineaImpuesto();
+    }
+    
 
 }

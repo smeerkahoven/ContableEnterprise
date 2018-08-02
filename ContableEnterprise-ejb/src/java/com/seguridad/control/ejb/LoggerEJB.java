@@ -5,6 +5,7 @@
  */
 package com.seguridad.control.ejb;
 
+import com.seguridad.control.FacadeEJB;
 import com.seguridad.control.entities.Log;
 import com.seguridad.control.entities.UserLogin;
 import com.seguridad.control.exception.CRUDException;
@@ -21,11 +22,8 @@ import javax.persistence.PersistenceContext;
  * @author Cheyo
  */
 @Stateful
-public class LoggerEJB implements LoggerRemote {
+public class LoggerEJB extends FacadeEJB implements LoggerRemote {
     static final long serialVersionUID = 42L;
-
-    @PersistenceContext
-    private EntityManager em;
 
     @Override
     public boolean add(Log l) {

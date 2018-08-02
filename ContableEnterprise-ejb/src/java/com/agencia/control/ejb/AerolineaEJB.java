@@ -35,23 +35,6 @@ public class AerolineaEJB extends FacadeEJB implements AerolineaRemote {
     }
 
     @Override
-    public int insert(Entidad e) throws CRUDException {
-        em.persist(e);
-        em.flush();
-        em.refresh(e);
-
-        LoggerContable.log(Thread.currentThread().getStackTrace()[1].getMethodName() + ":" + e.toString(), this, Level.SEVERE);
-
-        if (e instanceof Aerolinea) {
-            return ((Aerolinea) e).getIdAerolinea();
-        } else if (e instanceof AerolineaImpuesto) {
-            return ((AerolineaImpuesto) e).getIdAerolineaImpuesto();
-        }
-
-        return 1;
-    }
-
-    @Override
     public Entidad get(Entidad e) throws CRUDException {
         Aerolinea l = (Aerolinea) em.find(Aerolinea.class, ((Aerolinea) e).getIdAerolinea());
 
@@ -109,5 +92,6 @@ public class AerolineaEJB extends FacadeEJB implements AerolineaRemote {
 
         query.executeUpdate();
     }
+
 
 }

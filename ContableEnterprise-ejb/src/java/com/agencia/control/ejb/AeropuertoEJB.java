@@ -7,6 +7,7 @@ package com.agencia.control.ejb;
 
 import com.agencia.control.remote.AeropuertoRemote;
 import com.agencia.entities.Aeropuerto;
+import com.seguridad.control.FacadeEJB;
 import com.seguridad.control.LoggerContable;
 import com.seguridad.control.entities.Entidad;
 import com.seguridad.control.exception.CRUDException;
@@ -22,11 +23,7 @@ import javax.persistence.Query;
  * @author xeio
  */
 @Stateless
-public class AeropuertoEJB implements AeropuertoRemote {
-
-    @PersistenceContext
-    private EntityManager em ;
-    
+public class AeropuertoEJB extends FacadeEJB implements AeropuertoRemote {
 
     @Override
     public List<Aeropuerto> get() throws CRUDException {

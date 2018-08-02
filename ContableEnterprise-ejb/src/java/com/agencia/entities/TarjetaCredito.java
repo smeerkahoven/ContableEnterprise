@@ -7,6 +7,7 @@ package com.agencia.entities;
 
 import com.contabilidad.entities.PlanCuentas;
 import com.seguridad.control.entities.Entidad;
+import com.seguridad.control.exception.CRUDException;
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -19,8 +20,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -134,5 +133,12 @@ public class TarjetaCredito extends Entidad {
     public String toString() {
         return "com.contabilidad.entities.TarjetaCredito[ idTarjetaCredito=" + idTarjetaCredito + " ]";
     }
+
+    @Override
+    public int getId() throws CRUDException {
+        return this.getIdTarjetaCredito();
+    }
+    
+    
     
 }

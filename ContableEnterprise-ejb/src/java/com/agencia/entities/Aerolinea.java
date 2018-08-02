@@ -6,7 +6,7 @@
 package com.agencia.entities;
 
 import com.seguridad.control.entities.Entidad;
-import java.io.Serializable;
+import com.seguridad.control.exception.CRUDException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.util.List;
@@ -34,7 +34,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "cnt_aerolinea")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Aerolinea.findAll", query = "SELECT a FROM Aerolinea a")})
+    @NamedQuery(name = "Aerolinea.findAll", query = "SELECT a FROM Aerolinea a")
+    ,
+@NamedQuery(name = "Aerolinea.findForCombo", query = "SELECT a.idAerolinea,a.numero, a.nombre, a.moneda FROM Aerolinea a WHERE a.moneda=:moneda")})
 public class Aerolinea extends Entidad {
 
     private static final long serialVersionUID = 1L;
@@ -116,10 +118,8 @@ public class Aerolinea extends Entidad {
     private BigInteger ctaDevolucionMonExt;
     @Column(name = "boletos_mon_nac")
     private Boolean boletosMonNac;
-
     @Column(name = "boletos_mon_ext")
     private Boolean boletosMonExt;
-
     @Size(max = 1)
     @Column(name = "moneda")
     private String moneda;
@@ -136,6 +136,10 @@ public class Aerolinea extends Entidad {
     @OneToMany(orphanRemoval = true, cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     @JoinColumn(name = "id_aerolinea")
     private List<AerolineaImpuesto> aerolineaImpuestoList;
+
+    @OneToMany(orphanRemoval = true, cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_comision_promotor")
+    private List<ComisionPromotorAerolinea> comisionPromotorList;
 
     public Aerolinea() {
     }
@@ -433,6 +437,14 @@ public class Aerolinea extends Entidad {
         this.aerolineaImpuestoList = aerolineaImpuestoList;
     }
 
+    public List<ComisionPromotorAerolinea> getComisionPromotorList() {
+        return comisionPromotorList;
+    }
+
+    public void setComisionPromotorList(List<ComisionPromotorAerolinea> comisionPromotorList) {
+        this.comisionPromotorList = comisionPromotorList;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -456,6 +468,11 @@ public class Aerolinea extends Entidad {
     @Override
     public String toString() {
         return "com.agencia.entities.Aerolinea[ idAerolinea=" + idAerolinea + " ]";
+    }
+
+    @Override
+    public int getId() throws CRUDException {
+        return this.getIdAerolinea();
     }
 
 }

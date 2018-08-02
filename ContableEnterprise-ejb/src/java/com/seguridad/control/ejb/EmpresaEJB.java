@@ -5,6 +5,8 @@
  */
 package com.seguridad.control.ejb;
 
+import com.seguridad.control.FacadeEJB;
+import com.seguridad.control.FacadeEJBFirst;
 import com.seguridad.control.LoggerContable;
 import com.seguridad.control.exception.CRUDException;
 import com.seguridad.control.entities.Empresa;
@@ -14,8 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 /**
@@ -23,12 +23,7 @@ import javax.persistence.Query;
  * @author Cheyo
  */
 @Stateless
-public class EmpresaEJB implements EmpresaRemote {
-
-    @PersistenceContext
-    private EntityManager em;
-
-    private Queries querie = Queries.getQueries();
+public class EmpresaEJB extends FacadeEJBFirst implements EmpresaRemote {
 
     @Override
     public Empresa get(Empresa e) throws CRUDException {
@@ -64,7 +59,7 @@ public class EmpresaEJB implements EmpresaRemote {
 
     @Override
     public Empresa getPrincipal(Empresa e) throws CRUDException {
-        Query q = em.createNativeQuery(querie.getPropertie(Queries.GET_EMPRESA_PRINCIPAL), Empresa.class);
+        Query q = em.createNativeQuery(queries.getPropertie(Queries.GET_EMPRESA_CENTRAL), Empresa.class);
         List<Empresa> l = q.getResultList();
 
         for (Empresa emp : l) {
@@ -83,7 +78,7 @@ public class EmpresaEJB implements EmpresaRemote {
 
     @Override
     public List<Empresa> getSucursales(Empresa e) throws CRUDException {
-       Query q = em.createNativeQuery(querie.getPropertie(Queries.GET_SUCURSALES), Empresa.class);
+       Query q = em.createNativeQuery(queries.getPropertie(Queries.GET_SUCURSALES), Empresa.class);
         List<Empresa> l = q.getResultList();
 
         for (Empresa emp : l) {
@@ -100,8 +95,14 @@ public class EmpresaEJB implements EmpresaRemote {
     }
 
     @Override
-    public List<Empresa> get(String q) throws CRUDException {
+    public List get(String q) throws CRUDException {
         Query query = em.createNamedQuery(q, Empresa.class) ;
+        return (List<Empresa>)query.getResultList() ;
+    }
+
+    @Override
+    public List getAll() throws CRUDException {
+        Query query = em.createNamedQuery("Empresa.findAll", Empresa.class) ;
         return (List<Empresa>)query.getResultList() ;
     }
     

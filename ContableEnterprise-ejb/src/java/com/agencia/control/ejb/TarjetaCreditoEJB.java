@@ -8,6 +8,7 @@ package com.agencia.control.ejb;
 import com.agencia.control.remote.TarjetaCreditoRemote;
 import com.agencia.entities.TarjetaCredito;
 import com.contabilidad.entities.PlanCuentas;
+import com.seguridad.control.FacadeEJB;
 import com.seguridad.control.LoggerContable;
 import com.seguridad.control.entities.Entidad;
 import com.seguridad.control.exception.CRUDException;
@@ -23,10 +24,7 @@ import javax.persistence.Query;
  * @author xeio
  */
 @Stateless
-public class TarjetaCreditoEJB implements TarjetaCreditoRemote {
-
-    @PersistenceContext
-    private EntityManager em;
+public class TarjetaCreditoEJB extends FacadeEJB implements TarjetaCreditoRemote {
 
     @Override
     public List<TarjetaCredito> get() throws CRUDException {

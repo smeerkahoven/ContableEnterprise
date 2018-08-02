@@ -6,6 +6,7 @@
 package com.configuracion.entities;
 
 import com.seguridad.control.entities.Entidad;
+import com.seguridad.control.exception.CRUDException;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -93,5 +94,11 @@ public class CambioUfv extends Entidad {
     public String toString() {
         return "com.configuracion.entities.CambioUfv[ fecha=" + fecha + " ]";
     }
+
+    @Override
+    public int getId() throws CRUDException {
+        return 0 ;
+    }
+    
     
 }

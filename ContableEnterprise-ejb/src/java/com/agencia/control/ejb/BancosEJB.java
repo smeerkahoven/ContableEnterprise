@@ -8,6 +8,7 @@ package com.agencia.control.ejb;
 import com.agencia.control.remote.BancosRemote;
 import com.agencia.entities.Bancos;
 import com.agencia.entities.CuentaBanco;
+import com.seguridad.control.FacadeEJB;
 import com.seguridad.control.LoggerContable;
 import com.seguridad.control.entities.Entidad;
 import com.seguridad.control.exception.CRUDException;
@@ -15,8 +16,6 @@ import com.seguridad.queries.Queries;
 import java.util.List;
 import java.util.logging.Level;
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 /**
@@ -24,10 +23,7 @@ import javax.persistence.Query;
  * @author xeio
  */
 @Stateless
-public class BancosEJB implements BancosRemote {
-
-    @PersistenceContext
-    private EntityManager em;
+public class BancosEJB extends FacadeEJB implements BancosRemote {
 
     private Queries querie = Queries.getQueries();
 
@@ -105,7 +101,7 @@ public class BancosEJB implements BancosRemote {
 
     @Override
     public void remove(CuentaBanco e) throws CRUDException {
-       if (!em.contains(e)) {
+        if (!em.contains(e)) {
             e = em.merge(e);
         }
         em.remove(e);
@@ -114,13 +110,13 @@ public class BancosEJB implements BancosRemote {
 
     @Override
     public boolean hasCuentas(Bancos b) throws CRUDException {
-        
+
         Query q = em.createNamedQuery("CuentaBanco.countCuentasByBanco");
         q.setParameter("idBanco", b.getIdBanco());
-        
+
         long value = (long) q.getSingleResult();
-        
-        return value > 0 ;
+
+        return value > 0;
     }
 
 }

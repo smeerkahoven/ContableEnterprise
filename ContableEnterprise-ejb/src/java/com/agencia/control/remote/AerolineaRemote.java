@@ -7,8 +7,11 @@ package com.agencia.control.remote;
 
 import com.agencia.entities.Aerolinea;
 import com.agencia.entities.AerolineaImpuesto;
+import com.seguridad.control.entities.Entidad;
 import com.seguridad.control.exception.CRUDException;
 import com.seguridad.control.remote.DaoRemote;
+import com.seguridad.control.remote.DaoRemoteFacade;
+import java.util.HashMap;
 import java.util.List;
 import javax.ejb.Remote;
 
@@ -18,13 +21,26 @@ import javax.ejb.Remote;
  */
 
 @Remote
-public interface AerolineaRemote extends DaoRemote {
+public interface AerolineaRemote extends DaoRemoteFacade {
 
     public List<Aerolinea> get() throws CRUDException;
 
+    @Override
+    public List get(String namedQuery, Class<?> typeClass) throws CRUDException;
+    
+
     public List<AerolineaImpuesto> get(Aerolinea a) throws CRUDException;
+
+    @Override
+    public int insert(Entidad e) throws CRUDException;
+    
     
     public void remove(AerolineaImpuesto a , String query) throws CRUDException;
+
+    @Override
+    public void remove(String nativeQuery, HashMap<String, Object> parameters) throws CRUDException;
+    
+    
     
 
 }

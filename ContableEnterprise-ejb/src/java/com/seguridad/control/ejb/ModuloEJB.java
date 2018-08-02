@@ -5,6 +5,7 @@
  */
 package com.seguridad.control.ejb;
 
+import com.seguridad.control.FacadeEJB;
 import com.seguridad.control.LoggerContable;
 import com.seguridad.control.entities.Entidad;
 import com.seguridad.control.entities.Modulo;
@@ -21,10 +22,7 @@ import javax.persistence.PersistenceContext;
  * @author Cheyo
  */
 @Stateless
-public class ModuloEJB implements ModuloRemote {
-
-    @PersistenceContext
-    private EntityManager em;
+public class ModuloEJB extends FacadeEJB implements ModuloRemote {
 
     @Override
     public void update(Entidad e) throws CRUDException {
@@ -65,6 +63,11 @@ public class ModuloEJB implements ModuloRemote {
 
     @Override
     public List get(Entidad e, String q) throws CRUDException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public List get() throws CRUDException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

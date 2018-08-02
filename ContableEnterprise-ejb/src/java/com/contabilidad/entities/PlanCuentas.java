@@ -6,6 +6,7 @@
 package com.contabilidad.entities;
 
 import com.seguridad.control.entities.Entidad;
+import com.seguridad.control.exception.CRUDException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import javax.persistence.Basic;
@@ -29,24 +30,27 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "PlanCuentas.findAll", query = "SELECT p FROM PlanCuentas p WHERE p.idEmpresa=:idEmpresa ORDER BY p.idPlanCuentas, p.cuenta, p.nivel asc"),
     //@NamedQuery(name = "PlanCuentas.findAll", query = "SELECT p ,(select c.cuenta from PlanCuentas c where p.idPlanCuentas=c.idPlanCuentas ) as idPlanCuentaPadreNombre FROM PlanCuentas p ORDER BY p.idPlanCuentas, p.cuenta, p.nivel asc"),
     @NamedQuery(name = "PlanCuentas.forCombo", query = "SELECT p.idPlanCuentas,p.cuenta FROM PlanCuentas p WHERE p.nivel = 5 AND p.idEmpresa=:idEmpresa  Order by p.cuenta"),
-    @NamedQuery(name = "PlanCuentas.forComboPlan", query = "SELECT p FROM PlanCuentas p WHERE p.idEmpresa=:idEmpresa and p.idPlanCuentaPadre= (SELECT q.idPlanCuentas FROM PlanCuentas q WHERE q.cuenta = :cuenta ) ORDER BY p.idPlanCuentas, p.cuenta, p.nivel asc"),
-    @NamedQuery(name = "PlanCuentas.forComboIdPlan", query = "SELECT p FROM PlanCuentas p WHERE p.idEmpresa=:idEmpresa and p.idPlanCuentaPadre=:idPlanCuentas ORDER BY p.idPlanCuentas, p.cuenta, p.nivel asc"),
+    @NamedQuery(name = "PlanCuentas.forComboPlan", query = "SELECT p FROM PlanCuentas p WHERE p.idEmpresa=:idEmpresa and p.nroPlanCuentaPadre= (SELECT q.nroPlanCuenta FROM PlanCuentas q WHERE q.cuenta = :cuenta ) ORDER BY p.nroPlanCuenta, p.cuenta, p.nivel asc"),
+    @NamedQuery(name = "PlanCuentas.forComboIdPlan", query = "SELECT p FROM PlanCuentas p WHERE p.idEmpresa=:idEmpresa and p.nroPlanCuentaPadre=:nroPlanCuentas ORDER BY p.nroPlanCuenta, p.cuenta, p.nivel asc"),
     @NamedQuery(name = "PlanCuentas.forSearch", query = "SELECT p.idPlanCuentas,p.cuenta FROM PlanCuentas p WHERE p.nivel < 5 Order by p.cuenta"),
     
 })
 public class PlanCuentas extends Entidad {
 
     private static final long serialVersionUID = 1L;
-    @Column(name = "id_empresa")
+    @Column(name = "id_empresa", updatable = false)
     private Integer idEmpresa;
 
     @Id
     @Basic(optional = false)
     @Column(name = "id_plan_cuentas")
-    private BigInteger idPlanCuentas;
+    private Integer idPlanCuentas;
 
-    @Column(name = "id_plan_cuenta_padre")
-    private BigInteger idPlanCuentaPadre;
+    @Column(name = "nro_plan_cuenta")
+    private BigInteger nroPlanCuenta;
+    
+    @Column(name = "nro_plan_cuenta_padre")
+    private BigInteger nroPlanCuentaPadre;
 
     @Column(name = "cuenta", length = 40)
     private String cuenta;
@@ -106,10 +110,6 @@ public class PlanCuentas extends Entidad {
     public PlanCuentas() {
     }
 
-    public PlanCuentas(BigInteger idPlanCuentas) {
-        this.idPlanCuentas = idPlanCuentas;
-    }
-
     public Integer getIdEmpresa() {
         return idEmpresa;
     }
@@ -118,22 +118,32 @@ public class PlanCuentas extends Entidad {
         this.idEmpresa = idEmpresa;
     }
 
-    public BigInteger getIdPlanCuentas() {
+    public Integer getIdPlanCuentas() {
         return idPlanCuentas;
     }
 
-    public void setIdPlanCuentas(BigInteger idPlanCuentas) {
+    public void setIdPlanCuentas(Integer idPlanCuentas) {
         this.idPlanCuentas = idPlanCuentas;
     }
 
-    public BigInteger getIdPlanCuentaPadre() {
-        return idPlanCuentaPadre;
+    public BigInteger getNroPlanCuenta() {
+        return nroPlanCuenta;
     }
 
-    public void setIdPlanCuentaPadre(BigInteger idPlanCuentaPadre) {
-        this.idPlanCuentaPadre = idPlanCuentaPadre;
+    public void setNroPlanCuenta(BigInteger nroPlanCuenta) {
+        this.nroPlanCuenta = nroPlanCuenta;
     }
 
+    public BigInteger getNroPlanCuentaPadre() {
+        return nroPlanCuentaPadre;
+    }
+
+    public void setNroPlanCuentaPadre(BigInteger nroPlanCuentaPadre) {
+        this.nroPlanCuentaPadre = nroPlanCuentaPadre;
+    }
+
+
+    
     public String getCuenta() {
         return cuenta;
     }
@@ -214,5 +224,12 @@ public class PlanCuentas extends Entidad {
     public String toString() {
         return "com.contabilidad.entities.PlanCuentas[ idPlanCuentas=" + idPlanCuentas + " ]";
     }
+
+    @Override
+    public int getId() throws CRUDException {
+        return 0 ;
+    }
+    
+    
 
 }

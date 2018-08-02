@@ -5,6 +5,8 @@
  */
 package com.seguridad.control.ejb;
 
+import com.seguridad.control.FacadeEJB;
+import com.seguridad.control.FacadeEJBFirst;
 import com.seguridad.control.LoggerContable;
 import com.seguridad.control.entities.Empleado;
 import com.seguridad.control.exception.CRUDException;
@@ -22,12 +24,7 @@ import javax.persistence.Query;
  * @author Cheyo
  */
 @Stateless
-public class EmpleadoEJB implements EmpleadoRemote {
-
-    @PersistenceContext
-    private EntityManager em;
-
-    private Queries queries = Queries.getQueries();
+public class EmpleadoEJB extends FacadeEJBFirst implements EmpleadoRemote {
 
     private String mensaje;
     //ResourceBundle.getBundle("/servlet/Mensajes").getString("MENSAJITO")

@@ -8,6 +8,7 @@ package com.configuracion.ejb;
 import com.configuracion.entities.CambioDolar;
 import com.configuracion.entities.CambioUfv;
 import com.configuracion.remote.CambioRemote;
+import com.seguridad.control.FacadeEJB;
 import com.seguridad.control.entities.Entidad;
 import com.seguridad.control.exception.CRUDException;
 import java.util.List;
@@ -21,7 +22,7 @@ import javax.persistence.Query;
  * @author xeio
  */
 @Stateless
-public class CambioEJB implements CambioRemote {
+public class CambioEJB extends FacadeEJB implements CambioRemote {
 
     @PersistenceContext
     private EntityManager em;
@@ -94,6 +95,11 @@ public class CambioEJB implements CambioRemote {
         q.setParameter("fecha", fecha);
 
         return (CambioDolar) q.getSingleResult();
+    }
+
+    @Override
+    public List get() throws CRUDException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
 }

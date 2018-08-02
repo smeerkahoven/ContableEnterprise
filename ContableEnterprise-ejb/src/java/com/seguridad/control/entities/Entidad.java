@@ -5,12 +5,15 @@
  */
 package com.seguridad.control.entities;
 
+import com.seguridad.control.exception.CRUDException;
 import java.io.Serializable;
 
 /**
  *
  * @author Cheyo
  */
-public class Entidad implements Serializable{
+public abstract class Entidad implements Serializable{
+    
+    public abstract int getId()  throws CRUDException  ;
    
 }
