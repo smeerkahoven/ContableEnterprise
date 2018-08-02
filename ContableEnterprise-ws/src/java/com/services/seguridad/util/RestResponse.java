@@ -15,6 +15,8 @@ public class RestResponse {
     public static final String VALOR_DOLAR_NO_ESTABLECIDO = "VALOR_DOLAR_NO_ESTABLECIDO" ; 
     
     public static final String RESTFUL_ERROR = "RESTFUL_ERROR";
+    public static final String RESTFUL_PARAMETERS_SENT = "RESTFUL_PARAMETERS_SENT";
+    public static final String RESTFUL_RECORD_EXISTS = "RESTFUL_RECORD_EXISTS";
     public static final String RESTFUL_SUCCESS = "RESTFUL_SUCCESS";
     public static final String RESTFUL_WARNING = "RESTFUL_WARNING";
     public static final String RESTFUL_TOKEN_MANDATORY = "RESTFUL_TOKEN_MANDATORY";

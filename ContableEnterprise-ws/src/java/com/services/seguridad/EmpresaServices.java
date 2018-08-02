@@ -5,14 +5,10 @@
  */
 package com.services.seguridad;
 
-import com.agencia.entities.Aerolinea;
-import com.agencia.entities.AerolineaImpuesto;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.response.json.agencia.AerolineaImpuestoJSON;
-import com.response.json.agencia.AerolineaJSON;
 import com.response.json.seguridad.SucursalJSON;
 import com.seguridad.control.entities.Empresa;
 import com.seguridad.control.entities.UserToken;
@@ -23,13 +19,15 @@ import com.seguridad.control.remote.UsuarioRemote;
 import com.seguridad.utils.Accion;
 import com.seguridad.utils.ResponseCode;
 import com.seguridad.utils.Status;
-import com.services.agencia.AerolineaResource;
 import com.services.seguridad.util.RestRequest;
 import com.services.seguridad.util.RestResponse;
+import com.util.resource.ComboSelect;
 import com.util.resource.Mensajes;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -88,9 +86,108 @@ public class EmpresaServices {
         r.setContent("hola " + request.getToken() + " y yo un mensaje : " + request.getContent());
         return r;
     }
+    
+    @POST
+    @Path("all")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public RestResponse getAllEmpresas(final RestRequest request) {
+
+        Mensajes m = Mensajes.getMensajes();
+        RestResponse r = new RestResponse();
+        try {
+            /*Verificamos el ID token*/
+            if (request.getToken() != null && !request.getToken().isEmpty()) {
+                System.out.println(request.getToken());
+                UserToken t = ejbUsuario.get(new UserToken(request.getToken()));
+                if (t != null) {
+                    if (t.getStatus().equals(Status.ACTIVO)) {
+
+                        r.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
+                        r.setContent(ejbEmpresa.getAll());
+
+                        return r;
+                    } else {
+                        r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+                        r.setContent(m.getProperty(RestResponse.RESTFUL_TOKEN_MANDATORY));
+                    }
+                } else {
+                    r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+                    r.setContent(m.getProperty(RestResponse.RESTFUL_TOKEN_MANDATORY));
+                }
+            } else {
+                r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+                r.setContent(m.getProperty(RestResponse.RESTFUL_TOKEN_MANDATORY));
+            }
+
+        } catch (CRUDException ex) {
+            Logger.getLogger(EmpresaServices.class.getName()).log(Level.SEVERE, null, ex);
+            r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+            r.setContent(m.getProperty(RestResponse.RESTFUL_ERROR));
+        }
+        r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+        r.setContent(m.getProperty(RestResponse.RESTFUL_ERROR));
+
+        return r;
+
+    }
+    
+        @POST
+    @Path("all-combo")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public RestResponse getSucursales(final RestRequest request) {
+
+        Mensajes m = Mensajes.getMensajes().getMensajes();
+        RestResponse r = new RestResponse();
+        try {
+            /*Verificamos el ID token*/
+            if (request.getToken() != null && !request.getToken().isEmpty()) {
+                System.out.println(request.getToken());
+                UserToken t = ejbUsuario.get(new UserToken(request.getToken()));
+                if (t != null) {
+                    if (t.getStatus().equals(Status.ACTIVO)) {
+                        List<Empresa> l = ejbEmpresa.get("Empresa.findEmpresaForCombo");
+                        ArrayList lst = new ArrayList();
+                        Iterator i = l.iterator() ;
+                        while (i.hasNext()){
+                            Object[] emp =(Object[]) i.next();
+                            ComboSelect c = new ComboSelect();
+                            c.setId( emp[0]);
+                            c.setName((String) emp[1] + " - " + (String)emp[2] );
+                            lst.add(c);
+                        }
+
+                        r.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
+                        r.setContent(lst);
+
+                        return r;
+                    } else {
+                        r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+                        r.setContent(m.getProperty(RestResponse.RESTFUL_TOKEN_MANDATORY));
+                    }
+                } else {
+                    r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+                    r.setContent(m.getProperty(RestResponse.RESTFUL_TOKEN_MANDATORY));
+                }
+            } else {
+                r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+                r.setContent(m.getProperty(RestResponse.RESTFUL_TOKEN_MANDATORY));
+            }
+
+        } catch (CRUDException ex) {
+            Logger.getLogger(EmpresaServices.class.getName()).log(Level.SEVERE, null, ex);
+            r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+            r.setContent(m.getProperty(RestResponse.RESTFUL_ERROR));
+        }
+        r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+        r.setContent(m.getProperty(RestResponse.RESTFUL_ERROR));
+
+        return r;
+
+    }
 
     /**
-     * No esta realizada la validacion del token
      *
      * @param request
      * @return
@@ -106,7 +203,6 @@ public class EmpresaServices {
         try {
             /*Verificamos el ID token*/
             if (request.getToken() != null && !request.getToken().isEmpty()) {
-                System.out.println(request.getToken());
                 UserToken t = ejbUsuario.get(new UserToken(request.getToken()));
                 if (t != null) {
                     if (t.getStatus().equals(Status.ACTIVO)) {
@@ -166,6 +262,7 @@ public class EmpresaServices {
                         json = gson.fromJson(object.toString(), SucursalJSON.class);
 
                         Empresa empresa = json.toSucursal(json);
+                        empresa.setTipo(Empresa.SUCURSAL);
 
                         ejbEmpresa.insert(empresa);
                         //se debe insertar los impuestos nuevos

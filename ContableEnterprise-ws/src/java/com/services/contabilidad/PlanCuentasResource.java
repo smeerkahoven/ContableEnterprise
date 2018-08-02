@@ -12,14 +12,15 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.response.json.PlanCuentasJSON;
+import com.seguridad.control.entities.Empresa;
 import com.seguridad.control.entities.User;
 import com.seguridad.control.entities.UserToken;
 import com.seguridad.control.exception.CRUDException;
-import com.seguridad.control.remote.LoggerRemote;
-import com.seguridad.control.remote.UsuarioRemote;
+import com.seguridad.queries.Queries;
 import com.seguridad.utils.Accion;
 import com.seguridad.utils.ResponseCode;
 import com.seguridad.utils.Status;
+import com.services.TemplateResource;
 import com.services.seguridad.EmpresaServices;
 import com.services.seguridad.util.RestRequest;
 import com.services.seguridad.util.RestResponse;
@@ -27,12 +28,11 @@ import com.util.resource.ComboSelect;
 import com.util.resource.Mensajes;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -48,19 +48,10 @@ import javax.ws.rs.core.MediaType;
  * @author xeio
  */
 @Path("contabilidad")
-public class PlanCuentasResource {
-
-    @Context
-    private UriInfo context;
+public class PlanCuentasResource extends TemplateResource {
 
     @EJB
     private PlanCuentasRemote ejbPlanCuentas;
-
-    @EJB
-    private UsuarioRemote ejbUsuario;
-
-    @EJB
-    private LoggerRemote ejbLogger;
 
     /**
      * Creates a new instance of ContabilidadResource
@@ -70,7 +61,7 @@ public class PlanCuentasResource {
 
     /**
      * Retrieves representation of an instance of
- com.services.contabilidad.PlanCuentasResource
+     * com.services.contabilidad.PlanCuentasResource
      *
      * @return an instance of java.lang.String
      */
@@ -97,66 +88,45 @@ public class PlanCuentasResource {
      * @return
      */
     @POST
-    @Path("plan-cuentas/all")
+    @Path("plan-cuentas/all/{idEmpresa}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public RestResponse getPlanCuentasAll(final RestRequest request) {
+    public RestResponse getPlanCuentasAll(final RestRequest request,
+            @PathParam("idEmpresa") final Integer idEmpresa) {
 
-        Mensajes m = Mensajes.getMensajes().getMensajes();
-        RestResponse r = new RestResponse();
-        try {
-            /*Verificamos el ID token*/
-            if (request.getToken() != null && !request.getToken().isEmpty()) {
-                System.out.println(request.getToken());
-                UserToken t = ejbUsuario.get(new UserToken(request.getToken()));
-                User u = ejbUsuario.get(new User(t.getUserName()));
+        RestResponse response = doValidations(request);
+        if (response.getCode() == ResponseCode.RESTFUL_SUCCESS.getCode()) {
 
-                if (t != null) {
-                    if (t.getStatus().equals(Status.ACTIVO)) {
+            try {
+                List<PlanCuentas> l = ejbPlanCuentas.get(new Empresa(idEmpresa));
+                List<PlanCuentasJSON> json = getPlanCuentasJSon(l);
 
-                        List<PlanCuentas> l = ejbPlanCuentas.get(u.getIdEmpleado().getIdEmpresa());
-                        List<PlanCuentasJSON> json = getPlanCuentasJSon(l);
+                response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
+                //r.setCode(u.getIdEmpleado().getIdEmpresa().getIdEmpresa());
+                response.setContent(json);
 
-                        r.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
-                        //r.setCode(u.getIdEmpleado().getIdEmpresa().getIdEmpresa());
-                        r.setContent(json);
-
-                        ejbLogger.add(Accion.ACCESS, t.getUserName(), request.getFormName(), "");
-
-                        return r;
-                    } else {
-                        r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
-                        r.setContent(m.getProperty(RestResponse.RESTFUL_TOKEN_MANDATORY));
-                    }
-                } else {
-                    r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
-                    r.setContent(m.getProperty(RestResponse.RESTFUL_TOKEN_MANDATORY));
-                }
-            } else {
-                r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
-                r.setContent(m.getProperty(RestResponse.RESTFUL_TOKEN_MANDATORY));
+                ejbLogger.add(Accion.ACCESS, user.getUserName(), request.getFormName(), user.getIp());
+            } catch (CRUDException ex) {
+                Logger.getLogger(PlanCuentasResource.class.getName()).log(Level.SEVERE, null, ex);
             }
 
-        } catch (CRUDException ex) {
-            Logger.getLogger(PlanCuentasResource.class.getName()).log(Level.SEVERE, null, ex);
-            r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
-            r.setContent(m.getProperty(RestResponse.RESTFUL_ERROR));
         }
-
-        return r;
+        return response;
 
     }
 
     /**
      *
      * @param request
+     * @param idEmpresa
      * @return
      */
     @POST
-    @Path("plan-cuentas/combo")
+    @Path("plan-cuentas/combo/{idEmpresa}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public RestResponse getCombo(final RestRequest request) {
+    public RestResponse getCombo(final RestRequest request,
+            @PathParam("idEmpresa") final Integer idEmpresa) {
 
         Mensajes m = Mensajes.getMensajes().getMensajes();
         RestResponse r = new RestResponse();
@@ -170,12 +140,12 @@ public class PlanCuentasResource {
                 if (t != null) {
                     if (t.getStatus().equals(Status.ACTIVO)) {
 
-                        List<Object[]> l = ejbPlanCuentas.getForCombo(u.getIdEmpleado().getIdEmpresa());
+                        List<Object[]> l = ejbPlanCuentas.getForCombo(new Empresa(idEmpresa));
 
                         ArrayList hm = new ArrayList();
                         for (Object[] o : l) {
                             ComboSelect cm = new ComboSelect();
-                            cm.setId((BigInteger) o[0]);
+                            cm.setId((Integer) o[0]);
                             cm.setName((String) o[1]);
                             hm.add(cm);
                         }
@@ -205,12 +175,12 @@ public class PlanCuentasResource {
 
         return r;
     }
-    
+
     @POST
     @Path("plan-cuentas/combo-plan/{cuenta}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public RestResponse getComboPlan(final RestRequest request, @PathParam("cuenta") BigInteger cuenta) {
+    public RestResponse getComboPlan(final RestRequest request, @PathParam("cuenta") Integer cuenta) {
 
         Mensajes m = Mensajes.getMensajes().getMensajes();
         RestResponse r = new RestResponse();
@@ -224,19 +194,26 @@ public class PlanCuentasResource {
                     if (t.getStatus().equals(Status.ACTIVO)) {
 
                         // Este plan de cuenta ya debe estar creado
-                        PlanCuentas p = new PlanCuentas();
-                        p.setIdPlanCuentas(cuenta);
+                        HashMap<String, Object> parameters = new HashMap<>();
+                        parameters.put("1", cuenta);
 
-                        List<PlanCuentas> l = ejbPlanCuentas.getForComboIdPLan(u.getIdEmpleado().getIdEmpresa(), p);
+                        List<PlanCuentas> l = ejbPlanCuentas.getNative(Queries.GET_PLAN_CUENTAS_NRO_PLANCUENTA, PlanCuentas.class, parameters);
 
                         ArrayList hm = new ArrayList();
-                        for (PlanCuentas o : l) {
+                        for (PlanCuentas p : l) {
                             ComboSelect cm = new ComboSelect();
-                            cm.setId(o.getIdPlanCuentas());
-                            cm.setName(o.getCuenta());
+                            cm.setId(p.getIdPlanCuentas());
+                            cm.setName(p.getCuenta());
+
                             hm.add(cm);
                         }
 
+                        /*for (Object[] o : l) {
+                            ComboSelect cm = new ComboSelect();
+                            cm.setId(o[0]);
+                            cm.setName((String) o[1] + "-" + (String) o[2] + "-" + (String) o[3]);
+                            hm.add(cm);
+                        }*/
                         r.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
                         r.setContent(hm);
 
@@ -269,52 +246,29 @@ public class PlanCuentasResource {
     @Produces(MediaType.APPLICATION_JSON)
     public RestResponse savePlanCuentas(final RestRequest request) {
 
-        Mensajes m = Mensajes.getMensajes().getMensajes();
-        RestResponse r = new RestResponse();
-        try {
-            /*Verificamos el ID token*/
-            if (request.getToken() != null && !request.getToken().isEmpty()) {
-                System.out.println(request.getToken());
-                UserToken t = ejbUsuario.get(new UserToken(request.getToken()));
-                if (t != null) {
-                    if (t.getStatus().equals(Status.ACTIVO)) {
+        RestResponse response = doValidations(request);
+        if (response.getCode() == ResponseCode.RESTFUL_SUCCESS.getCode()) {
 
-                        PlanCuentasJSON pc = new PlanCuentasJSON();
-                        Gson gson = new GsonBuilder().create();
-                        JsonParser parser = new JsonParser();
-                        JsonObject object = parser.parse((String) request.getContent()).getAsJsonObject();
-                        pc = gson.fromJson(object.toString(), PlanCuentasJSON.class);
+            try {
+                PlanCuentasJSON pc = new PlanCuentasJSON();
+                Gson gson = new GsonBuilder().create();
+                JsonParser parser = new JsonParser();
+                JsonObject object = parser.parse((String) request.getContent()).getAsJsonObject();
+                pc = gson.fromJson(object.toString(), PlanCuentasJSON.class);
 
-                        PlanCuentas pcu = PlanCuentasJSON.toPlanCuentas(pc);
-                        ejbPlanCuentas.insert(pcu);
+                PlanCuentas pcu = PlanCuentasJSON.toPlanCuentas(pc);
+                ejbPlanCuentas.insert(pcu);
 
-                        r.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
-                        r.setContent(m.getProperty(RestResponse.RESTFUL_SUCCESS));
+                response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
+                response.setContent(mensajes.getProperty(RestResponse.RESTFUL_SUCCESS));
 
-                        ejbLogger.add(Accion.INSERT, t.getUserName(), request.getFormName(), "");
-
-                        return r;
-
-                    } else {
-                        r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
-                        r.setContent(m.getProperty(RestResponse.RESTFUL_TOKEN_MANDATORY));
-                    }
-                } else {
-                    r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
-                    r.setContent(m.getProperty(RestResponse.RESTFUL_TOKEN_MANDATORY));
-                }
-            } else {
-                r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
-                r.setContent(m.getProperty(RestResponse.RESTFUL_TOKEN_MANDATORY));
+                ejbLogger.add(Accion.INSERT, user.getUserName(), request.getFormName(), user.getIp());
+            } catch (CRUDException ex) {
+                Logger.getLogger(PlanCuentasResource.class.getName()).log(Level.SEVERE, null, ex);
             }
 
-        } catch (CRUDException ex) {
-            Logger.getLogger(PlanCuentasResource.class.getName()).log(Level.SEVERE, null, ex);
-            r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
-            r.setContent(m.getProperty(RestResponse.RESTFUL_ERROR));
         }
-
-        return r;
+        return response;
 
     }
 
@@ -324,52 +278,30 @@ public class PlanCuentasResource {
     @Produces(MediaType.APPLICATION_JSON)
     public RestResponse updatePlanCuentas(final RestRequest request) {
 
-        Mensajes m = Mensajes.getMensajes().getMensajes();
-        RestResponse r = new RestResponse();
-        try {
-            /*Verificamos el ID token*/
-            if (request.getToken() != null && !request.getToken().isEmpty()) {
-                System.out.println(request.getToken());
-                UserToken t = ejbUsuario.get(new UserToken(request.getToken()));
-                if (t != null) {
-                    if (t.getStatus().equals(Status.ACTIVO)) {
+        RestResponse response = doValidations(request);
+        if (response.getCode() == ResponseCode.RESTFUL_SUCCESS.getCode()) {
 
-                        PlanCuentasJSON pc = new PlanCuentasJSON();
-                        Gson gson = new GsonBuilder().create();
-                        JsonParser parser = new JsonParser();
-                        JsonObject object = parser.parse((String) request.getContent()).getAsJsonObject();
-                        pc = gson.fromJson(object.toString(), PlanCuentasJSON.class);
+            try {
+                PlanCuentasJSON pc = new PlanCuentasJSON();
+                Gson gson = new GsonBuilder().create();
+                JsonParser parser = new JsonParser();
+                JsonObject object = parser.parse((String) request.getContent()).getAsJsonObject();
+                pc = gson.fromJson(object.toString(), PlanCuentasJSON.class);
 
-                        PlanCuentas pcu = PlanCuentasJSON.toPlanCuentas(pc);
-                        ejbPlanCuentas.update(pcu);
+                PlanCuentas pcu = PlanCuentasJSON.toPlanCuentas(pc);
+                ejbPlanCuentas.update(pcu);
 
-                        ejbLogger.add(Accion.UPDATE, t.getUserName(), request.getFormName(), "");
+                ejbLogger.add(Accion.UPDATE, user.getUserName(), request.getFormName(), user.getIp());
 
-                        r.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
-                        r.setContent(m.getProperty(RestResponse.RESTFUL_SUCCESS));
-
-                        return r;
-
-                    } else {
-                        r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
-                        r.setContent(m.getProperty(RestResponse.RESTFUL_TOKEN_MANDATORY));
-                    }
-                } else {
-                    r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
-                    r.setContent(m.getProperty(RestResponse.RESTFUL_TOKEN_MANDATORY));
-                }
-            } else {
-                r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
-                r.setContent(m.getProperty(RestResponse.RESTFUL_TOKEN_MANDATORY));
+                response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
+                response.setContent(mensajes.getProperty(RestResponse.RESTFUL_SUCCESS));
+            } catch (CRUDException ex) {
+                Logger.getLogger(PlanCuentasResource.class.getName()).log(Level.SEVERE, null, ex);
             }
 
-        } catch (CRUDException ex) {
-            Logger.getLogger(PlanCuentasResource.class.getName()).log(Level.SEVERE, null, ex);
-            r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
-            r.setContent(m.getProperty(RestResponse.RESTFUL_ERROR));
         }
 
-        return r;
+        return response;
     }
 
     @POST
@@ -378,55 +310,37 @@ public class PlanCuentasResource {
     @Produces(MediaType.APPLICATION_JSON)
     public RestResponse deletePlanCuentas(final RestRequest request) {
 
-        Mensajes m = Mensajes.getMensajes().getMensajes();
-        RestResponse r = new RestResponse();
-        try {
-            /*Verificamos el ID token*/
-            if (request.getToken() != null && !request.getToken().isEmpty()) {
-                System.out.println(request.getToken());
-                UserToken t = ejbUsuario.get(new UserToken(request.getToken()));
-                if (t != null) {
-                    if (t.getStatus().equals(Status.ACTIVO)) {
+        RestResponse response = doValidations(request);
+        if (response.getCode() == ResponseCode.RESTFUL_SUCCESS.getCode()) {
 
-                        //TODO
-                        // Hay q revisar que no existan transacciones para la cuenta
-                        //en la Eliminacion
-                        PlanCuentasJSON pc = new PlanCuentasJSON();
-                        Gson gson = new GsonBuilder().create();
-                        JsonParser parser = new JsonParser();
-                        JsonObject object = parser.parse((String) request.getContent()).getAsJsonObject();
-                        pc = gson.fromJson(object.toString(), PlanCuentasJSON.class);
+            try {
+                //TODO
+                // Hay q revisar que no existan transacciones para la cuenta
+                //en la Eliminacion
+                PlanCuentasJSON pc = new PlanCuentasJSON();
+                Gson gson = new GsonBuilder().create();
+                JsonParser parser = new JsonParser();
+                JsonObject object = parser.parse((String) request.getContent()).getAsJsonObject();
+                pc = gson.fromJson(object.toString(), PlanCuentasJSON.class);
 
-                        PlanCuentas pcu = PlanCuentasJSON.toPlanCuentas(pc);
-                        ejbPlanCuentas.remove(pcu);
+                //TODO
+                // Antes de hacer esta eliminacion, se debe verificar las relaciones
+                //con las otras tablas
+                PlanCuentas pcu = PlanCuentasJSON.toPlanCuentas(pc);
 
-                        ejbLogger.add(Accion.DELETE, t.getUserName(), request.getFormName(), "");
+                ejbPlanCuentas.remove(pcu);
 
-                        r.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
-                        r.setContent(m.getProperty(RestResponse.RESTFUL_SUCCESS));
+                ejbLogger.add(Accion.DELETE, user.getUserName(), request.getFormName(), user.getIp());
 
-                        return r;
-
-                    } else {
-                        r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
-                        r.setContent(m.getProperty(RestResponse.RESTFUL_TOKEN_MANDATORY));
-                    }
-                } else {
-                    r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
-                    r.setContent(m.getProperty(RestResponse.RESTFUL_TOKEN_MANDATORY));
-                }
-            } else {
-                r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
-                r.setContent(m.getProperty(RestResponse.RESTFUL_TOKEN_MANDATORY));
+                response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
+                response.setContent(mensajes.getProperty(RestResponse.RESTFUL_SUCCESS));
+            } catch (CRUDException ex) {
+                Logger.getLogger(PlanCuentasResource.class.getName()).log(Level.SEVERE, null, ex);
             }
 
-        } catch (CRUDException ex) {
-            Logger.getLogger(PlanCuentasResource.class.getName()).log(Level.SEVERE, null, ex);
-            r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
-            r.setContent(m.getProperty(RestResponse.RESTFUL_ERROR));
         }
 
-        return r;
+        return response;
 
     }
 
@@ -435,6 +349,8 @@ public class PlanCuentasResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public RestResponse getPlanCuentas(final RestRequest request) {
+
+        Queries queries = Queries.getQueries();
 
         Mensajes m = Mensajes.getMensajes().getMensajes();
         RestResponse r = new RestResponse();
@@ -456,8 +372,20 @@ public class PlanCuentasResource {
 
                         pcu = (PlanCuentas) ejbPlanCuentas.get(pcu);
 
+                        HashMap parameters = new HashMap();
+                        parameters.put("1", pcu.getNroPlanCuentaPadre());
+                        parameters.put("2", pcu.getIdEmpresa());
+
+                        List pcPadre = ejbPlanCuentas.getNative(Queries.GET_PLAN_CUENTA_PADRE, PlanCuentas.class, parameters);
+                        PlanCuentasJSON returnValue = PlanCuentasJSON.createJson(pcu);
+
+                        if (!pcPadre.isEmpty()) {
+                            PlanCuentas o = (PlanCuentas) pcPadre.get(0);
+                            returnValue.setNroPlanCuentaPadreNombre(o.getCuenta());
+                        }
+
                         r.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
-                        r.setContent(PlanCuentasJSON.createJson(pcu));
+                        r.setContent(returnValue);
 
                         return r;
 
@@ -497,7 +425,7 @@ public class PlanCuentasResource {
             if (lista.isEmpty()) {
                 lista.add(PlanCuentasJSON.createJson(p));
             } else {
-                if (p.getIdPlanCuentaPadre() == null) {
+                if (p.getNroPlanCuentaPadre() == null) {
                     lista.add(PlanCuentasJSON.createJson(p));
                 } else {
                     getPlanCuentasJSon(lista, p);
@@ -516,13 +444,13 @@ public class PlanCuentasResource {
     private void getPlanCuentasJSon(List<PlanCuentasJSON> l, PlanCuentas pc) {
 
         for (PlanCuentasJSON json : l) {
-            if (json.getIdPlanCuentas().equals(pc.getIdPlanCuentaPadre())) {
+            if (json.getNroPlanCuenta().equals(pc.getNroPlanCuentaPadre())) {
                 json = PlanCuentasJSON.addCuenta(pc, json);
                 break;
                 //return l;
             } else {
-                String padre = pc.getIdPlanCuentaPadre().toString();
-                String cuenta = json.getIdPlanCuentas().toString();
+                String padre = pc.getNroPlanCuentaPadre().toString();
+                String cuenta = json.getNroPlanCuenta().toString();
                 if (padre.startsWith(cuenta)) {
                     getPlanCuentasJSon(json.getChildren(), pc);
                     break;

@@ -8,7 +8,6 @@ package com.services.agencia;
 import com.agencia.control.remote.BancosRemote;
 import com.agencia.entities.Bancos;
 import com.agencia.entities.CuentaBanco;
-import com.agencia.entities.TarjetaCredito;
 import com.contabilidad.entities.PlanCuentas;
 import com.contabilidad.remote.PlanCuentasRemote;
 import com.google.gson.Gson;
@@ -17,37 +16,32 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.response.json.BancoJSON;
 import com.response.json.CuentaBancoJSON;
-import com.response.json.EntidadJSON;
-import com.response.json.TarjetaCreditoJSON;
+import com.seguridad.control.entities.Empresa;
 import com.seguridad.control.entities.User;
 import com.seguridad.control.entities.UserToken;
 import com.seguridad.control.exception.CRUDException;
-import com.seguridad.control.remote.LoggerRemote;
-import com.seguridad.control.remote.UsuarioRemote;
 import com.seguridad.queries.Queries;
 import com.seguridad.utils.Accion;
 import com.seguridad.utils.ResponseCode;
 import com.seguridad.utils.Status;
+import com.services.TemplateResource;
 import com.services.seguridad.EmpresaServices;
 import com.services.seguridad.util.RestRequest;
 import com.services.seguridad.util.RestResponse;
 import com.util.resource.ComboSelect;
 import com.util.resource.Mensajes;
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 
 /**
@@ -56,19 +50,10 @@ import javax.ws.rs.core.MediaType;
  * @author xeio
  */
 @Path("bancos")
-public class BancosResource {
-
-    @Context
-    private UriInfo context;
-
-    @EJB
-    private UsuarioRemote ejbUsuario;
+public class BancosResource extends TemplateResource{
 
     @EJB
     private BancosRemote ejbBancos;
-
-    @EJB
-    private LoggerRemote ejbLogger;
 
     @EJB
     private PlanCuentasRemote ejbPlanCuentas;
@@ -133,10 +118,11 @@ public class BancosResource {
     }
 
     @POST
-    @Path("combo")
+    @Path("combo/{idEmpresa}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public RestResponse getCombo(final RestRequest request) {
+    public RestResponse getCombo(final RestRequest request,
+            @PathParam("idEmpresa") final Integer idEmpresa) {
 
         Mensajes m = Mensajes.getMensajes().getMensajes();
         RestResponse r = new RestResponse();
@@ -153,7 +139,7 @@ public class BancosResource {
                         PlanCuentas p = new PlanCuentas();
                         p.setCuenta("BANCOS");
 
-                        List<PlanCuentas> l = ejbPlanCuentas.getForCombo(u.getIdEmpleado().getIdEmpresa(), p);
+                        List<PlanCuentas> l = ejbPlanCuentas.getForCombo(new Empresa(idEmpresa), p);
 
                         ArrayList hm = new ArrayList();
                         for (PlanCuentas o : l) {
@@ -300,10 +286,12 @@ public class BancosResource {
     }
 
     @POST
-    @Path("delete")
+    @Path("delete/{idBanco}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public RestResponse deleteBancos(final RestRequest request) {
+    public RestResponse deleteBancos(final RestRequest request,
+            @PathParam("idBanco") Integer idBanco
+    ) {
 
         Mensajes m = Mensajes.getMensajes().getMensajes();
         RestResponse r = new RestResponse();
@@ -314,14 +302,14 @@ public class BancosResource {
                 UserToken t = ejbUsuario.get(new UserToken(request.getToken()));
                 if (t != null) {
                     if (t.getStatus().equals(Status.ACTIVO)) {
+                        
+                        if (idBanco ==null){
+                            r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+                            r.setContent(m.getProperty(RestResponse.RESTFUL_PARAMETERS_SENT));
+                            return r ;
+                        }
 
-                        BancoJSON json = new BancoJSON();
-                        Gson gson = new GsonBuilder().create();
-                        JsonParser parser = new JsonParser();
-                        JsonObject object = parser.parse((String) request.getContent()).getAsJsonObject();
-                        json = gson.fromJson(object.toString(), BancoJSON.class);
-
-                        Bancos pcu = BancoJSON.toBancos(json);
+                        Bancos pcu = new Bancos(idBanco);
                         if (ejbBancos.hasCuentas(pcu)) {
                             r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
                             r.setContent(m.getProperty(RestResponse.BANCO_CUENTA_RELACION));
@@ -360,10 +348,11 @@ public class BancosResource {
     }
 
     @POST
-    @Path("delete-link")
+    @Path("delete-link/{idCuentaBanco}")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public RestResponse deleteLink(final RestRequest request) {
+    public RestResponse deleteLink(final RestRequest request,
+    @PathParam("idCuentaBanco") final Integer idCuentaBanco) {
 
         Mensajes m = Mensajes.getMensajes().getMensajes();
         RestResponse r = new RestResponse();
@@ -375,16 +364,17 @@ public class BancosResource {
                 if (t != null) {
                     if (t.getStatus().equals(Status.ACTIVO)) {
 
-                        CuentaBancoJSON json = new CuentaBancoJSON();
-                        Gson gson = new GsonBuilder().create();
-                        JsonParser parser = new JsonParser();
-                        JsonObject object = parser.parse((String) request.getContent()).getAsJsonObject();
-                        json = gson.fromJson(object.toString(), CuentaBancoJSON.class);
+                        if (idCuentaBanco ==null){
+                            r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+                            r.setContent(m.getProperty(RestResponse.RESTFUL_PARAMETERS_SENT));
+                            return r ;
+                        }
 
-                        CuentaBanco cb = CuentaBancoJSON.toCuentaBanco(json);
+                        HashMap<String, Object> parameters = new HashMap<>();
+                        parameters.put("1", idCuentaBanco);
 
-                        ejbBancos.remove(cb);
-
+                        ejbBancos.remove(Queries.DELETE_CUENTA_BANCO, parameters);
+                        
                         ejbLogger.add(Accion.DELETE, t.getUserName(), request.getFormName(), "");
 
                         r.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
@@ -493,7 +483,6 @@ public class BancosResource {
                         json = gson.fromJson(object.toString(), CuentaBancoJSON.class);
 
                         CuentaBanco b = CuentaBancoJSON.toCuentaBanco(json);
-                        b.setIdEmpresa(u.getIdEmpleado().getIdEmpresa().getIdEmpresa());
 
                         ejbBancos.insert(b);
 
