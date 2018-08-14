@@ -9,6 +9,7 @@ import com.security.SessionUtils;
 import com.seguridad.control.entities.Empresa;
 import com.seguridad.control.exception.CRUDException;
 import com.seguridad.control.remote.EmpresaRemote;
+import com.seguridad.utils.Accion;
 import com.view.ViewManagedBean;
 import com.view.menu.Formulario;
 import com.view.resources.Mensajes;
@@ -81,8 +82,8 @@ public class EmpresaManagedBean extends ViewManagedBean {
             Object value) {
         List<FacesMessage> msgs = new ArrayList<FacesMessage>();
         Part file = (Part) value;
-        
-        if (file == null){
+
+        if (file == null) {
             msgs.add(new FacesMessage("Ingrese un archivo de Imagen"));
             throw new ValidatorException(msgs);
         }
@@ -98,7 +99,6 @@ public class EmpresaManagedBean extends ViewManagedBean {
             throw new ValidatorException(msgs);
         }
     }
-
 
     public EmpresaManagedBean() {
         this.formName = "empresa";
@@ -153,6 +153,7 @@ public class EmpresaManagedBean extends ViewManagedBean {
             ejbEmpresa.update(data);
             successMessage = m.getProperty(Mensajes.DATOS_GUARDADOS_EXITOSAMENTE);
 
+            ejbLogger.add(Accion.INSERT, user.getUserName(), formName, user.getIp());
         } catch (CRUDException ex) {
             Logger.getLogger(EmpresaManagedBean.class
                     .getName()).log(Level.SEVERE, null, ex);
@@ -177,9 +178,13 @@ public class EmpresaManagedBean extends ViewManagedBean {
             data.setPaginaWeb(params.get("txtPaginaWeb"));
             data.setTipo(Empresa.SUCURSAL);
 
-            ejbEmpresa.insert(data);
+            data.setIdEmpresa(ejbEmpresa.insert(data));
+
+            ejbEmpresa.crearPlanCuentas(data);
+
             successMessage = m.getProperty(Mensajes.DATOS_GUARDADOS_EXITOSAMENTE);
 
+            ejbLogger.add(Accion.INSERT, user.getUserName(), formName, user.getIp());
         } catch (CRUDException ex) {
             Logger.getLogger(EmpresaManagedBean.class
                     .getName()).log(Level.SEVERE, null, ex);
@@ -207,6 +212,8 @@ public class EmpresaManagedBean extends ViewManagedBean {
 
             ejbEmpresa.update(data);
             successMessage = m.getProperty(Mensajes.DATOS_GUARDADOS_EXITOSAMENTE);
+
+            ejbLogger.add(Accion.INSERT, user.getUserName(), formName, user.getIp());
 
         } catch (CRUDException ex) {
             Logger.getLogger(EmpresaManagedBean.class

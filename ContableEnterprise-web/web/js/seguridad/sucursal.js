@@ -74,7 +74,6 @@ angular.module('jsSucursal.controllers', []).controller('frSucursal', ['$scope',
             }
         }
 
-
         $scope.ver = function (id) {
             $scope.ocultar();
             if (id > 0) {

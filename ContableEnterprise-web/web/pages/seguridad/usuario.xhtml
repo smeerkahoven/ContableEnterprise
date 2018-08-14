@@ -30,7 +30,7 @@
         <!-- BEGIN PLUGINS STYLES -->
         <link rel="stylesheet" href="../../assets/vendor/flatpickr/flatpickr.min.css"/>
         <link rel="stylesheet" href="../../css/main.css"  />
-        
+
         <!-- END PLUGINS STYLES -->
         <!-- BEGIN THEME STYLES -->
         <link rel="stylesheet" href="../../assets/stylesheets/main.min.css"/>
@@ -154,7 +154,9 @@
                                                             <td>{{row.nombreEmpleado}} </td>
                                                             <td>
                                                                 <div class="btn-group" role="group" aria-label="...">
-                                                                    <!--<button type="button" title="Editar" class="btn btn-info" ng-click="editar(row.username)"><i class="fa fa-pencil"></i></button> -->
+                                                                    <c:if test="#{usuario.formulario.actualizar == usuario.formulario.PERMITIR}">
+                                                                        <button type="button" title="Envia un mail para restablecimiento de contrase&ntilde;a" class="btn btn-sm btn-info" ng-click="send(row)"><i class="fa fa-envelope"></i></button> 
+                                                                    </c:if>
                                                                     <!--<button type="button" title="Ver" class="btn btn-default" ng-click="ver(row.username)" data-toggle="modal" data-target="#verForm"><i class="fa fa-search"></i></button>-->
                                                                     <button ng-if="row.status == 'INACTIVO'" type="button" title="Activar" class="btn btn-sm btn-success" ng-click="showConfirmation(row.username, 'User.activate', 'Activar')" data-toggle="modal" data-target="#frmConfirmation"><i class="fa fa-pencil"></i></button>
                                                                     <button ng-if="row.status == 'ACTIVO'" type="button" title="Desactivar" class="btn btn-sm btn-danger" ng-click="showConfirmation(row.username, 'User.deactivate', 'Desactivar')" data-toggle="modal" data-target="#frmConfirmation"><i class="fa fa-trash"></i></button>
@@ -163,13 +165,13 @@
                                                             </td>
                                                         </tr>
                                                     </tbody>
-                                                    <!--<tfoot>
+                                                    <tfoot>
                                                         <tr>
                                                             <td colspan="10" class="text-center">
-                                                                <div st-items-by-page="itemsByPage" st-pagination="" st-template="pagination.custom.html"></div>
+                                                                <div st-items-by-page="itemsByPage" st-pagination="" st-template="../index/pagination.custom.html"></div>
                                                             </td>
                                                         </tr>
-                                                    </tfoot> -->
+                                                    </tfoot>
                                                 </table>
                                             </div>
                                         </div>

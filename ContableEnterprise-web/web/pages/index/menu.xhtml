@@ -15,7 +15,7 @@
                     <!-- .menu -->
                     <ul class="menu">
                         <c:forEach var="modulo" items="#{menu.menuList}">
-                            <c:if test="#{ not empty modulo.urlAcceso }">
+                            <c:if test="#{ not empty modulo.urlAcceso and modulo.acceder }">
                                 <li class="menu-item has-child" title="#{modulo.nombre}">
                                     <h:commandLink class="menu-link" action="#{modulo.urlAcceso}">
                                         <i class="menu-icon fa fa-#{modulo.classMenu}"></i>
@@ -24,7 +24,7 @@
                                 </li>
                             </c:if>
 
-                            <c:if test="#{ empty modulo.urlAcceso }">
+                            <c:if test="#{ empty modulo.urlAcceso and modulo.acceder }">
                                 <li class="menu-item has-child"  title="#{modulo.nombre}">
                                     <a class="menu-link" href="#" >
                                         <span class="menu-icon fa fa-#{modulo.classMenu}"></span>

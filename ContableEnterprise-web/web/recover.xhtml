@@ -1,0 +1,109 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html  xmlns="http://www.w3.org/1999/xhtml"
+       xmlns:h="http://xmlns.jcp.org/jsf/html"
+       xmlns:ui="http://xmlns.jcp.org/jsf/facelets" ng-app="jsRecover"
+       xmlns:c="http://java.sun.com/jsp/jstl/core"
+       >
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <!-- End Required meta tags -->
+        <title>#{login.systemName.valor} - #{login.razonSocial}</title>
+        <!-- FAVICONS -->
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/apple-touch-icon.png" />
+        <link rel="shortcut icon" href="assets/favicon.ico" />
+        <meta name="theme-color" content="#3063A0" />
+        <!-- End FAVICONS -->
+        <script src="assets/vendor/pace/pace.min.js"></script>
+        <!-- BEGIN BASE STYLES -->
+        <link rel="stylesheet" href="assets/vendor/pace/pace.min.css" />
+        <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="assets/vendor/open-iconic/css/open-iconic-bootstrap.min.css"/>
+        <link rel="stylesheet" href="assets/vendor/fontawesome/css/fontawesome.all.css"/>
+        <link rel="stylesheet" href="assets/vendor/font-awesome/css/font-awesome.min.css"  />
+        <!-- END BASE STYLES -->
+        <!-- BEGIN PLUGINS STYLES -->
+        <link rel="stylesheet" href="assets/vendor/flatpickr/flatpickr.min.css"/>
+        <!-- END PLUGINS STYLES -->
+        <!-- BEGIN THEME STYLES -->
+        <link rel="stylesheet" href="assets/stylesheets/main.min.css"/>
+        <link rel="stylesheet" href="assets/vendor/sweetalert/css/sweetalert.css"/>
+
+        <script type="text/javascript" src="js/angular.min.js" />
+        <script type="text/javascript" src="js/ui-bootstrap-tpls.js" />
+        <script type="text/javascript" src="js/smart-table.min.js" />
+        <script type="text/javascript" src="assets/vendor/sweetalert/js/sweetalert.min.js"/>
+        <script type="text/javascript" src="js/agencia/recover.js" />
+
+        <!--CORRIGE ng-show -->
+        <link rel="stylesheet" href="css/main.css"  />
+    </head>
+    <h:body>
+        <!-- .auth -->
+        <main class="auth" ng-controller="frmRecover">
+            <!-- form -->
+            
+            <form class="auth-form auth-form-reflow " name="myForm">
+                <input type="hidden" id="hdUrl" name="hdUrl" value="#{recover.parametros.valor}"/>
+                <input type="hidden" id="hdUrlUser" name="hdUrlUser" value="#{recover.username}"/>
+                <div ng-show="showRecover">
+                    <div class="text-center mb-4">
+                        <div class="mb-4">
+                            <img class="rounded" src="assets/apple-touch-icon.png" alt="" height="72" /> </div>
+                        <h1 class="h3">Restablezca su Contrase&ntilde;a</h1>
+                    </div>
+                    <p class="mb-4">Estimado usuario <strong><h:outputLabel value="#{recover.username}"></h:outputLabel></strong></p>
+                    <span>Uste ha sido redireccionado a este formulario para restablecer su contrase&ntilde;a. Por favor ingrese su nueva contrase&ntilde;a para que pueda acceder al sistema. </span>
+                    <!-- .form-group -->
+                    <div class="form-group mb-4">
+                        <label class="d-block text-left" for="inputUser">Nueva Contrase&ntilde;a</label>
+                        <input type="password" id="txtPassword" class="form-control form-control-lg" required="required" autofocus="" ng-model="newPassword"  />
+                        <span class="alert-danger" ng-show="newPassword.length&lt;5">La contrase&ntilde;a debe tener al menos 5 caracteres</span>
+                    </div>
+                    <!-- /.form-group -->
+                    <!-- actions -->
+                    <div class="d-block d-md-inline-block mb-2">
+                        <button class="btn btn-lg btn-block btn-primary" type="submit" ng-disabled="checkButton()" ng-click="save()">Guardar Contrase&ntilde;a</button>
+                    </div>
+                </div>
+                
+                <div ng-show="!showRecover">
+                    <div class="text-center mb-4">
+                        <div class="mb-4">
+                            <img class="rounded" src="assets/apple-touch-icon.png" alt="" height="72" /> </div>
+                            <h1 class="h3">Contrase&ntilde;a Restablecida</h1>
+                    </div>
+                    <p class="mb-4">Estimado usuario <strong><h:outputLabel value="#{recover.username}"></h:outputLabel></strong></p>
+                    <span>Su contrase&ntilde;a ha sido restablecida exit&oacute;samente. Ingrese al sistema haciendo click abajo.</span>
+                    <!-- .form-group -->
+                    <br />
+                    <div class="d-block d-md-inline-block">
+                        <a href="login.xhtml" class="btn btn-block btn-success">Iniciar Sesi&oacute;n</a>
+                    </div>
+                </div>
+               
+            </form>
+            <!-- /.auth-form -->
+            <footer class="auth-footer mt-5"> © 2018 Todos los derechos reservados. Setricon.
+            </footer>
+        </main>
+        <!-- /.auth -->
+        <!-- BEGIN BASE JS -->
+        <script src="assets/vendor/jquery/jquery.min.js"></script>
+        <script src="assets/vendor/bootstrap/js/popper.min.js"></script>
+        <script src="assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+        <!-- END BASE JS -->
+        <!-- BEGIN THEME JS -->
+        <script src="assets/javascript/main.min.js"></script>
+        <!-- END THEME JS -->
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        
+    </h:body>
+</html>
+
+

@@ -209,7 +209,6 @@ angular.module('jsTarjeta.controllers', []).controller('frmTarjeta', ['$scope', 
         }
 
         $scope.getData('all');
-        $scope.getData('combo');
     }
 ]);
 

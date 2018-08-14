@@ -145,6 +145,15 @@
     <navigation-rule>
         <from-view-id>pages/*</from-view-id>
         <navigation-case>
+            <from-outcome>comprobantes</from-outcome>
+            <to-view-id>pages/contabilidad/comprobantes.xhtml?faces-redirect=true</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>pages/*</from-view-id>
+        <navigation-case>
             <from-outcome>factores</from-outcome>
             <to-view-id>pages/contabilidad/factores.xhtml?faces-redirect=true</to-view-id>
             <redirect />

@@ -94,8 +94,12 @@ public class LoginManagedBean implements Serializable {
     public Empleado getEmpleado() {
 
         User u = (User) SessionUtils.getSession(SessionUtils.SESION_USUARIO);
-        empleado = u.getIdEmpleado();
-        return empleado;
+        if (u != null) {
+            empleado = u.getIdEmpleado();
+            return empleado;
+        }
+
+        return new Empleado();
     }
 
     public void setEmpleado(Empleado empleado) {
@@ -239,7 +243,7 @@ public class LoginManagedBean implements Serializable {
         f.setCrear((int) o[9]);
         f.setEliminar((int) o[10]);
         f.setModulo((String) o[0]);
-        
+
         f.setIdFormulario((Integer) o[13]);
 
         return f;
@@ -250,6 +254,7 @@ public class LoginManagedBean implements Serializable {
         submenu.setNombre((String) o[2]);
         submenu.setAction((String) o[3]);
         submenu.setStatus((String) o[5]);
+        submenu.setAcceder(((int) o[6]) == 1);
         //submenu.setClassMenu((String)o[10]);
 
         return submenu;
@@ -262,6 +267,7 @@ public class LoginManagedBean implements Serializable {
         submenu.setStatus((String) o[1]);
         submenu.setClassMenu((String) o[11]);
         submenu.setUrlAcceso((String) o[12]);
+        submenu.setAcceder(((int) o[6]) == 1);
 
         return submenu;
     }

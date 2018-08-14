@@ -18,17 +18,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 public class SessionUtils {
-    
+
     static final long serialVersionUID = 42L;
     public static final String SESION_USUARIO = "SESION_USUARIO";
     public static final String SESION_MENU = "SESION_MENU";
     public static final String SESION_LOGIN = "SESION_LOGIN";
-    
+
     public static HttpSession getSession() {
         return (HttpSession) FacesContext.getCurrentInstance()
                 .getExternalContext().getSession(false);
     }
-    
+
     public static HttpServletRequest getRequest() {
         return (HttpServletRequest) FacesContext.getCurrentInstance()
                 .getExternalContext().getRequest();
@@ -55,13 +55,13 @@ public class SessionUtils {
                 .getExternalContext().getSession(false);
         return session.getAttribute(s);
     }
-    
+
     public static String getUserName() {
         HttpSession session = (HttpSession) FacesContext.getCurrentInstance()
                 .getExternalContext().getSession(false);
         return session.getAttribute("username").toString();
     }
-    
+
     public static String getUserId() {
         HttpSession session = getSession();
         if (session != null) {
@@ -70,25 +70,30 @@ public class SessionUtils {
             return null;
         }
     }
-    
+
     /**
-     * Este meotodo sera cambiado mas adelante para poder cargar los datos del formuario
+     * Este meotodo sera cambiado mas adelante para poder cargar los datos del
+     * formuario
+     *
      * @param page
-     * @return 
+     * @return
      */
     public static Formulario getFormulario(String page) {
         List<Menu> l = (List<Menu>) SessionUtils.getSession(SESION_MENU);
+        if (l == null) {
+            return new Formulario();
+        }
         for (Menu me : l) {
             for (Menu sub : me.getSubmenus()) {
                 if (sub.getAction() != null) {
                     if (sub.getAction().equals(page)) {
-                        return sub.getFormulario() ;
+                        return sub.getFormulario();
                     }
                 }
             }
-            
+
         }
-        
+
         return new Formulario();
     }
 }

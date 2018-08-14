@@ -7,6 +7,8 @@ package com.view;
 
 import com.configuracion.remote.ParametrosRemote;
 import com.security.SessionUtils;
+import com.seguridad.control.entities.User;
+import com.seguridad.control.remote.LoggerRemote;
 import com.view.menu.Formulario;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -21,9 +23,15 @@ public abstract class ViewManagedBean  {
     @EJB
     protected ParametrosRemote ejbParametros;
     
+    @EJB 
+    protected LoggerRemote ejbLogger ;
+    
     protected Formulario formulario;
+    
+    protected User user ;
 
     public ViewManagedBean(){
+        user = (User) SessionUtils.getSession(SessionUtils.SESION_USUARIO);
     }
     
     public Formulario getFormulario() {

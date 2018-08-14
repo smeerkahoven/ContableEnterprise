@@ -66,6 +66,30 @@ angular.module('jsUsuario.controllers', []).controller('frmUsuario', ['$scope', 
             });
 
         }
+        
+        $scope.send = function (item){
+            $scope.loading = true ;
+            var data = {username : item.username}
+            return $http({
+                method : 'POST',
+                url : url.value + 'send-recover-password',
+                data : {token : token.value , content : angular.toJson(data)}
+            }).then(function (response){
+                console.log(response) ;
+                if (response.data.code == '201'){
+                    $scope.showRestfulMessage = response.data.content ;
+                    $scope.showRestfulSuccess = true ;
+                }else if (response.data.code == '200'){
+                    $scope.showRestfulError = true ;
+                    $scope.showRestfulMessage = response.data.content;
+                }
+                $scope.loading = false ;
+            }, function(error){
+                $scope.loading = false ;
+                $scope.showRestfulError = true ;
+                $scope.showRestfulMessage = error ;
+            });
+        }
 
         $scope.getData('all', $scope.data);
         $scope.getData('personal', $scope.empleados);

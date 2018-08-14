@@ -19,6 +19,7 @@ public class Menu implements Serializable, Comparable<String> {
     private String status;
     private String classMenu;
     private String urlAcceso;
+    private Boolean acceder ;
 
     private ArrayList<Menu> submenus = new ArrayList<>();
     private Formulario formulario;
@@ -28,6 +29,16 @@ public class Menu implements Serializable, Comparable<String> {
     public String getClassMenu() {
         return classMenu;
     }
+
+    public Boolean getAcceder() {
+        return acceder;
+    }
+
+    public void setAcceder(Boolean acceder) {
+        this.acceder = acceder;
+    }
+    
+    
 
     public void setClassMenu(String classMenu) {
         this.classMenu = classMenu;
