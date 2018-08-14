@@ -41,6 +41,13 @@ public class Parametros extends Entidad {
     public static final String SYSTEM_NAME="SYSTEM_NAME";
     public static final String SYSTEM_DESCRIPTION="SYSTEM_DESCRIPTION";
     public static final String SYSTEM_VERSION="SYSTEM_VERSION";
+    public static final String SYSTEM_FULL_URL="SYSTEM_FULL_URL";
+    public static final String SYSTEM_RECOVER_PASSWORD_URL="SYSTEM_RECOVER_PASSWORD_URL";
+    public static final String SYSTEM_WEBSERVICES_URL="SYSTEM_WEBSERVICES_URL";
+    
+    public static final String URL_RECOVER_PASSWORD="URL_RECOVER_PASSWORD";
+    public static final String EMAIL_ACCOUNT="EMAIL_ACCOUNT";
+    
 
     private static final long serialVersionUID = 1L;
     @Id

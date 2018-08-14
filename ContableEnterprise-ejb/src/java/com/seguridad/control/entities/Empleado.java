@@ -5,6 +5,7 @@
  */
 package com.seguridad.control.entities;
 
+import com.seguridad.control.exception.CRUDException;
 import java.io.Serializable;
 import java.util.Date;
 import javax.persistence.Column;
@@ -42,7 +43,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     ,
         @NamedQuery(name = "Empleado.forCombo", query = "SELECT e.idEmpleado, e.nombre ,e.apellido FROM Empleado e")
 })
-public class Empleado implements Serializable {
+public class Empleado extends Entidad {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -183,4 +184,11 @@ public class Empleado implements Serializable {
         return "com.seguridad.control.entities.Empleado[ empleadoId=" + idEmpleado + " ]";
     }
 
+    @Override
+    public int getId() throws CRUDException {
+        
+        return 1 ;
+    }
+
+    
 }

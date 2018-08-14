@@ -6,7 +6,6 @@
 package com.seguridad.control.ejb;
 
 import com.seguridad.control.FacadeEJB;
-import com.seguridad.control.FacadeEJBFirst;
 import com.seguridad.control.LoggerContable;
 import com.seguridad.control.entities.Empleado;
 import com.seguridad.control.exception.CRUDException;
@@ -15,8 +14,6 @@ import com.seguridad.queries.Queries;
 import java.util.List;
 import java.util.logging.Level;
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 /**
@@ -24,7 +21,7 @@ import javax.persistence.Query;
  * @author Cheyo
  */
 @Stateless
-public class EmpleadoEJB extends FacadeEJBFirst implements EmpleadoRemote {
+public class EmpleadoEJB extends FacadeEJB implements EmpleadoRemote {
 
     private String mensaje;
     //ResourceBundle.getBundle("/servlet/Mensajes").getString("MENSAJITO")
@@ -44,15 +41,15 @@ public class EmpleadoEJB extends FacadeEJBFirst implements EmpleadoRemote {
         return emp;
     }
 
-    @Override
+   /* @Override
     public boolean update(Empleado e) throws CRUDException {
         em.merge(e);
         em.flush();
         LoggerContable.log(Thread.currentThread().getStackTrace()[1].getMethodName() + ":" + e.toString(), this, Level.FINE);
         return true;
-    }
+    }*/
 
-    @Override
+    /*@Override
     public int insert(Empleado e) throws CRUDException {
         em.persist(e);
         em.flush();
@@ -60,7 +57,7 @@ public class EmpleadoEJB extends FacadeEJBFirst implements EmpleadoRemote {
         LoggerContable.log(Thread.currentThread().getStackTrace()[1].getMethodName() + ":" + e.toString(), this, Level.FINE);
 
         return e.getIdEmpleado();
-    }
+    }*/
 
     public String getMensaje() {
         return mensaje;

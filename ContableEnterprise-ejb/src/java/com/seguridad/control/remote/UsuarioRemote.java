@@ -36,6 +36,8 @@ public interface UsuarioRemote {
     
     public boolean update(UserToken u) throws CRUDException ;
     
+     public boolean updatePassword(User u) throws CRUDException ;
+    
     public boolean update(UserLogin u) throws CRUDException ;
     
     public int insert(User e) throws CRUDException ;

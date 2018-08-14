@@ -31,5 +31,7 @@ public interface EmpresaRemote {
     
     public int insert (Empresa e) throws CRUDException ;
     
+    public void crearPlanCuentas(Empresa e) throws CRUDException;
+    
     
 }

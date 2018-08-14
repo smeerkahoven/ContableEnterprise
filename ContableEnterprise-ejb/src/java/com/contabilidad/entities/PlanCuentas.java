@@ -12,6 +12,8 @@ import java.math.BigInteger;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -27,12 +29,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "cnt_plan_cuentas")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "PlanCuentas.findAll", query = "SELECT p FROM PlanCuentas p WHERE p.idEmpresa=:idEmpresa ORDER BY p.idPlanCuentas, p.cuenta, p.nivel asc"),
+    @NamedQuery(name = "PlanCuentas.findAll", query = "SELECT p FROM PlanCuentas p WHERE p.idEmpresa=:idEmpresa ORDER BY p.nroPlanCuenta, p.cuenta, p.nivel asc"),
     //@NamedQuery(name = "PlanCuentas.findAll", query = "SELECT p ,(select c.cuenta from PlanCuentas c where p.idPlanCuentas=c.idPlanCuentas ) as idPlanCuentaPadreNombre FROM PlanCuentas p ORDER BY p.idPlanCuentas, p.cuenta, p.nivel asc"),
     @NamedQuery(name = "PlanCuentas.forCombo", query = "SELECT p.idPlanCuentas,p.cuenta FROM PlanCuentas p WHERE p.nivel = 5 AND p.idEmpresa=:idEmpresa  Order by p.cuenta"),
     @NamedQuery(name = "PlanCuentas.forComboPlan", query = "SELECT p FROM PlanCuentas p WHERE p.idEmpresa=:idEmpresa and p.nroPlanCuentaPadre= (SELECT q.nroPlanCuenta FROM PlanCuentas q WHERE q.cuenta = :cuenta ) ORDER BY p.nroPlanCuenta, p.cuenta, p.nivel asc"),
     @NamedQuery(name = "PlanCuentas.forComboIdPlan", query = "SELECT p FROM PlanCuentas p WHERE p.idEmpresa=:idEmpresa and p.nroPlanCuentaPadre=:nroPlanCuentas ORDER BY p.nroPlanCuenta, p.cuenta, p.nivel asc"),
     @NamedQuery(name = "PlanCuentas.forSearch", query = "SELECT p.idPlanCuentas,p.cuenta FROM PlanCuentas p WHERE p.nivel < 5 Order by p.cuenta"),
+    @NamedQuery(name = "PlanCuentas.nivel4Central", query = "SELECT p FROM PlanCuentas p WHERE p.nivel < 5 and p.idEmpresa=1 Order by p.cuenta")
     
 })
 public class PlanCuentas extends Entidad {
@@ -43,6 +46,7 @@ public class PlanCuentas extends Entidad {
 
     @Id
     @Basic(optional = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_plan_cuentas")
     private Integer idPlanCuentas;
 

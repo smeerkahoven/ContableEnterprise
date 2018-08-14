@@ -7,6 +7,7 @@ package com.contabilidad.remote;
 
 import com.contabilidad.entities.PlanCuentas;
 import com.seguridad.control.entities.Empresa;
+import com.seguridad.control.entities.Entidad;
 import com.seguridad.control.exception.CRUDException;
 import com.seguridad.control.remote.DaoRemoteFacade;
 import java.util.HashMap;
@@ -34,6 +35,14 @@ public interface PlanCuentasRemote extends DaoRemoteFacade {
 
     @Override
     public void remove(String nativeQuery, HashMap<String, Object> parameters) throws CRUDException;
+
+    @Override
+    public int insert(Entidad e) throws CRUDException;
+
+    @Override
+    public void update(Entidad e) throws CRUDException;
+    
+    
 
     
 }

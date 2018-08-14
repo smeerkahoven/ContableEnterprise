@@ -150,5 +150,16 @@ public class UsuarioEJB extends FacadeEJBFirst implements UsuarioRemote {
 
         return true;
     }
+    
+       @Override
+    public boolean updatePassword(User u) throws CRUDException {
+        Query q = em.createNamedQuery("User.updatePassword");
+        q.setParameter("userName", u.getUserName());
+        q.setParameter("password",EncryptionContable.encrypt(u.getPassword())) ;
+
+        q.executeUpdate();
+
+        return true;
+    }
 
 }
