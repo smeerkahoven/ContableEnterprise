@@ -19,6 +19,7 @@ import com.seguridad.control.remote.UsuarioRemote;
 import com.seguridad.utils.Accion;
 import com.seguridad.utils.ResponseCode;
 import com.seguridad.utils.Status;
+import com.services.TemplateResource;
 import com.services.seguridad.util.RestRequest;
 import com.services.seguridad.util.RestResponse;
 import com.util.resource.ComboSelect;
@@ -48,19 +49,10 @@ import javax.ws.rs.core.MediaType;
  */
 @Path("empresa")
 @Stateless
-public class EmpresaServices {
-
-    @EJB
-    private UsuarioRemote ejbUsuario;
+public class EmpresaServices extends TemplateResource {
 
     @EJB
     private EmpresaRemote ejbEmpresa;
-
-    @EJB
-    private LoggerRemote ejbLogger;
-
-    @Context
-    private UriInfo context;
 
     /**
      * Creates a new instance of EmpresaServices
@@ -86,53 +78,29 @@ public class EmpresaServices {
         r.setContent("hola " + request.getToken() + " y yo un mensaje : " + request.getContent());
         return r;
     }
-    
+
     @POST
     @Path("all")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public RestResponse getAllEmpresas(final RestRequest request) {
 
-        Mensajes m = Mensajes.getMensajes();
-        RestResponse r = new RestResponse();
-        try {
-            /*Verificamos el ID token*/
-            if (request.getToken() != null && !request.getToken().isEmpty()) {
-                System.out.println(request.getToken());
-                UserToken t = ejbUsuario.get(new UserToken(request.getToken()));
-                if (t != null) {
-                    if (t.getStatus().equals(Status.ACTIVO)) {
+        RestResponse response = doValidations(request);
 
-                        r.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
-                        r.setContent(ejbEmpresa.getAll());
-
-                        return r;
-                    } else {
-                        r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
-                        r.setContent(m.getProperty(RestResponse.RESTFUL_TOKEN_MANDATORY));
-                    }
-                } else {
-                    r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
-                    r.setContent(m.getProperty(RestResponse.RESTFUL_TOKEN_MANDATORY));
-                }
-            } else {
-                r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
-                r.setContent(m.getProperty(RestResponse.RESTFUL_TOKEN_MANDATORY));
+        if (response.getCode() == ResponseCode.RESTFUL_SUCCESS.getCode()) {
+            try {
+                response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
+                response.setContent(ejbEmpresa.getAll());
+            } catch (CRUDException ex) {
+                response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+                response.setContent(mensajes.getProperty(RestResponse.RESTFUL_ERROR));
             }
-
-        } catch (CRUDException ex) {
-            Logger.getLogger(EmpresaServices.class.getName()).log(Level.SEVERE, null, ex);
-            r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
-            r.setContent(m.getProperty(RestResponse.RESTFUL_ERROR));
         }
-        r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
-        r.setContent(m.getProperty(RestResponse.RESTFUL_ERROR));
-
-        return r;
+        return response;
 
     }
-    
-        @POST
+
+    @POST
     @Path("all-combo")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -149,12 +117,12 @@ public class EmpresaServices {
                     if (t.getStatus().equals(Status.ACTIVO)) {
                         List<Empresa> l = ejbEmpresa.get("Empresa.findEmpresaForCombo");
                         ArrayList lst = new ArrayList();
-                        Iterator i = l.iterator() ;
-                        while (i.hasNext()){
-                            Object[] emp =(Object[]) i.next();
+                        Iterator i = l.iterator();
+                        while (i.hasNext()) {
+                            Object[] emp = (Object[]) i.next();
                             ComboSelect c = new ComboSelect();
-                            c.setId( emp[0]);
-                            c.setName((String) emp[1] + " - " + (String)emp[2] );
+                            c.setId(emp[0]);
+                            c.setName((String) emp[1] + " - " + (String) emp[2]);
                             lst.add(c);
                         }
 
@@ -244,60 +212,40 @@ public class EmpresaServices {
     @Produces(MediaType.APPLICATION_JSON)
     public RestResponse saveSucursal(final RestRequest request) {
 
-        Mensajes m = Mensajes.getMensajes().getMensajes();
-        RestResponse r = new RestResponse();
-        try {
-            /*Verificamos el ID token*/
-            if (request.getToken() != null && !request.getToken().isEmpty()) {
-                System.out.println(request.getToken());
-                UserToken t = ejbUsuario.get(new UserToken(request.getToken()));
-                if (t != null) {
-                    if (t.getStatus().equals(Status.ACTIVO)) {
+        RestResponse response = doValidations(request);
+        if (response.getCode() == ResponseCode.RESTFUL_SUCCESS.getCode()) {
 
-                        SucursalJSON json = new SucursalJSON();
-                        Gson gson = new GsonBuilder().create();
-                        JsonParser parser = new JsonParser();
-                        JsonObject object = parser.parse((String) request.getContent()).getAsJsonObject();
-                        System.out.println((String) request.getContent());
-                        json = gson.fromJson(object.toString(), SucursalJSON.class);
+            try {
+                SucursalJSON json = new SucursalJSON();
+                Gson gson = new GsonBuilder().create();
+                JsonParser parser = new JsonParser();
+                JsonObject object = parser.parse((String) request.getContent()).getAsJsonObject();
+                System.out.println((String) request.getContent());
+                json = gson.fromJson(object.toString(), SucursalJSON.class);
 
-                        Empresa empresa = json.toSucursal(json);
-                        empresa.setTipo(Empresa.SUCURSAL);
+                Empresa sucursal = json.toSucursal(json);
+                sucursal.setTipo(Empresa.SUCURSAL);
 
-                        ejbEmpresa.insert(empresa);
-                        //se debe insertar los impuestos nuevos
-                        r.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
-                        r.setContent(m.getProperty(RestResponse.RESTFUL_SUCCESS));
+                //se crea la sucursal
+                sucursal.setIdEmpresa(ejbEmpresa.insert(sucursal));
+                //se copia el plan de cuentas hasta el nivel 4
+                ejbEmpresa.crearPlanCuentas(sucursal);
+                
+                response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
+                response.setContent(mensajes.getProperty(RestResponse.RESTFUL_SUCCESS));
 
-                        ejbLogger.add(Accion.INSERT, t.getUserName(), request.getFormName(), "");
-
-                        return r;
-
-                    } else {
-                        r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
-                        r.setContent(m.getProperty(RestResponse.RESTFUL_TOKEN_MANDATORY));
-                    }
-                } else {
-                    r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
-                    r.setContent(m.getProperty(RestResponse.RESTFUL_TOKEN_MANDATORY));
-                }
-            } else {
-                r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
-                r.setContent(m.getProperty(RestResponse.RESTFUL_TOKEN_MANDATORY));
+                ejbLogger.add(Accion.INSERT, user.getUserName(), request.getFormName(), user.getIp());
+            } catch (CRUDException ex) {
+                Logger.getLogger(EmpresaServices.class.getName()).log(Level.SEVERE, null, ex);
+                response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+                response.setContent(mensajes.getProperty(RestResponse.RESTFUL_ERROR));
             }
 
-        } catch (CRUDException ex) {
-            Logger.getLogger(EmpresaServices.class.getName()).log(Level.SEVERE, null, ex);
-            r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
-            r.setContent(m.getProperty(RestResponse.RESTFUL_ERROR));
         }
-
-        return r;
+        return response;
 
     }
-    
-    
-    
+
     @POST
     @Path("update")
     @Consumes(MediaType.APPLICATION_JSON)
