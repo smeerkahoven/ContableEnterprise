@@ -27,31 +27,33 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "cnt_parametros")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Parametros.findAll", query = "SELECT p FROM Parametros p"),
+    @NamedQuery(name = "Parametros.findAll", query = "SELECT p FROM Parametros p")
+    ,
     @NamedQuery(name = "Parametros.find", query = "SELECT p FROM Parametros p where p.idParametro =:idParametro")
 })
 public class Parametros extends Entidad {
-    
-    public static final String COMBO_CUENTA_VENTAS_AEROLINEA = "COMBO_CUENTA_VENTAS_AEROLINEA" ;
-    public static final String COMBO_CUENTA_COMISIONES_AEROLINEA = "COMBO_CUENTA_COMISIONES_AEROLINEA" ;
-    public static final String COMBO_CUENTA_DEVOLUCIONES_AEROLINEA = "COMBO_CUENTA_DEVOLUCIONES_AEROLINEA" ;
-    public static final String URL_CAMBIO_UFV = "URL_CAMBIO_UFV" ;
-    public static final String URL_CAMBIO_DOLAR="URL_CAMBIO_DOLAR";
+
+    public static final String COMBO_CUENTA_VENTAS_AEROLINEA = "COMBO_CUENTA_VENTAS_AEROLINEA";
+    public static final String COMBO_CUENTA_COMISIONES_AEROLINEA = "COMBO_CUENTA_COMISIONES_AEROLINEA";
+    public static final String COMBO_CUENTA_DEVOLUCIONES_AEROLINEA = "COMBO_CUENTA_DEVOLUCIONES_AEROLINEA";
+    public static final String URL_CAMBIO_UFV = "URL_CAMBIO_UFV";
+    public static final String URL_CAMBIO_DOLAR = "URL_CAMBIO_DOLAR";
     //------------SISTEMA------------------------------//
-    public static final String SYSTEM_NAME="SYSTEM_NAME";
-    public static final String SYSTEM_DESCRIPTION="SYSTEM_DESCRIPTION";
-    public static final String SYSTEM_VERSION="SYSTEM_VERSION";
-    public static final String SYSTEM_FULL_URL="SYSTEM_FULL_URL";
-    public static final String SYSTEM_RECOVER_PASSWORD_URL="SYSTEM_RECOVER_PASSWORD_URL";
-    public static final String SYSTEM_WEBSERVICES_URL="SYSTEM_WEBSERVICES_URL";
-    
-    public static final String URL_RECOVER_PASSWORD="URL_RECOVER_PASSWORD";
-    public static final String EMAIL_ACCOUNT="EMAIL_ACCOUNT";
-    
+    public static final String SYSTEM_NAME = "SYSTEM_NAME";
+    public static final String SYSTEM_DESCRIPTION = "SYSTEM_DESCRIPTION";
+    public static final String SYSTEM_VERSION = "SYSTEM_VERSION";
+    public static final String SYSTEM_FULL_URL = "SYSTEM_FULL_URL";
+    public static final String SYSTEM_RECOVER_PASSWORD_URL = "SYSTEM_RECOVER_PASSWORD_URL";
+    public static final String SYSTEM_WEBSERVICES_URL = "SYSTEM_WEBSERVICES_URL";
+
+    public static final String URL_RECOVER_PASSWORD = "URL_RECOVER_PASSWORD";
+    public static final String EMAIL_ACCOUNT = "EMAIL_ACCOUNT";
+
+    public static final String FACTOR_CAMBIARO_MAX_MIN = "FACTOR_CAMBIARO_MAX_MIN";
 
     private static final long serialVersionUID = 1L;
     @Id
-    @Column(name = "id_parametro" , length = 64)
+    @Column(name = "id_parametro", length = 64)
     private String idParametro;
     @Column(name = "valor", length = 128)
     private String valor;
@@ -111,8 +113,7 @@ public class Parametros extends Entidad {
 
     @Override
     public int getId() throws CRUDException {
-        return 0 ;
+        return 0;
     }
-    
-    
+
 }

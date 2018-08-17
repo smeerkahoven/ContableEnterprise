@@ -30,6 +30,8 @@ public class Queries {
     public final static String GET_BANCO_CUENTA_LINK = "GET_BANCO_CUENTA_LINK";
     public final static String GET_AEROLINA_CUENTA = "GET_AEROLINA_CUENTA";
     
+    //comprobantes
+    public final static String GET_NEXT_ID_LIBRO="GET_NEXT_ID_LIBRO" ;
 
     //removes
     public final static String DELETE_IMPUESTO_AEROLINEA = "DELETE_IMPUESTO_AEROLINEA";

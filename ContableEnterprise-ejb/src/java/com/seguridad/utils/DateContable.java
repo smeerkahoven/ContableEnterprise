@@ -16,12 +16,20 @@ import java.util.Date;
  */
 public class DateContable {
 
+    public static final String PARTITION_FORMAT = "yyyyMM" ;
+    
+    
     public static String getCurrentDateStr() {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
         return dtf.format(now);
     }
     
+    public static String getCurrentDateStr(String format) {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern(format);
+        LocalDateTime now = LocalDateTime.now();
+        return dtf.format(now);
+    }
 
 
     /**
@@ -39,5 +47,10 @@ public class DateContable {
             return "";
         }
         return  new SimpleDateFormat(format).format(date);
+    }
+    
+    
+    public static void main(String args[]){
+        System.out.println(DateContable.getCurrentDateStr(PARTITION_FORMAT));
     }
 }
