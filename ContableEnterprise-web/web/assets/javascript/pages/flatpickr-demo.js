@@ -17,7 +17,8 @@ var flatpickrDemo = {
     // wrap element
     return flatpickr('#flatpickr9', {
       disableMobile: true,
-      wrap: true
+      wrap: true,
+      dateFormat: "d/m/Y"
     });
   },
  

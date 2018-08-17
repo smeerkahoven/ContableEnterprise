@@ -5,10 +5,7 @@
  */
 package com.view.contabilidad;
 
-import com.security.SessionUtils;
 import com.view.ViewManagedBean;
-import com.view.menu.Formulario;
-import javax.annotation.PostConstruct;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
 
