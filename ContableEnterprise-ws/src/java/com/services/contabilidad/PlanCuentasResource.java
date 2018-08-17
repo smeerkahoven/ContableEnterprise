@@ -128,52 +128,29 @@ public class PlanCuentasResource extends TemplateResource {
     public RestResponse getCombo(final RestRequest request,
             @PathParam("idEmpresa") final Integer idEmpresa) {
 
-        Mensajes m = Mensajes.getMensajes().getMensajes();
-        RestResponse r = new RestResponse();
-        try {
-            /*Verificamos el ID token*/
-            if (request.getToken() != null && !request.getToken().isEmpty()) {
-                System.out.println(request.getToken());
-                UserToken t = ejbUsuario.get(new UserToken(request.getToken()));
-                User u = ejbUsuario.get(new User(t.getUserName()));
-
-                if (t != null) {
-                    if (t.getStatus().equals(Status.ACTIVO)) {
-
-                        List<Object[]> l = ejbPlanCuentas.getForCombo(new Empresa(idEmpresa));
-
-                        ArrayList hm = new ArrayList();
-                        for (Object[] o : l) {
-                            ComboSelect cm = new ComboSelect();
-                            cm.setId((Integer) o[0]);
-                            cm.setName((String) o[1]);
-                            hm.add(cm);
-                        }
-
-                        r.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
-                        r.setContent(hm);
-
-                        return r;
-                    } else {
-                        r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
-                        r.setContent(m.getProperty(RestResponse.RESTFUL_TOKEN_MANDATORY));
-                    }
-                } else {
-                    r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
-                    r.setContent(m.getProperty(RestResponse.RESTFUL_TOKEN_MANDATORY));
+        RestResponse response = doValidations(request);
+        {
+            try {
+                List<Object[]> l = ejbPlanCuentas.getForCombo(new Empresa(idEmpresa));
+                
+                ArrayList hm = new ArrayList();
+                for (Object[] o : l) {
+                    ComboSelect cm = new ComboSelect();
+                    cm.setId((Integer) o[0]);
+                    cm.setName((String) o[1]);
+                    hm.add(cm);
                 }
-            } else {
-                r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
-                r.setContent(m.getProperty(RestResponse.RESTFUL_TOKEN_MANDATORY));
+                
+                response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
+                response.setContent(hm);
+                
+                return response;
+            } catch (CRUDException ex) {
+                Logger.getLogger(PlanCuentasResource.class.getName()).log(Level.SEVERE, null, ex);
             }
-
-        } catch (CRUDException ex) {
-            Logger.getLogger(PlanCuentasResource.class.getName()).log(Level.SEVERE, null, ex);
-            r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
-            r.setContent(m.getProperty(RestResponse.RESTFUL_ERROR));
         }
+        return response;
 
-        return r;
     }
 
     @POST

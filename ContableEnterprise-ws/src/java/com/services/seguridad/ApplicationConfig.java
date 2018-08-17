@@ -37,6 +37,7 @@ public class ApplicationConfig extends Application {
         resources.add(com.services.agencia.PromotorResource.class);
         resources.add(com.services.agencia.TarjetasCreditoResource.class);
         resources.add(com.services.configuracion.FactoresResource.class);
+        resources.add(com.services.contabilidad.ComprobantesResource.class);
         resources.add(com.services.contabilidad.PlanCuentasResource.class);
         resources.add(com.services.seguridad.EmpresaServices.class);
         resources.add(com.services.seguridad.PersonalResource.class);

@@ -22,6 +22,7 @@ public class RestResponse {
     public static final String RESTFUL_TOKEN_MANDATORY = "RESTFUL_TOKEN_MANDATORY";
     public static final String RESTFUL_TOKEN_EXPIRED = "RESTFUL_TOKEN_EXPIRED";
     public static final String RESTFUL_VALUE_NOT_FOUND = "RESTFUL_VALUE_NOT_FOUND";
+    public static final String RESTFUL_NUMERO_COMPROBANTE="RESTFUL_NUMERO_COMPROBANTE";
     
     public static final String RESTFUL_SUCCES_MAIL_SENT = "RESTFUL_SUCCES_MAIL_SENT" ;
     public static final String RESTFUL_ERROR_MAIL_SENT = "RESTFUL_ERROR_MAIL_SENT" ;
