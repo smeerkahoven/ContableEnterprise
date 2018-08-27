@@ -2,12 +2,15 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="cabecera_empresa" language="groovy" pageWidth="612" pageHeight="792" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e7d65f31-51ac-413c-a8a9-63c3c8f66715">
 	<property name="ireport.zoom" value="3.452271214393106"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="159"/>
 	<parameter name="EMPRESA_ID" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA[1]]></defaultValueExpression>
 	</parameter>
 	<parameter name="PATH_SUBREPORTE" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["agencia/aerolinea.jasper"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["contabilidad/comprobante.jasper"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ID_LIBRO" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[22]]></defaultValueExpression>
 	</parameter>
 	<queryString>
 		<![CDATA[SELECT
@@ -108,6 +111,9 @@ WHERE
 		<band height="100" splitType="Stretch">
 			<subreport>
 				<reportElement x="6" y="0" width="200" height="100" uuid="9e5bdce7-711b-40e0-9b51-f915333152d9"/>
+				<subreportParameter name="ID_LIBRO">
+					<subreportParameterExpression><![CDATA[$P{ID_LIBRO}]]></subreportParameterExpression>
+				</subreportParameter>
 				<subreportParameter name="SUBREPORT_DIR"/>
 				<subreportParameter name="EMPRESA_ID"/>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>

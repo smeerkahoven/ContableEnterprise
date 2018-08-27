@@ -22,6 +22,7 @@ public class SessionManagedBean implements Serializable {
 
     private String token;
 
+    private User user ;
     /**
      * Creates a new instance of SessionManagedBean
      */
@@ -41,5 +42,21 @@ public class SessionManagedBean implements Serializable {
     public void setToken(String token) {
         this.token = token;
     }
+
+    public User getUser() {
+       User u = (User) SessionUtils.getSession(SessionUtils.SESION_USUARIO);
+        if (u != null) {
+            this.token = u.getToken_url();
+            return  u;
+        }
+
+        return new User();
+    }
+
+    public void setUser(User user) {
+        this.user = user;
+    }
+    
+    
 
 }

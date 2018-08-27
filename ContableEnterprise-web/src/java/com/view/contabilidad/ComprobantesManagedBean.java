@@ -8,6 +8,7 @@ package com.view.contabilidad;
 import com.configuracion.entities.Parametros;
 import com.contabilidad.entities.Bolivianos;
 import com.contabilidad.entities.Dolar;
+import com.reports.ReportUtil;
 import com.security.SessionUtils;
 import com.seguridad.control.exception.CRUDException;
 import com.view.ViewManagedBean;
@@ -26,6 +27,8 @@ import javax.enterprise.context.RequestScoped;
 public class ComprobantesManagedBean extends ViewManagedBean {
 
     private Parametros factorCambiarioMaxMin;
+    private Parametros diferenciaIngresos;
+    private Parametros diferenciaEgresos;
 
     public Parametros getFactorCambiarioMaxMin() {
         return factorCambiarioMaxMin;
@@ -60,12 +63,19 @@ public class ComprobantesManagedBean extends ViewManagedBean {
     public ComprobantesManagedBean() {
         this.formName = "comprobantes";
     }
+    
+    public void imprimir(Integer id) {
+        ReportUtil util = new ReportUtil();
+        util.verReporte("contabilidad/comprobantes.jasper");
+    }
 
     @PostConstruct
     public void init() {
         try {
             this.formulario = SessionUtils.getFormulario(this.formName);
             this.factorCambiarioMaxMin = (Parametros) ejbParametros.get(new Parametros(Parametros.FACTOR_CAMBIARO_MAX_MIN));
+            this.diferenciaEgresos = (Parametros) ejbParametros.get(new Parametros(Parametros.DIFERENCIA_CAMBIO_EGRESOS));
+            this.diferenciaIngresos = (Parametros) ejbParametros.get(new Parametros(Parametros.DIFERENCIA_CAMBIO_INGRESOS));
         } catch (CRUDException ex) {
             Logger.getLogger(ComprobantesManagedBean.class.getName()).log(Level.SEVERE, null, ex);
         }

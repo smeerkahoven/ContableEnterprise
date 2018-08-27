@@ -10,11 +10,13 @@ import com.reports.agencia.ReporteAgenciaMBean;
 import com.security.SessionUtils;
 import com.seguridad.control.entities.Formulario;
 import com.seguridad.control.exception.CRUDException;
+import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.context.FacesContext;
 
 /**
  *
@@ -28,7 +30,7 @@ public class ReporteContabilidadMBean extends ReporteHandler {
      * Creates a new instance of ReporteContabilidadMBean
      */
     public ReporteContabilidadMBean() {
-        this.formName = "reportes-contabilidad" ;
+        this.formName = "reportes-contabilidad";
     }
 
     @PostConstruct
@@ -40,6 +42,16 @@ public class ReporteContabilidadMBean extends ReporteHandler {
         } catch (CRUDException ex) {
             Logger.getLogger(ReporteAgenciaMBean.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+    public void verComprobante() {
+        
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+            String trxNo = facesContext.getExternalContext(). getRequestParameterMap().get("idLibro");
+        System.err.println("idLibro" + trxNo);
+        HashMap<String, Object> parameters = new HashMap<>();
+        parameters.put("ID_LIBRO", trxNo);
+        verReporte("contabilidad/comprobante.jasper", parameters);
     }
 
 }
