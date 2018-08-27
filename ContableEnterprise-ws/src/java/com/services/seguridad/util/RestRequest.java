@@ -5,11 +5,14 @@
  */
 package com.services.seguridad.util;
 
+import com.seguridad.control.entities.Entidad;
+import java.io.Serializable;
+
 /**
  *
  * @author xeio
  */
-public class RestRequest {
+public class RestRequest implements Serializable {
 
     private String token;
 
@@ -18,6 +21,8 @@ public class RestRequest {
     private String formName;
 
     private String ip;
+    
+    private Entidad entidad ;
 
     public String getFormName() {
         return formName;
@@ -50,5 +55,15 @@ public class RestRequest {
     public void setContent(Object content) {
         this.content = content;
     }
+
+    public Entidad getEntidad() {
+        return entidad;
+    }
+
+    public void setEntidad(Entidad entidad) {
+        this.entidad = entidad;
+    }
+    
+    
 
 }

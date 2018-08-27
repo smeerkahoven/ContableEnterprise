@@ -24,7 +24,7 @@ import com.services.TemplateResource;
 import com.services.seguridad.EmpresaServices;
 import com.services.seguridad.util.RestRequest;
 import com.services.seguridad.util.RestResponse;
-import com.util.resource.ComboSelect;
+import com.seguridad.utils.ComboSelect;
 import com.util.resource.Mensajes;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -138,6 +138,7 @@ public class PlanCuentasResource extends TemplateResource {
                     ComboSelect cm = new ComboSelect();
                     cm.setId((Integer) o[0]);
                     cm.setName((String) o[1]);
+                    cm.setComodin((String)o[2]);
                     hm.add(cm);
                 }
                 

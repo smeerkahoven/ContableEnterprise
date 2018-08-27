@@ -23,7 +23,7 @@ import com.seguridad.utils.ResponseCode;
 import com.services.TemplateResource;
 import com.services.seguridad.util.RestRequest;
 import com.services.seguridad.util.RestResponse;
-import com.util.resource.ComboSelect;
+import com.seguridad.utils.ComboSelect;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;

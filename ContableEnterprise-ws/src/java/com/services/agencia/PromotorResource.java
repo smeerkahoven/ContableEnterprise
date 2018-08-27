@@ -24,7 +24,7 @@ import com.seguridad.utils.Status;
 import com.services.TemplateResource;
 import com.services.seguridad.util.RestRequest;
 import com.services.seguridad.util.RestResponse;
-import com.util.resource.ComboSelect;
+import com.seguridad.utils.ComboSelect;
 import com.util.resource.Mensajes;
 import java.util.HashMap;
 import java.util.Iterator;

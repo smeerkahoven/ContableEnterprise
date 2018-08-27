@@ -24,7 +24,7 @@ import com.seguridad.utils.Status;
 import com.services.seguridad.EmpresaServices;
 import com.services.seguridad.util.RestRequest;
 import com.services.seguridad.util.RestResponse;
-import com.util.resource.ComboSelect;
+import com.seguridad.utils.ComboSelect;
 import com.util.resource.Mensajes;
 import java.math.BigInteger;
 import java.util.ArrayList;

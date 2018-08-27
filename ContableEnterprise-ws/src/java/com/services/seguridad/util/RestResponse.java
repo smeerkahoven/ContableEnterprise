@@ -5,15 +5,17 @@
  */
 package com.services.seguridad.util;
 
+import com.seguridad.control.entities.Entidad;
+
 /**
  *
  * @author xeio
  */
 public class RestResponse {
-    
+
     public static final String BANCO_CUENTA_RELACION = "BANCO_CUENTA_RELACION";
-    public static final String VALOR_DOLAR_NO_ESTABLECIDO = "VALOR_DOLAR_NO_ESTABLECIDO" ; 
-    
+    public static final String VALOR_DOLAR_NO_ESTABLECIDO = "VALOR_DOLAR_NO_ESTABLECIDO";
+
     public static final String RESTFUL_ERROR = "RESTFUL_ERROR";
     public static final String RESTFUL_PARAMETERS_SENT = "RESTFUL_PARAMETERS_SENT";
     public static final String RESTFUL_RECORD_EXISTS = "RESTFUL_RECORD_EXISTS";
@@ -22,16 +24,29 @@ public class RestResponse {
     public static final String RESTFUL_TOKEN_MANDATORY = "RESTFUL_TOKEN_MANDATORY";
     public static final String RESTFUL_TOKEN_EXPIRED = "RESTFUL_TOKEN_EXPIRED";
     public static final String RESTFUL_VALUE_NOT_FOUND = "RESTFUL_VALUE_NOT_FOUND";
-    public static final String RESTFUL_NUMERO_COMPROBANTE="RESTFUL_NUMERO_COMPROBANTE";
-    
-    public static final String RESTFUL_SUCCES_MAIL_SENT = "RESTFUL_SUCCES_MAIL_SENT" ;
-    public static final String RESTFUL_ERROR_MAIL_SENT = "RESTFUL_ERROR_MAIL_SENT" ;
-     public static final String RESTFUL_INVALID_MAIL = "RESTFUL_INVALID_MAIL";
+    public static final String RESTFUL_NUMERO_COMPROBANTE = "RESTFUL_NUMERO_COMPROBANTE";
 
+    public static final String RESTFUL_SUCCES_MAIL_SENT = "RESTFUL_SUCCES_MAIL_SENT";
+    public static final String RESTFUL_ERROR_MAIL_SENT = "RESTFUL_ERROR_MAIL_SENT";
+    public static final String RESTFUL_INVALID_MAIL = "RESTFUL_INVALID_MAIL";
+    
+    public static final String RESTFUL_COMPROBANTE_ANULADO_SUCCESS="RESTFUL_COMPROBANTE_ANULADO_SUCCESS";
+    public static final String RESTFUL_COMPROBANTE_PENDIENTE_SUCCESS="RESTFUL_COMPROBANTE_PENDIENTE_SUCCESS";
+    public static final String RESTFUL_COMPROBANTE_GENERADO_SUCCESS="RESTFUL_COMPROBANTE_GENERADO_SUCCESS";
 
     private int code;
 
     private Object content;
+
+    private Object entidad;
+
+    public Object getEntidad() {
+        return entidad;
+    }
+
+    public void setEntidad(Object entidad) {
+        this.entidad = entidad;
+    }
 
     public int getCode() {
         return code;
