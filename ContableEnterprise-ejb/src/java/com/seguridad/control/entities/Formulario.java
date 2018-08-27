@@ -39,6 +39,8 @@ import javax.xml.bind.annotation.XmlTransient;
 })
 public class Formulario extends Entidad {
 
+    public static String COMPROBANTES = "Comprobantes";
+
     @Column(name = "status" , length = 32)
     private String status;
     

@@ -43,5 +43,13 @@ public interface DaoRemoteFacade {
     public void remove(Entidad e) throws CRUDException;
 
     public void remove(String nativeQuery, HashMap<String, Object> parameters) throws CRUDException;
+    
+    public void beginTransaction() throws CRUDException ;
+    
+    public void endTransaction() throws CRUDException ;
+    
+    public void rollback() throws CRUDException ;
+    
+    public void executeNative(String query, HashMap<String, Object> parameters) throws CRUDException ;
 
 }

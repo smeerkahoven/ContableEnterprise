@@ -50,6 +50,9 @@ public class Parametros extends Entidad {
     public static final String EMAIL_ACCOUNT = "EMAIL_ACCOUNT";
 
     public static final String FACTOR_CAMBIARO_MAX_MIN = "FACTOR_CAMBIARO_MAX_MIN";
+    public static final String DIFERENCIA_CAMBIO_INGRESOS="DIFERENCIA_CAMBIO_INGRESOS";
+    public static final String DIFERENCIA_CAMBIO_EGRESOS="DIFERENCIA_CAMBIO_EGRESOS";
+    public static final String CUENTA_AITB="CUENTA_AITB";
 
     private static final long serialVersionUID = 1L;
     @Id

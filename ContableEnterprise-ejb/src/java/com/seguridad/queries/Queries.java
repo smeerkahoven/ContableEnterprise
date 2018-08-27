@@ -32,6 +32,9 @@ public class Queries {
     
     //comprobantes
     public final static String GET_NEXT_ID_LIBRO="GET_NEXT_ID_LIBRO" ;
+    public final static String UPDATE_COMPROBANTE_CONTABLE_ESTADO="UPDATE_COMPROBANTE_CONTABLE_ESTADO";
+    public final static String UPDATE_COMPROBANTE_CONTABLE_TOTALES="UPDATE_COMPROBANTE_CONTABLE_TOTALES";
+    public final static String DELETE_COMPROBANTE_TRANSACTION="DELETE_COMPROBANTE_TRANSACTION";
 
     //removes
     public final static String DELETE_IMPUESTO_AEROLINEA = "DELETE_IMPUESTO_AEROLINEA";

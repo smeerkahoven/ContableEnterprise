@@ -14,9 +14,18 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.transaction.HeuristicMixedException;
+import javax.transaction.HeuristicRollbackException;
+import javax.transaction.NotSupportedException;
+import javax.transaction.RollbackException;
+import javax.transaction.SystemException;
+import javax.transaction.UserTransaction;
 
 /**
  *
@@ -32,6 +41,48 @@ public abstract class FacadeEJB implements DaoRemoteFacade {
     protected EntityManager em;
 
     protected Queries queries = Queries.getQueries();
+
+    protected UserTransaction transaction ;
+
+    @Override
+    public void executeNative(String q, HashMap<String, Object> parameters) throws CRUDException {
+        Query query = em.createNativeQuery(queries.getPropertie(q));
+        
+        for (Map.Entry<String, Object> entry : parameters.entrySet()) {
+           query.setParameter(entry.getKey(), entry.getValue());
+        }
+        
+        query.executeUpdate() ;
+    }
+    
+    
+    @Override
+    public void beginTransaction() throws CRUDException {
+        try {
+            transaction = (UserTransaction) new InitialContext().lookup("jdbc/db_travel");
+            transaction.begin();
+        } catch (NamingException | NotSupportedException | SystemException ex) {
+            Logger.getLogger(FacadeEJB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @Override
+    public void endTransaction() throws CRUDException {
+        try {
+            transaction.commit();
+        } catch (RollbackException | HeuristicMixedException | HeuristicRollbackException | SecurityException | IllegalStateException | SystemException ex) {
+            Logger.getLogger(FacadeEJB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
+    @Override
+    public void rollback() throws CRUDException {
+        try {
+            transaction.rollback();
+        } catch (IllegalStateException | SecurityException | SystemException ex) {
+            Logger.getLogger(FacadeEJB.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 
     @Override
     public List get(String namedQuery, Class<?> typeClass) throws CRUDException {
@@ -131,7 +182,7 @@ public abstract class FacadeEJB implements DaoRemoteFacade {
             q.setParameter((String) pair.getKey(), pair.getValue());
         }
 
-        LoggerContable.log(Thread.currentThread().getStackTrace()[1].getMethodName() + ":" , this, Level.FINE);
+        LoggerContable.log(Thread.currentThread().getStackTrace()[1].getMethodName() + ":", this, Level.FINE);
 
         return q.getResultList();
     }
@@ -146,17 +197,15 @@ public abstract class FacadeEJB implements DaoRemoteFacade {
             q.setParameter((String) pair.getKey(), pair.getValue());
         }
 
-        LoggerContable.log(Thread.currentThread().getStackTrace()[1].getMethodName() + ":" , this, Level.FINE);
+        LoggerContable.log(Thread.currentThread().getStackTrace()[1].getMethodName() + ":", this, Level.FINE);
 
         return q.getResultList();
     }
-    
-    
 
     @Override
-    public void remove( String nativeQuery, HashMap<String, Object> parameters) throws CRUDException {
+    public void remove(String nativeQuery, HashMap<String, Object> parameters) throws CRUDException {
 
-        Query q = em.createNativeQuery(queries.getPropertie(nativeQuery) );
+        Query q = em.createNativeQuery(queries.getPropertie(nativeQuery));
         Iterator i = parameters.entrySet().iterator();
         while (i.hasNext()) {
             Map.Entry pair = (Map.Entry<String, Object>) i.next();
@@ -165,7 +214,7 @@ public abstract class FacadeEJB implements DaoRemoteFacade {
 
         q.executeUpdate();
 
-        LoggerContable.log(Thread.currentThread().getStackTrace()[1].getMethodName() + ":" , this, Level.FINE);
+        LoggerContable.log(Thread.currentThread().getStackTrace()[1].getMethodName() + ":", this, Level.FINE);
 
     }
 

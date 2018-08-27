@@ -5,12 +5,12 @@
  */
 package com.contabilidad.entities;
 
-import com.seguridad.control.entities.Entidad;
-import com.seguridad.control.exception.CRUDException;
 import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -18,12 +18,12 @@ import javax.validation.constraints.NotNull;
  * @author xeio
  */
 @Embeddable
-public class ComprobanteContablePK extends Entidad {
+public class ComprobanteContablePK implements Serializable {
 
-    public static final Integer INVALID_PK = 0;
+
     @Basic(optional = false)
-    @NotNull
     @Column(name = "id_libro")
+    @GeneratedValue (strategy = GenerationType.SEQUENCE)
     private int idLibro;
     @Basic(optional = false)
     @NotNull
@@ -81,14 +81,6 @@ public class ComprobanteContablePK extends Entidad {
     @Override
     public String toString() {
         return "com.contabilidad.entities.ComprobanteContablePK[ idLibro=" + idLibro + ", gestion=" + gestion + " ]";
-    }
-
-    @Override
-    public int getId() throws CRUDException {
-        String id = String.valueOf(gestion) + String.valueOf(idLibro);
-        
-        return Integer.parseInt(id);
-        
     }
     
 }

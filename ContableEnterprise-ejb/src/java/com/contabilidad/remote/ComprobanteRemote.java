@@ -10,6 +10,7 @@ import com.seguridad.control.entities.Entidad;
 import com.seguridad.control.exception.CRUDException;
 import com.seguridad.control.remote.DaoRemote;
 import com.seguridad.control.remote.DaoRemoteFacade;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import javax.ejb.Remote;
@@ -29,7 +30,6 @@ public interface ComprobanteRemote extends DaoRemoteFacade {
 
     @Override
     public List get(String namedQuery, Class<?> typeClass) throws CRUDException;
-    
 
     @Override
     public List get(String namedQuery, Class<?> typeClass, HashMap parameters) throws CRUDException;
@@ -41,4 +41,22 @@ public interface ComprobanteRemote extends DaoRemoteFacade {
     public void remove(String nativeQuery, HashMap<String, Object> parameters) throws CRUDException;
 
     public ComprobanteContablePK getNextComprobantePK (String fecha, String tipo) throws CRUDException ;
+
+    @Override
+    public void beginTransaction() throws CRUDException;
+
+    @Override
+    public void endTransaction() throws CRUDException;
+
+    @Override
+    public void rollback() throws CRUDException;
+    
+    public List getComprobantes(String tipo, String estado, String fechaI, String fechaF) throws CRUDException ;
+
+    @Override
+    public void executeNative(String query, HashMap<String, Object> parameters) throws CRUDException;
+    
+    
+    
+    
 }

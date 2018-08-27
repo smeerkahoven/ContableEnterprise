@@ -9,6 +9,8 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -20,11 +22,12 @@ public class AsientoContablePK implements Serializable {
 
     @Basic(optional = false)
     @NotNull
-    @Column(name = "id_asiento")
+    @Column(name = "id_asiento", updatable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idAsiento;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "gestion")
+    @Column(name = "gestion",  updatable = false)
     private int gestion;
 
     public AsientoContablePK() {
