@@ -28,15 +28,12 @@ import com.services.seguridad.util.RestRequest;
 import com.services.seguridad.util.RestResponse;
 import com.seguridad.utils.ComboSelect;
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.activation.DataContentHandler;
 import javax.ejb.EJB;
 import javax.ws.rs.Produces;
 import javax.ws.rs.Consumes;
@@ -45,7 +42,6 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 /**
@@ -224,7 +220,7 @@ public class ComprobantesResource extends TemplateResource {
             cc.setFechaInsert(DateContable.getCurrentDate());
             cc.setComprobanteContablePK(new ComprobanteContablePK(0, numero.getGestion()));
 
-          //  ejbComprobante.beginTransaction();
+            //  ejbComprobante.beginTransaction();
             Integer idLibro = ejbComprobante.insert(cc);
 
             cc.getComprobanteContablePK().setIdLibro(idLibro);
@@ -367,7 +363,7 @@ public class ComprobantesResource extends TemplateResource {
             if (id == 0) {
                 response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
                 response.setContent(mensajes.getProperty(RestResponse.RESTFUL_PARAMETERS_SENT));
-                return response ;
+                return response;
             }
 
             ComprobanteContableJSON pc = new ComprobanteContableJSON();
@@ -456,14 +452,14 @@ public class ComprobantesResource extends TemplateResource {
             c = gson.fromJson(object.toString(), ComprobanteContableJSON.class);
 
             ComprobanteContable cc = ComprobanteContableJSON.toComprobanteContable(c);
-            
-             switch (cc.getEstado()) {
+
+            switch (cc.getEstado()) {
                 case ComprobanteContable.PENDIENTE:
                     cc.setEstado(ComprobanteContable.APROBADO);
                     response.setContent(mensajes.getProperty(RestResponse.RESTFUL_COMPROBANTE_GENERADO_SUCCESS));
                     break;
             }
-             
+
             ejbComprobante.update(cc);
 
             /* ComprobanteContable cc = ComprobanteContableJSON.toComprobanteContable(c);
@@ -644,34 +640,43 @@ public class ComprobantesResource extends TemplateResource {
         return response;
     }
 
-    @GET
+    @POST
     @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
     @Path("all")
-    public RestResponse getComprobantes(@QueryParam("tipo") String tipo,
+    public RestResponse getComprobantes(/*@QueryParam("tipo") String tipo,
             @QueryParam("fechaI") String fechaI,
             @QueryParam("fechaF") String fechaF,
-            @QueryParam("estado") String estado) {
-        RestResponse response = new RestResponse();
-        try {
+            @QueryParam("estado") String estado*/final RestRequest request) {
+        RestResponse response = doValidations(request);
+        if (response.getCode() == ResponseCode.RESTFUL_SUCCESS.getCode()) {
+            try {
+                
+                HashMap<String,Object> parameters = (HashMap<String,Object>)request.getContent();
+                String tipo = (String)parameters.get("tipo");
+                String estado = (String)parameters.get("estado");
+                String fechaI = (String)parameters.get("fechaInicio");
+                String fechaF = (String)parameters.get("fechaFin");
+                
+                List<ComprobanteContable> l = ejbComprobante.getComprobantes(tipo == null ? "" : tipo,
+                        estado == null ? "" : estado,
+                        fechaI == null ? "" : fechaI,
+                        fechaF == null ? "" : fechaF, user.getIdEmpleado().getIdEmpresa().getIdEmpresa());
 
-            List<ComprobanteContable> l = ejbComprobante.getComprobantes(tipo == null ? "" : tipo,
-                    estado == null ? "" : estado,
-                    fechaI == null ? "" : fechaI,
-                    fechaF == null ? "" : fechaF);
+                List<ComprobanteContableJSON> ljson = new LinkedList<>();
+                for (ComprobanteContable cc : l) {
+                    ComprobanteContableJSON cjson = ComprobanteContableJSON.toComprobanteContableJSON(cc);
+                    ljson.add(cjson);
+                }
 
-            List<ComprobanteContableJSON> ljson = new LinkedList<>();
-            for (ComprobanteContable cc : l) {
-                ComprobanteContableJSON cjson = ComprobanteContableJSON.toComprobanteContableJSON(cc);
-                ljson.add(cjson);
+                response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
+                response.setContent(ljson);
+
+            } catch (CRUDException ex) {
+                Logger.getLogger(ComprobantesResource.class.getName()).log(Level.SEVERE, null, ex);
+                response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+                response.setContent(mensajes.getProperty(RestResponse.RESTFUL_ERROR));
             }
-
-            response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
-            response.setContent(ljson);
-
-        } catch (CRUDException ex) {
-            Logger.getLogger(ComprobantesResource.class.getName()).log(Level.SEVERE, null, ex);
-            response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
-            response.setContent(mensajes.getProperty(RestResponse.RESTFUL_ERROR));
         }
         return response;
     }
