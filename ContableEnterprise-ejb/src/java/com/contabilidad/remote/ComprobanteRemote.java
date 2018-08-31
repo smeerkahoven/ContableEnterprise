@@ -51,7 +51,7 @@ public interface ComprobanteRemote extends DaoRemoteFacade {
     @Override
     public void rollback() throws CRUDException;
     
-    public List getComprobantes(String tipo, String estado, String fechaI, String fechaF) throws CRUDException ;
+    public List getComprobantes(String tipo, String estado, String fechaI, String fechaF, Integer idEmpresa) throws CRUDException ;
 
     @Override
     public void executeNative(String query, HashMap<String, Object> parameters) throws CRUDException;

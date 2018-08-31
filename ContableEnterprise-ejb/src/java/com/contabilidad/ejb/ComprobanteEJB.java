@@ -45,7 +45,8 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
     }
 
     @Override
-    public List getComprobantes(String tipo, String estado, String fechaI, String fechaF) throws CRUDException {
+    public List getComprobantes(String tipo, String estado, String fechaI, String fechaF,
+            Integer idEmpresa) throws CRUDException {
 
         String q = "SELECT c FROM ComprobanteContable c ";
         if (tipo.trim().length() > 0 || estado.trim().length() > 0
@@ -67,7 +68,7 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
                 q += " c.fecha<=:fechaF AND";
             }
 
-            q += " 1=1 ";
+            q += " c.idEmpresa=:idEmpresa ";
         }
 
         Query query = em.createQuery(q, ComprobanteContable.class);
@@ -86,11 +87,12 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
             query.setParameter("fechaF", DateContable.toLatinAmericaDateFormat(fechaF));
         }
 
-        System.out.println(q);
+        query.setParameter("idEmpresa", idEmpresa);
+        /*System.out.println(q);
         System.out.println(fechaI);
         System.out.println(fechaF);
         System.out.println(DateContable.toLatinAmericaDateFormat(fechaI));
-        System.out.println(DateContable.toLatinAmericaDateFormat(fechaF));
+        System.out.println(DateContable.toLatinAmericaDateFormat(fechaF));*/
 
         return query.getResultList();
 

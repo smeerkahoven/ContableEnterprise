@@ -91,7 +91,7 @@ public class ComprobanteContable extends Entidad {
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaInsert;
     @Column(name = "con_errores")
-    private Short conErrores;
+    private String conErrores;
 
     public static String getEstadoNombre(String estado) {
         switch (estado) {
@@ -266,11 +266,11 @@ public class ComprobanteContable extends Entidad {
         this.fechaInsert = fechaInsert;
     }
 
-    public Short getConErrores() {
+    public String getConErrores() {
         return conErrores;
     }
 
-    public void setConErrores(Short conErrores) {
+    public void setConErrores(String conErrores) {
         this.conErrores = conErrores;
     }
 

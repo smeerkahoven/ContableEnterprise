@@ -38,17 +38,17 @@ public class AsientoContable extends Entidad {
     private static final long serialVersionUID = 1L;
     @EmbeddedId
     protected AsientoContablePK asientoContablePK;
-    @Size(max = 255)
+    @Size(max = 2)
     @Column(name = "estado")
     private String estado;
-    @Column(name = "fecha_movimiento")
+    @Column(name = "fecha_movimiento", updatable = false)
     @Temporal(TemporalType.DATE)
     private Date fechaMovimiento;
     @Column(name = "id_libro", updatable = false)
     private Integer idLibro;
     @Column(name = "id_plan_cuenta")
     private Integer idPlanCuenta;
-    @Size(max = 255)
+    @Size(max = 1)
     @Column(name = "moneda")
     private String moneda;
     @Column(name = "monto_debe_ext")

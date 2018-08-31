@@ -38,7 +38,7 @@ public class ComprobanteContableJSON {
     private BigDecimal totalDebeMonExt;
     private BigDecimal totalHaberMonNac;
     private BigDecimal totalHaberMonExt;
-    private Boolean conErrores;
+    private String conErrores;
 
     private List<AsientoContableJSON> transacciones = new LinkedList<AsientoContableJSON>();
 
@@ -61,7 +61,7 @@ public class ComprobanteContableJSON {
         newc.setTotalHaberExt(c.getTotalHaberMonExt());
         newc.setTotalHaberNac(c.getTotalHaberMonNac());
         newc.setFechaInsert(DateContable.getCurrentDate());
-        newc.setConErrores(c.getConErrores() ? new Short("1") : new Short("0"));
+        newc.setConErrores(c.getConErrores() );
 
         return newc;
     }
@@ -74,7 +74,7 @@ public class ComprobanteContableJSON {
         json.setGestion(c.getComprobanteContablePK().getGestion());
         json.setIdNumeroGestionColumna(c.getComprobanteContablePK().getGestion() + "-" + c.getIdNumeroGestion());
 
-        json.setConErrores((c.getConErrores() == 1));
+        json.setConErrores((c.getConErrores()));
         json.setConcepto(c.getConcepto());
         json.setEstado(c.getEstado());
         json.setFactorCambiario(c.getFactorCambiario());
@@ -129,11 +129,11 @@ public class ComprobanteContableJSON {
         this.transacciones = transacciones;
     }
 
-    public Boolean getConErrores() {
+    public String getConErrores() {
         return conErrores;
     }
 
-    public void setConErrores(Boolean conErrores) {
+    public void setConErrores(String conErrores) {
         this.conErrores = conErrores;
     }
 
