@@ -1,0 +1,876 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html  xmlns="http://www.w3.org/1999/xhtml"
+       xmlns:h="http://xmlns.jcp.org/jsf/html"
+       xmlns:ui="http://xmlns.jcp.org/jsf/facelets" ng-app="jsBoletos"
+       xmlns:c="http://java.sun.com/jsp/jstl/core"
+       lang="en"
+
+       xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+        <meta http-equiv="Expires" content="0"/>
+        <meta http-equiv="Last-Modified" content="0"/>
+        <meta http-equiv="Cache-Control" content="no-cache, mustrevalidate"/>
+        <meta http-equiv="Pragma" content="no-cache"/>
+        <!-- End Required meta tags -->
+        <title>#{login.systemName.valor} - #{login.razonSocial}</title>
+        <!-- FAVICONS -->
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/apple-touch-icon.png" />
+        <link rel="shortcut icon" href="../../assets/favicon.ico" />
+        <meta name="theme-color" content="#3063A0" />
+        <!-- End FAVICONS -->
+        <script src="../../assets/vendor/pace/pace.min.js"></script>
+        <!-- BEGIN BASE STYLES -->
+        <link rel="stylesheet" href="../../assets/vendor/pace/pace.min.css" />
+        <link rel="stylesheet" href="../../assets/vendor/bootstrap/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="../../assets/vendor/open-iconic/css/open-iconic-bootstrap.min.css"/>
+        <link rel="stylesheet" href="../../assets/vendor/fontawesome/css/fontawesome.all.css"/>
+        <link rel="stylesheet" href="../../assets/vendor/font-awesome/css/font-awesome.min.css"  />
+        <link rel="stylesheet" href="../../assets/vendor/flatpickr/flatpickr.min.css" />
+        <!-- END BASE STYLES -->
+        <!-- BEGIN PLUGINS STYLES -->
+        <!-- END PLUGINS STYLES -->
+        <!-- BEGIN THEME STYLES -->
+
+        <link rel="stylesheet" href="../../assets/vendor/sweetalert/css/sweetalert.css"/>
+
+        <link rel="stylesheet" href="../../assets/stylesheets/main.min.css"/>
+
+        <script type="text/javascript" src="../../js/angular.min.js" />
+        <script type="text/javascript" src="../../js/ui-bootstrap-tpls.js" />
+        <script type="text/javascript" src="../../js/smart-table.min.js" />
+        <script type="text/javascript" src="../../assets/vendor/sweetalert/js/sweetalert.min.js"/>
+        <script type="text/javascript" src="../../js/agencia/boletos.js" />
+
+        <!--CORRIGE ng-show -->
+        <link rel="stylesheet" href="../../css/main.css"  />
+    </head>
+    <h:body>
+        <!-- .app -->
+        <div class="app">
+            <!-- .app-header -->
+            <header class="app-header">
+                <!-- .top-bar -->
+                <ui:include src="../index/top-bar.xhtml" />
+                <!-- /.top-bar -->
+            </header>
+            <!-- /.app-header -->
+            <!-- .app-aside -->
+            <aside class="app-aside">
+                <!-- .aside-content -->
+                <div class="aside-content">
+                    <!-- .aside-menu -->
+                    <ui:include src="../index/menu.xhtml" />
+                    <!-- /.aside-menu -->
+                </div>
+                <!-- /.aside-content -->
+            </aside>
+            <!-- /.app-aside -->
+            <!-- .app-main -->
+            <main class="app-main" ng-controller="frmBoletos">
+                <!-- .wrapper -->
+                <div class="wrapper">
+                    <!-- .page -->
+                    <div class="page">
+                        <!-- .page-inner -->
+                        <div class="page-inner">
+                            <!-- .page-title-bar -->
+                            <header class="page-title-bar">
+                                <nav aria-label="breadcrumb">
+                                    <ol class="breadcrumb">
+                                        <li class="breadcrumb-item active">
+                                            <a href="#">
+                                                <i class="breadcrumb-icon fa fa-angle-left mr-2"></i>#{boletos.formulario.modulo}
+                                            </a>
+                                        </li>
+                                    </ol>
+                                </nav>
+                                <div class="d-md-flex">
+                                    <h1 class="page-title mr-sm-auto"> #{boletos.formulario.nombre}</h1>
+                                    <div class="dt-button btn-group">
+                                        <c:if test="#{boletos.formulario.crear== boletos.formulario.PERMITIR}">
+
+                                            <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                <span class="fa fa-plus"></span> Nuevo
+                                            </button>
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                <a class="dropdown-item" ng-click="newBoleto('S')">Boleto Simple</a>
+                                                <a class="dropdown-item" ng-click="newBoleto('M')">Boleto M&uacute;ltiple</a>
+                                            </div>
+
+                                        </c:if>
+                                        <button type="button" class="btn btn-warning " tabindex="0" ng-click="cancelar()"><span class="fa fa-undo"></span> Cancelar</button>
+                                    </div>
+                                </div>
+                            </header>
+                            <!-- /.page-title-bar -->
+                            <!-- .page-section -->
+                            <div class="page-section">
+                                <!-- .card -->
+                                <section id="base-style" class="card">
+                                    <!-- .card-body -->
+                                    <div class="card-body">
+
+                                        <!--Mensaje Cargando -->
+                                        <span ng-show="loading" class="alert alert-info"><i class="loader loader-sm" ></i>  Cargando...</span>
+                                        <!-- /Mensaje Cargando -->
+
+                                        <!--Mensaje Success -->
+                                        <div class="alert alert-success ng-hide" role="alert" ng-show="showRestfulSuccess">
+                                            <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">&times;</a>
+                                            {{ showRestfulMessage}}
+                                        </div>
+                                        <!--/Mensaje Success -->
+
+                                        <!--Mensaje Error -->
+                                        <div class="alert alert-danger ng-hide" role="alert" ng-show="showRestfulError">
+                                            <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">&times;</a>
+                                            {{ showRestfulMessage}}
+                                        </div>
+                                        <!-- /Mensaje Error -->
+                                        <!-- .form-group -->
+                                        <!-- Tabla Contenido -->
+
+                                        <!-- Search Options -->
+                                        <div class=" ng-hide" ng-show="showTable">
+
+                                            <div class="form-group row">
+                                                <label class="col-form-label col-sm-2 text-right" for="flatpickr-wrap">Fecha Inicio</label>
+                                                <div class="col-sm-3 input-group input-group-alt flatpickr" id="flatpickr9">
+                                                    <input id="txtFechaInicio" type="text" class="form-control flatpick-input" data-input="" 
+                                                           ng-model="search.fechaInicio"/>
+                                                    <div class="input-group-append">
+                                                        <button type="button" class="btn btn-secondary" data-toggle="">
+                                                            <i class="far fa-calendar"></i>
+                                                        </button>
+                                                        <button type="button" class="btn btn-secondary" data-clear="">
+                                                            <i class="fa fa-times"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+                                                <label class="col-form-label col-sm-2 text-right" for="flatpickr-wrap">Fecha Fin</label>
+                                                <div class="col-sm-3 input-group input-group-alt flatpickr" id="flatpickr9">
+                                                    <input id="txtFechaFin" type="text" class="form-control flatpick-input" data-input="" ng-model="search.fechaFin"/>
+                                                    <div class="input-group-append">
+                                                        <button type="button" class="btn btn-secondary" data-toggle="">
+                                                            <i class="far fa-calendar"></i>
+                                                        </button>
+                                                        <button type="button" class="btn btn-secondary" data-clear="">
+                                                            <i class="fa fa-times"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+                                                <button type="button" class="btn btn-primary col-1"  ng-click="find()"><span class="fa fa-search"></span> Buscar</button>
+                                            </div>
+                                        </div>
+
+                                        <!-- /Search Options -->
+
+                                        <!-- Tabla Contenido -->
+                                        <div  id="tableData" class="ng-hide table-responsive" ng-show="showTable" >
+                                            <table st-table="display_records"    st-safe-src="mainGrid" 
+                                                   class="table  table-hover ">
+                                                <thead >
+                                                    <c:if test="#{boletos.formulario.buscar == boletos.formulario.PERMITIR}">
+                                                        <tr>
+                                                            <th colspan="5">
+                                                                <!-- .input-group -->
+                                                                <div class="input-group has-clearable">
+                                                                    <div class="input-group-prepend">
+                                                                        <span class="input-group-text">
+                                                                            <span class="oi oi-magnifying-glass"></span>
+                                                                        </span>
+                                                                    </div>
+                                                                    <input st-search="" id="table-search" class="form-control placeholder-shown" placeholder="Busqueda" type="text" /> 
+                                                                </div>
+                                                                <!-- /.input-group -->
+                                                            </th>
+                                                        </tr>
+                                                    </c:if>
+                                                    <tr>
+                                                        <th>Fecha Emisi&oacute;n</th>
+                                                        <th>Aerolinea</th>
+                                                        <th>Cliente</th>
+                                                        <th>Fecha de Registro</th>
+                                                        <th>Estado</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr st-select-row="row" st-select-mode="multiple" ng-repeat="row in display_records">
+                                                        <td>{{row.fechaEmision}} </td>
+                                                        <td>{{row.idAerolinea| searchAerolinea }} </td>
+                                                        <td>{{row.cliente| searchCliente}} </td>
+                                                        <td>{{row.fechaRegistro}} </td>
+                                                        <td>{{row.estado| searchEstado}} </td>
+                                                        <td>
+                                                            <div class="btn-group" >
+                                                                <c:if test="${boletos.formulario.acceder == boletos.formulario.PERMITIR }">
+                                                                    <button type="button" title="Editar" class="btn btn-sm btn-info" ng-click="edit(row)" ><i class="fa fa-pencil"></i></button>
+                                                                </c:if>
+
+                                                                <c:if test="#{boletos.formulario.eliminar== boletos.formulario.PERMITIR}">
+                                                                    <button type="button" title="Anular" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#frmAnular" ng-click="modalAnular(row)"><i class="fa fa-trash"></i></button>
+                                                                </c:if>
+                                                                <!--<button type="button" title="Ver" class="btn btn-default" ng-click="ver(row.idEmpleado)" data-toggle="modal" data-target="#verForm"><i class="fa fa-search"></i></button>-->
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                                <tfoot>
+                                                    <tr>
+                                                        <td colspan="10" class="text-center">
+                                                            <div class="container" st-items-by-page="itemsByPage" st-pagination="" st-template="../index/pagination.custom.html"></div>
+                                                        </td>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+
+                                        </div>
+                                        <!-- /Tabla Contenido -->
+                                        <form id="myForm" name="myForm" >
+                                            <!-- .form -->
+                                            <script type="text/ng-template" id="customTemplate.html">
+                                                <div class="tt-suggestion tt-selectable">
+                                                <span class=""  ng-bind-html="match.label | uibTypeaheadHighlight:query"></span>
+                                                </div>
+                                            </script>
+                                            <!-- .Datos Generales -->
+                                            <fieldset  ng-show="showForm">
+                                                <legend>Datos Generales</legend>
+                                                <div id="formData" class="container ng-hide table-responsive" ng-show="showForm"  >
+                                                    <input type="hidden" id="hdUrl" name="hdUrl" value="#{comprobantes.formulario.restful}"/>
+                                                    <input type="hidden" id="hdUrlLineaAerea" name="hdUrlLineaAerea" value="#{aerolinea.formulario.restful}"/>
+                                                    <input type="hidden" id="hdUrlAeropuertos" name="hdUrlAeropuertos" value="#{aeropuerto.formulario.restful}"/>
+                                                    <input type="hidden" id="hdUrlClientes" name="hdUrlClientes" value="#{cliente.formulario.restful}"/>
+                                                    <input type="hidden" id="hdUrlFactores" name="hdUrlFactores" value="#{factores.formulario.restful}"/>
+                                                    <input type="hidden" id="hdUrlConfiguracionContabilidad" name="hdUrlConfiguracionContabilidad" value="#{planCuentas.formulario.restful}"/>
+                                                    <input type="hidden" id="hdToken" name="hdToken" value="#{sessionView.token}"/>
+                                                    <input type="hidden" id="idEmpresa" name="idEmpresa" value="#{login.empleado.idEmpresa.idEmpresa}"/>
+                                                    <input type="hidden" id="hdToken" name="hdFormName" value="#{comprobantes.formulario.nombre}"/>
+                                                    <input type="hidden" id="hdUserName" name="hdUserName" value="#{sessionView.user.userName}" />
+                                                    <!--<input type="hidden" id="txtFechaAlta" name="txtFechaAlta" ng-model="formData.fechaAlta"/>-->
+                                                    <!--<input type="hidden" id="txtFechaBaja" name="txtFechaBaja" ng-model="formData.fechaBaja"/>-->
+
+                                                    <div class="form-group row">
+                                                        <label for="txtNombre" class=" col-form-label col-sm-3 text-right">L&iacute;nea A&eacute;rea</label>
+                                                        <div class="col-sm-6">
+                                                            <input type="text" ng-model="formData.idAerolinea" placeholder="Seleccione una Linea Aerea"
+                                                                   uib-typeahead="cuenta as cuenta.name for cuenta in comboAerolinea | filter:{name:$viewValue}"
+                                                                   class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="0" 
+                                                                   typeahead-template-url="customTemplate.html" 
+                                                                   />
+                                                            <span class="alert-danger"  ng-show="formData.idAerolinea.id === undefined"  >
+                                                                Ingrese una Linea Aerea
+                                                            </span> 
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div class="form-group row">
+                                                        <label for="txtCodigo" class="col-form-label col-sm-3 text-right">Emision</label>
+                                                        <div class="col-sm-6">
+                                                            <select class="form-control " 
+                                                                    ng-options="option.id as option.name for option in comboEmision" ng-model="formData.emision">
+                                                                <option style="display:none" value="">seleccione una entidad</option>
+                                                            </select>
+
+                                                            <span class="alert-danger"  ng-show="formData.emision === undefined"  >
+                                                                Ingrese una tipo de Emision
+                                                            </span> 
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group row">
+                                                        <label for="txtCodigoLinea" class="col-sm-3 text-right" > Tipo de Cup&oacute;n</label>
+                                                        <div class="col-sm-6">
+                                                            <div class="form-inline">
+                                                                <div class="custom-control custom-control-inline custom-radio">
+                                                                    <input type="radio" class="custom-control-input" id="rdInternacional" name="rdTipoCupon"
+                                                                           ng-model="formData.tipoCupon" value="T" />
+                                                                    <label class="custom-control-label" for="rdInternacional">Internacional</label>
+                                                                </div>
+                                                                <div class="custom-control custom-control-inline custom-radio">
+                                                                    <input type="radio" class="custom-control-input" id="rdNacional" name="rdTipoCupon"
+                                                                           ng-model="formData.tipoCupon" value="N" ng-checked="true" />
+                                                                    <label class="custom-control-label" for="rdNacional" >Nacional</label>
+                                                                </div>
+                                                            </div>
+
+                                                            <span class="alert-danger"  ng-show="formData.tipoCupon === undefined"  >
+                                                                Ingrese una tipo de Cupon
+                                                            </span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group row">
+                                                        <label for="txtCodigo" class="col-form-label col-sm-3 text-right">N&uacute;mero del Boleto</label>
+                                                        <div class="col-sm-6">
+                                                            <input type="text" class="form-control col" name="txtNumero"  
+                                                                   required="required" valid-number="valid-number"  onkeypress="return isNumberKey(event)" 
+                                                                   maxlength="12" ng-model="formData.numero"/>
+                                                            <span class="alert-danger" ng-show="!myForm.txtNumero.$valid">Debe ingresar un Numero de Boleto</span>
+                                                        </div>
+
+                                                    </div>
+
+                                                    <div class="form-group row">
+                                                        <label for="txtNombre" class=" col-form-label col-sm-3 text-right">Ruta</label>
+                                                        <div class="col-sm-9">
+                                                            <div class="row">
+                                                                <div class="col-md-3">
+                                                                    <input type="text" ng-model="formData.idRuta1" placeholder="Ruta 1"
+                                                                           uib-typeahead="item as item.name for item in comboAeropuerto | filter:{name:$viewValue}"
+                                                                           class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="0" 
+                                                                           typeahead-template-url="customTemplate.html" 
+                                                                           />                                                                
+                                                                </div>
+                                                                <span class="fa fa-icons fa-plane"></span>
+                                                                <div class="col-md-3">
+                                                                    <input type="text" ng-model="formData.idRuta2" placeholder="Ruta 2"
+                                                                           uib-typeahead="item as item.name for item in comboAeropuerto | filter:{name:$viewValue}"
+                                                                           class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="0" 
+                                                                           typeahead-template-url="customTemplate.html" 
+                                                                           />
+                                                                </div>
+                                                                <span class="fa fa-icons fa-plane"></span>
+                                                                <div class="col-md-3">
+                                                                    <input type="text" ng-model="formData.idRuta3" placeholder="Ruta 3"
+                                                                           uib-typeahead="item as item.name for item in comboAeropuerto | filter:{name:$viewValue}"
+                                                                           class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="0" 
+                                                                           typeahead-template-url="customTemplate.html" 
+                                                                           />
+                                                                </div>
+                                                                <span class="fa fa-icons fa-plane"></span>
+                                                                <div class="col-md-3">
+                                                                    <input type="text" ng-model="formData.idRuta4" placeholder="Ruta 4"
+                                                                           uib-typeahead="item as item.name for item in comboAeropuerto | filter:{name:$viewValue}"
+                                                                           class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="0" 
+                                                                           typeahead-template-url="customTemplate.html" 
+                                                                           />
+                                                                </div>
+                                                                <span class="fa fa-icons fa-plane"></span>
+                                                                <div class="col-md-3">
+                                                                    <input type="text" ng-model="formData.idRuta5" placeholder="Ruta 5"
+                                                                           uib-typeahead="item as item.name for item in comboAeropuerto | filter:{name:$viewValue}"
+                                                                           class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="0" 
+                                                                           typeahead-template-url="customTemplate.html" 
+                                                                           />
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group row">
+                                                        <label for="txtNombre" class=" col-form-label col-sm-3 text-right">Cuenta</label>
+                                                        <div class="col-sm-6">
+                                                            <input type="text" ng-model="formData.idCliente" placeholder="Seleccione una Cliente"
+                                                                   uib-typeahead="cuenta as cuenta.name for cuenta in comboCliente | filter:{name:$viewValue}"
+                                                                   class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="0" 
+                                                                   typeahead-template-url="customTemplate.html" 
+                                                                   />
+                                                            <span class="alert-danger"  ng-show="formData.idCliente.id === undefined"  >
+                                                                Ingrese un Cliente V&aacute;lido.
+                                                            </span> 
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div class="form-group row">
+                                                        <label for="txtNombre" class=" col-form-label col-sm-3 text-right">Pasajero</label>
+                                                        <div class="col-sm-6">
+                                                            <input type="text" ng-model="formData.nombrePasajero" placeholder="Ingrese el nombre del Pasajero "
+                                                                   uib-typeahead="cuenta as cuenta.name for cuenta in comboPasajero | filter:{name:$viewValue}"
+                                                                   class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="0" 
+                                                                   typeahead-template-url="customTemplate.html" 
+                                                                   />                                                            
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div class="form-group row">
+                                                        <label class="col-form-label col-sm-3 text-right" for="flatpickr-wrap">Fecha de Emisi&oacute;n</label>
+                                                        <div class="col-sm-3 input-group input-group-alt flatpickr" id="flatpickr9">
+                                                            <input id="txtFechaInicio" type="text" class="form-control flatpick-input" data-input="" 
+                                                                   ng-model="formData.fechaEmision"/>
+                                                            <div class="input-group-append">
+                                                                <button type="button" class="btn btn-secondary" data-toggle="">
+                                                                    <i class="far fa-calendar"></i>
+                                                                </button>
+                                                                <button type="button" class="btn btn-secondary" data-clear="">
+                                                                    <i class="fa fa-times"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+
+                                                        <label class="col-form-label col-sm-2 text-right" for="flatpickr-wrap">Fecha de Viaje</label>
+                                                        <div class="col-sm-3 input-group input-group-alt flatpickr" id="flatpickr9">
+                                                            <input id="txtFechaFin" type="text" class="form-control flatpick-input" data-input="" 
+                                                                   ng-model="formData.fechaViaje"/>
+                                                            <div class="input-group-append">
+                                                                <button type="button" class="btn btn-secondary" data-toggle="">
+                                                                    <i class="far fa-calendar"></i>
+                                                                </button>
+                                                                <button type="button" class="btn btn-secondary" data-clear="">
+                                                                    <i class="fa fa-times"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group row">
+                                                        <label for="txtFactor" class=" col-form-label col-sm-3 text-right">Factor USD</label>
+                                                        <div class="col-sm-4">
+                                                            <input type="number" class="form-control col-sm" name="txtFactor" placeholder="0.00 BOB" 
+                                                                   ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01" min="{{formData.factorMin}}" max="{{formData.factorMax}}"
+                                                                   ng-model="formData.factorCambiario" value="{{formData.factorCambiario}}" data-toggle="tooltip" 
+                                                                   data-placement="top"  />
+                                                            <span class="alert-danger"  ng-show="!myForm.txtFactor.$valid"  >
+                                                                Debe seleccionar un valor entre {{formData.factorMin}} y {{formData.factorMax}}.
+                                                            </span>
+
+                                                            <span class="alert-danger"  ng-show="!formData.factorCambiario"  >
+                                                                Debe seleccionar un valor entre {{formData.factorMin}} y {{formData.factorMax}}.
+                                                            </span>
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div class="form-group row">
+                                                        <label for="txtCodigoLinea" class="col-sm-3 text-right" > Formas de Pago</label>
+                                                        <div class="col-sm-9">
+                                                            <div class="form-inline">
+                                                                <div class="custom-control custom-control-inline custom-radio">
+                                                                    <input type="radio" class="custom-control-input" id="rdCredito" name="rdFormaPago"
+                                                                           ng-model="formData.formaPago" value="C" />
+                                                                    <label class="custom-control-label" for="rdCredito">Credito</label>
+                                                                </div>
+                                                                <div class="custom-control custom-control-inline custom-radio">
+                                                                    <input type="radio" class="custom-control-input" id="rdContado" name="rdFormaPago"
+                                                                           ng-model="formData.formaPago" value="E" ng-checked="true" />
+                                                                    <label class="custom-control-label" for="rdContado" >Contado</label>
+                                                                </div>
+                                                                <div class="custom-control custom-control-inline custom-radio">
+                                                                    <input type="radio" class="custom-control-input" id="rdCombinado" name="rdFormaPago"
+                                                                           ng-model="formData.formaPago" value="P" ng-checked="true" />
+                                                                    <label class="custom-control-label" for="rdCombinado" >Combinado</label>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div class="container-fluid" ng-show="formData.formaPago == 'C'">
+                                                        <legend>Pago al Cr&eacute;dito</legend>
+
+                                                        <div class="row">
+                                                            <div class="col-sm-6">
+                                                                <div class="form-group row">
+                                                                    <label for="txtCodigoLinea" class="text-right col-sm-6" > Plazo en d&iacute;as</label>
+                                                                    <div class="col-sm-4">
+                                                                        <input type="number" class="form-control" name="txtPlazo" placeholder="0" 
+                                                                               ng-model="formData.creditoDias" step="1" max="365" min="1"
+                                                                               ng-pattern="/^[0-9]?$/" required="" />
+                                                                    </div>    
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-sm-6">
+                                                                <!--<div class="col-sm-6">-->
+                                                                <div class="form-group row">
+                                                                    <label for="txtCodigoLinea" class=" text-right col-sm-5" > Fecha de Vencimiento</label>
+                                                                    <div class="col-sm-6">
+                                                                        <label for="txtCodigoLinea" class=" text-right" > {{formData.creditoVencimiento}}</label>
+                                                                    </div>
+                                                                </div>
+                                                                <!--</div>-->
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div class="container-fluid" ng-show="formData.formaPago == 'E'">
+                                                        <legend>Pago al Contado</legend>
+
+                                                        <div class="row">
+                                                            <div class="col-sm-6">
+                                                                <div class="form-group row">
+                                                                    <label for="txtCodigoLinea" class="col-sm-6 text-right" > Pagar&aacute; con tarjeta ?</label>
+                                                                    <div class="custom-control custom-control-inline custom-checkbox ">
+                                                                        <input type="checkbox" class="custom-control-input" id="chkPagoTarjeta" 
+                                                                               ng-checked="formData.contadoIdTarjeta" ng-model="formData.contadoConTarjeta" />
+                                                                        <label class="custom-control-label" for="chkPagoTarjeta"></label>
+                                                                    </div>   
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="row" ng-show="formData.contadoConTarjeta">
+                                                            <div class="col-sm-5">
+                                                                <div class="form-group row">
+                                                                    <label for="txtCodigoLinea" class="text-right col-sm-6" > Tipo de Tarjeta</label>
+                                                                    <div class="col-sm-6">
+                                                                        <input type="text" ng-model="formData.contadoIdTarjeta" placeholder="Seleccione una Tarjeta"
+                                                                               uib-typeahead="cuenta as cuenta.name for cuenta in comboTarjetas | filter:{name:$viewValue}"
+                                                                               class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="0" 
+                                                                               typeahead-template-url="customTemplate.html" 
+                                                                               />
+                                                                    </div>    
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-sm-7">
+                                                                <!--<div class="col-sm-6">-->
+                                                                <div class="form-group row">
+                                                                    <label for="txtCodigoLinea" class=" text-right col-sm-4" > N&uacute;mero de tarjeta</label>
+                                                                    <div class="col-sm-6">
+                                                                        <input type="text" class="form-control " id="txtNroTarjeta"  name="txtNroTarjeta"  
+                                                                               required="required" valid-number="valid-number"  onkeypress="return isNumberKey(event)" maxlength="16" ng-model="formData.contadoNroTarjeta"/>
+                                                                        <span class="alert-danger" ng-show="!myForm.txtNroTarjeta.$valid">Debe ingresar un numero</span>
+                                                                    </div>
+                                                                </div>
+                                                                <!--</div>-->
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+
+                                            <hr />
+
+                                            <fieldset ng-show="showForm" class="ng-hide">
+                                                <div class="container-fluid">
+                                                    <legend>Importes para planillas de Ventas</legend>  <div class="table-responsive">
+                                                        <div class="col-10">
+                                                            <table class="table table-sm table-hover">
+                                                                <thead class="thead-dark">
+                                                                    <tr class="d-flex ">
+                                                                        <th class="col-sm-3"><label></label></th>
+                                                                        <th class="col-sm-3"><label></label></th>
+                                                                        <th class="col-sm-3"><label>BOB</label></th>
+                                                                        <th class="col-sm-3"><label>USD</label></th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody >
+                                                                    <tr class="d-flex" >
+                                                                        <td class="col-sm-3"><label class="text-right">Importe Neto</label></td>
+                                                                        <td class="col-sm-3"></td>
+                                                                        <td class="col-sm-3">
+                                                                            <input type="number" class="form-control" name="txtImporteNeto" placeholder="0.00 BOB" 
+                                                                                   ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="1" min="0" 
+                                                                                   ng-model="formData.importeNetoBs" value="{{formData.importeNetoBs}}" 
+                                                                                   data-toggle="tooltip" data-placement="top"  />
+                                                                        </td>
+                                                                        <td class="col-sm-3">
+                                                                            <input type="number" class="form-control" name="txtImporteNeto" placeholder="0.00 USD" 
+                                                                                   ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="1" min="0" 
+                                                                                   ng-model="formData.importeNetoUsd" value="{{formData.importeNetoUsd}}" 
+                                                                                   data-toggle="tooltip" data-placement="top"  />
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr class="d-flex">
+                                                                        <td class="col-sm-3"><label class="text-right">Impuestos BOB (%)</label></td>
+                                                                        <td class="col-sm-3">
+                                                                            <input type="number" class="form-control" name="txtImpuestoBob" placeholder="0.00 %" 
+                                                                                   ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="1.0" min="0" max="99" 
+                                                                                   ng-model="formData.impuestoBob" value="{{formData.impuestoBob}}" 
+                                                                                   data-toggle="tooltip" data-placement="top"  /></td>
+                                                                        <td class="col-sm-3">
+                                                                            impuestoBOB
+                                                                        </td>
+                                                                        <td class="col-sm-3">
+                                                                            impuestoBOB usd
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr class="d-flex">
+                                                                        <td class="col-sm-3"><label class="text-right">Impuestos QM (%)</label></td>
+                                                                        <td class="col-sm-3">
+                                                                            <input type="number" class="form-control" name="txtImpuestoQm" placeholder="0.00 %" 
+                                                                                   ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="1.0" min="0" max="99" 
+                                                                                   ng-model="formData.impuestoBob" value="{{formData.impuestoBob}}" 
+                                                                                   data-toggle="tooltip" data-placement="top"  /></td>
+                                                                        <td class="col-sm-3">
+                                                                            impuestoBOB
+                                                                        </td>
+                                                                        <td class="col-sm-3">
+                                                                            impuestoBOB usd
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr  class="d-flex" st-select-row="row" st-select-mode="multiple" ng-repeat="row in impuestos">
+                                                                        <td  class="col-sm-3"><label class="text-right">{{row.nombreImpuesto}} QM (%)</label></td>
+                                                                        <td class="col-sm-3">
+                                                                        </td>
+                                                                        <td class="col-sm-3">
+                                                                            <input type="number" class="form-control" name="txtImpuesto" placeholder="0.00 " 
+                                                                                   ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="1.0" min="0" max="99" 
+                                                                                   ng-model="row.valorImpuesto" value="{{row.valorImpuesto}}" 
+                                                                                   data-toggle="tooltip" data-placement="top"  />
+                                                                        </td>
+                                                                        <td class="col-sm-3">
+                                                                            <input type="number" class="form-control" name="txtImpuestoQm" placeholder="0.00 " 
+                                                                                   ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="1.0" min="0" max="99" 
+                                                                                   ng-model="row.valorImpuesto" value="{{row.valorImpuesto}}" 
+                                                                                   data-toggle="tooltip" data-placement="top"  />
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+
+                                                        <div class="col-10">
+                                                            <table  class="table table-sm table-hover table-danger" >
+                                                                <tbody>
+                                                                    <tr class="d-flex">
+                                                                        <td class="col-sm-3">
+                                                                            <strong class="table-danger">TOTAL BOLETO</strong>
+                                                                        </td>
+                                                                        <td class="col-sm-3">
+                                                                        </td>
+                                                                        <td class="col-sm-3">
+                                                                            <div><strong>TOTAL BOB{{formData.totalBoletoBob}}</strong></div>
+                                                                        </td>
+                                                                        <td class="col-sm-3">
+                                                                            <div ><strong>TOTAL US{{formData.totalBoletoUsd}}</strong></div>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+
+
+
+                                                        <div class="col-10">
+                                                            <table class="table table-sm table-hover">
+
+                                                                <tbody >
+                                                                    <tr class="d-flex" >
+                                                                        <td class="col-sm-3"><label class="text-right">Comision %</label></td>
+                                                                        <td class="col-sm-3"><input type="number" class="form-control" name="txtImporteNeto" placeholder="0.00 BOB" 
+                                                                                                    ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="1" min="0" 
+                                                                                                    ng-model="formData.comision" value="{{formData.comision}}" 
+                                                                                                    data-toggle="tooltip" data-placement="top"  /></td>
+                                                                        <td class="col-sm-3">
+                                                                            Comision Bs
+                                                                        </td>
+                                                                        <td class="col-sm-3">
+                                                                            Comision Us
+                                                                        </td>
+                                                                    </tr>
+                                                                    <tr class="d-flex">
+                                                                        <td class="col-sm-12"><label class="text-right">
+                                                                                <legend>
+                                                                                    Movimiento Interno (Solo cuenta por Cobrar)
+                                                                                </legend>
+                                                                            </label></td>
+                                                                    </tr>
+                                                                    <tr class="d-flex">
+                                                                        <td class="col-sm-3"><label class="text-right">FEE (Otros Comisionables) %</label></td>
+                                                                        <td class="col-sm-3">
+                                                                            <input type="number" class="form-control" name="txtImpuestoQm" placeholder="0.00 %" 
+                                                                                   ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="1.0" min="0" max="99" 
+                                                                                   ng-model="formData.montoFee" value="{{formData.montoFee}}" 
+                                                                                   data-toggle="tooltip" data-placement="top"  />
+                                                                        </td>
+                                                                        <td class="col-sm-3">
+                                                                            Fee Bs
+                                                                        </td>
+                                                                        <td class="col-sm-3">
+                                                                            Fee Us
+                                                                        </td>
+                                                                    </tr>
+
+
+                                                                    <tr class="d-flex">
+                                                                        <td class="col-sm-3"><label class="text-right">Descuento %</label></td>
+                                                                        <td class="col-sm-3">
+                                                                            <input type="number" class="form-control" name="txtImpuestoQm" placeholder="0.00 %" 
+                                                                                   ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="1.0"
+                                                                                   ng-model="formData.montoDescuento" value="{{formData.montoDescuento}}" 
+                                                                                   data-toggle="tooltip" data-placement="top"  />
+                                                                        </td>
+                                                                        <td class="col-sm-3">
+                                                                            <input type="number" class="form-control" name="txtImpuestoQm" placeholder="0.00 %" 
+                                                                                   ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/"
+                                                                                   ng-model="formData.montoDescuentoBs" value="{{formData.montoDescuentoBs}}" 
+                                                                                   data-toggle="tooltip" data-placement="top"  />
+                                                                        </td>
+                                                                        <td class="col-sm-3">
+                                                                            <input type="number" class="form-control" name="txtImpuestoQm" placeholder="0.00 %" 
+                                                                                   ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="1.0"  
+                                                                                   ng-model="formData.montoDescuentoUs" value="{{formData.montoDescuentoUs}}" 
+                                                                                   data-toggle="tooltip" data-placement="top"  />
+                                                                        </td>
+                                                                    </tr>
+
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                        
+                                                        <div class="col-10">
+                                                            <table  class="table table-sm table-hover table-success" >
+                                                                <tbody>
+                                                                    <tr class="d-flex">
+                                                                        <td class="col-sm-3">
+                                                                            <strong >TOTAL A CANCELAR</strong>
+                                                                        </td>
+                                                                        <td class="col-sm-3">
+                                                                        </td>
+                                                                        <td class="col-sm-3">
+                                                                            <div><strong>TOTAL BOB{{formData.totalBoletoBob}}</strong></div>
+                                                                        </td>
+                                                                        <td class="col-sm-3">
+                                                                            <div ><strong>TOTAL US{{formData.totalBoletoUsd}}</strong></div>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                        
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                            <!-- ./Datos Generales-->
+
+                                        </form>
+                                        <!-- /.form -->
+                                    </div>
+                                    <!-- /.card-body -->
+                                </section>
+                                <!-- /.card -->
+                            </div>
+                            <!-- /.page-section -->
+
+
+                            <!-- Modal Eliminar -->
+                            <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="frmConfirmation">
+                                <div class="modal-dialog modal-md">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title" id="myModalLabel">Confirmar</h4>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        </div>
+                                        <div class="modal-body"> 
+                                            <dl class="dl-horizontal">
+                                                Desea elimnar el registro <strong> {{modalConfirmation.nombre}}</strong>  ?
+                                            </dl>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" id="modal-btn-si" ng-click="delete()"  data-dismiss="modal">Si</button>
+                                            <button type="button" class="btn btn-primary" id="modal-btn-no"  data-dismiss="modal">No</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /Modal Eliminar-->
+
+                            <!-- Modal Anular -->
+                            <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="frmAnular">
+                                <div class="modal-dialog modal-md">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title" id="myModalLabel">Confirmar</h4>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        </div>
+                                        <div class="modal-body"> 
+                                            <dl class="dl-horizontal">
+                                                Desea anular el registro <strong> {{modalAnularData.row.gestion + '-' + modalAnularData.row.idNumeroGestion}}</strong>  ?
+                                            </dl>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" id="modal-btn-si" ng-click="anular()"  data-dismiss="modal">Si</button>
+                                            <button type="button" class="btn btn-primary" id="modal-btn-no"  data-dismiss="modal">No</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /Modal Anular-->
+
+                            <!-- Modal Pendiente -->
+                            <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="frmPendiente">
+                                <div class="modal-dialog modal-md">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title" id="myModalLabel">Confirmar</h4>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        </div>
+                                        <div class="modal-body"> 
+                                            <dl class="dl-horizontal">
+                                                <label class="form-label-group" ng-show="formData.estado === 'I'">
+                                                    El siguiente Comprobante pasara a estado PENDIENTE. Si no ha sido registrado, podr&aacute; modificarse mas adelante. 
+                                                    Desea colocarlo en estado PENDIENTE ?<br/>
+                                                </label>
+                                                <label ng-show="formData.estado === 'A'">
+                                                    El siguiente Comprobante se encuentra en estado APROBADO, al colocarlo en PENDIENTE podr&aacute; modificarse mas adelante. 
+                                                    Desea colocarlo en estado PENDIENTE ?<br/>
+                                                </label>
+                                                <label ng-show="formData.estado === 'P'">
+                                                    El siguiente Comprobante se encuentra en estado PENDIENTE, podr&aacute; modificarse mas adelante. 
+                                                    Desea colocarlo en estado PENDIENTE ?<br/>
+                                                </label>
+                                            </dl>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" id="modal-btn-si" ng-click="colocarPendiente()"  data-dismiss="modal">Si</button>
+                                            <button type="button" class="btn btn-primary" id="modal-btn-no"  data-dismiss="modal">No</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /Modal Anular-->
+                        </div>
+                        <!-- /.page-inner -->
+                    </div>
+                    <!-- /.page -->
+                </div>
+
+                <script  type="text/ng-template" id="customTemplate.html">
+                    <div class="list-on-top tt-suggestion tt-selectable  ">
+                    <span class="list-on-top"  ng-bind-html="match.label | uibTypeaheadHighlight:query"></span>
+                    </div>
+                </script>
+                <!-- .app-footer -->
+                <ui:include src="../index/footer.xhtml" />
+                <!-- /.app-footer -->
+                <!-- /.wrapper -->
+                <!-- Logout Form -->
+                <ui:include src="../index/logout.xhtml" />
+                <!-- /Logout Form -->
+            </main>
+            <!-- /.app-main -->
+        </div>
+        <!-- /.app -->
+        <!-- BEGIN BASE JS -->
+        <script src="../../assets/vendor/jquery/jquery.min.js"></script>
+        <script src="../../assets/vendor/bootstrap/js/popper.min.js"></script>
+        <script src="../../assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+        <!-- END BASE JS -->
+        <!-- BEGIN PLUGINS JS -->
+        <script src="../../assets/vendor/stacked-menu/stacked-menu.min.js"></script>
+        <script src="../../assets/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+        <script src="../../assets/vendor/handlebars/handlebars.min.js"></script>
+
+        <script src="../../assets/vendor/flatpickr/flatpickr.min.js"></script>
+        <script src="../../assets/vendor/typeahead.js/typeahead.bundle.min.js"></script>
+        <!-- END PLUGINS JS -->
+        <!-- BEGIN THEME JS -->
+        <script src="../../assets/javascript/main.min.js"></script>
+        <!-- END THEME JS -->
+        <!-- BEGIN PAGE LEVEL JS -->
+        <script type="text/javascript" src="../../assets/javascript/pages/flatpickr-demo.js"></script>
+        <script type="text/javascript" src="../../assets/javascript/pages/typeahead-demo.js"></script>
+        <!-- END PAGE LEVEL JS -->
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+    </h:body>
+</html>
+
+

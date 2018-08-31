@@ -3,7 +3,7 @@
 <html  xmlns="http://www.w3.org/1999/xhtml"
        xmlns:h="http://xmlns.jcp.org/jsf/html"
        xmlns:ui="http://xmlns.jcp.org/jsf/facelets" ng-app="jsPlanCuentas"
-       xmlns:c="http://java.sun.com/jsp/jstl/core"
+       xmlns:c="http://java.sun.com/jsp/jstl/core" lang="en"
        >
     <head>
         <meta charset="utf-8" />
@@ -121,18 +121,33 @@
 
                                                 <div class="row col-8">
                                                     <label for="txtNombre" class=" col-form-label col-sm-3 text-right">Entidad : </label>
-                                                    <select class="form-control col-sm-8" ng-model="idEmpresa" ng-change="getData('all',empresa.idEmpresa)">
-                                                        <option ng-repeat="empresa in comboEmpresa" value="{{empresa.id}}"
-                                                                label="{{empresa.name}}" >
-
-                                                        </option>
+                                                    <select class="form-control col-sm-8" ng-model="idEmpresa" 
+                                                            ng-change="getData('all', empresa.idEmpresa)" 
+                                                            ng-options="option.id as option.name for option in comboEmpresa">
+                                                        <option style="display:none" value="">seleccione un tipo</option>
                                                     </select>
                                                 </div>
-                                                <hr></hr>
-
+                                                <br /><br /><br />
                                                 <table class="table-nested table-hover ">
                                                     <thead>
+                                                        <c:if test="#{planCuentas.formulario.buscar == planCuentas.formulario.PERMITIR}">
+                                                            <tr>
+                                                                <th colspan="4">
+                                                                    <!-- .input-group -->
+                                                                    <div class="input-group has-clearable">
+                                                                        <div class="input-group-prepend">
+                                                                            <span class="input-group-text">
+                                                                                <span class="oi oi-magnifying-glass"></span>
+                                                                            </span>
+                                                                        </div>
+                                                                        <input ng-model="busqueda"  id="table-search" class="form-control placeholder-shown" placeholder="Busqueda" type="text" /> 
+                                                                    </div>
+                                                                    <!-- /.input-group -->
+                                                                </th>
+                                                            </tr>
+                                                        </c:if>
                                                         <tr>
+
                                                             <th class="cell-input">
                                                             </th>
                                                             <th class="cell-name">
@@ -150,7 +165,7 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody ng-class="{opened: item.opened}" ng-include="'table_tree.html'"
-                                                           ng-repeat="item in mainGrid"></tbody>
+                                                           ng-repeat="item in mainGrid | filter:busqueda"></tbody>
                                                 </table>
                                                 <script id="table_tree.html" type="text/ng-template">
                                                     <tr ng-class="{parent: item.children, selected : item.nroPlanCuenta=== selectedId}"
@@ -181,14 +196,14 @@
                                                     </c:if>
                                                     <button ng-show="showBtnAdicionar(item.nivel);" type="button" title="Adicionar" class="btn btn-sm btn-success" ng-click="add(item)"><i class="fa fa-plus"></i></button>
                                                     </div>
-                                                    
+
                                                     </td>
                                                     </tr>
                                                     <tr class="children" ng-if="item.children &amp;&amp; item.children.length &gt; 0">
                                                     <td colspan="5">
                                                     <table class="table-nested table-hover" >
                                                     <tbody ng-class="{opened: item.opened}" ng-include="'table_tree.html'"
-                                                    ng-init="level = level + 1" ng-repeat="item in item.children">
+                                                    ng-init="level = level + 1" ng-repeat="item in item.children | filter:busqueda">
                                                     </tbody>                                             
                                                     </table>
                                                     </td>
@@ -225,7 +240,7 @@
                                                         <div class="col-sm-4" >
                                                             <input type="text" class="form-control" autofocus="autofocus" name="txtCuenta" required="required" 
                                                                    maxlength="40" ng-model="frmNewTransaction.nombreCuenta"/>
-                                                             <span class="alert-danger" ng-show="!myForm.txtCuenta.$valid">
+                                                            <span class="alert-danger" ng-show="!myForm.txtCuenta.$valid">
                                                                 Debe ingresar un Nombre a la Cuenta
                                                             </span>
                                                         </div>

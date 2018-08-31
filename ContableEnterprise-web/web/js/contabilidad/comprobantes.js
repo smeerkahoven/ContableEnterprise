@@ -23,6 +23,8 @@ var PENDIENTE = "P";
 var ANULADO = "N";
 var INICIAL = "I";
 let ZERO = "0";
+let SI = "S";
+let NO = "N";
 function AsientoContable() {
     this.position = 0;
     this.idAsiento = '0';
@@ -65,7 +67,7 @@ function Comprobante() {
     this.totalHaberMonExt = 0;
     this.difMonNac = 0;
     this.difMonExt = 0;
-    this.conErrores = true;
+    this.conErrores = SI;
 }
 
 AsientoContable.prototype = Object.create(AsientoContable.prototype);
@@ -166,7 +168,13 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
 
                 $scope.find = function () {
                     $scope.loading = true;
-                    return $http.get(`${url.value}all?tipo=${$scope.search.tipo}&estado=${$scope.search.estado}&fechaI=${$scope.search.fechaInicio}&fechaF=${$scope.search.fechaFin}`).then(function (response) {
+                    return $http({
+                            method : 'POST',
+                            url : `${url.value}all`,
+                            data: {token: token.value, content:$scope.search},
+                            headers: {'Content-Type': 'application/json'}
+                            //`${url.value}all?tipo=${$scope.search.tipo}&estado=${$scope.search.estado}&fechaI=${$scope.search.fechaInicio}&fechaF=${$scope.search.fechaFin}`
+                    }).then(function (response) {
                         if (response.data.code === 201) {
                             $scope.mainGrid = response.data.content;
                             $scope.loading = false;
@@ -289,7 +297,7 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                 }
 
                 $scope.imprimir = function (data) {
-                    window.open(`ComprobanteReportServlet?idLibro=${data.idLibro}`,'_target');
+                    window.open(`../../ComprobanteReporteServlet?idLibro=${data.idLibro}`, '_target');
                 }
 
                 $scope.pendiente = function () {
@@ -303,8 +311,7 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                 $scope.colocarPendiente = function () {
                     if ($scope.formData.estado === INICIAL) {
                         $scope.save(PENDIENTE);
-                    } else {
-
+                    } else  if ($scope.formData.estado === ANULADO) {
                         $scope.loading = true;
                         return $http({
                             method: 'POST',
@@ -323,11 +330,10 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                                 $scope.showRestfulMessage = response.data.content;
                                 $scope.showRestfulError = true;
                             }
-                        }, function (error) {
-                            $scope.showRestfulMessage = error;
-                            $scope.showRestfulError = true;
-                        });
-                    }
+                        }, $scope.showErrorFunction());
+                     } else  if ($scope.formData.estado === PENDIENTE) {
+                         
+                     }
                 }
 
                 $scope.newComprobante = function (tipo) {
@@ -358,7 +364,6 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                     $scope.myForm.$setPristine();
                     myForm.reset();
                 }
-
 
                 $scope.existenTransaccionesInvalidas = function () {
 
@@ -403,6 +408,7 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                     }
                     return false;
                 }
+                
                 $scope.obtenerPlanCuentas = function () {
                     return $http({
                         method: 'POST',
@@ -429,9 +435,15 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                         //$scope.showAlert('Error de Verificacion', 'Verifique los mensajes de los valores requeridos')
                         return;
                     }
-                    if ($scope.formData.estado == INICIAL) {
+                    if ($scope.formData.estado === INICIAL) {
                         $scope.loading = true;
+                        if (estado === PENDIENTE)
+                            $scope.formData.conErrores = SI;
+                        else
+                            $scope.formData.conErrores = NO;
+                        
                         $scope.formData.estado = estado;
+                        console.log($scope.formData);
                         $http({
                             method: 'POST',
                             url: url.value + 'save',
@@ -447,6 +459,9 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                                 $scope.disablePendienteButton = false;
                                 $scope.disableAnularButton = false;
                                 $scope.habilitarBotones();
+                                if (estado === APROBADO){
+                                    $scope.imprimir($scope.formData);
+                                }
                                 //$scope.showForm = false;
                                 //$scope.showTable = true;
                                 //$scope.getData(url.value, 'all');
@@ -566,6 +581,7 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                     item.editable = true;
                     item.superDisabled = true;
                     $scope.disableAddButton = true;
+                    console.log(item);
                 }
 
                 $scope.saveTransaccion = function (item) {
@@ -659,7 +675,12 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                                 data: {token: token.value, content: angular.toJson($scope.formData)},
                                 headers: {'Content-Type': 'application/json'}
                             }).then(function (response) {
-                                item = response.data.entidad;
+                                console.log(response);
+                                item = response.data.entidad ;
+                                $scope.formData.transacciones[$scope.formData.transacciones.length -1].idAsiento = item.idAsiento ;
+                                $scope.formData.transacciones[$scope.formData.transacciones.length -1].idLibro = item.idLibro ;
+                                $scope.formData.transacciones[$scope.formData.transacciones.length -1].gestion = item.gestion ;
+                                console.log($scope.formData);
                             }, function (error) {
                                 $scope.showRestfulError = true;
                                 $scope.showRestfulMessage = error;
@@ -679,7 +700,7 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                         }
                     }
                 }
-
+                
                 $scope.sumarTotales = function () {
                     $scope.formData.totalDebeMonNac = 0;
                     $scope.formData.totalHaberMonNac = 0;

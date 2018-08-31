@@ -15,7 +15,7 @@ case tipo 	when  'AD' then 'Asiento Diario'
             when  'CE' then 'Comprobante de Egreso' 
             when  'CT' then 'Comprobante de Traspaso' end tipo ,
 cc.totalDebeNac, cc.totalDebeExt, cc.totalHaberExt, cc.totalHaberNac,
-number_to_string_2(cc.totalDebeNac) as literal,
+number_to_string(cc.totalDebeNac) as literal,
 ac.gestion, ac.fecha_movimiento,
 ac.monto_debe_nac, ac.monto_debe_ext, 
 ac.monto_haber_ext, ac.monto_haber_ext,

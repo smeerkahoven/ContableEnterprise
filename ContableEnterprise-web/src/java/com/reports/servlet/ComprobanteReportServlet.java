@@ -44,7 +44,7 @@ import net.sf.jasperreports.engine.xml.JRXmlLoader;
  *
  * @author xeio
  */
-@WebServlet(name = "ReportServlet", urlPatterns = {"/ReportServlet"})
+@WebServlet(name = "ComprobanteReporteServlet", urlPatterns = {"/ComprobanteReporteServlet"})
 public class ComprobanteReportServlet extends HttpServlet {
 
     /**
@@ -129,7 +129,7 @@ public class ComprobanteReportServlet extends HttpServlet {
             try {
                 
                 hm.put("ID_LIBRO", idLibro);
-                hm.put("PATH_SUBREPORTE", "/resources/contabilidad/comprobante.jrxml");
+                hm.put("PATH_SUBREPORTE", "contabilidad/comprobante.jasper");
                 
                 bytes = JasperRunManager.runReportToPdf(archivoReporte.getPath(), hm, datasource.getConnection());
  

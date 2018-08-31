@@ -108,9 +108,6 @@
 
                                         </c:if>
                                         <button type="button" class="btn btn-warning " tabindex="0" ng-click="cancelar()"><span class="fa fa-undo"></span> Cancelar</button>
-                                        <h:form target="_blank"> 
-                                            <h:commandLink class="visual-picker visual-picker has-peek px-3" actionListener="#{reporteContabilidad.verComprobante(22)}">sssss</h:commandLink>
-                                        </h:form>
                                     </div>
                                 </div>
                             </header>
@@ -260,7 +257,7 @@
 
                                         </div>
                                         <!-- /Tabla Contenido -->
-                                        <h:form id="myForm" >
+                                        <form id="myForm" name="myForm" >
                                             <!-- .form -->
 
                                             <!-- .fieldset -->
@@ -311,7 +308,7 @@
 
                                                         <label for="txtFactor" class=" col-form-label col-sm-2 text-right"><strong>Factor USD</strong></label>
                                                         <div class="col-sm-3">
-                                                            <label for="txtFactor" class=" col-form-label col-sm-2 "><strong>{{formData.factorCambiario}}</strong></label>
+                                                            <label for="txtFactor" class=" col-form-label "><strong>{{formData.factorCambiario}}</strong></label>
                                                             <!--<input type="number" class="form-control col-sm" name="txtFactor" placeholder="0.00 BOB" 
                                                                    ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01" min="{{formData.factorMin}}" max="{{formData.factorMax}}"
                                                                    ng-model="formData.factorCambiario" value="{{formData.factorCambiario}}" data-toggle="tooltip" 
@@ -509,56 +506,7 @@
                                                     </div>
 
                                                     <!-- Tabla Transacciones -->
-                                                    <div class=" table-responsive">
-                                                        <table  class="table table-sm table-hover " >
-                                                            <tbody>
-                                                                <tr class="table-success"  >
-                                                                    <td style="width: 30%">
-                                                                        <strong class="table-success">TOTALES</strong>
-                                                                    </td>
-                                                                    <td style="width: 9%">
-                                                                        <div></div>
-                                                                    </td>
-                                                                    <td style="width: 14%">
-                                                                        <div>{{formData.totalDebeMonNac}}</div>
-                                                                    </td>
-                                                                    <td style="width: 14%">
-                                                                        <div >{{formData.totalHaberMonNac}}</div>
-                                                                    </td>
-                                                                    <td style="width: 14%">
-                                                                        <div >{{formData.totalDebeMonExt}}</div>
-                                                                    </td>
-                                                                    <td style="width: 14%">
-                                                                        <div >{{formData.totalHaberMonExt}}</div>
-                                                                    </td>
-                                                                    <td style="width: 5%">
-                                                                    </td>
-                                                                </tr>
-                                                                <tr class="table-danger" >
-                                                                    <td style="width: 30%">
-                                                                        <strong class="table-danger">DIFERENCIA</strong>
-                                                                    </td>
-                                                                    <td style="width: 9%">
-                                                                        <div></div>
-                                                                    </td>
-                                                                    <td style="width: 14%">
-                                                                        <div ng-show="showDifDebeNac">{{formData.difMonNac| makePositive}}</div>
-                                                                    </td>
-                                                                    <td style="width: 14%">
-                                                                        <div  ng-show="showDifHaberNac">{{formData.difMonNac| makePositive}}</div>
-                                                                    </td>
-                                                                    <td style="width: 14%">
-                                                                        <div  ng-show="showDifDebeExt">{{formData.difMonExt| makePositive}}</div>
-                                                                    </td>
-                                                                    <td style="width: 14%">
-                                                                        <div  ng-show="showDifHaberExt">{{formData.difMonExt| makePositive}}</div>
-                                                                    </td>
-                                                                    <td style="width: 5%">
-                                                                    </td>
-                                                                </tr>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
+                                                   
 
                                                     <!-- /Tabla Totales -->
 
@@ -567,7 +515,7 @@
                                                         <c:if test="#{comprobantes.formulario.crear== comprobantes.formulario.PERMITIR}">
                                                             <div class="row" >
                                                                 <label for="txtNombre" class="col-form-label col-sm-3 text-right" ></label>
-                                                                <button  class="btn btn-primary" ng-click="save(REGISTRADO)"  value="Guardar" ng-disabled="disableGuardarButton" ><span class="fa fa-save"></span> Guardar</button>
+                                                                <button  class="btn btn-primary" ng-click="save('A')"  value="Guardar" ng-disabled="disableGuardarButton" ><span class="fa fa-save"></span> Guardar</button>
                                                             </div>
                                                         </c:if>
 
@@ -588,15 +536,15 @@
                                                         <c:if test="#{comprobantes.formulario.acceder== comprobantes.formulario.PERMITIR}">
                                                             <div class="row" >
                                                                 <label for="txtNombre" class="col-form-label col-sm-3 text-right" ></label>
-
-                                                                <button type="button" class="btn btn-dark"  ng-click="imprimir(formData)" value="Imprimir" ng-disabled="disableImprimirButton"> <span class="fa fa-trash"></span> Imprimir</button>                                                            </div>
+                                                                <button type="button" class="btn btn-dark"  ng-click="imprimir(formData)" value="Imprimir" ng-disabled="disableImprimirButton"> <span class="fa fa-trash"></span> Imprimir</button>                                                            
+                                                            </div>
                                                         </c:if>
                                                     </div>
                                                 </div>
                                                 <!-- /.form-group -->
                                             </fieldset>
                                             <!-- /.fieldset -->
-                                        </h:form>
+                                        </form>
                                         <!-- /.form -->
                                     </div>
                                     <!-- /.card-body -->
@@ -665,10 +613,13 @@
                                                     Desea colocarlo en estado PENDIENTE ?<br/>
                                                 </label>
                                                 <label ng-show="formData.estado === 'A'">
-                                                    El siguiente Comprobante se encuentra en estado APROBAD, al colocarlo en PENDIENTE podr&aacute; modificarse mas adelante. 
+                                                    El siguiente Comprobante se encuentra en estado APROBADO, al colocarlo en PENDIENTE podr&aacute; modificarse mas adelante. 
                                                     Desea colocarlo en estado PENDIENTE ?<br/>
                                                 </label>
-
+                                                <label ng-show="formData.estado === 'P'">
+                                                    El siguiente Comprobante se encuentra en estado PENDIENTE, podr&aacute; modificarse mas adelante. 
+                                                    Desea colocarlo en estado PENDIENTE ?<br/>
+                                                </label>
                                             </dl>
                                         </div>
                                         <div class="modal-footer">

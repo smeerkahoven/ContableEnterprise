@@ -132,6 +132,15 @@
         </navigation-case>
     </navigation-rule>
     
+        <navigation-rule>
+        <from-view-id>pages/*</from-view-id>
+        <navigation-case>
+            <from-outcome>boletos</from-outcome>
+            <to-view-id>pages/agencia/boletos.xhtml?faces-redirect=true</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
     
     <navigation-rule>
         <from-view-id>pages/*</from-view-id>
@@ -178,4 +187,23 @@
             <redirect />
         </navigation-case>
     </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>pages/*</from-view-id>
+        <navigation-case>
+            <from-outcome>configuracion-boletaje</from-outcome>
+            <to-view-id>pages/configuracion/boletaje.xhtml?faces-redirect=true</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>pages/*</from-view-id>
+        <navigation-case>
+            <from-outcome>configuracion-parametros</from-outcome>
+            <to-view-id>pages/configuracion/parametros.xhtml?faces-redirect=true</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
 </faces-config>
