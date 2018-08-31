@@ -46,7 +46,7 @@ public class UFVScheduler implements UFVSchedulerLocal {
     @EJB
     private CambioRemote ejbCambio;
 
-    //@Schedule(dayOfWeek = "*", month = "*", hour = "*", dayOfMonth = "*", year = "*", minute = "*", second = "*/5")
+    @Schedule(dayOfWeek = "*", month = "*", hour = "*", dayOfMonth = "*", year = "*", minute = "*", second = "*/30")
     @Override
     public void checkUFVFactor() {
                 Date today = new Date();
@@ -73,7 +73,7 @@ public class UFVScheduler implements UFVSchedulerLocal {
     private double obtenerUFVValor() {
         System.out.println("obtenerUFVValor Timer event: " + new Date());
         HttpURLConnection connection = null;
-        String path = "https://www.bcb.gob.bo/librerias/indicadores/ufv/ultimo.php";
+        //String path = "https://www.bcb.gob.bo/librerias/indicadores/ufv/ultimo.php";
         //String path = "https://www.bcb.gob.bo/librerias/indicadores/dolar/bolsin.php";
         try {
             Parametros p;

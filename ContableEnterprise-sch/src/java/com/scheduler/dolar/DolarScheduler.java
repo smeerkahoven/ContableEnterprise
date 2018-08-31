@@ -48,7 +48,7 @@ public class DolarScheduler implements DolarSchedulerLocal {
     @EJB
     private CambioRemote ejbCambio;
 
-    //@Schedule(dayOfWeek = "*", month = "*", hour = "*", dayOfMonth = "*", year = "*", minute = "*", second = "*/15")
+    @Schedule(dayOfWeek = "*", month = "*", hour = "*", dayOfMonth = "*", year = "*", minute = "*", second = "*/30")
     @Override
     public void checkDolarFactor() {
         System.out.println("checkDolarFactor Timer event: " + new Date());
@@ -81,24 +81,24 @@ public class DolarScheduler implements DolarSchedulerLocal {
 
         Parametros p;
         try {
-            p = (Parametros) ejbParametros.get(new Parametros("URL_CAMBIO_DOLAR"));
+            p = (Parametros) ejbParametros.get(new Parametros(Parametros.URL_CAMBIO_DOLAR));
 
             URI uri = new URI(p.getValor());
             URL url = new URL(uri.toURL().toString());
             URLConnection yc = url.openConnection();
             connection = (HttpsURLConnection) url.openConnection();
             print_https_cert(connection);
-            /*BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
+            BufferedReader in = new BufferedReader(new InputStreamReader(yc.getInputStream()));
             String inputLine;
             StringBuffer content = new StringBuffer();
             while ((inputLine = in.readLine()) != null) {
                 content.append(inputLine);
                 //System.out.println(inputLine);
             }
-             */
-            //in.close();
+             
+            in.close();
 
-            /*Document doc = Jsoup.parse(content.toString());
+            Document doc = Jsoup.parse(content.toString());
             String title = doc.title();
             //String body = doc.body().text();
             //System.out.printf("Body: %s", body);
@@ -116,7 +116,7 @@ public class DolarScheduler implements DolarSchedulerLocal {
 
                     }
                 }
-            }*/
+            }
         } catch (CRUDException | URISyntaxException | IOException ex) {
             Logger.getLogger(DolarScheduler.class.getName()).log(Level.SEVERE, null, ex);
         }
