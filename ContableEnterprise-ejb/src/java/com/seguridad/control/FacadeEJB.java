@@ -218,4 +218,10 @@ public abstract class FacadeEJB implements DaoRemoteFacade {
 
     }
 
+    @Override
+    public List getCombo() throws CRUDException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    
 }

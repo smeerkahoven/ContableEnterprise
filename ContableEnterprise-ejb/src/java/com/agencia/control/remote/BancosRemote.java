@@ -8,7 +8,6 @@ package com.agencia.control.remote;
 import com.agencia.entities.Bancos;
 import com.agencia.entities.CuentaBanco;
 import com.seguridad.control.exception.CRUDException;
-import com.seguridad.control.remote.DaoRemote;
 import com.seguridad.control.remote.DaoRemoteFacade;
 import java.util.HashMap;
 import java.util.List;

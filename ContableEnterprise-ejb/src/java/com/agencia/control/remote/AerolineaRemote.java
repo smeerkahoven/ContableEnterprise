@@ -22,6 +22,8 @@ import javax.ejb.Remote;
 
 @Remote
 public interface AerolineaRemote extends DaoRemoteFacade {
+    
+    public Aerolinea getAerolinea(Aerolinea a) throws CRUDException;
 
     public List<Aerolinea> get() throws CRUDException;
 
@@ -39,7 +41,9 @@ public interface AerolineaRemote extends DaoRemoteFacade {
 
     @Override
     public void remove(String nativeQuery, HashMap<String, Object> parameters) throws CRUDException;
-    
+
+    @Override
+    public List getCombo() throws CRUDException;
     
     
 

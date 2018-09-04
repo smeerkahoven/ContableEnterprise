@@ -36,7 +36,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Aerolinea.findAll", query = "SELECT a FROM Aerolinea a")
     ,
-@NamedQuery(name = "Aerolinea.findForCombo", query = "SELECT a.idAerolinea,a.numero, a.nombre, a.moneda FROM Aerolinea a WHERE a.moneda=:moneda")})
+@NamedQuery(name = "Aerolinea.findForCombo", query = "SELECT a.idAerolinea,a.numero, a.nombre, a.moneda FROM Aerolinea a WHERE a.moneda=:moneda"),
+@NamedQuery(name = "Aerolinea.find", query = "SELECT a FROM Aerolinea a WHERE a.idAerolinea=:idAerolinea"),
+@NamedQuery(name = "Aerolinea.allCombo", query = "SELECT a.idAerolinea, a.numero, a.nombre FROM Aerolinea a ")
+})
 public class Aerolinea extends Entidad {
 
     private static final long serialVersionUID = 1L;

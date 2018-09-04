@@ -56,9 +56,88 @@ public class ContabilidadBoletaje extends Entidad {
     @Column(name = "emision_dolares")
     private String emisionDolares;
 
+    @Column(name = "cuenta_efectivo_no_bsp_debe_bs")
+    private Integer cuentaEfectivoNoBspDebeBs;
+    
+    @Column(name = "cuenta_efectivo_no_bsp_debe_usd")
+    private Integer cuentaEfectivoNoBspDebeUsd;
+    
+    @Column(name = "tarjeta_credito_bsp_debe_bs")
+    private Integer tarjetaCreditoBspDebeBs;
+    
+    @Column(name = "tarjeta_credito_bsp_debe_usd")
+    private Integer tarjetaCreditoBspDebeUsd;
+    
+    @Column(name = "cuenta_efectivo_no_bsp_haber_bs")
+    private Integer cuentaEfectivoNoBspHaberBs;
+
+    @Column(name = "cuenta_efectivo_no_bsp_haber_usd")
+    private Integer cuentaEfectivoNoBspHaberUsd;
+    
+    @Column(name = "tarjeta_credito_bsp_haber_bs")
+    private Integer tarjetaCreditoBspHaberBs;
+    
     public ContabilidadBoletaje() {
     }
 
+    public Integer getCuentaEfectivoNoBspDebeBs() {
+        return cuentaEfectivoNoBspDebeBs;
+    }
+
+    public void setCuentaEfectivoNoBspDebeBs(Integer cuentaEfectivoNoBspDebeBs) {
+        this.cuentaEfectivoNoBspDebeBs = cuentaEfectivoNoBspDebeBs;
+    }
+
+    public Integer getCuentaEfectivoNoBspDebeUsd() {
+        return cuentaEfectivoNoBspDebeUsd;
+    }
+
+    public void setCuentaEfectivoNoBspDebeUsd(Integer cuentaEfectivoNoBspDebeUsd) {
+        this.cuentaEfectivoNoBspDebeUsd = cuentaEfectivoNoBspDebeUsd;
+    }
+
+    public Integer getTarjetaCreditoBspDebeBs() {
+        return tarjetaCreditoBspDebeBs;
+    }
+
+    public void setTarjetaCreditoBspDebeBs(Integer tarjetaCreditoBspDebeBs) {
+        this.tarjetaCreditoBspDebeBs = tarjetaCreditoBspDebeBs;
+    }
+
+    public Integer getTarjetaCreditoBspDebeUsd() {
+        return tarjetaCreditoBspDebeUsd;
+    }
+
+    public void setTarjetaCreditoBspDebeUsd(Integer tarjetaCreditoBspDebeUsd) {
+        this.tarjetaCreditoBspDebeUsd = tarjetaCreditoBspDebeUsd;
+    }
+
+    public Integer getCuentaEfectivoNoBspHaberBs() {
+        return cuentaEfectivoNoBspHaberBs;
+    }
+
+    public void setCuentaEfectivoNoBspHaberBs(Integer cuentaEfectivoNoBspHaberBs) {
+        this.cuentaEfectivoNoBspHaberBs = cuentaEfectivoNoBspHaberBs;
+    }
+
+    public Integer getCuentaEfectivoNoBspHaberUsd() {
+        return cuentaEfectivoNoBspHaberUsd;
+    }
+
+    public void setCuentaEfectivoNoBspHaberUsd(Integer cuentaEfectivoNoBspHaberUsd) {
+        this.cuentaEfectivoNoBspHaberUsd = cuentaEfectivoNoBspHaberUsd;
+    }
+
+    public Integer getTarjetaCreditoBspHaberBs() {
+        return tarjetaCreditoBspHaberBs;
+    }
+
+    public void setTarjetaCreditoBspHaberBs(Integer tarjetaCreditoBspHaberBs) {
+        this.tarjetaCreditoBspHaberBs = tarjetaCreditoBspHaberBs;
+    }
+
+    
+    
     public ContabilidadBoletaje(Integer idEmpresa) {
         this.idEmpresa = idEmpresa;
     }

@@ -6,7 +6,6 @@
 package com.agencia.control.remote;
 
 import com.agencia.entities.Aeropuerto;
-import com.seguridad.control.entities.Entidad;
 import com.seguridad.control.exception.CRUDException;
 import com.seguridad.control.remote.DaoRemote;
 import java.util.List;
@@ -22,6 +21,6 @@ public interface AeropuertoRemote extends DaoRemote {
     
     public List<Aeropuerto> get() throws CRUDException ;
 
-
+    public List getCombo() throws CRUDException ;
 
 }

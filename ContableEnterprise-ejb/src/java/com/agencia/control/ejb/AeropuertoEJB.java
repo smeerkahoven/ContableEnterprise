@@ -11,11 +11,11 @@ import com.seguridad.control.FacadeEJB;
 import com.seguridad.control.LoggerContable;
 import com.seguridad.control.entities.Entidad;
 import com.seguridad.control.exception.CRUDException;
+import com.seguridad.utils.ComboSelect;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
 /**
@@ -78,5 +78,23 @@ public class AeropuertoEJB extends FacadeEJB implements AeropuertoRemote {
     public List get(Entidad e, String q) throws CRUDException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public List getCombo() throws CRUDException {
+         Query q = em.createNamedQuery("Aeropuerto.findAll", Aeropuerto.class);
+         List l = q.getResultList() ;
+         List r = new LinkedList();
+         l.forEach((x) -> {
+             Aeropuerto a = (Aeropuerto)x ;
+             ComboSelect s = new ComboSelect();
+             s.setId(a.getIdAeropuerto());
+             s.setName(a.getIdAeropuerto() + "-" +a.getNombre());
+             
+             r.add(s);
+         });
+        
+        return r ;//To change body of generated methods, choose Tools | Templates.
+    }
+    
     
 }

@@ -12,8 +12,12 @@ import com.seguridad.control.FacadeEJB;
 import com.seguridad.control.LoggerContable;
 import com.seguridad.control.entities.Entidad;
 import com.seguridad.control.exception.CRUDException;
+import com.seguridad.utils.ComboSelect;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
+import javafx.scene.control.ComboBox;
 import javax.ejb.Stateless;
 import javax.persistence.Query;
 
@@ -23,6 +27,15 @@ import javax.persistence.Query;
  */
 @Stateless
 public class AerolineaEJB extends FacadeEJB implements AerolineaRemote {
+
+    @Override
+    public Aerolinea getAerolinea(Aerolinea a) throws CRUDException {
+        Aerolinea l = (Aerolinea) em.find(Aerolinea.class, a.getIdAerolinea());
+
+        LoggerContable.log(Thread.currentThread().getStackTrace()[1].getMethodName() + ":" + a.toString(), this, Level.SEVERE);
+
+        return l;
+    }
 
     @Override
     public void update(Entidad e) throws CRUDException {
@@ -93,5 +106,22 @@ public class AerolineaEJB extends FacadeEJB implements AerolineaRemote {
         query.executeUpdate();
     }
 
+    @Override
+    public List getCombo() throws CRUDException {
+
+        Query query = em.createNamedQuery("Aerolinea.allCombo", Aerolinea.class);
+        List aux = query.getResultList();
+        List resp = new LinkedList();
+
+        aux.forEach((x) -> {
+            ComboSelect s = new ComboSelect();
+            Object[] o = (Object[]) x;
+            s.setId((Integer) o[0]);
+            s.setName((String) o[1] + "-" + (String) o[2]);
+            resp.add(s);
+        });
+
+        return resp;
+    }
 
 }

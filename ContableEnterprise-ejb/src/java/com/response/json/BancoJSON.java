@@ -45,11 +45,11 @@ public class BancoJSON implements Serializable {
         b.setNombre(json.getNombre());
         b.setDireccion(json.getDireccion());
         b.setTelefono(json.getTelefono());
-        b.setCelular(b.getCelular());
+        b.setCelular(json.getCelular());
         b.setContacto(json.getContacto());
         b.setAbreviacion(json.getAbreviacion());
-        b.setNit(b.getNit());
-        b.setEmail(b.getEmail());
+        b.setNit(json.getNit());
+        b.setEmail(json.getEmail());
         
         return b ;
     }

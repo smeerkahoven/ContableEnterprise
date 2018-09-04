@@ -51,5 +51,7 @@ public interface DaoRemoteFacade {
     public void rollback() throws CRUDException ;
     
     public void executeNative(String query, HashMap<String, Object> parameters) throws CRUDException ;
+    
+    public List getCombo() throws CRUDException ;
 
 }
