@@ -709,6 +709,7 @@ public class ComprobantesResource extends TemplateResource {
             if (find.isEmpty()) {
                 response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
                 response.setContent(mensajes.getProperty(RestResponse.RESTFUL_VALUE_NOT_FOUND));
+                return response;
             }
 
             ComprobanteContable cc = (ComprobanteContable) find.get(0);

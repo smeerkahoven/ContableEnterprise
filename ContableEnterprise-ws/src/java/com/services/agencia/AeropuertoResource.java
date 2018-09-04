@@ -29,6 +29,7 @@ import javax.ejb.Stateless;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.Produces;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -70,6 +71,25 @@ public class AeropuertoResource {
      * @param request
      * @return
      */
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("combo")
+    public RestResponse getCombo() {
+        RestResponse response = new RestResponse();
+        try {
+            response.setContent(ejbAeropuerto.getCombo());
+            response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
+
+            return response;
+        } catch (CRUDException ex) {
+            Logger.getLogger(AeropuertoResource.class.getName()).log(Level.SEVERE, null, ex);
+            response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+            response.setContent(ex.getCause());
+        }
+        
+        return response ;
+    }
+
     @POST
     @Path("all")
     @Consumes(MediaType.APPLICATION_JSON)

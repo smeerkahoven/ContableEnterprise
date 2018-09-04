@@ -31,6 +31,7 @@ import com.util.resource.Mensajes;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -81,6 +82,38 @@ public class AerolineaResource extends TemplateResource {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     public void putJson(String content) {
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("get/{id}")
+    public RestResponse getAerolina(@PathParam("id") Integer id) {
+        RestResponse response = new RestResponse();
+        try {
+
+            Optional op = Optional.ofNullable(id);
+            if (!op.isPresent()) {
+                response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+                response.setContent(mensajes.getProperty(RestResponse.RESTFUL_PARAMETERS_SENT));
+                return response;
+            }
+
+            Aerolinea a = (Aerolinea) ejbAerolinea.getAerolinea(new Aerolinea(id));
+
+            op = Optional.ofNullable(a);
+            if (!op.isPresent()) {
+                response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+                response.setContent(mensajes.getProperty(RestResponse.RESTFUL_RECORD_EXISTS));
+                return response;
+            }
+            response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
+            response.setContent(a);
+        } catch (CRUDException ex) {
+            response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+                response.setContent(ex.getMessage());
+            Logger.getLogger(AerolineaResource.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return response;
     }
 
     @POST
@@ -183,6 +216,26 @@ public class AerolineaResource extends TemplateResource {
         }
 
         return r;
+    }
+
+    @POST
+    @Path("combo")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public RestResponse getCombo(final RestRequest request) {
+        RestResponse response = doValidations(request);
+        if (response.getCode() == ResponseCode.RESTFUL_SUCCESS.getCode()) {
+            try {
+                List l = ejbAerolinea.getCombo();
+                response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
+                response.setContent(l);
+            } catch (CRUDException ex) {
+                Logger.getLogger(AerolineaResource.class.getName()).log(Level.SEVERE, null, ex);
+                response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+                response.setContent(ex.getCause());
+            }
+        }
+        return response;
     }
 
     @POST
@@ -579,15 +632,15 @@ public class AerolineaResource extends TemplateResource {
                 JsonParser parser = new JsonParser();
                 JsonObject object = parser.parse((String) request.getContent()).getAsJsonObject();
                 ajson = gson.fromJson(object.toString(), AerolineaCuentaJSON.class);
-                
+
                 HashMap<String, Object> parameters = new HashMap<>();
                 parameters.put("1", ajson.getIdAerolineaCuenta());
-                
+
                 ejbAerolinea.remove(Queries.DELETE_AEROLINEA_CUENTA, parameters);
-                
+
                 response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
                 response.setContent(mensajes.getProperty(RestResponse.RESTFUL_SUCCESS));
-                
+
                 ejbLogger.add(Accion.INSERT, user.getUserName(), request.getFormName(), user.getIp());
             } catch (CRUDException ex) {
                 Logger.getLogger(AerolineaResource.class.getName()).log(Level.SEVERE, null, ex);
