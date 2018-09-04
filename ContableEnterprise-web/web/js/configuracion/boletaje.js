@@ -113,6 +113,90 @@ angular.module('jsBoletaje.controllers', []).controller('frmBoletaje',
                             saveData.idDescuentos = $scope.formData.idDescuentos.id;
                         }
                     }
+                    
+                    //formas de PAgo
+                    
+                    // NO BSP Bs
+                    if ($scope.formData.cuentaEfectivoNoBspDebeBs !== undefined) {
+                        if ($scope.formData.cuentaEfectivoNoBspDebeBs.id === undefined) {
+                            $scope.showAlert('Error de Verificacion', 'Ingrese un cuenta para Efectivos en el Debe');
+                            return;
+                        } else {
+                            saveData.cuentaEfectivoNoBspDebeBs = $scope.formData.cuentaEfectivoNoBspDebeBs.id;
+                        }
+                    }
+                    
+                    
+                    if ($scope.formData.cuentaEfectivoNoBspHaberBs !== undefined) {
+                        if ($scope.formData.cuentaEfectivoNoBspHaberBs.id === undefined) {
+                            $scope.showAlert('Error de Verificacion', 'Ingrese un cuenta para Efectivos en el Haber');
+                            return;
+                        } else {
+                            saveData.cuentaEfectivoNoBspHaberBs = $scope.formData.cuentaEfectivoNoBspHaberBs.id;
+                        }
+                    }
+                    
+                    // NO BSP Usd
+                    if ($scope.formData.cuentaEfectivoNoBspDebeUsd !== undefined) {
+                        if ($scope.formData.cuentaEfectivoNoBspDebeUsd.id === undefined) {
+                            $scope.showAlert('Error de Verificacion', 'Ingrese un cuenta para Efectivos en el Debe');
+                            return;
+                        } else {
+                            saveData.cuentaEfectivoNoBspDebeUsd = $scope.formData.cuentaEfectivoNoBspDebeUsd.id;
+                        }
+                    }
+                    
+                    
+                    if ($scope.formData.cuentaEfectivoNoBspHaberUsd !== undefined) {
+                        if ($scope.formData.cuentaEfectivoNoBspHaberUsd.id === undefined) {
+                            $scope.showAlert('Error de Verificacion', 'Ingrese un cuenta para Efectivos en el Haber');
+                            return;
+                        } else {
+                            saveData.cuentaEfectivoNoBspHaberUsd = $scope.formData.cuentaEfectivoNoBspHaberUsd.id;
+                        }
+                    }
+                    
+                    
+                    // CON BSP Bs
+                    
+                    if ($scope.formData.tarjetaCreditoBspDebeBs !== undefined) {
+                        if ($scope.formData.tarjetaCreditoBspDebeBs.id === undefined) {
+                            $scope.showAlert('Error de Verificacion', 'Ingrese un cuenta para Efectivos en el Debe');
+                            return;
+                        } else {
+                            saveData.tarjetaCreditoBspDebeBs = $scope.formData.tarjetaCreditoBspDebeBs.id;
+                        }
+                    }
+                    
+                    
+                    if ($scope.formData.tarjetaCreditoBspHaberBs !== undefined) {
+                        if ($scope.formData.tarjetaCreditoBspHaberBs.id === undefined) {
+                            $scope.showAlert('Error de Verificacion', 'Ingrese un cuenta para Efectivos en el Haber');
+                            return;
+                        } else {
+                            saveData.tarjetaCreditoBspHaberBs = $scope.formData.tarjetaCreditoBspHaberBs.id;
+                        }
+                    }
+                    
+                    //Con BSP USd
+                    if ($scope.formData.tarjetaCreditoBspDebeUsd !== undefined) {
+                        if ($scope.formData.tarjetaCreditoBspDebeUsd.id === undefined) {
+                            $scope.showAlert('Error de Verificacion', 'Ingrese un cuenta para Efectivos en el Debe');
+                            return;
+                        } else {
+                            saveData.tarjetaCreditoBspDebeUsd = $scope.formData.tarjetaCreditoBspDebeUsd.id;
+                        }
+                    }
+                    
+                    
+                    if ($scope.formData.tarjetaCreditoBspHaberUsd !== undefined) {
+                        if ($scope.formData.tarjetaCreditoBspHaberUsd.id === undefined) {
+                            $scope.showAlert('Error de Verificacion', 'Ingrese un cuenta para Efectivos en el Haber');
+                            return;
+                        } else {
+                            saveData.tarjetaCreditoBspHaberUsd = $scope.formData.tarjetaCreditoBspHaberUsd.id;
+                        }
+                    }
 
                     $scope.loading = true;
                     saveData.emisionBolivianos = $scope.formData.emisionBolivianos ? SI : NO;
@@ -181,7 +265,7 @@ angular.module('jsBoletaje.controllers', []).controller('frmBoletaje',
                         if (response.data.code === 201) {
                             $scope.comboCuentas = response.data.content;
                             $scope.formData.idTotalBoletoBs = $scope.findCta($scope.formData.idTotalBoletoBs, $scope.comboCuentas);
-                            $scope.formData.idTotalBoletoUs =$scope.findCta($scope.formData.idTotalBoletoUs, $scope.comboCuentas);
+                            $scope.formData.idTotalBoletoUs = $scope.findCta($scope.formData.idTotalBoletoUs, $scope.comboCuentas);
                             $scope.formData.idCuentaFee = $scope.findCta($scope.formData.idCuentaFee, $scope.comboCuentas);
                             $scope.formData.idDescuentos = $scope.findCta($scope.formData.idDescuentos, $scope.comboCuentas);
                             $scope.loading = false;
@@ -234,6 +318,71 @@ angular.module('jsBoletaje.controllers', []).controller('frmBoletaje',
                         return true;
                     } else {
                         if ($scope.formData.idDescuentos.id === undefined) {
+                            return true;
+                        }
+                    }
+
+                    //Formas de Pago
+                    if ($scope.formData.cuentaEfectivoNoBspDebeBs === undefined) {
+                        return true;
+                    } else {
+                        if ($scope.formData.cuentaEfectivoNoBspDebeBs.id === undefined) {
+                            return true;
+                        }
+                    }
+
+                    if ($scope.formData.cuentaEfectivoNoBspHaberBs === undefined) {
+                        return true;
+                    } else {
+                        if ($scope.formData.cuentaEfectivoNoBspHaberBs.id === undefined) {
+                            return true;
+                        }
+                    }
+
+                    if ($scope.formData.cuentaEfectivoNoBspDebeUsd === undefined) {
+                        return true;
+                    } else {
+                        if ($scope.formData.cuentaEfectivoNoBspDebeUsd.id === undefined) {
+                            return true;
+                        }
+                    }
+
+                    if ($scope.formData.cuentaEfectivoNoBspHaberUsd === undefined) {
+                        return true;
+                    } else {
+                        if ($scope.formData.cuentaEfectivoNoBspHaberUsd.id === undefined) {
+                            return true;
+                        }
+                    }
+                    
+                    if ($scope.formData.tarjetaCreditoBspDebeBs === undefined) {
+                        return true;
+                    } else {
+                        if ($scope.formData.tarjetaCreditoBspDebeBs.id === undefined) {
+                            return true;
+                        }
+                    }
+                    
+                    if ($scope.formData.tarjetaCreditoBspHaberBs === undefined) {
+                        return true;
+                    } else {
+                        if ($scope.formData.tarjetaCreditoBspHaberBs.id === undefined) {
+                            return true;
+                        }
+                    }
+                    
+                    if ($scope.formData.tarjetaCreditoBspDebeUsd === undefined) {
+                        return true;
+                    } else {
+                        if ($scope.formData.tarjetaCreditoBspDebeUsd.id === undefined) {
+                            return true;
+                        }
+                    }
+                    
+                    if ($scope.formData.tarjetaCreditoBspHaberUsd === undefined) {
+                        return true;
+                    } else {
+                        if ($scope.formData.tarjetaCreditoBspHaberUsd.id === undefined) {
                             return true;
                         }
                     }
@@ -299,8 +448,9 @@ angular.module('jsBoletaje.controllers', []).controller('frmBoletaje',
 
 
                 $scope.cancelar = function () {
-                    $scope.showForm = false;
-                    $scope.showTable = true;
+                    //$scope.showForm = false;
+                    //$scope.showTable = true;
+                    $scope.formData.idEmpresa = undefined ;
                     $scope.hideMessagesBox();
                 }
 

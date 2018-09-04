@@ -236,7 +236,7 @@
 
                                         </div>
                                         <!-- /Tabla Contenido -->
-                                        <form id="myForm" name="myForm" >
+                                        <form id="myForm" name="myForm" ng-show="showForm" >
                                             <!-- .form -->
                                             <script type="text/ng-template" id="customTemplate.html">
                                                 <div class="tt-suggestion tt-selectable">
@@ -244,11 +244,11 @@
                                                 </div>
                                             </script>
                                             <!-- .Datos Generales -->
-                                            <fieldset  ng-show="showForm">
+                                            <fieldset  >
                                                 <legend>Datos Generales</legend>
                                                 <div id="formData" class="container ng-hide table-responsive" ng-show="showForm"  >
-                                                    <input type="hidden" id="hdUrl" name="hdUrl" value="#{comprobantes.formulario.restful}"/>
-                                                    <input type="hidden" id="hdUrlLineaAerea" name="hdUrlLineaAerea" value="#{aerolinea.formulario.restful}"/>
+                                                    <input type="hidden" id="hdUrl" name="hdUrl" value="#{boletos.formulario.restful}"/>
+                                                    <input type="hidden" id="hdUrlAerolinea" name="hdUrlAerolinea" value="#{aerolinea.formulario.restful}"/>
                                                     <input type="hidden" id="hdUrlAeropuertos" name="hdUrlAeropuertos" value="#{aeropuerto.formulario.restful}"/>
                                                     <input type="hidden" id="hdUrlClientes" name="hdUrlClientes" value="#{cliente.formulario.restful}"/>
                                                     <input type="hidden" id="hdUrlFactores" name="hdUrlFactores" value="#{factores.formulario.restful}"/>
@@ -260,11 +260,12 @@
                                                     <!--<input type="hidden" id="txtFechaAlta" name="txtFechaAlta" ng-model="formData.fechaAlta"/>-->
                                                     <!--<input type="hidden" id="txtFechaBaja" name="txtFechaBaja" ng-model="formData.fechaBaja"/>-->
 
+
                                                     <div class="form-group row">
                                                         <label for="txtNombre" class=" col-form-label col-sm-3 text-right">L&iacute;nea A&eacute;rea</label>
                                                         <div class="col-sm-6">
                                                             <input type="text" ng-model="formData.idAerolinea" placeholder="Seleccione una Linea Aerea"
-                                                                   uib-typeahead="cuenta as cuenta.name for cuenta in comboAerolinea | filter:{name:$viewValue}"
+                                                                   uib-typeahead="cuenta as cuenta.name for cuenta in comboAerolineas | filter:{name:$viewValue}"
                                                                    class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="0" 
                                                                    typeahead-template-url="customTemplate.html" 
                                                                    />
@@ -280,7 +281,7 @@
                                                         <div class="col-sm-6">
                                                             <select class="form-control " 
                                                                     ng-options="option.id as option.name for option in comboEmision" ng-model="formData.emision">
-                                                                <option style="display:none" value="">seleccione una entidad</option>
+                                                                <option style="display:none" value="">Seleccione un tipo de Emision</option>
                                                             </select>
 
                                                             <span class="alert-danger"  ng-show="formData.emision === undefined"  >
@@ -324,56 +325,67 @@
 
                                                     <div class="form-group row">
                                                         <label for="txtNombre" class=" col-form-label col-sm-3 text-right">Ruta</label>
-                                                        <div class="col-sm-9">
-                                                            <div class="row">
-                                                                <div class="col-md-3">
-                                                                    <input type="text" ng-model="formData.idRuta1" placeholder="Ruta 1"
-                                                                           uib-typeahead="item as item.name for item in comboAeropuerto | filter:{name:$viewValue}"
-                                                                           class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="0" 
-                                                                           typeahead-template-url="customTemplate.html" 
-                                                                           />                                                                
-                                                                </div>
-                                                                <span class="fa fa-icons fa-plane"></span>
-                                                                <div class="col-md-3">
-                                                                    <input type="text" ng-model="formData.idRuta2" placeholder="Ruta 2"
-                                                                           uib-typeahead="item as item.name for item in comboAeropuerto | filter:{name:$viewValue}"
-                                                                           class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="0" 
-                                                                           typeahead-template-url="customTemplate.html" 
-                                                                           />
-                                                                </div>
-                                                                <span class="fa fa-icons fa-plane"></span>
-                                                                <div class="col-md-3">
-                                                                    <input type="text" ng-model="formData.idRuta3" placeholder="Ruta 3"
-                                                                           uib-typeahead="item as item.name for item in comboAeropuerto | filter:{name:$viewValue}"
-                                                                           class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="0" 
-                                                                           typeahead-template-url="customTemplate.html" 
-                                                                           />
-                                                                </div>
-                                                                <span class="fa fa-icons fa-plane"></span>
-                                                                <div class="col-md-3">
-                                                                    <input type="text" ng-model="formData.idRuta4" placeholder="Ruta 4"
-                                                                           uib-typeahead="item as item.name for item in comboAeropuerto | filter:{name:$viewValue}"
-                                                                           class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="0" 
-                                                                           typeahead-template-url="customTemplate.html" 
-                                                                           />
-                                                                </div>
-                                                                <span class="fa fa-icons fa-plane"></span>
-                                                                <div class="col-md-3">
-                                                                    <input type="text" ng-model="formData.idRuta5" placeholder="Ruta 5"
-                                                                           uib-typeahead="item as item.name for item in comboAeropuerto | filter:{name:$viewValue}"
-                                                                           class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="0" 
-                                                                           typeahead-template-url="customTemplate.html" 
-                                                                           />
-                                                                </div>
-                                                            </div>
+                                                        <div class="col-sm-6">
+
+                                                            <input type="text" ng-model="formData.idRuta1" placeholder="Ruta 1"
+                                                                   uib-typeahead="item as item.name for item in comboAeropuerto | filter:{name:$viewValue}"
+                                                                   class="form-control tt-input " typeahead-show-hint="true" typeahead-min-length="0" 
+                                                                   typeahead-template-url="customTemplate.html" 
+                                                                   /> 
 
                                                         </div>
+                                                        <span class="fa fa-icon fa-plane"></span>
+                                                    </div>
+
+                                                    <div class="form-group row">
+                                                        <label for="txtNombre" class=" col-form-label col-sm-3 text-right"></label>
+                                                        <div class="col-sm-6">
+                                                            <input type="text" ng-model="formData.idRuta2" placeholder="Ruta 2"
+                                                                   uib-typeahead="item as item.name for item in comboAeropuerto | filter:{name:$viewValue}"
+                                                                   class="form-control tt-input " typeahead-show-hint="true" typeahead-min-length="0" 
+                                                                   typeahead-template-url="customTemplate.html" 
+                                                                   />    
+                                                        </div>
+                                                        <span class="fa fa-icon fa-plane"></span>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label for="txtNombre" class=" col-form-label col-sm-3 text-right"></label>
+                                                        <div class="col-sm-6">
+                                                            <input type="text" ng-model="formData.idRuta3" placeholder="Ruta 3"
+                                                                   uib-typeahead="item as item.name for item in comboAeropuerto | filter:{name:$viewValue}"
+                                                                   class="form-control tt-input " typeahead-show-hint="true" typeahead-min-length="0" 
+                                                                   typeahead-template-url="customTemplate.html" 
+                                                                   />    
+                                                        </div>
+                                                        <span class="fa fa-icon fa-plane"></span>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label for="txtNombre" class=" col-form-label col-sm-3 text-right"></label>
+                                                        <div class="col-sm-6">
+                                                            <input type="text" ng-model="formData.idRuta4" placeholder="Ruta 4"
+                                                                   uib-typeahead="item as item.name for item in comboAeropuerto | filter:{name:$viewValue}"
+                                                                   class="form-control tt-input " typeahead-show-hint="true" typeahead-min-length="0" 
+                                                                   typeahead-template-url="customTemplate.html" 
+                                                                   />    
+                                                        </div>
+                                                        <span class="fa fa-icon fa-plane"></span>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label for="txtNombre" class=" col-form-label col-sm-3 text-right"></label>
+                                                        <div class="col-sm-6">
+                                                            <input type="text" ng-model="formData.idRuta5" placeholder="Ruta 5"
+                                                                   uib-typeahead="item as item.name for item in comboAeropuerto | filter:{name:$viewValue}"
+                                                                   class="form-control tt-input " typeahead-show-hint="true" typeahead-min-length="0" 
+                                                                   typeahead-template-url="customTemplate.html" 
+                                                                   />    
+                                                        </div>
+                                                        <span class="fa fa-icon fa-plane"></span>
                                                     </div>
 
                                                     <div class="form-group row">
                                                         <label for="txtNombre" class=" col-form-label col-sm-3 text-right">Cuenta</label>
                                                         <div class="col-sm-6">
-                                                            <input type="text" ng-model="formData.idCliente" placeholder="Seleccione una Cliente"
+                                                            <input type="text" ng-model="formData.idCliente" placeholder="Seleccione un Cliente"
                                                                    uib-typeahead="cuenta as cuenta.name for cuenta in comboCliente | filter:{name:$viewValue}"
                                                                    class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="0" 
                                                                    typeahead-template-url="customTemplate.html" 
@@ -443,304 +455,578 @@
                                                             </span>
                                                         </div>
                                                     </div>
-
-
-                                                    <div class="form-group row">
-                                                        <label for="txtCodigoLinea" class="col-sm-3 text-right" > Formas de Pago</label>
-                                                        <div class="col-sm-9">
-                                                            <div class="form-inline">
-                                                                <div class="custom-control custom-control-inline custom-radio">
-                                                                    <input type="radio" class="custom-control-input" id="rdCredito" name="rdFormaPago"
-                                                                           ng-model="formData.formaPago" value="C" />
-                                                                    <label class="custom-control-label" for="rdCredito">Credito</label>
-                                                                </div>
-                                                                <div class="custom-control custom-control-inline custom-radio">
-                                                                    <input type="radio" class="custom-control-input" id="rdContado" name="rdFormaPago"
-                                                                           ng-model="formData.formaPago" value="E" ng-checked="true" />
-                                                                    <label class="custom-control-label" for="rdContado" >Contado</label>
-                                                                </div>
-                                                                <div class="custom-control custom-control-inline custom-radio">
-                                                                    <input type="radio" class="custom-control-input" id="rdCombinado" name="rdFormaPago"
-                                                                           ng-model="formData.formaPago" value="P" ng-checked="true" />
-                                                                    <label class="custom-control-label" for="rdCombinado" >Combinado</label>
-                                                                </div>
-                                                            </div>
-
-                                                        </div>
-                                                    </div>
-
-
-                                                    <div class="container-fluid" ng-show="formData.formaPago == 'C'">
-                                                        <legend>Pago al Cr&eacute;dito</legend>
-
-                                                        <div class="row">
-                                                            <div class="col-sm-6">
-                                                                <div class="form-group row">
-                                                                    <label for="txtCodigoLinea" class="text-right col-sm-6" > Plazo en d&iacute;as</label>
-                                                                    <div class="col-sm-4">
-                                                                        <input type="number" class="form-control" name="txtPlazo" placeholder="0" 
-                                                                               ng-model="formData.creditoDias" step="1" max="365" min="1"
-                                                                               ng-pattern="/^[0-9]?$/" required="" />
-                                                                    </div>    
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="col-sm-6">
-                                                                <!--<div class="col-sm-6">-->
-                                                                <div class="form-group row">
-                                                                    <label for="txtCodigoLinea" class=" text-right col-sm-5" > Fecha de Vencimiento</label>
-                                                                    <div class="col-sm-6">
-                                                                        <label for="txtCodigoLinea" class=" text-right" > {{formData.creditoVencimiento}}</label>
-                                                                    </div>
-                                                                </div>
-                                                                <!--</div>-->
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-
-                                                    <div class="container-fluid" ng-show="formData.formaPago == 'E'">
-                                                        <legend>Pago al Contado</legend>
-
-                                                        <div class="row">
-                                                            <div class="col-sm-6">
-                                                                <div class="form-group row">
-                                                                    <label for="txtCodigoLinea" class="col-sm-6 text-right" > Pagar&aacute; con tarjeta ?</label>
-                                                                    <div class="custom-control custom-control-inline custom-checkbox ">
-                                                                        <input type="checkbox" class="custom-control-input" id="chkPagoTarjeta" 
-                                                                               ng-checked="formData.contadoIdTarjeta" ng-model="formData.contadoConTarjeta" />
-                                                                        <label class="custom-control-label" for="chkPagoTarjeta"></label>
-                                                                    </div>   
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="row" ng-show="formData.contadoConTarjeta">
-                                                            <div class="col-sm-5">
-                                                                <div class="form-group row">
-                                                                    <label for="txtCodigoLinea" class="text-right col-sm-6" > Tipo de Tarjeta</label>
-                                                                    <div class="col-sm-6">
-                                                                        <input type="text" ng-model="formData.contadoIdTarjeta" placeholder="Seleccione una Tarjeta"
-                                                                               uib-typeahead="cuenta as cuenta.name for cuenta in comboTarjetas | filter:{name:$viewValue}"
-                                                                               class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="0" 
-                                                                               typeahead-template-url="customTemplate.html" 
-                                                                               />
-                                                                    </div>    
-                                                                </div>
-                                                            </div>
-
-                                                            <div class="col-sm-7">
-                                                                <!--<div class="col-sm-6">-->
-                                                                <div class="form-group row">
-                                                                    <label for="txtCodigoLinea" class=" text-right col-sm-4" > N&uacute;mero de tarjeta</label>
-                                                                    <div class="col-sm-6">
-                                                                        <input type="text" class="form-control " id="txtNroTarjeta"  name="txtNroTarjeta"  
-                                                                               required="required" valid-number="valid-number"  onkeypress="return isNumberKey(event)" maxlength="16" ng-model="formData.contadoNroTarjeta"/>
-                                                                        <span class="alert-danger" ng-show="!myForm.txtNroTarjeta.$valid">Debe ingresar un numero</span>
-                                                                    </div>
-                                                                </div>
-                                                                <!--</div>-->
-                                                            </div>
-                                                        </div>
-                                                    </div>
                                                 </div>
                                             </fieldset>
 
                                             <hr />
 
                                             <fieldset ng-show="showForm" class="ng-hide">
-                                                <div class="container-fluid">
-                                                    <legend>Importes para planillas de Ventas</legend>  <div class="table-responsive">
-                                                        <div class="col-10">
-                                                            <table class="table table-sm table-hover">
-                                                                <thead class="thead-dark">
-                                                                    <tr class="d-flex ">
-                                                                        <th class="col-sm-3"><label></label></th>
-                                                                        <th class="col-sm-3"><label></label></th>
-                                                                        <th class="col-sm-3"><label>BOB</label></th>
-                                                                        <th class="col-sm-3"><label>USD</label></th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody >
-                                                                    <tr class="d-flex" >
-                                                                        <td class="col-sm-3"><label class="text-right">Importe Neto</label></td>
-                                                                        <td class="col-sm-3"></td>
-                                                                        <td class="col-sm-3">
-                                                                            <input type="number" class="form-control" name="txtImporteNeto" placeholder="0.00 BOB" 
-                                                                                   ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="1" min="0" 
-                                                                                   ng-model="formData.importeNetoBs" value="{{formData.importeNetoBs}}" 
-                                                                                   data-toggle="tooltip" data-placement="top"  />
-                                                                        </td>
-                                                                        <td class="col-sm-3">
-                                                                            <input type="number" class="form-control" name="txtImporteNeto" placeholder="0.00 USD" 
-                                                                                   ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="1" min="0" 
-                                                                                   ng-model="formData.importeNetoUsd" value="{{formData.importeNetoUsd}}" 
-                                                                                   data-toggle="tooltip" data-placement="top"  />
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr class="d-flex">
-                                                                        <td class="col-sm-3"><label class="text-right">Impuestos BOB (%)</label></td>
-                                                                        <td class="col-sm-3">
-                                                                            <input type="number" class="form-control" name="txtImpuestoBob" placeholder="0.00 %" 
-                                                                                   ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="1.0" min="0" max="99" 
-                                                                                   ng-model="formData.impuestoBob" value="{{formData.impuestoBob}}" 
-                                                                                   data-toggle="tooltip" data-placement="top"  /></td>
-                                                                        <td class="col-sm-3">
-                                                                            impuestoBOB
-                                                                        </td>
-                                                                        <td class="col-sm-3">
-                                                                            impuestoBOB usd
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr class="d-flex">
-                                                                        <td class="col-sm-3"><label class="text-right">Impuestos QM (%)</label></td>
-                                                                        <td class="col-sm-3">
-                                                                            <input type="number" class="form-control" name="txtImpuestoQm" placeholder="0.00 %" 
-                                                                                   ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="1.0" min="0" max="99" 
-                                                                                   ng-model="formData.impuestoBob" value="{{formData.impuestoBob}}" 
-                                                                                   data-toggle="tooltip" data-placement="top"  /></td>
-                                                                        <td class="col-sm-3">
-                                                                            impuestoBOB
-                                                                        </td>
-                                                                        <td class="col-sm-3">
-                                                                            impuestoBOB usd
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr  class="d-flex" st-select-row="row" st-select-mode="multiple" ng-repeat="row in impuestos">
-                                                                        <td  class="col-sm-3"><label class="text-right">{{row.nombreImpuesto}} QM (%)</label></td>
-                                                                        <td class="col-sm-3">
-                                                                        </td>
-                                                                        <td class="col-sm-3">
-                                                                            <input type="number" class="form-control" name="txtImpuesto" placeholder="0.00 " 
-                                                                                   ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="1.0" min="0" max="99" 
-                                                                                   ng-model="row.valorImpuesto" value="{{row.valorImpuesto}}" 
-                                                                                   data-toggle="tooltip" data-placement="top"  />
-                                                                        </td>
-                                                                        <td class="col-sm-3">
-                                                                            <input type="number" class="form-control" name="txtImpuestoQm" placeholder="0.00 " 
-                                                                                   ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="1.0" min="0" max="99" 
-                                                                                   ng-model="row.valorImpuesto" value="{{row.valorImpuesto}}" 
-                                                                                   data-toggle="tooltip" data-placement="top"  />
-                                                                        </td>
-                                                                    </tr>
-                                                                </tbody>
-                                                            </table>
+                                                <div class="container-fluid" align="center">
+                                                    <div class="row">
+                                                        <legend align="left">Importes para planillas de Ventas</legend>  
+                                                        <div class="table-responsive">
+                                                            <div class="col-10">
+                                                                <table class="table table-sm table-hover">
+                                                                    <thead class="thead-dark">
+                                                                        <tr class="d-flex ">
+                                                                            <th class="col-sm-3"><label></label></th>
+                                                                            <th class="col-sm-3"><label></label></th>
+                                                                            <th class="col-sm-3"><label>BOB</label></th>
+                                                                            <th class="col-sm-3"><label>USD</label></th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody >
+                                                                        <tr class="d-flex" >
+                                                                            <td class="col-sm-3"><label class="text-right">Importe Neto</label></td>
+                                                                            <td class="col-sm-3"></td>
+                                                                            <td class="col-sm-3">
+                                                                                <input type="number" class="form-control" name="txtImporteNeto" placeholder="0.00 BOB" 
+                                                                                       ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="1" min="0" 
+                                                                                       ng-model="formData.importeNetoBs" value="{{formData.importeNetoBs}}" 
+                                                                                       data-toggle="tooltip" data-placement="top"  />
+                                                                            </td>
+                                                                            <td class="col-sm-3">
+                                                                                <input type="number" class="form-control" name="txtImporteNeto" placeholder="0.00 USD" 
+                                                                                       ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="1" min="0" 
+                                                                                       ng-model="formData.importeNetoUsd" value="{{formData.importeNetoUsd}}" 
+                                                                                       data-toggle="tooltip" data-placement="top"  />
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr class="d-flex">
+                                                                            <td class="col-sm-3"><label class="text-right">Impuestos BOB</label></td>
+                                                                            <td class="col-sm-3">
+                                                                                <input type="number" class="form-control" name="txtImpuestoBob" placeholder="0.00 " 
+                                                                                       ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="1.0" min="0" max="99" 
+                                                                                       ng-model="formData.impuestoBob" value="{{formData.impuestoBob}}" 
+                                                                                       data-toggle="tooltip" data-placement="top"  /></td>
+                                                                            <td class="col-sm-3">impuestoBOB</td>
+                                                                            <td class="col-sm-3">impuestoBOB usd</td>
+                                                                        </tr>
+                                                                        <tr class="d-flex">
+                                                                            <td class="col-sm-3"><label class="text-right">Impuestos QM</label></td>
+                                                                            <td class="col-sm-3">
+                                                                                <input type="number" class="form-control" name="txtImpuestoQm" placeholder="0.00" 
+                                                                                       ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="1.0" min="0" max="99" 
+                                                                                       ng-model="formData.impuestoBob" value="{{formData.impuestoBob}}" 
+                                                                                       data-toggle="tooltip" data-placement="top"  /></td>
+                                                                            <td class="col-sm-3">impuestoBOB</td>
+                                                                            <td class="col-sm-3">impuestoBOB usd</td>
+                                                                        </tr>
+                                                                        <tr  class="d-flex" st-select-row="row" st-select-mode="multiple" ng-repeat="row in impuestos">
+                                                                            <td  class="col-sm-3"><label class="text-right">{{row.nombreImpuesto}} QM (%)</label></td>
+                                                                            <td class="col-sm-3">
+                                                                            </td>
+                                                                            <td class="col-sm-3">
+                                                                                <input type="number" class="form-control" name="txtImpuesto" placeholder="0.00 " 
+                                                                                       ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="1.0" min="0" max="99" 
+                                                                                       ng-model="row.valorImpuesto" value="{{row.valorImpuesto}}" 
+                                                                                       data-toggle="tooltip" data-placement="top"  />
+                                                                            </td>
+                                                                            <td class="col-sm-3">
+                                                                                <input type="number" class="form-control" name="txtImpuestoQm" placeholder="0.00 " 
+                                                                                       ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="1.0" min="0" max="99" 
+                                                                                       ng-model="row.valorImpuesto" value="{{row.valorImpuesto}}" 
+                                                                                       data-toggle="tooltip" data-placement="top"  />
+                                                                            </td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                            <div class="col-10">
+                                                                <table  class="table table-sm table-hover table-danger" >
+                                                                    <tbody>
+                                                                        <tr class="d-flex">
+                                                                            <td class="col-sm-3"><strong class="table-danger">TOTAL BOLETO</strong></td>
+                                                                            <td class="col-sm-3"></td>
+                                                                            <td class="col-sm-3"><div><strong>TOTAL BOB{{formData.totalBoletoBob}}</strong></div></td>
+                                                                            <td class="col-sm-3"><div ><strong>TOTAL US{{formData.totalBoletoUsd}}</strong></div></td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                            <div class="col-10">
+                                                                <table class="table table-sm table-hover">
+                                                                    <tbody >
+                                                                        <tr class="d-flex" >
+                                                                            <td class="col-sm-3"><label class="text-right">Comision %</label></td>
+                                                                            <td class="col-sm-3"><input type="number" class="form-control" name="txtImporteNeto" placeholder="0.00 BOB" 
+                                                                                                        ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="1" min="0" 
+                                                                                                        ng-model="formData.comision" value="{{formData.comision}}" 
+                                                                                                        data-toggle="tooltip" data-placement="top"  /></td>
+                                                                            <td class="col-sm-3">Comision Bs</td>
+                                                                            <td class="col-sm-3">Comision Us</td>
+                                                                        </tr>
+                                                                        <tr class="d-flex">
+                                                                            <td class="col-sm-12"><label class="text-right">
+                                                                                    <legend>Movimiento Interno (Solo cuenta por Cobrar)</legend>
+                                                                                </label>
+                                                                            </td>
+                                                                        </tr>
+                                                                        <tr class="d-flex">
+                                                                            <td class="col-sm-3"><label class="text-right">FEE (Otros Comisionables) %</label></td>
+                                                                            <td class="col-sm-3">
+                                                                                <input type="number" class="form-control" name="txtImpuestoQm" placeholder="0.00 %" 
+                                                                                       ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="1.0" min="0" max="99" 
+                                                                                       ng-model="formData.montoFee" value="{{formData.montoFee}}" 
+                                                                                       data-toggle="tooltip" data-placement="top"  />
+                                                                            </td>
+                                                                            <td class="col-sm-3">Fee Bs</td>
+                                                                            <td class="col-sm-3">Fee Us</td>
+                                                                        </tr>
+                                                                        <tr class="d-flex">
+                                                                            <td class="col-sm-3"><label class="text-right">Descuento %</label></td>
+                                                                            <td class="col-sm-3">
+                                                                                <input type="number" class="form-control" name="txtImpuestoQm" placeholder="0.00 %" 
+                                                                                       ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="1.0"
+                                                                                       ng-model="formData.montoDescuento" value="{{formData.montoDescuento}}" 
+                                                                                       data-toggle="tooltip" data-placement="top"  />
+                                                                            </td>
+                                                                            <td class="col-sm-3">
+                                                                                <input type="number" class="form-control" name="txtImpuestoQm" placeholder="0.00 %" 
+                                                                                       ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/"
+                                                                                       ng-model="formData.montoDescuentoBs" value="{{formData.montoDescuentoBs}}" 
+                                                                                       data-toggle="tooltip" data-placement="top"  />
+                                                                            </td>
+                                                                            <td class="col-sm-3">
+                                                                                <input type="number" class="form-control" name="txtImpuestoQm" placeholder="0.00 %" 
+                                                                                       ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="1.0"  
+                                                                                       ng-model="formData.montoDescuentoUs" value="{{formData.montoDescuentoUs}}" 
+                                                                                       data-toggle="tooltip" data-placement="top"  />
+                                                                            </td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                            <div class="col-10">
+                                                                <table  class="table table-sm table-hover table-success" >
+                                                                    <tbody>
+                                                                        <tr class="d-flex">
+                                                                            <td class="col-sm-3"><strong >TOTAL A CANCELAR</strong></td>
+                                                                            <td class="col-sm-3"></td>
+                                                                            <td class="col-sm-3"><div><strong>TOTAL BOB{{formData.totalBoletoBob}}</strong></div></td>
+                                                                            <td class="col-sm-3"><div ><strong>TOTAL US{{formData.totalBoletoUsd}}</strong></div></td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
                                                         </div>
-
-                                                        <div class="col-10">
-                                                            <table  class="table table-sm table-hover table-danger" >
-                                                                <tbody>
-                                                                    <tr class="d-flex">
-                                                                        <td class="col-sm-3">
-                                                                            <strong class="table-danger">TOTAL BOLETO</strong>
-                                                                        </td>
-                                                                        <td class="col-sm-3">
-                                                                        </td>
-                                                                        <td class="col-sm-3">
-                                                                            <div><strong>TOTAL BOB{{formData.totalBoletoBob}}</strong></div>
-                                                                        </td>
-                                                                        <td class="col-sm-3">
-                                                                            <div ><strong>TOTAL US{{formData.totalBoletoUsd}}</strong></div>
-                                                                        </td>
-                                                                    </tr>
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
-
-
-
-                                                        <div class="col-10">
-                                                            <table class="table table-sm table-hover">
-
-                                                                <tbody >
-                                                                    <tr class="d-flex" >
-                                                                        <td class="col-sm-3"><label class="text-right">Comision %</label></td>
-                                                                        <td class="col-sm-3"><input type="number" class="form-control" name="txtImporteNeto" placeholder="0.00 BOB" 
-                                                                                                    ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="1" min="0" 
-                                                                                                    ng-model="formData.comision" value="{{formData.comision}}" 
-                                                                                                    data-toggle="tooltip" data-placement="top"  /></td>
-                                                                        <td class="col-sm-3">
-                                                                            Comision Bs
-                                                                        </td>
-                                                                        <td class="col-sm-3">
-                                                                            Comision Us
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr class="d-flex">
-                                                                        <td class="col-sm-12"><label class="text-right">
-                                                                                <legend>
-                                                                                    Movimiento Interno (Solo cuenta por Cobrar)
-                                                                                </legend>
-                                                                            </label></td>
-                                                                    </tr>
-                                                                    <tr class="d-flex">
-                                                                        <td class="col-sm-3"><label class="text-right">FEE (Otros Comisionables) %</label></td>
-                                                                        <td class="col-sm-3">
-                                                                            <input type="number" class="form-control" name="txtImpuestoQm" placeholder="0.00 %" 
-                                                                                   ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="1.0" min="0" max="99" 
-                                                                                   ng-model="formData.montoFee" value="{{formData.montoFee}}" 
-                                                                                   data-toggle="tooltip" data-placement="top"  />
-                                                                        </td>
-                                                                        <td class="col-sm-3">
-                                                                            Fee Bs
-                                                                        </td>
-                                                                        <td class="col-sm-3">
-                                                                            Fee Us
-                                                                        </td>
-                                                                    </tr>
-
-
-                                                                    <tr class="d-flex">
-                                                                        <td class="col-sm-3"><label class="text-right">Descuento %</label></td>
-                                                                        <td class="col-sm-3">
-                                                                            <input type="number" class="form-control" name="txtImpuestoQm" placeholder="0.00 %" 
-                                                                                   ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="1.0"
-                                                                                   ng-model="formData.montoDescuento" value="{{formData.montoDescuento}}" 
-                                                                                   data-toggle="tooltip" data-placement="top"  />
-                                                                        </td>
-                                                                        <td class="col-sm-3">
-                                                                            <input type="number" class="form-control" name="txtImpuestoQm" placeholder="0.00 %" 
-                                                                                   ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/"
-                                                                                   ng-model="formData.montoDescuentoBs" value="{{formData.montoDescuentoBs}}" 
-                                                                                   data-toggle="tooltip" data-placement="top"  />
-                                                                        </td>
-                                                                        <td class="col-sm-3">
-                                                                            <input type="number" class="form-control" name="txtImpuestoQm" placeholder="0.00 %" 
-                                                                                   ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="1.0"  
-                                                                                   ng-model="formData.montoDescuentoUs" value="{{formData.montoDescuentoUs}}" 
-                                                                                   data-toggle="tooltip" data-placement="top"  />
-                                                                        </td>
-                                                                    </tr>
-
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
-                                                        
-                                                        <div class="col-10">
-                                                            <table  class="table table-sm table-hover table-success" >
-                                                                <tbody>
-                                                                    <tr class="d-flex">
-                                                                        <td class="col-sm-3">
-                                                                            <strong >TOTAL A CANCELAR</strong>
-                                                                        </td>
-                                                                        <td class="col-sm-3">
-                                                                        </td>
-                                                                        <td class="col-sm-3">
-                                                                            <div><strong>TOTAL BOB{{formData.totalBoletoBob}}</strong></div>
-                                                                        </td>
-                                                                        <td class="col-sm-3">
-                                                                            <div ><strong>TOTAL US{{formData.totalBoletoUsd}}</strong></div>
-                                                                        </td>
-                                                                    </tr>
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
-                                                        
                                                     </div>
                                                 </div>
                                             </fieldset>
-                                            <!-- ./Datos Generales-->
+                                            <hr />
+                                            <fieldset class="ng-hide" ng-show="showForm">
+                                                <legend align="left">Formas de Pagos</legend>
+                                                <div class="container-fluid" align="center">
+                                                    <div class="row">
+                                                        <div class="table-responsive">
+                                                            <div class="col-10">
+                                                                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                                                    <li class="nav-item">
+                                                                        <a class="nav-link active" id="home-tab" data-toggle="tab" href="#credito" role="tab" aria-controls="credito" aria-selected="true">Credito</a>
+                                                                    </li>
+                                                                    <li class="nav-item">
+                                                                        <a class="nav-link" id="profile-tab" data-toggle="tab" href="#contado" role="tab" aria-controls="contado" aria-selected="false">Contado</a>
+                                                                    </li>
+                                                                    <li class="nav-item">
+                                                                        <a class="nav-link" id="contact-tab" data-toggle="tab" href="#tarjeta" role="tab" aria-controls="tarjeta" aria-selected="false">Tarjeta</a>
+                                                                    </li>
 
+                                                                    <li class="nav-item">
+                                                                        <a class="nav-link" id="contact-tab" data-toggle="tab" href="#combinado" role="tab" aria-controls="combinado" aria-selected="false">Combinado</a>
+                                                                    </li>
+                                                                </ul>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="tab-content" id="myTabContent">
+                                                    <!-- Pago Credito -->
+                                                    <div class="tab-pane fade show active" id="credito" role="tabpanel" 
+                                                         aria-labelledby="credito-tab">
+                                                        <div class="container-fluid" align="center">
+                                                            <br />
+                                                            <div class="row">
+                                                                <div class="table-responsive">
+                                                                    <div class="col-10">
+                                                                        <div class="form-group row">
+                                                                            <label for="txtCodigoLinea" class="text-right col-sm-2" > Plazo en d&iacute;as</label>
+                                                                            <div class="col-sm-3">
+                                                                                <input type="number" class="form-control" name="txtPlazo" placeholder="0" 
+                                                                                       ng-model="formData.creditoDias" step="1" max="365" min="1"
+                                                                                       ng-pattern="/^[0-9]?$/" required="" />
+                                                                            </div>
+
+                                                                            <label for="txtCodigoLinea" class=" text-right col-sm-3" > Fecha de Vencimiento</label>
+                                                                            <div class="col-sm-3">
+                                                                                <label for="txtCodigoLinea" class=" text-right" > {{formData.creditoVencimiento}}</label>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>    
+                                                    </div>
+                                                    <!-- /Pago Credito -->
+
+                                                    <!-- Pagos Contado -->
+                                                    <div class="tab-pane fade" id="contado" role="tabpanel" aria-labelledby="contado-tab">
+                                                        <div class="container-fluid" align="center" >
+                                                            <br />
+                                                            <div class="row">
+                                                                <div class="table-responsive">
+                                                                    <div class="col-10" >
+                                                                        <div class="form-inline">
+                                                                            <div class="custom-control custom-control-inline custom-radio">
+                                                                                <input type="radio" class="custom-control-input" id="rdEfectivo" name="rdPagoContado"
+                                                                                       ng-model="formData.pagoContado" value="E" />
+                                                                                <label class="custom-control-label" for="rdEfectivo">Efectivo</label>
+                                                                            </div>
+                                                                            <div class="custom-control custom-control-inline custom-radio">
+                                                                                <input type="radio" class="custom-control-input" id="rdCheque" name="rdPagoContado"
+                                                                                       ng-model="formData.pagoContado" value="C" />
+                                                                                <label class="custom-control-label" for="rdCheque" >Cheque</label>
+                                                                            </div>
+                                                                            <div class="custom-control custom-control-inline custom-radio">
+                                                                                <input type="radio" class="custom-control-input" id="rdDeposito" name="rdPagoContado"
+                                                                                       ng-model="formData.pagoContado" value="D"  />
+                                                                                <label class="custom-control-label" for="rdDeposito" >Deposito a Banco</label>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <br />
+                                                            <!-- Cheques -->
+                                                            <div class="row" ng-if="formData.pagoContado == 'C'">
+                                                                <br />
+                                                                <div class="col-10">
+                                                                    <div class="form-group row">
+                                                                        <label for="txtNroCheque" class=" text-right col-sm-4" > N&uacute;mero de Cheque</label>
+                                                                        <div class="col-sm-6">
+                                                                            <input type="text" class="form-control " id="txtNroCheque"  name="txtNroCheque"  
+                                                                                   required="required" valid-number="valid-number"  onkeypress="return isNumberKey(event)" maxlength="16" ng-model="formData.contadoNroTarjeta"/>
+                                                                            <span class="alert-danger" ng-show="!myForm.txtNroCheque.$valid">Debe ingresar un N&uacute;mero de Cheque</span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group row">
+                                                                        <label for="txtContadoBanco" class=" text-right col-sm-4" > Banco</label>
+                                                                        <div class="col-sm-6">
+                                                                            <input type="text" ng-model="formData.contadoBanco" placeholder="Seleccione un Banco"
+                                                                                   uib-typeahead="cuenta as cuenta.name for cuenta in comboBancos | filter:{name:$viewValue}"
+                                                                                   class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="0" 
+                                                                                   typeahead-template-url="customTemplate.html" name="txtContadoBanco"
+                                                                                   />
+                                                                            <span class="alert-danger" ng-show="!myForm.txtContadoBanco.$valid">Debe ingresar un Banco</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <!-- /Cheques -->
+                                                            <!-- Deposito -->
+                                                            <div class="row"  ng-if="formData.pagoContado == 'D'">
+                                                                <br />
+                                                                <div class="col-10">
+                                                                    <div class="form-group row">
+                                                                        <label for="txtContadoDeposito" class=" text-right col-sm-4" > N&uacute;mero de Dep&oacute;sito</label>
+                                                                        <div class="col-sm-6">
+                                                                            <input type="text" class="form-control " id="txtContadoDeposito"  name="txtContadoDeposito"  
+                                                                                   required="required" valid-number="valid-number"  onkeypress="return isNumberKey(event)" maxlength="16" ng-model="formData.contadoNroTarjeta"/>
+                                                                            <span class="alert-danger" ng-show="!myForm.txtContadoDeposito.$valid">Debe ingresar un N&uacute;mero de Dep&oacute;sito</span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group row">
+                                                                        <label for="txtContadoDeposito" class=" text-right col-sm-4" > Banco</label>
+                                                                        <div class="col-sm-6">
+                                                                            <input type="text" ng-model="formData.contadoDepositoBanco" placeholder="Seleccione un Banco"
+                                                                                   uib-typeahead="cuenta as cuenta.name for cuenta in comboBancos | filter:{name:$viewValue}"
+                                                                                   class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="0" 
+                                                                                   typeahead-template-url="customTemplate.html" name="txtContadoDeposito"
+                                                                                   />
+                                                                            <span class="alert-danger" ng-show="!myForm.txtContadoDeposito.$valid">Debe ingresar un Banco</span>
+                                                                        </div>
+                                                                    </div>  
+                                                                </div>
+                                                            </div>
+                                                            <!-- /Cheques -->
+                                                        </div>
+                                                    </div>
+                                                    <!-- /Pagos Contado -->
+
+                                                    <!-- Pago con Tarjeta -->
+                                                    <div class="tab-pane fade" id="tarjeta" role="tabpanel" aria-labelledby="tarjeta-tab">
+                                                        <div class="container-fluid">
+                                                            <br />
+                                                            <div class="row" >
+                                                                <div class="col-10">
+                                                                    <div class="form-group row">
+                                                                        <label for="txtCodigoLinea" class="text-right  col-sm-4" > Tipo de Tarjeta</label>
+                                                                        <div class="col-sm-4">
+                                                                            <input type="text" ng-model="formData.contadoIdTarjeta" placeholder="Seleccione una Tarjeta"
+                                                                                   uib-typeahead="cuenta as cuenta.name for cuenta in comboTarjetas | filter:{name:$viewValue}"
+                                                                                   class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="0" 
+                                                                                   typeahead-template-url="customTemplate.html" 
+                                                                                   />
+                                                                        </div>    
+                                                                    </div>
+                                                                    <div class="form-group row">
+                                                                        <label for="txtCodigoLinea" class=" text-right col-sm-4" > N&uacute;mero de tarjeta</label>
+                                                                        <div class="col-sm-4">
+                                                                            <input type="text" class="form-control " id="txtNroTarjeta"  name="txtNroTarjeta"  
+                                                                                   required="required" valid-number="valid-number"  onkeypress="return isNumberKey(event)" maxlength="16" ng-model="formData.contadoNroTarjeta"/>
+                                                                            <span class="alert-danger" ng-show="!myForm.txtNroTarjeta.$valid">Debe ingresar un numero</span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!-- /Pago con Tarjeta -->
+
+                                                    <!-- Pagos Combinados-->
+                                                    <div class="tab-pane fade" id="combinado" role="tabpanel" aria-labelledby="combinado-tab">
+                                                        <div class="container-fluid" align="center">
+                                                            <br />
+                                                            <div class="row" >
+                                                                <div class="col-10">
+                                                                    <div class="form-group row ">
+                                                                        <div class="col-sm-6">
+                                                                            <div class="custom-control custom-control-inline custom-checkbox">
+                                                                                <input type="checkbox" class="custom-control-input" id="chkCombinadoCredito" 
+                                                                                       ng-checked="formData.combinadoCredito" ng-model="formData.combinadoCredito" />
+                                                                                <label class="custom-control-label" for="chkCombinadoCredito">Cr&eacute;dito</label>
+                                                                            </div>    
+                                                                            <div class="custom-control custom-control-inline custom-checkbox">
+                                                                                <input type="checkbox" class="custom-control-input" id="chkCombinadoContado" 
+                                                                                       ng-checked="formData.combinadoContado" ng-model="formData.combinadoContado" />
+                                                                                <label class="custom-control-label" for="chkCombinadoContado">Contado</label>
+                                                                            </div>
+
+                                                                            <div class="custom-control custom-control-inline custom-checkbox">
+                                                                                <input type="checkbox" class="custom-control-input" id="chkCombinadoTarjeta" 
+                                                                                       ng-checked="formData.combinadoTarjeta" ng-model="formData.combinadoTarjeta" />
+                                                                                <label class="custom-control-label" for="chkCombinadoTarjeta">Tarjeta</label>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <!-- Pago Combinado Credito -->
+                                                            <div  id="credito" role="tabpanel" ng-show="formData.combinadoCredito" >
+                                                                <div class="container-fluid">
+                                                                    <br />
+                                                                    <div class="row" >
+                                                                        <div class="col-10">
+                                                                            <legend>Pago Combinado Cr&eacute;dito</legend>
+                                                                            <div class="form-group row">
+                                                                                <label for="txtCodigoLinea" class="text-right col-sm-2" > Plazo en d&iacute;as</label>
+                                                                                <div class="col-sm-3">
+                                                                                    <input type="number" class="form-control" name="txtPlazo" placeholder="0" 
+                                                                                           ng-model="formData.creditoDias" step="1" max="365" min="1"
+                                                                                           ng-pattern="/^[0-9]?$/" required="" />
+                                                                                </div>
+
+                                                                                <label for="txtCodigoLinea" class=" text-right col-sm-3" > Fecha de Vencimiento</label>
+                                                                                <div class="col-sm-3">
+                                                                                    <label for="txtCodigoLinea" class=" text-right" > {{formData.creditoVencimiento}}</label>
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div class="form-group row">
+                                                                                <label for="txtCodigoLinea" class=" text-right col-sm-4" >Monto Bs</label>
+                                                                                <div class="col-sm-4">
+                                                                                    <input type="number" class="form-control" name="txtImpuestoQm" placeholder="0.00 " 
+                                                                                           ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="1.0" min="0" 
+                                                                                           ng-model="formData.combinadoCreditoMonto" 
+                                                                                           data-toggle="tooltip" data-placement="top"  />
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <!-- /Pago Combinado Credito -->
+
+                                                            <!-- Pago Combinado Contado -->
+                                                            <div class="tab-pane" ng-show="formData.combinadoContado"  role="tabpanel" aria-labelledby="contado-tab">
+                                                                <legend>Pago Combinado Contado</legend>
+                                                                <div class="container-fluid" align="center" >
+                                                                    <br />
+                                                                    <div class="row">
+                                                                        <div class="table-responsive">
+                                                                            <div class="col-10" >
+                                                                                <div class="form-inline">
+                                                                                    <div class="custom-control custom-control-inline custom-radio">
+                                                                                        <input type="radio" class="custom-control-input" id="rdEfectivo" name="rdPagoContado"
+                                                                                               ng-model="formData.pagoContado" value="E" />
+                                                                                        <label class="custom-control-label" for="rdEfectivo">Efectivo</label>
+                                                                                    </div>
+                                                                                    <div class="custom-control custom-control-inline custom-radio">
+                                                                                        <input type="radio" class="custom-control-input" id="rdCheque" name="rdPagoContado"
+                                                                                               ng-model="formData.pagoContado" value="C" />
+                                                                                        <label class="custom-control-label" for="rdCheque" >Cheque</label>
+                                                                                    </div>
+                                                                                    <div class="custom-control custom-control-inline custom-radio">
+                                                                                        <input type="radio" class="custom-control-input" id="rdDeposito" name="rdPagoContado"
+                                                                                               ng-model="formData.pagoContado" value="D"  />
+                                                                                        <label class="custom-control-label" for="rdDeposito" >Deposito</label>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <br />
+                                                                    <!-- Cheques -->
+                                                                    <div class="row" ng-if="formData.pagoContado == 'C'">
+                                                                        <br />
+                                                                        <div class="col-10">
+                                                                            <div class="form-group row">
+                                                                                <label for="txtNroCheque" class=" text-right col-sm-4" > N&uacute;mero de Cheque</label>
+                                                                                <div class="col-sm-6">
+                                                                                    <input type="text" class="form-control " id="txtNroCheque"  name="txtNroCheque"  
+                                                                                           required="required" valid-number="valid-number"  onkeypress="return isNumberKey(event)" maxlength="16" ng-model="formData.contadoNroTarjeta"/>
+                                                                                    <span class="alert-danger" ng-show="!myForm.txtNroCheque.$valid">Debe ingresar un N&uacute;mero de Cheque</span>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="form-group row">
+                                                                                <label for="txtContadoBanco" class=" text-right col-sm-4" > Banco</label>
+                                                                                <div class="col-sm-6">
+                                                                                    <input type="text" ng-model="formData.contadoBanco" placeholder="Seleccione un Banco"
+                                                                                           uib-typeahead="cuenta as cuenta.name for cuenta in comboBancos | filter:{name:$viewValue}"
+                                                                                           class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="0" 
+                                                                                           typeahead-template-url="customTemplate.html" name="txtContadoBanco"
+                                                                                           />
+                                                                                    <span class="alert-danger" ng-show="!myForm.txtContadoBanco.$valid">Debe ingresar un Banco</span>
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div class="form-group row">
+                                                                                <label for="txtCodigoLinea" class=" text-right col-sm-4" >Monto Bs</label>
+                                                                                <div class="col-sm-4">
+                                                                                    <input type="number" class="form-control" name="txtImpuestoQm" placeholder="0.00 " 
+                                                                                           ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="1.0" min="0" 
+                                                                                           ng-model="formData.combinadoCreditoMonto" 
+                                                                                           data-toggle="tooltip" data-placement="top"  />
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <!-- /Cheques -->
+                                                                    <!-- Deposito -->
+                                                                    <div class="row"  ng-if="formData.pagoContado == 'D'">
+                                                                        <br />
+                                                                        <div class="col-10">
+                                                                            <div class="form-group row">
+                                                                                <label for="txtContadoDeposito" class=" text-right col-sm-4" > N&uacute;mero de Dep&oacute;sito</label>
+                                                                                <div class="col-sm-6">
+                                                                                    <input type="text" class="form-control " id="txtContadoDeposito"  name="txtContadoDeposito"  
+                                                                                           required="required" valid-number="valid-number"  onkeypress="return isNumberKey(event)" maxlength="16" ng-model="formData.contadoNroTarjeta"/>
+                                                                                    <span class="alert-danger" ng-show="!myForm.txtContadoDeposito.$valid">Debe ingresar un N&uacute;mero de Dep&oacute;sito</span>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="form-group row">
+                                                                                <label for="txtContadoDeposito" class=" text-right col-sm-4" > Banco</label>
+                                                                                <div class="col-sm-6">
+                                                                                    <input type="text" ng-model="formData.contadoDepositoBanco" placeholder="Seleccione un Banco"
+                                                                                           uib-typeahead="cuenta as cuenta.name for cuenta in comboBancos | filter:{name:$viewValue}"
+                                                                                           class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="0" 
+                                                                                           typeahead-template-url="customTemplate.html" name="txtContadoDeposito"
+                                                                                           />
+                                                                                    <span class="alert-danger" ng-show="!myForm.txtContadoDeposito.$valid">Debe ingresar un Banco</span>
+                                                                                </div>
+                                                                            </div>  
+
+                                                                            <div class="form-group row">
+                                                                                <label for="txtCodigoLinea" class=" text-right col-sm-4" >Monto Bs</label>
+                                                                                <div class="col-sm-4">
+                                                                                    <input type="number" class="form-control" name="txtImpuestoQm" placeholder="0.00 " 
+                                                                                           ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="1.0" min="0" 
+                                                                                           ng-model="formData.combinadoCreditoMonto" 
+                                                                                           data-toggle="tooltip" data-placement="top"  />
+                                                                                </div>
+                                                                            </div>
+
+                                                                        </div>
+                                                                    </div>
+                                                                    <!-- /Cheques -->
+                                                                </div>
+                                                            </div>
+                                                            <!-- /Pago Combinado Contado -->
+
+                                                            <!-- Pago Combinado con Tarjeta -->
+                                                            <div class="tab-pane" aria-labelledby="credito-tab"  ng-show="formData.combinadoTarjeta" >
+                                                                <legend>Pago Combinado con Tarjeta</legend>
+                                                                <div class="container-fluid" align="center">
+                                                                    <br />
+                                                                    <div class="row">
+                                                                        <div class="table-responsive">
+                                                                            <div class="col-10">
+                                                                                <div class="form-group row">
+                                                                                    <label for="txtCodigoLinea" class="text-right col-sm-2" > Plazo en d&iacute;as</label>
+                                                                                    <div class="col-sm-3">
+                                                                                        <input type="number" class="form-control" name="txtPlazo" placeholder="0" 
+                                                                                               ng-model="formData.creditoDias" step="1" max="365" min="1"
+                                                                                               ng-pattern="/^[0-9]?$/" required="" />
+                                                                                    </div>
+
+                                                                                    <label for="txtCodigoLinea" class=" text-right col-sm-3" > Fecha de Vencimiento</label>
+                                                                                    <div class="col-sm-3">
+                                                                                        <label for="txtCodigoLinea" class=" text-right" > {{formData.creditoVencimiento}}</label>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="form-group row">
+                                                                                    <label for="txtCodigoLinea" class=" text-right col-sm-4" >Monto Bs</label>
+                                                                                    <div class="col-sm-4">
+                                                                                        <input type="number" class="form-control" name="txtImpuestoQm" placeholder="0.00 " 
+                                                                                               ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="1.0" min="0" 
+                                                                                               ng-model="formData.combinadoCreditoMonto" 
+                                                                                               data-toggle="tooltip" data-placement="top"  />
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>    
+                                                            </div>
+                                                            <!-- /Pago Combinado con Tarjeta -->
+                                                        </div>
+                                                    </div>
+                                                    <!-- /Pagos Combinados-->
+                                                </div>
+                                            </fieldset>
+                                            <!-- ./Datos Generales-->
+                                            <div class="form-group row ng-hide" ng-show="showForm">
+                                                <div class="col-1">&nbsp;</div>
+                                                <c:if test="#{boletos.formulario.crear== boletos.formulario.PERMITIR}">
+                                                    <div class="row" >
+                                                        <label for="txtNombre" class="col-form-label col-sm-3 text-right" ></label>
+                                                        <button  class="btn btn-primary" ng-click="save('A')"  value="Forma" ng-disabled="disableGuardarButton" ><span class="fa fa-save"></span> Guardar</button>
+                                                    </div>
+                                                </c:if>
+
+                                                <c:if test="#{boletos.formulario.crear== boletos.formulario.PERMITIR}">
+                                                    <div class="row" >
+                                                        <label for="txtNombre" class="col-form-label col-sm-3 text-right" ></label>
+                                                        <button  class="btn btn-warning"  value="Pendiente" ng-disabled="disablePendienteButton" ng-click="pendiente()" data-toggle="modal" data-target="#frmPendiente"><span class="fa fa-hourglass-half"></span> Pendiente</button>
+                                                    </div>
+                                                </c:if> 
+
+                                                <c:if test="#{boletos.formulario.eliminar== boletos.formulario.PERMITIR}">
+                                                    <div class="row" >
+                                                        <label for="txtNombre" class="col-form-label col-sm-3 text-right" ></label>
+                                                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#frmAnular" ng-click="modalAnular(formData)" value="Anular" ng-disabled="disableAnularButton"> <span class="fa fa-trash"></span> Anular</button>
+                                                    </div>
+                                                </c:if>
+
+                                                <c:if test="#{boletos.formulario.acceder== boletos.formulario.PERMITIR}">
+                                                    <div class="row" >
+                                                        <label for="txtNombre" class="col-form-label col-sm-3 text-right" ></label>
+                                                        <button type="button" class="btn btn-dark"  ng-click="imprimir(formData)" value="Imprimir" ng-disabled="disableImprimirButton"> <span class="fa fa-trash"></span> Imprimir</button>                                                            
+                                                    </div>
+                                                </c:if>
+                                            </div>
                                         </form>
                                         <!-- /.form -->
                                     </div>

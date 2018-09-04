@@ -149,26 +149,28 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr st-select-row="row" st-select-mode="multiple" ng-repeat="row in display_records | filter:busqueda">
+                                                        <tr st-select-row="row" st-select-mode="multiple" ng-repeat="row in display_records| filter:busqueda">
                                                             <td>{{row.nombre}} </td>
-                                                            <td>{{row.direccion}} </td>
+                                                            <td>{{row.direccion | limitTo: 32}}{{row.direccion.length>32 ? '...' : ''}} </td>
                                                             <td>{{row.telefono}} </td>
                                                             <td>{{row.celular}} </td>
                                                             <td>{{row.contacto}} </td>
                                                             <td>{{row.nit}} </td>
                                                             <td>{{row.email}} </td>
                                                             <td>
-                                                                <c:if test="#{bancos.formulario.actualizar== bancos.formulario.PERMITIR}">
-                                                                    <button type="button" title="Editar" class="btn btn-sm btn-info" ng-click="edit(row)"><i class="fa fa-pencil"></i></button>
-                                                                </c:if>
+                                                                <div class="btn-group" >
+                                                                    <c:if test="#{bancos.formulario.actualizar== bancos.formulario.PERMITIR}">
+                                                                        <button type="button" title="Editar" class="btn btn-sm btn-info" ng-click="edit(row)"><i class="fa fa-pencil"></i></button>
+                                                                    </c:if>
 
-                                                                <c:if test="#{bancos.formulario.actualizar== bancos.formulario.PERMITIR}">
-                                                                    <button type="button" title="Asociar Cuenta" class="btn btn-sm btn-warning" ng-click="link(row)"  data-toggle="modal" data-target="#frmLink"><i class="fa fa-list-alt"></i></button>
-                                                                </c:if>
-                                                                <!--<button type="button" title="Ver" class="btn btn-default" ng-click="ver(row.idTarjetaCredito)" data-toggle="modal" data-target="#verForm"><i class="fa fa-search"></i></button> -->
-                                                                <c:if test="#{bancos.formulario.eliminar== bancos.formulario.PERMITIR}">
-                                                                    <button type="button" title="Eliminar" class="btn btn-sm btn-danger" data-target="#frmConfirmation" ng-click="deleteBanco(row, 'delete')" data-toggle="modal"><i class="fa fa-remove"></i></button>
-                                                                </c:if>
+                                                                    <c:if test="#{bancos.formulario.actualizar== bancos.formulario.PERMITIR}">
+                                                                        <button type="button" title="Asociar Cuenta" class="btn btn-sm btn-warning" ng-click="link(row)"  data-toggle="modal" data-target="#frmLink"><i class="fa fa-list-alt"></i></button>
+                                                                    </c:if>
+                                                                    <!--<button type="button" title="Ver" class="btn btn-default" ng-click="ver(row.idTarjetaCredito)" data-toggle="modal" data-target="#verForm"><i class="fa fa-search"></i></button> -->
+                                                                    <c:if test="#{bancos.formulario.eliminar== bancos.formulario.PERMITIR}">
+                                                                        <button type="button" title="Eliminar" class="btn btn-sm btn-danger" data-target="#frmConfirmation" ng-click="deleteBanco(row, 'delete')" data-toggle="modal"><i class="fa fa-remove"></i></button>
+                                                                    </c:if>
+                                                                </div>
                                                             </td>
                                                         </tr>
                                                     </tbody>
@@ -367,7 +369,7 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            <tr st-select-row="row" st-select-mode="multiple" ng-repeat="row in display_records_cuenta | filter:busqueda">
+                                                            <tr st-select-row="row" st-select-mode="multiple" ng-repeat="row in display_records_cuenta| filter:busqueda">
                                                                 <td>{{row[2]}} </td>
                                                                 <td>{{row[3]}} </td>
                                                                 <td>{{row[5]}} </td>

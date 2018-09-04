@@ -22,6 +22,10 @@ angular.module('jsBoletos.controllers', []).controller('frmBoletos',
                 var url = document.getElementsByName("hdUrl")[0];
                 var urlEmpresa = document.getElementsByName("hdUrlEmpresa")[0];
                 var urlAerolinea = document.getElementsByName("hdUrlAerolinea")[0];
+                var urlAeropuertos = document.getElementsByName("hdUrlAeropuertos")[0];
+                var urlClientes = document.getElementsByName("hdUrlClientes")[0];
+                var urlFactores = document.getElementsByName("hdUrlFactores")[0];
+
                 var formName = document.getElementsByName("hdFormName")[0];
                 var myForm = document.getElementById("myForm");
 
@@ -77,6 +81,76 @@ angular.module('jsBoletos.controllers', []).controller('frmBoletos',
                     });
                 }
 
+                $scope.getLineaAerea = function () {
+                    return $http({
+                        url: `${urlAerolinea.value}combo`,
+                        method: 'POST',
+                        data: {token: token.value},
+                        headers: {'Content-type': 'application/json'}
+                    }).then(function (response) {
+                        if (response.data.code === 201) {
+                            $scope.comboAerolineas = response.data.content;
+                        }
+                    }, function (error) {
+                        $scope.showRestfulError = true;
+                        $scope.showRestfulMessage = error;
+                    });
+                }
+
+                $scope.getTipoEmision = function () {
+                    return $http.get(`${url.value}tipo-emision`).then(function (response) {
+                        if (response.data.code === 201) {
+                            $scope.comboEmision = response.data.content;
+                        }
+                    }, function (error) {
+                        $scope.showRestfulError = true;
+                        $scope.showRestfulMessage = error;
+                    });
+                }
+
+                $scope.getAeropuertos = function () {
+                    return $http.get(`${urlAeropuertos.value}combo`).then(function (response) {
+                        if (response.data.code === 201) {
+                            $scope.comboAeropuerto = response.data.content;
+                        }
+                    }, function (error) {
+                        $scope.showRestfulError = true;
+                        $scope.showRestfulMessage = error;
+                    });
+                }
+
+                $scope.getClientes = function () {
+                    return $http({
+                        url: `${urlClientes.value}all-cliente-combo`,
+                        method: 'POST',
+                        data: {token: token.value},
+                        headers: {'Content-type': 'application/json'}
+                    }).then(function (response) {
+                        if (response.data.code === 201) {
+                            $scope.comboCliente = response.data.content;
+                        }
+                    }, function (error) {
+                        $scope.showRestfulError = true;
+                        $scope.showRestfulMessage = error;
+                    });
+                }
+
+                $scope.getFactores = function (urls, method) {
+                    $scope.loading = true;
+                    return $http({
+                        method: 'POST',
+                        url: `${urlFactores.value}dollar/today`,
+                        data: {token: token.value, content: ''},
+                        headers: {'Content-Type': 'application/json'}
+                    }).then(function (response) {
+                        if (response.data.code === 201) {
+                            $scope.dollarToday = response.data.content;
+                        }
+                    }, function (error) {
+                        $scope.showRestfulMessage = error;
+                        $scope.showRestfulError = true;
+                    });
+                }
                 $scope.save = function () {
                     $scope.clickNuevo = false;
                     if (!$scope.myForm.$valid) {
@@ -118,9 +192,6 @@ angular.module('jsBoletos.controllers', []).controller('frmBoletos',
                         $scope.showForm = false;
                     });
                 };
-
-
-
 
                 $scope.formHasError = function () {
                     if ($scope.formData.idEmpresa == undefined) {
@@ -177,7 +248,6 @@ angular.module('jsBoletos.controllers', []).controller('frmBoletos',
                     }
                 };
 
-
                 $scope.hideMessagesBox = function () {
                     $scope.showRestfulSuccess = false;
                     $scope.showRestfulError = false;
@@ -226,7 +296,6 @@ angular.module('jsBoletos.controllers', []).controller('frmBoletos',
                     $scope.modalConfirmation = {id: idx, nombre: nombrex, method: methodx};
                 }
 
-
                 $scope.findCta = function (cta, input) {
                     var i = 0;
                     for (i; i < input.length; i++) {
@@ -236,12 +305,29 @@ angular.module('jsBoletos.controllers', []).controller('frmBoletos',
                     }
                 }
 
+
+                $scope.getLineaAerea();
+                $scope.getTipoEmision();
+                $scope.getAeropuertos();
+                $scope.getClientes();
+                //$scope.getFactorCambiario();
+
                 // los watch sirven para verificar si el valor cambio
-                $scope.$watch('formData.ctaDevolucionMonExt.id', function (now, old) {
-                    if (now == undefined) {
+                $scope.$watch('formData.idAerolinea.id', function (now, old) {
+                    if (now === undefined) {
                         $scope.showErrorCtaDevolucionMonExt = true;
                     } else {
-                        $scope.showErrorCtaDevolucionMonExt = false;
+                        $http.get(`${urlAerolinea}get/${$scope.formData.idAerolinea.id}`).then(
+                                function (response) {
+                                    if (response.data.code === 201) {
+                                        $scope.aerolinea = response.data.content;
+                                    }
+                                },
+                                function (error) {
+                                    $scope.showRestfulError = true;
+                                    $scope.showRestfulMessage = error;
+                                }
+                        );
                     }
                 });
             }

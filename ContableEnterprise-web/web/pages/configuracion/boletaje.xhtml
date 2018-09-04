@@ -121,186 +121,291 @@
                                         <!-- /Mensaje Error -->
                                         <!-- .form-group -->
                                         <!-- Tabla Contenido -->
-
-
                                         <form name="myForm">
                                             <!-- .form -->
-
                                             <!-- .fieldset -->
                                             <script type="text/ng-template" id="customTemplate.html">
                                                 <div class="tt-suggestion tt-selectable">
                                                 <span class=""  ng-bind-html="match.label | uibTypeaheadHighlight:query"></span>
                                                 </div>
                                             </script>
-
                                             <fieldset>
                                                 <legend>Configuraci&oacute;n Contable de Boletos</legend>
                                                 <!-- Contenido Formulario-->
                                                 <div id="formData" class="container animated fadeIn ng-hide"   ng-show="showForm" >
                                                     <input type="text" ng-show="false"  name="txtIdAeropuerto"  ng-model="formData.idAeropuerto" />
                                                     <input type="hidden" id="hdUrl" name="hdUrl" value="#{confBoletaje.formulario.restful}"/>
-                                        <input type="hidden" id="hdToken" name="hdToken" value="#{sessionView.token}"/>
-                                        <input type="hidden" id="hdToken" name="hdFormName" value="#{confBoletaje.formulario.nombre}"/>
-                                        <input type="hidden" id="hdUrlPlanCuentas" name="hdUrlPlanCuentas" value="#{planCuentas.formulario.restful}"/>
-                                        <input type="hidden" id="hdUrlEmpresa" name="hdUrlEmpresa" value="#{empresa.formulario.restful}"/>
-
-                                        <!--<input type="hidden" id="txtFechaAlta" name="txtFechaAlta" ng-model="formData.fechaAlta"/>-->
-                                        <!--<input type="hidden" id="txtFechaBaja" name="txtFechaBaja" ng-model="formData.fechaBaja"/>-->
-                                        <br />
-                                        <div class="form-group row">
-                                            <label for="txtCodigo" class="col-form-label col-sm-3 text-right">Entidad</label>
-                                            <div class="col-sm-7">
-                                                <select class="form-control " 
-                                                        ng-change="getData(formData.idEmpresa)" 
-                                                        ng-options="option.id as option.name for option in comboEmpresa" ng-model="formData.idEmpresa">
-                                                    <option style="display:none" value="">seleccione una entidad</option>
-                                                </select>
-                                            </div>
-                                        </div>
-
-                                        <div ng-show="formData.idEmpresa !== undefined">
-                                            <div class="form-group row">
-                                                <label for="txtNombre" class=" col-form-label col-sm-3 text-right">Emision en </label>
-                                                <div class="col-sm-2">
-                                                    <div class="custom-control custom-control-inline custom-checkbox">
-                                                        <input type="checkbox" class="custom-control-input" id="chkEmisionBolivianos"  
-                                                               ng-checked="formData.emisionBolivianos === 'S'" ng-model="formData.emisionBolivianos" />
-                                                        <label class="custom-control-label" for="chkEmisionBolivianos">Bolivianos</label>
-                                                    </div>    
-                                                </div>
-
-                                                <div class="col-sm-3">
-                                                    <div class="custom-control custom-control-inline custom-checkbox">
-                                                        <input type="checkbox" class="custom-control-input" id="chkEmisionDolares"  
-                                                               ng-checked="formData.emisionDolares === 'S'" ng-model="formData.emisionDolares"  />
-                                                        <label class="custom-control-label" for="chkEmisionDolares">Dolares</label>
-                                                    </div>    
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group row" ng-show="formData.emisionBolivianos===true || formData.emisionBolivianos==='S'">
-                                                <label for="txtNombre" class=" col-form-label col-sm-3 text-right">Cuenta Total Boleto Bolivianos </label>
-                                                <div class="col-sm-7">
-                                                    <input type="text" ng-model="formData.idTotalBoletoBs" placeholder="Seleccione una cuenta"
-                                                           uib-typeahead="cuenta as cuenta.name for cuenta in comboCuentas | filter:{name:$viewValue}"
-                                                           class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="0" 
-                                                           typeahead-template-url="customTemplate.html" 
-                                                           />
-                                                     <span class="alert-danger"  ng-show="formData.emisionBolivianos &amp;&amp; formData.idTotalBoletoBs.id ===undefined"  >
-                                                        Ingrese una cuenta para el Total en Bolivianos
-                                                    </span> 
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group row" ng-show="formData.emisionDolares===true || formData.emisionDolares==='S'">
-                                                <label for="txtNombre" class=" col-form-label col-sm-3 text-right">Cuenta Total Boleto Dolares</label>
-                                                <div class="col-sm-7">
-                                                    <input type="text" ng-model="formData.idTotalBoletoUs" placeholder="Seleccione una cuenta"
-                                                           uib-typeahead="cuenta as cuenta.name for cuenta in comboCuentas | filter:{name:$viewValue}"
-                                                           class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="0" 
-                                                           typeahead-template-url="customTemplate.html" 
-                                                           />
-
-                                                   <span class="alert-danger"  ng-show="formData.emisionDolares &amp;&amp; formData.idTotalBoletoUs.id ===undefined"  >
-                                                        Ingrese una cuenta para el Total en Bolivianos
-                                                    </span> 
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group row">
-                                                <label for="txtNombre" class=" col-form-label col-sm-3 text-right">Cuenta FEE</label>
-                                                <div class="col-sm-7">
-                                                    <input type="text" ng-model="formData.idCuentaFee" placeholder="Seleccione una cuenta"
-                                                           uib-typeahead="cuenta as cuenta.name for cuenta in comboCuentas | filter:{name:$viewValue}"
-                                                           class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="0" 
-                                                           typeahead-template-url="customTemplate.html" 
-                                                           />
-                                                    <span class="alert-danger"  ng-show="formData.idCuentaFee.id === undefined"  >
-                                                        Ingrese una cuenta FEE
-                                                    </span> 
-                                                </div>
-                                            </div>
-
-                                            <div class="form-group row">
-                                                <label for="txtNombre" class=" col-form-label col-sm-3 text-right">Cuenta Descuentos</label>
-                                                <div class="col-sm-7">
-                                                    <input type="text" ng-model="formData.idDescuentos" placeholder="Seleccione una cuenta"
-                                                           uib-typeahead="cuenta as cuenta.name for cuenta in comboCuentas | filter:{name:$viewValue}"
-                                                           class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="0" 
-                                                           typeahead-template-url="customTemplate.html" 
-                                                           />
-                                                    <span class="alert-danger"  ng-show="formData.idDescuentos.id === undefined"  >
-                                                        Ingrese una cuenta FEE
-                                                    </span> 
-                                                </div>
-                                            </div>
-
-
-                                            <div class="form-group">
-                                                <c:if test="#{confBoletaje.formulario.crear== confBoletaje.formulario.PERMITIR}">
-                                                    <div class="row" >
-                                                        <label for="txtNombre" class="col-form-label col-sm-3 text-right" ></label>
-                                                        <button  class="btn btn-primary" ng-click="save()"  value="Guardar"><span class="fa fa-save"></span> Guardar</button>
+                                                    <input type="hidden" id="hdToken" name="hdToken" value="#{sessionView.token}"/>
+                                                    <input type="hidden" id="hdToken" name="hdFormName" value="#{confBoletaje.formulario.nombre}"/>
+                                                    <input type="hidden" id="hdUrlPlanCuentas" name="hdUrlPlanCuentas" value="#{planCuentas.formulario.restful}"/>
+                                                    <input type="hidden" id="hdUrlEmpresa" name="hdUrlEmpresa" value="#{empresa.formulario.restful}"/>
+                                                    <!--<input type="hidden" id="txtFechaAlta" name="txtFechaAlta" ng-model="formData.fechaAlta"/>-->
+                                                    <!--<input type="hidden" id="txtFechaBaja" name="txtFechaBaja" ng-model="formData.fechaBaja"/>-->
+                                                    <br />
+                                                    <div class="form-group row">
+                                                        <label for="txtCodigo" class="col-form-label col-sm-3 text-right">Entidad</label>
+                                                        <div class="col-sm-7">
+                                                            <select class="form-control " 
+                                                                    ng-change="getData(formData.idEmpresa)" 
+                                                                    ng-options="option.id as option.name for option in comboEmpresa" ng-model="formData.idEmpresa">
+                                                                <option style="display:none" value="">seleccione una entidad</option>
+                                                            </select>
+                                                        </div>
                                                     </div>
-                                                </c:if>                                    
 
-                                                <c:if test="#{promotores.formulario.actualizar== promotores.formulario.PERMITIR}">
-                                                    <div class="row" ng-show="showBtnEditar">
-                                                        <label for="txtNombre" class="col-form-label col-sm-3 text-right" ></label>
-                                                        <button type="button" class="btn btn-primary" ng-click="update()" value="Actualizar"> <span class="fa fa-edit"></span> Actualizar</button>
+                                                    <div ng-show="formData.idEmpresa !== undefined">
+                                                        <div class="form-group row">
+                                                            <label for="txtNombre" class=" col-form-label col-sm-3 text-right">Emision en </label>
+                                                            <div class="col-sm-2">
+                                                                <div class="custom-control custom-control-inline custom-checkbox">
+                                                                    <input type="checkbox" class="custom-control-input" id="chkEmisionBolivianos"  
+                                                                           ng-checked="formData.emisionBolivianos === 'S'" ng-model="formData.emisionBolivianos" />
+                                                                    <label class="custom-control-label" for="chkEmisionBolivianos">Bolivianos</label>
+                                                                </div>    
+                                                            </div>
+
+                                                            <div class="col-sm-3">
+                                                                <div class="custom-control custom-control-inline custom-checkbox">
+                                                                    <input type="checkbox" class="custom-control-input" id="chkEmisionDolares"  
+                                                                           ng-checked="formData.emisionDolares === 'S'" ng-model="formData.emisionDolares"  />
+                                                                    <label class="custom-control-label" for="chkEmisionDolares">Dolares</label>
+                                                                </div>    
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group row" ng-show="formData.emisionBolivianos === true || formData.emisionBolivianos === 'S'">
+                                                            <label for="txtNombre" class=" col-form-label col-sm-3 text-right">Cuenta Total Boleto Bolivianos </label>
+                                                            <div class="col-sm-7">
+                                                                <input type="text" ng-model="formData.idTotalBoletoBs" placeholder="Seleccione una cuenta"
+                                                                       uib-typeahead="cuenta as cuenta.name for cuenta in comboCuentas | filter:{name:$viewValue}"
+                                                                       class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="0" 
+                                                                       typeahead-template-url="customTemplate.html" 
+                                                                       />
+                                                                <span class="alert-danger"  ng-show="formData.emisionBolivianos &amp;&amp; formData.idTotalBoletoBs.id === undefined"  >
+                                                                    Ingrese una cuenta para el Total en Bolivianos
+                                                                </span> 
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group row" ng-show="formData.emisionDolares === true || formData.emisionDolares === 'S'">
+                                                            <label for="txtNombre" class=" col-form-label col-sm-3 text-right">Cuenta Total Boleto Dolares</label>
+                                                            <div class="col-sm-7">
+                                                                <input type="text" ng-model="formData.idTotalBoletoUs" placeholder="Seleccione una cuenta"
+                                                                       uib-typeahead="cuenta as cuenta.name for cuenta in comboCuentas | filter:{name:$viewValue}"
+                                                                       class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="0" 
+                                                                       typeahead-template-url="customTemplate.html" 
+                                                                       />
+
+                                                                <span class="alert-danger"  ng-show="formData.emisionDolares &amp;&amp; formData.idTotalBoletoUs.id === undefined"  >
+                                                                    Ingrese una cuenta para el Total en Bolivianos
+                                                                </span> 
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group row">
+                                                            <label for="txtNombre" class=" col-form-label col-sm-3 text-right">Cuenta FEE</label>
+                                                            <div class="col-sm-7">
+                                                                <input type="text" ng-model="formData.idCuentaFee" placeholder="Seleccione una cuenta"
+                                                                       uib-typeahead="cuenta as cuenta.name for cuenta in comboCuentas | filter:{name:$viewValue}"
+                                                                       class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="0" 
+                                                                       typeahead-template-url="customTemplate.html" 
+                                                                       />
+                                                                <span class="alert-danger"  ng-show="formData.idCuentaFee.id === undefined"  >
+                                                                    Ingrese una cuenta FEE
+                                                                </span> 
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group row">
+                                                            <label for="txtNombre" class=" col-form-label col-sm-3 text-right">Cuenta Descuentos</label>
+                                                            <div class="col-sm-7">
+                                                                <input type="text" ng-model="formData.idDescuentos" placeholder="Seleccione una cuenta"
+                                                                       uib-typeahead="cuenta as cuenta.name for cuenta in comboCuentas | filter:{name:$viewValue}"
+                                                                       class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="0" 
+                                                                       typeahead-template-url="customTemplate.html" 
+                                                                       />
+                                                                <span class="alert-danger"  ng-show="formData.idDescuentos.id === undefined"  >
+                                                                    Ingrese una cuenta FEE
+                                                                </span> 
+                                                            </div>
+                                                        </div>
+
+                                                        <fieldset>
+                                                            <legend>Configuraci&oacute;n Contable: Formas de Pago</legend>
+                                                        </fieldset>
+                                                        
+                                                        <div class="form-group row">
+                                                            <label for="txtNombre" class=" col-form-label col-sm-4 text-right"></label>
+                                                            <div class="col-sm-4">
+                                                                <label>DEBE</label>
+                                                            </div>
+                                                            <div class="col-sm-4">
+                                                                <label>HABER</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <label for="txtNombre" class=" col-form-label col-sm-4 text-right">Efectivo Cheque, Tarjeta de Cr&eacute;dito para L&iacute;nea 
+                                                                A&eacute;rea sin BSP <strong>Bs.</strong></label>
+                                                            <div class="col-sm-4">
+                                                                <input type="text" ng-model="formData.cuentaEfectivoNoBspDebeBs" placeholder="Seleccione una cuenta"
+                                                                       uib-typeahead="cuenta as cuenta.name for cuenta in comboCuentas | filter:{name:$viewValue}"
+                                                                       class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="0" 
+                                                                       typeahead-template-url="customTemplate.html" 
+                                                                       />
+                                                                <span class="alert-danger"  ng-show="formData.cuentaEfectivoNoBspDebeBs.id === undefined"  >
+                                                                    Ingrese una cuenta de Caja
+                                                                </span> 
+                                                            </div>
+                                                            <div class="col-sm-4">
+                                                                <input type="text" ng-model="formData.cuentaEfectivoNoBspHaberBs" placeholder="Seleccione una cuenta"
+                                                                       uib-typeahead="cuenta as cuenta.name for cuenta in comboCuentas | filter:{name:$viewValue}"
+                                                                       class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="0" 
+                                                                       typeahead-template-url="customTemplate.html" 
+                                                                       />
+                                                                <span class="alert-danger"  ng-show="formData.cuentaEfectivoNoBspHaberBs.id === undefined"  >
+                                                                    Ingrese una cuenta de 
+                                                                </span> 
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <label for="txtNombre" class=" col-form-label col-sm-4 text-right">Efectivo Cheque, Tarjeta de Cr&eacute;dito para L&iacute;nea 
+                                                                A&eacute;rea sin BSP <strong>USD.</strong></label>
+                                                            <div class="col-sm-4">
+                                                                <input type="text" ng-model="formData.cuentaEfectivoNoBspDebeUsd" placeholder="Seleccione una cuenta"
+                                                                       uib-typeahead="cuenta as cuenta.name for cuenta in comboCuentas | filter:{name:$viewValue}"
+                                                                       class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="0" 
+                                                                       typeahead-template-url="customTemplate.html" 
+                                                                       />
+                                                                <span class="alert-danger"  ng-show="formData.cuentaEfectivoNoBspDebeUsd.id === undefined"  >
+                                                                    Ingrese una cuenta de Caja
+                                                                </span> 
+                                                            </div>
+                                                            <div class="col-sm-4">
+                                                                <input type="text" ng-model="formData.cuentaEfectivoNoBspHaberUsd" placeholder="Seleccione una cuenta"
+                                                                       uib-typeahead="cuenta as cuenta.name for cuenta in comboCuentas | filter:{name:$viewValue}"
+                                                                       class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="0" 
+                                                                       typeahead-template-url="customTemplate.html" 
+                                                                       />
+                                                                <span class="alert-danger"  ng-show="formData.cuentaEfectivoNoBspHaberUsd.id === undefined"  >
+                                                                    Ingrese una cuenta de Caja
+                                                                </span> 
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <label for="txtNombre" class=" col-form-label col-sm-4 text-right">Tarjeta de Cr&eacute;dito para L&iacute;nea 
+                                                                A&eacute;rea BSP <strong>Bs.</strong></label>
+                                                            <div class="col-sm-4">
+                                                                <input type="text" ng-model="formData.tarjetaCreditoBspDebeBs" placeholder="Seleccione una cuenta"
+                                                                       uib-typeahead="cuenta as cuenta.name for cuenta in comboCuentas | filter:{name:$viewValue}"
+                                                                       class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="0" 
+                                                                       typeahead-template-url="customTemplate.html" 
+                                                                       />
+                                                                <span class="alert-danger"  ng-show="formData.tarjetaCreditoBspDebeBs.id === undefined"  >
+                                                                    Ingrese una cuenta
+                                                                </span> 
+                                                            </div>
+                                                            <div class="col-sm-4">
+                                                                <input type="text" ng-model="formData.tarjetaCreditoBspHaberBs" placeholder="Seleccione una cuenta"
+                                                                       uib-typeahead="cuenta as cuenta.name for cuenta in comboCuentas | filter:{name:$viewValue}"
+                                                                       class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="0" 
+                                                                       typeahead-template-url="customTemplate.html" 
+                                                                       />
+                                                                <span class="alert-danger"  ng-show="formData.tarjetaCreditoBspHaberBs.id === undefined"  >
+                                                                    Ingrese una cuenta FEE
+                                                                </span> 
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <label for="txtNombre" class=" col-form-label col-sm-4 text-right">Tarjeta de Cr&eacute;dito para L&iacute;nea 
+                                                                A&eacute;rea BSP <strong>USD.</strong></label>
+                                                            <div class="col-sm-4">
+                                                                <input type="text" ng-model="formData.tarjetaCreditoBspDebeUsd" placeholder="Seleccione una cuenta"
+                                                                       uib-typeahead="cuenta as cuenta.name for cuenta in comboCuentas | filter:{name:$viewValue}"
+                                                                       class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="0" 
+                                                                       typeahead-template-url="customTemplate.html" 
+                                                                       />
+                                                                <span class="alert-danger"  ng-show="formData.tarjetaCreditoBspDebeUsd.id === undefined"  >
+                                                                    Ingrese una cuenta
+                                                                </span> 
+                                                            </div>
+                                                            <div class="col-sm-4">
+                                                                <input type="text" ng-model="formData.tarjetaCreditoBspHaberUsd" placeholder="Seleccione una cuenta"
+                                                                       uib-typeahead="cuenta as cuenta.name for cuenta in comboCuentas | filter:{name:$viewValue}"
+                                                                       class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="0" 
+                                                                       typeahead-template-url="customTemplate.html" 
+                                                                       />
+                                                                <span class="alert-danger"  ng-show="formData.tarjetaCreditoBspHaberUsd.id === undefined"  >
+                                                                    Ingrese una cuenta
+                                                                </span> 
+                                                            </div>
+                                                        </div>
+                                                        
+
+                                                        <div class="form-group">
+                                                            <c:if test="#{confBoletaje.formulario.crear== confBoletaje.formulario.PERMITIR}">
+                                                                <div class="row" >
+                                                                    <label for="txtNombre" class="col-form-label col-sm-3 text-right" ></label>
+                                                                    <button  class="btn btn-primary" ng-click="save()"  value="Guardar"><span class="fa fa-save"></span> Guardar</button>
+                                                                </div>
+                                                            </c:if>                                    
+
+                                                            <c:if test="#{promotores.formulario.actualizar== promotores.formulario.PERMITIR}">
+                                                                <div class="row" ng-show="showBtnEditar">
+                                                                    <label for="txtNombre" class="col-form-label col-sm-3 text-right" ></label>
+                                                                    <button type="button" class="btn btn-primary" ng-click="update()" value="Actualizar"> <span class="fa fa-edit"></span> Actualizar</button>
+                                                                </div>
+                                                            </c:if>
+                                                        </div>
                                                     </div>
-                                                </c:if>
-                                            </div>
-                                        </div>
 
+                                                </div>
+                                                <!-- /.form-group -->
+                                            </fieldset>
+                                            <!-- /.fieldset -->
+                                        </form>
+                                        <!-- /.form -->
                                     </div>
-                                    <!-- /.form-group -->
-                                    </fieldset>
-                                    <!-- /.fieldset -->
-                                    </form>
-                                    <!-- /.form -->
+                                    <!-- /.card-body -->
+                                </section>
+                                <!-- /.card -->
                             </div>
-                            <!-- /.card-body -->
-                            </section>
-                            <!-- /.card -->
-                        </div>
-                        <!-- /.page-section -->
+                            <!-- /.page-section -->
 
-                        <!-- Modal Eliminar -->
-                        <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="frmConfirmation">
-                            <div class="modal-dialog modal-md">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h4 class="modal-title" id="myModalLabel">Confirmar</h4>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                    </div>
-                                    <div class="modal-body"> 
-                                        <dl class="dl-horizontal">
-                                            Desea elimnar el registro <strong> {{nombreEliminar}}</strong>  ?
-                                        </dl>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-default" id="modal-btn-si" ng-click="eliminar()"  data-dismiss="modal">Si</button>
-                                        <button type="button" class="btn btn-primary" id="modal-btn-no"  data-dismiss="modal">No</button>
+                            <!-- Modal Eliminar -->
+                            <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="frmConfirmation">
+                                <div class="modal-dialog modal-md">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title" id="myModalLabel">Confirmar</h4>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        </div>
+                                        <div class="modal-body"> 
+                                            <dl class="dl-horizontal">
+                                                Desea elimnar el registro <strong> {{nombreEliminar}}</strong>  ?
+                                            </dl>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" id="modal-btn-si" ng-click="eliminar()"  data-dismiss="modal">Si</button>
+                                            <button type="button" class="btn btn-primary" id="modal-btn-no"  data-dismiss="modal">No</button>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                            <!-- /Modal Eliminar-->
                         </div>
-                        <!-- /Modal Eliminar-->
+                        <!-- /.page-inner -->
                     </div>
-                    <!-- /.page-inner -->
+                    <!-- /.page -->
                 </div>
-                <!-- /.page -->
-        </div>
-        <!-- .app-footer -->
-        <ui:include src="../index/footer.xhtml" />
-        <!-- /.app-footer -->
-        <!-- /.wrapper -->
-        <!-- Logout Form -->
-        <ui:include src="../index/logout.xhtml" />
-        <!-- /Logout Form -->
-        </main>
-        <!-- /.app-main -->
+                <!-- .app-footer -->
+                <ui:include src="../index/footer.xhtml" />
+                <!-- /.app-footer -->
+                <!-- /.wrapper -->
+                <!-- Logout Form -->
+                <ui:include src="../index/logout.xhtml" />
+                <!-- /Logout Form -->
+            </main>
+            <!-- /.app-main -->
         </div>
         <!-- /.app -->
         <!-- BEGIN BASE JS -->
