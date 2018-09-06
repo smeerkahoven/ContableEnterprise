@@ -36,23 +36,23 @@ public class PlanCuentasEJB extends FacadeEJB implements PlanCuentasRemote {
 
     @Override
     public int insert(Entidad e) throws CRUDException {
-        PlanCuentas p = null;
+        /*PlanCuentas p = null;
         try {
             p = (PlanCuentas) get((PlanCuentas) e);
         } catch (Exception ex) {
 
-        }
+        }*/
 
-        if (p == null) {
+        //if (p == null) {
             em.persist(e);
             em.flush();
             LoggerContable.log(Thread.currentThread().getStackTrace()[1].getMethodName() + ":" + e.toString(), this, Level.FINE);
 
             return 1;
 
-        } else {
+        /*} else {
             throw new CRUDException("La numero de cuenta ya existe");
-        }
+        }*/
 
     }
 

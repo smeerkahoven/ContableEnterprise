@@ -12,8 +12,6 @@ import com.seguridad.control.entities.Entidad;
 import com.seguridad.control.exception.CRUDException;
 import java.util.List;
 import javax.ejb.Stateless;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 /**
  *

@@ -75,12 +75,12 @@ public class AerolineaJSON implements Serializable {
         a.setComisionPromIntTipo(json.getComisionPromIntTipo());
         a.setComisionPromNac(json.getComisionPromNac());
         a.setComisionPromNacTipo(json.getComisionPromNacTipo());
-        a.setCtaComisionMonExt(json.getCtaComisionMonExt());
+        /*a.setCtaComisionMonExt(json.getCtaComisionMonExt());
         a.setCtaComisionMonNac(json.getCtaComisionMonNac());
         a.setCtaDevolucionMonExt(json.getCtaDevolucionMonExt());
         a.setCtaDevolucionMonNac(json.getCtaDevolucionMonNac());
         a.setCtaVentasMonExt(json.getCtaVentasMonExt());
-        a.setCtaVentasMonNac(json.getCtaVentasMonNac());
+        a.setCtaVentasMonNac(json.getCtaVentasMonNac());*/
         a.setDireccion(json.getDireccion());
         a.setEmail(json.getEmail());
         a.setEmitirFacturaA(json.getEmitirFacturaA());

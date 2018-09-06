@@ -106,9 +106,8 @@ public class Aerolinea extends Entidad {
     @Column(name = "iva_it_comision")
     private Boolean ivaItComision;
 
-    @Column(name = "cta_ventas_mon_nac")
+    /*@Column(name = "cta_ventas_mon_nac")
     private BigInteger ctaVentasMonNac;
-
     @Column(name = "cta_ventas_mon_ext")
     private BigInteger ctaVentasMonExt;
     @Column(name = "cta_comision_mon_nac")
@@ -119,6 +118,7 @@ public class Aerolinea extends Entidad {
     private BigInteger ctaDevolucionMonNac;
     @Column(name = "cta_devolucion_mon_ext")
     private BigInteger ctaDevolucionMonExt;
+    */
     @Column(name = "boletos_mon_nac")
     private Boolean boletosMonNac;
     @Column(name = "boletos_mon_ext")
@@ -320,7 +320,7 @@ public class Aerolinea extends Entidad {
         this.ivaItComision = ivaItComision;
     }
 
-    public BigInteger getCtaVentasMonNac() {
+    /*public BigInteger getCtaVentasMonNac() {
         return ctaVentasMonNac;
     }
 
@@ -366,7 +366,7 @@ public class Aerolinea extends Entidad {
 
     public void setCtaDevolucionMonExt(BigInteger ctaDevolucionMonExt) {
         this.ctaDevolucionMonExt = ctaDevolucionMonExt;
-    }
+    }*/
 
     public Boolean getBoletosMonNac() {
         return boletosMonNac;
