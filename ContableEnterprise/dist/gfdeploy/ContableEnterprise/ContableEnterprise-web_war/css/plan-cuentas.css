@@ -1,0 +1,91 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 21-jun-2018, 14:18:31
+    Author     : xeio
+*/
+
+@charset "UTF-8";
+body {
+  width: 100%;
+  background: #eee;
+  text-align: center;
+}
+
+.selected {
+  background: #eee
+}
+
+table {
+  width: 100%;
+
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.table-nested table{
+  background: #fff;
+  /*border: 1px solid #444;*/
+  text-align: left;
+}
+.table-nested th, .table-nested td {
+  padding: 0;
+}
+.table-nested th + th, .table-nested th + td, .table-nested td + th, .table-nested td + td {
+  padding-left: 5px;
+}
+.table-nested td {
+  /*border-top: 1px solid;*/
+}
+.table-nested td[colspan] {
+  border: none;
+}
+.table-nested .cell-input {
+  width: 20px;
+    content: "+";
+  /*border-right: 1px solid;*/
+}
+
+.table-nested .cell-c1 {
+  width: 100px;
+}
+
+.table-nested .cell-c2 {
+  width: 100px;
+}
+
+.table-nested .cell-c3 {
+  width: 150px;
+ 
+}
+
+.table-nested .indent {
+  display: inline-block;
+}
+.table-nested .parent > .cell-name {
+  cursor: pointer;
+}
+.table-nested .parent > .cell-name > .indent {
+  margin-right: 15px;
+}
+.table-nested .parent > .cell-name > .indent:before {
+  font-family: FontAwesome;
+  display: inline-block;
+  -moz-transition: -moz-transform 0.3s;
+  -o-transition: -o-transform 0.3s;
+  -webkit-transition: -webkit-transform 0.3s;
+  transition: transform 0.3s;
+  content: "+";
+}
+.table-nested .children {
+  display: none;
+}
+.table-nested .opened > tr > .cell-name > .indent:before {
+  content: "-";
+}
+.table-nested .opened > .children {
+  display: table-row;
+}

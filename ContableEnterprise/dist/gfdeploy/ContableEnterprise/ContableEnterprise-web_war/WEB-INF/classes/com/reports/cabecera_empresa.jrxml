@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="cabecera_empresa" language="groovy" pageWidth="612" pageHeight="792" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e7d65f31-51ac-413c-a8a9-63c3c8f66715">
+	<property name="ireport.zoom" value="3.452271214393106"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="EMPRESA_ID" class="java.lang.Integer" isForPrompting="false">
+		<defaultValueExpression><![CDATA[1]]></defaultValueExpression>
+	</parameter>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["/home/xeio/proyectos/netbeans/repository/ContableEnterprise-web/src/java/com/reports/"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="MAIN_REPORT_NAME" class="java.lang.String">
+		<defaultValueExpression><![CDATA[aerolinea.jasper]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     tb_empresa.`id_empresa` AS tb_empresa_id_empresa,
+     tb_empresa.`razon_social` AS tb_empresa_razon_social,
+     tb_empresa.`direccion` AS tb_empresa_direccion,
+     tb_empresa.`nit` AS tb_empresa_nit,
+     tb_empresa.`telefono_fijo` AS tb_empresa_telefono_fijo,
+     tb_empresa.`telefono_celular` AS tb_empresa_telefono_celular,
+     tb_empresa.`email` AS tb_empresa_email,
+     tb_empresa.`pagina_web` AS tb_empresa_pagina_web,
+     tb_empresa.`nro_iata` AS tb_empresa_nro_iata,
+     tb_empresa.`tipo` AS tb_empresa_tipo,
+     tb_empresa.`logo` AS tb_empresa_logo
+FROM
+     `tb_empresa` tb_empresa
+WHERE
+      tb_empresa.id_empresa = $P{EMPRESA_ID}]]>
+	</queryString>
+	<field name="tb_empresa_id_empresa" class="java.lang.Integer"/>
+	<field name="tb_empresa_razon_social" class="java.lang.String"/>
+	<field name="tb_empresa_direccion" class="java.lang.String"/>
+	<field name="tb_empresa_nit" class="java.lang.String"/>
+	<field name="tb_empresa_telefono_fijo" class="java.lang.String"/>
+	<field name="tb_empresa_telefono_celular" class="java.lang.String"/>
+	<field name="tb_empresa_email" class="java.lang.String"/>
+	<field name="tb_empresa_pagina_web" class="java.lang.String"/>
+	<field name="tb_empresa_nro_iata" class="java.lang.String"/>
+	<field name="tb_empresa_tipo" class="java.lang.String"/>
+	<field name="tb_empresa_logo" class="java.awt.Image"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="68" splitType="Stretch">
+			<textField>
+				<reportElement x="88" y="2" width="189" height="13" uuid="776a28dd-2be6-4cad-b464-aa383ac04237"/>
+				<textElement>
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{tb_empresa_razon_social}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="88" y="14" width="189" height="13" uuid="9e44d815-1519-4cbc-9b85-00dab841d583"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Direccion: "+$F{tb_empresa_direccion}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="88" y="26" width="109" height="13" uuid="e6a45d44-8b6b-4a2c-b98d-d9abc3cfbaa9"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Telefono:"+ $F{tb_empresa_telefono_fijo} + "-Celular:" + $F{tb_empresa_telefono_celular}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="88" y="39" width="189" height="13" uuid="9d715ff5-55b8-4122-b1fe-254975ff489f"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["NIT:" + $F{tb_empresa_nit}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="88" y="52" width="212" height="13" uuid="c9821523-e0ef-4dcd-adfd-c85c1ee7e457"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{tb_empresa_email} + " / " + $F{tb_empresa_pagina_web}]]></textFieldExpression>
+			</textField>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="388" y="2" width="184" height="14" uuid="9d3da0b7-1839-434c-b35b-b5996f7bf27a"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<image>
+				<reportElement x="6" y="2" width="82" height="66" uuid="afdd5dbf-6818-4fdd-bb35-15be0b994d5d"/>
+				<imageExpression><![CDATA[$F{tb_empresa_logo}]]></imageExpression>
+			</image>
+			<textField pattern="HH.mm.ss">
+				<reportElement x="472" y="15" width="100" height="14" uuid="715b0222-40a9-4274-99d1-d33a9c87f81a"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="85" splitType="Stretch">
+			<subreport>
+				<reportElement x="0" y="0" width="572" height="80" uuid="da80fde0-e9a2-4d6c-a3a5-c7d169a81fce"/>
+				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + $P{MAIN_REPORT_NAME}]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="11" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="26" splitType="Stretch">
+			<textField>
+				<reportElement x="460" y="5" width="112" height="20" uuid="9e752d41-da80-4741-80ac-949b907037fc"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA["Página - "+$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="3" y="1" width="569" height="1" uuid="87e80cd4-8555-4fef-a992-cb15f1d888c8"/>
+			</line>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="15" splitType="Stretch"/>
+	</summary>
+</jasperReport>

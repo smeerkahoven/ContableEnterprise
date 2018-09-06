@@ -1,0 +1,35 @@
+.ng-hide.ng-hide-animate {
+    display: none !important;
+}
+
+.ng-animate.no-animate {
+    transition: 0s none;
+    -webkit-transition: 0s none;
+    animation: 0s none;
+    -webkit-animation: 0s none;
+}
+
+
+.dropdown-menu
+{
+    margin-top: 0px;
+    width: 100%;
+    border-top:  0px;
+}
+
+.value-inactivo {
+    color : red ;
+}
+
+input[type='number'] {
+    -moz-appearance:textfield;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+}
+
+list-on-top {
+    z-index: 2 ;
+}

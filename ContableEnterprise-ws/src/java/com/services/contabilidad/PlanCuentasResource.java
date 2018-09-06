@@ -131,19 +131,19 @@ public class PlanCuentasResource extends TemplateResource {
         {
             try {
                 List<Object[]> l = ejbPlanCuentas.getForCombo(new Empresa(idEmpresa));
-                
+
                 ArrayList hm = new ArrayList();
                 for (Object[] o : l) {
                     ComboSelect cm = new ComboSelect();
                     cm.setId((Integer) o[0]);
                     cm.setName((String) o[1]);
-                    cm.setComodin((String)o[2]);
+                    cm.setComodin((String) o[2]);
                     hm.add(cm);
                 }
-                
+
                 response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
                 response.setContent(hm);
-                
+
                 return response;
             } catch (CRUDException ex) {
                 Logger.getLogger(PlanCuentasResource.class.getName()).log(Level.SEVERE, null, ex);
@@ -242,6 +242,8 @@ public class PlanCuentasResource extends TemplateResource {
                 ejbLogger.add(Accion.INSERT, user.getUserName(), request.getFormName(), user.getIp());
             } catch (CRUDException ex) {
                 Logger.getLogger(PlanCuentasResource.class.getName()).log(Level.SEVERE, null, ex);
+                response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+                response.setContent(mensajes.getProperty(RestResponse.RESTFUL_ERROR));
             }
 
         }

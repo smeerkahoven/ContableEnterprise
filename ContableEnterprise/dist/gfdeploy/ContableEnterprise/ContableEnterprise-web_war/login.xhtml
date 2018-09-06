@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html lang="en"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:a="http://xmlns.jcp.org/jsf/passthrough"
+      >
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <!-- End Required meta tags -->
+
+        <!-- Favicons -->
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="assets/apple-touch-icon.png" />
+        <link rel="shortcut icon" href="assets/favicon.ico" />
+        <meta name="theme-color" content="#3063A0" />
+        <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+        <!-- BEGIN BASE STYLES -->
+        <link rel="stylesheet" href="assets/vendor/bootstrap/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="assets/vendor/fontawesome/css/fontawesome.all.css" />
+        <!-- END BASE STYLES -->
+        <!-- BEGIN THEME STYLES -->
+        <link rel="stylesheet" href="assets/stylesheets/main.min.css" />
+        <link rel="stylesheet" href="assets/stylesheets/custom.css" />
+        <!-- END THEME STYLES -->
+        <title>#{login.razonSocial}</title>
+    </head>
+    <body>
+        <!-- .auth -->
+        <main class="auth">
+            <header id="auth-header" class="" >
+                <!--style="background-image: url(assets/images/illustration/img-1.png);"-->
+
+                <h1>
+                    <img src="assets/images/agencia-inicio.png" alt="" height="148" />
+                    <span class="sr-only">Sign In</span>
+                </h1>
+
+            </header>
+            <!-- form -->
+                <h:form class="auth-form">
+                    <!-- .form-group -->
+                    <h:outputLabel value="">
+                    </h:outputLabel>
+                    <br />
+                    <h:panelGroup class="wrap-input100 m-b-10 p-t-10 bg-danger text-white"
+                                  rendered="#{ not empty login.errorMessage}"> 
+                        <h:outputLabel value="#{login.errorMessage}">
+                        </h:outputLabel>
+                    </h:panelGroup>
+
+                    <div class="form-group">
+                        <div class="form-label-group">
+                            <h:inputText class="form-control" id="username" a:placeholder="Usuario" 
+                                         a:autofocus="true" required="" value="#{login.usuario}">
+                            </h:inputText>
+                            <label for="inputUser">Usuario</label>
+                        </div>
+                    </div>
+                    <!-- /.form-group -->
+                    <!-- .form-group -->
+                    <div class="form-group">
+                        <div class="form-label-group">
+                            <h:inputSecret id="password" class="form-control" a:placeholder="Contraseña" 
+                                           value="#{login.password}" required="" ></h:inputSecret>
+
+                            <label for="inputPassword">Contraseña</label>
+                        </div>
+                    </div>
+                    <!-- /.form-group -->
+                    <!-- .form-group -->
+                    <div class="form-group">
+
+                        <h:commandButton class="btn btn-lg btn-primary btn-block" action="#{login.doLogin}"  value="Ingresar"></h:commandButton>
+                    </div>
+                    <!-- /.form-group -->
+                    <!-- .form-group -->
+                    <!--<div class="form-group text-center">
+                        <div class="custom-control custom-control-inline custom-checkbox">
+                            <input type="checkbox" class="custom-control-input" id="remember-me" />
+                            <label class="custom-control-label" for="remember-me">Keep me sign in</label>
+                        </div>
+                    </div> -->
+                    <!-- /.form-group -->
+                    <!-- recovery links -->
+                    <!--<div class="text-center pt-3">
+                        <a href="auth-recovery-username.html" class="link">Forgot Username?</a>
+                        <span class="mx-2">·</span>
+                        <a href="auth-recovery-password.html" class="link">Forgot Password?</a>
+                    </div>-->
+                    <!-- /recovery links -->
+                    <!-- /.auth-form -->
+                </h:form>
+               
+            <!-- copyright -->
+            <footer class="auth-footer"> © 2018 Todos los derechos Reservados. Serticon
+                <!--<a href="auth-signin-v1.html#">Privacy</a> and
+                <a href="auth-signin-v1.html#">Terms</a> -->
+            </footer>
+        </main>
+        <!-- /.auth -->
+        <!-- BEGIN PLUGINS JS -->
+
+        <!-- END PLUGINS JS -->
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+        <script>
+            window.dataLayer = window.dataLayer || [];
+
+            function gtag()
+            {
+                dataLayer.push(arguments);
+            }
+            gtag('js', new Date());
+            gtag('config', 'UA-116692175-1');
+        </script>
+    </body>
+</html>
