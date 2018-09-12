@@ -5,7 +5,13 @@
  */
 package com.view.agencia;
 
+import com.configuracion.entities.Parametros;
+import com.security.SessionUtils;
+import com.seguridad.control.exception.CRUDException;
 import com.view.ViewManagedBean;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 
@@ -17,9 +23,29 @@ import javax.inject.Named;
 @RequestScoped
 public class BoletosManagedBean extends ViewManagedBean {
 
+    private Parametros porcentaje ;
     public BoletosManagedBean() {
-        this.formName = "boletos" ;
+        this.formName = "boletos";
     }
- 
+
+    @PostConstruct
+    public void init() {
+        try {
+            this.formulario = SessionUtils.getFormulario(this.formName);
+            this.porcentaje = (Parametros) ejbParametros.get(new Parametros(Parametros.PORCENTAJE_COMISION));
+        } catch (CRUDException ex) {
+            Logger.getLogger(BoletosManagedBean.class.getName()).log(Level.SEVERE.SEVERE, null, ex);
+        }
+    }
+
+    public Parametros getPorcentaje() {
+        return porcentaje;
+    }
+
+    public void setPorcentaje(Parametros porcentaje) {
+        this.porcentaje = porcentaje;
+    }
     
+    
+
 }
