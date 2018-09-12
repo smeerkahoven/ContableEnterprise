@@ -28,6 +28,7 @@ import com.seguridad.utils.ComboSelect;
 import com.util.resource.Mensajes;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -35,6 +36,7 @@ import javax.ejb.EJB;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.Produces;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -68,6 +70,33 @@ public class TarjetasCreditoResource {
      * Creates a new instance of TarjetasCreditoResource
      */
     public TarjetasCreditoResource() {
+    }
+
+    @GET
+    @Path("combo/all")
+    @Produces(MediaType.APPLICATION_JSON)
+    public RestResponse getComboAll() {
+        RestResponse response = new RestResponse();
+        try {
+
+            List l = ejbTarjeta.get();
+            List r = new LinkedList();
+            l.forEach((x) -> {
+                ComboSelect s = new ComboSelect();
+                s.setId(((TarjetaCredito)x).getIdTarjetaCredito());
+                s.setName(((TarjetaCredito)x).getDenominacion());
+                r.add(s);
+            });
+
+            response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
+            response.setContent(r);
+
+        } catch (CRUDException ex) {
+            response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+            response.setContent(ex.getMessage());
+            Logger.getLogger(TarjetasCreditoResource.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return response;
     }
 
     /**

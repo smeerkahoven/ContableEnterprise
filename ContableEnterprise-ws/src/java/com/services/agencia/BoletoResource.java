@@ -10,6 +10,7 @@ import com.seguridad.control.exception.CRUDException;
 import com.seguridad.utils.ResponseCode;
 import com.services.TemplateResource;
 import com.services.seguridad.util.RestResponse;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -18,6 +19,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 
 /**
@@ -58,6 +60,24 @@ public class BoletoResource extends TemplateResource {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     public void putJson(String content) {
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("existe-boleto/{nroBoleto}")
+    public RestResponse getExisteBoleto(@PathParam("nroBoleto") String nroBoleto) {
+        RestResponse response = new RestResponse();
+
+        Optional op = Optional.ofNullable(nroBoleto);
+        if (!op.isPresent()){
+            response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+            response.setContent(mensajes.getProperty(RestResponse.RESTFUL_PARAMETERS_SENT));
+            return response ;
+        }
+        
+        
+        
+        return response;
     }
 
     @GET

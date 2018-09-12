@@ -32,11 +32,14 @@ import com.seguridad.utils.ComboSelect;
 import com.util.resource.Mensajes;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.Produces;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -50,7 +53,7 @@ import javax.ws.rs.core.MediaType;
  * @author xeio
  */
 @Path("bancos")
-public class BancosResource extends TemplateResource{
+public class BancosResource extends TemplateResource {
 
     @EJB
     private BancosRemote ejbBancos;
@@ -62,6 +65,27 @@ public class BancosResource extends TemplateResource{
      * Creates a new instance of TarjetasCreditoResource
      */
     public BancosResource() {
+    }
+
+    @GET
+    @Path("combo/all")
+    @Produces(MediaType.APPLICATION_JSON)
+    public RestResponse getComboAll() {
+        RestResponse response = new RestResponse();
+        try {
+
+            List l = ejbBancos.getCombo();
+
+            response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
+            response.setContent(l);
+
+        } catch (CRUDException ex) {
+            response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+            response.setContent(ex.getMessage());
+            Logger.getLogger(BancosResource.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return response;
     }
 
     /**
@@ -115,6 +139,46 @@ public class BancosResource extends TemplateResource{
         }
 
         return r;
+    }
+
+    @GET
+    @Path("getBancosCuentas/{idEmpresa}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public RestResponse getBancosCuentas(@PathParam("idEmpresa") Integer idEmpresa) {
+        RestResponse response = new RestResponse();
+        try {
+            Optional op = Optional.ofNullable(idEmpresa);
+            if (!op.isPresent()) {
+                response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+                response.setContent(mensajes.getProperty(RestResponse.RESTFUL_PARAMETERS_SENT));
+                return response;
+            }
+            HashMap<String, Object> parameters = new HashMap<>();
+            parameters.put("1", idEmpresa);
+
+            List l = ejbBancos.getNative(Queries.GET_BANCOS_CUENTAS_EMPRESA, parameters);
+            if (l.isEmpty()) {
+                response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+                response.setContent(mensajes.getProperty(RestResponse.RESTFUL_VALUE_NOT_FOUND));
+                return response;
+            }
+
+            List r = new LinkedList();
+            l.forEach((x) -> {
+                ComboSelect s = new ComboSelect();
+                Object[] o = (Object[]) x;
+                s.setId((Integer) o[0]);
+                s.setName((String) o[1]);
+                r.add(s);
+            });
+
+            response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
+            response.setContent(r);
+
+        } catch (CRUDException ex) {
+            Logger.getLogger(BancosResource.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return response;
     }
 
     @POST
@@ -302,11 +366,11 @@ public class BancosResource extends TemplateResource{
                 UserToken t = ejbUsuario.get(new UserToken(request.getToken()));
                 if (t != null) {
                     if (t.getStatus().equals(Status.ACTIVO)) {
-                        
-                        if (idBanco ==null){
+
+                        if (idBanco == null) {
                             r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
                             r.setContent(m.getProperty(RestResponse.RESTFUL_PARAMETERS_SENT));
-                            return r ;
+                            return r;
                         }
 
                         Bancos pcu = new Bancos(idBanco);
@@ -352,7 +416,7 @@ public class BancosResource extends TemplateResource{
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public RestResponse deleteLink(final RestRequest request,
-    @PathParam("idCuentaBanco") final Integer idCuentaBanco) {
+            @PathParam("idCuentaBanco") final Integer idCuentaBanco) {
 
         Mensajes m = Mensajes.getMensajes().getMensajes();
         RestResponse r = new RestResponse();
@@ -364,17 +428,17 @@ public class BancosResource extends TemplateResource{
                 if (t != null) {
                     if (t.getStatus().equals(Status.ACTIVO)) {
 
-                        if (idCuentaBanco ==null){
+                        if (idCuentaBanco == null) {
                             r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
                             r.setContent(m.getProperty(RestResponse.RESTFUL_PARAMETERS_SENT));
-                            return r ;
+                            return r;
                         }
 
                         HashMap<String, Object> parameters = new HashMap<>();
                         parameters.put("1", idCuentaBanco);
 
                         ejbBancos.remove(Queries.DELETE_CUENTA_BANCO, parameters);
-                        
+
                         ejbLogger.add(Accion.DELETE, t.getUserName(), request.getFormName(), "");
 
                         r.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());

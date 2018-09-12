@@ -13,7 +13,6 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.response.json.agencia.AerolineaJSON;
 import com.response.json.agencia.ClienteJSON;
 import com.response.json.agencia.ClienteSolicitadoJSON;
 import com.seguridad.control.exception.CRUDException;
@@ -28,6 +27,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -98,6 +98,40 @@ public class ClienteResource extends TemplateResource {
         }
 
         return response;
+    }
+    
+    @GET
+    @Path("get/{idCliente}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public RestResponse getClienteId(@PathParam("idCliente") Integer idCliente){
+         RestResponse response = new RestResponse();
+        try {
+           
+            Optional op = Optional.ofNullable(idCliente);
+            if (!op.isPresent()){
+                response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+                response.setContent(mensajes.getProperty(RestResponse.RESTFUL_PARAMETERS_SENT));
+                return response ;
+            }
+            
+            
+            Cliente c = (Cliente) ejbCliente.get(new Cliente(idCliente));
+            
+            op = Optional.ofNullable(c);
+            if (!op.isPresent()){
+                response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+                response.setContent(mensajes.getProperty(RestResponse.RESTFUL_VALUE_NOT_FOUND));
+                return response ;
+            }
+            
+            response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
+            response.setContent(c);
+            
+        } catch (CRUDException ex) {
+            Logger.getLogger(ClienteResource.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return response ;
     }
 
     @POST
