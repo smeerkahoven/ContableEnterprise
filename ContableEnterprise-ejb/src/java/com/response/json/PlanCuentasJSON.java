@@ -7,7 +7,6 @@ package com.response.json;
 
 import com.contabilidad.entities.PlanCuentas;
 import com.seguridad.utils.MarcoCuenta;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,8 +19,8 @@ public class PlanCuentasJSON {
     private int idEmpresa;
     private Integer idPlanCuentas;
     private String nombreCuenta;
-    private BigInteger nroPlanCuenta;
-    private BigInteger nroPlanCuentaPadre;
+    private Long nroPlanCuenta;
+    private Long nroPlanCuentaPadre;
     private String nroPlanCuentaPadreNombre;
     private int nivel;
     private String marco;
@@ -30,7 +29,7 @@ public class PlanCuentasJSON {
     private String aplicaMovimientoNombre;
     private String mantenimientoValor;
     private String moneda;
-    private BigInteger ctaItb;
+    private Integer ctaItb;
 
     //
     /*private int aplica;
@@ -130,11 +129,11 @@ public class PlanCuentasJSON {
         this.aplicaMovimientoNombre = aplicaMovimientoNombre;
     }
 
-    public BigInteger getCtaItb() {
+    public Integer getCtaItb() {
         return ctaItb;
     }
 
-    public void setCtaItb(BigInteger ctaItb) {
+    public void setCtaItb(Integer ctaItb) {
         this.ctaItb = ctaItb;
     }
 
@@ -218,19 +217,19 @@ public class PlanCuentasJSON {
         this.idPlanCuentas = idPlanCuentas;
     }
 
-    public BigInteger getNroPlanCuenta() {
+    public Long getNroPlanCuenta() {
         return nroPlanCuenta;
     }
 
-    public void setNroPlanCuenta(BigInteger nroPlanCuenta) {
+    public void setNroPlanCuenta(Long nroPlanCuenta) {
         this.nroPlanCuenta = nroPlanCuenta;
     }
 
-    public BigInteger getNroPlanCuentaPadre() {
+    public Long getNroPlanCuentaPadre() {
         return nroPlanCuentaPadre;
     }
 
-    public void setNroPlanCuentaPadre(BigInteger nroPlanCuentaPadre) {
+    public void setNroPlanCuentaPadre(Long nroPlanCuentaPadre) {
         this.nroPlanCuentaPadre = nroPlanCuentaPadre;
     }
 

@@ -51,7 +51,10 @@ public class Parametros extends Entidad {
     public static final String DIFERENCIA_CAMBIO_INGRESOS="DIFERENCIA_CAMBIO_INGRESOS";
     public static final String DIFERENCIA_CAMBIO_EGRESOS="DIFERENCIA_CAMBIO_EGRESOS";
     public static final String CUENTA_AITB="CUENTA_AITB";
-
+    
+    //------------boletaje------------------------------------//
+    public static final String PORCENTAJE_COMISION = "PORCENTAJE_COMISION";
+    
     private static final long serialVersionUID = 1L;
     @Id
     @Column(name = "id_parametro", length = 64)

@@ -13,6 +13,8 @@ import com.seguridad.control.LoggerContable;
 import com.seguridad.control.entities.Entidad;
 import com.seguridad.control.exception.CRUDException;
 import com.seguridad.queries.Queries;
+import com.seguridad.utils.ComboSelect;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import javax.ejb.Stateless;
@@ -118,5 +120,24 @@ public class BancosEJB extends FacadeEJB implements BancosRemote {
 
         return value > 0;
     }
+
+    @Override
+    public List getCombo() throws CRUDException {
+        Query q = em.createNamedQuery("Bancos.combo");
+        List l = q.getResultList();
+        List r = new LinkedList();
+        
+        l.forEach((x) -> {
+            Object[] o = (Object[])x ;
+            ComboSelect s = new ComboSelect();
+            s.setId((Integer)o[0]);
+            s.setName((String)o[1]);
+            r.add(s);
+        });
+        
+        return r ;
+    }
+    
+    
 
 }

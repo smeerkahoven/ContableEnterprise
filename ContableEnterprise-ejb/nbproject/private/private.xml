@@ -2,6 +2,16 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group/>
+        <group>
+            <file>file:/home/xeio/proyectos/netbeans/repository/ContableEnterprise-ejb/src/java/com/agencia/control/remote/ClienteRemote.java</file>
+            <file>file:/home/xeio/proyectos/netbeans/repository/ContableEnterprise-ejb/src/java/com/response/json/PlanCuentasJSON.java</file>
+            <file>file:/home/xeio/proyectos/netbeans/repository/ContableEnterprise-ejb/src/java/com/agencia/control/ejb/BancosEJB.java</file>
+            <file>file:/home/xeio/proyectos/netbeans/repository/ContableEnterprise-ejb/src/java/com/seguridad/queries/Queries.properties</file>
+            <file>file:/home/xeio/proyectos/netbeans/repository/ContableEnterprise-ejb/src/java/com/contabilidad/entities/PlanCuentas.java</file>
+            <file>file:/home/xeio/proyectos/netbeans/repository/ContableEnterprise-ejb/src/java/com/agencia/control/remote/BancosRemote.java</file>
+            <file>file:/home/xeio/proyectos/netbeans/repository/ContableEnterprise-ejb/src/java/com/agencia/control/ejb/ClienteEJB.java</file>
+            <file>file:/home/xeio/proyectos/netbeans/repository/ContableEnterprise-ejb/src/java/com/contabilidad/ejb/PlanCuentasEJB.java</file>
+            <file>file:/home/xeio/proyectos/netbeans/repository/ContableEnterprise-ejb/src/java/com/contabilidad/remote/PlanCuentasRemote.java</file>
+        </group>
     </open-files>
 </project-private>

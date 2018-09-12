@@ -6,7 +6,10 @@
 package com.agencia.control.ejb;
 
 import com.agencia.control.remote.ClienteRemote;
+import com.agencia.entities.Cliente;
 import com.seguridad.control.FacadeEJB;
+import com.seguridad.control.entities.Entidad;
+import com.seguridad.control.exception.CRUDException;
 import javax.ejb.Stateless;
 
 /**
@@ -19,6 +22,16 @@ public class ClienteEJB extends FacadeEJB implements ClienteRemote {
     public ClienteEJB() {
         this.findAll = "Cliente.findAll" ;
     }
+
+    @Override
+    public Entidad get(Entidad e) throws CRUDException {
+        
+        Cliente c = em.find(Cliente.class, ((Cliente)e).getIdCliente());
+        
+        return c ;
+        //To change body of generated methods, choose Tools | Templates.
+    }
+    
     
     
     

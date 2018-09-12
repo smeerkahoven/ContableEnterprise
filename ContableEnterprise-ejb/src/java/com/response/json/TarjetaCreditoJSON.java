@@ -6,9 +6,7 @@
 package com.response.json;
 
 import com.agencia.entities.TarjetaCredito;
-import com.contabilidad.entities.PlanCuentas;
 import java.io.Serializable;
-import java.math.BigInteger;
 
 /**
  *
@@ -19,11 +17,6 @@ public class TarjetaCreditoJSON implements Serializable {
     private Integer idTarjetaCredito;
     private String sigla;
     private String denominacion;
-    private BigInteger planCuentaMonExt;
-    private String planCuentaMonExtNombre;
-    private BigInteger planCuentaMonNac;
-    private String planCuentaMonNacNombre;
-
     public static TarjetaCreditoJSON toJSON(TarjetaCredito tc) {
         TarjetaCreditoJSON json = new TarjetaCreditoJSON();
         json.setDenominacion(tc.getDenominacion());
@@ -47,29 +40,6 @@ public class TarjetaCreditoJSON implements Serializable {
         return t ;
     }
 
-    public BigInteger getPlanCuentaMonExt() {
-        return planCuentaMonExt;
-    }
-
-    public void setPlanCuentaMonExt(BigInteger planCuentaMonExt) {
-        this.planCuentaMonExt = planCuentaMonExt;
-    }
-
-    public BigInteger getPlanCuentaMonNac() {
-        return planCuentaMonNac;
-    }
-
-    public void setPlanCuentaMonNac(BigInteger planCuentaMonNac) {
-        this.planCuentaMonNac = planCuentaMonNac;
-    }
-
-    public String getPlanCuentaMonNacNombre() {
-        return planCuentaMonNacNombre;
-    }
-
-    public void setPlanCuentaMonNacNombre(String planCuentaMonNacNombre) {
-        this.planCuentaMonNacNombre = planCuentaMonNacNombre;
-    }
 
     public Integer getIdTarjetaCredito() {
         return idTarjetaCredito;
@@ -93,14 +63,6 @@ public class TarjetaCreditoJSON implements Serializable {
 
     public void setDenominacion(String denominacion) {
         this.denominacion = denominacion;
-    }
-
-    public String getPlanCuentaMonExtNombre() {
-        return planCuentaMonExtNombre;
-    }
-
-    public void setPlanCuentaMonExtNombre(String planCuentaMonExtNombre) {
-        this.planCuentaMonExtNombre = planCuentaMonExtNombre;
     }
 
 }

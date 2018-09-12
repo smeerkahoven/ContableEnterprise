@@ -20,6 +20,9 @@ import javax.ejb.Remote;
 public interface ClienteRemote extends DaoRemoteFacade {
 
     @Override
+    public Entidad get(Entidad e) throws CRUDException;
+
+    @Override
     public List get(String namedQuery, Class<?> typeClass) throws CRUDException;
 
     @Override

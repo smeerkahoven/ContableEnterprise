@@ -6,7 +6,6 @@
 package com.seguridad.utils;
 
 import java.io.Serializable;
-import java.math.BigInteger;
 
 /**
  *

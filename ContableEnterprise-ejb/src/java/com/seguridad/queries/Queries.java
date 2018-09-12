@@ -29,12 +29,12 @@ public class Queries {
     public final static String GET_PLAN_CUENTA_PADRE = "GET_PLAN_CUENTA_PADRE";
     public final static String GET_BANCO_CUENTA_LINK = "GET_BANCO_CUENTA_LINK";
     public final static String GET_AEROLINA_CUENTA = "GET_AEROLINA_CUENTA";
-    
+
     //comprobantes
-    public final static String GET_NEXT_ID_LIBRO="GET_NEXT_ID_LIBRO" ;
-    public final static String UPDATE_COMPROBANTE_CONTABLE_ESTADO="UPDATE_COMPROBANTE_CONTABLE_ESTADO";
-    public final static String UPDATE_COMPROBANTE_CONTABLE_TOTALES="UPDATE_COMPROBANTE_CONTABLE_TOTALES";
-    public final static String DELETE_COMPROBANTE_TRANSACTION="DELETE_COMPROBANTE_TRANSACTION";
+    public final static String GET_NEXT_ID_LIBRO = "GET_NEXT_ID_LIBRO";
+    public final static String UPDATE_COMPROBANTE_CONTABLE_ESTADO = "UPDATE_COMPROBANTE_CONTABLE_ESTADO";
+    public final static String UPDATE_COMPROBANTE_CONTABLE_TOTALES = "UPDATE_COMPROBANTE_CONTABLE_TOTALES";
+    public final static String DELETE_COMPROBANTE_TRANSACTION = "DELETE_COMPROBANTE_TRANSACTION";
 
     //removes
     public final static String DELETE_IMPUESTO_AEROLINEA = "DELETE_IMPUESTO_AEROLINEA";
@@ -42,9 +42,12 @@ public class Queries {
     public final static String DELETE_AEROLINEA = "DELETE_AEROLINEA";
     public final static String DELETE_AEROLINEA_CUENTA = "DELETE_AEROLINEA_CUENTA";
     public final static String DELETE_CUENTA_BANCO = "DELETE_CUENTA_BANCO";
-    public final static String GET_PLAN_CUENTAS_NRO_PLANCUENTA="GET_PLAN_CUENTAS_NRO_PLANCUENTA";
-    public final static String DELETE_CLIENTE="DELETE_CLIENTE";
-public final static String DELETE_CLIENTE_SOLICITADO="DELETE_CLIENTE_SOLICITADO";
+    public final static String GET_PLAN_CUENTAS_NRO_PLANCUENTA = "GET_PLAN_CUENTAS_NRO_PLANCUENTA";
+    public final static String DELETE_CLIENTE = "DELETE_CLIENTE";
+    public final static String DELETE_CLIENTE_SOLICITADO = "DELETE_CLIENTE_SOLICITADO";
+
+    //Boletos
+    public final static String GET_BANCOS_CUENTAS_EMPRESA = "GET_BANCOS_CUENTAS_EMPRESA";
 
     private static Queries queries;
 

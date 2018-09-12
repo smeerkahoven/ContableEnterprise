@@ -51,10 +51,10 @@ public class PlanCuentas extends Entidad {
     private Integer idPlanCuentas;
 
     @Column(name = "nro_plan_cuenta")
-    private BigInteger nroPlanCuenta;
+    private Long nroPlanCuenta;
     
     @Column(name = "nro_plan_cuenta_padre")
-    private BigInteger nroPlanCuentaPadre;
+    private Long nroPlanCuentaPadre;
 
     @Column(name = "cuenta", length = 40)
     private String cuenta;
@@ -69,7 +69,7 @@ public class PlanCuentas extends Entidad {
     private String marco;
 
     @Column(name = "cta_itb", length = 24)
-    private BigInteger ctaItb;
+    private Integer ctaItb;
 
     @Column(name = "nivel")
     private Integer nivel;
@@ -142,19 +142,19 @@ public class PlanCuentas extends Entidad {
         this.idPlanCuentas = idPlanCuentas;
     }
 
-    public BigInteger getNroPlanCuenta() {
+    public Long getNroPlanCuenta() {
         return nroPlanCuenta;
     }
 
-    public void setNroPlanCuenta(BigInteger nroPlanCuenta) {
+    public void setNroPlanCuenta(Long nroPlanCuenta) {
         this.nroPlanCuenta = nroPlanCuenta;
     }
 
-    public BigInteger getNroPlanCuentaPadre() {
+    public Long getNroPlanCuentaPadre() {
         return nroPlanCuentaPadre;
     }
 
-    public void setNroPlanCuentaPadre(BigInteger nroPlanCuentaPadre) {
+    public void setNroPlanCuentaPadre(Long nroPlanCuentaPadre) {
         this.nroPlanCuentaPadre = nroPlanCuentaPadre;
     }
 
@@ -192,11 +192,11 @@ public class PlanCuentas extends Entidad {
         this.marco = marco;
     }
 
-    public BigInteger getCtaItb() {
+    public Integer getCtaItb() {
         return ctaItb;
     }
 
-    public void setCtaItb(BigInteger ctaItb) {
+    public void setCtaItb(Integer ctaItb) {
         this.ctaItb = ctaItb;
     }
 

@@ -38,12 +38,7 @@ public class AerolineaJSON implements Serializable {
     private Boolean roundComisionBob;
     private Boolean roundComisionUsd;
     private Boolean ivaItComision;
-    private BigInteger ctaVentasMonNac;
-    private BigInteger ctaVentasMonExt;
-    private BigInteger ctaComisionMonNac;
-    private BigInteger ctaComisionMonExt;
-    private BigInteger ctaDevolucionMonNac;
-    private BigInteger ctaDevolucionMonExt;
+
     private Boolean boletosMonNac;
     private Boolean boletosMonExt;
     private String moneda;
@@ -312,53 +307,6 @@ public class AerolineaJSON implements Serializable {
         this.ivaItComision = ivaItComision;
     }
 
-    public BigInteger getCtaVentasMonNac() {
-        return ctaVentasMonNac;
-    }
-
-    public void setCtaVentasMonNac(BigInteger ctaVentasMonNac) {
-        this.ctaVentasMonNac = ctaVentasMonNac;
-    }
-
-    public BigInteger getCtaVentasMonExt() {
-        return ctaVentasMonExt;
-    }
-
-    public void setCtaVentasMonExt(BigInteger ctaVentasMonExt) {
-        this.ctaVentasMonExt = ctaVentasMonExt;
-    }
-
-    public BigInteger getCtaComisionMonNac() {
-        return ctaComisionMonNac;
-    }
-
-    public void setCtaComisionMonNac(BigInteger ctaComisionMonNac) {
-        this.ctaComisionMonNac = ctaComisionMonNac;
-    }
-
-    public BigInteger getCtaComisionMonExt() {
-        return ctaComisionMonExt;
-    }
-
-    public void setCtaComisionMonExt(BigInteger ctaComisionMonExt) {
-        this.ctaComisionMonExt = ctaComisionMonExt;
-    }
-
-    public BigInteger getCtaDevolucionMonNac() {
-        return ctaDevolucionMonNac;
-    }
-
-    public void setCtaDevolucionMonNac(BigInteger ctaDevolucionMonNac) {
-        this.ctaDevolucionMonNac = ctaDevolucionMonNac;
-    }
-
-    public BigInteger getCtaDevolucionMonExt() {
-        return ctaDevolucionMonExt;
-    }
-
-    public void setCtaDevolucionMonExt(BigInteger ctaDevolucionMonExt) {
-        this.ctaDevolucionMonExt = ctaDevolucionMonExt;
-    }
 
     public Boolean getBoletosMonNac() {
         return boletosMonNac;

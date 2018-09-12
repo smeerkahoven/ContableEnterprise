@@ -14,7 +14,7 @@ import java.math.BigInteger;
  */
 public class CuentaBancoJSON {
 
-    private BigInteger idPlanCuentas;
+    private Integer idPlanCuentas;
     private String cuenta;
     private int idBanco;
     private int idCuentaBanco;
@@ -39,11 +39,11 @@ public class CuentaBancoJSON {
         return json ;
     }
 
-    public BigInteger getIdPlanCuentas() {
+    public Integer getIdPlanCuentas() {
         return idPlanCuentas;
     }
 
-    public void setIdPlanCuentas(BigInteger idPlanCuentas) {
+    public void setIdPlanCuentas(Integer idPlanCuentas) {
         this.idPlanCuentas = idPlanCuentas;
     }
 

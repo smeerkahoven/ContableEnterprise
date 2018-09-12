@@ -19,15 +19,22 @@ import javax.ejb.Remote;
  */
 @Remote
 public interface BancosRemote extends DaoRemoteFacade {
-    
-    public List<Bancos> get() throws CRUDException ;
-    
-    public void remove(CuentaBanco e) throws CRUDException; 
-    
-    public boolean hasCuentas(Bancos b) throws CRUDException ;
+
+    public List<Bancos> get() throws CRUDException;
+
+    public void remove(CuentaBanco e) throws CRUDException;
+
+    public boolean hasCuentas(Bancos b) throws CRUDException;
 
     @Override
     public void remove(String nativeQuery, HashMap<String, Object> parameters) throws CRUDException;
+
+    @Override
+    public List getCombo() throws CRUDException;
+
+    @Override
+    public List getNative(String nativeQuery, HashMap parameters) throws CRUDException;
     
     
+
 }

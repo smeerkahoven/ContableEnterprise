@@ -41,7 +41,7 @@ public class CuentaBanco extends Entidad {
     private Integer idCuentaBanco;
 
     @Column(name = "id_plan_cuentas")
-    private BigInteger idPlanCuentas;
+    private Integer idPlanCuentas;
 
     @Column(name = "id_banco")
     private Integer idBanco;
@@ -60,11 +60,11 @@ public class CuentaBanco extends Entidad {
         this.descripcion = descripcion;
     }
 
-    public BigInteger getIdPlanCuentas() {
+    public Integer getIdPlanCuentas() {
         return idPlanCuentas;
     }
 
-    public void setIdPlanCuentas(BigInteger idPlanCuentas) {
+    public void setIdPlanCuentas(Integer idPlanCuentas) {
         this.idPlanCuentas = idPlanCuentas;
     }
 

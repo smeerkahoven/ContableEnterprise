@@ -26,7 +26,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "cnt_bancos")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Bancos.findAll", query = "SELECT b FROM Bancos b")})
+    @NamedQuery(name = "Bancos.findAll", query = "SELECT b FROM Bancos b"),
+    @NamedQuery(name = "Bancos.combo", query="SELECT b.idBanco, b.nombre from Bancos b")
+
+})
 public class Bancos extends Entidad {
 
     private static final long serialVersionUID = 1L;
