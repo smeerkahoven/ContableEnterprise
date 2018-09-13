@@ -6,6 +6,8 @@
 package com.response.json.agencia;
 
 import com.agencia.entities.AerolineaImpuesto;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
@@ -28,6 +30,19 @@ public class AerolineaImpuestoJSON {
         aim.setNombre(json.getNombre());
         
         return aim ;
+    }
+    
+    
+    public static List<AerolineaImpuesto> toAerolineaImpuesto(List<AerolineaImpuestoJSON> l){
+        LinkedList r = new LinkedList();
+        l.forEach((x)->{
+            AerolineaImpuestoJSON tmp = (AerolineaImpuestoJSON)x ;
+            AerolineaImpuesto ai = toAerolineaImpuesto(tmp);
+            
+            r.add(ai);
+        });
+        
+        return r ;
     }
     
     public Integer getIdAerolineaImpuesto() {

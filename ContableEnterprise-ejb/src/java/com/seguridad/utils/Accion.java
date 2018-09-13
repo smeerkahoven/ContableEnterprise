@@ -12,22 +12,22 @@ import java.io.Serializable;
  * @author Cheyo
  */
 public enum Accion implements Serializable {
-    
+
     LOGIN("Login"),
     LOGOUT("Logout"),
     ACCESS("ACCESS"),
     INSERT("INSERT"),
     DELETE("DELETE"),
-    UPDATE("UPDATE")
-    ;
+    UPDATE("UPDATE");
 
-    private final String value ;
+    private final String value;
+
     private Accion(String value) {
-        this.value = value ;
+        this.value = value;
     }
 
     public String getValue() {
         return value;
-    }   
-    
+    }
+
 }

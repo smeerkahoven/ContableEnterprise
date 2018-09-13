@@ -135,8 +135,8 @@ public class Aerolinea extends Entidad {
     private Boolean modalidadBoleto;
     @Column(name = "registra_pnr")
     private Boolean registraPnr;
-    @OneToMany(orphanRemoval = true, cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_aerolinea")
+    @OneToMany(orphanRemoval = true, fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_aerolinea", updatable = false )
     private List<AerolineaImpuesto> aerolineaImpuestoList;
 
     @OneToMany(orphanRemoval = true, cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)

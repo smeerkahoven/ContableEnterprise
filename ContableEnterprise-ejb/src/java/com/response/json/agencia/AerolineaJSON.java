@@ -96,8 +96,11 @@ public class AerolineaJSON implements Serializable {
         a.setRoundComisionUsd(json.getRoundComisionUsd());
         a.setTelefono(json.getTelefono());
 
+        a.setAerolineaImpuestoList(AerolineaImpuestoJSON.toAerolineaImpuesto(json.getAerolineaImpuestoList()));
+        
         return a;
     }
+    
 
     public List<AerolineaCuentaJSON> getListCtaVentasMonNac() {
         return listCtaVentasMonNac;

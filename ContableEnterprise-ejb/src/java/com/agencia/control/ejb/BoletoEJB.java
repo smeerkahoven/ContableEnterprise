@@ -6,6 +6,7 @@
 package com.agencia.control.ejb;
 
 import com.agencia.control.remote.BoletoRemote;
+import com.agencia.entities.Boleto;
 import com.agencia.entities.EmisionBoleto;
 import com.seguridad.control.FacadeEJB;
 import com.seguridad.control.exception.CRUDException;
@@ -40,9 +41,22 @@ public class BoletoEJB extends FacadeEJB implements BoletoRemote {
         });
         
         return resp ;
+    }
+
+    @Override
+    public boolean isBoletoRegistrado(Boleto b) throws CRUDException {
+        
+        Query q = em.createNamedQuery("Boleto.findNroBoleto", Boleto.class);
+        q.setParameter("numero", b.getNumero());
+        
+        List l = q.getResultList() ;
+        
+        return !l.isEmpty() ;
         
     }
-    
+
+
+
     
     
 }

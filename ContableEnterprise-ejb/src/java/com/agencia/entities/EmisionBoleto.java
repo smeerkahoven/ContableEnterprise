@@ -29,6 +29,15 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "EmisionBoleto.findAll", query = "SELECT e FROM EmisionBoleto e ORDER BY e.orden ASC")})
 public class EmisionBoleto extends Entidad {
+    
+    public static final String NORMAL = "NORM";
+    public static final String CONEXION = "CNX";
+    public static final String CANJE = "CHG";
+    public static final String VIRTUAL = "MDP";
+    public static final String DEBITO = "ADM";
+    public static final String CREDITO = "ACM";
+    public static final String EMISION_TICKET = "TKT";
+    
 
     private static final long serialVersionUID = 1L;
     @Id

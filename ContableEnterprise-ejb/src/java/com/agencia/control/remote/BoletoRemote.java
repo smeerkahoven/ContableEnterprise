@@ -5,6 +5,7 @@
  */
 package com.agencia.control.remote;
 
+import com.agencia.entities.Boleto;
 import com.seguridad.control.entities.Entidad;
 import com.seguridad.control.exception.CRUDException;
 import com.seguridad.control.remote.DaoRemoteFacade;
@@ -31,6 +32,14 @@ public interface BoletoRemote extends DaoRemoteFacade {
     @Override
     public List getList(String namedQuery, Class<?> typeClass) throws CRUDException;
     
+    /**
+     * Obtiene los tipos de Emision del Boleto que se almacenan en la cnt_tipo_emision
+     * @return
+     * @throws CRUDException 
+     */
+    
     public List getTipoEmision() throws CRUDException ;
+    
+    public boolean isBoletoRegistrado(Boleto b) throws CRUDException ;
     
 }
