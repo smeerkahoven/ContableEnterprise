@@ -532,10 +532,13 @@ public class AerolineaResource extends TemplateResource {
                 ajson = gson.fromJson(object.toString(), AerolineaImpuestoJSON.class);
 
                 AerolineaImpuesto pcu = AerolineaImpuestoJSON.toAerolineaImpuesto(ajson);
-                ejbAerolinea.insert(pcu);
+                Integer id = ejbAerolinea.insert(pcu);
+                
+                pcu.setIdAerolineaImpuesto(id);
 
                 response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
                 response.setContent(mensajes.getProperty(RestResponse.RESTFUL_SUCCESS));
+                response.setEntidad(pcu);
 
                 ejbLogger.add(Accion.INSERT, user.getUserName(), request.getFormName(), user.getIp());
             } catch (CRUDException ex) {

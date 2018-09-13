@@ -6,6 +6,7 @@
 package com.services.agencia;
 
 import com.agencia.control.remote.BoletoRemote;
+import com.agencia.entities.Boleto;
 import com.seguridad.control.exception.CRUDException;
 import com.seguridad.utils.ResponseCode;
 import com.services.TemplateResource;
@@ -64,19 +65,34 @@ public class BoletoResource extends TemplateResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    @Path("existe-boleto/{nroBoleto}")
-    public RestResponse getExisteBoleto(@PathParam("nroBoleto") String nroBoleto) {
+    @Path("existe-boleto/{numero}")
+    public RestResponse getExisteBoleto(@PathParam("nroBoleto") long numero) {
         RestResponse response = new RestResponse();
+        try {
+            Optional op = Optional.ofNullable(numero);
+            if (!op.isPresent()) {
+                response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+                response.setContent(mensajes.getProperty(RestResponse.RESTFUL_PARAMETERS_SENT));
+                return response;
+            }
 
-        Optional op = Optional.ofNullable(nroBoleto);
-        if (!op.isPresent()){
+            boolean existe = ejbBoleto.isBoletoRegistrado(new Boleto(numero));
+
+            if (existe) {
+                response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+                response.setContent(mensajes.getProperty(RestResponse.RESTFUL_NUMERO_BOLETO_INSERTADO));
+            } else {
+                response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
+                response.setContent(mensajes.getProperty(RestResponse.RESTFUL_NUMERO_BOLETO_INSERTADO));
+
+            }
+
+        } catch (CRUDException ex) {
+            Logger.getLogger(BoletoResource.class.getName()).log(Level.SEVERE, null, ex);
             response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
-            response.setContent(mensajes.getProperty(RestResponse.RESTFUL_PARAMETERS_SENT));
-            return response ;
+            response.setContent(ex.getMessage());
         }
-        
-        
-        
+
         return response;
     }
 
