@@ -213,9 +213,15 @@ angular.module('jsAerolinea.controllers', []).controller('frmAerolinea',
                         return;
                     }
 
+                    //VALIDA QUE LOS CARACTERES SEAN 5
                     if ($scope.formData.otrosImpuestos.length < 5) {
                         $scope.showErrorOtrosImpuestos = true;
                         return;
+                    }
+                    
+                    if ($scope.formData.aerolineaImpuestoList.length >= 5){
+                        $scope.showErrorMaximoImpuetos = true;
+                        return ;
                     }
 
                     $scope.showErrorOtrosImpuestos = false;
@@ -715,7 +721,6 @@ angular.module('jsAerolinea.controllers', []).controller('frmAerolinea',
                     $scope.showRestfulError = false;
 
                     $scope.formData = item;
-                    console.log(item);
                     /*$scope.formData.ctaVentasMonNac = $scope.findCta(item.ctaVentasMonNac, $scope.comboVentas);
                     $scope.formData.ctaVentasMonExt = $scope.findCta(item.ctaVentasMonExt, $scope.comboVentas);
                     $scope.formData.ctaComisionMonNac = $scope.findCta(item.ctaComisionMonNac, $scope.comboComisiones);
@@ -732,6 +737,8 @@ angular.module('jsAerolinea.controllers', []).controller('frmAerolinea',
                     $scope.showTable = false;
                     $scope.hideMessagesBox();
                     $scope.formData = new Aerolinea();
+                    $scope.showErrorMaximoImpuetos = false ;
+                    $scope.showErrorOtrosImpuestos = false ;
                 }
 
                 $scope.hideMessagesBox = function () {

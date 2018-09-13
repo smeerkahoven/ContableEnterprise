@@ -292,7 +292,7 @@
                                                                 <option style="display:none" value="">Seleccione un tipo de Emision</option>
                                                             </select>
 
-                                                            <span class="alert-danger"  ng-show="formData.emision === undefined"  >
+                                                            <span class="alert-danger"  ng-show="!formData.emision"  >
                                                                 Ingrese una tipo de Emision
                                                             </span> 
                                                         </div>
@@ -325,10 +325,11 @@
                                                         <div class="col-sm-6">
                                                             <input type="text" class="form-control col" name="txtNumero"  
                                                                    required="required" valid-number="valid-number"  onkeypress="return isNumberKey(event)" 
-                                                                   maxlength="12" ng-model="formData.numero"/>
+                                                                   maxlength="12" ng-model="formData.numero" ng-blur="validarNroBoleto()"/>
                                                             <span class="alert-danger" ng-show="!myForm.txtNumero.$valid">Debe ingresar un Numero de Boleto</span>
                                                         </div>
-
+                                                        <span ng-show="showCheckNumeroBoleto"><i class="loader loader-sm" ></i></span>
+                                                        <span ng-show="showCheckNumeroBoletoExists" class="alert alert-info">{{showCheckNumeroBoletoMensaje}}</span>
                                                     </div>
 
                                                     <div class="form-group row">
@@ -582,6 +583,18 @@
                                                                                                         ng-model="formData.comisionUsd" ng-change="calculateComisionUsd()"
                                                                                                         data-toggle="tooltip" data-placement="top" ng-disabled="aerolinea.moneda == 'B'" /></td>
                                                                         </tr>
+                                                                        
+                                                                       <tr class="d-flex table-warning"  >
+                                                                           <td class="col-sm-6"><label class="text-right"><strong>MONTO A PAGAR A LA LINEA AEREA</strong></label></td>
+                                                                                
+                                                                            <td class="col-sm-3">
+                                                                                <strong>{{formData.montoPagarLineaAereaBs }}</strong>
+                                                                            </td>
+                                                                            <td class="col-sm-3">
+                                                                                <strong>{{formData.montoPagarLineaAereaUsd }}</strong>
+                                                                            </td>
+                                                                        </tr>
+                                                                        
                                                                         <tr class="d-flex">
                                                                             <td class="col-sm-12"><label class="text-right">
                                                                                     <legend>Movimiento Interno (Solo cuenta por Cobrar)</legend>

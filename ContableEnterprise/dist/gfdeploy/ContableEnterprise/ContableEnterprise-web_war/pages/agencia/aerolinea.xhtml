@@ -124,7 +124,7 @@
                                                 <thead >
                                                     <c:if test="#{aerolinea.formulario.buscar == aerolinea.formulario.PERMITIR}">
                                                         <tr>
-                                                            <th colspan="4">
+                                                            <th colspan="6">
                                                                 <!-- .input-group -->
                                                                 <div class="input-group has-clearable">
                                                                     <div class="input-group-prepend">
@@ -726,7 +726,7 @@
                                                         <div class="col-sm">
                                                             <div class="form-inline">
 
-                                                                <input type="text" class="form-control" name="txtOtrosImpuestos" maxlength="16" ng-model="formData.otrosImpuestos" />
+                                                                <input type="text" class="form-control" name="txtOtrosImpuestos" maxlength="16" ng-model="formData.otrosImpuestos" title="Debe ingresar un nombre de Impuesto mayor a 4 caract&eacute;res" />
 
                                                                 <a title="Ingresar" class="btn btn-sm btn-success" ng-click="updateAddImpuesto()" ng-show="showBtnEditar">
                                                                     <i class=" fa fa-plus text-white"></i>
@@ -738,6 +738,10 @@
 
                                                                 <span class="alert-danger"  ng-show="showErrorOtrosImpuestos"  >
                                                                     Ingrese un nombre v&aacute;lido.
+                                                                </span> 
+                                                                
+                                                                <span class="alert-danger"  ng-show="showErrorMaximoImpuetos"  >
+                                                                    Solo est&aacute; permitido ingresar hasta 5 impuestos.
                                                                 </span> 
                                                             </div>
 
