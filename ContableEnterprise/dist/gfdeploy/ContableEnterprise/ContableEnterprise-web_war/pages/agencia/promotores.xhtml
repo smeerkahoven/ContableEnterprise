@@ -204,15 +204,13 @@
                                                     <div class="form-group row">
                                                         <label for="txtSucursal" class=" col-form-label col-sm-3 text-right">Agencia</label>
                                                         <div class="col-sm-6">
-                                                            <input type="text" ng-model="formData.idEmpresa" placeholder="Seleccione una Agencia"
-                                                                   uib-typeahead="sucursal as sucursal.name for sucursal in comboSucursales | filter:{name:$viewValue}"
-                                                                   typeahead-min-length="0"
-                                                                   typeahead-template-url="customTemplate.html"
-                                                                   typeahead-show-hint="true"
-                                                                   class="form-control"                                                                    
-                                                                   />
-                                                        
-                                                            <span class="alert-danger"  ng-show="!formData.idEmpresa.id"  >
+                                                            
+                                                            <select class="form-control " 
+                                                                    ng-options="option.id as option.name for option in comboSucursales" ng-model="formData.idEmpresa">
+                                                                <option style="display:none" value="">Seleccione una Entidad</option>
+                                                            </select>
+
+                                                            <span class="alert-danger"  ng-show="!formData.idEmpresa"  >
                                                                 Debe ingresar una Agencia v&aacute;lida.
                                                             </span>
                                                         </div>

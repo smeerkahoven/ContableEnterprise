@@ -89,11 +89,8 @@ angular.module('jsPromotores.controllers', []).controller('frmPromotores',
                         $scope.showAlert('Error de Verificacion', 'Verifique los mensajes de los valores requeridos')
                         return;
                     }
-
                     $scope.loading = true;
-
                     $scope.formData.idEmpresa = $scope.formData.idEmpresa.id;
-
                     $http({
                         method: 'POST',
                         url: url.value + 'save',
@@ -120,9 +117,6 @@ angular.module('jsPromotores.controllers', []).controller('frmPromotores',
                         $scope.showForm = false;
                     });
                 };
-
-
-
 
                 $scope.formHasError = function () {
                     if ($scope.formData.idEmpresa == undefined) {
