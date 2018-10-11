@@ -5,12 +5,24 @@
  */
 package com.services.agencia;
 
+import com.agencia.control.ejb.BoletoMultipleSearch;
 import com.agencia.control.remote.BoletoRemote;
 import com.agencia.entities.Boleto;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.response.json.agencia.BoletoJSON;
+import com.seguridad.control.entities.Formulario;
 import com.seguridad.control.exception.CRUDException;
+import com.seguridad.utils.Accion;
 import com.seguridad.utils.ResponseCode;
 import com.services.TemplateResource;
+import com.services.seguridad.util.RestRequest;
 import com.services.seguridad.util.RestResponse;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -18,6 +30,7 @@ import javax.ejb.EJB;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
 import javax.ws.rs.PathParam;
@@ -65,8 +78,33 @@ public class BoletoResource extends TemplateResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
+    @Path("cliente-pasajeros/{idCliente}")
+    public RestResponse getClientePasajeros(@PathParam("idCliente") Integer idCliente) {
+        RestResponse response = new RestResponse();
+
+        Optional op = Optional.ofNullable(idCliente);
+        if (op.isPresent()) {
+
+            try {
+                response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
+                response.setContent(ejbBoleto.getPasajerosPorCliente(idCliente));
+            } catch (CRUDException ex) {
+                Logger.getLogger(BoletoResource.class.getName()).log(Level.SEVERE, null, ex);
+                response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+                response.setContent(ex.getCause());
+            }
+        } else {
+            response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+            response.setContent(mensajes.getProperty(RestResponse.RESTFUL_PARAMETERS_SENT));
+        }
+
+        return response;
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
     @Path("existe-boleto/{numero}")
-    public RestResponse getExisteBoleto(@PathParam("nroBoleto") long numero) {
+    public RestResponse getExisteBoleto(@PathParam("numero") long numero) {
         RestResponse response = new RestResponse();
         try {
             Optional op = Optional.ofNullable(numero);
@@ -83,7 +121,7 @@ public class BoletoResource extends TemplateResource {
                 response.setContent(mensajes.getProperty(RestResponse.RESTFUL_NUMERO_BOLETO_INSERTADO));
             } else {
                 response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
-                response.setContent(mensajes.getProperty(RestResponse.RESTFUL_NUMERO_BOLETO_INSERTADO));
+                response.setContent(mensajes.getProperty(RestResponse.RESTFUL_NUMERO_BOLETO_VALIDO));
 
             }
 
@@ -113,4 +151,178 @@ public class BoletoResource extends TemplateResource {
 
         return response;
     }
+
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("save-simple")
+    public RestResponse saveSimple(final RestRequest request) {
+        RestResponse response = doValidations(request);
+
+        if (response.getCode() == ResponseCode.RESTFUL_SUCCESS.getCode()) {
+
+            BoletoJSON bjson;
+            Gson gson = new GsonBuilder().create();
+            JsonParser parser = new JsonParser();
+            JsonObject object = parser.parse((String) request.getContent()).getAsJsonObject();
+            System.out.println((String) request.getContent());
+            bjson = gson.fromJson(object.toString(), BoletoJSON.class);
+
+            bjson.setIdUsuarioCreador(user.getUserName());
+            bjson.setIdEmpresa(user.getIdEmpleado().getIdEmpresa().getIdEmpresa());
+
+            Boleto boleto = BoletoJSON.toNewBoleto(bjson);
+
+            Optional op = Optional.ofNullable(boleto);
+            if (op.isPresent()) {
+                try {
+                    boleto = ejbBoleto.procesarBoleto(boleto);
+                    response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
+                    response.setContent("El Boleto ha sido ingresado Exitosamente!");
+
+                    bjson.setIdBoleto(boleto.getIdBoleto());
+                    bjson.setIdNotaDebito(boleto.getIdNotaDebito());
+                    bjson.setIdIngresoCaja(boleto.getIdIngresoCaja());
+
+                    response.setEntidad(bjson);
+
+                    ejbLogger.add(Accion.INSERT, user.getUserName(), Formulario.BOLETOS, user.getIp());
+
+                } catch (CRUDException ex) {
+                    Logger.getLogger(BoletoResource.class.getName()).log(Level.SEVERE, null, ex);
+                    response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+                    response.setContent(ex.getMessage());
+                }
+            } else {
+                response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+                response.setContent(mensajes.getProperty(RestResponse.RESTFUL_BOLETO_NO_CREADO));
+            }
+        }
+
+        return response;
+    }
+
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("all")
+    public RestResponse getAll(final RestRequest request) {
+
+        RestResponse response = doValidations(request);
+
+        if (response.getCode() == ResponseCode.RESTFUL_SUCCESS.getCode()) {
+
+            try {
+                HashMap<String, Object> parameters = (HashMap<String, Object>) request.getContent();
+                Integer cliente = (Integer) parameters.get("cliente");
+                Integer aerolinea = (Integer) parameters.get("aerolinea");
+                String fechaI = (String) parameters.get("fechaInicio");
+                String fechaF = (String) parameters.get("fechaFin");
+
+                List l = ejbBoleto.getBoletos(cliente, aerolinea, user.getIdEmpleado().getIdEmpresa().getIdEmpresa(), fechaI, fechaF);
+
+                List r = new LinkedList();
+
+                l.forEach((x) -> {
+                    BoletoJSON bjson = BoletoJSON.toBoletoJSON((Boleto) x);
+                    r.add(bjson);
+                });
+
+                response.setContent(r);
+                response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
+
+            } catch (CRUDException ex) {
+                Logger.getLogger(BoletoResource.class.getName()).log(Level.SEVERE, null, ex);
+                response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+                response.setContent(ex.getCause());
+            }
+        }
+
+        return response;
+    }
+
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("save-boleto")
+    public RestResponse saveBoleto(final RestRequest request) {
+        RestResponse response = new RestResponse();
+
+        response = doValidations(request);
+        if (response.getCode() == ResponseCode.RESTFUL_SUCCESS.getCode()) {
+
+            BoletoJSON bjson;
+            Gson gson = new GsonBuilder().create();
+            JsonParser parser = new JsonParser();
+            JsonObject object = parser.parse((String) request.getContent()).getAsJsonObject();
+            System.out.println((String) request.getContent());
+            bjson = gson.fromJson(object.toString(), BoletoJSON.class);
+
+            bjson.setIdUsuarioCreador(user.getUserName());
+            bjson.setIdEmpresa(user.getIdEmpleado().getIdEmpresa().getIdEmpresa());
+
+            Boleto boleto = BoletoJSON.toNewBoleto(bjson);
+
+            Optional op = Optional.ofNullable(boleto);
+            if (op.isPresent()) {
+                try {
+                    boleto = ejbBoleto.saveBoleto(boleto);
+                    bjson.setIdBoleto(boleto.getIdBoleto());
+
+                    response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
+                    response.setContent(mensajes.getProperty(RestResponse.RESTFUL_BOLETO_MULTIPLE_INSERTADO));
+                    response.setEntidad(bjson);
+                } catch (CRUDException ex) {
+                    Logger.getLogger(BoletoResource.class.getName()).log(Level.SEVERE, null, ex);
+                    response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+                    response.setContent(ex.getMessage());
+                }
+            }
+
+        }
+
+        return response;
+    }
+
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("load-multiple")
+    public RestResponse loadMultiple(final RestRequest request) {
+        RestResponse response = new RestResponse();
+
+        response = doValidations(request);
+        if (response.getCode() == ResponseCode.RESTFUL_SUCCESS.getCode()) {
+
+            BoletoMultipleSearch bjson;
+            Gson gson = new GsonBuilder().create();
+            JsonParser parser = new JsonParser();
+            JsonObject object = parser.parse((String) request.getContent()).getAsJsonObject();
+            System.out.println((String) request.getContent());
+            bjson = gson.fromJson(object.toString(), BoletoMultipleSearch.class);
+
+            try {
+                List l = ejbBoleto.getBoletosMultiples(bjson.getIdBoleto(), bjson.getIdBoletoPadre());
+
+                List resp = new LinkedList();
+                l.forEach(x -> {
+                    BoletoJSON bj = BoletoJSON.toBoletoJSON((Boleto)x);
+                    
+                    resp.add(bj);
+                });
+                
+                response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
+                response.setContent(resp);
+
+            } catch (CRUDException ex) {
+                Logger.getLogger(BoletoResource.class.getName()).log(Level.SEVERE, null, ex);
+                response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+                response.setContent(ex.getMessage());
+            }
+
+        }
+
+        return response;
+    }
+
 }

@@ -37,6 +37,8 @@ public class RestResponse {
     //boleto
     public static final String RESTFUL_NUMERO_BOLETO_INSERTADO="RESTFUL_NUMERO_BOLETO_INSERTADO";
     public static final String RESTFUL_NUMERO_BOLETO_VALIDO="RESTFUL_NUMERO_BOLETO_VALIDO";
+    public static final String RESTFUL_BOLETO_NO_CREADO="RESTFUL_BOLETO_NO_CREADO";
+    public static final String RESTFUL_BOLETO_MULTIPLE_INSERTADO="RESTFUL_BOLETO_MULTIPLE_INSERTADO";
 
     private int code;
 

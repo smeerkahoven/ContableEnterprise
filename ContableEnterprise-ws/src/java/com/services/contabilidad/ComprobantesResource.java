@@ -109,40 +109,6 @@ public class ComprobantesResource extends TemplateResource {
         return response;
     }
 
-    @POST
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Path("numero-comprobante/{tipo}")
-    public RestResponse getNumeroComprobante(final RestRequest request, @PathParam("tipo") String tipo) {
-
-        RestResponse response = doValidations(request);
-        if (response.getCode() == ResponseCode.RESTFUL_SUCCESS.getCode()) {
-            try {
-                if (tipo == null) {
-                    response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
-                    response.setContent(mensajes.getProperty(RestResponse.RESTFUL_PARAMETERS_SENT));
-                    return response;
-                }
-                if (tipo.isEmpty()) {
-                    response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
-                    response.setContent(mensajes.getProperty(RestResponse.RESTFUL_PARAMETERS_SENT));
-                    return response;
-                }
-
-                String fecha = DateContable.getCurrentDateStr(DateContable.PARTITION_FORMAT);
-
-                ComprobanteContablePK numero = ejbComprobante.getNextComprobantePK(fecha, tipo);
-
-                response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
-                response.setContent(numero);
-            } catch (CRUDException ex) {
-                Logger.getLogger(ComprobantesResource.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-
-        return response;
-    }
-
     /**
      * No se esta pidiendo la validacion del token debido a un error con los
      * formatos de los numeros Se debe depurar valor por valor mas adelante con
@@ -151,6 +117,8 @@ public class ComprobantesResource extends TemplateResource {
      *
      * Tambien revisar los begin y end Trnsaction para commit y rollback
      *
+     * @param c
+     * @return 
      * @TODO
      */
     @POST
@@ -208,11 +176,11 @@ public class ComprobantesResource extends TemplateResource {
             }
             }*/
 
-            ComprobanteContablePK numero = ejbComprobante.getNextComprobantePK(c.getFecha(), c.getTipo());
-
             ComprobanteContable cc = ComprobanteContableJSON.toComprobanteContable(c);
+            
+            //ComprobanteContablePK numero = ejbComprobante.getNextComprobantePK(c.getFecha(), c.getTipo());
 
-            cc.setIdNumeroGestion(numero.getIdLibro());
+            /*cc.setIdNumeroGestion(numero.getIdLibro());
             //cc.setIdUsuarioCreador(user.getUserName());
             //cc.setIdEmpresa(user.getIdEmpleado().getIdEmpresa().getIdEmpresa());
             cc.setIdUsuarioCreador(c.getIdUsuarioCreador());
@@ -223,20 +191,24 @@ public class ComprobantesResource extends TemplateResource {
             //  ejbComprobante.beginTransaction();
             Integer idLibro = ejbComprobante.insert(cc);
 
-            cc.getComprobanteContablePK().setIdLibro(idLibro);
+            cc.getComprobanteContablePK().setIdLibro(idLibro);*/
             //insertamos las transacciones.
+            
+            cc = ejbComprobante.procesarComprobante(cc);
             List<AsientoContableJSON> transacciones = c.getTransacciones();
             for (AsientoContableJSON t : transacciones) {
 
                 AsientoContable a = AsientoContableJSON.toAsientoContable(t);
-                a.setFechaMovimiento(DateContable.getCurrentDate());
+                /*a.setFechaMovimiento(DateContable.getCurrentDate());
                 a.setIdLibro(idLibro);
                 a.setAsientoContablePK(new AsientoContablePK(0, cc.getComprobanteContablePK().getGestion()));
 
-                ejbComprobante.insert(a);
+                ejbComprobante.insert(a);*/
 
+                a = ejbComprobante.procesarAsientoContable(a, cc);
+                
                 t.setFechaMovimiento(DateContable.getDateFormat(a.getFechaMovimiento(), DateContable.LATIN_AMERICA_TIME_FORMAT));
-                t.setIdLibro(idLibro);
+                t.setIdLibro(c.getIdLibro());
                 t.setGestion(a.getAsientoContablePK().getGestion());
                 t.setIdAsiento(a.getAsientoContablePK().getIdAsiento());
             }

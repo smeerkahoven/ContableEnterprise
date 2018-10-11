@@ -30,11 +30,13 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.ws.rs.Produces;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
@@ -55,6 +57,43 @@ public class PromotorResource extends TemplateResource {
      * Creates a new instance of PromotorResource
      */
     public PromotorResource() {
+    }
+
+    @GET
+    @Path("combo/all-counters/{idEmpresa}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public RestResponse getAllCounterCombo(@PathParam("idEmpresa") Integer idEmpresa) {
+        RestResponse response = new RestResponse();
+        try {
+
+            Optional op = Optional.ofNullable(idEmpresa);
+            if (!op.isPresent()) {
+                response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+                response.setContent(mensajes.getProperty(RestResponse.RESTFUL_PARAMETERS_SENT));
+                return response ;
+            }
+
+            List l = ejbPromotor.get("Promotor.comboAllCounter", Promotor.class);
+            List r = new LinkedList();
+
+            l.forEach((x) -> {
+                Promotor p = (Promotor) x;
+                ComboSelect s = new ComboSelect();
+                s.setId(p.getIdPromotor());
+                s.setName(p.getNombre() + " " + p.getApellido());
+
+                r.add(s);
+            });
+
+            response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
+            response.setContent(r);
+            
+        } catch (CRUDException ex) {
+            response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+            response.setContent(ex.getMessage());
+            Logger.getLogger(PromotorResource.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return response;
     }
 
     @POST
