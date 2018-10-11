@@ -11,8 +11,6 @@ import com.reports.ReportViewer;
 import com.reports.agencia.ReporteAgenciaMBean;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.sql.Connection;
@@ -20,7 +18,6 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.Resource;
@@ -40,8 +37,8 @@ import net.sf.jasperreports.engine.JasperRunManager;
  *
  * @author xeio
  */
-@WebServlet(name = "ComprobanteReporteServlet", urlPatterns = {"/ComprobanteReporteServlet"})
-public class ComprobanteReportServlet extends HttpServlet {
+@WebServlet(name = "NotaDebitoReportServlet", urlPatterns = {"/NotaDebitoReportServlet"})
+public class NotaDebitoReportServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -108,11 +105,11 @@ public class ComprobanteReportServlet extends HttpServlet {
     }
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, SQLException {
+            throws ServletException, IOException {
         try {
             String jrxmlFileName = "/resources/cabecera.jasper";
             File archivoReporte = new File(request.getSession().getServletContext().getRealPath(jrxmlFileName));
-            Integer idLibro = Integer.parseInt(request.getParameter("idLibro"));
+            Integer idNotaDebito = Integer.parseInt(request.getParameter("idNota"));
             HashMap hm = null;
             hm = new HashMap();
 
@@ -122,8 +119,8 @@ public class ComprobanteReportServlet extends HttpServlet {
 
             try {
 
-                hm.put("ID_LIBRO", idLibro);
-                hm.put("PATH_SUBREPORTE", "contabilidad/comprobante.jasper");
+                hm.put("ID_NOTA_DEBITO", idNotaDebito);
+                hm.put("PATH_SUBREPORTE", "contabilidad/nota_debito.jasper");
 
                 bytes = JasperRunManager.runReportToPdf(archivoReporte.getPath(), hm, datasource.getConnection());
 
@@ -138,14 +135,14 @@ public class ComprobanteReportServlet extends HttpServlet {
                 e.printStackTrace(printWriter);
                 response.setContentType("text/plain");
                 response.getOutputStream().print(stringWriter.toString());
+            } finally {
+                if (datasource.getConnection() != null) {
+                    datasource.getConnection().close();
+                }
             }
         } catch (Exception e) {
             String salida = "Error generando Reporte Jasper, el error del Sistema es " + e;
             System.out.println(salida);
-        } finally {
-            if (datasource.getConnection() != null) {
-                datasource.getConnection().close();
-            }
         }
     }
 
@@ -161,12 +158,7 @@ public class ComprobanteReportServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            processRequest(request, response);
-        } catch (SQLException ex) {
-            Logger.getLogger(ComprobanteReportServlet.class.getName()).log(Level.SEVERE, null, ex);
-            ex.printStackTrace();
-        }
+        processRequest(request, response);
     }
 
     /**
@@ -180,11 +172,7 @@ public class ComprobanteReportServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        try {
-            processRequest(request, response);
-        } catch (SQLException ex) {
-            Logger.getLogger(ComprobanteReportServlet.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        processRequest(request, response);
     }
 
     /**

@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="05708238-32c6-4b2d-94c3-a78b24b631fb">
+	<property name="ireport.zoom" value="2.5937424601000028"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ID_INGRESO" class="java.lang.String">
+		<defaultValueExpression><![CDATA[6]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select 
+ic.id_ingreso_caja, 
+ic.id_usuario,
+ic.id_empresa, em.tipo,
+ic.id_cliente, upper(cl.nombre) cliente, cl.telefono_fijo,
+ic.id_counter, concat( upper(pr.nombre),' ', upper(pr.apellido)) counter,
+date_format(ic.fecha_emision,'%d/%m/%y')fecha_emision,
+ic.fecha_insert, 
+ic.factor_cambiario,
+ic.moneda, 
+ic.total_debitado_bs,
+number_to_string(ic.total_debitado_bs) literal_bs, round(abs(mod(ic.total_debitado_bs,1)*100)) decimal_part_bs,
+ic.total_debitado_usd,
+number_to_string (ic.total_debitado_usd)literal_usd, round(abs(mod(ic.total_debitado_usd,1)*100)) decimal_part_usd,
+case ic.forma_pago 	
+	when  'E' then 
+	case ic.tipo_contado 
+		when 'E' then 'CONTADO EFECTIVO' 
+		when 'D' then concat('CONTADO con DEPOSITO BANCARIO Nro Deposito:',ic.nro_deposito, ' en la Cuenta: ',coalesce( pc.cuenta,'SIN NOMBRE'))
+		when 'C' then concat('CONTADO con CHEQUE Nro:', ic.nro_cheque, ' del Banco:' , coalesce( ba.nombre,' SIN NOMBRE'))
+	end
+	when  'T' then concat('TARJETA CREDITO/DEBITO con Numero de Tarjeta: ', ic.nro_tarjeta )
+	when  'P' then 
+		concat('', 
+			coalesce(                
+				case ic.combinado_contado when '1' then 
+					case ic.tipo_contado
+					when 'E' then ' CONTADO EFECTIVO ' 
+					when 'D' then concat(' CONTADO con DEPOSITO BANCARIO Nro Deposito:',ic.nro_deposito, ' en la Cuenta: ', coalesce( pc.cuenta,'SIN NOMBRE'))
+					when 'C' then concat(' CONTADO con CHEQUE Nro:', ic.nro_cheque, ' del Banco:' , ba.nombre)
+					end                
+				end, ' CONTADO'
+			,''),			
+			coalesce(case ic.combinado_tarjeta when '1' then concat(' TARJETA CREDITO/DEBITO con Numero de Tarjeta: ', ic.nro_tarjeta ) end, '')
+		)
+                				
+	end forma_pago_literal,
+    tr.id_ingreso_caja, tr.descripcion, tr.monto_bs monto_bs_tr, tr.monto_usd monto_usd_tr
+from cnt_ingreso_caja ic
+inner join tb_empresa em on em.id_empresa = ic.id_empresa
+inner join cnt_cliente cl on cl.id_cliente = ic.id_cliente
+inner join cnt_promotor pr on pr.id_promotor = ic.id_counter
+inner join cnt_ingreso_transaccion tr on tr.id_ingreso_caja = ic.id_ingreso_caja
+left join cnt_bancos ba on ba.id_banco = ic.id_banco
+left join cnt_plan_cuentas pc on pc.id_plan_cuentas = ic.id_cuenta_deposito
+left join cnt_tarjetas_credito tc on tc.id_tarjeta_credito = ic.id_tarjeta_credito
+WHERE ic.id_ingreso_caja=$P{ID_INGRESO}]]>
+	</queryString>
+	<field name="id_ingreso_caja" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="id_usuario" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="id_empresa" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="tipo" class="java.lang.String">
+		<fieldDescription><![CDATA[principal solo deberia permitir una
+sucursal]]></fieldDescription>
+	</field>
+	<field name="id_cliente" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="cliente" class="java.lang.String"/>
+	<field name="telefono_fijo" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="id_counter" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="counter" class="java.lang.String"/>
+	<field name="fecha_emision" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="fecha_insert" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="factor_cambiario" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="moneda" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="total_debitado_bs" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="literal_bs" class="java.lang.String"/>
+	<field name="decimal_part_bs" class="java.math.BigDecimal"/>
+	<field name="total_debitado_usd" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="literal_usd" class="java.lang.String"/>
+	<field name="decimal_part_usd" class="java.math.BigDecimal"/>
+	<field name="forma_pago_literal" class="java.lang.String"/>
+	<field name="descripcion" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="monto_bs_tr" class="java.math.BigDecimal"/>
+	<field name="monto_usd_tr" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="555" height="25" uuid="cd6fad28-c39b-4c89-a744-a59a3fc15091"/>
+				<textElement textAlignment="Right">
+					<font  fontName="SansSerif" pdfFontName="Helvetica-Bold" isPdfEmbedded="true" size="18" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Ingreso a Caja #"+$F{id_ingreso_caja}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="8" y="25" width="547" height="3" uuid="222a71a6-8039-492a-8577-0288016e208c"/>
+			</line>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="68" splitType="Stretch">
+			<textField>
+				<reportElement x="85" y="0" width="232" height="14" uuid="a9d5ff25-277e-42b1-9f89-9ae1d471e9a9"/>
+				<textFieldExpression><![CDATA[$F{cliente}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="8" y="0" width="77" height="14" uuid="69cb3b93-8979-496c-a203-73ea1a815c03"/>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[Señores:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="16" width="77" height="14" uuid="a85539fa-f2ca-4021-b73c-6ad3e7e89532"/>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[Counter:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="453" y="1" width="100" height="14" uuid="0a5f2962-fe77-45a2-9edc-3e9ce5e12258"/>
+				<textFieldExpression><![CDATA[$F{factor_cambiario}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="87" y="16" width="286" height="14" uuid="0b8ea35e-6838-49ec-ac9f-4b6de3e090d2"/>
+				<textFieldExpression><![CDATA[$F{counter}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="453" y="16" width="100" height="14" uuid="a9d48ee5-0099-44bc-8274-1bd1eea5a0dd"/>
+				<textFieldExpression><![CDATA[$F{fecha_emision}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="376" y="1" width="77" height="14" uuid="4087cc5b-a49f-42b4-b22c-6c98879f99ca"/>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[Factor:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="376" y="16" width="77" height="14" uuid="90987dfa-23ff-41b1-9536-c4501233f704"/>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[Fecha Emision:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="50" width="342" height="14" uuid="34cfe6bc-8811-4eb3-a1c7-fb5846edf163"/>
+				<textElement>
+					<font  fontName="SansSerif" pdfFontName="Helvetica-Bold" isPdfEmbedded="true" isBold="true"/>
+				</textElement>
+				<text><![CDATA[DESCRIPCION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="351" y="50" width="100" height="14" uuid="341dd98e-a90a-49ab-8ec4-c3564b9f3f03"/>
+				<textElement textAlignment="Right">
+					<font  fontName="SansSerif" pdfFontName="Helvetica-Bold" isPdfEmbedded="true" isBold="true"/>
+				</textElement>
+				<text><![CDATA[BS.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="453" y="50" width="100" height="14" uuid="b5987175-7def-4392-a9c6-7ec6e2889325"/>
+				<textElement textAlignment="Right">
+					<font  fontName="SansSerif" pdfFontName="Helvetica-Bold" isPdfEmbedded="true" isBold="true"/>
+				</textElement>
+				<text><![CDATA[USD.]]></text>
+			</staticText>
+			<line>
+				<reportElement x="10" y="64" width="543" height="1" uuid="6a810a7b-e6e7-4831-96ab-c79550c504c3"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="10" y="0" width="342" height="14" uuid="36e191bc-a6a8-49df-9aa2-efa6f75bbf99"/>
+				<textFieldExpression><![CDATA[$F{descripcion}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="353" y="0" width="100" height="14" uuid="335d3751-78ee-4576-b673-2bc65539e8df"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{monto_bs_tr}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="455" y="0" width="100" height="14" uuid="b92f8830-1c43-4b73-b1c9-e44e8b399e07"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{monto_usd_tr}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="201" splitType="Stretch">
+			<line>
+				<reportElement x="11" y="3" width="542" height="1" uuid="e9970861-1e3f-4d2a-899e-4e74cb8c5538"/>
+			</line>
+			<staticText>
+				<reportElement x="10" y="7" width="341" height="14" uuid="cdb77b20-454f-489c-9798-b3afc384ce24"/>
+				<textElement>
+					<font  fontName="SansSerif" pdfFontName="Helvetica-Bold" isPdfEmbedded="true" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="353" y="7" width="100" height="14" uuid="7a01dcb6-ec36-4051-a7a7-28e9b3e309a3"/>
+				<textElement textAlignment="Right">
+					<font  fontName="SansSerif" pdfFontName="Helvetica-Bold" isPdfEmbedded="true" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{total_debitado_bs}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="455" y="7" width="100" height="14" uuid="9e4e95d1-c2a4-40d8-a922-d62d34cb0dce"/>
+				<textElement textAlignment="Right">
+					<font  fontName="SansSerif" pdfFontName="Helvetica-Bold" isPdfEmbedded="true" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{total_debitado_usd}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="10" y="30" width="553" height="30" isPrintWhenDetailOverflows="true" uuid="3ac32ee7-168b-41b9-b909-e947df4d462b"/>
+				<textFieldExpression><![CDATA["Pago:" + $F{forma_pago_literal}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="10" y="80" width="551" height="20" uuid="f52fb10b-7a39-4f0d-a655-c78aef103c54">
+					<printWhenExpression><![CDATA[$F{total_debitado_bs}!= null]]></printWhenExpression>
+				</reportElement>
+				<textFieldExpression><![CDATA["Son:"+$F{literal_bs} + " " + $F{decimal_part_bs} + "/100 BOLIVIANOS."]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="10" y="60" width="551" height="20" uuid="5882ede2-7af1-4d0e-9b13-f5f1f6d2df40">
+					<printWhenExpression><![CDATA[$F{total_debitado_usd}!= null]]></printWhenExpression>
+				</reportElement>
+				<textFieldExpression><![CDATA["Son:" + $F{literal_usd} + " " + $F{decimal_part_usd}+"/100 DOLARES."]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="310" y="161" width="251" height="14" uuid="31565672-d2e2-41a4-8684-c68ee15de330"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[FIRMA DEL CLIENTE]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="13" y="161" width="254" height="14" uuid="9ee79ed2-1388-497c-985c-7eaf1e38896c"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA["AUTORIZADO POR :" + $F{id_usuario}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="13" y="158" width="251" height="1" uuid="94f94940-c41c-4b26-8521-7c9099507993"/>
+			</line>
+			<line>
+				<reportElement x="310" y="158" width="251" height="1" uuid="b87bcb6f-4dc8-4d2c-9542-727a6dbe32e9"/>
+			</line>
+			<textField>
+				<reportElement x="0" y="185" width="342" height="12" uuid="a711826e-311c-4a90-af3d-900ac056c2af"/>
+				<textElement>
+					<font size="7"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Creado por: " + $F{id_usuario} + " fecha: " + $F{fecha_insert}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

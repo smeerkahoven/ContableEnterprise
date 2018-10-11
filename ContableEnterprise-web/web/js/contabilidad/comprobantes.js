@@ -25,6 +25,7 @@ var INICIAL = "I";
 let ZERO = "0";
 let SI = "S";
 let NO = "N";
+
 function AsientoContable() {
     this.position = 0;
     this.idAsiento = '0';
@@ -85,7 +86,6 @@ let ALL_PLAN_CUENTAS = "combo/";
 let DOLLAR_TODAY = 'dollar/today';
 let UFV_TODAY = 'ufv/today';
 
-let NUMERO_COMPROBANTE = 'numero-comprobante/';
 
 let METHOD_ANULAR = 'anular';
 let METHOD_PENDIENTE = 'pendiente';
@@ -169,11 +169,11 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                 $scope.find = function () {
                     $scope.loading = true;
                     return $http({
-                            method : 'POST',
-                            url : `${url.value}all`,
-                            data: {token: token.value, content:$scope.search},
-                            headers: {'Content-Type': 'application/json'}
-                            //`${url.value}all?tipo=${$scope.search.tipo}&estado=${$scope.search.estado}&fechaI=${$scope.search.fechaInicio}&fechaF=${$scope.search.fechaFin}`
+                        method: 'POST',
+                        url: `${url.value}all`,
+                        data: {token: token.value, content: $scope.search},
+                        headers: {'Content-Type': 'application/json'}
+                        //`${url.value}all?tipo=${$scope.search.tipo}&estado=${$scope.search.estado}&fechaI=${$scope.search.fechaInicio}&fechaF=${$scope.search.fechaFin}`
                     }).then(function (response) {
                         if (response.data.code === 201) {
                             $scope.mainGrid = response.data.content;
@@ -206,7 +206,8 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                                     $scope.formData.transacciones[i].idPlanCuenta = $scope.findCta($scope.formData.transacciones[i].idPlanCuenta.id, $scope.comboPlanCuentas);
                                 }
                             }
-                            $scope.sumarTotales();
+                            //$scope.sumarTotales();
+                            $scope.sumarDiferencias()
                             $scope.habilitarBotones();
                         } else {
                             $scope.showRestfulMessage = response.data.content;
@@ -311,7 +312,7 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                 $scope.colocarPendiente = function () {
                     if ($scope.formData.estado === INICIAL) {
                         $scope.save(PENDIENTE);
-                    } else  if ($scope.formData.estado === ANULADO) {
+                    } else if ($scope.formData.estado === ANULADO) {
                         $scope.loading = true;
                         return $http({
                             method: 'POST',
@@ -331,9 +332,9 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                                 $scope.showRestfulError = true;
                             }
                         }, $scope.showErrorFunction());
-                     } else  if ($scope.formData.estado === PENDIENTE) {
-                         
-                     }
+                    } else if ($scope.formData.estado === PENDIENTE) {
+
+                    }
                 }
 
                 $scope.newComprobante = function (tipo) {
@@ -367,7 +368,7 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
 
                 $scope.existenTransaccionesInvalidas = function () {
 
-                    if ($scope.formData.transacciones == undefined) {
+                    if ($scope.formData.transacciones === undefined) {
                         return true;
                     }
 
@@ -394,6 +395,7 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                     }
 
                     //existen diferencias
+                    console.log(`existen diferencias:${$scope.existenDiferencias()} `);
                     disable = $scope.existenDiferencias();
 
                     return disable;
@@ -408,7 +410,7 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                     }
                     return false;
                 }
-                
+
                 $scope.obtenerPlanCuentas = function () {
                     return $http({
                         method: 'POST',
@@ -441,7 +443,7 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                             $scope.formData.conErrores = SI;
                         else
                             $scope.formData.conErrores = NO;
-                        
+
                         $scope.formData.estado = estado;
                         console.log($scope.formData);
                         $http({
@@ -459,7 +461,7 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                                 $scope.disablePendienteButton = false;
                                 $scope.disableAnularButton = false;
                                 $scope.habilitarBotones();
-                                if (estado === APROBADO){
+                                if (estado === APROBADO) {
                                     $scope.imprimir($scope.formData);
                                 }
                                 //$scope.showForm = false;
@@ -538,6 +540,7 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                         if ($scope.formData.transacciones[i] === $scope.modalConfirmation.row) {
                             $scope.formData.transacciones.splice(i, 1);
                             $scope.sumarTotales();
+                            $scope.sumarDiferencias();
                             break;
                         }
                     }
@@ -554,6 +557,7 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                             headers: {'Content-Type': 'application/json'}
                         }).then(function (response) {
                             $scope.sumarTotales();
+                            $scope.sumarDiferencias();
                             $scope.eliminarAsientoFromTable();
                             if ($scope.existenTransaccionesInvalidas()) {
                                 $scope.disableGuardarButton = true;
@@ -599,13 +603,13 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                     }
 
                     if (item.moneda === MONEDA_NACIONAL) {
-                        if (item.debeMonNac == undefined || item.haberMonNac == undefined) {
+                        if (item.debeMonNac === undefined || item.haberMonNac === undefined) {
                             $scope.showRowError = true;
                             $scope.showRowMessage = "Ingrese valores a los montos de Moneda nacional";
                             return false;
                         }
 
-                        if (item.debeMonNac == 0 && item.haberMonNac == 0) {
+                        if (item.debeMonNac === 0 && item.haberMonNac === 0) {
                             $scope.showRowError = true;
                             $scope.showRowMessage = "Ingrese valores a los montos de Moneda nacional";
                             return false;
@@ -655,11 +659,13 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                     }
 
                     $scope.sumarTotales();
+                    $scope.sumarDiferencias();
                     item.editable = false;
                     item.action = ACTION_UPDATE;
                     item.isOK = true;
                     $scope.disableAddButton = false;
 
+                    console.log($scope.existenTransaccionesInvalidas());
                     if ($scope.existenTransaccionesInvalidas()) {
                         $scope.disableGuardarButton = true;
                     } else {
@@ -676,10 +682,10 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                                 headers: {'Content-Type': 'application/json'}
                             }).then(function (response) {
                                 console.log(response);
-                                item = response.data.entidad ;
-                                $scope.formData.transacciones[$scope.formData.transacciones.length -1].idAsiento = item.idAsiento ;
-                                $scope.formData.transacciones[$scope.formData.transacciones.length -1].idLibro = item.idLibro ;
-                                $scope.formData.transacciones[$scope.formData.transacciones.length -1].gestion = item.gestion ;
+                                item = response.data.entidad;
+                                $scope.formData.transacciones[$scope.formData.transacciones.length - 1].idAsiento = item.idAsiento;
+                                $scope.formData.transacciones[$scope.formData.transacciones.length - 1].idLibro = item.idLibro;
+                                $scope.formData.transacciones[$scope.formData.transacciones.length - 1].gestion = item.gestion;
                                 console.log($scope.formData);
                             }, function (error) {
                                 $scope.showRestfulError = true;
@@ -700,22 +706,23 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                         }
                     }
                 }
-                
+
                 $scope.sumarTotales = function () {
                     $scope.formData.totalDebeMonNac = 0;
                     $scope.formData.totalHaberMonNac = 0;
                     $scope.formData.totalHaberMonExt = 0;
                     $scope.formData.totalDebeMonExt = 0;
                     for (var i in $scope.formData.transacciones) {
-                        $scope.formData.totalDebeMonNac = parseFloat(parseFloat($scope.formData.totalDebeMonNac) + parseFloat($scope.formData.transacciones[i].debeMonNac)).toFixed(2);
-                        $scope.formData.totalHaberMonNac = parseFloat(parseFloat($scope.formData.totalHaberMonNac) + parseFloat($scope.formData.transacciones[i].haberMonNac)).toFixed(2);
-                        $scope.formData.totalDebeMonExt = parseFloat(parseFloat($scope.formData.totalDebeMonExt) + parseFloat($scope.formData.transacciones[i].debeMonExt)).toFixed(2);
-                        $scope.formData.totalHaberMonExt = parseFloat(parseFloat($scope.formData.totalHaberMonExt) + parseFloat($scope.formData.transacciones[i].haberMonExt)).toFixed(2);
+                        $scope.formData.totalDebeMonNac = parseFloat((parseFloat($scope.formData.totalDebeMonNac)) + (parseFloat($scope.formData.transacciones[i].debeMonNac))).toFixed(2);
+                        $scope.formData.totalHaberMonNac = parseFloat((parseFloat($scope.formData.totalHaberMonNac)) + (parseFloat($scope.formData.transacciones[i].haberMonNac))).toFixed(2);
+                        $scope.formData.totalDebeMonExt = parseFloat((parseFloat($scope.formData.totalDebeMonExt)) + (parseFloat($scope.formData.transacciones[i].debeMonExt))).toFixed(2);
+                        $scope.formData.totalHaberMonExt = parseFloat((parseFloat($scope.formData.totalHaberMonExt)) + (parseFloat($scope.formData.transacciones[i].haberMonExt))).toFixed(2);
                     }
+                }
 
-
-                    $scope.formData.difMonNac = parseFloat($scope.formData.totalDebeMonNac - $scope.formData.totalHaberMonNac).toFixed(2);
-                    $scope.formData.difMonExt = parseFloat($scope.formData.totalDebeMonExt - $scope.formData.totalHaberMonExt).toFixed(2);
+                $scope.sumarDiferencias= function() {
+                    $scope.formData.difMonNac = parseFloat(Number($scope.formData.totalDebeMonNac) - Number($scope.formData.totalHaberMonNac)).toFixed(2);
+                    $scope.formData.difMonExt = parseFloat(Number($scope.formData.totalDebeMonExt) - Number($scope.formData.totalHaberMonExt)).toFixed(2);
                     console.log($scope.formData.difMonNac);
                     console.log($scope.formData.difMonExt);
 

@@ -48,9 +48,6 @@
         <script type="text/javascript" src="../../js/smart-table.min.js" />
         <script type="text/javascript" src="../../assets/vendor/sweetalert/js/sweetalert.min.js"/>
         <script type="text/javascript" src="../../js/contabilidad/comprobantes.js" />
-
-
-
         <!--CORRIGE ng-show -->
         <link rel="stylesheet" href="../../css/main.css"  />
     </head>
@@ -98,16 +95,15 @@
                                     <h1 class="page-title mr-sm-auto"> #{comprobantes.formulario.nombre}</h1>
                                     <div class="dt-button btn-group">
                                         <c:if test="#{comprobantes.formulario.crear== comprobantes.formulario.PERMITIR}">
-
                                             <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                                 <span class="fa fa-plus"></span> Nuevo
                                             </button>
                                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                                 <a class="dropdown-item" ng-repeat="row in comboTiposComprobantes" ng-click="newComprobante(row.id)">{{row.name}}</a>
                                             </div>
-
                                         </c:if>
                                         <button type="button" class="btn btn-warning " tabindex="0" ng-click="cancelar()"><span class="fa fa-undo"></span> Cancelar</button>
+                                        
                                     </div>
                                 </div>
                             </header>
@@ -118,18 +114,15 @@
                                 <section id="base-style" class="card">
                                     <!-- .card-body -->
                                     <div class="card-body">
-
                                         <!--Mensaje Cargando -->
                                         <span ng-show="loading" class="alert alert-info"><i class="loader loader-sm" ></i>  Cargando...</span>
                                         <!-- /Mensaje Cargando -->
-
                                         <!--Mensaje Success -->
                                         <div class="alert alert-success ng-hide" role="alert" ng-show="showRestfulSuccess">
                                             <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">&times;</a>
                                             {{ showRestfulMessage}}
                                         </div>
                                         <!--/Mensaje Success -->
-
                                         <!--Mensaje Error -->
                                         <div class="alert alert-danger ng-hide" role="alert" ng-show="showRestfulError">
                                             <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">&times;</a>
@@ -138,7 +131,6 @@
                                         <!-- /Mensaje Error -->
                                         <!-- .form-group -->
                                         <!-- Tabla Contenido -->
-
                                         <!-- Search Options -->
                                         <div class=" ng-hide" ng-show="showTable">
                                             <div class="form-group row">
@@ -149,7 +141,6 @@
                                                         <option style="display:none" value="">seleccione un tipo</option>
                                                     </select>
                                                 </div>
-
                                                 <label for="txtSucursal" class="col-form-label col-sm-2 text-right">Estado</label>
                                                 <div class="col-sm-3">
                                                     <select class="form-control" id="txtEstado" ng-model="search.estado" required="required">
@@ -174,7 +165,6 @@
                                                         </button>
                                                     </div>
                                                 </div>
-
                                                 <label class="col-form-label col-sm-2 text-right" for="flatpickr-wrap">Fecha Fin</label>
                                                 <div class="col-sm-3 input-group input-group-alt flatpickr" id="flatpickr9">
                                                     <input id="txtFechaFin" type="text" class="form-control flatpick-input" data-input="" ng-model="search.fechaFin"/>
@@ -187,13 +177,10 @@
                                                         </button>
                                                     </div>
                                                 </div>
-
                                                 <button type="button" class="btn btn-primary col-1"  ng-click="find()"><span class="fa fa-search"></span> Buscar</button>
                                             </div>
                                         </div>
-
                                         <!-- /Search Options -->
-
                                         <!-- Tabla Contenido -->
                                         <div  id="tableData" class="ng-hide table-responsive" ng-show="showTable" >
                                             <table st-table="display_records"    st-safe-src="mainGrid" 
@@ -237,7 +224,6 @@
                                                                 <c:if test="${comprobantes.formulario.acceder== comprobantes.formulario.PERMITIR }">
                                                                     <button type="button" title="Editar" class="btn btn-sm btn-info" ng-click="edit(row)" ><i class="fa fa-pencil"></i></button>
                                                                 </c:if>
-
                                                                 <c:if test="#{comprobantes.formulario.eliminar== comprobantes.formulario.PERMITIR}">
                                                                     <button type="button" title="Anular" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#frmAnular" ng-click="modalAnular(row)"><i class="fa fa-trash"></i></button>
                                                                 </c:if>
@@ -254,12 +240,10 @@
                                                     </tr>
                                                 </tfoot>
                                             </table>
-
                                         </div>
                                         <!-- /Tabla Contenido -->
-                                        <form id="myForm" name="myForm" >
+                                        <form id="myForm" name="myForm">
                                             <!-- .form -->
-
                                             <!-- .fieldset -->
                                             <fieldset>
                                                 <!-- Contenido Formulario-->
@@ -278,22 +262,17 @@
                                                     <!--<input type="hidden" id="txtFechaAlta" name="txtFechaAlta" ng-model="formData.fechaAlta"/>-->
                                                     <!--<input type="hidden" id="txtFechaBaja" name="txtFechaBaja" ng-model="formData.fechaBaja"/>-->
                                                     <br />
-
                                                     <div class="form-group row">
                                                         <label for="txtIdLibro" class=" col-form-label col-sm-2 text-right"><strong>N&uacute;mero </strong></label>
                                                         <div class="col-sm-3">
                                                             <label for="txtIdLibro" class="col-form-label"  ><strong><h4> {{formData.idLibro == 0 ? '-' : formData.gestion + "-" + formData.idNumeroGestion}}</h4></strong></label>
                                                         </div>
                                                         <span class=" fa fa-info-circle text-blue" data-toggle="tooltip" data-placement="top" title="El numero de comprobante se asignar&aacute; al guardar los datos."></span>
-
                                                         <label for="txtSucursal" class="col-form-label col-sm-2 text-right">Estado</label>
                                                         <div class="col-sm-4">
                                                             <label for="txtSucursal" class="col-form-label"><strong><h5>{{ formData.estado | checkStatus  }}</h5></strong></label>
                                                         </div>
-
-
                                                     </div>
-
                                                     <div class="form-group row">
                                                         <label for="txtSucursal" class="col-form-label col-sm-2 text-right">Tipo de Comprobante</label>
                                                         <div class="col-sm-3">
@@ -305,10 +284,9 @@
                                                                 Debe seleccionar una opci&oacute;n.
                                                             </span>
                                                         </div>
-
                                                         <label for="txtFactor" class=" col-form-label col-sm-2 text-right"><strong>Factor USD</strong></label>
                                                         <div class="col-sm-3">
-                                                            <label for="txtFactor" class=" col-form-label "><strong>{{formData.factorCambiario}}</strong></label>
+                                                            <label for="txtFactor" class=" col-form-label col-sm-4 "><strong>{{formData.factorCambiario}}</strong></label>
                                                             <!--<input type="number" class="form-control col-sm" name="txtFactor" placeholder="0.00 BOB" 
                                                                    ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01" min="{{formData.factorMin}}" max="{{formData.factorMax}}"
                                                                    ng-model="formData.factorCambiario" value="{{formData.factorCambiario}}" data-toggle="tooltip" 
@@ -316,14 +294,11 @@
                                                             <span class="alert-danger"  ng-show="!myForm.txtFactor.$valid"  >
                                                                 Debe seleccionar un valor entre {{formData.factorMin}} y {{formData.factorMax}}.
                                                             </span>
-
                                                             <span class="alert-danger"  ng-show="!formData.factorCambiario"  >
                                                                 Debe seleccionar un valor entre {{formData.factorMin}} y {{formData.factorMax}}.
                                                             </span>-->
                                                         </div>
-
                                                     </div>
-
                                                     <div class="form-group row">
                                                         <label class="col-form-label col-sm-2 text-right" for="flatpickr-wrap">Fecha Comprobante</label>
                                                         <div class="col-sm-3 input-group input-group-alt flatpickr" id="flatpickr9">
@@ -341,7 +316,6 @@
                                                                 Debe seleccionar una fecha.
                                                             </span>
                                                         </div>
-
                                                         <label for="txtUfv" class=" col-form-label col-sm-2 text-right"><strong>Factor UFV</strong></label>
                                                         <div class="col-sm-3">
                                                             <label class="col-form-label" for="flatpickr-wrap"><strong>{{formData.factorUfv}}</strong></label>
@@ -351,7 +325,6 @@
                                                                    data-placement="top"  />-->
                                                         </div>
                                                     </div>
-
                                                     <div class="form-group row">
                                                         <label for="txtGlosa" class=" col-form-label col-sm-2 text-right">Nombre</label>
                                                         <div class="col-sm-8">
@@ -361,7 +334,6 @@
                                                             </span>
                                                         </div>
                                                     </div>
-
                                                     <div class="form-group row">
                                                         <label for="txtConcepto" class=" col-form-label col-sm-2 text-right">Concepto</label>
                                                         <div class="col-sm-8">
@@ -371,14 +343,11 @@
                                                             </span>
                                                         </div>
                                                     </div>
-
                                                     <!--
                                                     <div class="form-group">
                                                         <label class="control-label" for="the-basics">The Basics</label>
                                                         <input id="the-basics" type="text" class="form-control" placeholder="States of USA" /> </div> -->
-
                                                     <header class="card-header">
-
                                                         <div class="d-flex align-items-center">
                                                             <div class="alert alert-danger" ng-show="showRowError">
                                                                 <span class="alert-danger"    >
@@ -390,7 +359,6 @@
                                                         </div>
                                                     </header>
                                                     <!-- Tabla Transacciones -->
-
                                                     <div class="form-group ">
                                                         <table st-table="transacciones" st-safe-src="formData.transacciones" class="table table-sm table-hover" >
                                                             <thead>
@@ -402,13 +370,6 @@
                                                                     <th style="width: 14%">Debe M/E</th>
                                                                     <th style="width: 14%">Haber M/E</th>
                                                                     <th style="width: 5%"></th>
-                                                                    <!--<th class="col-2">Cuenta</th>
-                                                                    <th class="col-1">Mon.</th>
-                                                                    <th class="col-2">Debe M/N</th>
-                                                                    <th class="col-2">Haber M/N</th>
-                                                                    <th class="col-2">Debe M/E</th>
-                                                                    <th class="col-2">Haber M/E</th>
-                                                                    <th class="col-1"></th>-->
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
@@ -416,7 +377,6 @@
                                                                     <td style="width: 30%">
                                                                         <!--<td class="col-2">-->
                                                                         <div ng-show="!row.editable">{{row.idPlanCuenta.name}}</div>
-
                                                                         <div  ng-show="row.editable" >
                                                                             <input autofocus="autofocus" type="text" ng-model="row.idPlanCuenta" placeholder="Seleccione una Cuenta"
                                                                                    uib-typeahead="cuenta as cuenta.name for cuenta in comboPlanCuentas| filter:{name:$viewValue}"
@@ -435,7 +395,6 @@
                                                                                 <option value="#{comprobantes.dolar.codigo}" >#{comprobantes.dolar.abreviado}</option>
                                                                             </select>
                                                                         </div>
-
                                                                     </td>
                                                                     <td style="width: 14%">
                                                                         <!--<td class="col-2">-->
@@ -450,7 +409,6 @@
                                                                                    ng-model="row.debeMonNac" data-toggle="tooltip" 
                                                                                    data-placement="top"  /> --></div>
                                                                     </td>
-
                                                                     <td style="width: 14%">
                                                                         <!--<td class="col-2">-->
                                                                         <div ng-show="!row.editable">{{row.haberMonNac == '0.00' ? '' : row.haberMonNac }}</div>
@@ -487,12 +445,9 @@
                                                                             <c:if test="${comprobantes.formulario.crear== comprobantes.formulario.PERMITIR }">
                                                                                 <button ng-show="!row.editable" ng-disabled="disableEditarTransaccion" type="button" title="Editar" class="btn btn-sm btn-info" ng-click="editTransaccion(row)"><i class="fa fa-pencil"></i></button>
                                                                             </c:if>
-
                                                                             <c:if test="${comprobantes.formulario.crear== comprobantes.formulario.PERMITIR }">
                                                                                 <button ng-show="row.editable" ng-disabled="disableGuardarTransaccion" type="button" title="Guardar" class="btn btn-sm btn-primary" ng-click="saveTransaccion(row)"><i class="fa fa-save"></i></button>
                                                                             </c:if>
-
-
                                                                             <c:if test="#{comprobantes.formulario.crear== comprobantes.formulario.PERMITIR}">
                                                                                 <button type="button" title="Eliminar" ng-disabled="disableEliminarTransaccion" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#frmConfirmation" ng-click="modalEliminarAsiento(row)"><i class="fa fa-remove"></i></button>
                                                                             </c:if>
@@ -500,16 +455,61 @@
                                                                         </div>
                                                                     </td>
                                                                 </tr>
-
                                                             </tbody>
                                                         </table>
                                                     </div>
-
                                                     <!-- Tabla Transacciones -->
-                                                   
-
+                                                    <div class=" table-responsive">
+                                                        <table  class="table table-sm table-hover " >
+                                                            <tbody>
+                                                                <tr class="table-success"  >
+                                                                    <td style="width: 30%">
+                                                                        <strong class="table-success">TOTALES</strong>
+                                                                    </td>
+                                                                    <td style="width: 9%">
+                                                                        <div></div>
+                                                                    </td>
+                                                                    <td style="width: 14%">
+                                                                        <div>{{formData.totalDebeMonNac}}</div>
+                                                                    </td>
+                                                                    <td style="width: 14%">
+                                                                        <div >{{formData.totalHaberMonNac}}</div>
+                                                                    </td>
+                                                                    <td style="width: 14%">
+                                                                        <div >{{formData.totalDebeMonExt}}</div>
+                                                                    </td>
+                                                                    <td style="width: 14%">
+                                                                        <div >{{formData.totalHaberMonExt}}</div>
+                                                                    </td>
+                                                                    <td style="width: 5%">
+                                                                    </td>
+                                                                </tr>
+                                                                <tr class="table-danger" >
+                                                                    <td style="width: 30%">
+                                                                        <strong class="table-danger">DIFERENCIA</strong>
+                                                                    </td>
+                                                                    <td style="width: 9%">
+                                                                        <div></div>
+                                                                    </td>
+                                                                    <td style="width: 14%">
+                                                                        <div ng-show="showDifDebeNac">{{formData.difMonNac| makePositive}}</div>
+                                                                    </td>
+                                                                    <td style="width: 14%">
+                                                                        <div  ng-show="showDifHaberNac">{{formData.difMonNac| makePositive}}</div>
+                                                                    </td>
+                                                                    <td style="width: 14%">
+                                                                        <div  ng-show="showDifDebeExt">{{formData.difMonExt| makePositive}}</div>
+                                                                    </td>
+                                                                    <td style="width: 14%">
+                                                                        <div  ng-show="showDifHaberExt">{{formData.difMonExt| makePositive}}</div>
+                                                                    </td>
+                                                                    <td style="width: 5%">
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
                                                     <!-- /Tabla Totales -->
-
                                                     <div class="form-group row">
                                                         <div class="col-1">&nbsp;</div>
                                                         <c:if test="#{comprobantes.formulario.crear== comprobantes.formulario.PERMITIR}">
@@ -518,26 +518,22 @@
                                                                 <button  class="btn btn-primary" ng-click="save('A')"  value="Guardar" ng-disabled="disableGuardarButton" ><span class="fa fa-save"></span> Guardar</button>
                                                             </div>
                                                         </c:if>
-
                                                         <c:if test="#{comprobantes.formulario.crear== comprobantes.formulario.PERMITIR}">
                                                             <div class="row" >
                                                                 <label for="txtNombre" class="col-form-label col-sm-3 text-right" ></label>
                                                                 <button  class="btn btn-warning"  value="Pendiente" ng-disabled="disablePendienteButton" ng-click="pendiente()" data-toggle="modal" data-target="#frmPendiente"><span class="fa fa-hourglass-half"></span> Pendiente</button>
                                                             </div>
                                                         </c:if> 
-
                                                         <c:if test="#{comprobantes.formulario.eliminar== comprobantes.formulario.PERMITIR}">
                                                             <div class="row" >
                                                                 <label for="txtNombre" class="col-form-label col-sm-3 text-right" ></label>
                                                                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#frmAnular" ng-click="modalAnular(formData)" value="Anular" ng-disabled="disableAnularButton"> <span class="fa fa-trash"></span> Anular</button>
                                                             </div>
                                                         </c:if>
-
                                                         <c:if test="#{comprobantes.formulario.acceder== comprobantes.formulario.PERMITIR}">
                                                             <div class="row" >
                                                                 <label for="txtNombre" class="col-form-label col-sm-3 text-right" ></label>
-                                                                <button type="button" class="btn btn-dark"  ng-click="imprimir(formData)" value="Imprimir" ng-disabled="disableImprimirButton"> <span class="fa fa-trash"></span> Imprimir</button>                                                            
-                                                            </div>
+                                                                <button type="button" class="btn btn-dark"  ng-click="imprimir(formData)" value="Imprimir" ng-disabled="disableImprimirButton"> <span class="fa fa-trash"></span> Imprimir</button>                                                            </div>
                                                         </c:if>
                                                     </div>
                                                 </div>
@@ -552,8 +548,6 @@
                                 <!-- /.card -->
                             </div>
                             <!-- /.page-section -->
-
-
                             <!-- Modal Eliminar -->
                             <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="frmConfirmation">
                                 <div class="modal-dialog modal-md">
@@ -575,7 +569,6 @@
                                 </div>
                             </div>
                             <!-- /Modal Eliminar-->
-
                             <!-- Modal Anular -->
                             <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="frmAnular">
                                 <div class="modal-dialog modal-md">
@@ -597,7 +590,6 @@
                                 </div>
                             </div>
                             <!-- /Modal Anular-->
-
                             <!-- Modal Pendiente -->
                             <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="frmPendiente">
                                 <div class="modal-dialog modal-md">
@@ -613,11 +605,7 @@
                                                     Desea colocarlo en estado PENDIENTE ?<br/>
                                                 </label>
                                                 <label ng-show="formData.estado === 'A'">
-                                                    El siguiente Comprobante se encuentra en estado APROBADO, al colocarlo en PENDIENTE podr&aacute; modificarse mas adelante. 
-                                                    Desea colocarlo en estado PENDIENTE ?<br/>
-                                                </label>
-                                                <label ng-show="formData.estado === 'P'">
-                                                    El siguiente Comprobante se encuentra en estado PENDIENTE, podr&aacute; modificarse mas adelante. 
+                                                    El siguiente Comprobante se encuentra en estado APROBAD, al colocarlo en PENDIENTE podr&aacute; modificarse mas adelante. 
                                                     Desea colocarlo en estado PENDIENTE ?<br/>
                                                 </label>
                                             </dl>
@@ -635,7 +623,6 @@
                     </div>
                     <!-- /.page -->
                 </div>
-
                 <script  type="text/ng-template" id="customTemplate.html">
                     <div class="list-on-top tt-suggestion tt-selectable  ">
                     <span class="list-on-top"  ng-bind-html="match.label | uibTypeaheadHighlight:query"></span>
@@ -661,7 +648,6 @@
         <script src="../../assets/vendor/stacked-menu/stacked-menu.min.js"></script>
         <script src="../../assets/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
         <script src="../../assets/vendor/handlebars/handlebars.min.js"></script>
-
         <script src="../../assets/vendor/flatpickr/flatpickr.min.js"></script>
         <script src="../../assets/vendor/typeahead.js/typeahead.bundle.min.js"></script>
         <!-- END PLUGINS JS -->
@@ -675,5 +661,3 @@
         <!-- Global site tag (gtag.js) - Google Analytics -->
     </h:body>
 </html>
-
-

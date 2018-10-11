@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="612" pageHeight="792" columnWidth="577" leftMargin="5" rightMargin="30" topMargin="5" bottomMargin="20" uuid="c6d5ac85-d154-42b4-b451-dcd03b103eae">
 	<property name="ireport.zoom" value="1.6105100000000014"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="41"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="ID_LIBRO" class="java.lang.Integer">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
@@ -18,9 +18,9 @@ cc.totalDebeNac, cc.totalDebeExt, cc.totalHaberExt, cc.totalHaberNac,
 number_to_string(cc.totalDebeNac) as literal,
 ac.gestion, ac.fecha_movimiento,
 ac.monto_debe_nac, ac.monto_debe_ext, 
-ac.monto_haber_ext, ac.monto_haber_ext,
+ac.monto_haber_nac, ac.monto_haber_ext,
 pc.nro_plan_cuenta, pc.cuenta,
-floor (abs(mod(monto_haber_ext,1)*100)) decimal_part,
+ round(abs(mod(totalDebeNac,1)*100)) decimal_part,
 case tipo 	when  'AD' then 'Contabilidad'   
 			when  'AJ' then 'Contabilidad' 
             when  'CI' then 'Contabilidad' 
@@ -39,7 +39,7 @@ cc.fecha_insert
  inner join cnt_plan_cuentas pc on pc.id_plan_cuentas = ac.id_plan_cuenta
  inner join tb_user u on u.user_name = cc.id_usuario_creador
  inner join tb_empleado emp on emp.id_empleado = u.id_empleado
-where cc.id_libro=$P{ID_LIBRO} order by id_asiento desc;]]>
+where cc.id_libro=$P{ID_LIBRO} order by nro_plan_cuenta asc]]>
 	</queryString>
 	<field name="id_numero_gestion" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -84,6 +84,9 @@ where cc.id_libro=$P{ID_LIBRO} order by id_asiento desc;]]>
 	<field name="monto_debe_ext" class="java.math.BigDecimal">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
+	<field name="monto_haber_nac" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<field name="monto_haber_ext" class="java.math.BigDecimal">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
@@ -93,7 +96,7 @@ where cc.id_libro=$P{ID_LIBRO} order by id_asiento desc;]]>
 	<field name="cuenta" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="decimal_part" class="java.lang.Long"/>
+	<field name="decimal_part" class="java.math.BigDecimal"/>
 	<field name="firma1" class="java.lang.String"/>
 	<field name="firma2" class="java.lang.String"/>
 	<field name="firma3" class="java.lang.String"/>
@@ -115,7 +118,7 @@ where cc.id_libro=$P{ID_LIBRO} order by id_asiento desc;]]>
 			<textField>
 				<reportElement x="0" y="0" width="562" height="23" uuid="b37222b5-8d88-423e-8538-9d8a2df765ce"/>
 				<textElement textAlignment="Right">
-					<font size="18" isBold="true"/>
+					<font fontName="SansSerif" size="18" isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{tipo}]]></textFieldExpression>
 			</textField>
@@ -129,7 +132,7 @@ where cc.id_libro=$P{ID_LIBRO} order by id_asiento desc;]]>
 			<textField>
 				<reportElement x="83" y="3" width="117" height="14" uuid="19ae09c0-f40f-4bd2-bda2-ded305d50d7e"/>
 				<textElement>
-					<font isBold="true"/>
+					<font fontName="SansSerif" isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{gestion}+"-"+$F{id_numero_gestion}]]></textFieldExpression>
 			</textField>
@@ -233,22 +236,22 @@ where cc.id_libro=$P{ID_LIBRO} order by id_asiento desc;]]>
 			<textField>
 				<reportElement x="425" y="2" width="68" height="15" uuid="d9c38372-d189-4e7e-9abc-3155bb63bb7f"/>
 				<textElement textAlignment="Right"/>
-				<textFieldExpression><![CDATA[$F{monto_debe_ext}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{monto_debe_ext}==null?"":$F{monto_debe_ext}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="346" y="2" width="69" height="15" uuid="5691d379-149f-482b-9ebf-89f0263fa4da"/>
 				<textElement textAlignment="Right"/>
-				<textFieldExpression><![CDATA[$F{monto_haber_ext}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{monto_haber_nac}==null?"":$F{monto_haber_nac}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="494" y="2" width="69" height="15" uuid="630221c6-73f1-4cf9-bf02-e68f8664f660"/>
 				<textElement textAlignment="Right"/>
-				<textFieldExpression><![CDATA[$F{monto_haber_ext}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{monto_haber_ext}==null?"":$F{monto_haber_ext}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="277" y="2" width="69" height="15" uuid="f79fa554-01ff-410b-babc-43781708fb91"/>
 				<textElement textAlignment="Right"/>
-				<textFieldExpression><![CDATA[$F{monto_debe_nac}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{monto_debe_nac}==null?"":$F{monto_debe_nac}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="1" y="2" width="275" height="15" uuid="13262b30-feac-40f7-9718-8dba224fefdd"/>
@@ -285,42 +288,42 @@ where cc.id_libro=$P{ID_LIBRO} order by id_asiento desc;]]>
 			</textField>
 			<textField>
 				<reportElement x="0" y="18" width="559" height="20" uuid="d45cc385-ed17-47a3-ad5d-7dfb271c36f6"/>
-				<textFieldExpression><![CDATA["Son:" +$F{literal} + " " + $F{decimal_part}+"/100 BOLIVIANOS."]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Son:" +$F{literal} + " " + ($F{decimal_part}>0?$F{decimal_part}:"0"+$F{decimal_part})+"/100 BOLIVIANOS."]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="0" y="2" width="267" height="14" uuid="b348fcd7-5e1a-4f32-a23e-1d7984f9d15f"/>
 				<textElement>
-					<font size="11" isBold="true"/>
+					<font fontName="SansSerif" size="11" isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[TOTALES]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="276" y="2" width="69" height="14" uuid="0b3235f4-0b24-442b-9636-25f6085ab125"/>
 				<textElement textAlignment="Right">
-					<font isBold="true"/>
+					<font fontName="SansSerif" isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{totalDebeNac}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{totalDebeNac}==null?"":$F{totalDebeNac}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="345" y="2" width="70" height="14" uuid="1ab629f5-8a81-4813-8fde-d526be78f7a5"/>
 				<textElement textAlignment="Right">
-					<font isBold="true"/>
+					<font fontName="SansSerif" isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{totalHaberNac}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{totalHaberNac}==null?"":$F{totalHaberNac}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="424" y="2" width="69" height="14" uuid="0763f3e7-9293-48ee-b773-df61afc01898"/>
 				<textElement textAlignment="Right">
-					<font isBold="true"/>
+					<font fontName="SansSerif" isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{totalDebeExt}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{totalDebeExt}==null?"":$F{totalDebeExt}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="493" y="2" width="70" height="14" uuid="a171fefb-5cfe-4015-9e37-482e64d3ef41"/>
 				<textElement textAlignment="Right">
-					<font isBold="true"/>
+					<font fontName="SansSerif" isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{totalHaberExt}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{totalHaberExt}==null?"":$F{totalDebeExt}]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement x="3" y="0" width="558" height="1" uuid="00c21694-87ae-4484-8db1-e32d3c723b4d"/>

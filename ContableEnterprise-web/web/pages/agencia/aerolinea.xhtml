@@ -288,9 +288,9 @@
                                                         <label for="txtEmail" class="col-sm-3 text-right" >Email</label>
                                                         <div class="col-sm-6">
                                                             <input type="email" class="form-control " name="txtEmail"  maxlength="128" ng-model="formData.email"/>
-                                                            <!--<span class="alert-danger" ng-show="!myForm.txtEmail.$valid"  >
+                                                            <span class="alert-danger" ng-show="!myForm.txtEmail.$valid"  >
                                                                 Debe ingresar un Email valido
-                                                            </span>-->
+                                                            </span>
                                                         </div>
                                                     </div>
 
@@ -438,7 +438,7 @@
                                                             <div class="custom-control custom-control-inline custom-checkbox">
                                                                 <input type="checkbox" class="custom-control-input" id="chkBoletosMonNac"  
                                                                        ng-checked="formData.boletosMonNac" ng-model="formData.boletosMonNac" 
-                                                                       ng-click="formData.moneda = 'B';" />
+                                                                       ng-click="formData.moneda = 'N';" />
                                                                 <label class="custom-control-label" for="chkBoletosMonNac"></label>
                                                             </div>    
                                                         </div>
@@ -450,7 +450,7 @@
                                                             <div class="custom-control custom-control-inline custom-checkbox">
                                                                 <input type="checkbox" class="custom-control-input" id="chkBoletosMonExt"  
                                                                        ng-checked="formData.boletosMonExt" ng-model="formData.boletosMonExt" 
-                                                                       ng-click="formData.moneda = 'D';" />
+                                                                       ng-click="formData.moneda = 'U';" />
                                                                 <label class="custom-control-label" for="chkBoletosMonExt"></label>
                                                             </div>    
                                                         </div>
@@ -470,7 +470,7 @@
                                                                 </div>
                                                                 <div class="custom-control custom-control-inline custom-radio">
                                                                     <input type="radio" class="custom-control-input" id="rdDolares" name="rdMoneda"
-                                                                           ng-model="formData.moneda" value="D" />
+                                                                           ng-model="formData.moneda" value="U" />
                                                                     <label class="custom-control-label" for="rdDolares" >D&oacute;lares Americanos</label>
                                                                 </div>
                                                             </div>
@@ -487,15 +487,15 @@
                                                                    />
                                                         </div>
 
-                                                        <a title="Adicionar" class="btn btn-sm btn-success" ng-click="updateAddCuentaVenta('V', 'N')" ng-show="showBtnEditar &amp;&amp; formData.ctaVentasMonNac.id" >
+                                                        <a title="Adicionar" class="btn btn-sm btn-success" ng-click="updateAddCuentaVenta('V', 'B')" ng-show="showBtnEditar &amp;&amp; formData.ctaVentasMonNac.id" >
                                                             <i class=" fa fa-plus text-white"></i>
                                                         </a>
 
-                                                        <a title="Adicionar" class="btn btn-sm btn-success" ng-click="addCuentaVenta('V', 'N')" ng-show="showBtnNuevo &amp;&amp; formData.ctaVentasMonNac.id" >
+                                                        <a title="Adicionar" class="btn btn-sm btn-success" ng-click="addCuentaVenta('V', 'B')" ng-show="showBtnNuevo &amp;&amp; formData.ctaVentasMonNac.id" >
                                                             <i class=" fa fa-plus text-white" ></i>
                                                         </a>
 
-                                                        <a  class="btn btn-sm btn-info" ng-click="showUpdateAddCuenta('Cuentas Ventas en Moneda Nacional', 'V', 'N')" ng-show="showBtnEditar" data-toggle="modal"  
+                                                        <a  class="btn btn-sm btn-info" ng-click="showUpdateAddCuenta('Cuentas Ventas en Moneda Nacional', 'V', 'B')" ng-show="showBtnEditar" data-toggle="modal"  
                                                             data-target="#frmAerolineaCuenta"
                                                             data-placement="top" title="Revisar las Cuentas de Ventas en Moneda Nacional">
                                                             <i class=" fa fa-search text-white"></i>
@@ -520,15 +520,15 @@
                                                                    typeahead-template-url="customTemplate.html" 
                                                                    />
                                                         </div>
-                                                        <a title="Adicionar" class="btn btn-sm btn-success" ng-click="updateAddCuentaVentaExt(formData.ctaVentasMonExt,'V', 'E')" ng-show="showBtnEditar &amp;&amp; formData.ctaVentasMonExt.id" >
+                                                        <a title="Adicionar" class="btn btn-sm btn-success" ng-click="updateAddCuentaVentaExt(formData.ctaVentasMonExt,'V', 'U')" ng-show="showBtnEditar &amp;&amp; formData.ctaVentasMonExt.id" >
                                                             <i class=" fa fa-plus text-white"></i>
                                                             </a>
 
-                                                            <a title="Adicionar" class="btn btn-sm btn-success" ng-click="addCuentaVentaExt('V', 'E')" ng-show="showBtnNuevo &amp;&amp; formData.ctaVentasMonExt.id" >
+                                                            <a title="Adicionar" class="btn btn-sm btn-success" ng-click="addCuentaVentaExt('V', 'U')" ng-show="showBtnNuevo &amp;&amp; formData.ctaVentasMonExt.id" >
                                                             <i class=" fa fa-plus text-white" ></i>
                                                             </a>
 
-                                                            <a  class="btn btn-sm btn-info" ng-click="showUpdateAddCuenta('Cuentas Ventas en Moneda Extranjera', 'V', 'E')" ng-show="showBtnEditar" data-toggle="modal"  
+                                                            <a  class="btn btn-sm btn-info" ng-click="showUpdateAddCuenta('Cuentas Ventas en Moneda Extranjera', 'V', 'U')" ng-show="showBtnEditar" data-toggle="modal"  
                                                             data-target="#frmAerolineaCuenta"
                                                             data-placement="top" title="Revisar las Cuentas de Ventas en Moneda Extranjera">
                                                             <i class=" fa fa-search text-white"></i>
@@ -553,15 +553,15 @@
                                                                    typeahead-template-url="customTemplate.html" 
                                                                    />                                                             
                                                         </div>
-                                                        <a title="Adicionar" class="btn btn-sm btn-success" ng-click="updateAddCuentaComisionNac(formData.ctaComisionMonNac,'C', 'N')" ng-show="showBtnEditar &amp;&amp; formData.ctaComisionMonNac.id" >
+                                                        <a title="Adicionar" class="btn btn-sm btn-success" ng-click="updateAddCuentaComisionNac(formData.ctaComisionMonNac,'C', 'B')" ng-show="showBtnEditar &amp;&amp; formData.ctaComisionMonNac.id" >
                                                             <i class=" fa fa-plus text-white"></i>
                                                             </a>
 
-                                                            <a title="Adicionar" class="btn btn-sm btn-success" ng-click="addCuentaComisionNac('C', 'N')" ng-show="showBtnNuevo &amp;&amp; formData.ctaComisionMonNac.id" >
+                                                            <a title="Adicionar" class="btn btn-sm btn-success" ng-click="addCuentaComisionNac('C', 'B')" ng-show="showBtnNuevo &amp;&amp; formData.ctaComisionMonNac.id" >
                                                             <i class=" fa fa-plus text-white" ></i>
                                                             </a>
 
-                                                            <a  class="btn btn-sm btn-info" ng-click="showUpdateAddCuenta('Cuentas de Comisiones en Moneda Nacional', 'C', 'N')" ng-show="showBtnEditar" data-toggle="modal"  
+                                                            <a  class="btn btn-sm btn-info" ng-click="showUpdateAddCuenta('Cuentas de Comisiones en Moneda Nacional', 'C', 'B')" ng-show="showBtnEditar" data-toggle="modal"  
                                                             data-target="#frmAerolineaCuenta"
                                                             data-placement="top" title="Revisar las Cuentas de Comisiones en Moneda Nacional">
                                                             <i class=" fa fa-search text-white"></i>
@@ -585,15 +585,15 @@
                                                                    typeahead-template-url="customTemplate.html" 
                                                                    />
                                                         </div>
-                                                            <a title="Adicionar" class="btn btn-sm btn-success" ng-click="updateAddCuentaComisionExt(formData.ctaComisionMonExt,'C', 'E')" ng-show="showBtnEditar &amp;&amp; formData.ctaComisionMonExt.id" >
+                                                            <a title="Adicionar" class="btn btn-sm btn-success" ng-click="updateAddCuentaComisionExt(formData.ctaComisionMonExt,'C', 'U')" ng-show="showBtnEditar &amp;&amp; formData.ctaComisionMonExt.id" >
                                                             <i class=" fa fa-plus text-white"></i>
                                                             </a>
 
-                                                            <a title="Adicionar" class="btn btn-sm btn-success" ng-click="addCuentaComisionExt('C', 'E')" ng-show="showBtnNuevo &amp;&amp; formData.ctaComisionMonExt.id" >
+                                                            <a title="Adicionar" class="btn btn-sm btn-success" ng-click="addCuentaComisionExt('C', 'U')" ng-show="showBtnNuevo &amp;&amp; formData.ctaComisionMonExt.id" >
                                                             <i class=" fa fa-plus text-white" ></i>
                                                             </a>
 
-                                                            <a  class="btn btn-sm btn-info" ng-click="showUpdateAddCuenta('Cuentas de Comisiones en Moneda Extranjera', 'C', 'E')" ng-show="showBtnEditar" data-toggle="modal"  
+                                                            <a  class="btn btn-sm btn-info" ng-click="showUpdateAddCuenta('Cuentas de Comisiones en Moneda Extranjera', 'C', 'U')" ng-show="showBtnEditar" data-toggle="modal"  
                                                             data-target="#frmAerolineaCuenta"
                                                             data-placement="top" title="Revisar las Cuentas de Comisiones en Moneda Extranjera">
                                                             <i class=" fa fa-search text-white"></i>
@@ -616,15 +616,15 @@
                                                                    typeahead-template-url="customTemplate.html" 
                                                                    />                                                            
                                                         </div>
-                                                            <a title="Adicionar" class="btn btn-sm btn-success" ng-click="updateAddCuentaDevolucionNac(formData.ctaDevolucionMonNac,'D', 'N')" ng-show="showBtnEditar &amp;&amp; formData.ctaDevolucionMonNac.id" >
+                                                            <a title="Adicionar" class="btn btn-sm btn-success" ng-click="updateAddCuentaDevolucionNac(formData.ctaDevolucionMonNac,'D', 'B')" ng-show="showBtnEditar &amp;&amp; formData.ctaDevolucionMonNac.id" >
                                                             <i class=" fa fa-plus text-white"></i>
                                                             </a>
 
-                                                            <a title="Adicionar" class="btn btn-sm btn-success" ng-click="addCuentaDevolucionNac('D', 'N')" ng-show="showBtnNuevo &amp;&amp; formData.ctaDevolucionMonNac.id" >
+                                                            <a title="Adicionar" class="btn btn-sm btn-success" ng-click="addCuentaDevolucionNac('D', 'B')" ng-show="showBtnNuevo &amp;&amp; formData.ctaDevolucionMonNac.id" >
                                                             <i class=" fa fa-plus text-white" ></i>
                                                             </a>
 
-                                                            <a  class="btn btn-sm btn-info" ng-click="showUpdateAddCuenta('Cuentas de Devoluciones en Moneda Nacional', 'D', 'N')" ng-show="showBtnEditar" data-toggle="modal"  
+                                                            <a  class="btn btn-sm btn-info" ng-click="showUpdateAddCuenta('Cuentas de Devoluciones en Moneda Nacional', 'D', 'B')" ng-show="showBtnEditar" data-toggle="modal"  
                                                             data-target="#frmAerolineaCuenta"
                                                             data-placement="top" title="Revisar las Cuentas de Devoluciones en Moneda Nacional">
                                                             <i class=" fa fa-search text-white"></i>
@@ -648,15 +648,15 @@
                                                                    typeahead-template-url="customTemplate.html" 
                                                                    />                                                            
                                                         </div>
-                                                            <a title="Adicionar" class="btn btn-sm btn-success" ng-click="updateAddCuentaDevolucionExt(formData.ctaDevolucionMonExt,'D', 'E')" ng-show="showBtnEditar &amp;&amp; formData.ctaDevolucionMonExt.id" >
+                                                            <a title="Adicionar" class="btn btn-sm btn-success" ng-click="updateAddCuentaDevolucionExt(formData.ctaDevolucionMonExt,'D', 'U')" ng-show="showBtnEditar &amp;&amp; formData.ctaDevolucionMonExt.id" >
                                                             <i class=" fa fa-plus text-white"></i>
                                                             </a>
 
-                                                            <a title="Adicionar" class="btn btn-sm btn-success" ng-click="addCuentaDevolucionExt('D', 'E')" ng-show="showBtnNuevo &amp;&amp; formData.ctaDevolucionMonExt.id" >
+                                                            <a title="Adicionar" class="btn btn-sm btn-success" ng-click="addCuentaDevolucionExt('D', 'U')" ng-show="showBtnNuevo &amp;&amp; formData.ctaDevolucionMonExt.id" >
                                                             <i class=" fa fa-plus text-white" ></i>
                                                             </a>
 
-                                                            <a  class="btn btn-sm btn-info" ng-click="showUpdateAddCuenta('Cuentas de Devoluciones en Moneda Extranjera', 'D', 'E')" ng-show="showBtnEditar" data-toggle="modal"  
+                                                            <a  class="btn btn-sm btn-info" ng-click="showUpdateAddCuenta('Cuentas de Devoluciones en Moneda Extranjera', 'D', 'U')" ng-show="showBtnEditar" data-toggle="modal"  
                                                             data-target="#frmAerolineaCuenta"
                                                             data-placement="top" title="Revisar las Cuentas de Devoluciones en Moneda Extranjera">
                                                             <i class=" fa fa-search text-white"></i>

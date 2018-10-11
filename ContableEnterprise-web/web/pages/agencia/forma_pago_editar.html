@@ -1,0 +1,431 @@
+<fieldset class="ng-hide" ng-show="formData.idCliente.id">
+    <legend align="left">Formas de Pagos (editar)</legend>
+    <div class="container-fluid" align="center">
+        <div class="row">
+            <div class="table-responsive">
+                <div class="col-10">
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link" ng-class="formData.formaPago =='C'? 'active' : ''" ng-click="creditoClick()" id="home-tab" data-toggle="tab" href="#credito" role="tab" aria-controls="credito" aria-selected="true">Cr&eacute;dito</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" ng-class="formData.formaPago =='E'? 'active' : ''" ng-click="contadoClick()" id="profile-tab" data-toggle="tab" href="#contado" role="tab" aria-controls="contado" aria-selected="false">Contado</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link"  ng-class="formData.formaPago =='T'? 'active' : ''" ng-click="tarjetaClick()" id="contact-tab" data-toggle="tab" href="#tarjeta" role="tab" aria-controls="tarjeta" aria-selected="false">Tarjeta</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" ng-class="formData.formaPago =='P'? 'active' : ''" ng-click="combinadoClick()" id="contact-tab" data-toggle="tab" href="#combinado" role="tab" aria-controls="combinado" aria-selected="false">Combinado</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-content" id="myTabContent">
+        <!-- Pago Credito -->
+        <div class="tab-pane fade " ng-class="formData.formaPago =='C'? 'active show' : ''" id="credito" role="tabpanel" 
+             aria-labelledby="credito-tab">
+            <div class="container-fluid" align="center">
+                <br />
+                <div class="row">
+                    <div class="table-responsive">
+                        <div class="col-10">
+                            <div class="form-group row">
+                                <label for="txtCodigoLinea" class="text-right col-sm-2" > Plazo en d&iacute;as</label>
+                                <div class="col-sm-2">
+                                    <input type="number" class="form-control" name="txtPlazoDias" id="txtPlazoDias" placeholder="0" 
+                                           ng-model="formData.creditoDias" ng-change="setCreditoVencimiento()" step="1" max="365" min="1"
+                                           ng-pattern="/^[0-9]{1,3}?$/"   ng-disabled="true"/>
+                                    <span class="alert-danger" ng-show="!myForm.txtPlazoDias.$valid || !formData.creditoDias">Ingrese una cantidad de D&iacute;as.</span>
+                                    <span class="alert-danger" ng-show="!myForm.txtPlazoDias > 365">Ingrese un valor menor a 365</span>
+                                </div>
+
+                                <label for="txtCodigoLinea" class=" text-right col-sm-3" > Fecha de Vencimiento</label>
+                                <div class="col-sm-3">
+                                    <label for="txtCodigoLinea" class=" text-right" ><strong>{{formData.creditoVencimiento}}</strong> </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>    
+        </div>
+        <!-- /Pago Credito -->
+
+        <!-- Pagos Contado -->
+        <div class="tab-pane fade" ng-class="formData.formaPago =='E'? 'active show' : ''" id="contado" role="tabpanel" aria-labelledby="contado-tab">
+            <div class="container-fluid"  >
+                <br />
+                <div class="row">
+                    <div class="table-responsive">
+                        <div class="col-10" >
+                            <div class="form-inline">
+                                <div class="custom-control custom-control-inline custom-radio">
+                                    <input type="radio" class="custom-control-input" id="rdEfectivo" name="rdPagoContado"
+                                           ng-model="formData.contadoTipo" value="E" ng-disabled="true" />
+                                    <label class="custom-control-label"   for="rdEfectivo">Efectivo</label>
+                                </div>
+                                <div class="custom-control custom-control-inline custom-radio">
+                                    <input type="radio" class="custom-control-input" id="rdCheque" name="rdPagoContado"
+                                           ng-model="formData.contadoTipo" ng-disabled="true" value="C" />
+                                    <label class="custom-control-label"  ng-disabled="true" for="rdCheque" >Cheque</label>
+                                </div>
+                                <div class="custom-control custom-control-inline custom-radio">
+                                    <input type="radio" class="custom-control-input" id="rdDeposito" name="rdPagoContado"
+                                           ng-model="formData.contadoTipo" value="D"  />
+                                    <label class="custom-control-label" ng-disabled="true" ng-disabled="true" for="rdDeposito" >Deposito a Banco</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <!-- Cheques -->
+                <div class="row" ng-if="formData.contadoTipo == 'C'">
+                    <br />
+                    <div class="col-10">
+                        <div class="form-group row">
+                            <label for="txtNroCheque" class=" text-right col-sm-4" > N&uacute;mero de Cheque</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control " id="txtContadoNroCheque"  name="txtNroCheque"  
+                                       required="required" valid-number="valid-number"  
+                                       onkeypress="return isNumberKey(event)" maxlength="16" 
+                                       ng-model="formData.contadoNroCheque"  ng-disabled="true"/>
+                                <span class="alert-danger " ng-show="!myForm.txtContadoNroCheque.$valid">Debe ingresar un N&uacute;mero de Cheque</span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="txtContadoBanco" class=" text-right col-sm-4" > Banco</label>
+                            <div class="col-sm-6">
+
+                                <select class="form-control" ng-model="formData.contadoIdBanco" name="txtContadoIdBanco"
+                                        id="txtContadoIdBanco"  ng-disabled="true"
+                                        ng-options="option.id as option.name for option in comboAllBancos"> 
+                                    <option style="display:none" value="">seleccione un banco</option>
+                                </select>
+                                <span class="alert-danger" ng-show="!formData.contadoIdBanco">Debe ingresar un Banco</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Cheques -->
+                <!-- Deposito -->
+                <div class="row"  ng-if="formData.contadoTipo == 'D'">
+                    <br />
+                    <div class="col-10">
+                        <div class="form-group row">
+                            <label for="txtContadoNroDeposito" class=" text-right col-sm-4" > N&uacute;mero de Dep&oacute;sito</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control " id="txtContadoNroDeposito"  name="txtContadoNroDeposito"  
+                                       required="required" valid-number="valid-number"  onkeypress="return isNumberKey(event)" maxlength="16" ng-model="formData.contadoNroDeposito"/>
+                                <span class="alert-danger" ng-show="!myForm.txtContadoNroDeposito.$valid">Debe ingresar un N&uacute;mero de Dep&oacute;sito</span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="txtContadoDeposito" class=" text-right col-sm-4" > Banco</label>
+                            <div class="col-sm-6">
+                                <select class="form-control" ng-model="formData.contadoIdBancoDeposito" name="txtContadoIdBancoDeposito"
+                                        id="txtContadoIdBancoDeposito"
+                                        ng-options="option.id as option.name for option in comboBancosConCuenta"> 
+                                    <option style="display:none" value="">seleccione un banco</option>
+                                </select>
+                                <span class="alert-danger" ng-show="!formData.contadoIdBanco">Debe ingresar un Banco</span>
+                            </div>
+                        </div>  
+                    </div>
+                </div>
+                <!-- /Cheques -->
+            </div>
+        </div>
+        <!-- /Pagos Contado -->
+
+        <!-- Pago con Tarjeta -->
+        <div class="tab-pane fade" ng-class="formData.formaPago =='T'? 'active show' : ''" id="tarjeta" role="tabpanel" aria-labelledby="tarjeta-tab">
+            <div class="container-fluid">
+                <br />
+                <div class="row" >
+                    <div class="col-10">
+                        <div class="form-group row">
+                            <label for="txtCodigoLinea" class="text-right  col-sm-4" > Tipo de Tarjeta</label>
+                            <div class="col-sm-6">
+                                <select class="form-control" ng-model="formData.contadoIdTarjeta" name="txtContadoIdTarjeta"
+                                        id="txtContadoIdTarjeta"
+                                        ng-options="option.id as option.name for option in comboTarjetas"> 
+                                    <option style="display:none" value="">seleccione una Tarjeta</option>
+                                </select>
+                                <span class="alert-danger" ng-show="!formData.contadoIdTarjeta">Debe ingresar un tipo de Tarjeta</span>
+
+                            </div>    
+                        </div>
+                        <div class="form-group row">
+                            <label for="txtCodigoLinea" class=" text-right col-sm-4" > N&uacute;mero de tarjeta</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control " id="txtNroTarjeta"  name="txtNroTarjeta"  
+                                       valid-number="valid-number"  onkeypress="return isNumberKey(event)" maxlength="16" 
+                                       ng-model="formData.contadoNroTarjeta"  ng-disabled="true"/>
+                                <span class="alert-danger" ng-show="!formData.contadoNroTarjeta">Debe ingresar un numero de tarjeta</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Pago con Tarjeta -->
+
+        <!-- Pagos Combinados-->
+        <div class="tab-pane fade" ng-class="formData.formaPago =='P'? 'active show' : ''" id="combinado" role="tabpanel" aria-labelledby="combinado-tab">
+            <div class="container-fluid" align="center">
+                <br />
+                <div class="row" >
+                    <div class="col-10">
+                        <div class="form-group row ">
+                            <div class="col-sm-10">
+                                <div class="custom-control custom-control-inline custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="chkCombinadoCredito" 
+                                           ng-checked="formData.combinadoCredito" ng-model="formData.combinadoCredito" 
+                                           ng-click="onClickCombinadoCredito()"  ng-disabled="true"/>
+                                    <label class="custom-control-label" for="chkCombinadoCredito">Cr&eacute;dito</label>
+                                </div>    
+                                <div class="custom-control custom-control-inline custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="chkCombinadoContado" 
+                                           ng-checked="formData.combinadoContado"  ng-disabled="true" ng-model="formData.combinadoContado" />
+                                    <label class="custom-control-label" for="chkCombinadoContado">Contado</label>
+                                </div>
+
+                                <div class="custom-control custom-control-inline custom-checkbox">
+                                    <input type="checkbox" class="custom-control-input" id="chkCombinadoTarjeta" 
+                                           ng-checked="formData.combinadoTarjeta"  ng-disabled="true" ng-model="formData.combinadoTarjeta" />
+                                    <label class="custom-control-label" for="chkCombinadoTarjeta">Tarjeta</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pago Combinado Credito -->
+                <div class="tab-pane ng-hide" id="credito" role="tabpanel" 
+                     aria-labelledby="credito-tab" ng-show="formData.combinadoCredito">
+                    <div class="container-fluid" align="center">
+                        <br />
+                        <legend>Pago a Cr&eacute;dito</legend>
+                        <div class="row">
+                            <div class="table-responsive">
+                                <div class="col-10">
+                                    <div class="form-group row">
+                                        <label for="txtCombinadoCreditoDias" class="text-right col-sm-2" > Plazo en d&iacute;as</label>
+                                        <div class="col-sm-2">
+                                            <input type="number" class="form-control" name="txtCombinadoCreditoDias" id="txtCombinadoCreditoDias" placeholder="0" 
+                                                   ng-model="formData.combinadoCreditoDias" ng-change="setCreditoVencimiento()" step="1" max="365" min="1"
+                                                   ng-pattern="/^[0-9]{1,3}?$/"  ng-disabled="true"/>
+                                            <span class="alert-danger" ng-show="!myForm.txtCombinadoCreditoDias.$valid || !formData.combinadoCreditoDias">Ingrese una cantidad de D&iacute;as.</span>
+                                            <span class="alert-danger" ng-show="formData.combinadoCreditoDias > 365">Ingrese un valor menor a 365</span>
+                                        </div>
+
+                                        <label for="txtCodigoLinea" class=" text-right col-sm-3" > Fecha de Vencimiento</label>
+                                        <div class="col-sm-3">
+                                            <label for="txtCodigoLinea" class=" text-right" ><strong>{{formData.combinadoCreditoVencimiento}}</strong> </label>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="txtCombinadoCreditMonto" class="text-right col-sm-2" > Monto del Cr&eacute;dito</label>
+                                        <input type="number" class="form-control col-sm-2" name="txtDescuentoMontoBs" placeholder="0.00 " 
+                                               ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01"   ng-disabled="true"
+                                               ng-model="formData.combinadoCreditoMonto" ng-change="checkMontoTotalCredito()"
+                                               data-toggle="tooltip" data-placement="top" />
+                                        <span ng-show="showCombinadoCreditoMontoExcede" class="alert-danger">
+                                            El monto del cr&eacute;dito excede el total: <strong>{{showMontoTotalCancelar}}</strong>
+                                        </span>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>    
+                </div>
+                <!-- /Pago Combinado Credito -->
+
+                <!-- Pagos Combinado Contado -->
+                <div class="tab-pane ng-hide" id="contado" role="tabpanel" aria-labelledby="contado-tab" ng-show="formData.combinadoContado">
+                    <div class="container-fluid"  >
+                        <br />
+                        <legend>Pago al Contado</legend>
+                        <div class="row">
+                            <div class="table-responsive">
+                                <div class="col-10" >
+                                    <div class="form-inline">
+                                        <div class="custom-control custom-control-inline custom-radio">
+                                            <input type="radio" class="custom-control-input" id="rdCombinadoEfectivo" name="rdCombinadoPagoContado"
+                                                   ng-model="formData.combinadoContadoTipo" value="E"  ng-disabled="true" />
+                                            <label class="custom-control-label" for="rdCombinadoEfectivo">Efectivo</label>
+                                        </div>
+                                        <div class="custom-control custom-control-inline custom-radio">
+                                            <input type="radio" class="custom-control-input" id="rdCombinadoCheque" name="rdCombinadoPagoContado"
+                                                   ng-model="formData.combinadoContadoTipo" ng-disabled="true" value="C" />
+                                            <label class="custom-control-label" for="rdCombinadoCheque"   >Cheque</label>
+                                        </div>
+                                        <div class="custom-control custom-control-inline custom-radio">
+                                            <input type="radio" class="custom-control-input" id="rdCombinadoDeposito" name="rdCombinadoPagoContado"
+                                                   ng-model="formData.combinadoContadoTipo" value="D" ng-disabled="true"  />
+                                            <label class="custom-control-label" for="rdCombinadoDeposito"  >Deposito a Banco</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+
+                        <!-- Combinado Efectivo -->
+                        <div class="row" ng-if="formData.combinadoContadoTipo == 'E'">
+                            <br />
+                            <div class="col-10">
+                                <div class="form-group row">
+                                    <label for="txtCombinadoContadoMonto" class="text-right col-sm-4" > Monto a Cancelar</label>
+                                    <input type="number" class="form-control col-sm-6" name="txtCombinadoContadoMonto" placeholder="0.00 " 
+                                           ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01"   ng-disabled="true"
+                                           ng-model="formData.combinadoContadoMonto" ng-change="checkMontoTotalContado()"
+                                           data-toggle="tooltip" data-placement="top"  />
+                                </div>
+                                <span class="alert-danger" ng-show="showCombinadoContadoMontoExcede">El monto a pagar al contado excede al monto Total a Cancelar</span>
+                            </div>
+                        </div>
+                        <!-- /Combinado Efectivo -->
+
+                        <!--Combinado Cheques -->
+                        <div class="row" ng-if="formData.combinadoContadoTipo == 'C'">
+                            <br />
+                            <div class="col-10">
+                                <div class="form-group row">
+                                    <label for="txtNroCheque" class=" text-right col-sm-4" > N&uacute;mero de Cheque</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control " id="txtContadoNroCheque"  name="txtNroCheque"  
+                                               required="required" valid-number="valid-number"  
+                                               onkeypress="return isNumberKey(event)" maxlength="16"   ng-disabled="true"
+                                               ng-model="formData.contadoNroCheque" ng-change="checkMontoTotalContado()"/>
+                                        <span class="alert-danger " ng-show="!myForm.txtContadoNroCheque.$valid">Debe ingresar un N&uacute;mero de Cheque</span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="txtContadoBanco" class=" text-right col-sm-4" > Banco</label>
+                                    <div class="col-sm-6">
+
+                                        <select class="form-control" ng-model="formData.contadoIdBanco" name="txtContadoIdBanco"
+                                                id="txtContadoIdBanco"  ng-disabled="true"
+                                                ng-options="option.id as option.name for option in comboAllBancos"> 
+                                            <option style="display:none" value="">seleccione un banco</option>
+                                        </select>
+                                        <span class="alert-danger" ng-show="!formData.contadoIdBanco">Debe ingresar un Banco</span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="txtCombinadoContadoMonto" class="text-right col-sm-4" > Monto a Cancelar</label>
+
+                                    <div class="col-sm-6">
+                                        <input type="number" class="form-control" name="txtCombinadoContadoMonto" placeholder="0.00 " 
+                                               ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01"   ng-disabled="true"
+                                               ng-model="formData.combinadoContadoMonto" ng-change="checkMontoTotalContado()"
+                                               data-toggle="tooltip" data-placement="top"  />
+                                    </div>
+                                    <span class="alert-danger" ng-show="showCombinadoContadoMontoExcede">El monto a pagar al contado excede al monto Total a Cancelar</span>
+                                </div>
+
+                            </div>
+                        </div>
+                        <!-- /Combinado Cheques -->
+                        <!-- Depositos -->
+                        <div class="row"  ng-if="formData.combinadoContadoTipo == 'D'">
+                            <br />
+                            <div class="col-10">
+                                <div class="form-group row">
+                                    <label for="txtContadoNroDeposito" class=" text-right col-sm-4" > N&uacute;mero de Dep&oacute;sito</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control " id="txtContadoNroDeposito"  name="txtContadoNroDeposito"  
+                                               required="required" valid-number="valid-number"  onkeypress="return isNumberKey(event)" 
+                                               maxlength="16" ng-model="formData.contadoNroDeposito"  ng-disabled="true"/>
+                                        <span class="alert-danger" ng-show="!myForm.txtContadoNroDeposito.$valid">Debe ingresar un N&uacute;mero de Dep&oacute;sito</span>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="txtContadoDeposito" class=" text-right col-sm-4" > Banco</label>
+                                    <div class="col-sm-6">
+                                        <select class="form-control" ng-model="formData.contadoIdBancoDeposito" name="txtContadoIdBancoDeposito"
+                                                id="txtContadoIdBancoDeposito"  ng-disabled="true"
+                                                ng-options="option.id as option.name for option in comboBancosConCuenta"> 
+                                            <option style="display:none" value="">seleccione un banco</option>
+                                        </select>
+                                        <span class="alert-danger" ng-show="!formData.contadoIdBanco">Debe ingresar un Banco</span>
+                                    </div>
+                                </div>  
+
+                                <div class="form-group row">
+                                    <label for="txtCombinadoContadoMonto" class="text-right col-sm-4" > Monto a Cancelar</label>
+                                    <div class="col-sm-6">
+                                        <input type="number" class="form-control " name="txtCombinadoContadoMonto" placeholder="0.00 " 
+                                               ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01" 
+                                               ng-model="formData.combinadoContadoMonto" ng-change="checkMontoTotalContado()" 
+                                               data-toggle="tooltip" data-placement="top"   ng-disabled="true"/>
+                                    </div>
+                                    <span class="alert-danger" ng-show="showCombinadoContadoMontoExcede">El monto a pagar al contado excede al monto Total a Cancelar : <strong>{{showMontoTotalCancelar}}</strong></span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /Combinado Depositos -->
+                    </div>
+                </div>
+                <!-- /Pagos Combinado Contado -->
+
+                <!-- Pago Combinado con Tarjeta -->
+                <div class="tab-pane ng-hide" id="tarjeta" role="tabpanel" aria-labelledby="tarjeta-tab" ng-show="formData.combinadoTarjeta">
+                    <div class="container-fluid">
+                        <br />
+                        <legend>Pago con Tarjeta</legend>
+                        <div class="row" >
+                            <div class="col-10">
+                                <div class="form-group row">
+                                    <label for="txtCodigoLinea" class="text-right  col-sm-4" > Tipo de Tarjeta</label>
+                                    <div class="col-sm-6">
+                                        <select class="form-control" ng-model="formData.contadoIdTarjeta" name="txtContadoIdTarjeta"
+                                                id="txtContadoIdTarjeta"
+                                                ng-options="option.id as option.name for option in comboTarjetas"  ng-disabled="true"> 
+                                            <option style="display:none" value="">seleccione una Tarjeta</option>
+                                        </select>
+                                        <span class="alert-danger" ng-show="!formData.contadoIdTarjeta">Debe ingresar un tipo de Tarjeta</span>
+
+                                    </div>    
+                                </div>
+                                <div class="form-group row">
+                                    <label for="txtCodigoLinea" class=" text-right col-sm-4" > N&uacute;mero de tarjeta</label>
+                                    <div class="col-sm-6">
+                                        <input type="text" class="form-control " id="txtNroTarjeta"  name="txtNroTarjeta"  
+                                               valid-number="valid-number"  onkeypress="return isNumberKey(event)" maxlength="16" 
+                                               ng-model="formData.contadoNroTarjeta"  ng-disabled="true"/>
+                                        <span class="alert-danger" ng-show="!formData.contadoNroTarjeta">Debe ingresar un numero de tarjeta</span>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="txtCombinadoTarjetaMonto" class="text-right col-sm-4" > Monto a Cancelar</label>
+                                    <div class="col-sm-6">
+                                        <input type="number" class="form-control" name="combinadoTarjetaMonto" placeholder="0.00 " 
+                                               ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01" 
+                                               ng-model="formData.combinadoTarjetaMonto" ng-change="checkMontoTotalTarjeta()"
+                                               data-toggle="tooltip" data-placement="top" ng-disabled="true"  />
+                                    </div>
+                                    <span class="alert-danger" ng-show="showCombinadoTarjetaMontoExcede">El monto a pagar al contado excede al monto Total a Cancelar : <strong>{{showMontoTotalCancelar}}</strong></span>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- /Pago Combinado con Tarjeta -->
+            </div>
+        </div>
+        <!-- /Pagos Combinados-->
+    </div>
+</fieldset>

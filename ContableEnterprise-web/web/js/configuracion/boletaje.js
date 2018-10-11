@@ -52,7 +52,6 @@ angular.module('jsBoletaje.controllers', []).controller('frmBoletaje',
                     }).then(function (response) {
                         if (response.data.code === 201) {
                             $scope.formData = response.data.content;
-                            console.log($scope.formData);
                             $scope.getCuentas();
                             $scope.loading = false;
                         } else {
@@ -79,6 +78,84 @@ angular.module('jsBoletaje.controllers', []).controller('frmBoletaje',
                         $scope.showAlert('Error de Verificacion', 'Verifique los mensajes de los valores requeridos')
                         return;
                     }
+                    // EFECTIVO CHEQUE
+                    if ($scope.formData.cuentaEfectivoDebeBs) {
+                        if ($scope.formData.cuentaEfectivoDebeBs.id === undefined) {
+                            $scope.showAlert('Error de Verificacion', 'Ingrese un cuenta para Efectivo Debe Bs');
+                            return;
+                        } else {
+                            saveData.cuentaEfectivoDebeBs = $scope.formData.cuentaEfectivoDebeBs.id;
+                        }
+                    }
+                    
+                    if ($scope.formData.cuentaEfectivoHaberBs) {
+                        if ($scope.formData.cuentaEfectivoHaberBs.id === undefined) {
+                            $scope.showAlert('Error de Verificacion', 'Ingrese un cuenta para Efectivo Haber Bolivianos');
+                            return;
+                        } else {
+                            saveData.cuentaEfectivoHaberBs = $scope.formData.cuentaEfectivoHaberBs.id;
+                        }
+                    }
+                    
+                    if ($scope.formData.cuentaEfectivoHaberUsd) {
+                        if ($scope.formData.cuentaEfectivoHaberUsd.id === undefined) {
+                            $scope.showAlert('Error de Verificacion', 'Ingrese un cuenta para Cuenta Efectivo Haber Dolares');
+                            return;
+                        } else {
+                            saveData.cuentaEfectivoHaberUsd = $scope.formData.cuentaEfectivoHaberUsd.id;
+                        }
+                    }
+                    
+                    if ($scope.formData.cuentaEfectivoDebeUsd) {
+                        if ($scope.formData.cuentaEfectivoDebeUsd.id === undefined) {
+                            $scope.showAlert('Error de Verificacion', 'Ingrese un cuenta para Cuenta Efectivo Debe Dolares');
+                            return;
+                        } else {
+                            saveData.cuentaEfectivoDebeUsd = $scope.formData.cuentaEfectivoDebeUsd.id;
+                        }
+                    }
+                    
+                    
+                    
+                     // Banco
+                    if ($scope.formData.depositoBancoDebeBs) {
+                        if ($scope.formData.depositoBancoDebeBs.id === undefined) {
+                            $scope.showAlert('Error de Verificacion', 'Ingrese un cuenta para Deposito Banco Debe Bs');
+                            return;
+                        } else {
+                            saveData.depositoBancoDebeBs = $scope.formData.depositoBancoDebeBs.id;
+                        }
+                    }
+                    
+                    if ($scope.formData.depositoBancoHaberBs) {
+                        if ($scope.formData.depositoBancoHaberBs.id === undefined) {
+                            $scope.showAlert('Error de Verificacion', 'Ingrese un cuenta para Deposito Banco Bolivianos');
+                            return;
+                        } else {
+                            saveData.depositoBancoHaberBs = $scope.formData.depositoBancoHaberBs.id;
+                        }
+                    }
+                    
+                    if ($scope.formData.depositoBancoDebeUsd) {
+                        if ($scope.formData.depositoBancoDebeUsd.id === undefined) {
+                            $scope.showAlert('Error de Verificacion', 'Ingrese un cuenta para Deposito Banco Debe Dolares');
+                            return;
+                        } else {
+                            saveData.depositoBancoDebeUsd = $scope.formData.depositoBancoDebeUsd.id;
+                        }
+                    }
+                    
+                    if ($scope.formData.depositoBancoHaberUsd) {
+                        if ($scope.formData.depositoBancoHaberUsd.id === undefined) {
+                            $scope.showAlert('Error de Verificacion', 'Ingrese un cuenta para Deposito Banco Haber Dolares');
+                            return;
+                        } else {
+                            saveData.depositoBancoHaberUsd = $scope.formData.depositoBancoHaberUsd.id;
+                        }
+                    }
+                    
+                    // Emision Bolivianos
+                    
                     if ($scope.formData.emisionBolivianos) {
                         if ($scope.formData.idTotalBoletoBs.id === undefined) {
                             $scope.showAlert('Error de Verificacion', 'Ingrese un cuenta para Total Boletos en Bolivianos');
@@ -268,6 +345,28 @@ angular.module('jsBoletaje.controllers', []).controller('frmBoletaje',
                             $scope.formData.idTotalBoletoUs = $scope.findCta($scope.formData.idTotalBoletoUs, $scope.comboCuentas);
                             $scope.formData.idCuentaFee = $scope.findCta($scope.formData.idCuentaFee, $scope.comboCuentas);
                             $scope.formData.idDescuentos = $scope.findCta($scope.formData.idDescuentos, $scope.comboCuentas);
+                            
+                        
+                            $scope.formData.cuentaEfectivoDebeBs = $scope.findCta($scope.formData.cuentaEfectivoDebeBs, $scope.comboCuentas);
+                            $scope.formData.cuentaEfectivoHaberBs = $scope.findCta($scope.formData.cuentaEfectivoHaberBs, $scope.comboCuentas);
+                            $scope.formData.cuentaEfectivoDebeUsd = $scope.findCta($scope.formData.cuentaEfectivoDebeUsd, $scope.comboCuentas);
+                            $scope.formData.cuentaEfectivoHaberUsd = $scope.findCta($scope.formData.cuentaEfectivoHaberUsd, $scope.comboCuentas);
+                            
+                            $scope.formData.depositoBancoHaberBs = $scope.findCta($scope.formData.depositoBancoHaberBs, $scope.comboCuentas);
+                            $scope.formData.depositoBancoDebeBs = $scope.findCta($scope.formData.depositoBancoDebeBs, $scope.comboCuentas);
+                            $scope.formData.depositoBancoHaberUsd = $scope.findCta($scope.formData.depositoBancoHaberUsd, $scope.comboCuentas);
+                            $scope.formData.depositoBancoDebeUsd = $scope.findCta($scope.formData.cuentaEfectivoHaberUsd, $scope.comboCuentas);
+                        
+                            $scope.formData.cuentaEfectivoNoBspDebeBs = $scope.findCta($scope.formData.cuentaEfectivoNoBspDebeBs, $scope.comboCuentas);
+                            $scope.formData.cuentaEfectivoNoBspHaberBs = $scope.findCta($scope.formData.cuentaEfectivoNoBspHaberBs, $scope.comboCuentas);
+                            $scope.formData.cuentaEfectivoNoBspDebeUsd = $scope.findCta($scope.formData.cuentaEfectivoNoBspDebeUsd, $scope.comboCuentas);
+                            $scope.formData.cuentaEfectivoNoBspHaberUsd = $scope.findCta($scope.formData.cuentaEfectivoNoBspHaberUsd, $scope.comboCuentas);
+                            $scope.formData.tarjetaCreditoBspDebeBs = $scope.findCta($scope.formData.tarjetaCreditoBspDebeBs, $scope.comboCuentas);
+                            $scope.formData.tarjetaCreditoBspHaberBs = $scope.findCta($scope.formData.tarjetaCreditoBspHaberBs, $scope.comboCuentas);
+                            $scope.formData.tarjetaCreditoBspDebeUsd = $scope.findCta($scope.formData.tarjetaCreditoBspDebeUsd, $scope.comboCuentas);
+                            $scope.formData.tarjetaCreditoBspHaberUsd = $scope.findCta($scope.formData.tarjetaCreditoBspHaberUsd, $scope.comboCuentas);
+                            
+                            
                             $scope.loading = false;
                             $scope.showBtnNuevo = true;
                         } else {

@@ -92,7 +92,7 @@ angular.module('jsPromotores.controllers', []).controller('frmPromotores',
 
                     $scope.loading = true;
 
-                    $scope.formData.idEmpresa = $scope.formData.idEmpresa.id;
+                    //$scope.formData.idEmpresa = $scope.formData.idEmpresa.id;
 
                     $http({
                         method: 'POST',
@@ -200,9 +200,6 @@ angular.module('jsPromotores.controllers', []).controller('frmPromotores',
                             $scope.formData.listComisionNacional.push(comision);
                         }
                     }
-
-                    
-
                     $scope.formData.comisionNacional = '';
                     $scope.formData.comisionNacionalMonto = '';
                 }
@@ -258,10 +255,11 @@ angular.module('jsPromotores.controllers', []).controller('frmPromotores',
                 }
 
                 $scope.formHasError = function () {
-                    if ($scope.formData.idEmpresa == undefined) {
+                    if ($scope.formData.idEmpresa === undefined) {
                         return true;
                     }
-                    return (!$scope.formData.idEmpresa.id);
+                    
+                    return false ;
                 }
 
                 $scope.update = function () {
@@ -276,7 +274,7 @@ angular.module('jsPromotores.controllers', []).controller('frmPromotores',
 
                     $scope.loading = true;
 
-                    $scope.formData.idEmpresa = $scope.formData.idEmpresa.id;
+                    //$scope.formData.idEmpresa = $scope.formData.idEmpresa.id;
 
                     $http({
                         method: 'POST',
@@ -354,7 +352,7 @@ angular.module('jsPromotores.controllers', []).controller('frmPromotores',
                     $scope.hideMessagesBox();
                     $scope.formData = item;
 
-                    $scope.formData.idEmpresa = $scope.findCta(item.idEmpresa, $scope.comboSucursales);
+                    //$scope.formData.idEmpresa = $scope.findCta(item.idEmpresa, $scope.comboSucursales);
                 }
 
                 $scope.nuevo = function () {
