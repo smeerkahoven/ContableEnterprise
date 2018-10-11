@@ -13,8 +13,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 import javax.persistence.EntityManager;
@@ -31,6 +34,7 @@ import javax.transaction.UserTransaction;
  *
  * @author xeio
  */
+@TransactionAttribute(TransactionAttributeType.REQUIRED)
 public abstract class FacadeEJB implements DaoRemoteFacade {
 
     protected String findAll;
@@ -42,20 +46,19 @@ public abstract class FacadeEJB implements DaoRemoteFacade {
 
     protected Queries queries = Queries.getQueries();
 
-    protected UserTransaction transaction ;
+    protected UserTransaction transaction;
 
     @Override
     public void executeNative(String q, HashMap<String, Object> parameters) throws CRUDException {
         Query query = em.createNativeQuery(queries.getPropertie(q));
-        
+
         for (Map.Entry<String, Object> entry : parameters.entrySet()) {
-           query.setParameter(entry.getKey(), entry.getValue());
+            query.setParameter(entry.getKey(), entry.getValue());
         }
-        
-        query.executeUpdate() ;
+
+        query.executeUpdate();
     }
-    
-    
+
     @Override
     public void beginTransaction() throws CRUDException {
         try {
@@ -142,12 +145,16 @@ public abstract class FacadeEJB implements DaoRemoteFacade {
     @Override
     public int insert(Entidad e) throws CRUDException {
 
-        em.persist(e);
-        em.flush();
+        Optional op = Optional.ofNullable(e);
+        if (op.isPresent()) {
+            em.persist(e);
+            em.flush();
 
-        LoggerContable.log(Thread.currentThread().getStackTrace()[1].getMethodName() + ":" + e.toString(), this, Level.FINE);
+            LoggerContable.log(Thread.currentThread().getStackTrace()[1].getMethodName() + ":" + e.toString(), this, Level.FINE);
 
-        return e.getId();
+            return e.getId();
+        }
+        return 0;
     }
 
     @Override
@@ -223,5 +230,4 @@ public abstract class FacadeEJB implements DaoRemoteFacade {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 
-    
 }

@@ -3,13 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.agencia.entities;
+package com.contabilidad.entities;
 
 import com.seguridad.control.entities.Entidad;
 import com.seguridad.control.exception.CRUDException;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.TableGenerator;
 import javax.validation.constraints.NotNull;
 
 /**
@@ -17,30 +20,31 @@ import javax.validation.constraints.NotNull;
  * @author xeio
  */
 @Embeddable
-public class BoletoPK extends Entidad {
+public class NotaDebitoTransaccionPK extends Entidad {
 
     @Basic(optional = false)
-    @Column(name = "id_boleto")
-    private int idBoleto;
+    @Column(name = "id_nota_debito_transaccion")
+    @GeneratedValue (strategy = GenerationType.SEQUENCE)
+    private int idNotaDebitoTransaccion;
     @Basic(optional = false)
     @NotNull
     @Column(name = "gestion")
     private int gestion;
 
-    public BoletoPK() {
+    public NotaDebitoTransaccionPK() {
     }
 
-    public BoletoPK(int idBoleto, int gestion) {
-        this.idBoleto = idBoleto;
+    public NotaDebitoTransaccionPK(int idNotaDebitoTransaccion, int gestion) {
+        this.idNotaDebitoTransaccion = idNotaDebitoTransaccion;
         this.gestion = gestion;
     }
 
-    public int getIdBoleto() {
-        return idBoleto;
+    public int getIdNotaDebitoTransaccion() {
+        return idNotaDebitoTransaccion;
     }
 
-    public void setIdBoleto(int idBoleto) {
-        this.idBoleto = idBoleto;
+    public void setIdNotaDebitoTransaccion(int idNotaDebitoTransaccion) {
+        this.idNotaDebitoTransaccion = idNotaDebitoTransaccion;
     }
 
     public int getGestion() {
@@ -54,7 +58,7 @@ public class BoletoPK extends Entidad {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (int) idBoleto;
+        hash += (int) idNotaDebitoTransaccion;
         hash += (int) gestion;
         return hash;
     }
@@ -62,11 +66,11 @@ public class BoletoPK extends Entidad {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof BoletoPK)) {
+        if (!(object instanceof NotaDebitoTransaccionPK)) {
             return false;
         }
-        BoletoPK other = (BoletoPK) object;
-        if (this.idBoleto != other.idBoleto) {
+        NotaDebitoTransaccionPK other = (NotaDebitoTransaccionPK) object;
+        if (this.idNotaDebitoTransaccion != other.idNotaDebitoTransaccion) {
             return false;
         }
         if (this.gestion != other.gestion) {
@@ -77,12 +81,12 @@ public class BoletoPK extends Entidad {
 
     @Override
     public String toString() {
-        return "com.agencia.entities.BoletoPK[ idBoleto=" + idBoleto + ", gestion=" + gestion + " ]";
+        return "com.contabilidad.entities.NotaDebitoTransaccionPK[ idNotaDebitoTransaccion=" + idNotaDebitoTransaccion + ", gestion=" + gestion + " ]";
     }
 
     @Override
     public int getId() throws CRUDException {
-        return this.idBoleto ;
+            return this.getIdNotaDebitoTransaccion();
     }
     
 }

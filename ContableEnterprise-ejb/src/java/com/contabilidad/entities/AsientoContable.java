@@ -59,6 +59,8 @@ public class AsientoContable extends Entidad {
     private BigDecimal montoHaberExt;
     @Column(name = "monto_haber_nac")
     private BigDecimal montoHaberNac;
+    @Column(name = "id_boleto")
+    private Integer idBoleto;
 
     public AsientoContable() {
     }
@@ -149,6 +151,14 @@ public class AsientoContable extends Entidad {
 
     public void setMontoHaberNac(BigDecimal montoHaberNac) {
         this.montoHaberNac = montoHaberNac;
+    }
+
+    public Integer getIdBoleto() {
+        return idBoleto;
+    }
+
+    public void setIdBoleto(Integer idBoleto) {
+        this.idBoleto = idBoleto;
     }
 
     @Override

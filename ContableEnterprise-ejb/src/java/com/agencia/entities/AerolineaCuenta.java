@@ -30,7 +30,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "AerolineaCuenta.findAll", query = "SELECT a FROM AerolineaCuenta a"),
-    @NamedQuery(name = "AerolineaCuenta.exists", query = "SELECT a FROM AerolineaCuenta a WHERE a.idAerolinea=:idAerolinea and a.idPlanCuentas=:idPlanCuentas and a.tipo=:tipo and a.moneda=:moneda")
+    @NamedQuery(name = "AerolineaCuenta.exists", query = "SELECT a FROM AerolineaCuenta a WHERE a.idAerolinea=:idAerolinea and a.idPlanCuentas=:idPlanCuentas and a.tipo=:tipo and a.moneda=:moneda"),
+    @NamedQuery(name = "AerolineaCuenta.find", query = "SELECT a FROM AerolineaCuenta a WHERE a.idAerolinea=:idAerolinea and a.tipo=:tipo and a.moneda=:moneda")
 })
 public class AerolineaCuenta extends Entidad {
 

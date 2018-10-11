@@ -16,8 +16,21 @@ public class ComboSelect implements Serializable {
     private Object id;
 
     private String name;
+
+    private String comodin;
+
+    public ComboSelect() {
+
+    }
+
+    public ComboSelect(Object id) {
+        this.id = id;
+    }
     
-    private String comodin ;
+     public ComboSelect(Object id, String name) {
+        this.id = id;
+        this.name = name ;
+    }
 
     public Object getId() {
         return id;
@@ -42,7 +55,5 @@ public class ComboSelect implements Serializable {
     public void setComodin(String comodin) {
         this.comodin = comodin;
     }
-    
-    
 
 }

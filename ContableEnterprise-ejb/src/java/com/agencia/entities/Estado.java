@@ -10,7 +10,8 @@ package com.agencia.entities;
  * @author xeio
  */
 public enum Estado {
-    
+    ERROR("E"),
+    ANULADO("A"),
     PENDIENTE("P"),
     COMPLETADO("C");
     

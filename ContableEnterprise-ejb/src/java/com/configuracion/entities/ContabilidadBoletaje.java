@@ -26,12 +26,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "tb_contabilidad_boletaje")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "ContabilidadBoletaje.findAll", query = "SELECT c FROM ContabilidadBoletaje c"),
+    @NamedQuery(name = "ContabilidadBoletaje.findAll", query = "SELECT c FROM ContabilidadBoletaje c")
+    ,
     @NamedQuery(name = "ContabilidadBoletaje.find", query = "SELECT c FROM ContabilidadBoletaje c WHERE c.idEmpresa=:idEmpresa")
 
 })
 public class ContabilidadBoletaje extends Entidad {
-    
+
     public static final String SI = "S";
     public static final String NO = "N";
 
@@ -56,27 +57,49 @@ public class ContabilidadBoletaje extends Entidad {
     @Column(name = "emision_dolares")
     private String emisionDolares;
 
+    @Column(name = "cuenta_efectivo_debe_bs")
+    private Integer cuentaEfectivoDebeBs;
+    @Column(name = "cuenta_efectivo_haber_bs")
+    private Integer cuentaEfectivoHaberBs;
+    @Column(name = "cuenta_efectivo_haber_usd")
+    private Integer cuentaEfectivoDebeUsd;
+    @Column(name = "cuenta_efectivo_debe_usd")
+    private Integer cuentaEfectivoHaberUsd;
+    
+    @Column(name = "deposito_banco_haber_bs")
+    private Integer depositoBancoHaberBs;
+    @Column(name = "deposito_banco_debe_bs")
+    private Integer depositoBancoDebeBs;
+    @Column(name = "deposito_banco_debe_usd")
+    private Integer depositoBancoDebeUsd;
+    @Column(name = "deposito_banco_haber_usd")
+    private Integer depositoBancoHaberUsd;
+    
+    
     @Column(name = "cuenta_efectivo_no_bsp_debe_bs")
     private Integer cuentaEfectivoNoBspDebeBs;
-    
+
     @Column(name = "cuenta_efectivo_no_bsp_debe_usd")
     private Integer cuentaEfectivoNoBspDebeUsd;
-    
+
     @Column(name = "tarjeta_credito_bsp_debe_bs")
     private Integer tarjetaCreditoBspDebeBs;
-    
+
     @Column(name = "tarjeta_credito_bsp_debe_usd")
     private Integer tarjetaCreditoBspDebeUsd;
-    
+
     @Column(name = "cuenta_efectivo_no_bsp_haber_bs")
     private Integer cuentaEfectivoNoBspHaberBs;
 
     @Column(name = "cuenta_efectivo_no_bsp_haber_usd")
     private Integer cuentaEfectivoNoBspHaberUsd;
-    
+
     @Column(name = "tarjeta_credito_bsp_haber_bs")
     private Integer tarjetaCreditoBspHaberBs;
-    
+
+    @Column(name = "tarjeta_credito_bsp_haber_usd")
+    private Integer tarjetaCreditoBspHaberUsd;
+
     public ContabilidadBoletaje() {
     }
 
@@ -136,8 +159,6 @@ public class ContabilidadBoletaje extends Entidad {
         this.tarjetaCreditoBspHaberBs = tarjetaCreditoBspHaberBs;
     }
 
-    
-    
     public ContabilidadBoletaje(Integer idEmpresa) {
         this.idEmpresa = idEmpresa;
     }
@@ -198,6 +219,80 @@ public class ContabilidadBoletaje extends Entidad {
         this.emisionDolares = emisionDolares;
     }
 
+    public Integer getTarjetaCreditoBspHaberUsd() {
+        return tarjetaCreditoBspHaberUsd;
+    }
+
+    public void setTarjetaCreditoBspHaberUsd(Integer tarjetaCreditoBspHaberUsd) {
+        this.tarjetaCreditoBspHaberUsd = tarjetaCreditoBspHaberUsd;
+    }
+
+    public Integer getCuentaEfectivoDebeBs() {
+        return cuentaEfectivoDebeBs;
+    }
+
+    public void setCuentaEfectivoDebeBs(Integer cuentaEfectivoDebeBs) {
+        this.cuentaEfectivoDebeBs = cuentaEfectivoDebeBs;
+    }
+
+    public Integer getCuentaEfectivoHaberBs() {
+        return cuentaEfectivoHaberBs;
+    }
+
+    public void setCuentaEfectivoHaberBs(Integer cuentaEfectivoHaberBs) {
+        this.cuentaEfectivoHaberBs = cuentaEfectivoHaberBs;
+    }
+
+    public Integer getCuentaEfectivoDebeUsd() {
+        return cuentaEfectivoDebeUsd;
+    }
+
+    public void setCuentaEfectivoDebeUsd(Integer cuentaEfectivoDebeUsd) {
+        this.cuentaEfectivoDebeUsd = cuentaEfectivoDebeUsd;
+    }
+
+    public Integer getCuentaEfectivoHaberUsd() {
+        return cuentaEfectivoHaberUsd;
+    }
+
+    public void setCuentaEfectivoHaberUsd(Integer cuentaEfectivoHaberUsd) {
+        this.cuentaEfectivoHaberUsd = cuentaEfectivoHaberUsd;
+    }
+
+    public Integer getDepositoBancoHaberBs() {
+        return depositoBancoHaberBs;
+    }
+
+    public void setDepositoBancoHaberBs(Integer depositoBancoHaberBs) {
+        this.depositoBancoHaberBs = depositoBancoHaberBs;
+    }
+
+    public Integer getDepositoBancoDebeBs() {
+        return depositoBancoDebeBs;
+    }
+
+    public void setDepositoBancoDebeBs(Integer depositoBancoDebeBs) {
+        this.depositoBancoDebeBs = depositoBancoDebeBs;
+    }
+
+    public Integer getDepositoBancoDebeUsd() {
+        return depositoBancoDebeUsd;
+    }
+
+    public void setDepositoBancoDebeUsd(Integer depositoBancoDebeUsd) {
+        this.depositoBancoDebeUsd = depositoBancoDebeUsd;
+    }
+
+    public Integer getDepositoBancoHaberUsd() {
+        return depositoBancoHaberUsd;
+    }
+
+    public void setDepositoBancoHaberUsd(Integer depositoBancoHaberUsd) {
+        this.depositoBancoHaberUsd = depositoBancoHaberUsd;
+    }
+    
+    
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -220,14 +315,12 @@ public class ContabilidadBoletaje extends Entidad {
 
     @Override
     public int getId() throws CRUDException {
-        return idEmpresa ;
+        return idEmpresa;
     }
-    
-    
 
     @Override
     public String toString() {
         return "com.configuracion.ejb.ContabilidadBoletaje[ idEmpresa=" + idEmpresa + " ]";
     }
-    
+
 }

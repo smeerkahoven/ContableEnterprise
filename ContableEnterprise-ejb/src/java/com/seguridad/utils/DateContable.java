@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.util.Date;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -39,6 +40,13 @@ public class DateContable {
     }
 
     public static Date toLatinAmericaDateFormat(String date) {
+        
+        Optional op = Optional.ofNullable(date);
+        
+        if (!op.isPresent()){
+            return null ;
+        }
+        
         try {
             SimpleDateFormat formatter = new SimpleDateFormat(LATIN_AMERICA_FORMAT);
             Date parseDAte = formatter.parse(date);
@@ -65,6 +73,20 @@ public class DateContable {
         return newDate;
     }
 
+    
+    public static Integer getPartitionDateInt(String strDate) {
+        //for strdate = 2017 July 25
+
+        DateTimeFormatter f = new DateTimeFormatterBuilder().appendPattern(LATIN_AMERICA_FORMAT)
+                .toFormatter();
+
+        LocalDate parsedDate = LocalDate.parse(strDate, f);
+        DateTimeFormatter f2 = DateTimeFormatter.ofPattern(PARTITION_FORMAT);
+
+        String newDate = parsedDate.format(f2);
+
+        return Integer.parseInt(newDate);
+    }
     /**
      *
      * @return
@@ -75,7 +97,10 @@ public class DateContable {
         return d;
     }
 
-    public static String getDateFormat(Date date, String format) {
+    public DateContable() {
+    }
+
+   public static String getDateFormat(Date date, String format) {
         if (date == null) {
             return "";
         }
@@ -83,7 +108,7 @@ public class DateContable {
     }
 
     public static void main(String args[]) {
-            //System.out.println(DateContable.getPartitionDate("20/08/2018"));
+            System.out.println(DateContable.getPartitionDate(DateContable.getCurrentDateStr(LATIN_AMERICA_FORMAT)));
             Date d = new Date("2018-08-21T04:00:00Z[UTC]");
             
             SimpleDateFormat simple = new SimpleDateFormat(LATIN_AMERICA_FORMAT);

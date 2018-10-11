@@ -42,4 +42,33 @@ public interface BoletoRemote extends DaoRemoteFacade {
     
     public boolean isBoletoRegistrado(Boleto b) throws CRUDException ;
     
+    public Boleto procesarBoleto (Boleto b)throws CRUDException ;
+    
+    public List getPasajerosPorCliente(Integer idCliente) throws CRUDException ;
+    
+    
+    public Boleto saveBoleto(Boleto b) throws CRUDException;
+    
+    /**
+     * Busqueda de Boletos por medio de los parametros de entrada
+     * @param idCliente
+     * @param idAerolinea
+     * @param idEmpresa
+     * @param fechaI
+     * @param fechaF
+     * @return
+     * @throws CRUDException 
+     */
+    public List getBoletos(Integer idCliente, Integer idAerolinea, Integer idEmpresa, String fechaI, String fechaF) throws CRUDException ;
+    
+    
+    /**
+     * Retorna la lista de Boletos Multiples para visualizar en la pantalla como una 
+     * Tabla
+     * @param idBoleto
+     * @param idBoletoPadre
+     * @return
+     * @throws CRUDException 
+     */
+    public List getBoletosMultiples(Integer idBoleto , Integer idBoletoPadre) throws CRUDException;
 }

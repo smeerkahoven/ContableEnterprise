@@ -8,6 +8,7 @@ package com.agencia.control.remote;
 import com.seguridad.control.entities.Entidad;
 import com.seguridad.control.exception.CRUDException;
 import com.seguridad.control.remote.DaoRemoteFacade;
+import java.util.HashMap;
 import java.util.List;
 import javax.ejb.Remote;
 
@@ -26,6 +27,12 @@ public interface PromotorRemote extends DaoRemoteFacade {
 
     @Override
     public void update(Entidad e) throws CRUDException;
+
+    @Override
+    public List get(String namedQuery, Class<?> typeClass) throws CRUDException;
+
+    @Override
+    public List get(String namedQuery, Class<?> typeClass, HashMap parameters) throws CRUDException;
     
     
     

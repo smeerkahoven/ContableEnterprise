@@ -18,10 +18,10 @@ import javax.persistence.Entity;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -31,15 +31,25 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name = "cnt_comprobante_contable")
+@TableGenerator(name = "comprobante_tg", initialValue = 0, allocationSize = 1)
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "ComprobanteContable.findAll", query = "SELECT c FROM ComprobanteContable c")
     ,
       @NamedQuery(name = "ComprobanteContable.find", query = "SELECT c FROM ComprobanteContable c WHERE c.comprobanteContablePK.idLibro=:idLibro")
-    
+
 })
 public class ComprobanteContable extends Entidad {
 
+    public static class Tipo {
+
+        public static final String ASIENTO_DIARIO = "AD";
+        public static final String COMPROBANTE_INGRESO = "CI";
+        public static final String COMPROBANTE_TRASPASO = "CT";
+        public static final String COMPROBANTE_EGRESO = "CE";
+        public static final String ASIENTO_AJUSTE = "AJ";
+
+    }
     public static final String APROBADO = "A";
     public static final String PENDIENTE = "P";
     public static final String ANULADO = "N";
@@ -79,6 +89,8 @@ public class ComprobanteContable extends Entidad {
     private String tipo;
     @Column(name = "id_empresa")
     private Integer idEmpresa;
+    @Column(name = "id_nota_debito")
+    private Integer idNotaDebito;
     @Column(name = "totalDebeNac")
     private BigDecimal totalDebeNac;
     @Column(name = "totalHaberNac")
@@ -132,6 +144,14 @@ public class ComprobanteContable extends Entidad {
         this.idNumeroGestion = idNumeroGestion;
         this.idUsuarioCreador = idUsuarioCreador;
         this.fecha = fecha;
+    }
+
+    public Integer getIdNotaDebito() {
+        return idNotaDebito;
+    }
+
+    public void setIdNotaDebito(Integer idNotaDebito) {
+        this.idNotaDebito = idNotaDebito;
     }
 
     public ComprobanteContable(int idLibro, int gestion) {

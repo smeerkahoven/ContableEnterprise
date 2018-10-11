@@ -30,7 +30,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "cnt_promotor")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Promotor.findAll", query = "SELECT p FROM Promotor p")})
+    @NamedQuery(name = "Promotor.findAll", query = "SELECT p FROM Promotor p"), 
+    @NamedQuery(name = "Promotor.comboAllCounter" , query = "SELECT p FROM Promotor p WHERE p.tipo='C' and p.estado='A'")
+})
 public class Promotor extends Entidad  {
 
     private static final long serialVersionUID = 1L;

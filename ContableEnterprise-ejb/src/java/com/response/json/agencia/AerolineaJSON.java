@@ -61,7 +61,7 @@ public class AerolineaJSON implements Serializable {
 
     public static Aerolinea toAerolinea(AerolineaJSON json) {
         Aerolinea a = new Aerolinea();
-        a.setBoletosMonExt(json.getBoletosMonExt());
+            a.setBoletosMonExt(json.getBoletosMonExt());
         a.setBoletosMonNac(json.getBoletosMonNac());
         a.setBsp(json.getBsp());
         a.setCargoNoFiscal(json.getCargoNoFiscal());

@@ -5,7 +5,14 @@
  */
 package com.response.json.agencia;
 
+import com.agencia.entities.Aerolinea;
+import com.agencia.entities.Boleto;
+import com.agencia.entities.BoletoSearch;
+import com.agencia.entities.Cliente;
+import com.agencia.entities.FormasPago;
 import com.seguridad.utils.ComboSelect;
+import com.seguridad.utils.Contabilidad;
+import com.seguridad.utils.DateContable;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -14,45 +21,45 @@ import java.math.BigDecimal;
  * @author xeio
  */
 public class BoletoJSON implements Serializable {
-    
+
     //id de la tabla
-    private int idBoleto ;
-    private int gestion ;
-    private ComboSelect idAerolinea ;
-    private int idEmpresa ;
-    private ComboSelect idPromotor ;
-    private Integer idLibro ;
+    private int idBoleto;
+    private int gestion;
+    private ComboSelect idAerolinea;
+    private Integer idEmpresa;
+    private ComboSelect idPromotor;
+    private Integer idLibro;
+    private Integer idIngresoCaja;
     private ComboSelect idCliente;
-    private ComboSelect nombrePasajero ;
-    
-    private String emision ;
-    private String tipoBoleto ;
-    private String tipoCupon ;
-    private long numero ;
+    private String nombrePasajero;
+    private Integer idBoletoPadre;
+
+    private String emision;
+    private String tipoBoleto;
+    private String tipoCupon;
+    private long numero;
     //rutas
-    private ComboSelect idRuta1 ;
-    private ComboSelect idRuta2 ;
-    private ComboSelect idRuta3 ;
-    private ComboSelect idRuta4 ;
-    private ComboSelect idRuta5 ;
-    
-    
-    
-    private String fechaEmision ;
-    private String fechaViaje ;
-    
-    private BigDecimal factorCambiario ;
+    private ComboSelect idRuta1;
+    private ComboSelect idRuta2;
+    private ComboSelect idRuta3;
+    private ComboSelect idRuta4;
+    private ComboSelect idRuta5;
+
+    private String fechaEmision;
+    private String fechaViaje;
+
+    private BigDecimal factorCambiario;
     private String moneda;
-    
+
     // montos
     private BigDecimal importeNetoBs;
     private BigDecimal importeNetoUsd;
-    private BigDecimal impuestoBobBs ;
-    private BigDecimal impuestoBobUsd ;
-    private BigDecimal impuestoQmBs ;
-    private BigDecimal impuestoQmUsd ;
-    private BigDecimal impuesto1Bs ;
-    private BigDecimal impuesto1Usd ;
+    private BigDecimal impuestoBobBs;
+    private BigDecimal impuestoBobUsd;
+    private BigDecimal impuestoQmBs;
+    private BigDecimal impuestoQmUsd;
+    private BigDecimal impuesto1Bs;
+    private BigDecimal impuesto1Usd;
     private BigDecimal impuesto2Bs;
     private BigDecimal impuesto2Usd;
     private BigDecimal impuesto3Bs;
@@ -63,44 +70,461 @@ public class BoletoJSON implements Serializable {
     private BigDecimal impuesto5Usd;
     private BigDecimal totalBoletoBs;
     private BigDecimal totalBoletoUsd;
-    private BigDecimal comisionBs;
-    private BigDecimal comisionUsd;
-    private BigDecimal montoFee;
+    private BigDecimal comision;
+    private BigDecimal montoComisionBs;
+    private BigDecimal montoComisionUsd;
+    private BigDecimal fee;
     private BigDecimal montoFeeBs;
     private BigDecimal montoFeeUsd;
-    private BigDecimal montoDescuento;
+    private BigDecimal descuento;
     private BigDecimal montoDescuentoBs;
     private BigDecimal montoDescuentoUsd;
     private BigDecimal totalMontoCanceladoBs;
     private BigDecimal totalMontoCanceladoUsd;
-    
-    
-    private String estado ;
-    private int idNotaDebito ;
-    private String fechaInsert ;
-    
-    private String idUsuarioCreador ;
-    
+    private BigDecimal montoPagarLineaAereaBs;
+    private BigDecimal montoPagarLineaAereaUsd;
+
+    private String estado;
+    private Integer idNotaDebito;
+    private String fechaInsert;
+
+    private String idUsuarioCreador;
+
     //formas de pago
-    private String formaPago ;
-    private Integer creditoDias ;
-    private String creditoVencimiento ;
-    private String contadoTipo ;
-    private String contadoNroCheque ;
-    private Integer contadoNroBanco ;
-    private String contadoNroDeposito ;
-    
-    private String tarjetaNumero ;
-    private Integer tarjetaId ;
+    private String formaPago;
+    private Integer creditoDias;
+    private String creditoVencimiento;
+    private String contadoTipo;
+    private String contadoNroCheque;
+    private Integer contadoIdBanco;
+    private String contadoNroDeposito;
+    private ComboSelect contadoIdCuenta;
+
+    private String tarjetaNumero;
+    private Integer tarjetaId;
     private String combinadoTipo;
+    private boolean combinadoCredito;
     private Integer combinadoCreditoDias;
-    private String combinadoCreditoVencimiento ;
+    private String combinadoCreditoVencimiento;
     private BigDecimal combinadoCreditoMonto;
-    private String combinadoContadoTipo ;
-    private BigDecimal combinadoContadoMonto ;
-    private String combinadoContadoNroCheque ;
-    private Integer combinadoCOntadoIdBanco ;
-    private String combinadoContadoNroDeposito ;
+    private boolean combinadoContado;
+    private String combinadoContadoTipo;
+    private BigDecimal combinadoContadoMonto;
+    private String combinadoContadoNroCheque;
+    private Integer combinadoContadoIdBanco;
+    private String combinadoContadoNroDeposito;
+    private boolean combinadoTarjeta;
+    private Integer combinadoTarjetaId;
+    private String combinadoTarjetaNumero;
+    private BigDecimal combinadoTarjetaMonto;
+
+    public static Boleto toNewBoleto(BoletoJSON bjson) {
+        Boleto boleto = new Boleto();
+
+        boleto.setGestion(Integer.parseInt(DateContable.getPartitionDate(DateContable.getCurrentDateStr(DateContable.LATIN_AMERICA_FORMAT))));;
+        boleto.setIdAerolinea(new Aerolinea(((Double) bjson.getIdAerolinea().getId()).intValue()));
+        //boleto.setIdAerolinea(((Double) bjson.getIdAerolinea().getId()).intValue());
+        boleto.setIdEmpresa(bjson.getIdEmpresa());
+        boleto.setEmision(bjson.getEmision());
+        boleto.setTipoBoleto(bjson.getTipoBoleto());
+        boleto.setTipoCupon(bjson.getTipoCupon());
+        boleto.setNumero(bjson.getNumero());
+        boleto.setIdPromotor(((Double) bjson.getIdPromotor().getId()).intValue());
+        boleto.setEstado(bjson.getEstado());
+        boleto.setIdBoletoPadre(bjson.getIdBoletoPadre());
+
+        // rutas
+        boleto.setIdRuta1(bjson.getIdRuta1() != null ? (String) bjson.getIdRuta1().getId() : null);
+        boleto.setIdRuta2(bjson.getIdRuta2() != null ? (String) bjson.getIdRuta2().getId() : null);
+        boleto.setIdRuta3(bjson.getIdRuta3() != null ? (String) bjson.getIdRuta3().getId() : null);
+        boleto.setIdRuta4(bjson.getIdRuta4() != null ? (String) bjson.getIdRuta4().getId() : null);
+        boleto.setIdRuta5(bjson.getIdRuta5() != null ? (String) bjson.getIdRuta5().getId() : null);
+
+        //cliente
+        //boleto.setIdCliente(((Double) bjson.getIdCliente().getId()).intValue());
+        boleto.setIdCliente(new Cliente((((Double) bjson.getIdCliente().getId()).intValue())));
+        boleto.setNombrePasajero(bjson.getNombrePasajero().toUpperCase());
+
+        boleto.setFechaEmision(DateContable.toLatinAmericaDateFormat(bjson.getFechaEmision()));
+        boleto.setFechaViaje(DateContable.toLatinAmericaDateFormat(bjson.getFechaViaje()));
+        boleto.setFechaInsert(DateContable.getCurrentDate());
+
+        boleto.setFactorCambiario(bjson.getFactorCambiario());
+        boleto.setIdUsuarioCreador(bjson.getIdUsuarioCreador());
+
+        boleto.setComision(bjson.getComision());
+        boleto.setFee(bjson.getFee());
+        boleto.setDescuento(bjson.getDescuento());
+        //Dolares
+        if (bjson.getTipoCupon().equals(Boleto.Cupon.INTERNACIONAL)) {
+            boleto.setImporteNeto(bjson.getImporteNetoUsd());
+            boleto.setImpuestoBob(bjson.getImpuestoBobUsd());
+            boleto.setImpuestoQm(bjson.getImpuestoQmUsd());
+            boleto.setImpuesto1(bjson.getImpuesto1Usd());
+            boleto.setImpuesto2(bjson.getImpuesto2Usd());
+            boleto.setImpuesto3(bjson.getImpuesto3Usd());
+            boleto.setImpuesto4(bjson.getImpuesto4Usd());
+            boleto.setImpuesto5(bjson.getImpuesto5Usd());
+            boleto.setTotalBoleto(bjson.getTotalBoletoUsd());
+            System.out.println("JSON  Monto COmision Usd:" + bjson.getMontoComisionUsd());
+            boleto.setMontoComision(bjson.getMontoComisionUsd());
+            boleto.setMontoFee(bjson.getMontoFeeUsd());
+            boleto.setMontoDescuento(bjson.getMontoDescuentoUsd());
+            boleto.setTotalMontoCancelado(bjson.getTotalMontoCanceladoUsd());
+        } else {//Bolivianos
+            boleto.setImporteNeto(bjson.getImporteNetoBs());
+            boleto.setImpuestoBob(bjson.getImpuestoBobBs());
+            boleto.setImpuestoQm(bjson.getImpuestoQmBs());
+            boleto.setImpuesto1(bjson.getImpuesto1Bs());
+            boleto.setImpuesto2(bjson.getImpuesto2Bs());
+            boleto.setImpuesto3(bjson.getImpuesto3Bs());
+            boleto.setImpuesto4(bjson.getImpuesto4Bs());
+            boleto.setImpuesto5(bjson.getImpuesto5Bs());
+            boleto.setTotalBoleto(bjson.getTotalBoletoBs());
+            System.out.println("JSON  Monto COmision Bs:" + bjson.getMontoComisionBs());
+            boleto.setMontoComision(bjson.getMontoComisionBs());
+            boleto.setMontoFee(bjson.getMontoFeeBs());
+            boleto.setMontoDescuento(bjson.getMontoDescuentoBs());
+            boleto.setTotalMontoCancelado(bjson.getTotalMontoCanceladoBs());
+        }
+
+        //formas de pago
+        boleto.setFormaPago(bjson.getFormaPago());
+        boleto.setMoneda(bjson.moneda);
+
+        if (bjson.getFormaPago() != null) {
+
+            switch (bjson.getFormaPago()) {
+
+                case FormasPago.CREDITO:
+                    boleto.setCreditoDias(bjson.getCreditoDias());
+                    boleto.setCreditoVencimiento(DateContable.toLatinAmericaDateFormat(bjson.getCreditoVencimiento()));
+                    break;
+
+                case FormasPago.TARJETA:
+                    boleto.setTarjetaId(bjson.getTarjetaId());
+                    boleto.setTarjetaNumero(bjson.getTarjetaNumero());
+                    break;
+
+                case FormasPago.CONTADO:
+                    boleto.setContadoNroCheque(bjson.getContadoNroCheque());
+                    boleto.setContadoIdBanco(bjson.getContadoIdBanco());
+                    boleto.setContadoNroDeposito(bjson.getContadoNroDeposito());
+                    boleto.setContadoTipo(bjson.getContadoTipo());
+                    boleto.setContadoIdCuenta(((Double) bjson.getContadoIdCuenta().getId()).intValue());
+
+                    break;
+
+                case FormasPago.COMBINADO:
+                    boleto.setCombinadoTipo(bjson.getCombinadoTipo());
+
+                    if (bjson.isCombinadoContado()) {
+                        boleto.setCombinadoContadoTipo(bjson.getCombinadoContadoTipo());
+                        boleto.setCombinadoContadoMonto(bjson.getCombinadoContadoMonto());
+
+                        switch (bjson.getCombinadoContadoTipo()) {
+                            case FormasPago.CONTADO_EFECTIVO:
+                                break;
+                            case FormasPago.CONTADO_CHEQUE:
+                                boleto.setCombinadoContadoIdBanco(bjson.getCombinadoContadoIdBanco());
+                                boleto.setCombinadoContadoNroCheque(bjson.getCombinadoContadoNroCheque());
+                                break;
+                            case FormasPago.CONTADO_DEPOSITO:
+                                boleto.setCombinadoContadoIdBanco(bjson.getCombinadoContadoIdBanco());
+                                boleto.setCombinadoContadoNroDeposito(bjson.getCombinadoContadoNroDeposito());
+                                break;
+                        }
+                    }
+
+                    if (bjson.isCombinadoCredito()) {
+                        boleto.setCombinadoCreditoDias(bjson.getCombinadoCreditoDias());
+                        boleto.setCombinadoCreditoVencimiento(DateContable.toLatinAmericaDateFormat(bjson.getCombinadoCreditoVencimiento()));
+                        boleto.setCombinadoCreditoMonto(bjson.getCombinadoCreditoMonto());
+                    }
+
+                    if (bjson.isCombinadoTarjeta()) {
+                        boleto.setCombinadoTarjetaId(bjson.getCombinadoTarjetaId());
+                        boleto.setCombinadoTarjetaNumero(bjson.getCombinadoTarjetaNumero());
+                        boleto.setCombinadoTarjetaMonto(bjson.getCombinadoTarjetaMonto());
+                    }
+                    break;
+            }
+        }
+
+        return boleto;
+    }
+
+    public static BoletoJSON toBoletoJSON(Boleto boleto) {
+        BoletoJSON bjson = new BoletoJSON();
+
+        bjson.setGestion(boleto.getGestion());
+        bjson.setIdAerolinea(new ComboSelect(boleto.getIdAerolinea().getIdAerolinea(), boleto.getIdAerolinea().getNombre()));
+        bjson.setIdEmpresa(boleto.getIdEmpresa());
+        bjson.setEmision(boleto.getEmision());
+        bjson.setTipoBoleto(boleto.getTipoBoleto());
+        bjson.setTipoCupon(boleto.getTipoCupon());
+        bjson.setNumero(boleto.getNumero());
+        bjson.setIdPromotor(new ComboSelect(boleto.getIdPromotor()));
+        bjson.setEstado(boleto.getEstado());
+        bjson.setIdNotaDebito(boleto.getIdNotaDebito());
+        bjson.setIdBoleto(boleto.getIdBoleto());
+        bjson.setIdBoletoPadre(boleto.getIdBoletoPadre());
+
+        // rutas
+        bjson.setIdRuta1(boleto.getIdRuta1() != null ? new ComboSelect(boleto.getIdRuta1()) : null);
+        bjson.setIdRuta2(boleto.getIdRuta2() != null ? new ComboSelect(boleto.getIdRuta2()) : null);
+        bjson.setIdRuta3(boleto.getIdRuta3() != null ? new ComboSelect(boleto.getIdRuta3()) : null);
+        bjson.setIdRuta4(boleto.getIdRuta4() != null ? new ComboSelect(boleto.getIdRuta4()) : null);
+        bjson.setIdRuta5(boleto.getIdRuta5() != null ? new ComboSelect(boleto.getIdRuta5()) : null);
+
+        //cliente
+        bjson.setIdCliente(new ComboSelect(boleto.getIdCliente().getIdCliente(), boleto.getIdCliente().getNombre()));
+        bjson.setNombrePasajero(boleto.getNombrePasajero().toUpperCase());
+
+        bjson.setFechaEmision(DateContable.getDateFormat(boleto.getFechaEmision(), DateContable.LATIN_AMERICA_FORMAT));
+        bjson.setFechaViaje(DateContable.getDateFormat(boleto.getFechaViaje(), DateContable.LATIN_AMERICA_FORMAT));
+        bjson.setFechaInsert(DateContable.getDateFormat(boleto.getFechaInsert(), DateContable.LATIN_AMERICA_TIME_FORMAT));
+
+        bjson.setFactorCambiario(boleto.getFactorCambiario());
+        bjson.setIdUsuarioCreador(boleto.getIdUsuarioCreador());
+
+        bjson.setComision(boleto.getComision());
+        bjson.setFee(boleto.getFee());
+        bjson.setDescuento(boleto.getDescuento());
+        bjson.setMoneda(boleto.getMoneda());
+        //Dolares
+        if (boleto.getTipoCupon().equals(Boleto.Cupon.INTERNACIONAL)) {
+            bjson.setImporteNetoUsd(boleto.getImporteNeto());
+            bjson.setImpuestoBobUsd(boleto.getImpuestoBob());
+            bjson.setImpuestoQmUsd(boleto.getImpuestoQm());
+            bjson.setImpuesto1Usd(boleto.getImpuesto1());
+            bjson.setImpuesto2Usd(boleto.getImpuesto2());
+            bjson.setImpuesto3Usd(boleto.getImpuesto3());
+            bjson.setImpuesto4Usd(boleto.getImpuesto4());
+            bjson.setImpuesto5Usd(boleto.getImpuesto5());
+            bjson.setTotalBoletoUsd(boleto.getTotalBoleto());
+            bjson.setMontoComisionUsd(boleto.getMontoComision());
+            bjson.setMontoFeeUsd(boleto.getMontoFee());
+            bjson.setMontoDescuentoUsd(boleto.getMontoDescuento());
+            bjson.setTotalMontoCanceladoUsd(boleto.getTotalMontoCancelado());
+            bjson.setMontoPagarLineaAereaUsd(boleto.getTotalBoleto().subtract(boleto.getMontoComision()));
+
+            if (boleto.getImporteNeto() != null) {
+                bjson.setImporteNetoBs(boleto.getImporteNeto().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO));
+            }
+            if (boleto.getImpuestoBob() != null) {
+                bjson.setImpuestoBobBs(boleto.getImpuestoBob().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO));
+            }
+
+            if (boleto.getImpuestoQm() != null) {
+                bjson.setImpuestoQmBs(boleto.getImpuestoQm().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO));
+            }
+
+            if (boleto.getImpuesto1() != null) {
+                bjson.setImpuesto1Bs(boleto.getImpuesto1().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO));
+            }
+
+            if (boleto.getImpuesto2() != null) {
+                bjson.setImpuesto2Bs(boleto.getImpuesto2().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO));
+            }
+
+            if (boleto.getImpuesto3() != null) {
+                bjson.setImpuesto3Bs(boleto.getImpuesto3().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO));
+            }
+
+            if (boleto.getImpuesto4() != null) {
+                bjson.setImpuesto4Bs(boleto.getImpuesto4().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO));
+            }
+
+            if (boleto.getImpuesto5() != null) {
+                bjson.setImpuesto5Bs(boleto.getImpuesto5().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO));
+            }
+
+            if (boleto.getTotalBoleto() != null) {
+                bjson.setTotalBoletoBs(boleto.getTotalBoleto().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO));
+            }
+
+            if (boleto.getMontoComision() != null) {
+                bjson.setMontoComisionBs(boleto.getMontoComision().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO));
+            }
+
+            if (boleto.getMontoFee() != null) {
+                bjson.setMontoFeeBs(boleto.getMontoFee().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO));
+            }
+            if (boleto.getMontoDescuento() != null) {
+                bjson.setMontoDescuentoBs(boleto.getMontoDescuento().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO));
+            }
+
+            if (boleto.getTotalMontoCancelado() != null) {
+                bjson.setTotalMontoCanceladoBs(boleto.getTotalMontoCancelado().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO));
+            }
+            if (boleto.getMontoComision() != null) {
+                bjson.setMontoPagarLineaAereaBs(boleto.getTotalBoleto().subtract(boleto.getMontoComision()).multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO));
+            }else {
+                bjson.setMontoPagarLineaAereaBs(boleto.getTotalBoleto().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO));
+            }
+
+        } else {//Bolivianos
+            bjson.setImporteNetoBs(boleto.getImporteNeto());
+            bjson.setImpuestoBobBs(boleto.getImpuestoBob());
+            bjson.setImpuestoQmBs(boleto.getImpuestoQm());
+            bjson.setImpuesto1Bs(boleto.getImpuesto1());
+            bjson.setImpuesto2Bs(boleto.getImpuesto2());
+            bjson.setImpuesto3Bs(boleto.getImpuesto3());
+            bjson.setImpuesto4Bs(boleto.getImpuesto4());
+            bjson.setImpuesto5Bs(boleto.getImpuesto5());
+            bjson.setTotalBoletoBs(boleto.getTotalBoleto());
+            bjson.setMontoComisionBs(boleto.getMontoComision());
+            bjson.setMontoFeeBs(boleto.getMontoFee());
+            bjson.setMontoDescuentoBs(boleto.getMontoDescuento());
+            bjson.setTotalMontoCanceladoBs(boleto.getTotalMontoCancelado());
+            bjson.setMontoPagarLineaAereaBs(boleto.getTotalBoleto().subtract(boleto.getMontoComision()));
+            
+            if (boleto.getImporteNeto() != null) {
+                bjson.setImporteNetoUsd(boleto.getImporteNeto().divide(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO));
+            }
+            if (boleto.getImpuestoBob() != null) {
+                bjson.setImpuestoBobUsd(boleto.getImpuestoBob().divide(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO));
+            }
+
+            if (boleto.getImpuestoQm() != null) {
+                bjson.setImpuestoQmUsd(boleto.getImpuestoQm().divide(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO));
+            }
+
+            if (boleto.getImpuesto1() != null) {
+                bjson.setImpuesto1Usd(boleto.getImpuesto1().divide(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO));
+            }
+
+            if (boleto.getImpuesto2() != null) {
+                bjson.setImpuesto2Usd(boleto.getImpuesto2().divide(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO));
+            }
+
+            if (boleto.getImpuesto3() != null) {
+                bjson.setImpuesto3Usd(boleto.getImpuesto3().divide(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO));
+            }
+
+            if (boleto.getImpuesto4() != null) {
+                bjson.setImpuesto4Usd(boleto.getImpuesto4().divide(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO));
+            }
+
+            if (boleto.getImpuesto5() != null) {
+                bjson.setImpuesto5Usd(boleto.getImpuesto5().divide(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO));
+            }
+
+            if (boleto.getTotalBoleto() != null) {
+                bjson.setTotalBoletoUsd(boleto.getTotalBoleto().divide(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO));
+            }
+
+            if (boleto.getMontoComision() != null) {
+                bjson.setMontoComisionUsd(boleto.getMontoComision().divide(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO));
+            }
+
+            if (boleto.getMontoFee() != null) {
+                bjson.setMontoFeeUsd(boleto.getMontoFee().divide(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO));
+            }
+            if (boleto.getMontoDescuento() != null) {
+                bjson.setMontoDescuentoUsd(boleto.getMontoDescuento().divide(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO));
+            }
+
+            if (boleto.getTotalMontoCancelado() != null) {
+                bjson.setTotalMontoCanceladoUsd(boleto.getTotalMontoCancelado().divide(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO));
+            }
+            if (boleto.getMontoComision() != null) {
+                bjson.setMontoPagarLineaAereaUsd(boleto.getTotalBoleto().subtract(boleto.getMontoComision()).divide(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO));
+            }else {
+                bjson.setMontoPagarLineaAereaUsd(boleto.getTotalBoleto().divide(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO));
+            }
+        }
+
+        //formas de pago
+        bjson.setFormaPago(boleto.getFormaPago());
+
+        if (boleto.getFormaPago() != null) {
+            switch (boleto.getFormaPago()) {
+
+                case FormasPago.CREDITO:
+                    bjson.setCreditoDias(boleto.getCreditoDias());
+                    bjson.setCreditoVencimiento(DateContable.getDateFormat(boleto.getCreditoVencimiento(), DateContable.LATIN_AMERICA_FORMAT));
+                    break;
+
+                case FormasPago.TARJETA:
+                    bjson.setTarjetaId(boleto.getTarjetaId());
+                    bjson.setTarjetaNumero(boleto.getTarjetaNumero());
+                    break;
+
+                case FormasPago.CONTADO:
+                    bjson.setContadoNroCheque(boleto.getContadoNroCheque());
+                    bjson.setContadoIdBanco(boleto.getContadoIdBanco());
+                    bjson.setContadoNroDeposito(boleto.getContadoNroDeposito());
+                    bjson.setContadoTipo(boleto.getContadoTipo());
+                    bjson.setContadoIdCuenta(new ComboSelect(boleto.getContadoIdCuenta()));
+
+                    break;
+
+                case FormasPago.COMBINADO:
+                    bjson.setCombinadoTipo(boleto.getCombinadoTipo());
+
+                    if (boleto.getCombinadoContado().equals("1")) {
+                        bjson.setCombinadoContadoTipo(boleto.getCombinadoContadoTipo());
+                        bjson.setCombinadoContadoMonto(boleto.getCombinadoContadoMonto());
+
+                        switch (boleto.getCombinadoContadoTipo()) {
+                            case FormasPago.CONTADO_EFECTIVO:
+                                break;
+                            case FormasPago.CONTADO_CHEQUE:
+                                bjson.setCombinadoContadoIdBanco(boleto.getCombinadoContadoIdBanco());
+                                bjson.setCombinadoContadoNroCheque(boleto.getCombinadoContadoNroCheque());
+                                break;
+                            case FormasPago.CONTADO_DEPOSITO:
+                                bjson.setCombinadoContadoIdBanco(boleto.getCombinadoContadoIdBanco());
+                                bjson.setCombinadoContadoNroDeposito(boleto.getCombinadoContadoNroDeposito());
+                                break;
+                        }
+                    }
+
+                    if (boleto.getCombinadoCredito().equals("1")) {
+                        bjson.setCombinadoCredito(true);
+                        bjson.setCombinadoCreditoDias(boleto.getCombinadoCreditoDias());
+                        bjson.setCombinadoCreditoVencimiento(DateContable.getDateFormat(boleto.getCombinadoCreditoVencimiento(), DateContable.LATIN_AMERICA_FORMAT));
+                        bjson.setCombinadoCreditoMonto(boleto.getCombinadoCreditoMonto());
+                    }
+
+                    if (boleto.getCombinadoTarjeta().equals("1")) {
+                        bjson.setCombinadoTarjeta(true);
+                        bjson.setCombinadoTarjetaId(boleto.getCombinadoTarjetaId());
+                        bjson.setCombinadoTarjetaNumero(boleto.getCombinadoTarjetaNumero());
+                        bjson.setCombinadoTarjetaMonto(boleto.getCombinadoTarjetaMonto());
+                    }
+                    break;
+            }
+        }
+
+        return bjson;
+    }
+
+    public ComboSelect getContadoIdCuenta() {
+        return contadoIdCuenta;
+    }
+
+    public void setContadoIdCuenta(ComboSelect contadoIdCuenta) {
+        this.contadoIdCuenta = contadoIdCuenta;
+    }
+
+    public Integer getIdIngresoCaja() {
+        return idIngresoCaja;
+    }
+
+    public void setIdIngresoCaja(Integer idIngresoCaja) {
+        this.idIngresoCaja = idIngresoCaja;
+    }
+
+    public BigDecimal getComision() {
+        return comision;
+    }
+
+    public void setComision(BigDecimal comision) {
+        this.comision = comision;
+    }
 
     public int getIdBoleto() {
         return idBoleto;
@@ -230,11 +654,11 @@ public class BoletoJSON implements Serializable {
         this.idCliente = idCliente;
     }
 
-    public ComboSelect getNombrePasajero() {
+    public String getNombrePasajero() {
         return nombrePasajero;
     }
 
-    public void setNombrePasajero(ComboSelect nombrePasajero) {
+    public void setNombrePasajero(String nombrePasajero) {
         this.nombrePasajero = nombrePasajero;
     }
 
@@ -414,30 +838,6 @@ public class BoletoJSON implements Serializable {
         this.totalBoletoUsd = totalBoletoUsd;
     }
 
-    public BigDecimal getComisionBs() {
-        return comisionBs;
-    }
-
-    public void setComisionBs(BigDecimal comisionBs) {
-        this.comisionBs = comisionBs;
-    }
-
-    public BigDecimal getComisionUsd() {
-        return comisionUsd;
-    }
-
-    public void setComisionUsd(BigDecimal comisionUsd) {
-        this.comisionUsd = comisionUsd;
-    }
-
-    public BigDecimal getMontoFee() {
-        return montoFee;
-    }
-
-    public void setMontoFee(BigDecimal montoFee) {
-        this.montoFee = montoFee;
-    }
-
     public BigDecimal getMontoFeeBs() {
         return montoFeeBs;
     }
@@ -454,12 +854,36 @@ public class BoletoJSON implements Serializable {
         this.montoFeeUsd = montoFeeUsd;
     }
 
-    public BigDecimal getMontoDescuento() {
-        return montoDescuento;
+    public BigDecimal getMontoComisionBs() {
+        return montoComisionBs;
     }
 
-    public void setMontoDescuento(BigDecimal montoDescuento) {
-        this.montoDescuento = montoDescuento;
+    public void setMontoComisionBs(BigDecimal montoComisionBs) {
+        this.montoComisionBs = montoComisionBs;
+    }
+
+    public BigDecimal getMontoComisionUsd() {
+        return montoComisionUsd;
+    }
+
+    public void setMontoComisionUsd(BigDecimal montoComisionUsd) {
+        this.montoComisionUsd = montoComisionUsd;
+    }
+
+    public BigDecimal getFee() {
+        return fee;
+    }
+
+    public void setFee(BigDecimal fee) {
+        this.fee = fee;
+    }
+
+    public BigDecimal getDescuento() {
+        return descuento;
+    }
+
+    public void setDescuento(BigDecimal descuento) {
+        this.descuento = descuento;
     }
 
     public BigDecimal getMontoDescuentoBs() {
@@ -502,11 +926,11 @@ public class BoletoJSON implements Serializable {
         this.estado = estado;
     }
 
-    public int getIdNotaDebito() {
+    public Integer getIdNotaDebito() {
         return idNotaDebito;
     }
 
-    public void setIdNotaDebito(int idNotaDebito) {
+    public void setIdNotaDebito(Integer idNotaDebito) {
         this.idNotaDebito = idNotaDebito;
     }
 
@@ -566,12 +990,12 @@ public class BoletoJSON implements Serializable {
         this.contadoNroCheque = contadoNroCheque;
     }
 
-    public Integer getContadoNroBanco() {
-        return contadoNroBanco;
+    public Integer getContadoIdBanco() {
+        return contadoIdBanco;
     }
 
-    public void setContadoNroBanco(Integer contadoNroBanco) {
-        this.contadoNroBanco = contadoNroBanco;
+    public void setContadoIdBanco(Integer contadoIdBanco) {
+        this.contadoIdBanco = contadoIdBanco;
     }
 
     public String getContadoNroDeposito() {
@@ -654,12 +1078,12 @@ public class BoletoJSON implements Serializable {
         this.combinadoContadoNroCheque = combinadoContadoNroCheque;
     }
 
-    public Integer getCombinadoCOntadoIdBanco() {
-        return combinadoCOntadoIdBanco;
+    public Integer getCombinadoContadoIdBanco() {
+        return combinadoContadoIdBanco;
     }
 
-    public void setCombinadoCOntadoIdBanco(Integer combinadoCOntadoIdBanco) {
-        this.combinadoCOntadoIdBanco = combinadoCOntadoIdBanco;
+    public void setCombinadoContadoIdBanco(Integer combinadoContadoIdBanco) {
+        this.combinadoContadoIdBanco = combinadoContadoIdBanco;
     }
 
     public String getCombinadoContadoNroDeposito() {
@@ -669,9 +1093,77 @@ public class BoletoJSON implements Serializable {
     public void setCombinadoContadoNroDeposito(String combinadoContadoNroDeposito) {
         this.combinadoContadoNroDeposito = combinadoContadoNroDeposito;
     }
-    
-    
-    
-    
-    
+
+    public Integer getCombinadoTarjetaId() {
+        return combinadoTarjetaId;
+    }
+
+    public void setCombinadoTarjetaId(Integer combinadoTarjetaId) {
+        this.combinadoTarjetaId = combinadoTarjetaId;
+    }
+
+    public String getCombinadoTarjetaNumero() {
+        return combinadoTarjetaNumero;
+    }
+
+    public void setCombinadoTarjetaNumero(String combinadoTarjetaNumero) {
+        this.combinadoTarjetaNumero = combinadoTarjetaNumero;
+    }
+
+    public BigDecimal getCombinadoTarjetaMonto() {
+        return combinadoTarjetaMonto;
+    }
+
+    public void setCombinadoTarjetaMonto(BigDecimal combinadoTarjetaMonto) {
+        this.combinadoTarjetaMonto = combinadoTarjetaMonto;
+    }
+
+    public boolean isCombinadoCredito() {
+        return combinadoCredito;
+    }
+
+    public void setCombinadoCredito(boolean combinadoCredito) {
+        this.combinadoCredito = combinadoCredito;
+    }
+
+    public boolean isCombinadoContado() {
+        return combinadoContado;
+    }
+
+    public void setCombinadoContado(boolean combinadoContado) {
+        this.combinadoContado = combinadoContado;
+    }
+
+    public boolean isCombinadoTarjeta() {
+        return combinadoTarjeta;
+    }
+
+    public void setCombinadoTarjeta(boolean combinadoTarjeta) {
+        this.combinadoTarjeta = combinadoTarjeta;
+    }
+
+    public BigDecimal getMontoPagarLineaAereaBs() {
+        return montoPagarLineaAereaBs;
+    }
+
+    public void setMontoPagarLineaAereaBs(BigDecimal montoPagarLineaAereaBs) {
+        this.montoPagarLineaAereaBs = montoPagarLineaAereaBs;
+    }
+
+    public BigDecimal getMontoPagarLineaAereaUsd() {
+        return montoPagarLineaAereaUsd;
+    }
+
+    public void setMontoPagarLineaAereaUsd(BigDecimal montoPagarLineaAereaUsd) {
+        this.montoPagarLineaAereaUsd = montoPagarLineaAereaUsd;
+    }
+
+    public Integer getIdBoletoPadre() {
+        return idBoletoPadre;
+    }
+
+    public void setIdBoletoPadre(Integer idBoletoPadre) {
+        this.idBoletoPadre = idBoletoPadre;
+    }
+
 }

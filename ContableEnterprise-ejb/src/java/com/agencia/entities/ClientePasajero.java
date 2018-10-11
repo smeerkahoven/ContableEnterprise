@@ -28,7 +28,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "ClientePasajero.findAll", query = "SELECT c FROM ClientePasajero c"),
-    @NamedQuery (name ="ClientePasajero.find", query ="SELECT c FROM ClientePasajero c WHERE c.idCliente =:idCliente" )
+    @NamedQuery(name = "ClientePasajero.findPasajero", query = "SELECT c FROM ClientePasajero c WHERE UPPER(c.nombrePasajero)=UPPER(:nombrePasajero) and c.idCliente=:idCliente"),
+    @NamedQuery (name ="ClientePasajero.find", query ="SELECT c.nombrePasajero FROM ClientePasajero c WHERE c.idCliente =:idCliente" )
 })
 public class ClientePasajero extends Entidad {
 
