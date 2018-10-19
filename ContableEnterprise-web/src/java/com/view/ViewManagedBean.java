@@ -9,31 +9,37 @@ import com.configuracion.remote.ParametrosRemote;
 import com.security.SessionUtils;
 import com.seguridad.control.entities.User;
 import com.seguridad.control.remote.LoggerRemote;
+import com.view.agencia.BoletosManagedBean;
 import com.view.menu.Formulario;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  *
  * @author xeio
  */
-public abstract class ViewManagedBean  {
+public abstract class ViewManagedBean {
 
-    protected String formName  ;
+    protected String formName;
     @EJB
     protected ParametrosRemote ejbParametros;
-    
-    @EJB 
-    protected LoggerRemote ejbLogger ;
-    
-    protected Formulario formulario;
-    
-    protected User user ;
 
-    public ViewManagedBean(){
+    @EJB
+    protected LoggerRemote ejbLogger;
+
+    protected Formulario formulario;
+
+    protected User user;
+
+    public ViewManagedBean() {
         user = (User) SessionUtils.getSession(SessionUtils.SESION_USUARIO);
     }
-    
+
     public Formulario getFormulario() {
         return formulario;
     }
@@ -41,10 +47,25 @@ public abstract class ViewManagedBean  {
     public void setFormulario(Formulario formulario) {
         this.formulario = formulario;
     }
-    
+
     @PostConstruct
-    public void init(){
+    public void init() {
         this.formulario = SessionUtils.getFormulario(this.formName);
+
+    }
+
+    public void checkIfCanAccess() {
+        System.out.println("ACCEDER View Managed Bean : " + this.formName + " Valor : " + this.formulario.getAcceder());
+        if (this.formulario.getAcceder() == formulario.DENEGAR) {
+            FacesContext context = FacesContext.getCurrentInstance();
+            HttpServletRequest origRequest = (HttpServletRequest) context.getExternalContext().getRequest();
+            try {
+                FacesContext.getCurrentInstance().getExternalContext()
+                        .redirect(origRequest.getContextPath() + "/pages/index/index.xhtml");
+            } catch (IOException ex) {
+                Logger.getLogger(BoletosManagedBean.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }
 
 }

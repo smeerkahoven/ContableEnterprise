@@ -11,7 +11,9 @@ import com.contabilidad.entities.Dolar;
 import com.reports.ReportUtil;
 import com.security.SessionUtils;
 import com.seguridad.control.exception.CRUDException;
+import com.seguridad.utils.Accion;
 import com.view.ViewManagedBean;
+import com.view.menu.Formulario;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
@@ -63,7 +65,7 @@ public class ComprobantesManagedBean extends ViewManagedBean {
     public ComprobantesManagedBean() {
         this.formName = "comprobantes";
     }
-    
+
     public void imprimir(Integer id) {
         ReportUtil util = new ReportUtil();
         util.verReporte("contabilidad/comprobantes.jasper");
@@ -72,10 +74,15 @@ public class ComprobantesManagedBean extends ViewManagedBean {
     @PostConstruct
     public void init() {
         try {
-            this.formulario = SessionUtils.getFormulario(this.formName);
+            this.formulario = SessionUtils.getFormulario(Formulario.COMPROBANTES);
             this.factorCambiarioMaxMin = (Parametros) ejbParametros.get(new Parametros(Parametros.FACTOR_CAMBIARO_MAX_MIN));
             this.diferenciaEgresos = (Parametros) ejbParametros.get(new Parametros(Parametros.DIFERENCIA_CAMBIO_EGRESOS));
             this.diferenciaIngresos = (Parametros) ejbParametros.get(new Parametros(Parametros.DIFERENCIA_CAMBIO_INGRESOS));
+            
+            checkIfCanAccess();
+
+            ejbLogger.add(Accion.ACCESS, user.getUserName(), this.formName, user.getIp());
+
         } catch (CRUDException ex) {
             Logger.getLogger(ComprobantesManagedBean.class.getName()).log(Level.SEVERE, null, ex);
         }

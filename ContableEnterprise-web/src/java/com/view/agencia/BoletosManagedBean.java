@@ -7,14 +7,18 @@ package com.view.agencia;
 
 import com.configuracion.entities.Parametros;
 import com.security.SessionUtils;
+import com.seguridad.control.entities.Formulario;
 import com.seguridad.control.exception.CRUDException;
 import com.seguridad.utils.Accion;
 import com.view.ViewManagedBean;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
+import javax.faces.context.FacesContext;
 import javax.inject.Named;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  *
@@ -24,7 +28,8 @@ import javax.inject.Named;
 @RequestScoped
 public class BoletosManagedBean extends ViewManagedBean {
 
-    private Parametros porcentaje ;
+    private Parametros porcentaje;
+
     public BoletosManagedBean() {
         this.formName = "boletos";
     }
@@ -32,8 +37,11 @@ public class BoletosManagedBean extends ViewManagedBean {
     @PostConstruct
     public void init() {
         try {
-            this.formulario = SessionUtils.getFormulario(this.formName);
+            this.formulario = SessionUtils.getFormulario(Formulario.BOLETOS);
+            System.out.println("ACCEDER BOLETOS:" + this.formulario.getAcceder());
             this.porcentaje = (Parametros) ejbParametros.get(new Parametros(Parametros.PORCENTAJE_COMISION));
+
+            checkIfCanAccess();
             
             ejbLogger.add(Accion.ACCESS, user.getUserName(), this.formName, user.getIp());
         } catch (CRUDException ex) {
@@ -48,7 +56,5 @@ public class BoletosManagedBean extends ViewManagedBean {
     public void setPorcentaje(Parametros porcentaje) {
         this.porcentaje = porcentaje;
     }
-    
-    
 
 }

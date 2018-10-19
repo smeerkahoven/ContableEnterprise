@@ -8,6 +8,7 @@ package com.view.agencia;
 import com.configuracion.entities.Parametros;
 import com.security.SessionUtils;
 import com.seguridad.control.exception.CRUDException;
+import com.seguridad.utils.Accion;
 import com.view.ViewManagedBean;
 import com.view.menu.Formulario;
 import java.util.logging.Level;
@@ -41,6 +42,10 @@ public class AerolineaManagedBean extends ViewManagedBean {
             this.comboVentas = (Parametros) ejbParametros.get(new Parametros(Parametros.COMBO_CUENTA_VENTAS_AEROLINEA));
             this.comboComisiones = (Parametros) ejbParametros.get(new Parametros(Parametros.COMBO_CUENTA_COMISIONES_AEROLINEA));
             this.comboDevoluciones = (Parametros) ejbParametros.get(new Parametros(Parametros.COMBO_CUENTA_DEVOLUCIONES_AEROLINEA));
+            
+            checkIfCanAccess();
+            
+            ejbLogger.add(Accion.ACCESS, user.getUserName(), this.formName, user.getIp());
 
         } catch (CRUDException ex) {
             Logger.getLogger(AerolineaManagedBean.class.getName()).log(Level.SEVERE, null, ex);

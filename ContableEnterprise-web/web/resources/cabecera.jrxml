@@ -12,7 +12,8 @@
 	<parameter name="ID_LIBRO" class="java.lang.Integer">
 		<defaultValueExpression><![CDATA[22]]></defaultValueExpression>
 	</parameter>
-	<parameter name="ID_NOTA_DEBITO" class="java.lang.String"/>
+	<parameter name="ID_NOTA_DEBITO" class="java.lang.Integer"/>
+	<parameter name="ID_INGRESO" class="java.lang.Integer"/>
 	<queryString>
 		<![CDATA[SELECT
      tb_empresa.`id_empresa` AS tb_empresa_id_empresa,
@@ -112,6 +113,9 @@ WHERE
 		<band height="100" splitType="Stretch">
 			<subreport>
 				<reportElement x="6" y="0" width="200" height="100" uuid="9e5bdce7-711b-40e0-9b51-f915333152d9"/>
+				<subreportParameter name="ID_INGRESO">
+					<subreportParameterExpression><![CDATA[$P{ID_INGRESO}]]></subreportParameterExpression>
+				</subreportParameter>
 				<subreportParameter name="ID_LIBRO">
 					<subreportParameterExpression><![CDATA[$P{ID_LIBRO}]]></subreportParameterExpression>
 				</subreportParameter>

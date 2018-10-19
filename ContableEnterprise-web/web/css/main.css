@@ -33,3 +33,34 @@ input::-webkit-inner-spin-button {
 list-on-top {
     z-index: 2 ;
 }
+
+
+.boleto-estado-E {
+
+}
+
+.boleto-estado-V {
+
+}
+
+.boleto-estado-A {
+    background-color:#ebd6e5;
+}
+
+.boleto-estado-P {
+    background-color:#fdeed6;
+}
+
+
+
+.bd-example-modal-lg .modal-dialog{
+    display: table;
+    position: relative;
+    margin: 0 auto;
+    top: calc(50% - 24px);
+  }
+
+  .bd-example-modal-lg .modal-dialog .modal-content{
+    background-color: transparent;
+    border: none;
+  }

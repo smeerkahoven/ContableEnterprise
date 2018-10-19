@@ -145,8 +145,8 @@
                                                 <div class="col-sm-3">
                                                     <select class="form-control" id="txtEstado" ng-model="search.estado" required="required">
                                                         <option style="display:none" value="">seleccione un tipo</option>
-                                                        <option value="A">APROBADO</option>
-                                                        <option value="N">ANULADO</option>
+                                                        <option value="E">EMITIDO</option>
+                                                        <option value="A">ANULADO</option>
                                                         <option value="P">PENDIENTE</option>
                                                     </select>
                                                 </div>
@@ -515,7 +515,7 @@
                                                         <c:if test="#{comprobantes.formulario.crear== comprobantes.formulario.PERMITIR}">
                                                             <div class="row" >
                                                                 <label for="txtNombre" class="col-form-label col-sm-3 text-right" ></label>
-                                                                <button  class="btn btn-primary" ng-click="save('A')"  value="Guardar" ng-disabled="disableGuardarButton" ><span class="fa fa-save"></span> Guardar</button>
+                                                                <button  class="btn btn-primary" ng-click="save(EMITIDO)"  value="Guardar" ng-disabled="disableGuardarButton" ><span class="fa fa-save"></span> Guardar</button>
                                                             </div>
                                                         </c:if>
                                                         <c:if test="#{comprobantes.formulario.crear== comprobantes.formulario.PERMITIR}">
@@ -600,12 +600,12 @@
                                         </div>
                                         <div class="modal-body"> 
                                             <dl class="dl-horizontal">
-                                                <label class="form-label-group" ng-show="formData.estado === 'I'">
+                                                <label class="form-label-group" ng-show="formData.estado === INICIAL">
                                                     El siguiente Comprobante pasara a estado PENDIENTE. Si no ha sido registrado, podr&aacute; modificarse mas adelante. 
                                                     Desea colocarlo en estado PENDIENTE ?<br/>
                                                 </label>
-                                                <label ng-show="formData.estado === 'A'">
-                                                    El siguiente Comprobante se encuentra en estado APROBAD, al colocarlo en PENDIENTE podr&aacute; modificarse mas adelante. 
+                                                <label ng-show="formData.estado === EMITIDO">
+                                                    El siguiente Comprobante se encuentra en estado EMITIDO, al colocarlo en PENDIENTE podr&aacute; modificarse mas adelante. 
                                                     Desea colocarlo en estado PENDIENTE ?<br/>
                                                 </label>
                                             </dl>

@@ -17,11 +17,8 @@ function showModal(idModal) {
     $(`#${idModal}`).modal();
 }
 
-var RECUPERADO = "R";
-var APROBADO = "A";
-var PENDIENTE = "P";
-var ANULADO = "N";
-var INICIAL = "I";
+
+
 let ZERO = "0";
 let SI = "S";
 let NO = "N";
@@ -55,7 +52,7 @@ function Comprobante() {
     this.gestion = '0';
     this.fecha = '';
     this.nombre = '';
-    this.estado = INICIAL; // 
+    this.estado = 'I'; // 
     this.moneda = 'B';
     this.factorCambiario = '0';
     this.factorMin = 0;
@@ -103,6 +100,7 @@ let app = angular.module("jsComprobantes", ['jsComprobantes.controllers', 'smart
 
 angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
         ['$scope', '$http', '$uibModal', '$window',
+
             function ($scope, $http, $window) {
                 var token = document.getElementsByName("hdToken")[0];
                 var url = document.getElementsByName("hdUrl")[0];
@@ -113,6 +111,12 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                 var idEmpresa = document.getElementById("idEmpresa");
                 var factorMaxMin = document.getElementById("hdFactorMaxMin");
                 var username = document.getElementById("hdUserName");
+
+                $scope.RECUPERADO = "R";
+                $scope.APROBADO = "A";
+                $scope.PENDIENTE = "P";
+                $scope.ANULADO = "N";
+                $scope.INICIAL = "I";
 
                 $scope.showRestfulMessage = '';
                 $scope.showRestfulError = false;
@@ -129,7 +133,7 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                 $scope.itemsByPage = 15;
                 $scope.dollarToday = 0;
 
-                $scope.search = {tipo: 'AD', estado: APROBADO, fechaInicio: firstDay, fechaFin: today};
+                $scope.search = {tipo: 'AD', estado: $scope.APROBADO, fechaInicio: firstDay, fechaFin: today};
 
                 $scope.getData = function (urls, method) {
                     $scope.loading = true;
@@ -223,7 +227,7 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
 
                 $scope.habilitarBotones = function () {
                     switch ($scope.formData.estado) {
-                        case ANULADO :
+                        case $scope.ANULADO :
                             $scope.disableAnularButton = true;
                             $scope.disableGuardarButton = true;
                             $scope.disablePendienteButton = false;
@@ -233,7 +237,7 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                             $scope.disableGuardarTransaccion = true;
                             $scope.disableEliminarTransaccion = true;
                             break;
-                        case APROBADO :
+                        case $scope.APROBADO :
                             $scope.disableAnularButton = false;
                             $scope.disableGuardarButton = true;
                             $scope.disablePendienteButton = false;
@@ -243,7 +247,7 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                             $scope.disableEliminarTransaccion = true;
                             $scope.disableGuardarTransaccion = true;
                             break;
-                        case PENDIENTE :
+                        case $scope.PENDIENTE :
                             $scope.disableAnularButton = false;
                             $scope.disableGuardarButton = true;
                             $scope.disablePendienteButton = true;
@@ -281,7 +285,7 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                         headers: {'Content-Type': 'application/json'}
                     }).then(function (response) {
                         if (response.data.code === 201) {
-                            $scope.modalAnularData.row.estado = ANULADO;
+                            $scope.modalAnularData.row.estado = $scope.ANULADO;
                             $scope.showRestfulMessage = response.data.content;
                             $scope.showRestfulSuccess = true;
                             $scope.loading = false;
@@ -310,9 +314,9 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                 }
 
                 $scope.colocarPendiente = function () {
-                    if ($scope.formData.estado === INICIAL) {
-                        $scope.save(PENDIENTE);
-                    } else if ($scope.formData.estado === ANULADO) {
+                    if ($scope.formData.estado === $scope.INICIAL) {
+                        $scope.save($scope.PENDIENTE);
+                    } else if ($scope.formData.estado === $scope.ANULADO) {
                         $scope.loading = true;
                         return $http({
                             method: 'POST',
@@ -321,7 +325,7 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                             headers: {'Content-Type': 'application/json'}
                         }).then(function (response) {
                             if (response.data.code === 201) {
-                                $scope.modalAnularData.row.estado = PENDIENTE;
+                                $scope.modalAnularData.row.estado = $scope.PENDIENTE;
                                 $scope.showRestfulMessage = response.data.content;
                                 $scope.showRestfulSuccess = true;
                                 $scope.loading = false;
@@ -332,7 +336,7 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                                 $scope.showRestfulError = true;
                             }
                         }, $scope.showErrorFunction());
-                    } else if ($scope.formData.estado === PENDIENTE) {
+                    } else if ($scope.formData.estado === $scope.PENDIENTE) {
 
                     }
                 }
@@ -437,9 +441,9 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                         //$scope.showAlert('Error de Verificacion', 'Verifique los mensajes de los valores requeridos')
                         return;
                     }
-                    if ($scope.formData.estado === INICIAL) {
+                    if ($scope.formData.estado === $scope.INICIAL) {
                         $scope.loading = true;
-                        if (estado === PENDIENTE)
+                        if (estado === $scope.PENDIENTE)
                             $scope.formData.conErrores = SI;
                         else
                             $scope.formData.conErrores = NO;
@@ -461,7 +465,7 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                                 $scope.disablePendienteButton = false;
                                 $scope.disableAnularButton = false;
                                 $scope.habilitarBotones();
-                                if (estado === APROBADO) {
+                                if (estado === $scope.APROBADO) {
                                     $scope.imprimir($scope.formData);
                                 }
                                 //$scope.showForm = false;
@@ -672,7 +676,7 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                         $scope.disableGuardarButton = false;
                     }
 
-                    if ($scope.formData.estado === PENDIENTE) {
+                    if ($scope.formData.estado === $scope.PENDIENTE) {
                         console.log(item);
                         if (item.idAsiento === ZERO) {
                             $http({
@@ -720,7 +724,7 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                     }
                 }
 
-                $scope.sumarDiferencias= function() {
+                $scope.sumarDiferencias = function () {
                     $scope.formData.difMonNac = parseFloat(Number($scope.formData.totalDebeMonNac) - Number($scope.formData.totalHaberMonNac)).toFixed(2);
                     $scope.formData.difMonExt = parseFloat(Number($scope.formData.totalDebeMonExt) - Number($scope.formData.totalHaberMonExt)).toFixed(2);
                     console.log($scope.formData.difMonNac);
@@ -853,12 +857,12 @@ app.filter('checkStatus', function () {
         switch (estado) {
             case 'I':
                 return "INICIAL";
-            case 'N' :
+            case 'A' :
                 return "ANULADO";
             case 'P' :
                 return "PENDIENTE";
-            case 'A' :
-                return "APROBADO";
+            case 'E' :
+                return "EMITIDO";
             case 'R' :
                 return "RECUPERADO";
             default :

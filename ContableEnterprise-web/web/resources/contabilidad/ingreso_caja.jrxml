@@ -17,10 +17,10 @@ date_format(ic.fecha_emision,'%d/%m/%y')fecha_emision,
 ic.fecha_insert, 
 ic.factor_cambiario,
 ic.moneda, 
-ic.total_debitado_bs,
-number_to_string(ic.total_debitado_bs) literal_bs, round(abs(mod(ic.total_debitado_bs,1)*100)) decimal_part_bs,
-ic.total_debitado_usd,
-number_to_string (ic.total_debitado_usd)literal_usd, round(abs(mod(ic.total_debitado_usd,1)*100)) decimal_part_usd,
+ic.monto_abonado_bs,
+number_to_string(ic.monto_abonado_bs) literal_bs, round(abs(mod(ic.monto_abonado_bs,1)*100)) decimal_part_bs,
+ic.monto_abonado_usd,
+number_to_string (ic.monto_abonado_usd)literal_usd, round(abs(mod(ic.monto_abonado_usd,1)*100)) decimal_part_usd,
 case ic.forma_pago 	
 	when  'E' then 
 	case ic.tipo_contado 
@@ -91,12 +91,12 @@ sucursal]]></fieldDescription>
 	<field name="moneda" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="total_debitado_bs" class="java.math.BigDecimal">
+	<field name="monto_abonado_bs" class="java.math.BigDecimal">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="literal_bs" class="java.lang.String"/>
 	<field name="decimal_part_bs" class="java.math.BigDecimal"/>
-	<field name="total_debitado_usd" class="java.math.BigDecimal">
+	<field name="monto_abonado_usd" class="java.math.BigDecimal">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="literal_usd" class="java.lang.String"/>
@@ -118,7 +118,7 @@ sucursal]]></fieldDescription>
 			<textField>
 				<reportElement x="0" y="0" width="555" height="25" uuid="cd6fad28-c39b-4c89-a744-a59a3fc15091"/>
 				<textElement textAlignment="Right">
-					<font  fontName="SansSerif" pdfFontName="Helvetica-Bold" isPdfEmbedded="true" size="18" isBold="true"/>
+					<font fontName="SansSerif" size="18" isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Ingreso a Caja #"+$F{id_ingreso_caja}]]></textFieldExpression>
 			</textField>
@@ -168,21 +168,21 @@ sucursal]]></fieldDescription>
 			<staticText>
 				<reportElement x="10" y="50" width="342" height="14" uuid="34cfe6bc-8811-4eb3-a1c7-fb5846edf163"/>
 				<textElement>
-					<font  fontName="SansSerif" pdfFontName="Helvetica-Bold" isPdfEmbedded="true" isBold="true"/>
+					<font fontName="SansSerif" isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[DESCRIPCION]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="351" y="50" width="100" height="14" uuid="341dd98e-a90a-49ab-8ec4-c3564b9f3f03"/>
 				<textElement textAlignment="Right">
-					<font  fontName="SansSerif" pdfFontName="Helvetica-Bold" isPdfEmbedded="true" isBold="true"/>
+					<font fontName="SansSerif" isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[BS.]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="453" y="50" width="100" height="14" uuid="b5987175-7def-4392-a9c6-7ec6e2889325"/>
 				<textElement textAlignment="Right">
-					<font  fontName="SansSerif" pdfFontName="Helvetica-Bold" isPdfEmbedded="true" isBold="true"/>
+					<font fontName="SansSerif" isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[USD.]]></text>
 			</staticText>
@@ -223,23 +223,23 @@ sucursal]]></fieldDescription>
 			<staticText>
 				<reportElement x="10" y="7" width="341" height="14" uuid="cdb77b20-454f-489c-9798-b3afc384ce24"/>
 				<textElement>
-					<font  fontName="SansSerif" pdfFontName="Helvetica-Bold" isPdfEmbedded="true" isBold="true"/>
+					<font fontName="SansSerif" isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[TOTAL]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
 				<reportElement x="353" y="7" width="100" height="14" uuid="7a01dcb6-ec36-4051-a7a7-28e9b3e309a3"/>
 				<textElement textAlignment="Right">
-					<font  fontName="SansSerif" pdfFontName="Helvetica-Bold" isPdfEmbedded="true" isBold="true"/>
+					<font fontName="SansSerif" isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{total_debitado_bs}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{monto_abonado_bs}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="455" y="7" width="100" height="14" uuid="9e4e95d1-c2a4-40d8-a922-d62d34cb0dce"/>
 				<textElement textAlignment="Right">
-					<font  fontName="SansSerif" pdfFontName="Helvetica-Bold" isPdfEmbedded="true" isBold="true"/>
+					<font fontName="SansSerif" isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{total_debitado_usd}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{monto_abonado_usd}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="10" y="30" width="553" height="30" isPrintWhenDetailOverflows="true" uuid="3ac32ee7-168b-41b9-b909-e947df4d462b"/>
@@ -247,13 +247,13 @@ sucursal]]></fieldDescription>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="10" y="80" width="551" height="20" uuid="f52fb10b-7a39-4f0d-a655-c78aef103c54">
-					<printWhenExpression><![CDATA[$F{total_debitado_bs}!= null]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{monto_abonado_bs}!= null]]></printWhenExpression>
 				</reportElement>
 				<textFieldExpression><![CDATA["Son:"+$F{literal_bs} + " " + $F{decimal_part_bs} + "/100 BOLIVIANOS."]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="10" y="60" width="551" height="20" uuid="5882ede2-7af1-4d0e-9b13-f5f1f6d2df40">
-					<printWhenExpression><![CDATA[$F{total_debitado_usd}!= null]]></printWhenExpression>
+					<printWhenExpression><![CDATA[$F{monto_abonado_usd}!= null]]></printWhenExpression>
 				</reportElement>
 				<textFieldExpression><![CDATA["Son:" + $F{literal_usd} + " " + $F{decimal_part_usd}+"/100 DOLARES."]]></textFieldExpression>
 			</textField>
