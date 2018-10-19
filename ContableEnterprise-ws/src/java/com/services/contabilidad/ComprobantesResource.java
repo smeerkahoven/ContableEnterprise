@@ -6,9 +6,7 @@
 package com.services.contabilidad;
 
 import com.contabilidad.entities.AsientoContable;
-import com.contabilidad.entities.AsientoContablePK;
 import com.contabilidad.entities.ComprobanteContable;
-import com.contabilidad.entities.ComprobanteContablePK;
 import com.contabilidad.entities.TipoComprobante;
 import com.contabilidad.remote.ComprobanteRemote;
 import com.google.gson.Gson;
@@ -209,14 +207,14 @@ public class ComprobantesResource extends TemplateResource {
                 
                 t.setFechaMovimiento(DateContable.getDateFormat(a.getFechaMovimiento(), DateContable.LATIN_AMERICA_TIME_FORMAT));
                 t.setIdLibro(c.getIdLibro());
-                t.setGestion(a.getAsientoContablePK().getGestion());
-                t.setIdAsiento(a.getAsientoContablePK().getIdAsiento());
+                t.setGestion(a.getGestion());
+                t.setIdAsiento(a.getIdAsiento());
             }
 
             c.setIdNumeroGestion(cc.getIdNumeroGestion());
             c.setFechaInsert(DateContable.getDateFormat(cc.getFechaInsert(), DateContable.LATIN_AMERICA_TIME_FORMAT));
-            c.setIdLibro(cc.getComprobanteContablePK().getIdLibro());
-            c.setGestion(cc.getComprobanteContablePK().getGestion());
+            c.setIdLibro(cc.getIdLibro());
+            c.setGestion(cc.getGestion());
 
             //ejbComprobante.endTransaction();
             response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
@@ -227,7 +225,7 @@ public class ComprobantesResource extends TemplateResource {
             response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
 
             switch (cc.getEstado()) {
-                case ComprobanteContable.APROBADO:
+                case ComprobanteContable.EMITIDO:
                     response.setContent(mensajes.getProperty(RestResponse.RESTFUL_COMPROBANTE_GENERADO_SUCCESS));
                     break;
                 case ComprobanteContable.PENDIENTE:
@@ -261,14 +259,14 @@ public class ComprobantesResource extends TemplateResource {
             pc = gson.fromJson(object.toString(), ComprobanteContableJSON.class);
 
             AsientoContable insert = AsientoContableJSON.toAsientoContable(pc.getTransacciones().get(pc.getTransacciones().size() - 1));
-            insert.setAsientoContablePK(new AsientoContablePK(0, pc.getGestion()));
+            insert.setGestion(pc.getGestion());
             insert.setIdLibro(pc.getIdLibro());
             insert.setFechaMovimiento(DateContable.getCurrentDate());
 
             Integer idAsiento = ejbComprobante.insert(insert);
             ejbLogger.add(Accion.INSERT, user.getUserName(), Formulario.COMPROBANTES, user.getIp());
 
-            insert.getAsientoContablePK().setIdAsiento(idAsiento);
+            insert.setIdAsiento(idAsiento);
 
             response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
             response.setContent(mensajes.getProperty(RestResponse.RESTFUL_SUCCESS));
@@ -427,7 +425,7 @@ public class ComprobantesResource extends TemplateResource {
 
             switch (cc.getEstado()) {
                 case ComprobanteContable.PENDIENTE:
-                    cc.setEstado(ComprobanteContable.APROBADO);
+                    cc.setEstado(ComprobanteContable.EMITIDO);
                     response.setContent(mensajes.getProperty(RestResponse.RESTFUL_COMPROBANTE_GENERADO_SUCCESS));
                     break;
             }

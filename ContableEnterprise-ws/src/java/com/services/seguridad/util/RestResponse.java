@@ -20,6 +20,8 @@ public class RestResponse {
     public static final String RESTFUL_PARAMETERS_SENT = "RESTFUL_PARAMETERS_SENT";
     public static final String RESTFUL_RECORD_EXISTS = "RESTFUL_RECORD_EXISTS";
     public static final String RESTFUL_SUCCESS = "RESTFUL_SUCCESS";
+    public static final String RESTFUL_UPDATE_SUCCESS = "RESTFUL_UPDATE_SUCCESS";
+    public static final String RESTFUL_UPDATE_ERROR = "RESTFUL_UPDATE_ERROR";
     public static final String RESTFUL_WARNING = "RESTFUL_WARNING";
     public static final String RESTFUL_TOKEN_MANDATORY = "RESTFUL_TOKEN_MANDATORY";
     public static final String RESTFUL_TOKEN_EXPIRED = "RESTFUL_TOKEN_EXPIRED";
@@ -39,6 +41,7 @@ public class RestResponse {
     public static final String RESTFUL_NUMERO_BOLETO_VALIDO="RESTFUL_NUMERO_BOLETO_VALIDO";
     public static final String RESTFUL_BOLETO_NO_CREADO="RESTFUL_BOLETO_NO_CREADO";
     public static final String RESTFUL_BOLETO_MULTIPLE_INSERTADO="RESTFUL_BOLETO_MULTIPLE_INSERTADO";
+    public static final String RESTFUL_BOLETO_VOID_INSERTADO="RESTFUL_BOLETO_VOID_INSERTADO";
 
     private int code;
 

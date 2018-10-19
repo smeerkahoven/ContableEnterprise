@@ -144,7 +144,7 @@ public class ClienteResource extends TemplateResource {
 
             try {
 
-                List<Cliente> l = ejbCliente.get();
+                List<Cliente> l = ejbCliente.getAllClienteCombo();
                 List<ComboSelect> listCombo = new LinkedList<>();
                 Iterator i = l.iterator();
                 while (i.hasNext()) {
