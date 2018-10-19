@@ -10,7 +10,9 @@ import com.agencia.entities.Cliente;
 import com.seguridad.control.FacadeEJB;
 import com.seguridad.control.entities.Entidad;
 import com.seguridad.control.exception.CRUDException;
+import java.util.List;
 import javax.ejb.Stateless;
+import javax.persistence.Query;
 
 /**
  *
@@ -31,6 +33,17 @@ public class ClienteEJB extends FacadeEJB implements ClienteRemote {
         return c ;
         //To change body of generated methods, choose Tools | Templates.
     }
+
+    @Override
+    public List<Cliente> getAllClienteCombo() throws CRUDException {
+        String q = "SELECT c FROM Cliente c ORDER by c.nombre" ;
+        
+        Query querie = em.createQuery(q);
+        
+        return querie.getResultList();
+
+    }
+    
     
     
     

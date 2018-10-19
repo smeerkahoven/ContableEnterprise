@@ -47,7 +47,7 @@ public interface ComprobanteRemote extends DaoRemoteFacade {
     @Override
     public void remove(String nativeQuery, HashMap<String, Object> parameters) throws CRUDException;
 
-    public ComprobanteContablePK getNextComprobantePK(Date fecha, String tipo) throws CRUDException;
+    public Integer getNextComprobantePK(Date fecha, String tipo) throws CRUDException;
 
     @Override
     public void beginTransaction() throws CRUDException;
@@ -112,22 +112,20 @@ public interface ComprobanteRemote extends DaoRemoteFacade {
      */
     public AsientoContable procesarAsientoContable(AsientoContable a, ComprobanteContable c) throws CRUDException;
 
-    public AsientoContable crearTotalCancelar(Boleto b, ComprobanteContable cc,
-            ContabilidadBoletaje conf, Aerolinea a) throws CRUDException;
+    public AsientoContable crearTotalCancelar(final Boleto b, final ComprobanteContable cc,
+            final ContabilidadBoletaje conf, final Aerolinea a, Integer idTransaccion) throws CRUDException;
 
-    public AsientoContable crearMontoPagarLineaAerea(Boleto b, ComprobanteContable cc,
-            ContabilidadBoletaje conf, AerolineaCuenta ac) throws CRUDException;
+    public AsientoContable crearMontoPagarLineaAerea(final Boleto b,final ComprobanteContable cc,
+            final ContabilidadBoletaje conf, final AerolineaCuenta ac, Integer idTransaccion) throws CRUDException;
 
-    public AsientoContable crearMontoComision(Boleto b, ComprobanteContable cc,
-            Aerolinea a, AerolineaCuenta ac)
-            throws CRUDException;
+    public AsientoContable crearMontoComision(final Boleto b, final ComprobanteContable cc,
+            final Aerolinea a, final AerolineaCuenta ac, Integer idTransaccion)throws CRUDException;
 
-    public AsientoContable crearMontoFee(Boleto b, ComprobanteContable cc, ContabilidadBoletaje conf, Aerolinea a)
-            throws CRUDException;
+    public AsientoContable crearMontoFee(final Boleto b, final ComprobanteContable cc, 
+            final ContabilidadBoletaje conf, final Aerolinea a, Integer idTransaccion) throws CRUDException;
 
-    public AsientoContable crearMontoDescuentos(Boleto b, ComprobanteContable cc,
-            ContabilidadBoletaje conf, Aerolinea a)
-            throws CRUDException;
+    public AsientoContable crearMontoDescuentos(final Boleto b, final ComprobanteContable cc,
+            final ContabilidadBoletaje conf, final Aerolinea a, Integer idTransaccion)throws CRUDException;
 
     /**
      * Crea la transaccion para el comprobante de Ingreso a Caja al Haber
@@ -157,4 +155,6 @@ public interface ComprobanteRemote extends DaoRemoteFacade {
      */
     public AsientoContable createTotalCancelarIngresoClienteHaber(ComprobanteContable c,
             ContabilidadBoletaje conf, Aerolinea aerolinea, Boleto boleto) throws CRUDException;
+    
+    public int anularAsientosContables( final Boleto boleto) throws CRUDException ;
 }

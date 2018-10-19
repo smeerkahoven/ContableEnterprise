@@ -41,6 +41,7 @@ public class Formulario extends Entidad {
 
     public static String COMPROBANTES = "Comprobantes";
     public static String BOLETOS = "Boleto";
+    public static String BOLETOS_MULTIPLES = "Boleto Multiples";
 
     @Column(name = "status" , length = 32)
     private String status;

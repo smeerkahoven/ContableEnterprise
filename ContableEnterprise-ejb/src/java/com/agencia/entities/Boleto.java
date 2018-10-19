@@ -23,7 +23,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -37,15 +36,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Boleto.findAll", query = "SELECT b FROM Boleto b")
     ,
-    @NamedQuery(name = "Boleto.findNroBoleto", query = "SELECT b FROM Boleto b WHERE b.numero=:numero")
+    @NamedQuery(name = "Boleto.findNroBoleto", query = "SELECT b FROM Boleto b WHERE b.numero=:numero and b.estado in (:list)")
 })
 public class Boleto extends Entidad {
 
     public static class Estado {
 
-        public static final String APROBADO = "A";
+        public static final String EMITIDO = "E";
         public static final String PENDIENTE = "P";
-        public static final String ANULADO = "N";
+        public static final String ANULADO = "A";
+        public static final String VOID = "V" ;
     }
 
     public static class Cupon {
@@ -66,7 +66,7 @@ public class Boleto extends Entidad {
     @Basic(optional = false)
     @Column(name = "id_boleto")
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private int idBoleto;
+    private Integer idBoleto;
     @Basic(optional = false)
     @Column(name = "gestion")
     private Integer gestion;
@@ -78,18 +78,20 @@ public class Boleto extends Entidad {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_aerolinea")
     private Aerolinea idAerolinea;
-
     @Basic(optional = false)
     @Column(name = "id_boleto_padre")
     private Integer idBoletoPadre;
-    @Basic(optional = false)
-    @Column(name = "id_promotor")
-    private Integer idPromotor;
+    
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_promotor")
+    private Promotor idPromotor;
     @Basic(optional = false)
     @Column(name = "id_ingreso_caja")
     private Integer idIngresoCaja;
-    @Column(name = "id_libro")
-    private Integer idLibro;
+    @Column(name = "id_ingreso_caja_transaccion")
+    private Integer idIngresoCajaTransaccion;
+    @Column(name="id_libro")
+    private Integer idLibro ;
     @Basic(optional = false)
     @Column(name = "id_empresa")
     private Integer idEmpresa;
@@ -160,6 +162,8 @@ public class Boleto extends Entidad {
     @Basic(optional = false)
     @Column(name = "id_nota_debito")
     private Integer idNotaDebito;
+    @Column(name = "id_nota_debito_transaccion")
+    private Integer idNotaDebitoTransaccion;
     @Basic(optional = false)
     @Column(name = "fecha_insert")
     @Temporal(TemporalType.TIMESTAMP)
@@ -194,9 +198,9 @@ public class Boleto extends Entidad {
     private BigDecimal impuesto5;
     @Column(name = "total_boleto" , updatable = false)
     private BigDecimal totalBoleto;
-    @Column(name = "comision" , updatable = false)
+    @Column(name = "comision" )
     private BigDecimal comision;
-    @Column(name = "monto_comision" , updatable = false)
+    @Column(name = "monto_comision" )
     private BigDecimal montoComision;
     @Column(name = "fee" , updatable = false)
     private BigDecimal fee;
@@ -267,13 +271,16 @@ public class Boleto extends Entidad {
 
     public Boleto() {
     }
+    
+    public Boleto (Integer idBoleto){
+        this.idBoleto = idBoleto ;
+    }
 
     public Boleto(long numero) {
         this.numero = numero;
     }
 
-    public Boleto(int idAerolinea, int idPromotor, int idEmpresa, String emision, String tipoBoleto, long numero, String idRuta1, String idRuta2, int idCliente, String nombrePasajero, Date fechaEmision, Date fechaViaje, BigDecimal factorCambiario, String formaPago, String estado, int idNotaDebito, Date fechaInsert, String idUsuarioCreador) {
-        this.idPromotor = idPromotor;
+    public Boleto(int idAerolinea, int idEmpresa, String emision, String tipoBoleto, long numero, String idRuta1, String idRuta2, int idCliente, String nombrePasajero, Date fechaEmision, Date fechaViaje, BigDecimal factorCambiario, String formaPago, String estado, Date fechaInsert, String idUsuarioCreador) {
         this.idEmpresa = idEmpresa;
         this.emision = emision;
         this.tipoBoleto = tipoBoleto;
@@ -286,17 +293,8 @@ public class Boleto extends Entidad {
         this.factorCambiario = factorCambiario;
         this.formaPago = formaPago;
         this.estado = estado;
-        this.idNotaDebito = idNotaDebito;
         this.fechaInsert = fechaInsert;
         this.idUsuarioCreador = idUsuarioCreador;
-    }
-
-    public Cliente getIdCliente() {
-        return idCliente;
-    }
-
-    public void setIdCliente(Cliente idCliente) {
-        this.idCliente = idCliente;
     }
 
     public Integer getIdIngresoCaja() {
@@ -305,6 +303,30 @@ public class Boleto extends Entidad {
 
     public void setIdIngresoCaja(Integer idIngresoCaja) {
         this.idIngresoCaja = idIngresoCaja;
+    }
+
+    public Integer getIdLibro() {
+        return idLibro;
+    }
+
+    public void setIdLibro(Integer idLibro) {
+        this.idLibro = idLibro;
+    }
+
+    public Integer getIdNotaDebito() {
+        return idNotaDebito;
+    }
+
+    public void setIdNotaDebito(Integer idNotaDebito) {
+        this.idNotaDebito = idNotaDebito;
+    }
+
+    public Cliente getIdCliente() {
+        return idCliente;
+    }
+
+    public void setIdCliente(Cliente idCliente) {
+        this.idCliente = idCliente;
     }
 
     public Integer getContadoIdCuenta() {
@@ -323,20 +345,12 @@ public class Boleto extends Entidad {
         this.combinadoContadoIdCuenta = combinadoContadoIdCuenta;
     }
 
-    public Integer getIdPromotor() {
+    public Promotor getIdPromotor() {
         return idPromotor;
     }
 
-    public void setIdPromotor(Integer idPromotor) {
+    public void setIdPromotor(Promotor idPromotor) {
         this.idPromotor = idPromotor;
-    }
-
-    public Integer getIdLibro() {
-        return idLibro;
-    }
-
-    public void setIdLibro(Integer idLibro) {
-        this.idLibro = idLibro;
     }
 
     public Integer getIdEmpresa() {
@@ -465,14 +479,6 @@ public class Boleto extends Entidad {
 
     public void setEstado(String estado) {
         this.estado = estado;
-    }
-
-    public Integer getIdNotaDebito() {
-        return idNotaDebito;
-    }
-
-    public void setIdNotaDebito(Integer idNotaDebito) {
-        this.idNotaDebito = idNotaDebito;
     }
 
     public Date getFechaInsert() {
@@ -819,11 +825,11 @@ public class Boleto extends Entidad {
         this.idBoletoPadre = idBoletoPadre;
     }
 
-    public int getIdBoleto() {
+    public Integer getIdBoleto() {
         return idBoleto;
     }
 
-    public void setIdBoleto(int idBoleto) {
+    public void setIdBoleto(Integer idBoleto) {
         this.idBoleto = idBoleto;
     }
 
@@ -852,5 +858,23 @@ public class Boleto extends Entidad {
     public int getId() throws CRUDException {
         return getIdBoleto();
     }
+
+    public Integer getIdIngresoCajaTransaccion() {
+        return idIngresoCajaTransaccion;
+    }
+
+    public void setIdIngresoCajaTransaccion(Integer idIngresoCajaTransaccion) {
+        this.idIngresoCajaTransaccion = idIngresoCajaTransaccion;
+    }
+
+    public Integer getIdNotaDebitoTransaccion() {
+        return idNotaDebitoTransaccion;
+    }
+
+    public void setIdNotaDebitoTransaccion(Integer idNotaDebitoTransaccion) {
+        this.idNotaDebitoTransaccion = idNotaDebitoTransaccion;
+    }
+    
+    
 
 }

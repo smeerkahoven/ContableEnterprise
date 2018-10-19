@@ -69,4 +69,14 @@ public interface NotaDebitoRemote extends DaoRemoteFacade  {
      */
     public List<NotaDebitoTransaccion> createNotaDebitoTransacction(List<Boleto> boleto, NotaDebito notaDebito) throws CRUDException ;
     
+    /**
+     * Anula una transaccion. Verifica si exi
+     * 
+     * @param idTransaccion
+     * @return
+     * @throws CRUDException 
+     */
+    public int anularTransaccion(Boleto boleto) throws CRUDException;
+
+    
 }

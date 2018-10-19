@@ -38,9 +38,10 @@ public class IngresoCajaEJB extends FacadeEJB implements IngresoCajaRemote {
         ingreso.setFormaPago(boleto.getFormaPago());
         ingreso.setIdNotaDebito(nota.getIdNotaDebito());
         ingreso.setIdUsuario(boleto.getIdUsuarioCreador());
-        ingreso.setIdCliente(boleto.getIdCliente().getIdCliente());
+        ingreso.setIdCliente(boleto.getIdCliente());
         ingreso.setIdEmpresa(boleto.getIdEmpresa());
         ingreso.setIdCounter(boleto.getIdPromotor());
+        ingreso.setEstado(IngresoCaja.EMITIDO);
 
         if (boleto.getTipoCupon().equals(Boleto.Cupon.INTERNACIONAL)) {
             ingreso.setMoneda(Moneda.EXTRANJERA);
@@ -106,6 +107,8 @@ public class IngresoCajaEJB extends FacadeEJB implements IngresoCajaRemote {
         transaccion.setDescripcion(transacciones.getDescripcion());
         transaccion.setFechaInsert(DateContable.getCurrentDate());
         transaccion.setIdIngresoCaja(ingreso);
+        transaccion.setIdNotaTransaccion(transacciones.getIdNotaDebitoTransaccion());
+        transaccion.setEstado(IngresoTransaccion.EMITIDO);
         
         if (boleto.getTipoCupon().equals(Boleto.Cupon.INTERNACIONAL)) {
             transaccion.setMoneda(Moneda.EXTRANJERA);
@@ -141,6 +144,11 @@ public class IngresoCajaEJB extends FacadeEJB implements IngresoCajaRemote {
 
     @Override
     public IngresoCaja createIngresoCaja(LinkedList<Boleto> boleto, NotaDebito nota, LinkedList<NotaDebitoTransaccion> transacciones) throws CRUDException {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void anularTransaccion(Boleto boleto) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

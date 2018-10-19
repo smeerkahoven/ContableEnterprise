@@ -13,15 +13,21 @@ import java.util.LinkedList;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.NamedStoredProcedureQuery;
+import javax.persistence.ParameterMode;
+import javax.persistence.StoredProcedureParameter;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -33,13 +39,25 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "cnt_comprobante_contable")
 @TableGenerator(name = "comprobante_tg", initialValue = 0, allocationSize = 1)
 @XmlRootElement
+@NamedStoredProcedureQuery(
+        name = "ComprobanteContable.updateComprobanteContable",
+        procedureName = "updateComprobanteContable",
+        parameters = {
+            @StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_boleto")
+        }
+)
 @NamedQueries({
     @NamedQuery(name = "ComprobanteContable.findAll", query = "SELECT c FROM ComprobanteContable c")
     ,
-      @NamedQuery(name = "ComprobanteContable.find", query = "SELECT c FROM ComprobanteContable c WHERE c.comprobanteContablePK.idLibro=:idLibro")
+      @NamedQuery(name = "ComprobanteContable.find", query = "SELECT c FROM ComprobanteContable c WHERE c.idLibro=:idLibro")
 
 })
 public class ComprobanteContable extends Entidad {
+
+    @Override
+    public int getId() throws CRUDException {
+        return this.idLibro ;
+    }
 
     public static class Tipo {
 
@@ -50,14 +68,23 @@ public class ComprobanteContable extends Entidad {
         public static final String ASIENTO_AJUSTE = "AJ";
 
     }
-    public static final String APROBADO = "A";
+    public static final String EMITIDO = "E";
     public static final String PENDIENTE = "P";
-    public static final String ANULADO = "N";
+    public static final String ANULADO = "A";
     public static final String RECUPERADO = "R";
 
     private static final long serialVersionUID = 1L;
-    @EmbeddedId
-    protected ComprobanteContablePK comprobanteContablePK;
+    
+    @Id
+    @Basic(optional = false)
+    @Column(name = "id_libro")
+    @GeneratedValue (strategy = GenerationType.SEQUENCE)
+    private int idLibro;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "gestion")
+    private Integer gestion;
+    
     @Basic(optional = false)
     @Column(name = "id_numero_gestion")
     private int idNumeroGestion;
@@ -91,13 +118,13 @@ public class ComprobanteContable extends Entidad {
     private Integer idEmpresa;
     @Column(name = "id_nota_debito")
     private Integer idNotaDebito;
-    @Column(name = "totalDebeNac")
+    @Column(name = "total_debe_nac")
     private BigDecimal totalDebeNac;
-    @Column(name = "totalHaberNac")
+    @Column(name = "total_haber_nac")
     private BigDecimal totalHaberNac;
-    @Column(name = "totalDebeExt")
+    @Column(name = "total_debe_ext")
     private BigDecimal totalDebeExt;
-    @Column(name = "totalHaberExt")
+    @Column(name = "total_haber_ext")
     private BigDecimal totalHaberExt;
     @Column(name = "fecha_insert")
     @Temporal(TemporalType.TIMESTAMP)
@@ -113,9 +140,8 @@ public class ComprobanteContable extends Entidad {
                 return "Pendiente";
             case ComprobanteContable.RECUPERADO:
                 return "Recuperado";
-
-            case ComprobanteContable.APROBADO:
-                return "Aprobado";
+            case ComprobanteContable.EMITIDO:
+                return "Emitido";
             default:
                 return "Sin Estado";
         }
@@ -135,12 +161,8 @@ public class ComprobanteContable extends Entidad {
         this.transacciones = transacciones;
     }
 
-    public ComprobanteContable(ComprobanteContablePK comprobanteContablePK) {
-        this.comprobanteContablePK = comprobanteContablePK;
-    }
 
-    public ComprobanteContable(ComprobanteContablePK comprobanteContablePK, int idNumeroGestion, String idUsuarioCreador, Date fecha) {
-        this.comprobanteContablePK = comprobanteContablePK;
+    public ComprobanteContable(int idNumeroGestion, String idUsuarioCreador, Date fecha) {
         this.idNumeroGestion = idNumeroGestion;
         this.idUsuarioCreador = idUsuarioCreador;
         this.fecha = fecha;
@@ -152,18 +174,6 @@ public class ComprobanteContable extends Entidad {
 
     public void setIdNotaDebito(Integer idNotaDebito) {
         this.idNotaDebito = idNotaDebito;
-    }
-
-    public ComprobanteContable(int idLibro, int gestion) {
-        this.comprobanteContablePK = new ComprobanteContablePK(idLibro, gestion);
-    }
-
-    public ComprobanteContablePK getComprobanteContablePK() {
-        return comprobanteContablePK;
-    }
-
-    public void setComprobanteContablePK(ComprobanteContablePK comprobanteContablePK) {
-        this.comprobanteContablePK = comprobanteContablePK;
     }
 
     public int getIdNumeroGestion() {
@@ -294,34 +304,54 @@ public class ComprobanteContable extends Entidad {
         this.conErrores = conErrores;
     }
 
+    public int getIdLibro() {
+        return idLibro;
+    }
+
+    public void setIdLibro(int idLibro) {
+        this.idLibro = idLibro;
+    }
+
+    public Integer getGestion() {
+        return gestion;
+    }
+
+    public void setGestion(Integer gestion) {
+        this.gestion = gestion;
+    }
+    
+    
+
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (comprobanteContablePK != null ? comprobanteContablePK.hashCode() : 0);
+        int hash = 7;
+        hash = 11 * hash + this.idLibro;
+        hash = 11 * hash + this.gestion;
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof ComprobanteContable)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        ComprobanteContable other = (ComprobanteContable) object;
-        if ((this.comprobanteContablePK == null && other.comprobanteContablePK != null) || (this.comprobanteContablePK != null && !this.comprobanteContablePK.equals(other.comprobanteContablePK))) {
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ComprobanteContable other = (ComprobanteContable) obj;
+        if (this.idLibro != other.idLibro) {
+            return false;
+        }
+        if (this.gestion != other.gestion) {
             return false;
         }
         return true;
     }
 
-    @Override
-    public String toString() {
-        return "com.contabilidad.entities.ComprobanteContable[ comprobanteContablePK=" + comprobanteContablePK + " ]";
-    }
+    
 
-    @Override
-    public int getId() throws CRUDException {
-        return this.getComprobanteContablePK().getIdLibro();
-    }
 
 }

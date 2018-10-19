@@ -32,8 +32,20 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "cnt_nota_debito_transaccion")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "NotaDebitoTransaccion.findAll", query = "SELECT n FROM NotaDebitoTransaccion n")})
+    @NamedQuery(name = "NotaDebitoTransaccion.findAll", query = "SELECT n FROM NotaDebitoTransaccion n")
+    , 
+    @NamedQuery(name = "NotaDebitoTransaccion.updateBoletoEstado", query = "UPDATE NotaDebitoTransaccion n SET n.estado=:estado WHERE n.idBoleto=:idBoleto")})
 public class NotaDebitoTransaccion extends Entidad {
+
+    public static class Tipo {
+
+        public static final String BOLETO = "B";
+        public static final String PAQUETE = "P";
+        public static final String SEGURO = "S";
+        public static final String HOTEL = "H";
+        public static final String ALQUILER_AUTO = "A";
+        public static final String RESERVA = "R";
+    }
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -60,6 +72,20 @@ public class NotaDebitoTransaccion extends Entidad {
     @Column(name = "fecha_insert")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaInsert;
+
+    @Column(name = "id_boleto")
+    private Integer idBoleto;
+
+    @Column(name = "id_plan_cuentas")
+    private Integer idPlanCuentas;
+
+    @Column(name = "estado")
+    private String estado;
+
+    @Column(name = "moneda")
+    private String moneda;
+    @Column(name = "tipo")
+    private String tipo;
 
     public NotaDebitoTransaccion() {
     }
@@ -118,6 +144,46 @@ public class NotaDebitoTransaccion extends Entidad {
 
     public void setFechaInsert(Date fechaInsert) {
         this.fechaInsert = fechaInsert;
+    }
+
+    public Integer getIdBoleto() {
+        return idBoleto;
+    }
+
+    public void setIdBoleto(Integer idBoleto) {
+        this.idBoleto = idBoleto;
+    }
+
+    public Integer getIdPlanCuentas() {
+        return idPlanCuentas;
+    }
+
+    public void setIdPlanCuentas(Integer idPlanCuentas) {
+        this.idPlanCuentas = idPlanCuentas;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public String getMoneda() {
+        return moneda;
+    }
+
+    public void setMoneda(String moneda) {
+        this.moneda = moneda;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
     }
 
     @Override

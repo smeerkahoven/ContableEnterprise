@@ -5,6 +5,9 @@
  */
 package com.contabilidad.entities;
 
+import com.agencia.entities.Aerolinea;
+import com.agencia.entities.Cliente;
+import com.agencia.entities.Promotor;
 import com.seguridad.control.entities.Entidad;
 import com.seguridad.control.exception.CRUDException;
 import java.math.BigDecimal;
@@ -12,11 +15,17 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.NamedStoredProcedureQuery;
+import javax.persistence.ParameterMode;
+import javax.persistence.StoredProcedureParameter;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -30,9 +39,21 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Entity
 @Table(name = "cnt_nota_debito")
 @XmlRootElement
+@NamedStoredProcedureQuery(
+        name = "NotaDebito.updateNotaDebito",
+        procedureName = "updateNotaDebito",
+        parameters = {
+            @StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_boleto")
+        }
+)
 @NamedQueries({
     @NamedQuery(name = "NotaDebito.findAll", query = "SELECT n FROM NotaDebito n")})
 public class NotaDebito extends Entidad {
+
+    public static final String EMITIDO = "E";
+    public static final String PENDIENTE = "P";
+    public static final String ANULADO = "A";
+    public static final String CREADO = "C" ;
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -48,14 +69,12 @@ public class NotaDebito extends Entidad {
     @NotNull
     @Column(name = "id_empresa")
     private int idEmpresa;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "id_cliente")
-    private int idCliente;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "id_counter")
-    private int idCounter;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_cliente")
+    private Cliente idCliente;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_counter")
+    private Promotor idCounter;
     @Column(name = "fecha_emision")
     @Temporal(TemporalType.DATE)
     private Date fechaEmision;
@@ -117,42 +136,38 @@ public class NotaDebito extends Entidad {
     @Column(name = "combinado_contado_tipo")
     private String combinadoContadoTipo;
 
+    @Column(name = "estado")
+    private String estado;
+
     public NotaDebito() {
     }
 
-    public NotaDebito(int idNotaDebito, int idEmpresa, int idCliente, int idCounter) {
+    public NotaDebito(Integer idNotaDebito, Integer idEmpresa) {
         this.idEmpresa = idEmpresa;
-        this.idCliente = idCliente;
-        this.idCounter = idCounter;
         this.idNotaDebito = idNotaDebito;
     }
 
-    public NotaDebito(int idNotaDebito, int gestion) {
-        this.idNotaDebito = idNotaDebito;
-        this.gestion = gestion;
-    }
-
-    public int getIdEmpresa() {
+    public Integer getIdEmpresa() {
         return idEmpresa;
     }
 
-    public void setIdEmpresa(int idEmpresa) {
+    public void setIdEmpresa(Integer idEmpresa) {
         this.idEmpresa = idEmpresa;
     }
 
-    public int getIdCliente() {
+    public Cliente getIdCliente() {
         return idCliente;
     }
 
-    public void setIdCliente(int idCliente) {
+    public void setIdCliente(Cliente idCliente) {
         this.idCliente = idCliente;
     }
 
-    public int getIdCounter() {
+    public Promotor getIdCounter() {
         return idCounter;
     }
 
-    public void setIdCounter(int idCounter) {
+    public void setIdCounter(Promotor idCounter) {
         this.idCounter = idCounter;
     }
 
@@ -346,6 +361,14 @@ public class NotaDebito extends Entidad {
 
     public void setGestion(int gestion) {
         this.gestion = gestion;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
 
     @Override

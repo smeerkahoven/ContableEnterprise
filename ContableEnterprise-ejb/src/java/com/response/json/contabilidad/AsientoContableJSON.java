@@ -40,7 +40,9 @@ public class AsientoContableJSON {
         anew.setFechaMovimiento(DateContable.getCurrentDate());
         /*anew.setGestion(a.getGestion());
         anew.setIdAsiento(a.getIdAsiento());*/
-        anew.setAsientoContablePK(new AsientoContablePK(a.getIdAsiento(), a.getGestion()));
+        anew.setIdAsiento(a.getIdAsiento());
+        anew.setGestion(a.getGestion());
+        
         anew.setIdLibro(a.getIdLibro());
         anew.setIdPlanCuenta(idPlanCuenta.intValue());
         anew.setMoneda(a.getMoneda());
@@ -63,8 +65,8 @@ public class AsientoContableJSON {
 
     public static AsientoContableJSON toAsientoContableJSON(AsientoContable a) {
         AsientoContableJSON json = new AsientoContableJSON();
-        json.setIdAsiento(a.getAsientoContablePK().getIdAsiento());
-        json.setGestion(a.getAsientoContablePK().getGestion());
+        json.setIdAsiento(a.getIdAsiento());
+        json.setGestion(a.getGestion());
 
         json.setDebeMonExt(a.getMontoDebeExt());
         json.setDebeMonNac(a.getMontoDebeNac());

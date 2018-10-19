@@ -44,7 +44,8 @@ public class ComprobanteContableJSON {
 
     public static ComprobanteContable toComprobanteContable(ComprobanteContableJSON c) {
         ComprobanteContable newc = new ComprobanteContable();
-        newc.setComprobanteContablePK(new ComprobanteContablePK(c.getIdLibro(), c.getGestion()));
+        newc.setIdLibro(c.getIdLibro());
+        newc.setGestion(c.getGestion());
         newc.setConcepto(c.getConcepto());
         newc.setEstado(c.getEstado());
         newc.setFactorCambiario(c.getFactorCambiario());
@@ -70,9 +71,9 @@ public class ComprobanteContableJSON {
 
     public static ComprobanteContableJSON toComprobanteContableJSON(ComprobanteContable c) {
         ComprobanteContableJSON json = new ComprobanteContableJSON();
-        json.setIdLibro(c.getComprobanteContablePK().getIdLibro());
-        json.setGestion(c.getComprobanteContablePK().getGestion());
-        json.setIdNumeroGestionColumna(c.getComprobanteContablePK().getGestion() + "-" + c.getIdNumeroGestion());
+        json.setIdLibro(c.getIdLibro());
+        json.setGestion(c.getGestion());
+        json.setIdNumeroGestionColumna(c.getGestion() + "-" + c.getIdNumeroGestion());
 
         json.setConErrores((c.getConErrores()));
         json.setConcepto(c.getConcepto());

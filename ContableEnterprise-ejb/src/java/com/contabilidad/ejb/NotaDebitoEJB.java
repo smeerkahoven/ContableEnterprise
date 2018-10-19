@@ -8,16 +8,20 @@ package com.contabilidad.ejb;
 import com.agencia.entities.Aerolinea;
 import com.agencia.entities.Boleto;
 import com.agencia.entities.FormasPago;
+import com.contabilidad.entities.ComprobanteContable;
 import com.contabilidad.entities.NotaDebito;
 import com.contabilidad.entities.NotaDebitoTransaccion;
 import com.contabilidad.remote.NotaDebitoRemote;
 import com.seguridad.control.FacadeEJB;
 import com.seguridad.control.exception.CRUDException;
 import com.seguridad.utils.DateContable;
+import com.seguridad.utils.Operacion;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
+import javax.persistence.Query;
+import javax.persistence.StoredProcedureQuery;
 
 /**
  *
@@ -35,11 +39,12 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
         notaDebito.setFactorCambiario(boleto.getFactorCambiario());
         notaDebito.setFechaEmision(boleto.getFechaEmision());
         notaDebito.setFechaInsert(DateContable.getCurrentDate());
-        notaDebito.setIdCliente(boleto.getIdCliente().getIdCliente());
+        notaDebito.setIdCliente(boleto.getIdCliente());
         notaDebito.setIdCounter(boleto.getIdPromotor());
         notaDebito.setIdEmpresa(boleto.getIdEmpresa());
         notaDebito.setIdUsuarioCreador(boleto.getIdUsuarioCreador());
         notaDebito.setGestion(DateContable.getPartitionDateInt(DateContable.getDateFormat(DateContable.getCurrentDate(), DateContable.LATIN_AMERICA_FORMAT)));
+        notaDebito.setEstado(NotaDebito.EMITIDO);
 
         if (boleto.getTipoCupon().equals(Boleto.Cupon.INTERNACIONAL)) {
             notaDebito.setMontoTotalUsd(boleto.getTotalMontoCancelado());
@@ -108,6 +113,10 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
         transaccion.setIdNotaDebito(notaDebito.getIdNotaDebito());
         transaccion.setGestion(notaDebito.getGestion());
         transaccion.setFechaInsert(DateContable.getCurrentDate());
+        transaccion.setMoneda(boleto.getMoneda());
+        transaccion.setTipo(NotaDebitoTransaccion.Tipo.BOLETO);
+        transaccion.setEstado(NotaDebito.EMITIDO);
+        transaccion.setIdBoleto(boleto.getIdBoleto());
 
         StringBuilder buff = new StringBuilder();
 
@@ -156,6 +165,23 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
     @Override
     public List<NotaDebitoTransaccion> createNotaDebitoTransacction(List<Boleto> boleto, NotaDebito notaDebito) throws CRUDException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public int anularTransaccion(Boleto boleto) throws CRUDException {
+
+        Query q = em.createNamedQuery("NotaDebitoTransaccion.updateBoletoEstado");
+        q.setParameter("idBoleto", boleto.getIdBoleto());
+        q.setParameter("estado", ComprobanteContable.ANULADO);
+        q.executeUpdate();
+
+        // Actualiza los totales del comprobante Contable. y si ya no tiene 
+        //transacciones, anula el Comprobante Contable
+        StoredProcedureQuery spq = em.createNamedStoredProcedureQuery("NotaDebito.updateNotaDebito");
+        spq.setParameter("in_id_boleto", boleto.getIdBoleto());
+        spq.executeUpdate();
+
+        return Operacion.REALIZADA;
     }
 
 }

@@ -34,6 +34,11 @@ import javax.validation.constraints.Size;
 @NamedQueries({
     @NamedQuery(name = "IngresoTransaccion.findAll", query = "SELECT i FROM IngresoTransaccion i")})
 public class IngresoTransaccion extends Entidad {
+    
+        public static final String EMITIDO = "E";
+    public static final String PENDIENTE = "P";
+    public static final String ANULADO = "A";
+    public static final String CREADO = "C" ;   
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -57,6 +62,11 @@ public class IngresoTransaccion extends Entidad {
     @JoinColumn(name = "id_ingreso_caja", referencedColumnName = "id_ingreso_caja")
     @ManyToOne(optional = false)
     private IngresoCaja idIngresoCaja;
+
+    @Column(name = "id_nota_transaccion")
+    private Integer idNotaTransaccion;
+    @Column(name = "estado")
+    private String estado;
 
     public IngresoTransaccion() {
     }
@@ -121,6 +131,22 @@ public class IngresoTransaccion extends Entidad {
         this.idIngresoCaja = idIngresoCaja;
     }
 
+    public Integer getIdNotaTransaccion() {
+        return idNotaTransaccion;
+    }
+
+    public void setIdNotaTransaccion(Integer idNotaTransaccion) {
+        this.idNotaTransaccion = idNotaTransaccion;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -150,5 +176,5 @@ public class IngresoTransaccion extends Entidad {
     public int getId() throws CRUDException {
         return this.getIdTransaccion();
     }
-    
+
 }

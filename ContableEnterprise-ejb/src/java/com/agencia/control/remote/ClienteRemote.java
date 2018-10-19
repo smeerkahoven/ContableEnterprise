@@ -5,6 +5,7 @@
  */
 package com.agencia.control.remote;
 
+import com.agencia.entities.Cliente;
 import com.seguridad.control.entities.Entidad;
 import com.seguridad.control.exception.CRUDException;
 import com.seguridad.control.remote.DaoRemoteFacade;
@@ -36,6 +37,9 @@ public interface ClienteRemote extends DaoRemoteFacade {
 
     @Override
     public void remove(String nativeQuery, HashMap<String, Object> parameters) throws CRUDException;
+
+    public List<Cliente> getAllClienteCombo()throws CRUDException;
+
      
     
 }

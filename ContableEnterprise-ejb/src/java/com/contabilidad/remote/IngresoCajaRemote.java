@@ -51,4 +51,6 @@ public interface IngresoCajaRemote extends DaoRemoteFacade {
 
     public IngresoTransaccion createIngresoCajaTransaccion(final Boleto boleto, final NotaDebito nota,
             final NotaDebitoTransaccion transacciones, IngresoCaja ingreso) throws CRUDException;
+
+    public void anularTransaccion(Boleto boleto);
 }

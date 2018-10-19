@@ -136,6 +136,7 @@ public abstract class FacadeEJB implements DaoRemoteFacade {
 
     @Override
     public void update(Entidad e) throws CRUDException {
+        
         em.merge(e);
         em.flush();
         LoggerContable.log(Thread.currentThread().getStackTrace()[1].getMethodName() + ":" + e.toString(), this, Level.FINE);

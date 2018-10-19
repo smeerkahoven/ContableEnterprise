@@ -8,6 +8,7 @@ package com.agencia.control.ejb;
 import com.agencia.control.remote.BoletoRemote;
 import com.agencia.entities.Boleto;
 import com.agencia.entities.FormasPago;
+import com.agencia.entities.Promotor;
 import com.seguridad.control.entities.Entidad;
 import com.seguridad.utils.DateContable;
 import java.math.BigDecimal;
@@ -33,7 +34,7 @@ public class BoletoEJBTest {
         b.setEmision("TKT");
         b.setTipoBoleto("S");
         b.setTipoCupon("I");
-        b.setIdPromotor(5);
+        b.setIdPromotor(new Promotor(5));
         b.setNumero(11447788552l);
         b.setIdRuta1("VVI");
         b.setIdRuta2("BSB");
@@ -62,7 +63,6 @@ public class BoletoEJBTest {
         BoletoRemote instance = (BoletoRemote)container.getContext().lookup("java:global/classes/BoletoEJB");
         Boleto expResult = null;
         Boleto result = instance.procesarBoleto(b);
-        assertNotEquals(0, result.getIdBoleto());
         container.close();
         fail("The test case is a prototype.");
     }

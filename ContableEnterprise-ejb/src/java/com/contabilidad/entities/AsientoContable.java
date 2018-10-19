@@ -9,14 +9,19 @@ import com.seguridad.control.entities.Entidad;
 import com.seguridad.control.exception.CRUDException;
 import java.math.BigDecimal;
 import java.util.Date;
+import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -30,14 +35,24 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "AsientoContable.findAll", query = "SELECT a FROM AsientoContable a")
     ,
-@NamedQuery(name = "AsientoContable.find", query = "SELECT a FROM AsientoContable a WHERE a.idLibro=:idLibro")
+@NamedQuery(name = "AsientoContable.find", query = "SELECT a FROM AsientoContable a WHERE a.idLibro=:idLibro"),
+@NamedQuery(name = "AsientoContable.updateEstadoFromBoleto", query = "UPDATE AsientoContable a SET a.estado=:estado WHERE a.idBoleto=:idBoleto")
+
 }
 )
 public class AsientoContable extends Entidad {
 
     private static final long serialVersionUID = 1L;
-    @EmbeddedId
-    protected AsientoContablePK asientoContablePK;
+    @Id
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "id_asiento", updatable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int idAsiento;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "gestion",  updatable = false)
+    private int gestion;
     @Size(max = 2)
     @Column(name = "estado")
     private String estado;
@@ -61,26 +76,31 @@ public class AsientoContable extends Entidad {
     private BigDecimal montoHaberNac;
     @Column(name = "id_boleto")
     private Integer idBoleto;
+    @Column(name="id_nota_transaccion")
+    private Integer idNotaTransaccion ;
+    @Column(name="id_ingreso_caja_transaccion")
+    private Integer idIngresoCajaTransaccion ;
 
     public AsientoContable() {
     }
 
-    public AsientoContable(AsientoContablePK asientoContablePK) {
-        this.asientoContablePK = asientoContablePK;
+    public Integer getIdIngresoCajaTransaccion() {
+        return idIngresoCajaTransaccion;
     }
 
-    public AsientoContable(int idAsiento, int gestion) {
-        this.asientoContablePK = new AsientoContablePK(idAsiento, gestion);
+    public void setIdIngresoCajaTransaccion(Integer idIngresoCajaTransaccion) {
+        this.idIngresoCajaTransaccion = idIngresoCajaTransaccion;
     }
 
-    public AsientoContablePK getAsientoContablePK() {
-        return asientoContablePK;
+    public Integer getIdNotaTransaccion() {
+        return idNotaTransaccion;
     }
 
-    public void setAsientoContablePK(AsientoContablePK asientoContablePK) {
-        this.asientoContablePK = asientoContablePK;
+    public void setIdNotaTransaccion(Integer idNotaTransaccion) {
+        this.idNotaTransaccion = idNotaTransaccion;
     }
 
+    
     public String getEstado() {
         return estado;
     }
@@ -163,32 +183,59 @@ public class AsientoContable extends Entidad {
 
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (asientoContablePK != null ? asientoContablePK.hashCode() : 0);
+        int hash = 3;
+        hash = 73 * hash + this.idAsiento;
+        hash = 73 * hash + this.gestion;
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof AsientoContable)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        AsientoContable other = (AsientoContable) object;
-        if ((this.asientoContablePK == null && other.asientoContablePK != null) || (this.asientoContablePK != null && !this.asientoContablePK.equals(other.asientoContablePK))) {
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final AsientoContable other = (AsientoContable) obj;
+        if (this.idAsiento != other.idAsiento) {
+            return false;
+        }
+        if (this.gestion != other.gestion) {
             return false;
         }
         return true;
     }
 
-    @Override
-    public String toString() {
-        return "com.contabilidad.entities.AsientoContable[ asientoContablePK=" + asientoContablePK + " ]";
+    public int getIdAsiento() {
+        return idAsiento;
+    }
+
+    public void setIdAsiento(int idAsiento) {
+        this.idAsiento = idAsiento;
+    }
+
+    public int getGestion() {
+        return gestion;
+    }
+
+    public void setGestion(int gestion) {
+        this.gestion = gestion;
     }
 
     @Override
     public int getId() throws CRUDException {
-        return this.getAsientoContablePK().getIdAsiento();
+        return this.idAsiento ;
+    }
+
+
+
+    @Override
+    public String toString() {
+        return "com.contabilidad.entities.AsientoContable[ asientoContablePK=" + idAsiento + " ]";
     }
 
 }

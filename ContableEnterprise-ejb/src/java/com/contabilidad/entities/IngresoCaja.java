@@ -5,6 +5,8 @@
  */
 package com.contabilidad.entities;
 
+import com.agencia.entities.Cliente;
+import com.agencia.entities.Promotor;
 import com.seguridad.control.entities.Entidad;
 import com.seguridad.control.exception.CRUDException;
 import java.math.BigDecimal;
@@ -14,12 +16,18 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.NamedStoredProcedureQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.ParameterMode;
+import javax.persistence.StoredProcedureParameter;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -32,9 +40,21 @@ import javax.validation.constraints.Size;
  */
 @Entity
 @Table(name = "cnt_ingreso_caja")
+@NamedStoredProcedureQuery(
+        name = "NotaDebito.updateNotaDebito",
+        procedureName = "updateNotaDebito",
+        parameters = {
+            @StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_boleto")
+        }
+)
 @NamedQueries({
     @NamedQuery(name = "IngresoCaja.findAll", query = "SELECT i FROM IngresoCaja i")})
 public class IngresoCaja extends Entidad {
+
+    public static final String EMITIDO = "E";
+    public static final String PENDIENTE = "P";
+    public static final String ANULADO = "A";
+    public static final String CREADO = "C";
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -55,14 +75,15 @@ public class IngresoCaja extends Entidad {
     @NotNull
     @Column(name = "id_empresa")
     private Integer idEmpresa;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "id_cliente")
-    private Integer idCliente;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "id_counter")
-    private Integer idCounter;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_cliente")
+    private Cliente idCliente;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_counter")
+    private Promotor idCounter;
+    
     @Basic(optional = false)
     @NotNull
     @Column(name = "fecha_emision")
@@ -117,6 +138,9 @@ public class IngresoCaja extends Entidad {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idIngresoCaja")
     private Collection<IngresoTransaccion> ingresoTransaccionCollection;
 
+    @Column(name = "estado")
+    private String estado;
+
     public IngresoCaja() {
     }
 
@@ -157,19 +181,19 @@ public class IngresoCaja extends Entidad {
         this.idEmpresa = idEmpresa;
     }
 
-    public Integer getIdCliente() {
+    public Cliente getIdCliente() {
         return idCliente;
     }
 
-    public void setIdCliente(Integer idCliente) {
+    public void setIdCliente(Cliente idCliente) {
         this.idCliente = idCliente;
     }
 
-    public Integer getIdCounter() {
+    public Promotor getIdCounter() {
         return idCounter;
     }
 
-    public void setIdCounter(Integer idCounter) {
+    public void setIdCounter(Promotor idCounter) {
         this.idCounter = idCounter;
     }
 
@@ -236,8 +260,6 @@ public class IngresoCaja extends Entidad {
     public void setMontoAbonadoUsd(BigDecimal montoAbonadoUsd) {
         this.montoAbonadoUsd = montoAbonadoUsd;
     }
-
-    
 
     public BigDecimal getFactorCambiario() {
         return factorCambiario;
@@ -317,6 +339,14 @@ public class IngresoCaja extends Entidad {
 
     public void setCombinadoTarjeta(Short combinadoTarjeta) {
         this.combinadoTarjeta = combinadoTarjeta;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
 
     @Override
