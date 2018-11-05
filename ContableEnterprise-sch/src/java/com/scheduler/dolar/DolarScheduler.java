@@ -48,7 +48,7 @@ public class DolarScheduler implements DolarSchedulerLocal {
     @EJB
     private CambioRemote ejbCambio;
 
-    @Schedule(dayOfWeek = "*", month = "*", hour = "*", dayOfMonth = "*", year = "*", minute = "*", second = "*/30")
+    @Schedule(dayOfWeek = "*", month = "*", hour = "*", dayOfMonth = "*", year = "*", minute = "*/5")
     @Override
     public void checkDolarFactor() {
         System.out.println("checkDolarFactor Timer event: " + new Date());
