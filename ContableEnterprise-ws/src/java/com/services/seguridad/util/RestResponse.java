@@ -39,10 +39,18 @@ public class RestResponse {
     //boleto
     public static final String RESTFUL_NUMERO_BOLETO_INSERTADO="RESTFUL_NUMERO_BOLETO_INSERTADO";
     public static final String RESTFUL_NUMERO_BOLETO_VALIDO="RESTFUL_NUMERO_BOLETO_VALIDO";
+    public static final String RESTFUL_NUMERO_BOLETO_NO_EXISTE="RESTFUL_NUMERO_BOLETO_NO_EXISTE";
     public static final String RESTFUL_BOLETO_NO_CREADO="RESTFUL_BOLETO_NO_CREADO";
     public static final String RESTFUL_BOLETO_MULTIPLE_INSERTADO="RESTFUL_BOLETO_MULTIPLE_INSERTADO";
+    public static final String RESTFUL_BOLETO_ASOCIADO="RESTFUL_BOLETO_ASOCIADO";
     public static final String RESTFUL_BOLETO_VOID_INSERTADO="RESTFUL_BOLETO_VOID_INSERTADO";
 
+    //NOTA Debito
+    public static final String RESTFUL_NO_RECORDS_FOUND="RESTFUL_NO_RECORDS_FOUND";
+    public static final String RESTFUL_NO_TICKETS_FOUND="RESTFUL_NO_TICKETS_FOUND";
+    public static final String RESTFUL_CANT_CREATE_NOTA_DEBITO="RESTFUL_CANT_CREATE_NOTA_DEBITO";
+    public static final String RESTFUL_LISTA_VACIA="RESTFUL_LISTA_VACIA";
+    
     private int code;
 
     private Object content;

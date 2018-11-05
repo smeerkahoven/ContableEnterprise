@@ -8,21 +8,19 @@ package com.services.agencia;
 import com.agencia.control.ejb.BoletoMultipleSearch;
 import com.agencia.control.remote.BoletoRemote;
 import com.agencia.entities.Boleto;
-import com.agencia.entities.BoletoSearch;
 import com.agencia.search.dto.BoletoSearchForm;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.response.json.agencia.BoletoJSON;
-import com.seguridad.control.entities.Formulario;
 import com.seguridad.control.exception.CRUDException;
 import com.seguridad.utils.Accion;
 import com.seguridad.utils.ResponseCode;
 import com.services.TemplateResource;
 import com.services.seguridad.util.RestRequest;
 import com.services.seguridad.util.RestResponse;
-import java.math.BigDecimal;
+import com.view.menu.Formulario;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -119,6 +117,8 @@ public class BoletoResource extends TemplateResource {
 
             boolean existe = ejbBoleto.isBoletoRegistrado(new Boleto(numero));
 
+            System.out.println("Existe Boleto :" + existe);
+
             if (existe) {
                 response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
                 response.setContent(mensajes.getProperty(RestResponse.RESTFUL_NUMERO_BOLETO_INSERTADO));
@@ -126,6 +126,39 @@ public class BoletoResource extends TemplateResource {
                 response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
                 response.setContent(mensajes.getProperty(RestResponse.RESTFUL_NUMERO_BOLETO_VALIDO));
 
+            }
+
+        } catch (CRUDException ex) {
+            Logger.getLogger(BoletoResource.class.getName()).log(Level.SEVERE, null, ex);
+            response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+            response.setContent(ex.getMessage());
+        }
+
+        return response;
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("existe-boleto-origen/{numero}")
+    public RestResponse getExisteBoletoOrigen(@PathParam("numero") long numero) {
+        RestResponse response = new RestResponse();
+        try {
+            Optional op = Optional.ofNullable(numero);
+            if (!op.isPresent()) {
+                response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+                response.setContent(mensajes.getProperty(RestResponse.RESTFUL_PARAMETERS_SENT));
+                return response;
+            }
+
+            Boleto existe = ejbBoleto.isBoletoRegistradoOrigen(new Boleto(numero));
+
+            if (existe.getIdBoleto() == 0) {
+                response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+                response.setContent(mensajes.getProperty(RestResponse.RESTFUL_NUMERO_BOLETO_NO_EXISTE));
+            } else {
+                response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
+                response.setContent(mensajes.getProperty(RestResponse.RESTFUL_NUMERO_BOLETO_VALIDO));
+                response.setEntidad(BoletoJSON.toBoletoJSON(existe));
             }
 
         } catch (CRUDException ex) {
@@ -193,7 +226,7 @@ public class BoletoResource extends TemplateResource {
 
                     response.setEntidad(bjson);
 
-                    ejbLogger.add(Accion.INSERT, user.getUserName(), Formulario.BOLETOS, user.getIp());
+                    ejbLogger.add(Accion.INSERT, user.getUserName(), com.view.menu.Formulario.BOLETOS, user.getIp());
                 }
             } catch (CRUDException ex) {
                 Logger.getLogger(BoletoResource.class.getName()).log(Level.SEVERE, null, ex);
@@ -218,7 +251,7 @@ public class BoletoResource extends TemplateResource {
 
         if (response.getCode() == ResponseCode.RESTFUL_SUCCESS.getCode()) {
 
-            HashMap<String, java.math.BigDecimal> parameter = (HashMap<String, java.math.BigDecimal >) request.getContent();
+            HashMap<String, java.math.BigDecimal> parameter = (HashMap<String, java.math.BigDecimal>) request.getContent();
             Optional p = Optional.ofNullable(parameter.get("idBoleto"));
             if (p.isPresent()) {
                 try {
@@ -263,6 +296,43 @@ public class BoletoResource extends TemplateResource {
                 response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
                 response.setContent(mensajes.getProperty(RestResponse.RESTFUL_UPDATE_ERROR));
             }
+        }
+
+        return response;
+    }
+
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("all/amadeus")
+    public RestResponse getAllAmadeus(final RestRequest request) {
+
+        RestResponse response = doValidations(request);
+        try {
+            if (response.getCode() == ResponseCode.RESTFUL_SUCCESS.getCode()) {
+
+                List<Boleto> l = ejbBoleto.getBoletosAmadeusCargados(user.getIdEmpleado().getIdEmpresa().getIdEmpresa());
+                List r = new LinkedList<BoletoJSON>();
+                if (!l.isEmpty()) {
+                    l.forEach(x->{
+                        System.out.println(x);
+                        
+                        BoletoJSON b = BoletoJSON.toBoletoJSON(x);
+                        r.add(b);
+                    });
+                    response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
+                    response.setContent(r);
+                } else {
+                    response.setCode(ResponseCode.RESTFUL_WARNING.getCode());
+                    response.setContent(mensajes.getProperty(RestResponse.RESTFUL_NO_TICKETS_FOUND));
+                }
+
+            }
+
+        } catch (Exception ex) {
+            response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+            response.setContent(ex.getMessage());
+            ex.printStackTrace();
         }
 
         return response;
@@ -406,7 +476,6 @@ public class BoletoResource extends TemplateResource {
                 response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
                 response.setContent(ex.getMessage());
             }
-
         }
 
         return response;
@@ -445,7 +514,7 @@ public class BoletoResource extends TemplateResource {
                 response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
                 response.setContent(resp);
 
-                ejbLogger.add(Accion.INSERT, user.getUserName(), Formulario.BOLETOS_MULTIPLES, user.getIp());
+                ejbLogger.add(Accion.INSERT, user.getUserName(), Formulario.BOLETOS, user.getIp());
 
             } catch (CRUDException ex) {
                 Logger.getLogger(BoletoResource.class

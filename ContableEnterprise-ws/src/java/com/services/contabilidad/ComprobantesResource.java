@@ -15,7 +15,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.response.json.contabilidad.AsientoContableJSON;
 import com.response.json.contabilidad.ComprobanteContableJSON;
-import com.seguridad.control.entities.Formulario;
 import com.seguridad.control.exception.CRUDException;
 import com.seguridad.queries.Queries;
 import com.seguridad.utils.Accion;
@@ -25,6 +24,7 @@ import com.services.TemplateResource;
 import com.services.seguridad.util.RestRequest;
 import com.services.seguridad.util.RestResponse;
 import com.seguridad.utils.ComboSelect;
+import com.view.menu.Formulario;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -233,7 +233,7 @@ public class ComprobantesResource extends TemplateResource {
                     break;
             }
 
-            ejbLogger.add(Accion.INSERT, c.getIdUsuarioCreador(), Formulario.COMPROBANTES, "");
+            ejbLogger.add(Accion.INSERT, c.getIdUsuarioCreador(), com.view.menu.Formulario.COMPROBANTES, "");
             return response;
         } catch (CRUDException ex) {
             Logger.getLogger(ComprobantesResource.class.getName()).log(Level.SEVERE, null, ex);
