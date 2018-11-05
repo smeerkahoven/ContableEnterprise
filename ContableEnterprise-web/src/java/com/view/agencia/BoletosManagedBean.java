@@ -37,7 +37,7 @@ public class BoletosManagedBean extends ViewManagedBean {
     @PostConstruct
     public void init() {
         try {
-            this.formulario = SessionUtils.getFormulario(Formulario.BOLETOS);
+            this.formulario = SessionUtils.getFormulario(com.view.menu.Formulario.BOLETOS);
             System.out.println("ACCEDER BOLETOS:" + this.formulario.getAcceder());
             this.porcentaje = (Parametros) ejbParametros.get(new Parametros(Parametros.PORCENTAJE_COMISION));
 

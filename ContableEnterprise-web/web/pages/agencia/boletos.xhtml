@@ -16,7 +16,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 
         <meta http-equiv="Expires" content="0"/>
-        <meta http-equiv="Last-Modified" content="0"/>
+        <meta http-equiv="Last-Modified" content="0"/>  
         <meta http-equiv="Cache-Control" content="no-cache, mustrevalidate"/>
         <meta http-equiv="Pragma" content="no-cache"/>
         <!-- End Required meta tags -->
@@ -104,9 +104,9 @@
                                                 <span class="fa fa-plus"></span> Nuevo
                                             </button>
                                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                <a class="dropdown-item" ng-click="newBoleto(SIMPLE)">Boleto Simple</a>
+                                                <a class="dropdown-item" ng-click="newBoleto(MANUAL)">Boleto Simple</a>
                                                 <div class="dropdown-divider"></div>
-                                                <a class="dropdown-item" ng-click="newBoleto(VOID)">Boleto Void</a>
+                                                <a class="dropdown-item" ng-click="newBoleto(MANUAL_VOID)">Boleto Void</a>
                                             </div>
 
                                         </c:if>
@@ -146,11 +146,10 @@
                                         <div class=" ng-hide" ng-show="showTable">
 
                                             <div class="form-group row">
-                                                <label class="col-form-label col-sm-2 text-right" for="flatpickr-wrap">Cliente</label>
+                                                <label class="col-form-label col-sm-2 text-right" for="flatpickr-wrap">N&uacute;mero Boleto</label>
                                                 <div class="col-sm-3">
-                                                    <select ng-model="search.cliente" class="form-control">
-                                                        <option ng-repeat="row in comboCliente" value="{{row.id}}">{{row.name}}</option>
-                                                    </select>
+                                                    
+                                                    <input ng-model="search.numeroBoleto" class="form-control" maxlength="11" type="number" />
                                                 </div>
 
                                                 <label class="col-form-label col-sm-2 text-right" for="flatpickr-wrap">Aerolinea</label>
@@ -360,6 +359,20 @@
                                                             <span ng-show="showCheckNumeroBoletoExists" class="alert-danger">{{showCheckNumeroBoletoMensaje}}</span>
                                                         </div>
                                                         <span ng-show="showCheckNumeroBoleto"><i class="loader loader-sm" ></i></span>
+
+                                                    </div>
+
+                                                    <div class="form-group row" ng-show="formData.emision == 'CHG' || formData.emision == 'CNX'">
+                                                        <label for="txtNroOrigen" class="col-form-label col-sm-3 text-right">Boleto Origen</label>
+                                                        <div class="col-sm-6">
+                                                            <input type="number" class="form-control" name="txtNumeroOrigen" required=""
+                                                                   ng-model="formData.numeroOrigen" ng-blur="validarNroBoletoOrigen()"
+                                                                   data-toggle="tooltip" data-placement="top"   />                                                          
+                                                            <span class="alert-danger" ng-show="!myForm.txtNumeroOrigen.$valid">Debe ingresar un Numero de Boleto Origen</span>
+                                                            <span ng-show="showMensajeBoletoOrigenNoExiste" class="alert-danger">{{showMensajeBoletoOrigen}}</span>
+                                                        </div>
+                                                        <span ng-show="showLoadingBoletoOrigen"><i class="loader loader-sm" ></i></span>
+                                                        <span ng-show="showBoletoOrigenExiste" class="fa fa-icon fa-check alert-success"><i class="check" ></i></span>
                                                     </div>
 
                                                     <div class="form-group row">

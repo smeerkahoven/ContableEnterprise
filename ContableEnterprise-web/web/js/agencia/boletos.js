@@ -24,9 +24,6 @@ function isNumberKey(evt)
     }
 }
 
-
-
-
 let date = new Date();
 let firstDay = new Date(date.getFullYear(), date.getMonth(), 1).toLocaleDateString();
 let today = new Date().toLocaleDateString();
@@ -46,6 +43,7 @@ function Boleto() {
     this.estado = null;
 
     this.numero = null;
+    this.numeroOrigen = null;
     this.idRuta1 = null;
     this.idRuta2 = null;
     this.idRuta3 = null;
@@ -172,9 +170,9 @@ angular.module('jsBoletos.controllers', []).controller('frmBoletos',
                 $scope.NACIONAL = "N";
                 $scope.INTERNACIONAL = "I";
 
-                $scope.MULTIPLE = "M";
-                $scope.SIMPLE = "S";
-                $scope.VOID = "V";
+                $scope.MANUAL = "MA";
+                $scope.MANUAL_VOID = "MV";
+                
                 $scope.INICIAL = 'I';
                 $scope.EMITIDO = 'E';
                 $scope.ANULADO = 'A';
@@ -224,14 +222,15 @@ angular.module('jsBoletos.controllers', []).controller('frmBoletos',
 
                 $scope.find = function () {
                     $scope.loading = true;
-                    $scope.showRestfulError = false ;
-                    $scope.showRestfulSuccess = false ;
+                    $scope.showRestfulError = false;
+                    $scope.showRestfulSuccess = false;
                     return $http({
                         method: 'POST',
                         url: `${url.value}all`,
                         data: {token: token.value, content: angular.toJson($scope.search)},
                         headers: {'Content-Type': 'application/json'}
                     }).then(function (response) {
+                        console.log(response);
                         if (response.data.code === 201) {
                             $scope.mainGrid = response.data.content;
                             $scope.loading = false;
@@ -509,7 +508,7 @@ angular.module('jsBoletos.controllers', []).controller('frmBoletos',
                             $scope.formData.idNotaDebito = boleto.idNotaDebito;
                             $scope.formData.idLibro = boleto.idLibro;
                             $scope.formData.idIngresoCaja = boleto.idIngresoCaja;
-                            $scope.showBtnGuardar = false ;
+                            $scope.showBtnGuardar = false;
                             //$scope.showForm = false;
                             //$scope.showTable = true;
                             //$scope.getData(url.value, 'all');
@@ -683,26 +682,45 @@ angular.module('jsBoletos.controllers', []).controller('frmBoletos',
 
                 $scope.transformarImporteNetoBs = function () {
                     $scope.formData.importeNetoBs = $scope.formData.importeNetoUsd === null ? undefined : Number(parseFloat($scope.formData.importeNetoUsd * $scope.formData.factorCambiario).toFixed(2));
+                    if ($scope.aerolinea.roundComisionUsd) {
+                        $scope.formData.importeNetoBs = Math.trunc($scope.formData.importeNetoBs);
+                    }
                 }
 
                 $scope.transformarImporteNetoUsd = function () {
                     $scope.formData.importeNetoUsd = $scope.formData.importeNetoBs === null ? undefined : Number(parseFloat($scope.formData.importeNetoBs / $scope.formData.factorCambiario).toFixed(2));
+                    if ($scope.aerolinea.roundComisionUsd) {
+                        $scope.formData.importeNetoUsd = Math.trun($scope.formData.importeNetoUsd);
+                    }
                 }
 
                 $scope.transformarImpuestoBobToBs = function () {
                     $scope.formData.impuestoBobBs = $scope.formData.impuestoBobUsd === null ? undefined : Number(parseFloat($scope.formData.impuestoBobUsd * $scope.formData.factorCambiario).toFixed(2));
+                    if ($scope.aerolinea.roundComisionBob) {
+                        $scope.formData.impuestoBobBs = Math.trunc($scope.formData.impuestoBobBs);
+                    }
                 }
 
                 $scope.transformarImpuestoBobToUsd = function () {
                     $scope.formData.impuestoBobUsd = $scope.formData.impuestoBobBs === null ? undefined : Number(parseFloat($scope.formData.impuestoBobBs / $scope.formData.factorCambiario).toFixed(2));
+
+                    if ($scope.aerolinea.roundComisionUsd) {
+                        $scope.formData.impuestoBobUsd = Math.trunc($scope.formData.impuestoBobUsd);
+                    }
                 }
 
                 $scope.transformarImpuestoQmToBs = function () {
                     $scope.formData.impuestoQmBs = $scope.formData.impuestoQmUsd === null ? undefined : Number(parseFloat($scope.formData.impuestoQmUsd * $scope.formData.factorCambiario).toFixed(2));
+                    if ($scope.aerolinea.roundComisionBob) {
+                        $scope.formData.impuestoQmBs = Math.trunc($scope.formData.impuestoQmBs);
+                    }
                 }
 
                 $scope.transformarImpuestoQmToUsd = function () {
                     $scope.formData.impuestoQmUsd = $scope.formData.impuestoQmBs === null ? undefined : Number(parseFloat($scope.formData.impuestoQmBs / $scope.formData.factorCambiario).toFixed(2));
+                    if ($scope.aerolinea.roundComisionUsd) {
+                        $scope.formData.impuestoQmUsd = Math.trunc($scope.formData.impuestoQmUsd);
+                    }
                 }
 
                 $scope.transformarListaImpuestosToBs = function () {
@@ -710,6 +728,9 @@ angular.module('jsBoletos.controllers', []).controller('frmBoletos',
                         for (var e in $scope.aerolineaImpuestos) {
                             if ($scope.aerolineaImpuestos[e].valorImpuestoUsd !== undefined) {
                                 $scope.aerolineaImpuestos[e].valorImpuestoBs = $scope.aerolineaImpuestos[e].valorImpuestoUsd === null ? undefined : Number(parseFloat($scope.aerolineaImpuestos[e].valorImpuestoUsd * $scope.formData.factorCambiario).toFixed(2));
+                                if ($scope.aerolinea.roundComisionBob) {
+                                    $scope.aerolineaImpuestos[e].valorImpuestoBs = Math.trunc($scope.aerolineaImpuestos[e].valorImpuestoBs);
+                                }
                             }
                         }
                     }
@@ -720,6 +741,9 @@ angular.module('jsBoletos.controllers', []).controller('frmBoletos',
                         for (var e in $scope.aerolineaImpuestos) {
                             if ($scope.aerolineaImpuestos[e].valorImpuestoBs !== undefined) {
                                 $scope.aerolineaImpuestos[e].valorImpuestoUsd = $scope.aerolineaImpuestos[e].valorImpuestoBs === null ? undefined : Number(parseFloat($scope.aerolineaImpuestos[e].valorImpuestoBs / $scope.formData.factorCambiario).toFixed(2));
+                                if ($scope.aerolinea.roundComisionUsd) {
+                                    $scope.aerolineaImpuestos[e].valorImpuestoUsd = Math.trunc($scope.aerolineaImpuestos[e].valorImpuestoUsd);
+                                }
                             }
                         }
                     }
@@ -731,14 +755,23 @@ angular.module('jsBoletos.controllers', []).controller('frmBoletos',
 
                 $scope.transformarMontoFeeToUsd = function () {
                     $scope.formData.montoFeeUsd = Number(parseFloat($scope.formData.montoFeeBs) / parseFloat($scope.formData.factorCambiario).toFixed(2));
+                    if ($scope.aerolinea.roundComisionUsd) {
+                        $scope.formData.montoFeeUsd = Math.trun($scope.formData.montoFeeUsd);
+                    }
                 }
 
                 $scope.transformarComisionToBs = function () {
                     $scope.formData.montoComisionBs = Number(parseFloat((Number(parseFloat($scope.formData.montoComisionUsd)) * Number(parseFloat($scope.formData.factorCambiario)))).toFixed(2));
+                    if ($scope.aerolinea.roundComisionBob) {
+                        $scope.formData.montoComisionBs = Math.trunc($scope.formData.montoComisionBs);
+                    }
                 }
 
                 $scope.transformarComisionToUsd = function () {
                     $scope.formData.montoComisionUsd = Number(parseFloat((Number(parseFloat($scope.formData.montoComisionBs)) / Number(parseFloat($scope.formData.factorCambiario)))).toFixed(2));
+                    if ($scope.aerolinea.roundComisionUsd) {
+                        $scope.formData.montoComisionUsd = Math.trun($scope.formData.montoComisionUsd);
+                    }
                 }
 
                 $scope.transformarDescuentoToBs = function () {
@@ -751,26 +784,44 @@ angular.module('jsBoletos.controllers', []).controller('frmBoletos',
 
                 $scope.transformarTotalBoletoToBs = function () {
                     $scope.formData.totalBoletoBs = $scope.formData.totalBoletoUsd === null ? undefined : Number(parseFloat($scope.formData.totalBoletoUsd * $scope.formData.factorCambiario).toFixed(2));
+                    if ($scope.aerolinea.roundComisionBob) {
+                        $scope.formData.totalBoletoBs = Math.trunc($scope.formData.totalBoletoBs);
+                    }
                 }
 
                 $scope.transformarTotalBoletoToUsd = function () {
                     $scope.formData.totalBoletoUsd = $scope.formData.totalBoletoBs === null ? undefined : Number(parseFloat($scope.formData.totalBoletoBs / $scope.formData.factorCambiario).toFixed(2));
+                    if ($scope.aerolinea.roundComisionUsd) {
+                        $scope.formData.totalBoletoUsd = Math.trunc($scope.formData.totalBoletoUsd);
+                    }
                 }
 
                 $scope.transformarTotalCancelToBs = function () {
                     $scope.formData.totalMontoCanceladoBs = $scope.formData.totalMontoCanceladoUsd === null ? undefined : Number(parseFloat($scope.formData.totalMontoCanceladoUsd * $scope.formData.factorCambiario).toFixed(2));
+                    if ($scope.aerolinea.roundComisionBob) {
+                        $scope.formData.totalMontoCanceladoBs = Math.trun($scope.formData.totalMontoCanceladoBs);
+                    }
                 }
 
                 $scope.transformarTotalCancelToUsd = function () {
                     $scope.formData.totalMontoCanceladoUsd = $scope.formData.totalMontoCanceladoBs === null ? undefined : Number(parseFloat($scope.formData.totalMontoCanceladoBs / $scope.formData.factorCambiario).toFixed(2));
+                    if ($scope.aerolinea.roundComisionUsd) {
+                        $scope.formData.totalMontoCanceladoUsd = Math.trunc($scope.formData.totalMontoCanceladoUsd);
+                    }
                 }
 
                 $scope.transformarMontoPagarLineaAereaUsd = function () {
                     $scope.formData.montoPagarLineaAereaUsd = $scope.formData.montoPagarLineaAereaBs === null ? undefined : Number(parseFloat($scope.formData.montoPagarLineaAereaBs / $scope.formData.factorCambiario).toFixed(2));
+                    if ($scope.aerolinea.roundComisionUsd) {
+                        $scope.formData.montoPagarLineaAereaUsd = Math.trun($scope.formData.montoPagarLineaAereaUsd);
+                    }
                 }
 
                 $scope.transformarMontoPagarLineaAereaBs = function () {
                     $scope.formData.montoPagarLineaAereaBs = $scope.formData.montoPagarLineaAereaUsd === null ? undefined : Number(parseFloat($scope.formData.montoPagarLineaAereaUsd * $scope.formData.factorCambiario).toFixed(2));
+                    if ($scope.aerolinea.roundComisionBob) {
+                        $scope.formData.montoPagarLineaAereaBs = Math.trunc($scope.formData.montoPagarLineaAereaBs);
+                    }
                 }
 
                 /**
@@ -779,7 +830,7 @@ angular.module('jsBoletos.controllers', []).controller('frmBoletos',
 
                 $scope.anular = function (boleto) {
                     $scope.showLoading = true;
-                    console.log(boleto) ;
+                    console.log(boleto);
                     return $http({
                         url: `${url.value}anular`,
                         method: 'POST',
@@ -802,9 +853,9 @@ angular.module('jsBoletos.controllers', []).controller('frmBoletos',
                         $scope.showRestfulMessage = error.statusText;
                     });
                 }
-                
+
                 $scope.modalAnular = function (boleto) {
-                    $scope.boletoAnular = boleto ;
+                    $scope.boletoAnular = boleto;
                 }
 
                 /*
@@ -842,6 +893,10 @@ angular.module('jsBoletos.controllers', []).controller('frmBoletos',
                             $scope.formData.montoComisionBs = Number(parseFloat((Number(parseFloat($scope.formData.importeNetoBs)) / 100) * Number(parseFloat($scope.formData.comision))).toFixed(2));
                             $scope.formData.montoComisionBs = Number(parseFloat(((porcentaje * $scope.formData.montoComisionBs) / 100) + $scope.formData.montoComisionBs).toFixed(2));
 
+                            if ($scope.aerolinea.roundComisionBob) {
+                                $scope.formData.montoComisionBs = Math.trunc($scope.formData.montoComisionBs);
+                            }
+
                             $scope.calculateTotalCancelBs();
                             $scope.transformarComisionToUsd();
                         }
@@ -853,6 +908,11 @@ angular.module('jsBoletos.controllers', []).controller('frmBoletos',
                         if ($scope.aerolinea.moneda === $scope.MONEDA_EXTRANJERA) {
                             $scope.formData.montoComisionUsd = Number(parseFloat((Number(parseFloat($scope.formData.importeNetoUsd)) / 100) * Number(parseFloat($scope.formData.comision))).toFixed(2));
                             $scope.formData.montoComisionUsd = Number(parseFloat(((porcentaje * $scope.formData.montoComisionUsd) / 100) + $scope.formData.montoComisionUsd).toFixed(2));
+
+                            if ($scope.aerolinea.roundComisionUsd) {
+                                $scope.formData.montoComisionUsd = Math.trunc($scope.formData.montoComisionUsd);
+                            }
+
                             $scope.calculateTotalCancelUsd();
                             $scope.transformarComisionToBs();
                         }
@@ -904,6 +964,13 @@ angular.module('jsBoletos.controllers', []).controller('frmBoletos',
                     if (Number.isNaN(Number($scope.formData.totalMontoCanceladoBs))) {
                         $scope.formData.totalMontoCanceladoBs = null;
                     }
+
+                    if ($scope.aerolinea.roundComisionBob) {
+                        if ($scope.formData.totalMontoCanceladoBs !== null) {
+                            $scope.formData.totalMontoCanceladoBs = Math.trunc($scope.formData.totalMontoCanceladoBs);
+                        }
+                    }
+
                     $scope.transformarTotalCancelToUsd();
                 }
 
@@ -916,11 +983,23 @@ angular.module('jsBoletos.controllers', []).controller('frmBoletos',
                     if (Number.isNaN(Number($scope.formData.totalMontoCanceladoUsd))) {
                         $scope.formData.totalMontoCanceladoUsd = null;
                     }
+
+                    if ($scope.formData.totalMontoCanceladoUsd !== null) {
+                        if ($scope.aerolinea.roundComisionUsd) {
+                            $scope.formData.totalMontoCanceladoUsd = Math.trunc($scope.formData.totalMontoCanceladoUsd)
+                        }
+                    }
+
                     $scope.transformarTotalCancelToBs();
                 }
 
                 $scope.calculateImporteNetoBs = function () {
                     if ($scope.aerolinea.moneda === $scope.MONEDA_NACIONAL) {
+
+                        if ($scope.aerolinea.roundComisionBob) {
+                            $scope.formData.importeNetoBs = Math.trunc($scope.formData.importeNetoBs);
+                        }
+
                         $scope.calculateTotalBoletoBs();
                         $scope.calculateComisionBs();
                         $scope.calculateFeeMontoBs();
@@ -933,6 +1012,10 @@ angular.module('jsBoletos.controllers', []).controller('frmBoletos',
 
                 $scope.calculateImporteNetoUsd = function () {
                     if ($scope.aerolinea.moneda === $scope.MONEDA_EXTRANJERA) {
+                        if ($scope.aerolinea.roundComisionUsd) {
+                            $scope.formData.importeNetoUsd = Math.trunc($scope.formData.importeNetoUsd);
+                        }
+
                         $scope.calculateTotalBoletoUsd();
                         $scope.calculateComisionUsd();
                         $scope.calculateFeeMontoUsd();
@@ -945,6 +1028,10 @@ angular.module('jsBoletos.controllers', []).controller('frmBoletos',
                 }
 
                 $scope.calculateImpuestoBobBs = function () {
+                    if ($scope.aerolinea.roundComisionBob) {
+                        $scope.formData.impuestoBobBs = Math.trunc($scope.formData.impuestoBobBs);
+                    }
+
                     $scope.calculateComisionBs();
                     $scope.calculateTotalBoletoBs();
                     $scope.calculateTotalCancelBs();
@@ -952,6 +1039,11 @@ angular.module('jsBoletos.controllers', []).controller('frmBoletos',
                 }
 
                 $scope.calculateImpuestoBobUsd = function () {
+
+                    if ($scope.aerolinea.roundComisionUsd) {
+                        $scope.formData.impuestoBobUsd = Math.trunc($scope.formData.impuestoBobUsd);
+                    }
+
                     $scope.calculateTotalBoletoUsd();
                     $scope.calculateComisionUsd();
                     $scope.calculateTotalCancelUsd();
@@ -996,6 +1088,11 @@ angular.module('jsBoletos.controllers', []).controller('frmBoletos',
                     }
                     $scope.formData.totalBoletoBs = parseFloat((totalBs * 100) / 100).toFixed(2);
                     $scope.formData.totalBoletoBs = Number.isNaN(Number($scope.formData.totalBoletoBs)) ? '' : $scope.formData.totalBoletoBs;
+
+                    if ($scope.aerolinea.roundComisionBob) {
+                        $scope.formData.totalBoletoBs = Math.trunc($scope.formData.totalBoletoBs);
+                    }
+
                     $scope.calculateMontoPagarLineaAerea();
 
                 }
@@ -1015,6 +1112,12 @@ angular.module('jsBoletos.controllers', []).controller('frmBoletos',
                     }
                     $scope.formData.totalBoletoUsd = parseFloat((totalUsd * 100) / 100).toFixed(2);
                     $scope.formData.totalBoletoUsd = Number.isNaN(Number($scope.formData.totalBoletoUsd)) ? Number(null) : $scope.formData.totalBoletoUsd;
+
+
+                    if ($scope.aerolinea.roundComisionUsd) {
+                        $scope.formData.totalBoletoUsd = Math.trunc($scope.formData.totalBoletoUsd);
+                    }
+
                     $scope.calculateMontoPagarLineaAerea();
                 }
 
@@ -1024,6 +1127,14 @@ angular.module('jsBoletos.controllers', []).controller('frmBoletos',
 
                     $scope.formData.montoPagarLineaAereaBs = Number.isNaN(Number($scope.formData.montoPagarLineaAereaBs)) ? Number(null) : $scope.formData.montoPagarLineaAereaBs;
                     $scope.formData.montoPagarLineaAereaUsd = Number.isNaN(Number($scope.formData.montoPagarLineaAereaUsd)) ? Number(null) : $scope.formData.montoPagarLineaAereaUsd;
+
+                    if ($scope.aerolinea.roundComisionBob) {
+                        $scope.formData.montoPagarLineaAereaBs = Math.trunc($scope.formData.montoPagarLineaAereaBs);
+                    }
+
+                    if ($scope.aerolinea.roundComisionUsd) {
+                        $scope.formData.montoPagarLineaAereaUsd = Math.trunc($scope.formData.montoPagarLineaAereaUsd);
+                    }
                 }
 
                 /**
@@ -1120,6 +1231,7 @@ angular.module('jsBoletos.controllers', []).controller('frmBoletos',
                         $scope.showCheckNumeroBoleto = true;
                         return $http.get(`${url.value}existe-boleto/${$scope.formData.numero}`)
                                 .then(function (response) {
+                                    console.log(response.data);
                                     if (response.data.code === 201) {
                                         $scope.showCheckNumeroBoleto = false;
                                     } else {
@@ -1135,6 +1247,42 @@ angular.module('jsBoletos.controllers', []).controller('frmBoletos',
                     }
                 }
 
+                /**
+                 * Validar Nro Boleto Origen
+                 * @returns {unresolved}
+                 */
+                $scope.validarNroBoletoOrigen = function () {
+                    $scope.showMensajeBoletoOrigenNoExiste = false;
+
+                    if ($scope.formData.numeroOrigen !== null && $scope.formData.numeroOrigen !== undefined) {
+                        $scope.showLoadingBoletoOrigen = true;
+                        return $http.get(`${url.value}existe-boleto-origen/${$scope.formData.numeroOrigen}`)
+                                .then(function (response) {
+                                    $scope.showLoadingBoletoOrigen = false;
+                                    if (response.data.code === 201) {
+                                         console.log(response.data.entidad);
+                                        var boleto = response.data.entidad ;
+                                        $scope.showBoletoOrigenExiste = true;
+                                        
+                                        $scope.formData.nombrePasajero = boleto.nombrePasajero ;
+                                        $scope.formData.idCliente = $scope.findCta(boleto.idCliente.id, $scope.comboCliente);
+                                        $scope.formData.idPromotor = $scope.findCta(boleto.idPromotor.id, $scope.comboCliente);
+                                        $scope.formData.fechaEmision = boleto.fechaEmision ;
+                                        $scope.formData.fechaViaje = boleto.fechaViaje ;
+                                        $scope.formData.moneda = boleto.moneda ;
+                                        $scope.formData.factorCambiario = boleto.factorCambiario ;
+                                       
+                                    } else {
+                                        $scope.showAlert("Error", response.data.content);
+                                        $scope.showMensajeBoletoOrigenNoExiste = true;
+                                        $scope.showMensajeBoletoOrigen = response.data.content;
+                                    }
+                                }, function (error) {
+                                    $scope.showRestfulError = true;
+                                    $scope.showRestfulMessage = error.statusText;
+                                });
+                    }
+                }
                 /**
                  * 
                  * Credito
@@ -1307,49 +1455,54 @@ angular.module('jsBoletos.controllers', []).controller('frmBoletos',
                     }
 
                     //formas de Pago
-                    if ($scope.formData.formaPago === null) {
-                        $scope.showAlert('Error', 'Debe Seleccionar una forma de Pago');
-                        return;
+                    // si el boleto es canje o conexion no se valida la forma de pago
+                    if ($scope.formData.emision !== 'CHG' && $scope.formData.emision !== 'CNX') {
+                        if ($scope.formData.formaPago === null) {
+                            $scope.showAlert('Error', 'Debe Seleccionar una forma de Pago');
+                            return;
+                        }
+
+                        if ($scope.formData.formaPago === $scope.CREDITO) {
+                            if (!$scope.myForm.txtPlazoDias.$valid) {
+                                return true;
+                            }
+                        } else if ($scope.formData.formaPago === $scope.CONTADO) {
+                            if ($scope.formData.contadoTipo === $scope.CHEQUE) {
+                                if (!$scope.myForm.txtContadoNroCheque.$valid) {
+                                    return true;
+                                } else if (!$scope.formData.contadoIdBanco) {
+                                    return true;
+                                }
+                            } else if ($scope.formData.contadoTipo === $scope.DEPOSITO) {
+                                if (!$scope.myForm.txtContadoNroDeposito.$valid) {
+                                    return true;
+                                } else if (!$scope.formData.contadoIdBanco) {
+                                    return true;
+                                }
+                            }
+                        } else if ($scope.formData.formaPago === $scope.COMBINADO) {
+                            if ($scope.formData.combinadoCredito) {
+                                if ($scope.showCombinadoCreditoMontoExcede) {
+                                    return true;
+                                }
+                            }
+
+                            if ($scope.formData.combinadoContado) {
+                                if ($scope.showCombinadoContadoMontoExcede) {
+                                    return true;
+                                }
+                            }
+
+                            if ($scope.formData.combinadoTarjeta) {
+                                if ($scope.showCombinadoTarjetaMontoExcede) {
+                                    return true;
+                                }
+                            }
+                        }
+                        return false;
                     }
 
-                    if ($scope.formData.formaPago === $scope.CREDITO) {
-                        if (!$scope.myForm.txtPlazoDias.$valid) {
-                            return true;
-                        }
-                    } else if ($scope.formData.formaPago === $scope.CONTADO) {
-                        if ($scope.formData.contadoTipo === $scope.CHEQUE) {
-                            if (!$scope.myForm.txtContadoNroCheque.$valid) {
-                                return true;
-                            } else if (!$scope.formData.contadoIdBanco) {
-                                return true;
-                            }
-                        } else if ($scope.formData.contadoTipo === $scope.DEPOSITO) {
-                            if (!$scope.myForm.txtContadoNroDeposito.$valid) {
-                                return true;
-                            } else if (!$scope.formData.contadoIdBanco) {
-                                return true;
-                            }
-                        }
-                    } else if ($scope.formData.formaPago === $scope.COMBINADO) {
-                        if ($scope.formData.combinadoCredito) {
-                            if ($scope.showCombinadoCreditoMontoExcede) {
-                                return true;
-                            }
-                        }
-
-                        if ($scope.formData.combinadoContado) {
-                            if ($scope.showCombinadoContadoMontoExcede) {
-                                return true;
-                            }
-                        }
-
-                        if ($scope.formData.combinadoTarjeta) {
-                            if ($scope.showCombinadoTarjetaMontoExcede) {
-                                return true;
-                            }
-                        }
-                    }
-                    return false;
+                    return false ;
                 }
 
 
@@ -1492,6 +1645,7 @@ angular.module('jsBoletos.controllers', []).controller('frmBoletos',
                         $scope.showFormEditar = true;
                         $scope.showFormVoid = false;
 
+                        console.log(item);
                         $scope.formData = item;
                         $scope.formData.idAerolinea = $scope.findCta(item.idAerolinea.id, $scope.comboAerolineas);
                         $scope.formData.idCliente = $scope.findCta(item.idCliente.id, $scope.comboCliente);
@@ -1507,44 +1661,44 @@ angular.module('jsBoletos.controllers', []).controller('frmBoletos',
 
                         //transformamos todo a Moneda Nacional
                         if ($scope.formData.tipoCupon === $scope.INTERNACIONAL) {
-                            $scope.transformarImporteNetoBs();
-                            $scope.transformarImpuestoBobToBs();
-                            $scope.transformarImpuestoQmToBs();
-                            $scope.transformarTotalBoletoToBs();
-                            $scope.transformarComisionToBs();
-                            $scope.transformarMontoFeeToBs();
-                            $scope.transformarDescuentoToBs();
-                            $scope.transformarTotalCancelToBs();
-                            $scope.transformarMontoPagarLineaAereaBs();
+                            /*$scope.transformarImporteNetoBs();
+                             $scope.transformarImpuestoBobToBs();
+                             $scope.transformarImpuestoQmToBs();
+                             $scope.transformarTotalBoletoToBs();
+                             $scope.transformarComisionToBs();
+                             $scope.transformarMontoFeeToBs();
+                             $scope.transformarDescuentoToBs();
+                             $scope.transformarTotalCancelToBs();
+                             $scope.transformarMontoPagarLineaAereaBs();*/
 
                         } else if ($scope.formData.tipoCupon === $scope.NACIONAL) {
-                            $scope.transformarImporteNetoUsd();
-                            $scope.transformarImpuestoBobToUsd();
-                            $scope.transformarImpuestoQmToUsd();
-                            $scope.transformarTotalBoletoToUsd();
-                            $scope.transformarComisionToUsd();
-                            $scope.transformarMontoFeeToUsd();
-                            $scope.transformarDescuentoToUsd();
-                            $scope.transformarTotalCancelToUsd();
-                            $scope.transformarMontoPagarLineaAereaUsd();
+                            /* $scope.transformarImporteNetoUsd();
+                             $scope.transformarImpuestoBobToUsd();
+                             $scope.transformarImpuestoQmToUsd();
+                             $scope.transformarTotalBoletoToUsd();
+                             $scope.transformarComisionToUsd();
+                             $scope.transformarMontoFeeToUsd();
+                             $scope.transformarDescuentoToUsd();
+                             $scope.transformarTotalCancelToUsd();
+                             $scope.transformarMontoPagarLineaAereaUsd();*/
                         }
                     } /*else if (item.tipoBoleto === $scope.MULTIPLE) {
-                        $scope.multiple = new Multiple();
-                        if (item.idBoletoPadre !== undefined) {
-                            $scope.multiple.idBoletoPadre = item.idBoletoPadre;
-                        } else {
-                            $scope.multiple.idBoletoPadre = item.idBoleto;
-                        }
-
-                        $scope.showTable = false;
-                        $scope.showMultiple = true;
-                        $scope.showTableMultiple = true;
-                        $scope.showForm = false;
-                        $scope.showFormVoid = false;
-
-                        $scope.cargarMultiples(item);
-
-                    } */else if (item.tipoBoleto === $scope.VOID) {
+                     $scope.multiple = new Multiple();
+                     if (item.idBoletoPadre !== undefined) {
+                     $scope.multiple.idBoletoPadre = item.idBoletoPadre;
+                     } else {
+                     $scope.multiple.idBoletoPadre = item.idBoleto;
+                     }
+                     
+                     $scope.showTable = false;
+                     $scope.showMultiple = true;
+                     $scope.showTableMultiple = true;
+                     $scope.showForm = false;
+                     $scope.showFormVoid = false;
+                     
+                     $scope.cargarMultiples(item);
+                     
+                     } */else if (item.tipoBoleto === $scope.VOID) {
                         $scope.formData = item;
                         $scope.showTable = false;
                         $scope.showMultiple = false;
@@ -1653,33 +1807,41 @@ angular.module('jsBoletos.controllers', []).controller('frmBoletos',
                     $scope.showMontoTotalCancelar = null;
                     $scope.showFormNuevo = true;
                     $scope.showFormEditar = false;
-                    $scope.showBtnGuardar = true ;
+                    $scope.showBtnGuardar = true;
+
+                    $scope.showMensajeBoletoOrigenNoExiste = false;
+                    $scope.showBoletoOrigenExiste = false;
+                    $scope.showMensajeBoletoOrigenNoExiste = false;
+
 
                     $scope.formData = new Boleto();
                     $scope.formData.tipoBoleto = tipo;
 
-                    if (tipo === 'M') {
+                    /*if (tipo === $scope.MANUAL) {
                         $scope.showMultiple = true;
                         $scope.showForm = false;
                         $scope.showFormVoid = false;
                         $scope.showTableMultiple = true;
                         $scope.showFormMultiple = false;
-                        $scope.showBtnSaveMultiple = false ;
-                        $scope.showBtnFinalizar = true ;
-                        
+                        $scope.showBtnSaveMultiple = false;
+                        $scope.showBtnFinalizar = true;
+
                         $scope.multiple = new Multiple();
 
-                    } else if (tipo === 'S') {
+                    } else */
+                    if (tipo === $scope.MANUAL) {
                         $scope.showForm = true;
-                        $scope.showFormMultiple = false;
+                        $scope.showFormVoid = false;
+                        //$scope.showFormMultiple = false;
 
                         $scope.formData.factorCambiario = $scope.dollarToday.valor;
                         $scope.formData.fechaEmision = $scope.dollarToday.fecha;
                         $scope.formData.factorMax = parseFloat($scope.formData.factorCambiario) + parseFloat(factorMaxMin.value);
                         $scope.formData.factorMin = parseFloat($scope.formData.factorCambiario) - parseFloat(factorMaxMin.value);
 
-                    } else if (tipo === 'V') {
+                    } else if (tipo === $scope.MANUAL_VOID) {
                         $scope.showFormVoid = true;
+                        $scope.showForm =false ;
                         $scope.showMultiple = false;
                     }
 
@@ -1775,7 +1937,7 @@ angular.module('jsBoletos.controllers', []).controller('frmBoletos',
                     $scope.showFormEditar = false;
                     $scope.showBtnMultipleNuevo = true;
                     $scope.showBtnMultipleEditar = false;
-                    
+
                     $scope.formData = new Boleto();
                     $scope.formData.tipoBoleto = 'M'; // Multiple
                     $scope.formData.factorCambiario = $scope.dollarToday.valor;
@@ -1798,10 +1960,10 @@ angular.module('jsBoletos.controllers', []).controller('frmBoletos',
                         $scope.showAlert("Error", 'No puede finalizar un boleto multiple con un solo boleto. Debe ingresar al menos 2 boletos');
                         return;
                     }
-                    
-                    $scope.showBtnSaveMultiple = true ;
-                    $scope.showFormaPagoMultipleNuevo = true ;
-                    $scope.showFormaPagoMultipleEditar = false ;
+
+                    $scope.showBtnSaveMultiple = true;
+                    $scope.showFormaPagoMultipleNuevo = true;
+                    $scope.showFormaPagoMultipleEditar = false;
                 }
 
 
@@ -1827,6 +1989,7 @@ angular.module('jsBoletos.controllers', []).controller('frmBoletos',
                                         if (response.data.code === 201) {
                                             $scope.aerolinea = response.data.content;
                                             //cargamos los datos de la aerolinea
+                                            console.log($scope.aerolinea);
                                             if ($scope.aerolinea.moneda === $scope.MONEDA_EXTRANJERA) {
                                                 $scope.formData.tipoCupon = $scope.INTERNACIONAL;
                                                 $scope.formData.moneda = $scope.MONEDA_EXTRANJERA;
@@ -1843,6 +2006,10 @@ angular.module('jsBoletos.controllers', []).controller('frmBoletos',
                                             } else if ($scope.formData.tipoCupon === $scope.NACIONAL) {
                                                 $scope.formData.comision = $scope.aerolinea.comisionPromNac;
                                             }
+
+                                            $scope.redondearDecimales = $scope.aerolinea.roundComisionBob ? true : false;
+
+
                                             $scope.calculateComision();
 
                                             $scope.getImpuestos($scope.aerolinea);
@@ -1858,6 +2025,7 @@ angular.module('jsBoletos.controllers', []).controller('frmBoletos',
                                     function (response) {
                                         if (response.data.code === 201) {
                                             $scope.aerolinea = response.data.content;
+                                            $scope.redondearDecimales = $scope.aerolinea.roundComisionBob ? true : false;
                                         }
                                     },
                                     function (error) {

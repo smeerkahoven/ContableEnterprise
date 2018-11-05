@@ -1,15 +1,15 @@
 <fieldset class="ng-hide" ng-show="formData.idCliente.id">
-    <legend align="left">Formas de Pagos (editar)</legend>
+    <legend align="left">Forma de Pago</legend>
     <div class="container-fluid" align="center">
         <div class="row">
             <div class="table-responsive">
                 <div class="col-10">
                     <ul class="nav nav-tabs" id="myTab" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link" ng-class="formData.formaPago =='C'? 'active' : ''" ng-click="creditoClick()" id="home-tab" data-toggle="tab" href="#credito" role="tab" aria-controls="credito" aria-selected="true">Cr&eacute;dito</a>
+                            <a class="nav-link" ng-class="formData.formaPago =='E'? 'active' : ''" ng-click="contadoClick()" id="profile-tab" data-toggle="tab" href="#contado" role="tab" aria-controls="contado" aria-selected="false">Contado</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" ng-class="formData.formaPago =='E'? 'active' : ''" ng-click="contadoClick()" id="profile-tab" data-toggle="tab" href="#contado" role="tab" aria-controls="contado" aria-selected="false">Contado</a>
+                            <a class="nav-link" ng-class="formData.formaPago =='C'? 'active' : ''" ng-click="creditoClick()" id="home-tab" data-toggle="tab" href="#credito" role="tab" aria-controls="credito" aria-selected="true">Cr&eacute;dito</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link"  ng-class="formData.formaPago =='T'? 'active' : ''" ng-click="tarjetaClick()" id="contact-tab" data-toggle="tab" href="#tarjeta" role="tab" aria-controls="tarjeta" aria-selected="false">Tarjeta</a>
