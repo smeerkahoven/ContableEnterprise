@@ -8,15 +8,19 @@ package com.contabilidad.ejb;
 import com.agencia.entities.Aerolinea;
 import com.agencia.entities.Boleto;
 import com.agencia.entities.FormasPago;
+import com.agencia.search.dto.BoletoSearchForm;
 import com.contabilidad.entities.ComprobanteContable;
 import com.contabilidad.entities.NotaDebito;
 import com.contabilidad.entities.NotaDebitoTransaccion;
 import com.contabilidad.remote.NotaDebitoRemote;
 import com.seguridad.control.FacadeEJB;
+import com.seguridad.control.entities.Entidad;
 import com.seguridad.control.exception.CRUDException;
+import com.seguridad.queries.Queries;
 import com.seguridad.utils.DateContable;
 import com.seguridad.utils.Operacion;
 import java.util.List;
+import java.util.Optional;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
@@ -31,6 +35,15 @@ import javax.persistence.StoredProcedureQuery;
 @TransactionAttribute(TransactionAttributeType.REQUIRED)
 public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
 
+    @Override
+    public Entidad get(Entidad e) throws CRUDException {
+        NotaDebito nd = em.find(NotaDebito.class, e.getId());
+        if (nd != null)
+        return nd ;
+        return new NotaDebito();
+    }
+
+    
     @Override
     public NotaDebito createNotaDebito(Boleto boleto) throws CRUDException {
 
@@ -183,5 +196,124 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
 
         return Operacion.REALIZADA;
     }
+
+    @Override
+    public List<NotaDebito> getAllNotaDebito(BoletoSearchForm search) throws CRUDException {
+
+        Optional op = Optional.ofNullable(search.getIdEmpresa());
+        if (!op.isPresent()) {
+            throw new CRUDException("Debe enviar el parametro de Id Empresa");
+        }
+        String q = queries.getPropertie(Queries.GET_NOTA_DEBITO_BOLETOS);
+
+        // dentro de q ya esta el WHERE nd.id_empresa = :idEmpresa
+        op = Optional.ofNullable(search.getNumeroBoleto());
+        if (op.isPresent()) {
+            q += " AND bo.numero=?2";
+        }
+
+        op = Optional.ofNullable(search.getNotaDebito());
+        if (op.isPresent()) {
+            q += " AND nd.id_nota_debito=?3";
+        }
+
+        op = Optional.ofNullable(search.getFechaInicio());
+        if (op.isPresent()) {
+            q += " AND nd.fecha_emision>=?4";
+        }
+
+        op = Optional.ofNullable(search.getFechaFin());
+        if (op.isPresent()) {
+            q += " AND nd.fecha_emision<=?5";
+        }
+
+        Query query = em.createNativeQuery(q, NotaDebito.class);
+
+        op = Optional.ofNullable(search.getNumeroBoleto());
+        if (op.isPresent()) {
+            query.setParameter("2", search.getNumeroBoleto());
+        }
+
+        op = Optional.ofNullable(search.getNotaDebito());
+        if (op.isPresent()) {
+            query.setParameter("3", search.getNotaDebito());
+        }
+
+        op = Optional.ofNullable(search.getFechaInicio());
+        if (op.isPresent() && !op.equals("")) {
+            query.setParameter("4", DateContable.toLatinAmericaDateFormat(search.getFechaInicio()));
+        }
+
+        op = Optional.ofNullable(search.getFechaFin());
+        if (op.isPresent() && !op.equals("")) {
+            query.setParameter("5", DateContable.toLatinAmericaDateFormat(search.getFechaFin()));
+        }
+
+        query.setParameter("1", search.getIdEmpresa());
+
+        System.out.println(query);
+
+        return query.getResultList();
+
+    }
+
+    @Override
+    public NotaDebito createNotaDebito(Integer idEmpresa, String usuario) throws CRUDException {
+
+        String date = DateContable.getCurrentDateStr().substring(0, 10);
+        NotaDebito nota = new NotaDebito();
+        nota.setIdEmpresa(idEmpresa);
+        nota.setIdUsuarioCreador(usuario);
+        nota.setEstado(NotaDebito.CREADO);
+        nota.setFechaInsert(DateContable.getCurrentDate());
+        nota.setFechaEmision(DateContable.getCurrentDate());
+        nota.setGestion(DateContable.getPartitionDateInt(date));
+
+        nota.setIdNotaDebito(insert(nota));
+
+        return nota;
+
+    }
+
+    @Override
+    public List<NotaDebitoTransaccion> getAllTransacciones(Integer idNotaDebito) throws CRUDException {
+
+        Query q = em.createNamedQuery("NotaDebitoTransaccion.findAllByIdNotaDebito", NotaDebitoTransaccion.class);
+
+        q.setParameter("idNotaDebito", idNotaDebito);
+
+        return q.getResultList();
+    }
+
+    @Override
+    public Integer actualizarMontosNotaDebito(Integer idNotaDebito) throws CRUDException {
+        // Se actualizan los montos del Boleto
+        StoredProcedureQuery spq2 = em.createNamedStoredProcedureQuery("NotaDebito.updateMontosNotaDebitoEnPendiente");
+        spq2.setParameter("in_id_nota_debito", idNotaDebito);
+
+        spq2.executeUpdate();
+
+        return Operacion.REALIZADA;
+
+    }
+    
+     @Override
+    public Integer asociarBoletoNotaDebito(Boleto b, NotaDebito n) throws CRUDException {
+        Integer idTransaccion = -1;
+
+        // En la BD crea la transaccion de la nota de debito asociandola con los montos del Boleto
+        // Asocia el Boleto con la Transaccion
+        StoredProcedureQuery spq = em.createNamedStoredProcedureQuery("NotaDebito.asociarBoletoNotaDebito");
+        spq.setParameter("in_id_boleto", b.getIdBoleto());
+        spq.setParameter("in_id_nota_debito", n.getIdNotaDebito());
+        spq.setParameter("out_id_transacion", idTransaccion);
+
+        spq.executeUpdate();
+
+        
+
+        return Operacion.REALIZADA;
+    }
+
 
 }

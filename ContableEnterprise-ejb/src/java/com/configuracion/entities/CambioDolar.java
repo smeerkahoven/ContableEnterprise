@@ -27,10 +27,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "cnt_cambio_dolar")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "CambioDolar.findAll", query = "SELECT c FROM CambioDolar c ORDER BY c.fecha DESC"),
-    @NamedQuery(name = "CambioDolar.findFecha", query = "SELECT c FROM CambioDolar c where c.fecha=:fecha")
+    @NamedQuery(name = "CambioDolar.findAll", query = "SELECT c FROM CambioDolar c ORDER BY c.fecha DESC")
+    ,@NamedQuery(name = "CambioDolar.findFecha", query = "SELECT c FROM CambioDolar c where c.fecha=:fecha")
 })
-public class CambioDolar extends Entidad{
+public class CambioDolar extends Entidad {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -54,7 +54,7 @@ public class CambioDolar extends Entidad{
     }
 
     public Date getFecha() {
-        
+
         return fecha;
     }
 
@@ -96,10 +96,9 @@ public class CambioDolar extends Entidad{
     }
 
     @Override
-    
+
     public int getId() throws CRUDException {
-        return 0 ;
+        return 0;
     }
-    
-    
+
 }

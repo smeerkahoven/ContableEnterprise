@@ -6,6 +6,7 @@
 package com.contabilidad.remote;
 
 import com.agencia.entities.Boleto;
+import com.agencia.search.dto.BoletoSearchForm;
 import com.contabilidad.entities.NotaDebito;
 import com.contabilidad.entities.NotaDebitoTransaccion;
 import com.seguridad.control.entities.Entidad;
@@ -30,6 +31,10 @@ public interface NotaDebitoRemote extends DaoRemoteFacade  {
 
     @Override
     public void update(Entidad e) throws CRUDException;
+
+    @Override
+    public Entidad get(Entidad e) throws CRUDException;
+    
 
     @Override
     public List get(String namedQuery, Class<?> typeClass, HashMap parameters) throws CRUDException;
@@ -64,6 +69,7 @@ public interface NotaDebitoRemote extends DaoRemoteFacade  {
      * crea una lista de Transacciones para la nota de debito a partir de una lista de 
      * Boletos
      * @param boleto
+     * @param notaDebito
      * @return
      * @throws CRUDException 
      */
@@ -72,11 +78,46 @@ public interface NotaDebitoRemote extends DaoRemoteFacade  {
     /**
      * Anula una transaccion. Verifica si exi
      * 
-     * @param idTransaccion
+     * @param boleto
      * @return
      * @throws CRUDException 
      */
     public int anularTransaccion(Boleto boleto) throws CRUDException;
 
+    public List<NotaDebito> getAllNotaDebito(BoletoSearchForm search) throws CRUDException ;
     
+    /**
+     * Creamos una nota de debito al momento de ingresar a la interfaz de Nuevo Nota Debito
+     * @param idEmpresa
+     * @param usuario
+     * @return
+     * @throws CRUDException 
+     */
+    public NotaDebito createNotaDebito (Integer idEmpresa, String usuario) throws CRUDException ;
+    
+    /**
+     * Devuelve la lista de Transacciones para la Nota de Debito
+     * 
+     * @param idNotaDebito
+     * @return
+     * @throws CRUDException 
+     */
+    public List<NotaDebitoTransaccion> getAllTransacciones (Integer idNotaDebito)throws CRUDException;
+    
+    /**
+     * Suma los montos de las transacciones y actualiza en los montos de la Nota de Debito
+     * @param idNotaDebito
+     * @return
+     * @throws CRUDException 
+     */
+    public Integer actualizarMontosNotaDebito (Integer idNotaDebito) throws CRUDException ;
+    
+        /**
+     * Asociacion en Base de datos del Boleto b con la Nota de Debito.
+     * @param b
+     * @param n
+     * @return El id de la transaccion a la cual esta relacionada el Boleto
+     * @throws CRUDException 
+     */
+    public Integer asociarBoletoNotaDebito(Boleto b , NotaDebito n) throws CRUDException;
 }

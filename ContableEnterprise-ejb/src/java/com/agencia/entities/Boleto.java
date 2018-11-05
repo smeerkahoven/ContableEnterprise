@@ -5,6 +5,7 @@
  */
 package com.agencia.entities;
 
+import com.configuracion.entities.ArchivoBoleto;
 import com.seguridad.control.entities.Entidad;
 import com.seguridad.control.exception.CRUDException;
 import java.math.BigDecimal;
@@ -34,9 +35,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "cnt_boleto")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Boleto.findAll", query = "SELECT b FROM Boleto b")
-    ,
-    @NamedQuery(name = "Boleto.findNroBoleto", query = "SELECT b FROM Boleto b WHERE b.numero=:numero and b.estado in (:list)")
+    @NamedQuery(name = "Boleto.findAll", query = "SELECT b FROM Boleto b ORDER by b.numero")
+    ,@NamedQuery(name = "Boleto.findNroBoleto", query = "SELECT b FROM Boleto b WHERE b.numero=:numero and b.estado in ('E','V','P')")
+    ,@NamedQuery(name = "Boleto.findNroBoletoE", query = "SELECT b FROM Boleto b WHERE b.numero=:numero and b.estado=:estado")
+    ,@NamedQuery(name = "Boleto.getAllAmadeusAutomaticos", query = "SELECT b FROM Boleto b WHERE b.tipoBoleto='AM' and b.estado='C' and b.idEmpresa=:idEmpresa")
 })
 public class Boleto extends Entidad {
 
@@ -45,7 +47,8 @@ public class Boleto extends Entidad {
         public static final String EMITIDO = "E";
         public static final String PENDIENTE = "P";
         public static final String ANULADO = "A";
-        public static final String VOID = "V" ;
+        public static final String VOID = "V";
+        public static final String CARGADO_AUTOMATICO = "C";
     }
 
     public static class Cupon {
@@ -55,8 +58,24 @@ public class Boleto extends Entidad {
 
     }
 
-    public static final String MULTIPLE = "M";
-    public static final String SIMPLE = "S";
+    public static class Tipo {
+
+        public static final String AMADEUS = "AM";
+        public static final String SABRE = "SA";
+        public static final String AMADEUS_VOID = "AV";
+        public static final String SABRE_VOID = "SV";
+        public static final String MANUAL = "MA";
+        public static final String MANUAL_VOID = "MV";
+
+    }
+
+    public static class Emision {
+        public static final String TKT = "TKT" ;
+        public static final String NORMAL = "NORM" ;
+        public static final String CNX = "CNX" ;
+        public static final String CHG = "CHG" ;
+        
+    }
 
     public static final String PENDIENTE = "P";
     public static final String COMPLETADO = "C";
@@ -81,7 +100,7 @@ public class Boleto extends Entidad {
     @Basic(optional = false)
     @Column(name = "id_boleto_padre")
     private Integer idBoletoPadre;
-    
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_promotor")
     private Promotor idPromotor;
@@ -90,8 +109,8 @@ public class Boleto extends Entidad {
     private Integer idIngresoCaja;
     @Column(name = "id_ingreso_caja_transaccion")
     private Integer idIngresoCajaTransaccion;
-    @Column(name="id_libro")
-    private Integer idLibro ;
+    @Column(name = "id_libro")
+    private Integer idLibro;
     @Basic(optional = false)
     @Column(name = "id_empresa")
     private Integer idEmpresa;
@@ -100,7 +119,7 @@ public class Boleto extends Entidad {
     @Column(name = "emision")
     private String emision;
     @Basic(optional = false)
-    @Size(min = 1, max = 1)
+    @Size(min = 2, max = 2)
     @Column(name = "tipo_boleto")
     private String tipoBoleto;
     @Size(max = 1)
@@ -109,6 +128,9 @@ public class Boleto extends Entidad {
     @Basic(optional = false)
     @Column(name = "numero")
     private long numero;
+    @Basic(optional = false)
+    @Column(name = "numero_origen")
+    private long numeroOrigen;
     @Basic(optional = false)
     @Size(min = 1, max = 4)
     @Column(name = "id_ruta_1")
@@ -178,9 +200,9 @@ public class Boleto extends Entidad {
     @Temporal(TemporalType.DATE)
     private Date creditoVencimiento;
     @Size(max = 1)
-    @Column(name = "moneda" , updatable = false)
+    @Column(name = "moneda", updatable = false)
     private String moneda;
-    @Column(name = "importe_neto" , updatable = false)
+    @Column(name = "importe_neto", updatable = false)
     private BigDecimal importeNeto;
     @Column(name = "impuesto_bob", updatable = false)
     private BigDecimal impuestoBob;
@@ -188,27 +210,27 @@ public class Boleto extends Entidad {
     private BigDecimal impuestoQm;
     @Column(name = "impuesto_1", updatable = false)
     private BigDecimal impuesto1;
-    @Column(name = "impuesto_2" , updatable = false)
+    @Column(name = "impuesto_2", updatable = false)
     private BigDecimal impuesto2;
-    @Column(name = "impuesto_3" , updatable = false)
+    @Column(name = "impuesto_3", updatable = false)
     private BigDecimal impuesto3;
-    @Column(name = "impuesto_4" , updatable = false)
+    @Column(name = "impuesto_4", updatable = false)
     private BigDecimal impuesto4;
-    @Column(name = "impuesto_5" , updatable = false)
+    @Column(name = "impuesto_5", updatable = false)
     private BigDecimal impuesto5;
-    @Column(name = "total_boleto" , updatable = false)
+    @Column(name = "total_boleto", updatable = false)
     private BigDecimal totalBoleto;
-    @Column(name = "comision" )
+    @Column(name = "comision")
     private BigDecimal comision;
-    @Column(name = "monto_comision" )
+    @Column(name = "monto_comision")
     private BigDecimal montoComision;
-    @Column(name = "fee" , updatable = false)
+    @Column(name = "fee", updatable = false)
     private BigDecimal fee;
-    @Column(name = "monto_fee" , updatable = false)
+    @Column(name = "monto_fee", updatable = false)
     private BigDecimal montoFee;
-    @Column(name = "descuento" , updatable = false)
+    @Column(name = "descuento", updatable = false)
     private BigDecimal descuento;
-    @Column(name = "monto_descuento" , updatable = false)
+    @Column(name = "monto_descuento", updatable = false)
     private BigDecimal montoDescuento;
     @Column(name = "total_monto_cancelado", updatable = false)
     private BigDecimal totalMontoCancelado;
@@ -269,11 +291,15 @@ public class Boleto extends Entidad {
     @Column(name = "combinado_tarjeta_monto")
     private BigDecimal combinadoTarjetaMonto;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_archivo")
+    private ArchivoBoleto idArchivo;
+
     public Boleto() {
     }
-    
-    public Boleto (Integer idBoleto){
-        this.idBoleto = idBoleto ;
+
+    public Boleto(Integer idBoleto) {
+        this.idBoleto = idBoleto;
     }
 
     public Boleto(long numero) {
@@ -874,7 +900,21 @@ public class Boleto extends Entidad {
     public void setIdNotaDebitoTransaccion(Integer idNotaDebitoTransaccion) {
         this.idNotaDebitoTransaccion = idNotaDebitoTransaccion;
     }
-    
-    
+
+    public long getNumeroOrigen() {
+        return numeroOrigen;
+    }
+
+    public void setNumeroOrigen(long numeroOrigen) {
+        this.numeroOrigen = numeroOrigen;
+    }
+
+    public ArchivoBoleto getIdArchivo() {
+        return idArchivo;
+    }
+
+    public void setIdArchivo(ArchivoBoleto idArchivo) {
+        this.idArchivo = idArchivo;
+    }
 
 }

@@ -34,24 +34,17 @@ public class Log implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_log")
     private Integer idLog;
-    
-
     @Column(name = "fecha_log")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaLog;
-    
-    @Column(name = "accion", length = 10)
+    @Column(name = "accion", length = 16)
     private String accion;
-    
     @Column(name = "usuario", length = 16)
     private String usuario;
-    
     @Column(name = "formulario", length = 64)
     private String formulario;
-    
     @Column(name = "ip" ,length = 32)
     private String ip;
-
     public Log() {
     }
 

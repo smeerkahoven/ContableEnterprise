@@ -5,12 +5,13 @@
  */
 package com.contabilidad.entities;
 
-import com.agencia.entities.Aerolinea;
 import com.agencia.entities.Cliente;
 import com.agencia.entities.Promotor;
 import com.seguridad.control.entities.Entidad;
 import com.seguridad.control.exception.CRUDException;
+import com.seguridad.utils.DateContable;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -40,6 +41,23 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "cnt_nota_debito")
 @XmlRootElement
 @NamedStoredProcedureQuery(
+        name = "NotaDebito.asociarBoletoNotaDebito",
+        procedureName = "asociarBoletoNotaDebito",
+        parameters = {
+            @StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_nota_debito")
+            ,@StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_boleto")
+            ,@StoredProcedureParameter(mode = ParameterMode.OUT, type = Integer.class, name = "out_id_transacion")
+        }
+)
+@NamedStoredProcedureQuery(
+        name = "NotaDebito.updateMontosNotaDebitoEnPendiente",
+        procedureName = "updateMontosNotaDebitoEnPendiente",
+        parameters = {
+            @StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_nota_debito")
+        }
+)
+
+@NamedStoredProcedureQuery(
         name = "NotaDebito.updateNotaDebito",
         procedureName = "updateNotaDebito",
         parameters = {
@@ -53,18 +71,18 @@ public class NotaDebito extends Entidad {
     public static final String EMITIDO = "E";
     public static final String PENDIENTE = "P";
     public static final String ANULADO = "A";
-    public static final String CREADO = "C" ;
+    public static final String CREADO = "C";
 
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
     @Column(name = "id_nota_debito")
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private int idNotaDebito;
+    private Integer idNotaDebito;
     @Basic(optional = false)
     @NotNull
     @Column(name = "gestion")
-    private int gestion;
+    private Integer gestion;
     @Basic(optional = false)
     @NotNull
     @Column(name = "id_empresa")
@@ -78,6 +96,7 @@ public class NotaDebito extends Entidad {
     @Column(name = "fecha_emision")
     @Temporal(TemporalType.DATE)
     private Date fechaEmision;
+    @NotNull
     @Column(name = "fecha_insert")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaInsert;
@@ -92,41 +111,29 @@ public class NotaDebito extends Entidad {
     private BigDecimal montoAdeudadoUsd;
     @Column(name = "factor_cambiario")
     private BigDecimal factorCambiario;
-
     @Column(name = "forma_pago")
     private String formaPago;
-
     @Column(name = "tipo_contado")
     private String tipoContado;
-
     @Column(name = "id_banco")
     private Integer idBanco;
-
     @Column(name = "nro_cheque")
     private String nroCheque;
-
     @Column(name = "id_tarjeta_credito")
     private Integer idTarjetaCredito;
-
     @Column(name = "nro_tarjeta")
     private String nroTarjeta;
-
     @Column(name = "nro_deposito")
     private String nroDeposito;
-
     @Column(name = "id_cuenta_deposito")
     private Integer idCuentaDeposito;
-
     @Column(name = "id_usuario_creador")
     private String idUsuarioCreador;
-
     @Column(name = "credito_dias")
-    private int creditoDias;
-
+    private Integer creditoDias;
     @Column(name = "credito_vencimiento")
     @Temporal(TemporalType.TIMESTAMP)
     private Date creditoVencimiento;
-
     @Column(name = "combinado_contado")
     private Short combinadoContado;
     @Column(name = "combinado_tarjeta")
@@ -140,6 +147,10 @@ public class NotaDebito extends Entidad {
     private String estado;
 
     public NotaDebito() {
+    }
+
+    public NotaDebito(Integer idNotaDebito) {
+        this.idNotaDebito = idNotaDebito;
     }
 
     public NotaDebito(Integer idNotaDebito, Integer idEmpresa) {
@@ -174,6 +185,13 @@ public class NotaDebito extends Entidad {
     public Date getFechaEmision() {
         return fechaEmision;
     }
+
+    /*
+    public String getFechaEmision() {
+        String date = DateContable.getDateFormat(fechaEmision, DateContable.LATIN_AMERICA_FORMAT);
+        
+        return date;
+    }*/
 
     public void setFechaEmision(Date fechaEmision) {
         this.fechaEmision = fechaEmision;
@@ -299,11 +317,11 @@ public class NotaDebito extends Entidad {
         this.idUsuarioCreador = idUsuarioCreador;
     }
 
-    public int getCreditoDias() {
+    public Integer getCreditoDias() {
         return creditoDias;
     }
 
-    public void setCreditoDias(int creditoDias) {
+    public void setCreditoDias(Integer creditoDias) {
         this.creditoDias = creditoDias;
     }
 
@@ -347,19 +365,19 @@ public class NotaDebito extends Entidad {
         this.combinadoContadoTipo = combinadoContadoTipo;
     }
 
-    public int getIdNotaDebito() {
+    public Integer getIdNotaDebito() {
         return idNotaDebito;
     }
 
-    public void setIdNotaDebito(int idNotaDebito) {
+    public void setIdNotaDebito(Integer idNotaDebito) {
         this.idNotaDebito = idNotaDebito;
     }
 
-    public int getGestion() {
+    public Integer getGestion() {
         return gestion;
     }
 
-    public void setGestion(int gestion) {
+    public void setGestion(Integer gestion) {
         this.gestion = gestion;
     }
 

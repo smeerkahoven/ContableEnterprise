@@ -33,8 +33,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "NotaDebitoTransaccion.findAll", query = "SELECT n FROM NotaDebitoTransaccion n")
-    , 
-    @NamedQuery(name = "NotaDebitoTransaccion.updateBoletoEstado", query = "UPDATE NotaDebitoTransaccion n SET n.estado=:estado WHERE n.idBoleto=:idBoleto")})
+    ,@NamedQuery(name = "NotaDebitoTransaccion.updateBoletoEstado", query = "UPDATE NotaDebitoTransaccion n SET n.estado=:estado WHERE n.idBoleto=:idBoleto")
+    ,@NamedQuery(name = "NotaDebitoTransaccion.findAllByIdNotaDebito", query = "SELECT n FROM NotaDebitoTransaccion n WHERE n.idNotaDebito=:idNotaDebito")
+})
 public class NotaDebitoTransaccion extends Entidad {
 
     public static class Tipo {
@@ -52,15 +53,15 @@ public class NotaDebitoTransaccion extends Entidad {
     @Basic(optional = false)
     @Column(name = "id_nota_debito_transaccion")
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private int idNotaDebitoTransaccion;
+    private Integer idNotaDebitoTransaccion;
     @Basic(optional = false)
     @NotNull
     @Column(name = "gestion")
-    private int gestion;
+    private Integer gestion;
     @Basic(optional = false)
     @NotNull
     @Column(name = "id_nota_debito")
-    private int idNotaDebito;
+    private Integer idNotaDebito;
     @Size(max = 64)
     @Column(name = "descripcion")
     private String descripcion;
@@ -72,16 +73,12 @@ public class NotaDebitoTransaccion extends Entidad {
     @Column(name = "fecha_insert")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaInsert;
-
     @Column(name = "id_boleto")
     private Integer idBoleto;
-
     @Column(name = "id_plan_cuentas")
     private Integer idPlanCuentas;
-
     @Column(name = "estado")
     private String estado;
-
     @Column(name = "moneda")
     private String moneda;
     @Column(name = "tipo")
@@ -90,27 +87,27 @@ public class NotaDebitoTransaccion extends Entidad {
     public NotaDebitoTransaccion() {
     }
 
-    public int getIdNotaDebitoTransaccion() {
+    public Integer getIdNotaDebitoTransaccion() {
         return idNotaDebitoTransaccion;
     }
 
-    public void setIdNotaDebitoTransaccion(int idNotaDebitoTransaccion) {
+    public void setIdNotaDebitoTransaccion(Integer idNotaDebitoTransaccion) {
         this.idNotaDebitoTransaccion = idNotaDebitoTransaccion;
     }
 
-    public int getGestion() {
+    public Integer getGestion() {
         return gestion;
     }
 
-    public void setGestion(int gestion) {
+    public void setGestion(Integer gestion) {
         this.gestion = gestion;
     }
 
-    public int getIdNotaDebito() {
+    public Integer getIdNotaDebito() {
         return idNotaDebito;
     }
 
-    public void setIdNotaDebito(int idNotaDebito) {
+    public void setIdNotaDebito(Integer idNotaDebito) {
         this.idNotaDebito = idNotaDebito;
     }
 

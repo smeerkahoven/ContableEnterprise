@@ -34,10 +34,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Aerolinea.findAll", query = "SELECT a FROM Aerolinea a")
-    ,
-@NamedQuery(name = "Aerolinea.findForCombo", query = "SELECT a.idAerolinea,a.numero, a.nombre, a.moneda FROM Aerolinea a WHERE a.moneda=:moneda"),
-@NamedQuery(name = "Aerolinea.find", query = "SELECT a FROM Aerolinea a WHERE a.idAerolinea=:idAerolinea"),
-@NamedQuery(name = "Aerolinea.allCombo", query = "SELECT a.idAerolinea, a.numero, a.nombre FROM Aerolinea a  ORDER by a.numero")
+    ,@NamedQuery(name = "Aerolinea.findForCombo", query = "SELECT a.idAerolinea,a.numero, a.nombre, a.moneda FROM Aerolinea a WHERE a.moneda=:moneda")
+    ,@NamedQuery(name = "Aerolinea.find", query = "SELECT a FROM Aerolinea a WHERE a.idAerolinea=:idAerolinea")
+    ,@NamedQuery(name = "Aerolinea.findByIata", query = "SELECT a FROM Aerolinea a WHERE a.iata=:iata")
+    ,@NamedQuery(name = "Aerolinea.allCombo", query = "SELECT a.idAerolinea, a.numero, a.nombre FROM Aerolinea a  ORDER by a.numero")
 })
 public class Aerolinea extends Entidad {
 
@@ -117,7 +117,7 @@ public class Aerolinea extends Entidad {
     private BigInteger ctaDevolucionMonNac;
     @Column(name = "cta_devolucion_mon_ext")
     private BigInteger ctaDevolucionMonExt;
-    */
+     */
     @Column(name = "boletos_mon_nac")
     private Boolean boletosMonNac;
     @Column(name = "boletos_mon_ext")
@@ -136,7 +136,7 @@ public class Aerolinea extends Entidad {
     @Column(name = "registra_pnr")
     private Boolean registraPnr;
     @OneToMany(orphanRemoval = true, fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_aerolinea", updatable = false )
+    @JoinColumn(name = "id_aerolinea", updatable = false)
     private List<AerolineaImpuesto> aerolineaImpuestoList;
 
     @OneToMany(orphanRemoval = true, cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
@@ -366,7 +366,6 @@ public class Aerolinea extends Entidad {
     public void setCtaDevolucionMonExt(BigInteger ctaDevolucionMonExt) {
         this.ctaDevolucionMonExt = ctaDevolucionMonExt;
     }*/
-
     public Boolean getBoletosMonNac() {
         return boletosMonNac;
     }

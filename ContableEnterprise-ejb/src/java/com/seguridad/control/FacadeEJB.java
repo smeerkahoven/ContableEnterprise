@@ -108,6 +108,7 @@ public abstract class FacadeEJB implements DaoRemoteFacade {
 
     @Override
     public Entidad get(Entidad e) throws CRUDException {
+        
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

@@ -33,7 +33,7 @@ public class IngresoCajaEJB extends FacadeEJB implements IngresoCajaRemote {
         IngresoCaja ingreso = new IngresoCaja();
 
         ingreso.setFactorCambiario(nota.getFactorCambiario());
-        ingreso.setFechaEmision(nota.getFechaEmision());
+        ingreso.setFechaEmision(  nota.getFechaEmision());
         ingreso.setFechaInsert(DateContable.getCurrentDate());
         ingreso.setFormaPago(boleto.getFormaPago());
         ingreso.setIdNotaDebito(nota.getIdNotaDebito());

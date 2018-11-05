@@ -11,6 +11,7 @@ import com.configuracion.remote.CambioRemote;
 import com.seguridad.control.FacadeEJB;
 import com.seguridad.control.entities.Entidad;
 import com.seguridad.control.exception.CRUDException;
+import com.seguridad.utils.DateContable;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -26,6 +27,11 @@ public class CambioEJB extends FacadeEJB implements CambioRemote {
 
     @PersistenceContext
     private EntityManager em;
+
+    public CambioEJB() {
+        findAll = "CambioDolar.findAll";
+    }
+    
 
     @Override
     public void update(Entidad e) throws CRUDException {
@@ -92,7 +98,7 @@ public class CambioEJB extends FacadeEJB implements CambioRemote {
     @Override
     public CambioDolar get(String fecha, String query) {
         Query q = em.createNamedQuery(query);
-        q.setParameter("fecha", fecha);
+        q.setParameter("fecha", DateContable.toLatinAmericaDateFormat(fecha));
 
         return (CambioDolar) q.getSingleResult();
     }

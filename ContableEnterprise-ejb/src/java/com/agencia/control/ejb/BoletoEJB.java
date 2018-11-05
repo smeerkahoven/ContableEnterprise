@@ -29,8 +29,10 @@ import com.contabilidad.remote.NotaDebitoRemote;
 import com.seguridad.control.FacadeEJB;
 import com.seguridad.control.entities.Entidad;
 import com.seguridad.control.exception.CRUDException;
+import com.seguridad.utils.Accion;
 import com.seguridad.utils.ComboSelect;
 import com.seguridad.utils.DateContable;
+import com.seguridad.utils.Operacion;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -86,11 +88,13 @@ public class BoletoEJB extends FacadeEJB implements BoletoRemote {
         Query q = em.createNamedQuery("Boleto.findNroBoleto", Boleto.class);
         System.out.println("Numero Boleto :" + b.getNumero());
         q.setParameter("numero", b.getNumero());
-        q.setParameter("list", Boleto.Estado.EMITIDO);
+        /*q.setParameter("list", Boleto.Estado.EMITIDO);
         q.setParameter("list", Boleto.Estado.VOID);
-        q.setParameter("list", Boleto.Estado.PENDIENTE);
+        q.setParameter("list", Boleto.Estado.PENDIENTE);*/
 
         List l = q.getResultList();
+
+        System.out.println("Lista de BOletos : " + l.size());
         return !l.isEmpty();
 
     }
@@ -648,9 +652,9 @@ public class BoletoEJB extends FacadeEJB implements BoletoRemote {
         }
         String q = "SELECT b FROM Boleto b WHERE b.idEmpresa=:idEmpresa ";
 
-        op = Optional.ofNullable(search.getCliente());
+        op = Optional.ofNullable(search.getNumeroBoleto());
         if (op.isPresent()) {
-            q += " AND b.idCliente=:idCliente";
+            q += " AND b.numero=:numero";
         }
 
         op = Optional.ofNullable(search.getAerolinea());
@@ -670,9 +674,9 @@ public class BoletoEJB extends FacadeEJB implements BoletoRemote {
 
         Query query = em.createQuery(q, BoletoSearch.class);
 
-        op = Optional.ofNullable(search.getCliente());
+        op = Optional.ofNullable(search.getNumeroBoleto());
         if (op.isPresent()) {
-            query.setParameter("idCliente", new Cliente(search.getCliente()));
+            query.setParameter("numero", search.getNumeroBoleto());
         }
 
         op = Optional.ofNullable(search.getAerolinea());
@@ -859,4 +863,33 @@ public class BoletoEJB extends FacadeEJB implements BoletoRemote {
 
     }
 
+    @Override
+    public Boleto isBoletoRegistradoOrigen(Boleto b) throws CRUDException {
+
+        Query q = em.createNamedQuery("Boleto.findNroBoletoE", Boleto.class);
+        q.setParameter("numero", b.getNumero());
+        q.setParameter("estado", Boleto.Estado.EMITIDO);
+
+        List l = q.getResultList();
+
+        if (l.isEmpty()) {
+            return new Boleto(0);
+        }
+
+        return (Boleto) l.get(0);
+
+    }
+
+    @Override
+    public List<Boleto> getBoletosAmadeusCargados(Integer idEmpresa) throws CRUDException {
+
+        Query q = em.createNamedQuery("Boleto.getAllAmadeusAutomaticos", Boleto.class);
+        q.setParameter("idEmpresa", idEmpresa);
+
+        List l = q.getResultList();
+
+        return l;
+    }
+
+   
 }

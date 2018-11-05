@@ -7,8 +7,6 @@ package com.configuracion.entities;
 
 import com.seguridad.control.entities.Entidad;
 import com.seguridad.control.exception.CRUDException;
-import java.io.Serializable;
-import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -54,6 +52,11 @@ public class Parametros extends Entidad {
     
     //------------boletaje------------------------------------//
     public static final String PORCENTAJE_COMISION = "PORCENTAJE_COMISION";
+    
+    //------------archivos------------------------------------//
+    public static final String FOLDER_FILES_AMADEUS="FOLDER_FILES_AMADEUS";
+    public static final String FOLDER_FILES_SABRE="FOLDER_FILES_SABRE";
+    
     
     private static final long serialVersionUID = 1L;
     @Id

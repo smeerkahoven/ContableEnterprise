@@ -5,7 +5,6 @@
  */
 package com.agencia.search.dto;
 
-import com.seguridad.utils.ComboSelect;
 import java.io.Serializable;
 
 /**
@@ -14,7 +13,7 @@ import java.io.Serializable;
  */
 public class BoletoSearchForm implements Serializable {
 
-    private Integer cliente;
+    private Integer numeroBoleto;
 
     private Integer aerolinea;
 
@@ -24,6 +23,16 @@ public class BoletoSearchForm implements Serializable {
 
     private Integer idEmpresa;
 
+    private Integer notaDebito;
+
+    public Integer getNotaDebito() {
+        return notaDebito;
+    }
+
+    public void setNotaDebito(Integer notaDebito) {
+        this.notaDebito = notaDebito;
+    }
+
     public Integer getIdEmpresa() {
         return idEmpresa;
     }
@@ -32,12 +41,12 @@ public class BoletoSearchForm implements Serializable {
         this.idEmpresa = idEmpresa;
     }
 
-    public Integer getCliente() {
-        return cliente;
+    public Integer getNumeroBoleto() {
+        return numeroBoleto;
     }
 
-    public void setCliente(Integer cliente) {
-        this.cliente = cliente;
+    public void setNumeroBoleto(Integer numeroBoleto) {
+        this.numeroBoleto = numeroBoleto;
     }
 
     public Integer getAerolinea() {

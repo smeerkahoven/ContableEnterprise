@@ -48,6 +48,7 @@ public class Queries {
 
     //Boletos
     public final static String GET_BANCOS_CUENTAS_EMPRESA = "GET_BANCOS_CUENTAS_EMPRESA";
+    public final static String GET_NOTA_DEBITO_BOLETOS = "GET_NOTA_DEBITO_BOLETOS";
 
     private static Queries queries;
 

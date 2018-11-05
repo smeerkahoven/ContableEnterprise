@@ -26,7 +26,29 @@ public class DateContable {
 
     public static final String LATIN_AMERICA_FORMAT = "dd/MM/yyyy";
     public static final String LATIN_AMERICA_TIME_FORMAT = "dd/MM/yyyy HH:mm:ss";
+    public static final String AMADEUS_D_TAG_DATE = "yyMMdd" ;
+    public static final String AMADEUS_D_TAG_H_DATE = "ddMMMyyyy" ;
 
+    public static final String fromFormatToOtherFormat(String date, String fromFormat, String toFormat) {
+
+        try {
+            SimpleDateFormat from = new SimpleDateFormat(fromFormat);
+
+            Date fromDate = from.parse(date);
+            System.out.println(fromDate);
+
+            return new SimpleDateFormat(toFormat).format(fromDate);
+            
+        } catch (ParseException ex) {
+            Logger.getLogger(DateContable.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return "";
+    }
+
+    /**
+     * Devuelve en formato dd/MM/yyyy HH:mm:ss la fecha actual
+     * @return 
+     */
     public static String getCurrentDateStr() {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
@@ -40,13 +62,17 @@ public class DateContable {
     }
 
     public static Date toLatinAmericaDateFormat(String date) {
-        
+
         Optional op = Optional.ofNullable(date);
-        
-        if (!op.isPresent()){
-            return null ;
+
+        if (!op.isPresent()) {
+            return null;
         }
-        
+
+        if (date.length() == 0) {
+            return null;
+        }
+
         try {
             SimpleDateFormat formatter = new SimpleDateFormat(LATIN_AMERICA_FORMAT);
             Date parseDAte = formatter.parse(date);
@@ -73,7 +99,6 @@ public class DateContable {
         return newDate;
     }
 
-    
     public static Integer getPartitionDateInt(String strDate) {
         //for strdate = 2017 July 25
 
@@ -87,6 +112,7 @@ public class DateContable {
 
         return Integer.parseInt(newDate);
     }
+
     /**
      *
      * @return
@@ -100,7 +126,7 @@ public class DateContable {
     public DateContable() {
     }
 
-   public static String getDateFormat(Date date, String format) {
+    public static String getDateFormat(Date date, String format) {
         if (date == null) {
             return "";
         }
@@ -108,12 +134,8 @@ public class DateContable {
     }
 
     public static void main(String args[]) {
-            System.out.println(DateContable.getPartitionDate(DateContable.getCurrentDateStr(LATIN_AMERICA_FORMAT)));
-            Date d = new Date("2018-08-21T04:00:00Z[UTC]");
-            
-            SimpleDateFormat simple = new SimpleDateFormat(LATIN_AMERICA_FORMAT);
-            simple.format(d);
-            
-            
+
+        System.out.println(fromFormatToOtherFormat("180427", "yyMMdd", "dd/MM/yyyy"));
+
     }
 }

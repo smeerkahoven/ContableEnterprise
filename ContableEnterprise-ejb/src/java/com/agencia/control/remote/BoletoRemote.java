@@ -7,6 +7,7 @@ package com.agencia.control.remote;
 
 import com.agencia.entities.Boleto;
 import com.agencia.search.dto.BoletoSearchForm;
+import com.contabilidad.entities.NotaDebito;
 import com.seguridad.control.entities.Entidad;
 import com.seguridad.control.exception.CRUDException;
 import com.seguridad.control.remote.DaoRemoteFacade;
@@ -43,6 +44,8 @@ public interface BoletoRemote extends DaoRemoteFacade {
     public List getTipoEmision() throws CRUDException;
 
     public boolean isBoletoRegistrado(Boleto b) throws CRUDException;
+    
+    public Boleto isBoletoRegistradoOrigen(Boleto b) throws CRUDException;
 
     public Boleto procesarBoleto(Boleto b) throws CRUDException;
 
@@ -87,4 +90,15 @@ public interface BoletoRemote extends DaoRemoteFacade {
      * @throws CRUDException 
      */
     public Boleto anular( Boleto boleto) throws CRUDException ;
+    
+    /**
+     * Busqueda en la cnt_boletos de los boletos AM=AMADEUS con estado C=CARAGADO AUTOMATICO
+     * para poder anexarlo a una nota de debito
+     * @param idEmpresa
+     * @return
+     * @throws CRUDException 
+     */
+    public List<Boleto> getBoletosAmadeusCargados(Integer idEmpresa) throws CRUDException ;
+    
+
 }
