@@ -46,6 +46,13 @@ import javax.xml.bind.annotation.XmlRootElement;
             @StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_boleto")
         }
 )
+@NamedStoredProcedureQuery(
+        name = "ComprobanteContable.updateMontosComprobanteContableFromAsientos",
+        procedureName = "updateMontosComprobanteContableFromAsientos",
+        parameters = {
+            @StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_libro")
+        }
+)
 @NamedQueries({
     @NamedQuery(name = "ComprobanteContable.findAll", query = "SELECT c FROM ComprobanteContable c")
     ,

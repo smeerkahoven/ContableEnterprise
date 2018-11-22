@@ -21,7 +21,37 @@ public class AsociacionBoletoNotaDebitoJSON implements Serializable {
 
     private Integer idCliente;
 
+    private Integer idPromotor;
+
     private BigDecimal factor;
+
+    private String fechaEmision;
+
+    private String estado;
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    public String getFechaEmision() {
+        return fechaEmision;
+    }
+
+    public void setFechaEmision(String fechaEmision) {
+        this.fechaEmision = fechaEmision;
+    }
+
+    public Integer getIdPromotor() {
+        return idPromotor;
+    }
+
+    public void setIdPromotor(Integer idPromotor) {
+        this.idPromotor = idPromotor;
+    }
 
     public BigDecimal getFactor() {
         return factor;
@@ -30,7 +60,6 @@ public class AsociacionBoletoNotaDebitoJSON implements Serializable {
     public void setFactor(BigDecimal factor) {
         this.factor = factor;
     }
-
 
     public Integer getIdCliente() {
         return idCliente;

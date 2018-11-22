@@ -32,6 +32,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "User.findUserName", query = "SELECT u FROM User u WHERE u.userName=:user_name"),
     @NamedQuery(name = "User.findAll", query = "SELECT u FROM User u"),
     @NamedQuery(name = "User.activate" , query = "UPDATE User u SET u.status='ACTIVO'  WHERE u.userName=:p"),
+    @NamedQuery(name = "User.update" , query = "UPDATE User u SET u.status=:s, u.idRol=:r  WHERE u.userName=:p"),
     @NamedQuery(name = "User.deactivate" , query = "UPDATE User u SET u.status='INACTIVO'  WHERE u.userName=:p"),
         @NamedQuery(name = "User.updatePassword" , query = "UPDATE User u SET u.password=:password  WHERE u.userName=:userName")
 })

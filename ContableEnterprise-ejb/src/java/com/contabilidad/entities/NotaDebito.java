@@ -9,9 +9,7 @@ import com.agencia.entities.Cliente;
 import com.agencia.entities.Promotor;
 import com.seguridad.control.entities.Entidad;
 import com.seguridad.control.exception.CRUDException;
-import com.seguridad.utils.DateContable;
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -46,6 +44,10 @@ import javax.xml.bind.annotation.XmlRootElement;
         parameters = {
             @StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_nota_debito")
             ,@StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_boleto")
+            ,@StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_cliente")
+            ,@StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_counter")
+            ,@StoredProcedureParameter(mode = ParameterMode.IN, type = BigDecimal.class, name = "in_factor")
+            ,@StoredProcedureParameter(mode = ParameterMode.IN, type = String.class, name = "in_usuario_creador")
             ,@StoredProcedureParameter(mode = ParameterMode.OUT, type = Integer.class, name = "out_id_transacion")
         }
 )
@@ -113,8 +115,6 @@ public class NotaDebito extends Entidad {
     private BigDecimal factorCambiario;
     @Column(name = "forma_pago")
     private String formaPago;
-    @Column(name = "tipo_contado")
-    private String tipoContado;
     @Column(name = "id_banco")
     private Integer idBanco;
     @Column(name = "nro_cheque")
@@ -251,14 +251,6 @@ public class NotaDebito extends Entidad {
 
     public void setFormaPago(String formaPago) {
         this.formaPago = formaPago;
-    }
-
-    public String getTipoContado() {
-        return tipoContado;
-    }
-
-    public void setTipoContado(String tipoContado) {
-        this.tipoContado = tipoContado;
     }
 
     public Integer getIdBanco() {

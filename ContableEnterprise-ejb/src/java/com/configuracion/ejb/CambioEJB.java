@@ -31,7 +31,6 @@ public class CambioEJB extends FacadeEJB implements CambioRemote {
     public CambioEJB() {
         findAll = "CambioDolar.findAll";
     }
-    
 
     @Override
     public void update(Entidad e) throws CRUDException {
@@ -100,12 +99,24 @@ public class CambioEJB extends FacadeEJB implements CambioRemote {
         Query q = em.createNamedQuery(query);
         q.setParameter("fecha", DateContable.toLatinAmericaDateFormat(fecha));
 
-        return (CambioDolar) q.getSingleResult();
+        if (q.getResultList().size() > 1) {
+            return (CambioDolar) q.getSingleResult();
+        }
+
+        return null;
     }
 
     @Override
     public List get() throws CRUDException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        Query q = em.createNamedQuery("CambioDolar.findAll");
+        
+        if (q.getResultList().size() >0 ){
+            return q.getResultList();
+        }
+        
+        return null ;
+        
     }
 
 }

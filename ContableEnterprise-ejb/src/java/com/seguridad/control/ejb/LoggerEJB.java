@@ -69,4 +69,17 @@ public class LoggerEJB extends FacadeEJB implements LoggerRemote {
         return true ;
     }
 
+    @Override
+    public boolean add(Accion accion, String usuario, String formulario, String ip, String comentario) throws CRUDException {
+        Log l = new Log();
+        l.setAccion(accion.getValue());
+        l.setUsuario(usuario);
+        l.setFormulario(formulario);
+        l.setIp(ip);
+        l.setFechaLog(DateContable.getCurrentDate());
+        l.setComentario(comentario);
+        return add(l);
+    }
+
+    
 }

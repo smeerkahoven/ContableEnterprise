@@ -22,7 +22,7 @@ public class NotaDebitoJSON {
     private Integer gestion;
     private Integer idEmpresa;
     private ComboSelect idCliente;
-    private ComboSelect idCounter;
+    private ComboSelect idPromotor;
     private String fechaEmision;
     private String fechaInsert;
     private BigDecimal montoTotalBs;
@@ -31,7 +31,6 @@ public class NotaDebitoJSON {
     private BigDecimal montoAdeudadoUsd;
     private BigDecimal factorCambiario;
     private String formaPago;
-    private String tipoContado;
     private Integer idBanco;
     private String nroCheque;
     private String nroDeposito;
@@ -66,7 +65,7 @@ public class NotaDebitoJSON {
         }
 
         if (nota.getIdCounter() != null) {
-            ndj.setIdCounter(new ComboSelect(nota.getIdCounter().getIdPromotor(), nota.getIdCounter().getNombre() + " " + nota.getIdCounter().getApellido()));
+            ndj.setIdPromotor(new ComboSelect(nota.getIdCounter().getIdPromotor(), nota.getIdCounter().getNombre() + " " + nota.getIdCounter().getApellido()));
         }
         
         ndj.setIdCuentaDeposito(nota.getIdCuentaDeposito());
@@ -81,7 +80,6 @@ public class NotaDebitoJSON {
         ndj.setNroCheque(nota.getNroCheque());
         ndj.setNroDeposito(nota.getNroDeposito());
         ndj.setNroTarjeta(nota.getNroTarjeta());
-        ndj.setTipoContado(nota.getTipoContado());
         ndj.setEstado(nota.getEstado());
         
         return ndj;
@@ -102,12 +100,25 @@ public class NotaDebitoJSON {
         ndj.setGestion(nota.getGestion());
         ndj.setIdBanco(nota.getIdBanco());
         if (nota.getIdCliente() != null) {
-            ndj.setIdCliente(new Cliente((Integer)nota.getIdCliente().getId()));
+            if (nota.getIdCliente().getId() instanceof Double){
+                Double d = (Double)nota.getIdCliente().getId() ;
+                ndj.setIdCliente(new Cliente(d.intValue()));
+            }else if (nota.getIdCliente().getId() instanceof BigDecimal){
+                BigDecimal d = (BigDecimal)nota.getIdCliente().getId() ;
+                ndj.setIdCliente(new Cliente(d.intValue()));
+            }
         }
 
-        if (nota.getIdCounter() != null) {
-            ndj.setIdCounter(new Promotor((Integer)nota.getIdCounter().getId()));
+        if (nota.getIdPromotor()!= null) {
+            if (nota.getIdPromotor().getId() instanceof Double){
+                Double d = (Double)nota.getIdPromotor().getId() ;
+                ndj.setIdCounter(new Promotor(d.intValue()));
+            }else if (nota.getIdPromotor().getId() instanceof BigDecimal){
+                BigDecimal d = (BigDecimal)nota.getIdPromotor().getId() ;
+                ndj.setIdCounter(new Promotor(d.intValue()));
+            }
         }
+
         
         ndj.setIdCuentaDeposito(nota.getIdCuentaDeposito());
         ndj.setIdEmpresa(nota.getIdEmpresa());
@@ -121,7 +132,6 @@ public class NotaDebitoJSON {
         ndj.setNroCheque(nota.getNroCheque());
         ndj.setNroDeposito(nota.getNroDeposito());
         ndj.setNroTarjeta(nota.getNroTarjeta());
-        ndj.setTipoContado(nota.getTipoContado());
         ndj.setEstado(nota.getEstado());
         
         return ndj;
@@ -169,13 +179,15 @@ public class NotaDebitoJSON {
         this.idCliente = idCliente;
     }
 
-    public ComboSelect getIdCounter() {
-        return idCounter;
+    public ComboSelect getIdPromotor() {
+        return idPromotor;
     }
 
-    public void setIdCounter(ComboSelect idCounter) {
-        this.idCounter = idCounter;
+    public void setIdPromotor(ComboSelect idPromotor) {
+        this.idPromotor = idPromotor;
     }
+
+
 
     public String getFechaEmision() {
         return fechaEmision;
@@ -239,14 +251,6 @@ public class NotaDebitoJSON {
 
     public void setFormaPago(String formaPago) {
         this.formaPago = formaPago;
-    }
-
-    public String getTipoContado() {
-        return tipoContado;
-    }
-
-    public void setTipoContado(String tipoContado) {
-        this.tipoContado = tipoContado;
     }
 
     public Integer getIdBanco() {

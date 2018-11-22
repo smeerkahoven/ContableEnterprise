@@ -34,7 +34,7 @@ import javax.validation.constraints.Size;
     @NamedQuery(name = "ArchivoBoleto.findAll", query = "SELECT a FROM ArchivoBoleto a")
     , @NamedQuery(name = "ArchivoBoleto.findById", query = "SELECT a FROM ArchivoBoleto a WHERE a.idArchivoBoleto = :idArchivoBoleto")
     , @NamedQuery(name = "ArchivoBoleto.findByNombreArchivo", query = "SELECT a FROM ArchivoBoleto a WHERE a.nombreArchivo = :nombreArchivo")
-    , @NamedQuery(name = "ArchivoBoleto.findByEstadoCreado", query = "SELECT a FROM ArchivoBoleto a WHERE a.estado = :estado")
+    , @NamedQuery(name = "ArchivoBoleto.findByEstadoCreado", query = "SELECT a FROM ArchivoBoleto a WHERE a.estado = :estado ORDER BY a.idArchivoBoleto")
     , @NamedQuery(name = "ArchivoBoleto.updateEstado", query = "UPDATE ArchivoBoleto a SET a.estado=:estado WHERE a.idArchivoBoleto=:idArchivoBoleto")
     , @NamedQuery(name = "ArchivoBoleto.findByTipoArchivo", query = "SELECT a FROM ArchivoBoleto a WHERE a.tipoArchivo = :tipoArchivo")})
 public class ArchivoBoleto extends Entidad {
@@ -48,6 +48,7 @@ public class ArchivoBoleto extends Entidad {
     public class  Estado {
         public static final String CREADO="C" ;
         public static final String PROCESADO = "P";
+        public static final String ERROR = "E";
     }
 
     private static final long serialVersionUID = 1L;

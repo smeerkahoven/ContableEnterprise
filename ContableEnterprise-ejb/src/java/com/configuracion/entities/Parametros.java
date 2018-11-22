@@ -32,6 +32,10 @@ public class Parametros extends Entidad {
     public static final String COMBO_CUENTA_VENTAS_AEROLINEA = "COMBO_CUENTA_VENTAS_AEROLINEA";
     public static final String COMBO_CUENTA_COMISIONES_AEROLINEA = "COMBO_CUENTA_COMISIONES_AEROLINEA";
     public static final String COMBO_CUENTA_DEVOLUCIONES_AEROLINEA = "COMBO_CUENTA_DEVOLUCIONES_AEROLINEA";
+    public static final String COMBO_CUENTA_PASIVO_MAYORISTAS = "COMBO_CUENTA_PASIVO_MAYORISTAS";
+    public static final String COMBO_CUENTA_COMISION_AGENCIA = "COMBO_CUENTA_COMISION_AGENCIA";
+    public static final String COMBO_CUENTA_COMISION_PROMOTOR = "COMBO_CUENTA_COMISION_PROMOTOR";
+    //-------------------------------------------------//
     public static final String URL_CAMBIO_UFV = "URL_CAMBIO_UFV";
     public static final String URL_CAMBIO_DOLAR = "URL_CAMBIO_DOLAR";
     //------------SISTEMA------------------------------//

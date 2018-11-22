@@ -50,6 +50,8 @@ public class Queries {
     public final static String GET_BANCOS_CUENTAS_EMPRESA = "GET_BANCOS_CUENTAS_EMPRESA";
     public final static String GET_NOTA_DEBITO_BOLETOS = "GET_NOTA_DEBITO_BOLETOS";
 
+    public final static String UPDATE_NOTA_DEBITO_ESTADO="UPDATE_NOTA_DEBITO_ESTADO" ;
+    
     private static Queries queries;
 
     private Properties prop = new Properties();

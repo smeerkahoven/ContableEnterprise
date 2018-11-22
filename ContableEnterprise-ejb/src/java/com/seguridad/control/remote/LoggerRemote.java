@@ -23,6 +23,8 @@ public interface LoggerRemote extends Serializable {
     public boolean add(Log l) throws CRUDException;
     
     public boolean add(Accion accion, String usuario, String formulario, String ip) throws CRUDException ;
+    
+    public boolean add(Accion accion, String usuario, String formulario, String ip, String comentario) throws CRUDException ;
 
     public List<Log> getAllFrom(Log l) throws CRUDException ;
     

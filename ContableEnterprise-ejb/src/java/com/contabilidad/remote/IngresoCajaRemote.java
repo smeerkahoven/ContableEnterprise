@@ -44,13 +44,17 @@ public interface IngresoCajaRemote extends DaoRemoteFacade {
     @Override
     public void remove(String nativeQuery, HashMap<String, Object> parameters) throws CRUDException;
 
-    public IngresoCaja createIngresoCaja(final LinkedList<Boleto> boleto, final NotaDebito nota,
-            final LinkedList<NotaDebitoTransaccion> transacciones) throws CRUDException;
-
     public IngresoCaja createIngresoCaja(final Boleto boleto, final NotaDebito nota) throws CRUDException;
+    
+    public IngresoCaja createIngresoCaja(final NotaDebito nota) throws CRUDException;
 
     public IngresoTransaccion createIngresoCajaTransaccion(final Boleto boleto, final NotaDebito nota,
             final NotaDebitoTransaccion transacciones, IngresoCaja ingreso) throws CRUDException;
+    
+    public IngresoTransaccion createIngresoCajaTransaccion(NotaDebitoTransaccion nt,
+            NotaDebito nota, IngresoCaja ingreso) throws CRUDException ;
 
-    public void anularTransaccion(Boleto boleto);
+    public void anularTransaccion(Boleto boleto) throws CRUDException;
+    
+    public void actualizarMontosFinalizar(IngresoCaja caja) throws CRUDException ;
 }

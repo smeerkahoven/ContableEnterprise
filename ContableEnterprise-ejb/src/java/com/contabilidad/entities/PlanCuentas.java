@@ -88,6 +88,10 @@ public class PlanCuentas extends Entidad {
 
     @Transient
     private String idPlanCuentaPadreNombre;
+    
+    public PlanCuentas(Integer idPlanCuentas) {
+        this.idPlanCuentas = idPlanCuentas;
+    }
 
     public String getComodin() {
         return comodin;

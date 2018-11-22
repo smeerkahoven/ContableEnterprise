@@ -27,6 +27,10 @@ public class FormularioJSON implements Comparable {
     private int rolEliminar;
     private int rolAcceder;
     private int rolBuscar;
+    private int rolEjecutar;
+    private int rolVer;
+    private int rolAnular;
+    private int rolEditar;
 
     public FormularioJSON(Object[] o) {
         this.idFormulario = (int) o[4];
@@ -37,9 +41,14 @@ public class FormularioJSON implements Comparable {
         this.rolEliminar = (o[9] == null) ? -1 : (o[9] instanceof Long ? Long.signum((Long) o[9]) : (int) o[9]);
         this.rolAcceder = (o[10] == null) ? -1 : (o[10] instanceof Long ? Long.signum((Long) o[10]) : (int) o[10]);
         this.rolBuscar = (o[11] == null) ? -1 : (o[11] instanceof Long ? Long.signum((Long) o[11]) : (int) o[11]);
+        this.rolVer = (o[12] == null) ? -1 : (o[12] instanceof Long ? Long.signum((Long) o[12]) : (int) o[12]);
+        this.rolEditar = (o[13] == null) ? -1 : (o[13] instanceof Long ? Long.signum((Long) o[13]) : (int) o[13]);
+        this.rolAnular = (o[14] == null) ? -1 : (o[14] instanceof Long ? Long.signum((Long) o[14]) : (int) o[14]);
+        this.rolEjecutar = (o[15] == null) ? -1 : (o[15] instanceof Long ? Long.signum((Long) o[15]) : (int) o[15]);
 
-        if (o.length > 12) {
-            this.idRolFormulario = (o[12] == null ? -1 : (int) o[12]);
+        if (o.length > 16) {
+            this.idRolFormulario = (o[16] == null ? -1 : (int) o[16]);
+
         }
 
     }
@@ -55,6 +64,38 @@ public class FormularioJSON implements Comparable {
         r.setEliminar(new Integer(f.getRolEliminar()).shortValue());
 
         return r;
+    }
+
+    public int getRolEjecutar() {
+        return rolEjecutar;
+    }
+
+    public void setRolEjecutar(int rolEjecutar) {
+        this.rolEjecutar = rolEjecutar;
+    }
+
+    public int getRolVer() {
+        return rolVer;
+    }
+
+    public void setRolVer(int rolVer) {
+        this.rolVer = rolVer;
+    }
+
+    public int getRolAnular() {
+        return rolAnular;
+    }
+
+    public void setRolAnular(int rolAnular) {
+        this.rolAnular = rolAnular;
+    }
+
+    public int getRolEditar() {
+        return rolEditar;
+    }
+
+    public void setRolEditar(int rolEditar) {
+        this.rolEditar = rolEditar;
     }
 
     public int getIdFormulario() {

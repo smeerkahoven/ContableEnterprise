@@ -99,10 +99,34 @@ public class ContabilidadBoletaje extends Entidad {
 
     @Column(name = "tarjeta_credito_bsp_haber_usd")
     private Integer tarjetaCreditoBspHaberUsd;
+    
+    
+    @Column(name = "otros_cargos_cliente_cobrar_debe_bs")
+    private Integer otroCargosClienteCobrarDebeBs;
+
+    @Column(name = "otros_cargos_cliente_cobrar_debe_usd")
+    private Integer otrosCargosClienteCobrarDebeUsd;
 
     public ContabilidadBoletaje() {
     }
 
+    public Integer getOtroCargosClienteCobrarDebeBs() {
+        return otroCargosClienteCobrarDebeBs;
+    }
+
+    public void setOtroCargosClienteCobrarDebeBs(Integer otroCargosClienteCobrarDebeBs) {
+        this.otroCargosClienteCobrarDebeBs = otroCargosClienteCobrarDebeBs;
+    }
+
+    public Integer getOtrosCargosClienteCobrarDebeUsd() {
+        return otrosCargosClienteCobrarDebeUsd;
+    }
+
+    public void setOtrosCargosClienteCobrarDebeUsd(Integer otrosCargosClienteCobrarDebeUsd) {
+        this.otrosCargosClienteCobrarDebeUsd = otrosCargosClienteCobrarDebeUsd;
+    }
+
+    
     public Integer getCuentaEfectivoNoBspDebeBs() {
         return cuentaEfectivoNoBspDebeBs;
     }

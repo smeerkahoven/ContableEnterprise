@@ -18,9 +18,11 @@ import com.configuracion.remote.CambioRemote;
 import com.contabilidad.entities.Moneda;
 import com.seguridad.control.FacadeEJB;
 import com.seguridad.control.exception.CRUDException;
+import com.seguridad.utils.Contabilidad;
 import com.seguridad.utils.DateContable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
@@ -89,22 +91,22 @@ public class AmadeusFileEJB extends FacadeEJB implements AmadeusFileRemote {
     private CambioRemote ejbCambio;
 
     @Override
-    public void procesarArchivoAmadeus(final ArchivoBoleto archivoBoleto) throws CRUDException {
+    public boolean procesarArchivo(final ArchivoBoleto archivoBoleto) throws CRUDException {
         System.out.println("Procesando Archivo:" + archivoBoleto.getNombreArchivo());
-        
+
         impuestos.clear();
         pasajeros.clear();
-        ruta1 = null ;
-        ruta2 = null ;
-        ruta3 = null ;
-        ruta4 = null ; 
-        ruta5 = null ;
-        aerolinea = null ;
-        
-        fechaEmision = null ;
-        fechaViaje = null ;
-        importeNeto = null ;
-        totalBoleto = null ;
+        ruta1 = null;
+        ruta2 = null;
+        ruta3 = null;
+        ruta4 = null;
+        ruta5 = null;
+        aerolinea = null;
+
+        fechaEmision = null;
+        fechaViaje = null;
+        importeNeto = null;
+        totalBoleto = null;
 
         String[] line = archivoBoleto.getContenido().split(CARRIER);
         int i = 0;
@@ -261,6 +263,11 @@ public class AmadeusFileEJB extends FacadeEJB implements AmadeusFileRemote {
 
                         String code = lineColumn[0].substring(3, 6);
                         aerolinea = findAerolinea(code, archivoBoleto);
+
+                        op = Optional.ofNullable(aerolinea);
+                        if (!op.isPresent()) {
+                            return false;
+                        }
                         /*HashMap<String, String> parameters = new HashMap<>();
                         parameters.put("iata", code);
                         List l = get("Aerolinea.findByIata", Aerolinea.class, parameters);
@@ -350,6 +357,8 @@ public class AmadeusFileEJB extends FacadeEJB implements AmadeusFileRemote {
             crearLogArchivo(archivoBoleto.getNombreArchivo(), archivoBoleto.getTipoArchivo(), "", FILE_IMR_PROCESSED, LogArchivos.Tipo.WARNING);
         }
 
+        return true;
+
     }
 
     private Aerolinea findAerolinea(String code, final ArchivoBoleto archivoBoleto
@@ -361,7 +370,7 @@ public class AmadeusFileEJB extends FacadeEJB implements AmadeusFileRemote {
         if (l.isEmpty()) {
             String msg = CANT_PROCESS_AIRLINE_EXISTS.replace("<file>", archivoBoleto.getNombreArchivo());
             msg = msg.replace("<code>", code);
-            crearLogArchivo(archivoBoleto.getNombreArchivo(), archivoBoleto.getTipoArchivo(), tipoBoleto, msg, LogArchivos.Tipo.ERROR);
+            crearLogArchivo(archivoBoleto.getNombreArchivo(), archivoBoleto.getTipoArchivo(), "", msg, LogArchivos.Tipo.ERROR);
 
         } else {
             return (Aerolinea) l.get(0);
@@ -402,7 +411,7 @@ public class AmadeusFileEJB extends FacadeEJB implements AmadeusFileRemote {
                     List l = ejbCambio.get();
                     if (l.isEmpty()) {
                         crearLogArchivo(archivo.getNombreArchivo(), archivo.getTipoArchivo(), entry.getValue().getNumero().toString(),
-                                FILE_7A_NUMBER_TICKET_EXIST, LogArchivos.Tipo.ERROR);
+                                FILE_7A_NO_DOLAR_CAMBIO, LogArchivos.Tipo.ERROR);
                         return false;
                     } else {
                         //Tomamos
@@ -448,15 +457,20 @@ public class AmadeusFileEJB extends FacadeEJB implements AmadeusFileRemote {
                 } else if (imp.getKey().equals("QM")) {
                     b.setImpuestoQm(imp.getValue());
                 } else if (b.getImpuesto1() == null) {
+                    b.setImpuesto1nombre(imp.getKey());
                     b.setImpuesto1(imp.getValue());
                 } else if (b.getImpuesto2() == null) {
-                    b.setImpuesto2(importeNeto);
+                    b.setImpuesto2nombre(imp.getKey());
+                    b.setImpuesto2(imp.getValue());
                 } else if (b.getImpuesto3() == null) {
-                    b.setImpuesto2(importeNeto);
+                    b.setImpuesto3nombre(imp.getKey());
+                    b.setImpuesto2(imp.getValue());
                 } else if (b.getImpuesto4() == null) {
-                    b.setImpuesto2(importeNeto);
+                    b.setImpuesto4nombre(imp.getKey());
+                    b.setImpuesto2(imp.getValue());
                 } else if (b.getImpuesto5() == null) {
-                    b.setImpuesto2(importeNeto);
+                    b.setImpuesto5nombre(imp.getKey());
+                    b.setImpuesto2(imp.getValue());
                 }
 
             }
@@ -464,6 +478,42 @@ public class AmadeusFileEJB extends FacadeEJB implements AmadeusFileRemote {
             b.setTotalBoleto(totalBoleto);
             b.setTotalMontoCancelado(totalBoleto);
 
+            // Saca la comision del Boleto de acuerdo a la linea aerea
+            if (b.getTipoCupon().equals(Boleto.Cupon.INTERNACIONAL)) {
+                if (aerolinea.getComisionPromIntTipo() != null) {
+                    Double valor = 0d ;
+                    if (aerolinea.getComisionPromIntTipo().equals(Aerolinea.Comision.NETO)) {
+                        valor = b.getImporteNeto().doubleValue();
+                    } else if (aerolinea.getComisionPromIntTipo().equals(Aerolinea.Comision.TOTAL)) {
+                        valor = b.getTotalBoleto().doubleValue();
+                    }
+
+                    if (aerolinea.getComisionPromInt() != null) {
+                        Double comision = aerolinea.getComisionPromInt().doubleValue();
+                        Double total = (valor * comision) / 100;
+
+                        b.setComision(aerolinea.getComisionPromInt());
+                        b.setMontoComision(new BigDecimal(total).setScale(Contabilidad.VALOR_REDONDEO,RoundingMode.HALF_DOWN));
+                    }
+                }
+            } else if (b.getTipoCupon().equals(Boleto.Cupon.NACIONAL)) {
+                if (aerolinea.getComisionPromNacTipo() != null) {
+                    Double valor = 0d ;
+                    if (aerolinea.getComisionPromNacTipo().equals(Aerolinea.Comision.NETO)) {
+                        valor = b.getImporteNeto().doubleValue();
+                    } else if (aerolinea.getComisionPromNacTipo().equals(Aerolinea.Comision.TOTAL)) {
+                        valor = b.getTotalBoleto().doubleValue();
+                    }
+
+                    if (aerolinea.getComisionPromNac() != null) {
+                        Double comision = aerolinea.getComisionPromNac().doubleValue();
+                        Double total = (valor * comision) / 100;
+
+                        b.setComision(aerolinea.getComisionPromNac());
+                        b.setMontoComision(new BigDecimal(total).setScale(Contabilidad.VALOR_REDONDEO,RoundingMode.HALF_DOWN));
+                    }
+                }
+            }
             try {
                 //creamos el boleto
                 insert(b);

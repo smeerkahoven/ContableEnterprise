@@ -25,6 +25,8 @@ public interface DaoRemoteFacade {
     public Entidad get(Entidad e) throws CRUDException;
 
     public Entidad get(String q) throws CRUDException;
+    
+    public Entidad get(Integer id, Class<?> typeClass) throws CRUDException ;
 
     public List get() throws CRUDException;
 

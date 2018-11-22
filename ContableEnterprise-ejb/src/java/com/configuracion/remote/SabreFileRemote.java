@@ -18,7 +18,7 @@ import javax.ejb.Remote;
  * @author xeio
  */
 @Remote
-public interface AmadeusFileRemote extends DaoRemoteFacade{
+public interface SabreFileRemote extends DaoRemoteFacade {
 
     @Override
     public int insert(Entidad e) throws CRUDException;
@@ -28,6 +28,6 @@ public interface AmadeusFileRemote extends DaoRemoteFacade{
 
     @Override
     public List get(String namedQuery, Class<?> typeClass, HashMap parameters) throws CRUDException;
-    
-    public boolean procesarArchivo(final ArchivoBoleto boleto) throws CRUDException ;
+
+    public boolean procesarArchivo(final ArchivoBoleto boleto) throws CRUDException;
 }

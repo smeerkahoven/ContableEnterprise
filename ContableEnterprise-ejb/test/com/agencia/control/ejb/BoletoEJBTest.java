@@ -48,7 +48,7 @@ public class BoletoEJBTest {
         b.setTotalMontoCancelado(new BigDecimal(150));
         b.setMontoComision(new  BigDecimal(1.72));
         b.setFormaPago(FormasPago.CONTADO);
-        b.setContadoTipo(FormasPago.CONTADO_EFECTIVO);
+        b.setContadoTipo(FormasPago.EFECTIVO);
         
         return b ;
     }

@@ -7,7 +7,6 @@ package com.agencia.entities;
 
 import com.seguridad.control.entities.Entidad;
 import com.seguridad.control.exception.CRUDException;
-import java.io.Serializable;
 import java.math.BigDecimal;
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -41,17 +40,14 @@ public class Promotor extends Entidad  {
     @Basic(optional = false)
     @Column(name = "id_promotor")
     private Integer idPromotor;
-    
     @Column(name = "id_empresa")
     private Integer idEmpresa ;
-    
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 64)
     @Column(name = "nombre")
     private String nombre;
     @Basic(optional = false)
-    @NotNull
     @Size(min = 1, max = 64)
     @Column(name = "apellido")
     private String apellido;
@@ -90,13 +86,8 @@ public class Promotor extends Entidad  {
     @Column(name = "email")
     private String email;
     @Size(max = 1)
-    @Column(name = "sexo")
-    private String sexo;
-
-    @Size(max = 1)
     @Column(name = "tipo")
     private String tipo;
-
     @Size(max = 1)
     @Column(name = "estado")
     private String estado;
@@ -225,14 +216,6 @@ public class Promotor extends Entidad  {
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getSexo() {
-        return sexo;
-    }
-
-    public void setSexo(String sexo) {
-        this.sexo = sexo;
     }
 
     public String getTipo() {

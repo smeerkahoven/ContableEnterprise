@@ -50,7 +50,53 @@ public class Formulario implements Serializable {
     private String restful;
     private String status;
     private Integer idFormulario;
+    private Integer editar;
+    private Integer ejecutar;
+    private Integer anular ;
+    private Integer ver ;
+    private String fullPath;
 
+    public String getFullPath() {
+        return fullPath;
+    }
+
+    public void setFullPath(String fullPath) {
+        this.fullPath = fullPath;
+    }
+    
+    public Integer getEditar() {
+        return editar;
+    }
+
+    public void setEditar(Integer editar) {
+        this.editar = editar;
+    }
+
+    public Integer getEjecutar() {
+        return ejecutar;
+    }
+
+    public void setEjecutar(Integer ejecutar) {
+        this.ejecutar = ejecutar;
+    }
+
+    public Integer getAnular() {
+        return anular;
+    }
+
+    public void setAnular(Integer anular) {
+        this.anular = anular;
+    }
+
+    public Integer getVer() {
+        return ver;
+    }
+
+    public void setVer(Integer ver) {
+        this.ver = ver;
+    }
+
+    
     public Integer getIdFormulario() {
         return idFormulario;
     }

@@ -7,6 +7,7 @@ package com.contabilidad.remote;
 
 import com.agencia.entities.Boleto;
 import com.agencia.search.dto.BoletoSearchForm;
+import com.contabilidad.entities.CargoBoleto;
 import com.contabilidad.entities.NotaDebito;
 import com.contabilidad.entities.NotaDebitoTransaccion;
 import com.seguridad.control.entities.Entidad;
@@ -34,6 +35,9 @@ public interface NotaDebitoRemote extends DaoRemoteFacade  {
 
     @Override
     public Entidad get(Entidad e) throws CRUDException;
+
+    @Override
+    public Entidad get(Integer id, Class<?> typeClass) throws CRUDException;
     
 
     @Override
@@ -47,14 +51,6 @@ public interface NotaDebitoRemote extends DaoRemoteFacade  {
      */
     public NotaDebito createNotaDebito (Boleto boleto) throws CRUDException ;
     
-    /**
-     * Crea una nota de debito a partir de la lista de Boletos Multiples
-     * @param boleto
-     * @return
-     * @throws CRUDException 
-     */
-    public NotaDebito createNotaDebito (List<Boleto> boleto) throws CRUDException ;
-    
     
     /**
      * Crea la lista de Transacciones para la nota debito de un solo boleto
@@ -64,16 +60,6 @@ public interface NotaDebitoRemote extends DaoRemoteFacade  {
      * @throws CRUDException 
      */
     public NotaDebitoTransaccion createNotaDebitoTransaccion(Boleto boleto, NotaDebito notaDebito) throws CRUDException;
-    
-    /**
-     * crea una lista de Transacciones para la nota de debito a partir de una lista de 
-     * Boletos
-     * @param boleto
-     * @param notaDebito
-     * @return
-     * @throws CRUDException 
-     */
-    public List<NotaDebitoTransaccion> createNotaDebitoTransacction(List<Boleto> boleto, NotaDebito notaDebito) throws CRUDException ;
     
     /**
      * Anula una transaccion. Verifica si exi
@@ -120,4 +106,41 @@ public interface NotaDebitoRemote extends DaoRemoteFacade  {
      * @throws CRUDException 
      */
     public Integer asociarBoletoNotaDebito(Boleto b , NotaDebito n) throws CRUDException;
+
+    /**
+     * Coloca la Nota de Debito en Pendiente. Debe actualizar los valores que el usuario haya
+     * ingresado
+     * @param n
+     * @throws CRUDException 
+     */
+    public void pendiente(NotaDebito n) throws CRUDException;
+
+    /**
+     * Guarda la trnasaccion de Cargo y crea una transaccion para la nota de Debito.
+     * @param cargo
+     * @return 
+     * @throws CRUDException 
+     */
+    public CargoBoleto saveCargo(CargoBoleto cargo) throws CRUDException;
+
+    /**
+     * Obtiene la informacion del cargo de la Nota de Debito
+     * @param cargo 
+     * @return  
+     * @throws com.seguridad.control.exception.CRUDException 
+     */
+    public CargoBoleto getCargo(CargoBoleto cargo) throws CRUDException;
+
+    /**
+     * Coloca a Emitido la Nota de Debito
+     * Pasa los boletos a sus Planes de Cuentas
+     * 
+     * @param idNotaDebito
+     * @return
+     * @throws CRUDException 
+     */
+    public boolean finalizar(NotaDebito nota) throws CRUDException ;
+    
+    
+    
 }

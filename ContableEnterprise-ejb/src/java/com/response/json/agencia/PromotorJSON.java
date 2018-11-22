@@ -28,7 +28,6 @@ public class PromotorJSON implements Serializable {
     private String email;
     private String tipo;
     private String estado;
-    private String sexo ;
 
     private LinkedList<ComisionPromotorAerolineaJSON> listComisionNacional = new LinkedList<>();
     private LinkedList<ComisionPromotorAerolineaJSON> listComisionInternacional = new LinkedList<>();
@@ -46,7 +45,7 @@ public class PromotorJSON implements Serializable {
         newPromotor.setNombre(json.getNombre());
         newPromotor.setObservaciones(json.getObservaciones());
         newPromotor.setReportaTotalVentas(json.getReportaTotalVentas());
-        newPromotor.setSexo(json.getSexo());
+        //newPromotor.setSexo(json.getSexo());
         newPromotor.setTelefono(json.getTelefono());
         newPromotor.setTipo(json.getTipo());
         
@@ -54,15 +53,6 @@ public class PromotorJSON implements Serializable {
         return newPromotor ;
     }
 
-    public String getSexo() {
-        return sexo;
-    }
-
-    public void setSexo(String sexo) {
-        this.sexo = sexo;
-    }
-    
-    
     public Integer getIdPromotor() {
         return idPromotor;
     }

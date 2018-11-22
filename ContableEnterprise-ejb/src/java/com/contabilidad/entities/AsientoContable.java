@@ -35,12 +35,18 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "AsientoContable.findAll", query = "SELECT a FROM AsientoContable a")
     ,
-@NamedQuery(name = "AsientoContable.find", query = "SELECT a FROM AsientoContable a WHERE a.idLibro=:idLibro"),
+@NamedQuery(name = "AsientoContable.find", query = "SELECT a FROM AsientoContable a WHERE a.idLibro=:idLibro")
+    ,
 @NamedQuery(name = "AsientoContable.updateEstadoFromBoleto", query = "UPDATE AsientoContable a SET a.estado=:estado WHERE a.idBoleto=:idBoleto")
 
 }
 )
 public class AsientoContable extends Entidad {
+    
+    public static final class Tipo {
+        public static final String BOLETO = "B" ;
+        public static final String CARGO = "C" ;
+    }
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -51,7 +57,7 @@ public class AsientoContable extends Entidad {
     private int idAsiento;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "gestion",  updatable = false)
+    @Column(name = "gestion", updatable = false)
     private int gestion;
     @Size(max = 2)
     @Column(name = "estado")
@@ -76,12 +82,33 @@ public class AsientoContable extends Entidad {
     private BigDecimal montoHaberNac;
     @Column(name = "id_boleto")
     private Integer idBoleto;
-    @Column(name="id_nota_transaccion")
-    private Integer idNotaTransaccion ;
-    @Column(name="id_ingreso_caja_transaccion")
-    private Integer idIngresoCajaTransaccion ;
+    @Column(name = "id_nota_transaccion")
+    private Integer idNotaTransaccion;
+    @Column(name = "id_ingreso_caja_transaccion")
+    private Integer idIngresoCajaTransaccion;
+    @Column(name = "id_cargo")
+    private Integer idCargo;
+    @Column(name = "tipo")
+    private String tipo;
 
     public AsientoContable() {
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    
+    public Integer getIdCargo() {
+        return idCargo;
+    }
+
+    public void setIdCargo(Integer idCargo) {
+        this.idCargo = idCargo;
     }
 
     public Integer getIdIngresoCajaTransaccion() {
@@ -100,7 +127,6 @@ public class AsientoContable extends Entidad {
         this.idNotaTransaccion = idNotaTransaccion;
     }
 
-    
     public String getEstado() {
         return estado;
     }
@@ -228,10 +254,8 @@ public class AsientoContable extends Entidad {
 
     @Override
     public int getId() throws CRUDException {
-        return this.idAsiento ;
+        return this.idAsiento;
     }
-
-
 
     @Override
     public String toString() {

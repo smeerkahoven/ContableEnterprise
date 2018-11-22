@@ -18,7 +18,9 @@ public enum Accion implements Serializable {
     ACCESS("ACCESS"),
     SEARCH("SEARCH"),
     TRANSACTION("TRANSACTION"),
+    PENDIENTE("PENDIENTE"),
     INSERT("INSERT"),
+    EDIT("EDIT"),
     DELETE("DELETE"),
     UPDATE("UPDATE");
 

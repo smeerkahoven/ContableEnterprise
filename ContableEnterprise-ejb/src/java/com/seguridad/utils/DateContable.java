@@ -28,6 +28,7 @@ public class DateContable {
     public static final String LATIN_AMERICA_TIME_FORMAT = "dd/MM/yyyy HH:mm:ss";
     public static final String AMADEUS_D_TAG_DATE = "yyMMdd" ;
     public static final String AMADEUS_D_TAG_H_DATE = "ddMMMyyyy" ;
+    public static final String SABRE_M3_DATE = "ddMMMyyyy" ;
 
     public static final String fromFormatToOtherFormat(String date, String fromFormat, String toFormat) {
 
@@ -134,7 +135,10 @@ public class DateContable {
     }
 
     public static void main(String args[]) {
+        Date nota = new Date();
+        int gestion = DateContable.getPartitionDateInt(DateContable.getDateFormat(nota, DateContable.LATIN_AMERICA_FORMAT));
 
+        System.out.println(gestion);
         System.out.println(fromFormatToOtherFormat("180427", "yyMMdd", "dd/MM/yyyy"));
 
     }

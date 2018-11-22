@@ -17,6 +17,7 @@ import com.agencia.entities.FormasPago;
 import com.agencia.search.dto.BoletoSearchForm;
 import com.configuracion.entities.ContabilidadBoletaje;
 import com.contabilidad.entities.AsientoContable;
+import com.contabilidad.entities.CargoBoleto;
 import com.contabilidad.entities.ComprobanteContable;
 import com.contabilidad.entities.IngresoCaja;
 import com.contabilidad.entities.IngresoTransaccion;
@@ -29,7 +30,7 @@ import com.contabilidad.remote.NotaDebitoRemote;
 import com.seguridad.control.FacadeEJB;
 import com.seguridad.control.entities.Entidad;
 import com.seguridad.control.exception.CRUDException;
-import com.seguridad.utils.Accion;
+import com.seguridad.queries.Queries;
 import com.seguridad.utils.ComboSelect;
 import com.seguridad.utils.DateContable;
 import com.seguridad.utils.Operacion;
@@ -198,7 +199,7 @@ public class BoletoEJB extends FacadeEJB implements BoletoRemote {
      * @return
      * @throws CRUDException
      */
-    private boolean validarConfiguracion(ContabilidadBoletaje conf) throws CRUDException {
+    public boolean validarConfiguracion(ContabilidadBoletaje conf) throws CRUDException {
         Optional op = Optional.ofNullable(conf.getIdTotalBoletoBs());
         if (!op.isPresent()) {
             throw new CRUDException("No existe configuracion para la el Total Boleto Bs");
@@ -267,10 +268,20 @@ public class BoletoEJB extends FacadeEJB implements BoletoRemote {
             throw new CRUDException("No existe Cuenta Configurada para Cuenta Efectivo No BSP Haber USD");
         }
 
+        op = Optional.ofNullable(conf.getOtroCargosClienteCobrarDebeBs());
+        if (!op.isPresent()) {
+            throw new CRUDException("No existe Cuenta Configurada para Otros Cargos Clientes x Cobrar Debe Bs.");
+        }
+        op = Optional.ofNullable(conf.getOtrosCargosClienteCobrarDebeUsd());
+        if (!op.isPresent()) {
+            throw new CRUDException("No existe Cuenta Configurada para Otros Cargos Clientes x Cobrar Debe Usd.");
+        }
+
         return true;
     }
 
-    private AerolineaCuenta getAerolineCuenta(Boleto b, String tipo) throws CRUDException {
+    @Override
+    public AerolineaCuenta getAerolineCuenta(Boleto b, String tipo) throws CRUDException {
 
         HashMap<String, Object> parameters2 = new HashMap<>();
         parameters2.put("idAerolinea", b.getIdAerolinea().getIdAerolinea());
@@ -291,15 +302,19 @@ public class BoletoEJB extends FacadeEJB implements BoletoRemote {
     }
 
     private void saveClientePasajero(Boleto b) throws CRUDException {
-        ClientePasajero cp = createClientePasajero(b);
-        HashMap<String, Object> parpas = new HashMap<>();
-        parpas.put("idCliente", b.getIdCliente().getIdCliente());
-        parpas.put("nombrePasajero", b.getNombrePasajero());
 
-        List search = get("ClientePasajero.findPasajero", ClientePasajero.class, parpas);
-        if (search.isEmpty()) {
-            cp.setIdClientePasajero(insert(cp));
-        }//else ya existe el cliente
+        // En los VOID el idCliente es null
+        if (b.getIdCliente() != null) {
+            ClientePasajero cp = createClientePasajero(b);
+            HashMap<String, Object> parpas = new HashMap<>();
+            parpas.put("idCliente", b.getIdCliente().getIdCliente());
+            parpas.put("nombrePasajero", b.getNombrePasajero());
+
+            List search = get("ClientePasajero.findPasajero", ClientePasajero.class, parpas);
+            if (search.isEmpty()) {
+                cp.setIdClientePasajero(insert(cp));
+            }//else ya existe el cliente
+        }
     }
 
     /**
@@ -504,7 +519,7 @@ public class BoletoEJB extends FacadeEJB implements BoletoRemote {
                     //Crear Comprobante de Ingreso
                     comprobanteIngreso = ejbComprobante.createComprobante(a, b, c, ComprobanteContable.Tipo.COMPROBANTE_INGRESO);
                     comprobanteIngreso.setIdNotaDebito(notaDebito.getIdNotaDebito());
-                    if (ingreso.getMoneda().equals(Moneda.EXTRANJERA)) {
+                   /* if (ingreso.getMoneda().equals(Moneda.EXTRANJERA)) {
                         comprobanteIngreso.setTotalDebeExt(ingreso.getMontoAbonadoUsd());
                         comprobanteIngreso.setTotalHaberExt(ingreso.getMontoAbonadoUsd());
                         comprobanteIngreso.setTotalDebeNac(ingreso.getMontoAbonadoUsd().multiply(ingreso.getFactorCambiario()));
@@ -518,17 +533,23 @@ public class BoletoEJB extends FacadeEJB implements BoletoRemote {
                         comprobanteIngreso.setTotalHaberNac(ingreso.getMontoAbonadoBs().divide(ingreso.getFactorCambiario()));
 
                         notaDebito.setMontoAdeudadoBs(notaDebito.getMontoTotalBs().subtract(ingreso.getMontoAbonadoBs()));
-                    }
+                    }*/
                     insert(comprobanteIngreso);
 
-                    ingTotalCancelarCaja = ejbComprobante.createTotalCancelarIngresoCajaDebe(comprobanteIngreso, cbconf, a, b);
+                    /**
+                     *
+                     */
+                    // ESTAS TRANSACCIONES PASARLAS. al nuevo metodo de cada uno
+                    /*ingTotalCancelarCaja = ejbComprobante.createTotalCancelarIngresoCajaDebe(comprobanteIngreso, cbconf, a, b);
                     ingTotalCancelarCaja.setIdIngresoCajaTransaccion(ingTran.getIdTransaccion());
                     insert(ingTotalCancelarCaja);
 
                     ingTotalCancelarHaber = ejbComprobante.createTotalCancelarIngresoClienteHaber(comprobanteIngreso, cbconf, a, b);
                     ingTotalCancelarHaber.setIdIngresoCajaTransaccion(ingTran.getIdTransaccion());
-                    insert(ingTotalCancelarHaber);
-
+                    insert(ingTotalCancelarHaber);*/
+                    /**
+                     *
+                     */
                     //actualizar nota debito
                     em.merge(notaDebito);
                 }
@@ -612,6 +633,89 @@ public class BoletoEJB extends FacadeEJB implements BoletoRemote {
 
         em.flush();
         return b;
+    }
+
+    @Override
+    public boolean enviarAsientoDiario(final Boleto boleto, final NotaDebito nota,
+            final ComprobanteContable comprobante, final ContabilidadBoletaje conf) throws CRUDException {
+
+        AsientoContable totalCancelar = null, montoPagarLinea = null,
+                montoDescuento = null, montoComision = null, montoFee = null;
+
+        // 1. Obtenemos la configuracion de Ventas y Comision por Aerolinea
+        AerolineaCuenta av = getAerolineCuenta(boleto, "V");
+
+        if (av == null) {
+            throw new CRUDException("No existe Cuenta asociada a la Aerolinea" + boleto.getIdAerolinea().getNombre() + " para Ventas");
+        }
+
+        AerolineaCuenta ac = getAerolineCuenta(boleto, "C");
+
+        if (ac == null) {
+            throw new CRUDException("No existe Cuenta asociada a la Aerolinea" + boleto.getIdAerolinea().getNombre() + " para Comisiones");
+        }
+
+        // 2. Guardamos el Cliente Pasajero
+        saveClientePasajero(boleto);
+        // se crean los asientos de acuerdo a la configuracion.
+
+        //TotalCancelar
+        totalCancelar = ejbComprobante.crearTotalCancelar(boleto, comprobante, conf, boleto.getIdAerolinea(), boleto.getIdNotaDebitoTransaccion());
+        insert(totalCancelar);
+        //ejbComprobante.insert(totalCancelar);
+        //DiferenciaTotalBoleto
+        montoPagarLinea = ejbComprobante.crearMontoPagarLineaAerea(boleto, comprobante, conf, av, boleto.getIdNotaDebitoTransaccion());
+        //ejbComprobante.insert(montoPagarLinea);
+        insert(montoPagarLinea);
+        //Comision
+        montoComision = ejbComprobante.crearMontoComision(boleto, comprobante, boleto.getIdAerolinea(), ac, boleto.getIdNotaDebitoTransaccion());
+        //ejbComprobante.insert(montoComision);
+        insert(montoComision);
+        //Fee
+        montoFee = ejbComprobante.crearMontoFee(boleto, comprobante, conf, boleto.getIdAerolinea(), boleto.getIdNotaDebitoTransaccion());
+        //ejbComprobante.insert(montoFee);
+        insert(montoFee);
+        //Descuento
+        montoDescuento = ejbComprobante.crearMontoDescuentos(boleto, comprobante, conf, boleto.getIdAerolinea(), boleto.getIdNotaDebitoTransaccion());
+        //ejbComprobante.insert(montoDescuento);
+        insert(montoDescuento);
+
+        return false;
+
+    }
+
+    @Override
+    public boolean enviarAsientoDiario(final CargoBoleto cargo, final NotaDebito nota,
+            final ComprobanteContable comprobante, final ContabilidadBoletaje conf) throws CRUDException {
+
+        AsientoContable clientexCobrar = null, comisionMayorista = null,
+                comisionAgencia = null, comisionCounter = null;
+
+        // se crean los asientos de acuerdo a la configuracion.
+        clientexCobrar = ejbComprobante.crearClienteXCobrar(cargo, nota, comprobante, conf, cargo.getIdNotaDebitoTransaccion());
+        insert(clientexCobrar);
+
+        comisionMayorista = ejbComprobante.crearOperadorMayotistaXPagar(cargo, nota, comprobante, cargo.getIdNotaDebitoTransaccion());
+        insert(comisionMayorista);
+
+        comisionAgencia = ejbComprobante.crearComisionAgenciaHaber(cargo, nota, comprobante, cargo.getIdNotaDebitoTransaccion());
+        insert(comisionAgencia);
+
+        comisionCounter = ejbComprobante.crearComisionCounterHaber(cargo, nota, comprobante, cargo.getIdNotaDebitoTransaccion());
+        insert(comisionCounter);
+
+        return false;
+
+    }
+
+    public boolean crearTransaccionIngresoCaja(final Boleto boleto, final NotaDebito nota,
+            final ComprobanteContable comprobante, final IngresoCaja caja, final NotaDebitoTransaccion notaTran) throws CRUDException {
+
+        IngresoTransaccion transaccion = ejbIngresoCaja.createIngresoCajaTransaccion(boleto, nota, notaTran, caja);
+        transaccion.setIdTransaccion(insert(transaccion));
+        boleto.setIdIngresoCajaTransaccion(transaccion.getIdTransaccion());
+
+        return true;
     }
 
     private ClientePasajero createClientePasajero(Boleto b) {
@@ -701,7 +805,7 @@ public class BoletoEJB extends FacadeEJB implements BoletoRemote {
     }
 
     @Override
-    public Boleto saveBoletoVoid(Boleto b) throws CRUDException {
+    public Boleto saveBoletoVoid(Boleto b, NotaDebito n) throws CRUDException {
         Optional op;
         Aerolinea a = em.find(Aerolinea.class, b.getIdAerolinea().getIdAerolinea());
 
@@ -711,21 +815,17 @@ public class BoletoEJB extends FacadeEJB implements BoletoRemote {
         }
 
         //4. Obtenemos la configuracion del Boleto para guardar en el comprobanteAsiento
-        AerolineaCuenta ac = getAerolineCuenta(b, "C");
-
-        if (ac == null) {
-            throw new CRUDException("No existe Cuenta asociada a la Aerolinea para Comisiones");
-        }
-
         if (b.getTipoCupon().equals(Boleto.Cupon.INTERNACIONAL)) {
             b.setMoneda(Moneda.EXTRANJERA);
         } else {
             b.setMoneda(Moneda.NACIONAL);
         }
 
-        b.setEstado(Boleto.Estado.VOID);
+        b.setEstado(Boleto.Estado.PENDIENTE);
 
         insert(b);
+
+        ejbNotaDebito.asociarBoletoNotaDebito(b, n);
 
         return b;
     }
@@ -868,7 +968,6 @@ public class BoletoEJB extends FacadeEJB implements BoletoRemote {
 
         Query q = em.createNamedQuery("Boleto.findNroBoletoE", Boleto.class);
         q.setParameter("numero", b.getNumero());
-        q.setParameter("estado", Boleto.Estado.EMITIDO);
 
         List l = q.getResultList();
 
@@ -891,5 +990,48 @@ public class BoletoEJB extends FacadeEJB implements BoletoRemote {
         return l;
     }
 
-   
+    @Override
+    public List<Boleto> getBoletosSabreCargados(Integer idEmpresa) throws CRUDException {
+        Query q = em.createNamedQuery("Boleto.getAllSabreAutomaticos", Boleto.class);
+        q.setParameter("idEmpresa", idEmpresa);
+
+        List l = q.getResultList();
+
+        return l;
+    }
+
+    @Override
+    public Entidad get(Entidad e) throws CRUDException {
+        Boleto b = em.find(Boleto.class, e.getId());
+
+        Optional op = Optional.ofNullable(b);
+        if (op.isPresent()) {
+            return b;
+        }
+
+        return null;
+    }
+
+    @Override
+    public int insertarBoleto(Boleto boleto) throws CRUDException {
+
+        if (isBoletoRegistrado(boleto)) {
+            throw new CRUDException("El Numero de Boleto ya ha sido registrado");
+        }
+
+        NotaDebito n = (NotaDebito) ejbNotaDebito.get(new NotaDebito(boleto.getIdNotaDebito()));
+        // Se guarda el Boleto
+        boleto.setIdBoleto(insert(boleto));
+
+        saveClientePasajero(boleto);
+        //se asocia el Boleto con la Transaccion
+        ejbNotaDebito.asociarBoletoNotaDebito(boleto, n);
+
+        //actualizamos los montos de la Nota de debito
+        ejbNotaDebito.actualizarMontosNotaDebito(n.getIdNotaDebito());
+
+        return Operacion.REALIZADA;
+
+    }
+
 }

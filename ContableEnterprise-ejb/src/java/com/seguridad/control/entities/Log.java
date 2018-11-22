@@ -29,6 +29,19 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Log.findAll", query = "SELECT l FROM Log l")})
 public class Log implements Serializable {
+    
+    public static final String NOTA_DEBITO_NUEVO = "Creo la Nota de Debito <id> " ;
+    public static final String NOTA_DEBITO_PENDIENTE = "Establecio <id> como PENDIENTE" ;
+    public static final String NOTA_DEBITO_FINALIZAR = "Establecio <id> como FINALIZAR" ;
+    public static final String NOTA_DEBITO_ANULAR = "Establecio <id> como ANULAR" ;
+    public static final String NOTA_DEBITO_NUEVA_TRANSACCION_INICIO = "Inicio creacion de Transacciones Nota Debito <id>" ;
+    public static final String NOTA_DEBITO_NUEVA_TRANSACCION_FIN = "Fin creacion de Transacciones Nota Debito <id>" ;
+    public static final String NOTA_DEBITO_CARGO_GUARDAR = "Se Guardo el Cargo Nro <cargo> para la nota de Debito <nota>" ;
+    public static final String NOTA_DEBITO_CARGO_EDITAR = "Se edito el Cargo Nro <cargo> para la nota de Debito <nota>" ;
+    public static final String NOTA_DEBITO_CARGO_ANULAR = "Se anulo el Cargo Nro<cargo> para la nota de Debito <nota>" ;
+    public static final String BOLETO_ASOCIAR_AUTOMATICO = "Asocio el Boleto <boleto> con la Nota <id>" ;
+    public static final String BOLETO_ANULAR = "Establecio <boleto> como ANULADO" ;
+    public static final String BOLETO_SAVE = "Creacion del Boleto <boleto>" ;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -43,8 +56,11 @@ public class Log implements Serializable {
     private String usuario;
     @Column(name = "formulario", length = 64)
     private String formulario;
-    @Column(name = "ip" ,length = 32)
+    @Column(name = "ip", length = 32)
     private String ip;
+    @Column(name = "comentario", length = 256)
+    private String comentario;
+
     public Log() {
     }
 
@@ -55,6 +71,14 @@ public class Log implements Serializable {
     public Log(Integer idLog, Date fechaLog) {
         this.idLog = idLog;
         this.fechaLog = fechaLog;
+    }
+
+    public String getComentario() {
+        return comentario;
+    }
+
+    public void setComentario(String comentario) {
+        this.comentario = comentario;
     }
 
     public Integer getIdLog() {

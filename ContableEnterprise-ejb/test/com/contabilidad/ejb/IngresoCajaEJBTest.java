@@ -54,7 +54,7 @@ public class IngresoCajaEJBTest {
         System.out.println("createIngresoCaja");
         Boleto boleto = new Boleto();
         boleto.setFormaPago(FormasPago.CONTADO);
-        boleto.setContadoTipo(FormasPago.CONTADO_EFECTIVO);
+        boleto.setContadoTipo(FormasPago.EFECTIVO);
         boleto.setIdEmpresa(1);
         boleto.setIdUsuarioCreador("admin");
         //boleto.setIdCliente(238);

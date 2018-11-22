@@ -26,10 +26,16 @@ public class ComboSelect implements Serializable {
     public ComboSelect(Object id) {
         this.id = id;
     }
-    
-     public ComboSelect(Object id, String name) {
+
+    public ComboSelect(Object id, String name) {
         this.id = id;
-        this.name = name ;
+        this.name = name;
+    }
+
+    public ComboSelect(Object id, String name, String comodin) {
+        this.id = id;
+        this.name = name;
+        this.comodin = comodin ;
     }
 
     public Object getId() {

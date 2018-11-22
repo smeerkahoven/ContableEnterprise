@@ -145,6 +145,8 @@ public class UsuarioEJB extends FacadeEJBFirst implements UsuarioRemote {
     public boolean update(User e, String query) throws CRUDException {
         Query q = em.createNamedQuery(query);
         q.setParameter("p", e.getUserName());
+        q.setParameter("r", e.getIdRol());
+        q.setParameter("s", e.getStatus());
 
         q.executeUpdate();
 

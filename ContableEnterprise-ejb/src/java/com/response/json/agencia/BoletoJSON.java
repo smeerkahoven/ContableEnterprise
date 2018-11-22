@@ -40,8 +40,8 @@ public class BoletoJSON implements Serializable {
     private String emision;
     private String tipoBoleto;
     private String tipoCupon;
-    private long numero;
-    private long numeroOrigen;
+    private Long numero;
+    private Long numeroOrigen;
     //rutas
     private ComboSelect idRuta1;
     private ComboSelect idRuta2;
@@ -55,6 +55,11 @@ public class BoletoJSON implements Serializable {
     private BigDecimal factorCambiario;
     private String moneda;
 
+    private String impuesto1nombre;
+    private String impuesto2nombre;
+    private String impuesto3nombre;
+    private String impuesto4nombre;
+    private String impuesto5nombre;
     // montos
     private BigDecimal importeNetoBs;
     private BigDecimal importeNetoUsd;
@@ -140,7 +145,6 @@ public class BoletoJSON implements Serializable {
         boleto.setIdPromotor(p);
         boleto.setEstado(bjson.getEstado());
         boleto.setIdBoletoPadre(bjson.getIdBoletoPadre());
-        System.out.println("Id Boleto Padre:" + boleto.getIdBoletoPadre());
         boleto.setIdLibro(bjson.getIdLibro());
         boleto.setIdIngresoCaja(bjson.getIdIngresoCaja());
         boleto.setIdIngresoCajaTransaccion(bjson.getIdIngresoCajaTransaccion());
@@ -154,16 +158,27 @@ public class BoletoJSON implements Serializable {
         boleto.setIdRuta4(bjson.getIdRuta4() != null ? (String) bjson.getIdRuta4().getId() : null);
         boleto.setIdRuta5(bjson.getIdRuta5() != null ? (String) bjson.getIdRuta5().getId() : null);
 
+        //impuestos
+        boleto.setImpuesto1nombre(bjson.getImpuesto1nombre() != null ? bjson.getImpuesto1nombre() : null);
+        boleto.setImpuesto2nombre(bjson.getImpuesto2nombre() != null ? bjson.getImpuesto2nombre() : null);
+        boleto.setImpuesto3nombre(bjson.getImpuesto3nombre() != null ? bjson.getImpuesto3nombre() : null);
+        boleto.setImpuesto4nombre(bjson.getImpuesto4nombre() != null ? bjson.getImpuesto4nombre() : null);
+        boleto.setImpuesto5nombre(bjson.getImpuesto5nombre() != null ? bjson.getImpuesto5nombre() : null);
+
         //cliente
         //boleto.setIdCliente(((Double) bjson.getIdCliente().getId()).intValue());
         if (bjson.getIdCliente() != null) {
             boleto.setIdCliente(new Cliente((((Double) bjson.getIdCliente().getId()).intValue())));
         }
 
-        if (bjson.getNombrePasajero() != null) {
-            boleto.setNombrePasajero(bjson.getNombrePasajero().toUpperCase());
-        } else {
-            throw new CRUDException("Nombre del Pasajero es requerido");
+        if (bjson.getTipoBoleto().equals(Boleto.Tipo.AMADEUS)
+                || bjson.getTipoBoleto().equals(Boleto.Tipo.MANUAL)
+                || bjson.getTipoBoleto().equals(Boleto.Tipo.SABRE)) {
+            if (bjson.getNombrePasajero() != null) {
+                boleto.setNombrePasajero(bjson.getNombrePasajero().toUpperCase());
+            } else {
+                throw new CRUDException("Nombre del Pasajero es requerido");
+            }
         }
 
         boleto.setFechaEmision(DateContable.toLatinAmericaDateFormat(bjson.getFechaEmision()));
@@ -229,10 +244,10 @@ public class BoletoJSON implements Serializable {
 
                     boleto.setContadoTipo(bjson.getContadoTipo());
 
-                    if (bjson.getContadoTipo().equals(FormasPago.CONTADO_CHEQUE)) {
+                    if (bjson.getContadoTipo().equals(FormasPago.CHEQUE)) {
                         boleto.setContadoNroCheque(bjson.getContadoNroCheque());
                         boleto.setContadoIdBanco(bjson.getContadoIdBanco());
-                    } else if (bjson.getContadoTipo().equals(FormasPago.CONTADO_DEPOSITO)) {
+                    } else if (bjson.getContadoTipo().equals(FormasPago.DEPOSITO)) {
                         boleto.setContadoNroDeposito(bjson.getContadoNroDeposito());
                         boleto.setContadoIdCuenta(((Double) bjson.getContadoIdCuenta().getId()).intValue());
                     }
@@ -247,13 +262,13 @@ public class BoletoJSON implements Serializable {
                         boleto.setCombinadoContadoMonto(bjson.getCombinadoContadoMonto());
 
                         switch (bjson.getCombinadoContadoTipo()) {
-                            case FormasPago.CONTADO_EFECTIVO:
+                            case FormasPago.EFECTIVO:
                                 break;
-                            case FormasPago.CONTADO_CHEQUE:
+                            case FormasPago.CHEQUE:
                                 boleto.setCombinadoContadoIdBanco(bjson.getCombinadoContadoIdBanco());
                                 boleto.setCombinadoContadoNroCheque(bjson.getCombinadoContadoNroCheque());
                                 break;
-                            case FormasPago.CONTADO_DEPOSITO:
+                            case FormasPago.DEPOSITO:
                                 boleto.setCombinadoContadoIdBanco(bjson.getCombinadoContadoIdBanco());
                                 boleto.setCombinadoContadoNroDeposito(bjson.getCombinadoContadoNroDeposito());
                                 break;
@@ -283,7 +298,9 @@ public class BoletoJSON implements Serializable {
 
         bjson.setGestion(boleto.getGestion());
         if (boleto.getIdAerolinea() != null) {
-            bjson.setIdAerolinea(new ComboSelect(boleto.getIdAerolinea().getIdAerolinea(), boleto.getIdAerolinea().getNombre()));
+            bjson.setIdAerolinea(new ComboSelect(boleto.getIdAerolinea().getIdAerolinea(),
+                    boleto.getIdAerolinea().getNombre(),
+                    boleto.getIdAerolinea().getNumero()));
         }
         bjson.setIdEmpresa(boleto.getIdEmpresa());
         bjson.setEmision(boleto.getEmision());
@@ -311,6 +328,13 @@ public class BoletoJSON implements Serializable {
         bjson.setIdRuta4(boleto.getIdRuta4() != null ? new ComboSelect(boleto.getIdRuta4()) : null);
         bjson.setIdRuta5(boleto.getIdRuta5() != null ? new ComboSelect(boleto.getIdRuta5()) : null);
 
+        //IMPUESTOS
+        bjson.setImpuesto1nombre(boleto.getImpuesto1nombre() != null ? boleto.getImpuesto1nombre() : null);
+        bjson.setImpuesto2nombre(boleto.getImpuesto2nombre() != null ? boleto.getImpuesto2nombre() : null);
+        bjson.setImpuesto3nombre(boleto.getImpuesto3nombre() != null ? boleto.getImpuesto3nombre() : null);
+        bjson.setImpuesto4nombre(boleto.getImpuesto4nombre() != null ? boleto.getImpuesto4nombre() : null);
+        bjson.setImpuesto5nombre(boleto.getImpuesto5nombre() != null ? boleto.getImpuesto5nombre() : null);
+
         //cliente
         if (boleto.getIdCliente() != null) {
             bjson.setIdCliente(new ComboSelect(boleto.getIdCliente().getIdCliente(), boleto.getIdCliente().getNombre()));
@@ -332,172 +356,174 @@ public class BoletoJSON implements Serializable {
         bjson.setDescuento(boleto.getDescuento());
         bjson.setMoneda(boleto.getMoneda());
         //Dolares
-        if (boleto.getTipoCupon().equals(Boleto.Cupon.INTERNACIONAL)) {
-            bjson.setImporteNetoUsd(boleto.getImporteNeto());
-            bjson.setImpuestoBobUsd(boleto.getImpuestoBob());
-            bjson.setImpuestoQmUsd(boleto.getImpuestoQm());
-            bjson.setImpuesto1Usd(boleto.getImpuesto1());
-            bjson.setImpuesto2Usd(boleto.getImpuesto2());
-            bjson.setImpuesto3Usd(boleto.getImpuesto3());
-            bjson.setImpuesto4Usd(boleto.getImpuesto4());
-            bjson.setImpuesto5Usd(boleto.getImpuesto5());
-            bjson.setTotalBoletoUsd(boleto.getTotalBoleto());
-            bjson.setMontoComisionUsd(boleto.getMontoComision());
-            bjson.setMontoFeeUsd(boleto.getMontoFee());
-            bjson.setMontoDescuentoUsd(boleto.getMontoDescuento());
-            bjson.setTotalMontoCanceladoUsd(boleto.getTotalMontoCancelado());
+        if (boleto.getTipoCupon() != null) {
+            if (boleto.getTipoCupon().equals(Boleto.Cupon.INTERNACIONAL)) {
+                bjson.setImporteNetoUsd(boleto.getImporteNeto());
+                bjson.setImpuestoBobUsd(boleto.getImpuestoBob());
+                bjson.setImpuestoQmUsd(boleto.getImpuestoQm());
+                bjson.setImpuesto1Usd(boleto.getImpuesto1());
+                bjson.setImpuesto2Usd(boleto.getImpuesto2());
+                bjson.setImpuesto3Usd(boleto.getImpuesto3());
+                bjson.setImpuesto4Usd(boleto.getImpuesto4());
+                bjson.setImpuesto5Usd(boleto.getImpuesto5());
+                bjson.setTotalBoletoUsd(boleto.getTotalBoleto());
+                bjson.setMontoComisionUsd(boleto.getMontoComision());
+                bjson.setMontoFeeUsd(boleto.getMontoFee());
+                bjson.setMontoDescuentoUsd(boleto.getMontoDescuento());
+                bjson.setTotalMontoCanceladoUsd(boleto.getTotalMontoCancelado());
 
-            if (boleto.getMontoComision() != null) {
-                if (boleto.getTotalBoleto() != null) {
-                    bjson.setMontoPagarLineaAereaUsd(boleto.getTotalBoleto().subtract(boleto.getMontoComision()));
+                if (boleto.getMontoComision() != null) {
+                    if (boleto.getTotalBoleto() != null) {
+                        bjson.setMontoPagarLineaAereaUsd(boleto.getTotalBoleto().subtract(boleto.getMontoComision()));
+                    }
+                } else {
+                    bjson.setMontoPagarLineaAereaUsd(boleto.getTotalBoleto());
                 }
-            }else {
-                bjson.setMontoPagarLineaAereaUsd(boleto.getTotalBoleto());
-            }
 
-            if (boleto.getImporteNeto() != null) {
-                bjson.setImporteNetoBs(boleto.getImporteNeto().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
-            }
-            if (boleto.getImpuestoBob() != null) {
-                bjson.setImpuestoBobBs(boleto.getImpuestoBob().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
-            }
-
-            if (boleto.getImpuestoQm() != null) {
-                bjson.setImpuestoQmBs(boleto.getImpuestoQm().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
-            }
-
-            if (boleto.getImpuesto1() != null) {
-                bjson.setImpuesto1Bs(boleto.getImpuesto1().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
-            }
-
-            if (boleto.getImpuesto2() != null) {
-                bjson.setImpuesto2Bs(boleto.getImpuesto2().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
-            }
-
-            if (boleto.getImpuesto3() != null) {
-                bjson.setImpuesto3Bs(boleto.getImpuesto3().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
-            }
-
-            if (boleto.getImpuesto4() != null) {
-                bjson.setImpuesto4Bs(boleto.getImpuesto4().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
-            }
-
-            if (boleto.getImpuesto5() != null) {
-                bjson.setImpuesto5Bs(boleto.getImpuesto5().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
-            }
-
-            if (boleto.getTotalBoleto() != null) {
-                bjson.setTotalBoletoBs(boleto.getTotalBoleto().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
-            }
-
-            if (boleto.getMontoComision() != null) {
-                bjson.setMontoComisionBs(boleto.getMontoComision().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
-            }
-
-            if (boleto.getMontoFee() != null) {
-                bjson.setMontoFeeBs(boleto.getMontoFee().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
-            }
-            if (boleto.getMontoDescuento() != null) {
-                bjson.setMontoDescuentoBs(boleto.getMontoDescuento().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
-            }
-
-            if (boleto.getTotalMontoCancelado() != null) {
-                bjson.setTotalMontoCanceladoBs(boleto.getTotalMontoCancelado().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
-            }
-            if (boleto.getMontoComision() != null) {
-                if (boleto.getTotalBoleto() != null) {
-                    bjson.setMontoPagarLineaAereaBs(boleto.getTotalBoleto().subtract(boleto.getMontoComision()).multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
+                if (boleto.getImporteNeto() != null) {
+                    bjson.setImporteNetoBs(boleto.getImporteNeto().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
                 }
-            } else {
-                if (boleto.getTotalBoleto() != null) {
-                    bjson.setMontoPagarLineaAereaBs(boleto.getTotalBoleto().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
+                if (boleto.getImpuestoBob() != null) {
+                    bjson.setImpuestoBobBs(boleto.getImpuestoBob().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
                 }
-            }
 
-        } else {//Bolivianos
-            bjson.setImporteNetoBs(boleto.getImporteNeto());
-            bjson.setImpuestoBobBs(boleto.getImpuestoBob());
-            bjson.setImpuestoQmBs(boleto.getImpuestoQm());
-            bjson.setImpuesto1Bs(boleto.getImpuesto1());
-            bjson.setImpuesto2Bs(boleto.getImpuesto2());
-            bjson.setImpuesto3Bs(boleto.getImpuesto3());
-            bjson.setImpuesto4Bs(boleto.getImpuesto4());
-            bjson.setImpuesto5Bs(boleto.getImpuesto5());
-            bjson.setTotalBoletoBs(boleto.getTotalBoleto());
-            bjson.setMontoComisionBs(boleto.getMontoComision());
-            bjson.setMontoFeeBs(boleto.getMontoFee());
-            bjson.setMontoDescuentoBs(boleto.getMontoDescuento());
-            bjson.setTotalMontoCanceladoBs(boleto.getTotalMontoCancelado());
-
-            if (boleto.getMontoComision() != null) {
-                if (boleto.getTotalBoleto() != null) {
-                    bjson.setMontoPagarLineaAereaBs(boleto.getTotalBoleto().subtract(boleto.getMontoComision()));
+                if (boleto.getImpuestoQm() != null) {
+                    bjson.setImpuestoQmBs(boleto.getImpuestoQm().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
                 }
-            } else {
-                bjson.setMontoPagarLineaAereaBs(boleto.getTotalBoleto());
-            }
-            
-            System.out.println("Importe Neto :" + boleto.getImporteNeto());
-            System.out.println("Factor Cambiario :" + boleto.getFactorCambiario());
-            System.out.println("Divide :" + boleto.getImporteNeto().doubleValue() / boleto.getFactorCambiario().doubleValue());
 
-            if (boleto.getImporteNeto() != null) {
-                bjson.setImporteNetoUsd(boleto.getImporteNeto().divide(boleto.getFactorCambiario(),RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
-            }
-            if (boleto.getImpuestoBob() != null) {
-                bjson.setImpuestoBobUsd(boleto.getImpuestoBob().divide(boleto.getFactorCambiario(),RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
-            }
-
-            if (boleto.getImpuestoQm() != null) {
-                bjson.setImpuestoQmUsd(boleto.getImpuestoQm().divide(boleto.getFactorCambiario(),RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
-            }
-
-            if (boleto.getImpuesto1() != null) {
-                bjson.setImpuesto1Usd(boleto.getImpuesto1().divide(boleto.getFactorCambiario(),RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
-            }
-
-            if (boleto.getImpuesto2() != null) {
-                bjson.setImpuesto2Usd(boleto.getImpuesto2().divide(boleto.getFactorCambiario(),RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
-            }
-
-            if (boleto.getImpuesto3() != null) {
-                bjson.setImpuesto3Usd(boleto.getImpuesto3().divide(boleto.getFactorCambiario(),RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
-            }
-
-            if (boleto.getImpuesto4() != null) {
-                bjson.setImpuesto4Usd(boleto.getImpuesto4().divide(boleto.getFactorCambiario(),RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
-            }
-
-            if (boleto.getImpuesto5() != null) {
-                bjson.setImpuesto5Usd(boleto.getImpuesto5().divide(boleto.getFactorCambiario(),RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
-            }
-
-            if (boleto.getTotalBoleto() != null) {
-                bjson.setTotalBoletoUsd(boleto.getTotalBoleto().divide(boleto.getFactorCambiario(),RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
-            }
-
-            if (boleto.getMontoComision() != null) {
-                bjson.setMontoComisionUsd(boleto.getMontoComision().divide(boleto.getFactorCambiario(),RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
-            }
-
-            if (boleto.getMontoFee() != null) {
-                bjson.setMontoFeeUsd(boleto.getMontoFee().divide(boleto.getFactorCambiario(),RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
-            }
-            if (boleto.getMontoDescuento() != null) {
-                bjson.setMontoDescuentoUsd(boleto.getMontoDescuento().divide(boleto.getFactorCambiario(),RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
-            }
-
-            if (boleto.getTotalMontoCancelado() != null) {
-                bjson.setTotalMontoCanceladoUsd(boleto.getTotalMontoCancelado().divide(boleto.getFactorCambiario(),RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
-            }
-
-            if (boleto.getMontoComision() != null) {
-                if (boleto.getTotalBoleto() != null) {
-                    bjson.setMontoPagarLineaAereaUsd(boleto.getTotalBoleto().subtract(boleto.getMontoComision()).divide(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
+                if (boleto.getImpuesto1() != null) {
+                    bjson.setImpuesto1Bs(boleto.getImpuesto1().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
                 }
-            } else {
+
+                if (boleto.getImpuesto2() != null) {
+                    bjson.setImpuesto2Bs(boleto.getImpuesto2().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
+                }
+
+                if (boleto.getImpuesto3() != null) {
+                    bjson.setImpuesto3Bs(boleto.getImpuesto3().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
+                }
+
+                if (boleto.getImpuesto4() != null) {
+                    bjson.setImpuesto4Bs(boleto.getImpuesto4().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
+                }
+
+                if (boleto.getImpuesto5() != null) {
+                    bjson.setImpuesto5Bs(boleto.getImpuesto5().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
+                }
+
                 if (boleto.getTotalBoleto() != null) {
-                    bjson.setMontoPagarLineaAereaUsd(boleto.getTotalBoleto().divide(boleto.getFactorCambiario(),RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
+                    bjson.setTotalBoletoBs(boleto.getTotalBoleto().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
+                }
+
+                if (boleto.getMontoComision() != null) {
+                    bjson.setMontoComisionBs(boleto.getMontoComision().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
+                }
+
+                if (boleto.getMontoFee() != null) {
+                    bjson.setMontoFeeBs(boleto.getMontoFee().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
+                }
+                if (boleto.getMontoDescuento() != null) {
+                    bjson.setMontoDescuentoBs(boleto.getMontoDescuento().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
+                }
+
+                if (boleto.getTotalMontoCancelado() != null) {
+                    bjson.setTotalMontoCanceladoBs(boleto.getTotalMontoCancelado().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
+                }
+                if (boleto.getMontoComision() != null) {
+                    if (boleto.getTotalBoleto() != null) {
+                        bjson.setMontoPagarLineaAereaBs(boleto.getTotalBoleto().subtract(boleto.getMontoComision()).multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
+                    }
+                } else {
+                    if (boleto.getTotalBoleto() != null) {
+                        bjson.setMontoPagarLineaAereaBs(boleto.getTotalBoleto().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
+                    }
+                }
+
+            } else {//Bolivianos
+                bjson.setImporteNetoBs(boleto.getImporteNeto());
+                bjson.setImpuestoBobBs(boleto.getImpuestoBob());
+                bjson.setImpuestoQmBs(boleto.getImpuestoQm());
+                bjson.setImpuesto1Bs(boleto.getImpuesto1());
+                bjson.setImpuesto2Bs(boleto.getImpuesto2());
+                bjson.setImpuesto3Bs(boleto.getImpuesto3());
+                bjson.setImpuesto4Bs(boleto.getImpuesto4());
+                bjson.setImpuesto5Bs(boleto.getImpuesto5());
+                bjson.setTotalBoletoBs(boleto.getTotalBoleto());
+                bjson.setMontoComisionBs(boleto.getMontoComision());
+                bjson.setMontoFeeBs(boleto.getMontoFee());
+                bjson.setMontoDescuentoBs(boleto.getMontoDescuento());
+                bjson.setTotalMontoCanceladoBs(boleto.getTotalMontoCancelado());
+
+                if (boleto.getMontoComision() != null) {
+                    if (boleto.getTotalBoleto() != null) {
+                        bjson.setMontoPagarLineaAereaBs(boleto.getTotalBoleto().subtract(boleto.getMontoComision()));
+                    }
+                } else {
+                    bjson.setMontoPagarLineaAereaBs(boleto.getTotalBoleto());
+                }
+
+                System.out.println("Importe Neto :" + boleto.getImporteNeto());
+                System.out.println("Factor Cambiario :" + boleto.getFactorCambiario());
+                //System.out.println("Divide :" + boleto.getImporteNeto().doubleValue() / boleto.getFactorCambiario().doubleValue());
+
+                if (boleto.getImporteNeto() != null) {
+                    bjson.setImporteNetoUsd(boleto.getImporteNeto().divide(boleto.getFactorCambiario(), RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
+                }
+                if (boleto.getImpuestoBob() != null) {
+                    bjson.setImpuestoBobUsd(boleto.getImpuestoBob().divide(boleto.getFactorCambiario(), RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
+                }
+
+                if (boleto.getImpuestoQm() != null) {
+                    bjson.setImpuestoQmUsd(boleto.getImpuestoQm().divide(boleto.getFactorCambiario(), RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
+                }
+
+                if (boleto.getImpuesto1() != null) {
+                    bjson.setImpuesto1Usd(boleto.getImpuesto1().divide(boleto.getFactorCambiario(), RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
+                }
+
+                if (boleto.getImpuesto2() != null) {
+                    bjson.setImpuesto2Usd(boleto.getImpuesto2().divide(boleto.getFactorCambiario(), RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
+                }
+
+                if (boleto.getImpuesto3() != null) {
+                    bjson.setImpuesto3Usd(boleto.getImpuesto3().divide(boleto.getFactorCambiario(), RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
+                }
+
+                if (boleto.getImpuesto4() != null) {
+                    bjson.setImpuesto4Usd(boleto.getImpuesto4().divide(boleto.getFactorCambiario(), RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
+                }
+
+                if (boleto.getImpuesto5() != null) {
+                    bjson.setImpuesto5Usd(boleto.getImpuesto5().divide(boleto.getFactorCambiario(), RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
+                }
+
+                if (boleto.getTotalBoleto() != null) {
+                    bjson.setTotalBoletoUsd(boleto.getTotalBoleto().divide(boleto.getFactorCambiario(), RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
+                }
+
+                if (boleto.getMontoComision() != null) {
+                    bjson.setMontoComisionUsd(boleto.getMontoComision().divide(boleto.getFactorCambiario(), RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
+                }
+
+                if (boleto.getMontoFee() != null) {
+                    bjson.setMontoFeeUsd(boleto.getMontoFee().divide(boleto.getFactorCambiario(), RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
+                }
+                if (boleto.getMontoDescuento() != null) {
+                    bjson.setMontoDescuentoUsd(boleto.getMontoDescuento().divide(boleto.getFactorCambiario(), RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
+                }
+
+                if (boleto.getTotalMontoCancelado() != null) {
+                    bjson.setTotalMontoCanceladoUsd(boleto.getTotalMontoCancelado().divide(boleto.getFactorCambiario(), RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
+                }
+
+                if (boleto.getMontoComision() != null) {
+                    if (boleto.getTotalBoleto() != null) {
+                        bjson.setMontoPagarLineaAereaUsd(boleto.getTotalBoleto().subtract(boleto.getMontoComision()).divide(boleto.getFactorCambiario(), RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
+                    }
+                } else {
+                    if (boleto.getTotalBoleto() != null) {
+                        bjson.setMontoPagarLineaAereaUsd(boleto.getTotalBoleto().divide(boleto.getFactorCambiario(), RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
+                    }
                 }
             }
         }
@@ -535,13 +561,13 @@ public class BoletoJSON implements Serializable {
                         bjson.setCombinadoContadoMonto(boleto.getCombinadoContadoMonto());
 
                         switch (boleto.getCombinadoContadoTipo()) {
-                            case FormasPago.CONTADO_EFECTIVO:
+                            case FormasPago.EFECTIVO:
                                 break;
-                            case FormasPago.CONTADO_CHEQUE:
+                            case FormasPago.CHEQUE:
                                 bjson.setCombinadoContadoIdBanco(boleto.getCombinadoContadoIdBanco());
                                 bjson.setCombinadoContadoNroCheque(boleto.getCombinadoContadoNroCheque());
                                 break;
-                            case FormasPago.CONTADO_DEPOSITO:
+                            case FormasPago.DEPOSITO:
                                 bjson.setCombinadoContadoIdBanco(boleto.getCombinadoContadoIdBanco());
                                 bjson.setCombinadoContadoNroDeposito(boleto.getCombinadoContadoNroDeposito());
                                 break;
@@ -568,11 +594,11 @@ public class BoletoJSON implements Serializable {
         return bjson;
     }
 
-    public long getNumeroOrigen() {
+    public Long getNumeroOrigen() {
         return numeroOrigen;
     }
 
-    public void setNumeroOrigen(long numeroOrigen) {
+    public void setNumeroOrigen(Long numeroOrigen) {
         this.numeroOrigen = numeroOrigen;
     }
 
@@ -696,11 +722,11 @@ public class BoletoJSON implements Serializable {
         this.tipoCupon = tipoCupon;
     }
 
-    public long getNumero() {
+    public Long getNumero() {
         return numero;
     }
 
-    public void setNumero(long numero) {
+    public void setNumero(Long numero) {
         this.numero = numero;
     }
 
@@ -1254,6 +1280,46 @@ public class BoletoJSON implements Serializable {
 
     public void setIdBoletoPadre(Integer idBoletoPadre) {
         this.idBoletoPadre = idBoletoPadre;
+    }
+
+    public String getImpuesto1nombre() {
+        return impuesto1nombre;
+    }
+
+    public void setImpuesto1nombre(String impuesto1nombre) {
+        this.impuesto1nombre = impuesto1nombre;
+    }
+
+    public String getImpuesto2nombre() {
+        return impuesto2nombre;
+    }
+
+    public void setImpuesto2nombre(String impuesto2nombre) {
+        this.impuesto2nombre = impuesto2nombre;
+    }
+
+    public String getImpuesto3nombre() {
+        return impuesto3nombre;
+    }
+
+    public void setImpuesto3nombre(String impuesto3nombre) {
+        this.impuesto3nombre = impuesto3nombre;
+    }
+
+    public String getImpuesto4nombre() {
+        return impuesto4nombre;
+    }
+
+    public void setImpuesto4nombre(String impuesto4nombre) {
+        this.impuesto4nombre = impuesto4nombre;
+    }
+
+    public String getImpuesto5nombre() {
+        return impuesto5nombre;
+    }
+
+    public void setImpuesto5nombre(String impuesto5nombre) {
+        this.impuesto5nombre = impuesto5nombre;
     }
 
 }

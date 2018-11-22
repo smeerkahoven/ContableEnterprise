@@ -35,6 +35,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "NotaDebitoTransaccion.findAll", query = "SELECT n FROM NotaDebitoTransaccion n")
     ,@NamedQuery(name = "NotaDebitoTransaccion.updateBoletoEstado", query = "UPDATE NotaDebitoTransaccion n SET n.estado=:estado WHERE n.idBoleto=:idBoleto")
     ,@NamedQuery(name = "NotaDebitoTransaccion.findAllByIdNotaDebito", query = "SELECT n FROM NotaDebitoTransaccion n WHERE n.idNotaDebito=:idNotaDebito")
+    ,@NamedQuery(name = "NotaDebitoTransaccion.findAllByIdNotaDebitoAndPendientes", query = "SELECT n FROM NotaDebitoTransaccion n WHERE n.idNotaDebito=:idNotaDebito and n.estado='P'")
 })
 public class NotaDebitoTransaccion extends Entidad {
 
@@ -75,8 +76,8 @@ public class NotaDebitoTransaccion extends Entidad {
     private Date fechaInsert;
     @Column(name = "id_boleto")
     private Integer idBoleto;
-    @Column(name = "id_plan_cuentas")
-    private Integer idPlanCuentas;
+    @Column(name = "id_cargo")
+    private Integer idCargo;
     @Column(name = "estado")
     private String estado;
     @Column(name = "moneda")
@@ -151,14 +152,15 @@ public class NotaDebitoTransaccion extends Entidad {
         this.idBoleto = idBoleto;
     }
 
-    public Integer getIdPlanCuentas() {
-        return idPlanCuentas;
+    public Integer getIdCargo() {
+        return idCargo;
     }
 
-    public void setIdPlanCuentas(Integer idPlanCuentas) {
-        this.idPlanCuentas = idPlanCuentas;
+    public void setIdCargo(Integer idCargo) {
+        this.idCargo = idCargo;
     }
 
+    
     public String getEstado() {
         return estado;
     }

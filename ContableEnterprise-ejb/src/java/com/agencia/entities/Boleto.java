@@ -36,9 +36,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Boleto.findAll", query = "SELECT b FROM Boleto b ORDER by b.numero")
-    ,@NamedQuery(name = "Boleto.findNroBoleto", query = "SELECT b FROM Boleto b WHERE b.numero=:numero and b.estado in ('E','V','P')")
-    ,@NamedQuery(name = "Boleto.findNroBoletoE", query = "SELECT b FROM Boleto b WHERE b.numero=:numero and b.estado=:estado")
-    ,@NamedQuery(name = "Boleto.getAllAmadeusAutomaticos", query = "SELECT b FROM Boleto b WHERE b.tipoBoleto='AM' and b.estado='C' and b.idEmpresa=:idEmpresa")
+    ,@NamedQuery(name = "Boleto.findNroBoleto", query = "SELECT b FROM Boleto b WHERE b.numero=:numero and b.estado in ('E','V','P','C')")
+    ,@NamedQuery(name = "Boleto.findNroBoletoE", query = "SELECT b FROM Boleto b WHERE b.numero=:numero and b.estado in ('E','P') ")
+    ,@NamedQuery(name = "Boleto.getAllAmadeusAutomaticos", query = "SELECT b FROM Boleto b WHERE (b.tipoBoleto='AM' or b.tipoBoleto='AV') and b.estado='C' and b.idEmpresa=:idEmpresa ORDER BY b.idBoleto")
+    ,@NamedQuery(name = "Boleto.getAllSabreAutomaticos", query = "SELECT b FROM Boleto b WHERE (b.tipoBoleto='SA' or b.tipoBoleto='SV') and b.estado='C' and b.idEmpresa=:idEmpresa ORDER BY b.idBoleto")
 })
 public class Boleto extends Entidad {
 
@@ -70,11 +71,12 @@ public class Boleto extends Entidad {
     }
 
     public static class Emision {
-        public static final String TKT = "TKT" ;
-        public static final String NORMAL = "NORM" ;
-        public static final String CNX = "CNX" ;
-        public static final String CHG = "CHG" ;
-        
+
+        public static final String TKT = "TKT";
+        public static final String NORMAL = "NORM";
+        public static final String CNX = "CNX";
+        public static final String CHG = "CHG";
+
     }
 
     public static final String PENDIENTE = "P";
@@ -127,10 +129,10 @@ public class Boleto extends Entidad {
     private String tipoCupon;
     @Basic(optional = false)
     @Column(name = "numero")
-    private long numero;
+    private Long numero;
     @Basic(optional = false)
     @Column(name = "numero_origen")
-    private long numeroOrigen;
+    private Long numeroOrigen;
     @Basic(optional = false)
     @Size(min = 1, max = 4)
     @Column(name = "id_ruta_1")
@@ -218,22 +220,35 @@ public class Boleto extends Entidad {
     private BigDecimal impuesto4;
     @Column(name = "impuesto_5", updatable = false)
     private BigDecimal impuesto5;
+
+    @Column(name = "impuesto_1_nombre")
+    private String impuesto1nombre;
+    @Column(name = "impuesto_2_nombre")
+    private String impuesto2nombre;
+    @Column(name = "impuesto_3_nombre")
+    private String impuesto3nombre;
+    @Column(name = "impuesto_4_nombre")
+    private String impuesto4nombre;
+    @Column(name = "impuesto_5_nombre")
+    private String impuesto5nombre;
+
     @Column(name = "total_boleto", updatable = false)
     private BigDecimal totalBoleto;
     @Column(name = "comision")
     private BigDecimal comision;
     @Column(name = "monto_comision")
     private BigDecimal montoComision;
-    @Column(name = "fee", updatable = false)
+    @Column(name = "fee")
     private BigDecimal fee;
-    @Column(name = "monto_fee", updatable = false)
+    @Column(name = "monto_fee")
     private BigDecimal montoFee;
-    @Column(name = "descuento", updatable = false)
+    @Column(name = "descuento")
     private BigDecimal descuento;
     @Column(name = "monto_descuento", updatable = false)
     private BigDecimal montoDescuento;
     @Column(name = "total_monto_cancelado", updatable = false)
     private BigDecimal totalMontoCancelado;
+
     @Size(max = 1)
     @Column(name = "contado_tipo")
     private String contadoTipo;
@@ -302,7 +317,7 @@ public class Boleto extends Entidad {
         this.idBoleto = idBoleto;
     }
 
-    public Boleto(long numero) {
+    public Boleto(Long numero) {
         this.numero = numero;
     }
 
@@ -411,11 +426,11 @@ public class Boleto extends Entidad {
         this.tipoCupon = tipoCupon;
     }
 
-    public long getNumero() {
+    public Long getNumero() {
         return numero;
     }
 
-    public void setNumero(long numero) {
+    public void setNumero(Long numero) {
         this.numero = numero;
     }
 
@@ -901,11 +916,11 @@ public class Boleto extends Entidad {
         this.idNotaDebitoTransaccion = idNotaDebitoTransaccion;
     }
 
-    public long getNumeroOrigen() {
+    public Long getNumeroOrigen() {
         return numeroOrigen;
     }
 
-    public void setNumeroOrigen(long numeroOrigen) {
+    public void setNumeroOrigen(Long numeroOrigen) {
         this.numeroOrigen = numeroOrigen;
     }
 
@@ -915,6 +930,46 @@ public class Boleto extends Entidad {
 
     public void setIdArchivo(ArchivoBoleto idArchivo) {
         this.idArchivo = idArchivo;
+    }
+
+    public String getImpuesto1nombre() {
+        return impuesto1nombre;
+    }
+
+    public void setImpuesto1nombre(String impuesto1nombre) {
+        this.impuesto1nombre = impuesto1nombre;
+    }
+
+    public String getImpuesto2nombre() {
+        return impuesto2nombre;
+    }
+
+    public void setImpuesto2nombre(String impuesto2nombre) {
+        this.impuesto2nombre = impuesto2nombre;
+    }
+
+    public String getImpuesto3nombre() {
+        return impuesto3nombre;
+    }
+
+    public void setImpuesto3nombre(String impuesto3nombre) {
+        this.impuesto3nombre = impuesto3nombre;
+    }
+
+    public String getImpuesto4nombre() {
+        return impuesto4nombre;
+    }
+
+    public void setImpuesto4nombre(String impuesto4nombre) {
+        this.impuesto4nombre = impuesto4nombre;
+    }
+
+    public String getImpuesto5nombre() {
+        return impuesto5nombre;
+    }
+
+    public void setImpuesto5nombre(String impuesto5nombre) {
+        this.impuesto5nombre = impuesto5nombre;
     }
 
 }

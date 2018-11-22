@@ -47,6 +47,13 @@ import javax.validation.constraints.Size;
             @StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_boleto")
         }
 )
+@NamedStoredProcedureQuery(
+        name = "IngresoCaja.updateMontosIngresoCajaFromFinalizar",
+        procedureName = "updateMontosIngresoCajaFromFinalizar",
+        parameters = {
+            @StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_ingreso")
+        }
+)
 @NamedQueries({
     @NamedQuery(name = "IngresoCaja.findAll", query = "SELECT i FROM IngresoCaja i")})
 public class IngresoCaja extends Entidad {
@@ -94,11 +101,6 @@ public class IngresoCaja extends Entidad {
     @Column(name = "fecha_insert")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaInsert;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 1)
-    @Column(name = "moneda")
-    private String moneda;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "monto_abonado_bs")
     private BigDecimal montoAbonadoBs;
@@ -109,9 +111,6 @@ public class IngresoCaja extends Entidad {
     @Size(max = 1)
     @Column(name = "forma_pago")
     private String formaPago;
-    @Size(max = 1)
-    @Column(name = "tipo_contado")
-    private String tipoContado;
     @Column(name = "id_banco")
     private Integer idBanco;
     @Size(max = 45)
@@ -154,7 +153,6 @@ public class IngresoCaja extends Entidad {
         this.idUsuario = idUsuario;
         this.fechaEmision = fechaEmision;
         this.fechaInsert = fechaInsert;
-        this.moneda = moneda;
     }
 
     public Integer getIdCuentaDeposito() {
@@ -237,14 +235,6 @@ public class IngresoCaja extends Entidad {
         this.fechaInsert = fechaInsert;
     }
 
-    public String getMoneda() {
-        return moneda;
-    }
-
-    public void setMoneda(String moneda) {
-        this.moneda = moneda;
-    }
-
     public BigDecimal getMontoAbonadoBs() {
         return montoAbonadoBs;
     }
@@ -277,13 +267,6 @@ public class IngresoCaja extends Entidad {
         this.formaPago = formaPago;
     }
 
-    public String getTipoContado() {
-        return tipoContado;
-    }
-
-    public void setTipoContado(String tipoContado) {
-        this.tipoContado = tipoContado;
-    }
 
     public Integer getIdBanco() {
         return idBanco;

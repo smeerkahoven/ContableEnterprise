@@ -45,6 +45,14 @@ public class RolFormulario extends Entidad {
     private Short acceder;
     @Column(name = "buscar")
     private Short buscar;
+    @Column(name = "ver")
+    private Short ver;
+    @Column(name = "editar")
+    private Short editar;
+    @Column(name = "anular")
+    private Short anular;
+    @Column(name = "ejecutar")
+    private Short ejecutar;
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -129,6 +137,40 @@ public class RolFormulario extends Entidad {
     public void setIdRol(Rol idRol) {
         this.idRol = idRol;
     }
+
+    public Short getVer() {
+        return ver;
+    }
+
+    public void setVer(Short ver) {
+        this.ver = ver;
+    }
+
+    public Short getEditar() {
+        return editar;
+    }
+
+    public void setEditar(Short editar) {
+        this.editar = editar;
+    }
+
+    public Short getAnular() {
+        return anular;
+    }
+
+    public void setAnular(Short anular) {
+        this.anular = anular;
+    }
+
+    public Short getEjecutar() {
+        return ejecutar;
+    }
+
+    public void setEjecutar(Short ejecutar) {
+        this.ejecutar = ejecutar;
+    }
+    
+    
 
     @Override
     public int hashCode() {

@@ -16,9 +16,9 @@ public class FormasPago {
     public static final String TARJETA = "T";
     public static final String COMBINADO = "P";
     
-    public static final String CONTADO_EFECTIVO = "E";
-    public static final String CONTADO_CHEQUE = "C";
-    public static final String CONTADO_DEPOSITO = "D";
+    public static final String EFECTIVO = "E";
+    public static final String CHEQUE = "H";
+    public static final String DEPOSITO = "D";
     
     
 }

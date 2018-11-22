@@ -94,6 +94,15 @@ public abstract class FacadeEJB implements DaoRemoteFacade {
     }
 
     @Override
+    public Entidad get(Integer id, Class<?> typeClass) throws CRUDException {
+    
+        Entidad e =(Entidad) em.find(typeClass, id);
+        
+        return e ;
+    }
+
+    
+    @Override
     public List get(String namedQuery, Class<?> typeClass, HashMap parameters) throws CRUDException {
         Query q = em.createNamedQuery(namedQuery, typeClass);
 

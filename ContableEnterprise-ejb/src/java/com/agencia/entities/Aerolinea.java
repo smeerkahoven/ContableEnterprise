@@ -37,9 +37,16 @@ import javax.xml.bind.annotation.XmlRootElement;
     ,@NamedQuery(name = "Aerolinea.findForCombo", query = "SELECT a.idAerolinea,a.numero, a.nombre, a.moneda FROM Aerolinea a WHERE a.moneda=:moneda")
     ,@NamedQuery(name = "Aerolinea.find", query = "SELECT a FROM Aerolinea a WHERE a.idAerolinea=:idAerolinea")
     ,@NamedQuery(name = "Aerolinea.findByIata", query = "SELECT a FROM Aerolinea a WHERE a.iata=:iata")
+    ,@NamedQuery(name = "Aerolinea.findByNumero", query = "SELECT a FROM Aerolinea a WHERE a.numero=:numero")
     ,@NamedQuery(name = "Aerolinea.allCombo", query = "SELECT a.idAerolinea, a.numero, a.nombre FROM Aerolinea a  ORDER by a.numero")
 })
 public class Aerolinea extends Entidad {
+    
+    public static final class Comision {
+        public static final String TOTAL = "T" ;
+        public static final String NETO = "N" ;
+        
+    }
 
     private static final long serialVersionUID = 1L;
     @Id
