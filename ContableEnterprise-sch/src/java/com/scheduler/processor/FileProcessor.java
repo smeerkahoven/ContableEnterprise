@@ -7,6 +7,7 @@ package com.scheduler.processor;
 
 import com.configuracion.entities.ArchivoBoleto;
 import com.configuracion.remote.AmadeusFileRemote;
+import com.configuracion.remote.SabreFileRemote;
 import com.seguridad.control.exception.CRUDException;
 import java.util.Date;
 import java.util.HashMap;
@@ -27,8 +28,11 @@ import javax.ejb.LocalBean;
 public class FileProcessor {
 
     @EJB
+    private SabreFileRemote ejbSabre ;
+    @EJB
     private AmadeusFileRemote ejbAmadeus ;
-    //@Schedule(dayOfWeek = "Mon-Fri", month = "*", hour = "9-17", dayOfMonth = "*", year = "*", minute = "*", second = "0")
+    //EN PRODUCCION DEBE FUNCIONAR CADA 10 MINUTOS
+    //@Schedule(dayOfWeek = "Mon-Fri", month = "*", hour = "9-17", dayOfMonth = "*", year = "*", minute = "*/10", second = "0")
     @Schedule(dayOfWeek = "*", month = "*", hour = "*", dayOfMonth = "*", year = "*", minute = "*/1")
     public void processArchivosBoletos() {
         
@@ -41,14 +45,20 @@ public class FileProcessor {
             for(ArchivoBoleto b : l){
                 
                 if (b.getTipoArchivo().equals(ArchivoBoleto.TipoArchivo.AMADEUS)){
-                    ejbAmadeus.procesarArchivoAmadeus(b);
+                    if (ejbAmadeus.procesarArchivo(b)){
+                        b.setEstado(ArchivoBoleto.Estado.PROCESADO);
+                    }else {
+                        b.setEstado(ArchivoBoleto.Estado.ERROR);
+                    }
                 }else if (b.getTipoArchivo().equals(ArchivoBoleto.TipoArchivo.SABRE)){
-                    
+                    if (ejbSabre.procesarArchivo(b)){
+                        b.setEstado(ArchivoBoleto.Estado.PROCESADO);
+                    }else {
+                        b.setEstado(ArchivoBoleto.Estado.ERROR);
+                    }
                 }else {
                     //archivo desconocido
                 }
-                
-                b.setEstado(ArchivoBoleto.Estado.PROCESADO);
                 ejbAmadeus.update(b);
             }
             
