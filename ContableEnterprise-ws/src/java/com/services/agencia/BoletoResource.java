@@ -9,11 +9,15 @@ import com.agencia.control.ejb.BoletoMultipleSearch;
 import com.agencia.control.remote.BoletoRemote;
 import com.agencia.entities.Boleto;
 import com.agencia.search.dto.BoletoSearchForm;
+import com.contabilidad.entities.NotaDebito;
+import com.contabilidad.remote.NotaDebitoRemote;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.response.json.agencia.BoletoJSON;
+import com.response.json.contabilidad.NotaDebitoJSON;
+import com.seguridad.control.entities.Log;
 import com.seguridad.control.exception.CRUDException;
 import com.seguridad.utils.Accion;
 import com.seguridad.utils.ResponseCode;
@@ -45,6 +49,8 @@ import javax.ws.rs.core.MediaType;
 @Path("boletos")
 public class BoletoResource extends TemplateResource {
 
+    @EJB
+    private NotaDebitoRemote ejbNotaDebito;
     @EJB
     private BoletoRemote ejbBoleto;
 
@@ -201,7 +207,6 @@ public class BoletoResource extends TemplateResource {
                 Gson gson = new GsonBuilder().create();
                 JsonParser parser = new JsonParser();
                 JsonObject object = parser.parse((String) request.getContent()).getAsJsonObject();
-                System.out.println((String) request.getContent());
                 bjson = gson.fromJson(object.toString(), BoletoJSON.class);
 
                 bjson.setIdUsuarioCreador(user.getUserName());
@@ -226,7 +231,7 @@ public class BoletoResource extends TemplateResource {
 
                     response.setEntidad(bjson);
 
-                    ejbLogger.add(Accion.INSERT, user.getUserName(), com.view.menu.Formulario.BOLETOS, user.getIp());
+                    ejbLogger.add(Accion.INSERT, user.getUserName(), com.view.menu.Formulario.BOLETOS, user.getIp(), Log.BOLETO_ANULAR);
                 }
             } catch (CRUDException ex) {
                 Logger.getLogger(BoletoResource.class.getName()).log(Level.SEVERE, null, ex);
@@ -314,9 +319,9 @@ public class BoletoResource extends TemplateResource {
                 List<Boleto> l = ejbBoleto.getBoletosAmadeusCargados(user.getIdEmpleado().getIdEmpresa().getIdEmpresa());
                 List r = new LinkedList<BoletoJSON>();
                 if (!l.isEmpty()) {
-                    l.forEach(x->{
+                    l.forEach(x -> {
                         System.out.println(x);
-                        
+
                         BoletoJSON b = BoletoJSON.toBoletoJSON(x);
                         r.add(b);
                     });
@@ -338,6 +343,43 @@ public class BoletoResource extends TemplateResource {
         return response;
     }
 
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("all/sabre")
+    public RestResponse getAllSabre(final RestRequest request) {
+
+        RestResponse response = doValidations(request);
+        try {
+            if (response.getCode() == ResponseCode.RESTFUL_SUCCESS.getCode()) {
+
+                List<Boleto> l = ejbBoleto.getBoletosSabreCargados(user.getIdEmpleado().getIdEmpresa().getIdEmpresa());
+                List r = new LinkedList<BoletoJSON>();
+                if (!l.isEmpty()) {
+                    l.forEach(x -> {
+                        System.out.println(x);
+
+                        BoletoJSON b = BoletoJSON.toBoletoJSON(x);
+                        r.add(b);
+                    });
+                    response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
+                    response.setContent(r);
+                } else {
+                    response.setCode(ResponseCode.RESTFUL_WARNING.getCode());
+                    response.setContent(mensajes.getProperty(RestResponse.RESTFUL_NO_TICKETS_FOUND));
+                }
+
+            }
+
+        } catch (Exception ex) {
+            response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+            response.setContent(ex.getMessage());
+            ex.printStackTrace();
+        }
+
+        return response;
+    }
+    
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
@@ -387,47 +429,39 @@ public class BoletoResource extends TemplateResource {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Path("save-boleto")
-    public RestResponse saveBoleto(final RestRequest request) {
-        RestResponse response = new RestResponse();
+    @Path("save")
+    public RestResponse save(final RestRequest request) {
+        RestResponse response = doValidations(request);
 
-        response = doValidations(request);
-        if (response.getCode() == ResponseCode.RESTFUL_SUCCESS.getCode()) {
+        try {
+            if (response.getCode() == ResponseCode.RESTFUL_SUCCESS.getCode()) {
 
-            BoletoJSON bjson;
-            Gson gson = new GsonBuilder().create();
-            JsonParser parser = new JsonParser();
-            JsonObject object = parser.parse((String) request.getContent()).getAsJsonObject();
-            System.out.println((String) request.getContent());
-            bjson
-                    = gson.fromJson(object.toString(), BoletoJSON.class
-                    );
-
-            try {
-                bjson.setIdUsuarioCreador(user.getUserName());
-                bjson.setIdEmpresa(user.getIdEmpleado().getIdEmpresa().getIdEmpresa());
-
+                BoletoJSON bjson = convertToBoletoJSON(request);
                 Boleto boleto = BoletoJSON.toNewBoleto(bjson);
 
                 Optional op = Optional.ofNullable(boleto);
                 if (op.isPresent()) {
 
-                    boleto = ejbBoleto.saveBoletoMultiple(boleto);
-                    bjson.setIdBoleto(boleto.getIdBoleto());
+                    ejbBoleto.insertarBoleto(boleto);
+
+                    NotaDebito n = (NotaDebito) ejbNotaDebito.get(new NotaDebito(boleto.getIdNotaDebito()));
 
                     response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
-                    response.setContent(mensajes.getProperty(RestResponse.RESTFUL_BOLETO_MULTIPLE_INSERTADO));
-                    response.setEntidad(bjson);
+                    response.setContent(mensajes.getProperty(RestResponse.RESTFUL_BOLETO_INSERTADO));
 
-                    ejbLogger.add(Accion.INSERT, user.getUserName(), Formulario.BOLETOS, user.getIp());
+                    NotaDebitoJSON njson = NotaDebitoJSON.toNotaDebitoJSON(n);
 
+                    response.setEntidad(njson);
                 }
-            } catch (CRUDException ex) {
-                Logger.getLogger(BoletoResource.class
-                        .getName()).log(Level.SEVERE, null, ex);
-                response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
-                response.setContent(ex.getMessage());
+
+                ejbLogger.add(Accion.INSERT, user.getUserName(), Formulario.BOLETOS, user.getIp(), Log.BOLETO_SAVE.replace("<boleto>", boleto.getNumero().toString()));
             }
+
+        } catch (Exception ex) {
+            Logger.getLogger(BoletoResource.class
+                    .getName()).log(Level.SEVERE, null, ex);
+            response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+            response.setContent(ex.getMessage());
         }
 
         return response;
@@ -448,9 +482,7 @@ public class BoletoResource extends TemplateResource {
             JsonParser parser = new JsonParser();
             JsonObject object = parser.parse((String) request.getContent()).getAsJsonObject();
             System.out.println((String) request.getContent());
-            bjson
-                    = gson.fromJson(object.toString(), BoletoJSON.class
-                    );
+            bjson = gson.fromJson(object.toString(), BoletoJSON.class);
 
             bjson.setIdUsuarioCreador(user.getUserName());
             bjson.setIdEmpresa(user.getIdEmpleado().getIdEmpresa().getIdEmpresa());
@@ -460,14 +492,23 @@ public class BoletoResource extends TemplateResource {
                 Optional op = Optional.ofNullable(boleto);
                 if (op.isPresent()) {
 
-                    boleto = ejbBoleto.saveBoletoVoid(boleto);
-                    bjson.setIdBoleto(boleto.getIdBoleto());
+                    NotaDebito n = (NotaDebito) ejbNotaDebito.get(new NotaDebito(boleto.getIdNotaDebito()));
+                    op = Optional.ofNullable(n);
+                    if (op.isPresent()) {
 
-                    response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
-                    response.setContent(mensajes.getProperty(RestResponse.RESTFUL_BOLETO_VOID_INSERTADO));
-                    response.setEntidad(bjson);
+                        boleto = ejbBoleto.saveBoletoVoid(boleto, n);
 
-                    ejbLogger.add(Accion.INSERT, user.getUserName(), Formulario.BOLETOS, user.getIp());
+                        bjson.setIdBoleto(boleto.getIdBoleto());
+
+                        response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
+                        response.setContent(mensajes.getProperty(RestResponse.RESTFUL_BOLETO_VOID_INSERTADO));
+                        response.setEntidad(bjson);
+
+                        ejbLogger.add(Accion.INSERT, user.getUserName(), Formulario.BOLETOS, user.getIp(), Log.BOLETO_SAVE.replace("<id>", boleto.getNumero().toString()));
+                    }else {
+                        response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+                        response.setContent(mensajes.getProperty(RestResponse.RESTFUL_NO_EXISTE_NOTADEBITO));
+                    }
                 }
 
             } catch (CRUDException ex) {
@@ -496,10 +537,7 @@ public class BoletoResource extends TemplateResource {
             Gson gson = new GsonBuilder().create();
             JsonParser parser = new JsonParser();
             JsonObject object = parser.parse((String) request.getContent()).getAsJsonObject();
-            System.out.println((String) request.getContent());
-            bjson
-                    = gson.fromJson(object.toString(), BoletoMultipleSearch.class
-                    );
+            bjson = gson.fromJson(object.toString(), BoletoMultipleSearch.class);
 
             try {
                 List l = ejbBoleto.getBoletosMultiples(bjson.getIdBoleto(), bjson.getIdBoletoPadre());
@@ -528,15 +566,52 @@ public class BoletoResource extends TemplateResource {
         return response;
     }
 
+    @POST
+    @Path("get")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public RestResponse getBoleto(final RestRequest request) {
+        RestResponse response = doValidations(request);
+
+        try {
+
+            if (response.getCode() == ResponseCode.RESTFUL_SUCCESS.getCode()) {
+                BoletoJSON bjson = convertToBoletoJSON(request);
+                Optional op = Optional.ofNullable(bjson);
+                if (op.isPresent()) {
+                    Boleto b = new Boleto();
+                    b.setIdBoleto(bjson.getIdBoleto());
+                    b = (Boleto) ejbBoleto.get(b);
+                    op = Optional.ofNullable(b);
+                    if (!op.isPresent()) {
+                        response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+                        response.setContent(mensajes.getProperty(RestResponse.RESTFUL_NO_RECORDS_FOUND));
+                    } else {
+                        response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
+                        response.setContent(BoletoJSON.toBoletoJSON(b));
+                    }
+                }
+            }
+
+        } catch (CRUDException ex) {
+            Logger.getLogger(BoletoResource.class.getName()).log(Level.SEVERE, null, ex);
+            response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+            response.setContent(ex.getMessage());
+        }
+
+        return response;
+    }
+
     private BoletoJSON convertToBoletoJSON(final RestRequest request) {
         BoletoJSON bjson;
         Gson gson = new GsonBuilder().create();
         JsonParser parser = new JsonParser();
         JsonObject object = parser.parse((String) request.getContent()).getAsJsonObject();
         System.out.println((String) request.getContent());
-        bjson
-                = gson.fromJson(object.toString(), BoletoJSON.class
-                );
+        bjson = gson.fromJson(object.toString(), BoletoJSON.class);
+
+        bjson.setIdUsuarioCreador(user.getUserName());
+        bjson.setIdEmpresa(user.getIdEmpleado().getIdEmpresa().getIdEmpresa());
 
         return bjson;
     }

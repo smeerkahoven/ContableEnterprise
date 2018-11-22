@@ -5,28 +5,31 @@
  */
 package com.services.notadebito;
 
+import com.agencia.control.remote.BoletoRemote;
 import com.agencia.entities.Boleto;
-import com.agencia.entities.BoletoSearch;
+import com.agencia.entities.Cliente;
+import com.agencia.entities.Promotor;
 import com.agencia.search.dto.BoletoSearchForm;
 import com.contabilidad.entities.AsociacionBoletoNotaDebitoJSON;
+import com.contabilidad.entities.CargoBoleto;
 import com.contabilidad.entities.NotaDebito;
 import com.contabilidad.remote.NotaDebitoRemote;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.response.json.contabilidad.CargoBoletoJSON;
 import com.response.json.contabilidad.NotaDebitoJSON;
+import com.seguridad.control.entities.Log;
 import com.seguridad.control.exception.CRUDException;
 import com.seguridad.utils.Accion;
+import com.seguridad.utils.DateContable;
 import com.seguridad.utils.ResponseCode;
 import com.services.TemplateResource;
 import com.services.agencia.BoletoResource;
 import com.services.seguridad.util.RestRequest;
 import com.services.seguridad.util.RestResponse;
 import java.math.BigDecimal;
-import java.time.Clock;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -52,6 +55,9 @@ public class NotadebitoResource extends TemplateResource {
 
     @EJB
     private NotaDebitoRemote ejbNotaDebito;
+
+    @EJB
+    private BoletoRemote ejbBoleto;
 
     /**
      * Creates a new instance of NotadebitoResource
@@ -83,6 +89,109 @@ public class NotadebitoResource extends TemplateResource {
     }
 
     @POST
+    @Path("cargos/save")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public RestResponse saveCargos(RestRequest request) {
+        RestResponse response = doValidations(request);
+        try {
+            if (response.getCode() == ResponseCode.RESTFUL_SUCCESS.getCode()) {
+                CargoBoletoJSON json = convertToCargoJSON(request);
+                Optional op = Optional.ofNullable(json);
+                if (op.isPresent()) {
+                    json.setIdEmpresa(user.getIdEmpleado().getIdEmpresa().getIdEmpresa());
+                    json.setUsuarioCreador(user.getUserName());
+
+                    CargoBoleto cargo = CargoBoletoJSON.toCargoBoleto(json);
+                    cargo.setFechaInsert(DateContable.getCurrentDate());
+
+                    cargo = ejbNotaDebito.saveCargo(cargo);
+
+                    NotaDebito n = (NotaDebito) ejbNotaDebito.get(new NotaDebito(cargo.getIdNotaDebito()));
+
+                    response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
+                    response.setContent(mensajes.getProperty(RestResponse.RESTFUL_SUCCESS));
+                    response.setEntidad(n);
+
+                    String mensaje = Log.NOTA_DEBITO_CARGO_GUARDAR.replace("<cargo>", cargo.getIdCargo().toString());
+                    mensaje = mensaje.replace("<nota>", cargo.getIdNotaDebito().toString());
+
+                    ejbLogger.add(Accion.INSERT, user.getUserName(), com.view.menu.Formulario.BOLETOS_OTROS, user.getIp(), mensaje);
+
+                }
+            }
+        } catch (Exception ex) {
+            response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+            response.setContent(ex.getMessage());
+            Logger.getLogger(BoletoResource.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return response;
+    }
+
+    @POST
+    @Path("cargos/get")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public RestResponse getCargosBoleto(final RestRequest request) {
+        RestResponse response = doValidations(request);
+
+        try {
+            CargoBoletoJSON json = convertToCargoJSON(request);
+
+            Optional op = Optional.ofNullable(json);
+            if (op.isPresent()) {
+                CargoBoleto cargo = new CargoBoleto(json.getIdCargo());
+                cargo = ejbNotaDebito.getCargo(cargo);
+                op = Optional.ofNullable(cargo);
+                if (!op.isPresent()) {
+                    response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+                    response.setContent(mensajes.getProperty(RestResponse.RESTFUL_VALUE_NOT_FOUND));
+                } else {
+                    response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
+                    response.setContent(CargoBoletoJSON.toCargoBoletoJSON(cargo));
+                }
+
+                ejbLogger.add(Accion.EDIT, user.getUserName(), com.view.menu.Formulario.BOLETOS_OTROS, user.getIp());
+
+            }
+
+        } catch (Exception ex) {
+            response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+            response.setContent(ex.getMessage());
+            Logger.getLogger(BoletoResource.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return response;
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("finalizar")
+    public RestResponse finalizar(final RestRequest request) {
+        RestResponse response = doValidations(request);
+
+        if (response.getCode() == ResponseCode.RESTFUL_SUCCESS.getCode()) {
+            try {
+                NotaDebitoJSON json = convertToBoletoJSON(request);
+                
+                NotaDebito n = NotaDebitoJSON.toNotaDebito(json);
+                
+                ejbNotaDebito.finalizar(n);
+                
+                response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
+                response.setContent(mensajes.getProperty(RestResponse.RESTFUL_SUCCESS));
+                
+            } catch (CRUDException ex) {
+                Logger.getLogger(NotadebitoResource.class.getName()).log(Level.SEVERE, null, ex);
+                response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+                response.setContent(ex.getMessage());
+            }
+        }
+
+        return response;
+    }
+
+    @POST
     @Path("boleto/asociar")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
@@ -90,18 +199,39 @@ public class NotadebitoResource extends TemplateResource {
         RestResponse response = doValidations(request);
 
         try {
-            System.out.println(request.getContent());
-
             AsociacionBoletoNotaDebitoJSON json;
             Gson gson = new GsonBuilder().create();
             JsonParser parser = new JsonParser();
             JsonObject object = parser.parse((String) request.getContent()).getAsJsonObject();
             json = gson.fromJson(object.toString(), AsociacionBoletoNotaDebitoJSON.class); //Anhadimos cada boleto a una transaccion
 
+            NotaDebito n = (NotaDebito) ejbNotaDebito.get(new NotaDebito(json.getIdNotaDebito()));
+
+            if (json.getEstado().equals(NotaDebito.CREADO)) {
+                System.out.println("Id Cliente:"+ json.getIdCliente());
+                System.out.println("Id Promotor:"+ json.getIdPromotor());
+                n.setIdCliente(new Cliente(json.getIdCliente()));
+                n.setFactorCambiario(json.getFactor());
+                n.setIdCounter(new Promotor(json.getIdPromotor()));
+                n.setFechaEmision(DateContable.toLatinAmericaDateFormat(json.getFechaEmision()));
+                n.setEstado(NotaDebito.PENDIENTE);
+
+                ejbNotaDebito.update(n);
+            }
+
+            ejbLogger.add(Accion.TRANSACTION, user.getUserName(), com.view.menu.Formulario.BOLETOS_OTROS, user.getIp(), Log.NOTA_DEBITO_NUEVA_TRANSACCION_INICIO);
+
             if (json.getBoletos().size() > 0) {
                 for (Integer id : json.getBoletos()) {
-                    Boleto boleto = new Boleto(id);
-                    ejbNotaDebito.asociarBoletoNotaDebito(boleto, new NotaDebito(json.getIdNotaDebito()));
+                    Boleto boleto = (Boleto) ejbBoleto.get(new Boleto(id));
+                    boleto.setIdUsuarioCreador(user.getUserName());
+
+                    ejbNotaDebito.asociarBoletoNotaDebito(boleto, n);
+
+                    String mensaje = Log.BOLETO_ASOCIAR_AUTOMATICO.replace("<boleto>", String.valueOf(boleto.getNumero()));
+                    mensaje = mensaje.replace("<id>", json.getIdNotaDebito().toString());
+
+                    ejbLogger.add(Accion.TRANSACTION, user.getUserName(), com.view.menu.Formulario.BOLETOS_OTROS, user.getIp(), mensaje);
                 }
 
                 //actualizamos los montos con los boletos cargados
@@ -111,16 +241,16 @@ public class NotadebitoResource extends TemplateResource {
                 NotaDebito notaResult = (NotaDebito) ejbNotaDebito.get(new NotaDebito(json.getIdNotaDebito()));
 
                 response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
-                response.setContent(mensajes.getProperty(RestResponse.RESTFUL_BOLETO_MULTIPLE_INSERTADO));
+                response.setContent(mensajes.getProperty(RestResponse.RESTFUL_BOLETO_INSERTADO));
                 response.setEntidad(notaResult);
 
-                ejbLogger.add(Accion.TRANSACTION, user.getUserName(), com.view.menu.Formulario.BOLETOS_OTROS, user.getIp());
+                ejbLogger.add(Accion.TRANSACTION, user.getUserName(), com.view.menu.Formulario.BOLETOS_OTROS, user.getIp(), Log.NOTA_DEBITO_NUEVA_TRANSACCION_FIN.replace("<id>", n.getIdNotaDebito().toString()));
             }
 
         } catch (Exception ex) {
             response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
             response.setContent(ex.getMessage());
-            ex.printStackTrace();
+            Logger.getLogger(BoletoResource.class.getName()).log(Level.SEVERE, null, ex);
         }
         return response;
     }
@@ -158,7 +288,7 @@ public class NotadebitoResource extends TemplateResource {
             Logger.getLogger(BoletoResource.class.getName()).log(Level.SEVERE, null, ex);
             response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
             response.setContent(ex.getMessage());
-            ex.printStackTrace();
+            Logger.getLogger(BoletoResource.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         return response;
@@ -182,7 +312,7 @@ public class NotadebitoResource extends TemplateResource {
                     response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
                     response.setContent(mensajes.getProperty(RestResponse.RESTFUL_CANT_CREATE_NOTA_DEBITO));
                 }
-                ejbLogger.add(Accion.INSERT, user.getUserName(), com.view.menu.Formulario.BOLETOS_OTROS, user.getIp());
+                ejbLogger.add(Accion.INSERT, user.getUserName(), com.view.menu.Formulario.BOLETOS_OTROS, user.getIp(), Log.NOTA_DEBITO_NUEVO.replace("<id>", n.getIdNotaDebito().toString()));
 
             }
         } catch (CRUDException ex) {
@@ -190,6 +320,35 @@ public class NotadebitoResource extends TemplateResource {
 
             response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
             response.setContent(mensajes.getProperty(RestResponse.RESTFUL_CANT_CREATE_NOTA_DEBITO));
+        }
+
+        return response;
+    }
+
+    @POST
+    @Path("pendiente")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public RestResponse pendienteNotaDebito(final RestRequest request) {
+        RestResponse response = doValidations(request);
+        try {
+
+            NotaDebitoJSON json = convertToBoletoJSON(request);
+
+            NotaDebito n = NotaDebitoJSON.toNotaDebito(json);
+
+            ejbNotaDebito.pendiente(n);
+
+            String mensaje = Log.NOTA_DEBITO_PENDIENTE.replace("<id>", json.getIdNotaDebito().toString());
+            ejbLogger.add(Accion.PENDIENTE, user.getUserName(), com.view.menu.Formulario.BOLETOS_OTROS, user.getIp(), mensaje);
+
+            response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
+            response.setContent(mensajes.getProperty(RestResponse.RESTFUL_SUCCESS));
+
+        } catch (Exception ex) {
+            Logger.getLogger(BoletoResource.class.getName()).log(Level.SEVERE, null, ex);
+            response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+            response.setContent(ex.getMessage());
         }
 
         return response;
@@ -239,5 +398,28 @@ public class NotadebitoResource extends TemplateResource {
             Logger.getLogger(NotadebitoResource.class.getName()).log(Level.SEVERE, null, ex);
         }
         return response;
+    }
+
+    private NotaDebitoJSON convertToBoletoJSON(final RestRequest request) {
+        NotaDebitoJSON bjson;
+        Gson gson = new GsonBuilder().create();
+        JsonParser parser = new JsonParser();
+        JsonObject object = parser.parse((String) request.getContent()).getAsJsonObject();
+        System.out.println((String) request.getContent());
+        bjson = gson.fromJson(object.toString(), NotaDebitoJSON.class
+        );
+
+        return bjson;
+    }
+
+    private CargoBoletoJSON convertToCargoJSON(final RestRequest request) {
+        CargoBoletoJSON bjson;
+        Gson gson = new GsonBuilder().create();
+        JsonParser parser = new JsonParser();
+        JsonObject object = parser.parse((String) request.getContent()).getAsJsonObject();
+        System.out.println((String) request.getContent());
+        bjson = gson.fromJson(object.toString(), CargoBoletoJSON.class);
+
+        return bjson;
     }
 }

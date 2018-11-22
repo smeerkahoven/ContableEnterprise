@@ -14,6 +14,7 @@ import com.google.gson.JsonParser;
 import com.response.json.UsuarioJSON;
 import com.seguridad.control.LoggerContable;
 import com.seguridad.control.entities.PasswordRecover;
+import com.seguridad.control.entities.Rol;
 import com.seguridad.control.entities.User;
 import com.seguridad.control.entities.UserToken;
 import com.seguridad.control.exception.CRUDException;
@@ -30,6 +31,7 @@ import com.services.seguridad.util.RestRequest;
 import com.services.seguridad.util.RestResponse;
 import com.seguridad.utils.ComboSelect;
 import com.util.resource.Mensajes;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -281,9 +283,13 @@ public class UsuarioResource extends TemplateResource {
                         HashMap<String, Object> hmap = (HashMap<String, Object>) request.getContent();
                         String username = (String) hmap.get("username");
                         String comando = (String) hmap.get("comando");
-
+                        String estado = (String) hmap.get("status");
+                        BigDecimal idRol = (BigDecimal) hmap.get("idRol");
+                        
                         User u = new User();
                         u.setUserName(username);
+                        u.setStatus(estado);
+                        u.setIdRol(new Rol(idRol.intValue()));
 
                         ejbUsuario.update(u, comando);
 
