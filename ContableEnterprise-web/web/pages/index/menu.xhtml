@@ -32,9 +32,11 @@
                                     </a>  
                                     <ul class="menu" id="collapse#{modulo.nombre}">
                                         <c:forEach var="submenu" items="#{modulo.submenus}">
+                                            <c:if test="#{submenu.acceder}">
                                             <li class="menu-item">
                                                 <h:commandLink class="menu-link"  action="#{menu.navegar(submenu.action)}" value="#{submenu.nombre}" title="#{submenu.nombre}"></h:commandLink> 
                                             </li> 
+                                            </c:if>
                                         </c:forEach>
                                     </ul>
                                 </li>

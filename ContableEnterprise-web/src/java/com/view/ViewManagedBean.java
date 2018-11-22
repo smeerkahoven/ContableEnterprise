@@ -55,8 +55,8 @@ public abstract class ViewManagedBean {
     }
 
     public void checkIfCanAccess() {
-        System.out.println("ACCEDER View Managed Bean : " + this.formName + " Valor : " + this.formulario.getAcceder());
-        if (this.formulario.getAcceder() == formulario.DENEGAR) {
+        //System.out.println("ACCEDER View Managed Bean : " + this.formName + " Valor : " + this.formulario.getAcceder());
+        /*if (this.formulario.getAcceder() == formulario.DENEGAR) {
             FacesContext context = FacesContext.getCurrentInstance();
             HttpServletRequest origRequest = (HttpServletRequest) context.getExternalContext().getRequest();
             try {
@@ -65,7 +65,7 @@ public abstract class ViewManagedBean {
             } catch (IOException ex) {
                 Logger.getLogger(BoletosManagedBean.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }
+        }*/
     }
 
 }

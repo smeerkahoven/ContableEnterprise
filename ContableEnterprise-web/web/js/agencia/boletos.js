@@ -25,8 +25,8 @@ function isNumberKey(evt)
 }
 
 let date = new Date();
-let firstDay = new Date(date.getFullYear(), date.getMonth(), 1).toLocaleDateString();
-let today = new Date().toLocaleDateString();
+let firstDay = new Date(date.getFullYear(), date.getMonth(), 1).toLocaleDateString('en-GB');
+let today = new Date().toLocaleDateString('en-GB');
 
 function Boleto() {
     this.idBoleto = 0;
@@ -1537,11 +1537,11 @@ angular.module('jsBoletos.controllers', []).controller('frmBoletos',
 
                 $scope.update = function () {
                     if (!$scope.myForm.$valid) {
-                        $scope.showAlert('Error de Verificacion', 'Verifique los mensajes de los valores requeridos')
+                        $scope.showAlert('Error de Verificacion', 'Verifique los mensajes de los valores requeridos');
                         return;
                     }
                     if ($scope.formHasError()) {
-                        $scope.showAlert('Error de Verificacion', 'Verifique los mensajes de los valores requeridos')
+                        $scope.showAlert('Error de Verificacion', 'Verifique los mensajes de los valores requeridos');
                         return;
                     }
                     showBackground();
@@ -2000,7 +2000,6 @@ angular.module('jsBoletos.controllers', []).controller('frmBoletos',
                                                 $scope.showAlert("Error", "La Aerolinea seleccionada, no tiene configurada una moneda preferencial");
                                             }
 
-
                                             if ($scope.formData.tipoCupon === $scope.INTERNACIONAL) {
                                                 $scope.formData.comision = $scope.aerolinea.comisionPromInt;
                                             } else if ($scope.formData.tipoCupon === $scope.NACIONAL) {
@@ -2008,10 +2007,7 @@ angular.module('jsBoletos.controllers', []).controller('frmBoletos',
                                             }
 
                                             $scope.redondearDecimales = $scope.aerolinea.roundComisionBob ? true : false;
-
-
                                             $scope.calculateComision();
-
                                             $scope.getImpuestos($scope.aerolinea);
                                         }
                                     },

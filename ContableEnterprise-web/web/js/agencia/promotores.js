@@ -364,6 +364,7 @@ angular.module('jsPromotores.controllers', []).controller('frmPromotores',
                     $scope.showRestfulError = false;
                     $scope.formData = {};
                     $scope.clickNuevo = true;
+                    $scope.formData.tipo ='P' ;
                     $scope.myForm.$setPristine();
                     myForm.reset();
                 }

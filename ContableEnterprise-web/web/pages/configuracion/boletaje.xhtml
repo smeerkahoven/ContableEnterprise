@@ -390,10 +390,6 @@
                                                         </div>
                                                         
                                                         
-                                                        
-                                                        
-                                                        
-                                                        
                                                         <div class="form-group row">
                                                             <label for="txtNombre" class=" col-form-label col-sm-4 text-right">D&eacute;posito Bancario sin o con BSP <strong>Bs.</strong></label>
                                                             <div class="col-sm-4">
@@ -442,8 +438,41 @@
                                                             </div>
                                                         </div>
                                                         
+                                                        <legend>Otros Cargos (Boletos)</legend>
                                                         
+                                                        <div class="form-group row">
+                                                            <label for="txtNombre" class=" col-form-label col-sm-4 text-right"></label>
+                                                            <div class="col-sm-4">
+                                                                <label>BOB.</label>
+                                                            </div>
+                                                            <div class="col-sm-4">
+                                                                <label>USD.</label>
+                                                            </div>
+                                                        </div>
                                                         
+                                                        <div class="form-group row">
+                                                            <label for="txtNombre" class=" col-form-label col-sm-4 text-right">Cuenta Clientes x Cobrar</label>
+                                                            <div class="col-sm-4">
+                                                                <input type="text" ng-model="formData.otroCargosClienteCobrarDebeBs" placeholder="Seleccione una cuenta"
+                                                                       uib-typeahead="cuenta as cuenta.name for cuenta in comboCuentas | filter:{name:$viewValue}"
+                                                                       class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="0" 
+                                                                       typeahead-template-url="customTemplate.html" 
+                                                                       />
+                                                                <span class="alert-danger"  ng-show="formData.otroCargosClienteCobrarDebeBs.id === undefined"  >
+                                                                    Ingrese una cuenta para clientes x cobrar
+                                                                </span> 
+                                                            </div>
+                                                            <div class="col-sm-4">
+                                                                <input type="text" ng-model="formData.otrosCargosClienteCobrarDebeUsd" placeholder="Seleccione una cuenta"
+                                                                       uib-typeahead="cuenta as cuenta.name for cuenta in comboCuentas | filter:{name:$viewValue}"
+                                                                       class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="0" 
+                                                                       typeahead-template-url="customTemplate.html" 
+                                                                       />
+                                                                <span class="alert-danger"  ng-show="formData.otrosCargosClienteCobrarDebeUsd.id === undefined"  >
+                                                                    Ingrese una cuenta para clientes x cobrar
+                                                                </span> 
+                                                            </div>
+                                                        </div>
                                                         
 
                                                         <div class="form-group">

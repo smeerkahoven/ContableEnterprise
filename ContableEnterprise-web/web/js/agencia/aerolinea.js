@@ -212,8 +212,8 @@ angular.module('jsAerolinea.controllers', []).controller('frmAerolinea',
                         return;
                     }
 
-                    //VALIDA QUE LOS CARACTERES SEAN 5
-                    if ($scope.formData.otrosImpuestos.length < 5) {
+                    //VALIDA QUE LOS CARACTERES SEAN 2
+                    if ($scope.formData.otrosImpuestos.length < 1) {
                         $scope.showErrorOtrosImpuestos = true;
                         return;
                     }
@@ -254,7 +254,7 @@ angular.module('jsAerolinea.controllers', []).controller('frmAerolinea',
                         return;
                     }
 
-                    if ($scope.formData.otrosImpuestos.length < 5) {
+                    if ($scope.formData.otrosImpuestos.length < 1) {
                         $scope.showErrorOtrosImpuestos = true;
                         return;
                     }

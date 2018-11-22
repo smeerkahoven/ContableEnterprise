@@ -67,7 +67,7 @@ angular.module('jsRoles.controllers', []).controller('frmRoles', ['$scope', '$ht
                     return {};
                 }
             }, function (error) {
-                $scope.showRestfulMessage = error;
+                $scope.showRestfulMessage = error.statusText;
                 $scope.showRestfulError = true;
             });
         }
@@ -200,7 +200,7 @@ angular.module('jsRoles.controllers', []).controller('frmRoles', ['$scope', '$ht
                         $scope.showRestfulError = true;
                     }
                 }, function (error) {
-                    $scope.showRestfulMessage = error;
+                    $scope.showRestfulMessage = error.statusText;
                     $scope.showRestfulError = true;
                     $scope.loading = false;
                 });

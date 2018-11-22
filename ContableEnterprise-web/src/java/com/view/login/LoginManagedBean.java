@@ -245,7 +245,13 @@ public class LoginManagedBean implements Serializable {
         f.setModulo((String) o[0]);
 
         f.setIdFormulario((Integer) o[13]);
-
+        
+        f.setVer((Integer) o[14]);
+        f.setEditar((Integer) o[15]);
+        f.setAnular((Integer) o[16]);
+        f.setEjecutar((Integer) o[17]);
+        f.setFullPath((String) o[18]);
+        
         return f;
     }
 
@@ -288,7 +294,6 @@ public class LoginManagedBean implements Serializable {
             List<Object[]> l = ejbUsuario.get("GET_MENU", h);
             List<Menu> modulos = new ArrayList<>();
             for (Object[] o : l) {
-                System.out.println(o[0]);
                 if (modulos.isEmpty()) {
                     Menu menu = crearModulo(o);
 
@@ -310,6 +315,12 @@ public class LoginManagedBean implements Serializable {
 
                             modulo.getSubmenus().add(submenu);
                             ok = true;
+                            
+                            if (submenu.getAcceder()){
+                                modulo.setAcceder(submenu.getAcceder());
+                            }
+
+                            System.out.println("1 Modulo : " + modulo.getNombre() +" Acceder : " + modulo.getAcceder()+  " Submenu : " + submenu.getNombre() + " Acceder :" + submenu.getAcceder());
                         }
                     }
 
@@ -322,6 +333,8 @@ public class LoginManagedBean implements Serializable {
                         menu.getSubmenus().add(submenu);
 
                         modulos.add(menu);
+                        System.out.println("2 Modulo : " + menu.getNombre() +" Acceder : " + menu.getAcceder()+  " Submenu : " + submenu.getNombre() + " Acceder :" + submenu.getAcceder());
+
                     }
                 }
 

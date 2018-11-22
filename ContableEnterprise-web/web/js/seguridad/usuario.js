@@ -46,13 +46,15 @@ angular.module('jsUsuario.controllers', []).controller('frmUsuario', ['$scope', 
                 headers: {'Content-Type': 'application/json'}
             }).then(function (response) {
                 if (response.data.code === 201) {
-                    if (method === 'all')
+                    if (method === 'all'){
                         $scope.data = response.data.content;
+                        console.log($scope.data);
+                    }
                     if (method === 'personal')
                         $scope.empleados = response.data.content;
+                    
                     if (method === 'roles')
                         $scope.roles = response.data.content;
-
                     $scope.loading = false;
                 } else {
                     $scope.showRestfulMessage = response.data.content;
@@ -125,6 +127,50 @@ angular.module('jsUsuario.controllers', []).controller('frmUsuario', ['$scope', 
                 $scope.showForm = true;
             });
         }
+        
+        $scope.actualizar = function () {
+            if (!$scope.myForm.$valid)
+                return;
+            $scope.loading = true;
+            $http({
+                method: 'POST',
+                url: url.value + 'guardar',
+                data: {token: token.value, content: angular.toJson($scope.formData)},
+                headers: {'Content-Type': 'application/json'}
+            }).then(function (response) {
+                $scope.loading = false;
+                if (response.data.code === 201) {
+                    $scope.getData('all');
+                    $scope.formData = response.data.content;
+                    $scope.showRestfulMessage = response.data.content;
+                    $scope.showRestfulSuccess = true;
+                    $scope.showForm = false;
+                    $scope.showTable = true;
+                } else {
+                    $scope.showRestfulMessage = response.data.content;
+                    $scope.showRestfulError = true;
+                    $scope.showForm = true;
+                }
+            }, function (error) {
+                $scope.loading = false;
+                $scope.showRestfulMessage = error;
+                $scope.showRestfulError = true;
+                $scope.showForm = true;
+            });
+        }
+
+        $scope.edit = function(row){
+            $scope.formData = row ;
+            console.log(row);
+            $scope.showNuevo = false ;
+            $scope.showEditar = true ;
+            
+            $scope.showRestfulError = false ;
+            $scope.showRestfulSuccess = false ;
+            
+            $scope.showTable = false ;
+            $scope.showForm = true;
+        }
 
         $scope.nuevo = function () {
             $scope.formData = {};
@@ -141,6 +187,9 @@ angular.module('jsUsuario.controllers', []).controller('frmUsuario', ['$scope', 
             $scope.myForm.$submitted = false;
             $scope.myForm.txtPassword.$touched = false;
             $scope.myForm.txtConfirmPwd.$touched = false;
+            
+            $scope.showRestfulError = false ;
+            $scope.showRestfulSuccess = false ;
         }
 
         $scope.cancelar = function () {
@@ -162,7 +211,8 @@ angular.module('jsUsuario.controllers', []).controller('frmUsuario', ['$scope', 
             $http({
                 method: 'POST',
                 url: url.value + 'update',
-                data: {token: token.value, content: {username: $scope.deacUsername, comando: $scope.comando}},
+                data: {token: token.value, content: {username: $scope.formData.username, idRol: $scope.formData.idRol, status : $scope.formData.status,
+                        comando: 'User.update'}},
                 headers: {'Content-Type': 'application/json'}
             }).then(function (response) {
                 $scope.loading = false;

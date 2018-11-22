@@ -232,22 +232,26 @@
                                                     </div>
 
                                                     <div class="form-group row">
-                                                        <label for="txtNombre" class=" col-form-label col-sm-3 text-right">Nombre</label>
+                                                        <label for="txtNombre" ng-show="formData.tipo=='P'" class=" col-form-label col-sm-3 text-right">Nombre </label>
+                                                        <label for="txtNombre" ng-show="formData.tipo=='C'" class=" col-form-label col-sm-3 text-right">Agencia de Viajes</label>
                                                         <div class="col-sm-6">
                                                             <input type="text" class="form-control" name="txtNombre" required="required" 
-                                                                   maxlength="64" ng-model="formData.nombre"/>
+                                                                   maxlength="64" ng-model="formData.nombre" id="txtNombre"
+                                                                   onKeyUp="document.getElementById(this.id).value = document.getElementById(this.id).value.toUpperCase()"
+                                                                   />
                                                             <span class="alert-danger"  ng-show="!formData.nombre"  >
                                                                 Debe ingresar un valor
                                                          </span>
                                                         </div>
-                                                        
                                                     </div>
 
-                                                    <div class="form-group row">
+                                                    <div class="form-group row" ng-show="formData.tipo=='P'">
                                                         <label for="txtApellido" class=" col-form-label col-sm-3 text-right">Apellidos</label>
                                                         <div class="col-sm-6">
                                                             <input type="text" class="form-control" name="txtApellido" required="required" 
-                                                                   maxlength="64" ng-model="formData.apellido"/>
+                                                                   maxlength="64" ng-model="formData.apellido" id="txtApellido"
+                                                                   onKeyUp="document.getElementById(this.id).value = document.getElementById(this.id).value.toUpperCase()"
+                                                                   />
                                                              <span class="alert-danger"  ng-show="!myForm.txtApellido.$valid"  >
                                                                 Debe ingresar un valor.
                                                          </span>
@@ -269,6 +273,7 @@
                                                         </div>
                                                     </div>
 
+                                                    <!--
                                                     <div class="form-group row">
                                                         <label for="txtSexo" class="col-form-label col-sm-3 text-right">Sexo</label>
                                                         <div class="col-sm-6">
@@ -282,11 +287,12 @@
                                                          </span>
                                                         </div>
                                                     </div>
-
+                                                    -->
 
 
                                                     <div class="form-group row">
-                                                        <label for="txtCi" class=" col-form-label col-sm-3 text-right">Carnet de Identidad</label>
+                                                        <label for="txtCi" ng-show="formData.tipo=='P'" class=" col-form-label col-sm-3 text-right">Carnet de Identidad</label>
+                                                        <label for="txtCi" ng-show="formData.tipo=='C'" class=" col-form-label col-sm-3 text-right">NIT</label>
                                                         <div class="col-sm-6">
                                                             <input type="text" class="form-control" name="txtCi"
                                                                    maxlength="12" ng-model="formData.ci" required="required"/>
@@ -300,7 +306,9 @@
                                                         <label for="txtDireccion" class=" col-form-label col-sm-3 text-right">Direcci&oacute;n</label>
                                                         <div class="col-sm-6">
                                                             <input type="text" class="form-control" name="txtDireccion"
-                                                                   maxlength="128" ng-model="formData.direccion"/>
+                                                                   maxlength="128" ng-model="formData.direccion" id="txtDireccion"
+                                                                   onKeyUp="document.getElementById(this.id).value = document.getElementById(this.id).value.toUpperCase()"
+                                                                   />
                                                         </div>
                                                     </div>
 
@@ -445,7 +453,9 @@
                                                         <label for="txtObservaciones" class=" col-form-label col-sm-3 text-right">Observaciones</label>
                                                         <div class="col-sm-6">
                                                             <input type="text" class="form-control" name="txtObservaciones"  
-                                                                   maxlength="128" ng-model="formData.observaciones"/>
+                                                                   maxlength="128" ng-model="formData.observaciones" id="txtObservaciones" 
+                                                                   onKeyUp="document.getElementById(this.id).value = document.getElementById(this.id).value.toUpperCase()"
+                                                                   />
                                                         </div>
                                                     </div>
 

@@ -3,6 +3,7 @@
 // Flatpickr Demo
 // =============================================================
 
+
 var flatpickrDemo = {
   init: function init() {
 
@@ -20,11 +21,22 @@ var flatpickrDemo = {
       wrap: true,
       dateFormat: "d/m/Y"
     });
+  }
+  ,
+  _fp10: function _fp10() {
+    // wrap element
+    return flatpickr('#flatpickr10', {
+        static : true,
+      disableMobile: true,
+      wrap: true,
+      dateFormat: "d/m/Y"
+    });
   },
  
   handleFlatpickr: function handleFlatpickr() {
 
     this._fp9();
+    this._fp10();
   }
 };
 

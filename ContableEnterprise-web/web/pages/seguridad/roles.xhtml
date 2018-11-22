@@ -218,20 +218,28 @@
                                                                                     <th>Formulario</th>
                                                                                     <th>Estado</th>
                                                                                     <th>Acceder</th>
+                                                                                    <th>Ver</th>
                                                                                     <th>Actualizar</th>
+                                                                                    <th>Editar</th>
                                                                                     <th>Buscar</th>
                                                                                     <th>Crear</th>
                                                                                     <th>Eliminar</th>
+                                                                                    <th>Anular</th>
+                                                                                    <th>Ejecutar</th>
                                                                                 </thead>
                                                                                 <tbody>
                                                                                     <tr ng-repeat="c in row.flist">
                                                                                         <td>{{c.formularioNombre}}</td>
                                                                                         <td>{{c.formularioStatus}}</td>
                                                                                         <td><input class="form-control" type="checkbox" ng-true-value="1" ng-false-value="0" ng-checked="c.rolAcceder" ng-model="c.rolAcceder" /></td>
+                                                                                        <td><input class="form-control" type="checkbox" ng-true-value="1" ng-false-value="0" ng-checked="c.rolVer" ng-model="c.rolVer" /></td>
                                                                                         <td><input class="form-control" type="checkbox" ng-true-value="1" ng-false-value="0" ng-checked="c.rolActualizar" ng-model="c.rolActualizar" /></td>
+                                                                                        <td><input class="form-control" type="checkbox" ng-true-value="1" ng-false-value="0" ng-checked="c.rolEditar" ng-model="c.rolEditar" /></td>
                                                                                         <td><input class="form-control" type="checkbox" ng-true-value="1" ng-false-value="0" ng-checked="c.rolBuscar" ng-model="c.rolBuscar"/></td>
                                                                                         <td><input class="form-control" type="checkbox" ng-true-value="1" ng-false-value="0" ng-checked="c.rolCrear" ng-model="c.rolCrear"/></td>
                                                                                         <td><input class="form-control" type="checkbox" ng-true-value="1" ng-false-value="0" ng-checked="c.rolEliminar" ng-model="c.rolEliminar"/></td>
+                                                                                        <td><input class="form-control" type="checkbox" ng-true-value="1" ng-false-value="0" ng-checked="c.rolAnular" ng-model="c.rolAnular"/></td>
+                                                                                        <td><input class="form-control" type="checkbox" ng-true-value="1" ng-false-value="0" ng-checked="c.rolEjecutar" ng-model="c.rolEjecutar"/></td>
                                                                                     </tr>
                                                                                 </tbody>
                                                                             </table>
@@ -303,20 +311,28 @@
                                                                                     <th>Formulario</th>
                                                                                     <th>Estado</th>
                                                                                     <th>Acceder</th>
+                                                                                    <th>Ver</th>
                                                                                     <th>Actualizar</th>
+                                                                                    <th>Editar</th>
                                                                                     <th>Buscar</th>
                                                                                     <th>Crear</th>
                                                                                     <th>Eliminar</th>
+                                                                                    <th>Anular</th>
+                                                                                    <th>Ejecutar</th>
                                                                                 </thead>
                                                                                 <tbody>
                                                                                     <tr ng-repeat="c in row.flist">
                                                                                         <td>{{c.formularioNombre}}</td>
                                                                                         <td>{{c.formularioStatus}}</td>
                                                                                         <td><input class="form-control" type="checkbox" ng-true-value="1" ng-false-value="0" ng-checked="c.rolAcceder" ng-model="c.rolAcceder" /></td>
+                                                                                        <td><input class="form-control" type="checkbox" ng-true-value="1" ng-false-value="0" ng-checked="c.rolVer" ng-model="c.rolVer" /></td>
                                                                                         <td><input class="form-control" type="checkbox" ng-true-value="1" ng-false-value="0" ng-checked="c.rolActualizar" ng-model="c.rolActualizar"/></td>
+                                                                                        <td><input class="form-control" type="checkbox" ng-true-value="1" ng-false-value="0" ng-checked="c.rolEditar" ng-model="c.rolEditar"/></td>
                                                                                         <td><input class="form-control" type="checkbox" ng-true-value="1" ng-false-value="0" ng-checked="c.rolBuscar" ng-model="c.rolBuscar" /></td>
                                                                                         <td><input class="form-control" type="checkbox" ng-true-value="1" ng-false-value="0" ng-checked="c.rolCrear" ng-model="c.rolCrear" /></td>
                                                                                         <td><input class="form-control" type="checkbox" ng-true-value="1" ng-false-value="0" ng-checked="c.rolEliminar" ng-model="c.rolEliminar" /></td>
+                                                                                        <td><input class="form-control" type="checkbox" ng-true-value="1" ng-false-value="0" ng-checked="c.rolAnular" ng-model="c.rolAnular" /></td>
+                                                                                        <td><input class="form-control" type="checkbox" ng-true-value="1" ng-false-value="0" ng-checked="c.rolEjecutar" ng-model="c.rolEjecutar" /></td>
                                                                                     </tr>
                                                                                 </tbody>
                                                                             </table>
