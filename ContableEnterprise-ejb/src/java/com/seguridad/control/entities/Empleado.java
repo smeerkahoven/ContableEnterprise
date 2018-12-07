@@ -20,7 +20,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -40,8 +39,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "Empleado.findByFechaAlta", query = "SELECT e FROM Empleado e WHERE e.fechaAlta = :fechaAlta")
     , @NamedQuery(name = "Empleado.findByFechaBaja", query = "SELECT e FROM Empleado e WHERE e.fechaBaja = :fechaBaja")
     , @NamedQuery(name = "Empleado.findByStatus", query = "SELECT e FROM Empleado e WHERE e.status = :status")
-    ,
-        @NamedQuery(name = "Empleado.forCombo", query = "SELECT e.idEmpleado, e.nombre ,e.apellido FROM Empleado e")
+    , @NamedQuery(name = "Empleado.forCombo", query = "SELECT e.idEmpleado, e.nombre ,e.apellido FROM Empleado e")
+    , @NamedQuery(name = "Empleado.updateFromDatosPersonales", query="UPDATE Empleado e SET e.apellido=:apellido, e.email=:email, e.nombre=:nombre, e.sexo=:sexo, e.telefono=:telefono WHERE e.idEmpleado=:idEmpleado")
 })
 public class Empleado extends Entidad {
 

@@ -7,12 +7,12 @@ package com.contabilidad.entities;
 
 import com.seguridad.control.entities.Entidad;
 import com.seguridad.control.exception.CRUDException;
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -32,13 +32,16 @@ import javax.validation.constraints.Size;
 @Entity
 @Table(name = "cnt_ingreso_transaccion")
 @NamedQueries({
-    @NamedQuery(name = "IngresoTransaccion.findAll", query = "SELECT i FROM IngresoTransaccion i")})
+    @NamedQuery(name = "IngresoTransaccion.findAll", query = "SELECT i FROM IngresoTransaccion i")
+    ,@NamedQuery(name = "IngresoTransaccion.findByIdNotaTransaccion", query = "SELECT i from IngresoTransaccion i WHERE i.idNotaTransaccion=:idNotaTransaccion and i.estado='E'")
+    ,@NamedQuery(name = "IngresoTransaccion.findByIdIngresoCaja", query = "SELECT i from IngresoTransaccion i WHERE i.idIngresoCaja=:idIngresoCaja")
+})
 public class IngresoTransaccion extends Entidad {
-    
-        public static final String EMITIDO = "E";
+
+    public static final String EMITIDO = "E";
     public static final String PENDIENTE = "P";
     public static final String ANULADO = "A";
-    public static final String CREADO = "C" ;   
+    public static final String CREADO = "C";
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -59,12 +62,15 @@ public class IngresoTransaccion extends Entidad {
     @Column(name = "fecha_insert")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaInsert;
+
     @JoinColumn(name = "id_ingreso_caja", referencedColumnName = "id_ingreso_caja")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private IngresoCaja idIngresoCaja;
 
-    @Column(name = "id_nota_transaccion")
-    private Integer idNotaTransaccion;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_nota_transaccion")
+    private NotaDebitoTransaccion idNotaTransaccion;
+
     @Column(name = "estado")
     private String estado;
 
@@ -131,11 +137,11 @@ public class IngresoTransaccion extends Entidad {
         this.idIngresoCaja = idIngresoCaja;
     }
 
-    public Integer getIdNotaTransaccion() {
+    public NotaDebitoTransaccion getIdNotaTransaccion() {
         return idNotaTransaccion;
     }
 
-    public void setIdNotaTransaccion(Integer idNotaTransaccion) {
+    public void setIdNotaTransaccion(NotaDebitoTransaccion idNotaTransaccion) {
         this.idNotaTransaccion = idNotaTransaccion;
     }
 

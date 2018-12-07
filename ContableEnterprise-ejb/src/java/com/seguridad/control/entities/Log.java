@@ -31,17 +31,24 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Log implements Serializable {
     
     public static final String NOTA_DEBITO_NUEVO = "Creo la Nota de Debito <id> " ;
-    public static final String NOTA_DEBITO_PENDIENTE = "Establecio <id> como PENDIENTE" ;
-    public static final String NOTA_DEBITO_FINALIZAR = "Establecio <id> como FINALIZAR" ;
-    public static final String NOTA_DEBITO_ANULAR = "Establecio <id> como ANULAR" ;
+    public static final String NOTA_DEBITO_PENDIENTE = "Establecio la Nota de Debito <id> como PENDIENTE" ;
+    public static final String NOTA_DEBITO_FINALIZAR = "Establecio la Nota de Debito <id> como FINALIZAR" ;
+    public static final String NOTA_DEBITO_ANULAR = "Establecio la Nota de Debito <id> como ANULADA. Sus Transacciones, Ingresos a Caja, Comprobantes Contables" ;
     public static final String NOTA_DEBITO_NUEVA_TRANSACCION_INICIO = "Inicio creacion de Transacciones Nota Debito <id>" ;
     public static final String NOTA_DEBITO_NUEVA_TRANSACCION_FIN = "Fin creacion de Transacciones Nota Debito <id>" ;
     public static final String NOTA_DEBITO_CARGO_GUARDAR = "Se Guardo el Cargo Nro <cargo> para la nota de Debito <nota>" ;
+
+    public static final String INGRESO_CAJA_NUEVO = "Creo el Ingreso de Caja <id> " ;
+    public static final String INGRESO_CAJA_PENDIENTE = "Establecio el Ingreso de Caja <id> como PENDIENTE" ;
+    public static final String INGRESO_CAJA_FINALIZAR = "Establecio el Ingreso de Caja <id> como FINALIZAR" ;
+    public static final String INGRESO_CAJA_ANULAR = "Establecio el Ingreso de Caja <id> como ANULADA. Sus Transacciones, Ingresos a Caja, Comprobantes Contables" ;
+
     public static final String NOTA_DEBITO_CARGO_EDITAR = "Se edito el Cargo Nro <cargo> para la nota de Debito <nota>" ;
     public static final String NOTA_DEBITO_CARGO_ANULAR = "Se anulo el Cargo Nro<cargo> para la nota de Debito <nota>" ;
     public static final String BOLETO_ASOCIAR_AUTOMATICO = "Asocio el Boleto <boleto> con la Nota <id>" ;
     public static final String BOLETO_ANULAR = "Establecio <boleto> como ANULADO" ;
     public static final String BOLETO_SAVE = "Creacion del Boleto <boleto>" ;
+    
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

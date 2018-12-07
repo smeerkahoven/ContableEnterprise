@@ -7,6 +7,8 @@ package com.agencia.control.remote;
 
 import com.agencia.entities.AerolineaCuenta;
 import com.agencia.entities.Boleto;
+import com.agencia.entities.BoletoPlanillaBsp;
+import com.agencia.entities.Promotor;
 import com.agencia.search.dto.BoletoSearchForm;
 import com.configuracion.entities.ContabilidadBoletaje;
 import com.contabilidad.entities.CargoBoleto;
@@ -15,9 +17,11 @@ import com.contabilidad.entities.IngresoCaja;
 import com.contabilidad.entities.IngresoTransaccion;
 import com.contabilidad.entities.NotaDebito;
 import com.contabilidad.entities.NotaDebitoTransaccion;
+import com.response.json.boletaje.PlanillaSearchForm;
 import com.seguridad.control.entities.Entidad;
 import com.seguridad.control.exception.CRUDException;
 import com.seguridad.control.remote.DaoRemoteFacade;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import javax.ejb.Remote;
@@ -105,6 +109,9 @@ public interface BoletoRemote extends DaoRemoteFacade {
      * @throws CRUDException
      */
     public Boleto anular(Boleto boleto) throws CRUDException;
+    
+    public Boleto anularBoleto(Integer boleto) throws CRUDException;
+    public CargoBoleto anularCargo(Integer cargo) throws CRUDException;
 
     /**
      * Busqueda en la cnt_boletos de los boletos AM=AMADEUS con estado
@@ -135,6 +142,15 @@ public interface BoletoRemote extends DaoRemoteFacade {
      * @throws CRUDException
      */
     public int insertarBoleto(Boleto boleto) throws CRUDException;
+    
+    
+    /**
+     * 
+     * @param boleto
+     * @return
+     * @throws CRUDException 
+     */
+    public int updateBoleto(Boleto boleto) throws CRUDException;
 
     /**
      * Procesa un boleto y lo pasa a Contabilidad de acuerdo a la nota de Debito
@@ -156,6 +172,8 @@ public interface BoletoRemote extends DaoRemoteFacade {
      * @param boleto
      * @param nota
      * @param comprobante
+     * @param caja
+     * @param notaTran
      * @param conf
      * @return
      * @throws CRUDException
@@ -168,4 +186,12 @@ public interface BoletoRemote extends DaoRemoteFacade {
     
     public AerolineaCuenta getAerolineCuenta(Boleto b, String tipo) throws CRUDException;
 
+    /**
+     * 
+     * @param search
+     * @return
+     * @throws CRUDException 
+     */
+    public List<BoletoPlanillaBsp> getPlanillaBsp (PlanillaSearchForm search) throws CRUDException;
+    
 }

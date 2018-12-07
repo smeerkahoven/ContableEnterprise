@@ -5,6 +5,7 @@
  */
 package com.seguridad.control.remote;
 
+import com.response.json.seguridad.UserPersonalJSON;
 import com.seguridad.control.entities.User;
 import com.seguridad.control.entities.UserLogin;
 import com.seguridad.control.entities.UserToken;
@@ -45,9 +46,7 @@ public interface UsuarioRemote {
     public int insert(UserToken u) throws CRUDException ;
     
     public int insert (UserLogin u)throws CRUDException ;
-    
-    
-    
-    
+
+    public UserPersonalJSON getUsuario(User user) throws CRUDException;
     
 }

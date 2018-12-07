@@ -11,7 +11,6 @@ import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -34,18 +33,24 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "AsientoContable.findAll", query = "SELECT a FROM AsientoContable a")
-    ,
-@NamedQuery(name = "AsientoContable.find", query = "SELECT a FROM AsientoContable a WHERE a.idLibro=:idLibro")
-    ,
-@NamedQuery(name = "AsientoContable.updateEstadoFromBoleto", query = "UPDATE AsientoContable a SET a.estado=:estado WHERE a.idBoleto=:idBoleto")
+    ,@NamedQuery(name = "AsientoContable.find", query = "SELECT a FROM AsientoContable a WHERE a.idLibro=:idLibro")
+    ,@NamedQuery(name = "AsientoContable.findAllByIdNotaDebitoTransaccion", query = "SELECT a FROM AsientoContable a WHERE a.idNotaTransaccion =:idNotaTransaccion")
+    ,@NamedQuery(name = "AsientoContable.updateEstadoFromBoleto", query = "UPDATE AsientoContable a SET a.estado=:estado WHERE a.idBoleto=:idBoleto")
 
 }
 )
 public class AsientoContable extends Entidad {
-    
-    public static final class Tipo {
-        public static final String BOLETO = "B" ;
-        public static final String CARGO = "C" ;
+
+    public static class Tipo {
+
+        public static final String BOLETO = "B";
+        public static final String CARGO = "C";
+        //---------------------------------------------
+        public static final String PAQUETE = "P";
+        public static final String SEGURO = "S";
+        public static final String HOTEL = "H";
+        public static final String ALQUILER_AUTO = "A";
+        public static final String RESERVA = "R";
     }
 
     private static final long serialVersionUID = 1L;
@@ -80,6 +85,7 @@ public class AsientoContable extends Entidad {
     private BigDecimal montoHaberExt;
     @Column(name = "monto_haber_nac")
     private BigDecimal montoHaberNac;
+
     @Column(name = "id_boleto")
     private Integer idBoleto;
     @Column(name = "id_nota_transaccion")
@@ -102,7 +108,6 @@ public class AsientoContable extends Entidad {
         this.tipo = tipo;
     }
 
-    
     public Integer getIdCargo() {
         return idCargo;
     }

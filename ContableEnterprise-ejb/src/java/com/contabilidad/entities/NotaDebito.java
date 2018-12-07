@@ -52,6 +52,14 @@ import javax.xml.bind.annotation.XmlRootElement;
         }
 )
 @NamedStoredProcedureQuery(
+        name = "NotaDebito.updateBoletoNotaDebito",
+        procedureName = "updateBoletoNotaDebito",
+        parameters = {
+            @StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_boleto")
+            ,@StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_nota_transaccion")
+        }
+)
+@NamedStoredProcedureQuery(
         name = "NotaDebito.updateMontosNotaDebitoEnPendiente",
         procedureName = "updateMontosNotaDebitoEnPendiente",
         parameters = {
@@ -66,6 +74,24 @@ import javax.xml.bind.annotation.XmlRootElement;
             @StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_boleto")
         }
 )
+
+@NamedStoredProcedureQuery(
+        name = "NotaDebito.updateMontosAdeudadosNotaDebito",
+        procedureName = "updateMontosAdeudadosNotaDebito",
+        parameters = {
+            @StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_nota_debito")
+        }
+)
+
+@NamedStoredProcedureQuery(
+        name = "NotaDebito.updateNotaDebitoAnularTransaccion",
+        procedureName = "updateNotaDebitoAnularTransaccion",
+        parameters = {
+            @StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_nota_debito")
+        }
+)
+
+
 @NamedQueries({
     @NamedQuery(name = "NotaDebito.findAll", query = "SELECT n FROM NotaDebito n")})
 public class NotaDebito extends Entidad {
@@ -74,6 +100,8 @@ public class NotaDebito extends Entidad {
     public static final String PENDIENTE = "P";
     public static final String ANULADO = "A";
     public static final String CREADO = "C";
+    public static final String CANCELADO = "D";
+    public static final String EN_MORA = "M";
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -88,7 +116,7 @@ public class NotaDebito extends Entidad {
     @Basic(optional = false)
     @NotNull
     @Column(name = "id_empresa")
-    private int idEmpresa;
+    private Integer idEmpresa;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_cliente")
     private Cliente idCliente;

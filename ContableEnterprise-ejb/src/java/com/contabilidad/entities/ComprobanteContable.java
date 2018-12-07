@@ -5,6 +5,7 @@
  */
 package com.contabilidad.entities;
 
+import com.agencia.entities.Cliente;
 import com.seguridad.control.entities.Entidad;
 import com.seguridad.control.exception.CRUDException;
 import java.math.BigDecimal;
@@ -14,9 +15,12 @@ import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.NamedStoredProcedureQuery;
@@ -53,17 +57,25 @@ import javax.xml.bind.annotation.XmlRootElement;
             @StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_libro")
         }
 )
+@NamedStoredProcedureQuery(
+        name = "ComprobanteContable.updateComprobanteContableAnularTransaccion",
+        procedureName = "updateComprobanteContableAnularTransaccion",
+        parameters = {
+            @StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_libro")
+        }
+)
+
 @NamedQueries({
     @NamedQuery(name = "ComprobanteContable.findAll", query = "SELECT c FROM ComprobanteContable c")
-    ,
-      @NamedQuery(name = "ComprobanteContable.find", query = "SELECT c FROM ComprobanteContable c WHERE c.idLibro=:idLibro")
+    , @NamedQuery(name = "ComprobanteContable.find", query = "SELECT c FROM ComprobanteContable c WHERE c.idLibro=:idLibro")
+    , @NamedQuery(name = "ComprobanteContable.findAllComprobanteByNotaDebito", query = "SELECT c FROM ComprobanteContable c WHERE c.idNotaDebito=:idNotaDebito")
 
 })
 public class ComprobanteContable extends Entidad {
 
     @Override
     public int getId() throws CRUDException {
-        return this.idLibro ;
+        return this.idLibro;
     }
 
     public static class Tipo {
@@ -81,17 +93,17 @@ public class ComprobanteContable extends Entidad {
     public static final String RECUPERADO = "R";
 
     private static final long serialVersionUID = 1L;
-    
+
     @Id
     @Basic(optional = false)
     @Column(name = "id_libro")
-    @GeneratedValue (strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private int idLibro;
     @Basic(optional = false)
     @NotNull
     @Column(name = "gestion")
     private Integer gestion;
-    
+
     @Basic(optional = false)
     @Column(name = "id_numero_gestion")
     private int idNumeroGestion;
@@ -106,9 +118,7 @@ public class ComprobanteContable extends Entidad {
     @Column(name = "fecha")
     @Temporal(TemporalType.DATE)
     private Date fecha;
-    @Size(max = 128)
-    @Column(name = "nombre")
-    private String nombre;
+
     @Size(max = 128)
     @Column(name = "concepto")
     private String concepto;
@@ -125,6 +135,8 @@ public class ComprobanteContable extends Entidad {
     private Integer idEmpresa;
     @Column(name = "id_nota_debito")
     private Integer idNotaDebito;
+    @Column(name = "id_ingreso_caja")
+    private Integer idIngresoCaja;
     @Column(name = "total_debe_nac")
     private BigDecimal totalDebeNac;
     @Column(name = "total_haber_nac")
@@ -138,6 +150,10 @@ public class ComprobanteContable extends Entidad {
     private Date fechaInsert;
     @Column(name = "con_errores")
     private String conErrores;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_cliente")
+    private Cliente idCliente;
 
     public static String getEstadoNombre(String estado) {
         switch (estado) {
@@ -160,6 +176,22 @@ public class ComprobanteContable extends Entidad {
     public ComprobanteContable() {
     }
 
+    public Integer getIdIngresoCaja() {
+        return idIngresoCaja;
+    }
+
+    public void setIdIngresoCaja(Integer idIngresoCaja) {
+        this.idIngresoCaja = idIngresoCaja;
+    }
+
+    public Cliente getIdCliente() {
+        return idCliente;
+    }
+
+    public void setIdCliente(Cliente idCliente) {
+        this.idCliente = idCliente;
+    }
+
     public List<AsientoContable> getTransacciones() {
         return transacciones;
     }
@@ -167,7 +199,6 @@ public class ComprobanteContable extends Entidad {
     public void setTransacciones(List<AsientoContable> transacciones) {
         this.transacciones = transacciones;
     }
-
 
     public ComprobanteContable(int idNumeroGestion, String idUsuarioCreador, Date fecha) {
         this.idNumeroGestion = idNumeroGestion;
@@ -213,14 +244,6 @@ public class ComprobanteContable extends Entidad {
 
     public void setFecha(Date fecha) {
         this.fecha = fecha;
-    }
-
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
     }
 
     public String getConcepto() {
@@ -326,8 +349,6 @@ public class ComprobanteContable extends Entidad {
     public void setGestion(Integer gestion) {
         this.gestion = gestion;
     }
-    
-    
 
     @Override
     public int hashCode() {
@@ -357,8 +378,5 @@ public class ComprobanteContable extends Entidad {
         }
         return true;
     }
-
-    
-
 
 }

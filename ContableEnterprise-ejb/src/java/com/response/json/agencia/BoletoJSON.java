@@ -88,8 +88,8 @@ public class BoletoJSON implements Serializable {
     private BigDecimal descuento;
     private BigDecimal montoDescuentoBs;
     private BigDecimal montoDescuentoUsd;
-    private BigDecimal totalMontoCanceladoBs;
-    private BigDecimal totalMontoCanceladoUsd;
+    private BigDecimal totalMontoCobrarBs;
+    private BigDecimal totalMontoCobrarUsd;
     private BigDecimal montoPagarLineaAereaBs;
     private BigDecimal montoPagarLineaAereaUsd;
 
@@ -164,6 +164,8 @@ public class BoletoJSON implements Serializable {
         boleto.setImpuesto3nombre(bjson.getImpuesto3nombre() != null ? bjson.getImpuesto3nombre() : null);
         boleto.setImpuesto4nombre(bjson.getImpuesto4nombre() != null ? bjson.getImpuesto4nombre() : null);
         boleto.setImpuesto5nombre(bjson.getImpuesto5nombre() != null ? bjson.getImpuesto5nombre() : null);
+        
+       
 
         //cliente
         //boleto.setIdCliente(((Double) bjson.getIdCliente().getId()).intValue());
@@ -205,7 +207,8 @@ public class BoletoJSON implements Serializable {
             boleto.setMontoComision(bjson.getMontoComisionUsd());
             boleto.setMontoFee(bjson.getMontoFeeUsd());
             boleto.setMontoDescuento(bjson.getMontoDescuentoUsd());
-            boleto.setTotalMontoCancelado(bjson.getTotalMontoCanceladoUsd());
+            boleto.setTotalMontoCobrar(bjson.getTotalMontoCobrarUsd());
+             boleto.setMontoPagarLineaAerea(bjson.getMontoPagarLineaAereaUsd());
         } else {//Bolivianos
             boleto.setImporteNeto(bjson.getImporteNetoBs());
             boleto.setImpuestoBob(bjson.getImpuestoBobBs());
@@ -219,7 +222,8 @@ public class BoletoJSON implements Serializable {
             boleto.setMontoComision(bjson.getMontoComisionBs());
             boleto.setMontoFee(bjson.getMontoFeeBs());
             boleto.setMontoDescuento(bjson.getMontoDescuentoBs());
-            boleto.setTotalMontoCancelado(bjson.getTotalMontoCanceladoBs());
+            boleto.setTotalMontoCobrar(bjson.getTotalMontoCobrarBs());
+            boleto.setMontoPagarLineaAerea(bjson.getMontoPagarLineaAereaBs());
         }
 
         //formas de pago
@@ -229,21 +233,16 @@ public class BoletoJSON implements Serializable {
         if (bjson.getFormaPago() != null) {
 
             switch (bjson.getFormaPago()) {
-
                 case FormasPago.CREDITO:
                     boleto.setCreditoDias(bjson.getCreditoDias());
                     boleto.setCreditoVencimiento(DateContable.toLatinAmericaDateFormat(bjson.getCreditoVencimiento()));
                     break;
-
                 case FormasPago.TARJETA:
                     boleto.setTarjetaId(bjson.getTarjetaId());
                     boleto.setTarjetaNumero(bjson.getTarjetaNumero());
                     break;
-
                 case FormasPago.CONTADO:
-
                     boleto.setContadoTipo(bjson.getContadoTipo());
-
                     if (bjson.getContadoTipo().equals(FormasPago.CHEQUE)) {
                         boleto.setContadoNroCheque(bjson.getContadoNroCheque());
                         boleto.setContadoIdBanco(bjson.getContadoIdBanco());
@@ -251,16 +250,12 @@ public class BoletoJSON implements Serializable {
                         boleto.setContadoNroDeposito(bjson.getContadoNroDeposito());
                         boleto.setContadoIdCuenta(((Double) bjson.getContadoIdCuenta().getId()).intValue());
                     }
-
                     break;
-
                 case FormasPago.COMBINADO:
                     boleto.setCombinadoTipo(bjson.getCombinadoTipo());
-
                     if (bjson.isCombinadoContado()) {
                         boleto.setCombinadoContadoTipo(bjson.getCombinadoContadoTipo());
                         boleto.setCombinadoContadoMonto(bjson.getCombinadoContadoMonto());
-
                         switch (bjson.getCombinadoContadoTipo()) {
                             case FormasPago.EFECTIVO:
                                 break;
@@ -274,13 +269,11 @@ public class BoletoJSON implements Serializable {
                                 break;
                         }
                     }
-
                     if (bjson.isCombinadoCredito()) {
                         boleto.setCombinadoCreditoDias(bjson.getCombinadoCreditoDias());
                         boleto.setCombinadoCreditoVencimiento(DateContable.toLatinAmericaDateFormat(bjson.getCombinadoCreditoVencimiento()));
                         boleto.setCombinadoCreditoMonto(bjson.getCombinadoCreditoMonto());
                     }
-
                     if (bjson.isCombinadoTarjeta()) {
                         boleto.setCombinadoTarjetaId(bjson.getCombinadoTarjetaId());
                         boleto.setCombinadoTarjetaNumero(bjson.getCombinadoTarjetaNumero());
@@ -370,7 +363,8 @@ public class BoletoJSON implements Serializable {
                 bjson.setMontoComisionUsd(boleto.getMontoComision());
                 bjson.setMontoFeeUsd(boleto.getMontoFee());
                 bjson.setMontoDescuentoUsd(boleto.getMontoDescuento());
-                bjson.setTotalMontoCanceladoUsd(boleto.getTotalMontoCancelado());
+                bjson.setTotalMontoCobrarUsd(boleto.getTotalMontoCobrar());
+                bjson.setMontoPagarLineaAereaUsd(boleto.getMontoPagarLineaAerea());
 
                 if (boleto.getMontoComision() != null) {
                     if (boleto.getTotalBoleto() != null) {
@@ -426,8 +420,8 @@ public class BoletoJSON implements Serializable {
                     bjson.setMontoDescuentoBs(boleto.getMontoDescuento().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
                 }
 
-                if (boleto.getTotalMontoCancelado() != null) {
-                    bjson.setTotalMontoCanceladoBs(boleto.getTotalMontoCancelado().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
+                if (boleto.getTotalMontoCobrar() != null) {
+                    bjson.setTotalMontoCobrarBs(boleto.getTotalMontoCobrar().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
                 }
                 if (boleto.getMontoComision() != null) {
                     if (boleto.getTotalBoleto() != null) {
@@ -452,7 +446,8 @@ public class BoletoJSON implements Serializable {
                 bjson.setMontoComisionBs(boleto.getMontoComision());
                 bjson.setMontoFeeBs(boleto.getMontoFee());
                 bjson.setMontoDescuentoBs(boleto.getMontoDescuento());
-                bjson.setTotalMontoCanceladoBs(boleto.getTotalMontoCancelado());
+                bjson.setTotalMontoCobrarBs(boleto.getTotalMontoCobrar());
+                bjson.setMontoPagarLineaAereaBs(boleto.getMontoPagarLineaAerea());
 
                 if (boleto.getMontoComision() != null) {
                     if (boleto.getTotalBoleto() != null) {
@@ -512,8 +507,8 @@ public class BoletoJSON implements Serializable {
                     bjson.setMontoDescuentoUsd(boleto.getMontoDescuento().divide(boleto.getFactorCambiario(), RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
                 }
 
-                if (boleto.getTotalMontoCancelado() != null) {
-                    bjson.setTotalMontoCanceladoUsd(boleto.getTotalMontoCancelado().divide(boleto.getFactorCambiario(), RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
+                if (boleto.getTotalMontoCobrar() != null) {
+                    bjson.setTotalMontoCobrarUsd(boleto.getTotalMontoCobrar().divide(boleto.getFactorCambiario(), RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
                 }
 
                 if (boleto.getMontoComision() != null) {
@@ -1026,21 +1021,23 @@ public class BoletoJSON implements Serializable {
         this.montoDescuentoUsd = montoDescuentoUsd;
     }
 
-    public BigDecimal getTotalMontoCanceladoBs() {
-        return totalMontoCanceladoBs;
+    public BigDecimal getTotalMontoCobrarBs() {
+        return totalMontoCobrarBs;
     }
 
-    public void setTotalMontoCanceladoBs(BigDecimal totalMontoCanceladoBs) {
-        this.totalMontoCanceladoBs = totalMontoCanceladoBs;
+    public void setTotalMontoCobrarBs(BigDecimal totalMontoCobrarBs) {
+        this.totalMontoCobrarBs = totalMontoCobrarBs;
     }
 
-    public BigDecimal getTotalMontoCanceladoUsd() {
-        return totalMontoCanceladoUsd;
+    public BigDecimal getTotalMontoCobrarUsd() {
+        return totalMontoCobrarUsd;
     }
 
-    public void setTotalMontoCanceladoUsd(BigDecimal totalMontoCanceladoUsd) {
-        this.totalMontoCanceladoUsd = totalMontoCanceladoUsd;
+    public void setTotalMontoCobrarUsd(BigDecimal totalMontoCobrarUsd) {
+        this.totalMontoCobrarUsd = totalMontoCobrarUsd;
     }
+
+
 
     public String getEstado() {
         return estado;

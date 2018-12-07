@@ -26,5 +26,7 @@ public interface EmpleadoRemote extends DaoRemoteFacade {
 
     @Override
     public List get(String namedQuery, Class<?> typeClass, HashMap parameters) throws CRUDException;
+
+    public void updateInfo(Empleado emp) throws CRUDException;
     
 }

@@ -12,8 +12,10 @@ import com.agencia.entities.Boleto;
 import com.configuracion.entities.ArchivoBoleto;
 import com.configuracion.entities.CambioDolar;
 import com.configuracion.entities.LogArchivos;
+import com.configuracion.entities.Parametros;
 import com.configuracion.entities.Pasajero;
 import com.configuracion.remote.CambioRemote;
+import com.configuracion.remote.ParametrosRemote;
 import com.configuracion.remote.SabreFileRemote;
 import com.contabilidad.entities.Moneda;
 import com.seguridad.control.FacadeEJB;
@@ -74,6 +76,9 @@ public class SabreFileEJB extends FacadeEJB implements SabreFileRemote {
 
     @EJB
     private CambioRemote ejbCambio;
+
+    @EJB
+    protected ParametrosRemote ejbParametros;
 
     @Override
     public boolean procesarArchivo(final ArchivoBoleto archivoBoleto) throws CRUDException {
@@ -328,96 +333,97 @@ public class SabreFileEJB extends FacadeEJB implements SabreFileRemote {
     }
 
     private boolean createBoletoSabre(final ArchivoBoleto archivo) {
-        CambioDolar diario = null;
-        for (Map.Entry<String, Pasajero> entry : pasajeros.entrySet()) {
-            try {
-                if (ejbBoleto.isBoletoRegistrado(new Boleto(entry.getValue().getNumero()))) {
-                    crearLogArchivo(archivo.getNombreArchivo(), archivo.getTipoArchivo(), entry.getValue().getNumero().toString(),
-                            FILE_M0_NUMBER_TICKET_EXIST, LogArchivos.Tipo.ERROR);
+        try {
+            Parametros porcentajeComision = (Parametros) ejbParametros.get(new Parametros(Parametros.PORCENTAJE_COMISION));
+            CambioDolar diario = null;
+            for (Map.Entry<String, Pasajero> entry : pasajeros.entrySet()) {
+                try {
+                    if (ejbBoleto.isBoletoRegistrado(new Boleto(entry.getValue().getNumero()))) {
+                        crearLogArchivo(archivo.getNombreArchivo(), archivo.getTipoArchivo(), entry.getValue().getNumero().toString(),
+                                FILE_M0_NUMBER_TICKET_EXIST, LogArchivos.Tipo.ERROR);
+                        return false;
+                    }
+
+                    diario = ejbCambio.get(fechaEmision, "CambioDolar.findFecha");
+
+                    if (diario == null) {
+                        List l = ejbCambio.get();
+                        if (l.isEmpty()) {
+                            crearLogArchivo(archivo.getNombreArchivo(), archivo.getTipoArchivo(), entry.getValue().getNumero().toString(),
+                                    FILE_M0_NO_DOLAR_CAMBIO, LogArchivos.Tipo.ERROR);
+                            return false;
+                        } else {
+                            //Tomamos
+                            diario = (CambioDolar) l.get(l.size() - 1);
+                        }
+
+                    }
+
+                } catch (CRUDException ex) {
+                    Logger.getLogger(AmadeusFileEJB.class.getName()).log(Level.SEVERE, null, ex);
                     return false;
                 }
 
-                diario = ejbCambio.get(fechaEmision, "CambioDolar.findFecha");
+                Boleto b = new Boleto();
+                b.setTipoBoleto(Boleto.Tipo.SABRE);
+                b.setEstado(Boleto.Estado.CARGADO_AUTOMATICO);
+                b.setIdArchivo(archivo);
+                b.setIdAerolinea(aerolinea);
+                b.setFactorCambiario(diario.getValor());
+                b.setIdEmpresa(1);
+                b.setEmision(Boleto.Emision.TKT);
+                b.setTipoCupon(entry.getValue().getTipoCupon());
+                b.setNumero(entry.getValue().getNumero());
+                b.setIdRuta1(ruta1.getIdAeropuerto());
+                b.setIdRuta2(ruta2.getIdAeropuerto());
+                b.setIdRuta3(ruta3 != null ? ruta3.getIdAeropuerto() : null);
+                b.setIdRuta4(ruta4 != null ? ruta4.getIdAeropuerto() : null);
+                b.setIdRuta5(ruta5 != null ? ruta5.getIdAeropuerto() : null);
+                b.setNombrePasajero(entry.getValue().getNombrePasajero());
+                b.setFechaEmision(DateContable.toLatinAmericaDateFormat(fechaEmision));
+                b.setFechaViaje(DateContable.toLatinAmericaDateFormat(fechaViaje));
+                //todo factor cambiario
+                b.setEstado(Boleto.Estado.CARGADO_AUTOMATICO);
+                b.setFechaInsert(DateContable.getCurrentDate());
+                b.setIdUsuarioCreador("system");
+                b.setGestion(DateContable.getPartitionDateInt(fechaEmision));
+                b.setMoneda(moneda);
+                b.setImporteNeto(importeNeto);
 
-                if (diario == null) {
-                    List l = ejbCambio.get();
-                    if (l.isEmpty()) {
-                        crearLogArchivo(archivo.getNombreArchivo(), archivo.getTipoArchivo(), entry.getValue().getNumero().toString(),
-                                FILE_M0_NO_DOLAR_CAMBIO, LogArchivos.Tipo.ERROR);
-                        return false;
-                    } else {
-                        //Tomamos
-                        diario = (CambioDolar) l.get(l.size() - 1);
+                totalBoleto = new BigDecimal(BigInteger.ZERO);
+                for (Map.Entry<String, BigDecimal> imp : entry.getValue().getImportes().entrySet()) {
+                    if (imp.getKey().equals(NETO)) {
+                        b.setImporteNeto(imp.getValue());
+                    } else if (imp.getKey().equals(COMISION)) {
+                        //b.setMontoComision(imp.getValue()); PREFERIMOS JALAR LA COMISION DE LA CONFIGURACION DE LA LINEA AEREA
+                    } else if (imp.getKey().equals("BO")) {
+                        b.setImpuestoBob(imp.getValue());
+                    } else if (imp.getKey().equals("QM")) {
+                        b.setImpuestoQm(imp.getValue());
+                    } else if (b.getImpuesto1() == null) {
+                        b.setImpuesto1nombre(imp.getKey());
+                        b.setImpuesto1(imp.getValue());
+                    } else if (b.getImpuesto2() == null) {
+                        b.setImpuesto2nombre(imp.getKey());
+                        b.setImpuesto2(imp.getValue());
+                    } else if (b.getImpuesto3() == null) {
+                        b.setImpuesto3nombre(imp.getKey());
+                        b.setImpuesto2(imp.getValue());
+                    } else if (b.getImpuesto4() == null) {
+                        b.setImpuesto4nombre(imp.getKey());
+                        b.setImpuesto2(imp.getValue());
+                    } else if (b.getImpuesto5() == null) {
+                        b.setImpuesto5nombre(imp.getKey());
+                        b.setImpuesto2(imp.getValue());
                     }
 
+                    totalBoleto = totalBoleto.add(imp.getValue());
+
                 }
 
-            } catch (CRUDException ex) {
-                Logger.getLogger(AmadeusFileEJB.class.getName()).log(Level.SEVERE, null, ex);
-                return false;
-            }
-
-            Boleto b = new Boleto();
-            b.setTipoBoleto(Boleto.Tipo.SABRE);
-            b.setEstado(Boleto.Estado.CARGADO_AUTOMATICO);
-            b.setIdArchivo(archivo);
-            b.setIdAerolinea(aerolinea);
-            b.setFactorCambiario(diario.getValor());
-            b.setIdEmpresa(1);
-            b.setEmision(Boleto.Emision.TKT);
-            b.setTipoCupon(entry.getValue().getTipoCupon());
-            b.setNumero(entry.getValue().getNumero());
-            b.setIdRuta1(ruta1.getIdAeropuerto());
-            b.setIdRuta2(ruta2.getIdAeropuerto());
-            b.setIdRuta3(ruta3 != null ? ruta3.getIdAeropuerto() : null);
-            b.setIdRuta4(ruta4 != null ? ruta4.getIdAeropuerto() : null);
-            b.setIdRuta5(ruta5 != null ? ruta5.getIdAeropuerto() : null);
-            b.setNombrePasajero(entry.getValue().getNombrePasajero());
-            b.setFechaEmision(DateContable.toLatinAmericaDateFormat(fechaEmision));
-            b.setFechaViaje(DateContable.toLatinAmericaDateFormat(fechaViaje));
-            //todo factor cambiario
-            b.setEstado(Boleto.Estado.CARGADO_AUTOMATICO);
-            b.setFechaInsert(DateContable.getCurrentDate());
-            b.setIdUsuarioCreador("system");
-            b.setGestion(DateContable.getPartitionDateInt(fechaEmision));
-            b.setMoneda(moneda);
-            b.setImporteNeto(importeNeto);
-
-            totalBoleto = new BigDecimal(BigInteger.ZERO);
-            for (Map.Entry<String, BigDecimal> imp : entry.getValue().getImportes().entrySet()) {
-                if (imp.getKey().equals(NETO)) {
-                    b.setImporteNeto(imp.getValue());
-                } else if (imp.getKey().equals(COMISION)) {
-                    //b.setMontoComision(imp.getValue()); PREFERIMOS JALAR LA COMISION DE LA CONFIGURACION DE LA LINEA AEREA
-                } else if (imp.getKey().equals("BO")) {
-                    b.setImpuestoBob(imp.getValue());
-                } else if (imp.getKey().equals("QM")) {
-                    b.setImpuestoQm(imp.getValue());
-                } else if (b.getImpuesto1() == null) {
-                    b.setImpuesto1nombre(imp.getKey());
-                    b.setImpuesto1(imp.getValue());
-                } else if (b.getImpuesto2() == null) {
-                    b.setImpuesto2nombre(imp.getKey());
-                    b.setImpuesto2(imp.getValue());
-                } else if (b.getImpuesto3() == null) {
-                    b.setImpuesto3nombre(imp.getKey());
-                    b.setImpuesto2(imp.getValue());
-                } else if (b.getImpuesto4() == null) {
-                    b.setImpuesto4nombre(imp.getKey());
-                    b.setImpuesto2(imp.getValue());
-                } else if (b.getImpuesto5() == null) {
-                    b.setImpuesto5nombre(imp.getKey());
-                    b.setImpuesto2(imp.getValue());
-                }
-
-                totalBoleto = totalBoleto.add(imp.getValue());
-
-            }
-
-            b.setTotalBoleto(totalBoleto);
-            b.setTotalMontoCancelado(totalBoleto);
-
-            //if (b.getMontoComision() == null) {
+                b.setTotalBoleto(totalBoleto);
+                
+                //if (b.getMontoComision() == null) {
                 if (b.getTipoCupon().equals(Boleto.Cupon.INTERNACIONAL)) {
                     if (aerolinea.getComisionPromIntTipo() != null) {
                         Double valor = 0d;
@@ -433,6 +439,15 @@ public class SabreFileEJB extends FacadeEJB implements SabreFileRemote {
 
                             b.setComision(aerolinea.getComisionPromInt());
                             b.setMontoComision(new BigDecimal(total).setScale(Contabilidad.VALOR_REDONDEO, RoundingMode.HALF_DOWN));
+
+                            if (aerolinea.getIvaItComision()) {
+                                if (porcentajeComision != null) {
+                                    Double porcentaje = Double.parseDouble(porcentajeComision.getValor());
+                                    Double totalComisonIva = ((total * porcentaje) / 100) + total;
+                                    b.setMontoComision(new BigDecimal(totalComisonIva).setScale(Contabilidad.VALOR_REDONDEO, RoundingMode.HALF_DOWN));
+                                }
+
+                            }
                         }
                     }
                 } else if (b.getTipoCupon().equals(Boleto.Cupon.NACIONAL)) {
@@ -450,25 +465,43 @@ public class SabreFileEJB extends FacadeEJB implements SabreFileRemote {
 
                             b.setComision(aerolinea.getComisionPromNac());
                             b.setMontoComision(new BigDecimal(total).setScale(Contabilidad.VALOR_REDONDEO, RoundingMode.HALF_DOWN));
+
+                            if (aerolinea.getIvaItComision()) {
+                                if (porcentajeComision != null) {
+                                    Double porcentaje = Double.parseDouble(porcentajeComision.getValor());
+                                    Double totalComisonIva = ((total * porcentaje) / 100) + total;
+                                    b.setMontoComision(new BigDecimal(totalComisonIva).setScale(Contabilidad.VALOR_REDONDEO, RoundingMode.HALF_DOWN));
+                                }
+
+                            }
                         }
                     }
                 }
-            //}
+                //}
+                try {
+                    if (b.getMontoComision() != null){
+                        Double comision = b.getMontoComision().doubleValue() ;
+                        Double totalBoleto = b.getTotalBoleto().doubleValue() ;
+                        
+                        Double montoPagarLinea = totalBoleto - comision ;
+                        b.setMontoPagarLineaAerea(new BigDecimal(montoPagarLinea).setScale(Contabilidad.VALOR_REDONDEO));
+                    }
+                    
+                    b.setTotalMontoCobrar(totalBoleto);
+                    //creamos el boleto
+                    insert(b);
 
-            try {
-                //creamos el boleto
-                insert(b);
-
-                crearLogArchivo(archivo.getNombreArchivo(), archivo.getTipoArchivo(),
-                        entry.getValue().getNumero().toString(), FILE_MO_PROCESSED, LogArchivos.Tipo.INFO);
-            } catch (CRUDException ex) {
-                Logger.getLogger(AmadeusFileEJB.class.getName()).log(Level.SEVERE, null, ex);
-                return false;
+                    crearLogArchivo(archivo.getNombreArchivo(), archivo.getTipoArchivo(),
+                            entry.getValue().getNumero().toString(), FILE_MO_PROCESSED, LogArchivos.Tipo.INFO);
+                } catch (CRUDException ex) {
+                    Logger.getLogger(AmadeusFileEJB.class.getName()).log(Level.SEVERE, null, ex);
+                    return false;
+                }
             }
+        } catch (CRUDException ex) {
+            Logger.getLogger(SabreFileEJB.class.getName()).log(Level.SEVERE, null, ex);
         }
-
         return true;
-
     }
 
     private void createBoletoVoidSabre(ArchivoBoleto archivo) {

@@ -30,8 +30,11 @@ public class Formulario implements Serializable {
     public static final String BOLETOS = "boletos";
     public static final String PROMOTORES = "promotores";
     public static final String COMPROBANTES = "comprobantes";
+    public static final String INGRESO_CAJA = "ingreso-caja";
     public static final String BOLETOS_OTROS = "boletaje-otros";
+    public static final String NOTA_DEBITO = "nota-debito";
     public static final String CONFIGURACION_BOLETOS = "configuracion-boletaje";
+    public static final String CONFIGURACION_USER = "user-personal";
     //---REPORTES
     public static final String REPORTES_AGENCIA = "reportes-agencia";
     public static final String REPORTES_CONTABILIDAD = "reportes-contabilidad";

@@ -23,6 +23,7 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import jdk.nashorn.internal.runtime.regexp.joni.EncodingHelper;
 
 /**
  *
@@ -42,6 +43,8 @@ public class NotaDebitoTransaccion extends Entidad {
     public static class Tipo {
 
         public static final String BOLETO = "B";
+        public static final String CARGO = "C";
+        //---------------------------------------------
         public static final String PAQUETE = "P";
         public static final String SEGURO = "S";
         public static final String HOTEL = "H";
@@ -71,6 +74,10 @@ public class NotaDebitoTransaccion extends Entidad {
     private BigDecimal montoBs;
     @Column(name = "monto_usd")
     private BigDecimal montoUsd;
+    @Column(name = "monto_adeudado_bs")
+    private BigDecimal montoAdeudadoBs;
+    @Column(name = "monto_adeudado_usd")
+    private BigDecimal montoAdeudadoUsd;
     @Column(name = "fecha_insert")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaInsert;
@@ -84,8 +91,21 @@ public class NotaDebitoTransaccion extends Entidad {
     private String moneda;
     @Column(name = "tipo")
     private String tipo;
+    @Column(name = "id_usuario")
+    private String idUsuario;
 
     public NotaDebitoTransaccion() {
+    }
+    public NotaDebitoTransaccion(Integer idNotaTransaccion) {
+        this.idNotaDebitoTransaccion = idNotaTransaccion;
+    }
+
+    public String getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(String id_usuario) {
+        this.idUsuario = id_usuario;
     }
 
     public Integer getIdNotaDebitoTransaccion() {
@@ -160,7 +180,6 @@ public class NotaDebitoTransaccion extends Entidad {
         this.idCargo = idCargo;
     }
 
-    
     public String getEstado() {
         return estado;
     }
@@ -184,6 +203,24 @@ public class NotaDebitoTransaccion extends Entidad {
     public void setTipo(String tipo) {
         this.tipo = tipo;
     }
+
+    public BigDecimal getMontoAdeudadoBs() {
+        return montoAdeudadoBs;
+    }
+
+    public void setMontoAdeudadoBs(BigDecimal montoAdeudadoBs) {
+        this.montoAdeudadoBs = montoAdeudadoBs;
+    }
+
+    public BigDecimal getMontoAdeudadoUsd() {
+        return montoAdeudadoUsd;
+    }
+
+    public void setMontoAdeudadoUsd(BigDecimal montoAdeudadoUsd) {
+        this.montoAdeudadoUsd = montoAdeudadoUsd;
+    }
+    
+    
 
     @Override
     public String toString() {

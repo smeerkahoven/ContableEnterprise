@@ -13,7 +13,7 @@ import java.io.Serializable;
  */
 public class BoletoSearchForm implements Serializable {
 
-    private Integer numeroBoleto;
+    private Long numeroBoleto;
 
     private Integer aerolinea;
 
@@ -41,11 +41,11 @@ public class BoletoSearchForm implements Serializable {
         this.idEmpresa = idEmpresa;
     }
 
-    public Integer getNumeroBoleto() {
+    public Long getNumeroBoleto() {
         return numeroBoleto;
     }
 
-    public void setNumeroBoleto(Integer numeroBoleto) {
+    public void setNumeroBoleto(Long numeroBoleto) {
         this.numeroBoleto = numeroBoleto;
     }
 

@@ -20,5 +20,4 @@ public class FormasPago {
     public static final String CHEQUE = "H";
     public static final String DEPOSITO = "D";
     
-    
 }

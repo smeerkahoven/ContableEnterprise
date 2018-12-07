@@ -9,6 +9,7 @@ import com.agencia.control.remote.BoletoRemote;
 import com.agencia.entities.Aerolinea;
 import com.agencia.entities.AerolineaCuenta;
 import com.agencia.entities.Boleto;
+import com.agencia.entities.BoletoPlanillaBsp;
 import com.agencia.entities.BoletoSearch;
 import com.agencia.entities.Cliente;
 import com.agencia.entities.ClientePasajero;
@@ -27,6 +28,7 @@ import com.contabilidad.entities.NotaDebitoTransaccion;
 import com.contabilidad.remote.ComprobanteRemote;
 import com.contabilidad.remote.IngresoCajaRemote;
 import com.contabilidad.remote.NotaDebitoRemote;
+import com.response.json.boletaje.PlanillaSearchForm;
 import com.seguridad.control.FacadeEJB;
 import com.seguridad.control.entities.Entidad;
 import com.seguridad.control.exception.CRUDException;
@@ -35,9 +37,11 @@ import com.seguridad.utils.ComboSelect;
 import com.seguridad.utils.DateContable;
 import com.seguridad.utils.Operacion;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -98,6 +102,26 @@ public class BoletoEJB extends FacadeEJB implements BoletoRemote {
         System.out.println("Lista de BOletos : " + l.size());
         return !l.isEmpty();
 
+    }
+
+    public Boleto getBoletoRegistrado(Boleto b) throws CRUDException {
+
+        Query q = em.createNamedQuery("Boleto.findNroBoleto", Boleto.class);
+        System.out.println("Numero Boleto :" + b.getNumero());
+        q.setParameter("numero", b.getNumero());
+        /*q.setParameter("list", Boleto.Estado.EMITIDO);
+        q.setParameter("list", Boleto.Estado.VOID);
+        q.setParameter("list", Boleto.Estado.PENDIENTE);*/
+
+        List l = q.getResultList();
+
+        System.out.println("Lista de BOletos : " + l.size());
+
+        if (l.size() > 0) {
+            return (Boleto) l.get(0);
+        }
+
+        return new Boleto();
     }
 
     /**
@@ -519,7 +543,7 @@ public class BoletoEJB extends FacadeEJB implements BoletoRemote {
                     //Crear Comprobante de Ingreso
                     comprobanteIngreso = ejbComprobante.createComprobante(a, b, c, ComprobanteContable.Tipo.COMPROBANTE_INGRESO);
                     comprobanteIngreso.setIdNotaDebito(notaDebito.getIdNotaDebito());
-                   /* if (ingreso.getMoneda().equals(Moneda.EXTRANJERA)) {
+                    /* if (ingreso.getMoneda().equals(Moneda.EXTRANJERA)) {
                         comprobanteIngreso.setTotalDebeExt(ingreso.getMontoAbonadoUsd());
                         comprobanteIngreso.setTotalHaberExt(ingreso.getMontoAbonadoUsd());
                         comprobanteIngreso.setTotalDebeNac(ingreso.getMontoAbonadoUsd().multiply(ingreso.getFactorCambiario()));
@@ -903,6 +927,50 @@ public class BoletoEJB extends FacadeEJB implements BoletoRemote {
 
     }
 
+    @Override
+    public Boleto anularBoleto(Integer boleto) throws CRUDException {
+
+        Boleto boletoAnular = em.find(Boleto.class, boleto);
+
+        Optional op = Optional.ofNullable(boletoAnular);
+
+        if (!op.isPresent()) {
+            throw new CRUDException("No existe el Boleto");
+        }
+
+        if (boletoAnular.getEstado().equals(Boleto.Estado.ANULADO)) {
+            throw new CRUDException("El Boleto ya se encuentra anulado");
+        }
+
+        //Si el Boleto esta Emitido se deben dar de bajas su contabilidad
+        boletoAnular.setEstado(Boleto.Estado.ANULADO);
+        em.merge(boletoAnular);
+
+        return boletoAnular;
+    }
+
+    @Override
+    public CargoBoleto anularCargo(Integer cargo) throws CRUDException {
+
+        CargoBoleto cargoBoleto = em.find(CargoBoleto.class, cargo);
+
+        Optional op = Optional.ofNullable(cargoBoleto);
+
+        if (!op.isPresent()) {
+            throw new CRUDException("No existe el Cargo de Boleto");
+        }
+
+        if (cargoBoleto.getEstado().equals(Boleto.Estado.ANULADO)) {
+            throw new CRUDException("El Cargo del Boleto ya se encuentra anulado");
+        }
+
+        //Si el Boleto esta Emitido se deben dar de bajas su contabilidad
+        cargoBoleto.setEstado(Boleto.Estado.ANULADO);
+        em.merge(cargoBoleto);
+
+        return cargoBoleto;
+    }
+
     /**
      * Realiza la anulacion del Boleto. Si el boleto Es Simple o Multiple puede
      * anular Si el boleto es VOID
@@ -948,17 +1016,12 @@ public class BoletoEJB extends FacadeEJB implements BoletoRemote {
             //anulamos las transacciones del Ingreso de Caja
             //ejbIngresoCaja.anularTransaccion(boleto) ;
             // si esta en Pendiente solo debe cambiar el estado
-        } else if (boletoAnular.getEstado().equals(Boleto.Estado.PENDIENTE)) {
+        } else if (boletoAnular.getEstado().equals(Boleto.Estado.PENDIENTE) ||
+                boletoAnular.getEstado().equals(Boleto.Estado.CANCELADO)) {
             boletoAnular.setEstado(Boleto.Estado.ANULADO);
             em.merge(boletoAnular);
             //Si el Boleto es Void, se puede volver a ingresar el boleto.
-        } else if (boletoAnular.getEstado().equals(Boleto.Estado.VOID)) {
-            boletoAnular.setEstado(Boleto.Estado.ANULADO);
-            em.merge(boletoAnular);
-        } else if (boletoAnular.getEstado().equals(Boleto.Estado.ANULADO)) {
-            throw new CRUDException("El Boleto se encuenta ya Anulado.");
         }
-
         return boletoAnular;
 
     }
@@ -1033,5 +1096,48 @@ public class BoletoEJB extends FacadeEJB implements BoletoRemote {
         return Operacion.REALIZADA;
 
     }
+
+    @Override
+    public int updateBoleto(Boleto boleto) throws CRUDException {
+
+        Boleto boletoBd = getBoletoRegistrado(boleto);
+
+        if (boletoBd.getIdBoleto() != null) {
+            if (!Objects.equals(boletoBd.getIdBoleto(), boleto.getIdBoleto())) {
+                throw new CRUDException("El Numero de Boleto ya ha sido registrado");
+            }
+        }
+
+        em.merge(boleto);
+
+        NotaDebito n = (NotaDebito) ejbNotaDebito.get(new NotaDebito(boleto.getIdNotaDebito()));
+        // Se guarda el Boleto
+
+        saveClientePasajero(boleto);
+        //se asocia el Boleto con la Transaccion
+        ejbNotaDebito.updateBoletoNotaDebito(boleto, n);
+
+        //actualizamos los montos de la Nota de debito
+        ejbNotaDebito.actualizarMontosNotaDebito(n.getIdNotaDebito());
+
+        return Operacion.REALIZADA;
+
+    }
+
+    @Override
+    public List<BoletoPlanillaBsp> getPlanillaBsp(PlanillaSearchForm search) throws CRUDException {
+        
+        Query q = em.createNamedQuery("Boleto.getPlanillaBsp");
+        q.setParameter("1", DateContable.toLatinAmericaDateFormat(search.getFechaInicio())) ;
+        q.setParameter("2", DateContable.toLatinAmericaDateFormat(search.getFechaFin()) ) ;
+        q.setParameter("3", search.getIdEmpresa()) ;
+         
+        List <BoletoPlanillaBsp> l = q.getResultList() ;
+        
+        return l ;
+        
+    }
+    
+    
 
 }

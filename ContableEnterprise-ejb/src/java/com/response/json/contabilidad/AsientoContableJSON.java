@@ -6,7 +6,6 @@
 package com.response.json.contabilidad;
 
 import com.contabilidad.entities.AsientoContable;
-import com.contabilidad.entities.AsientoContablePK;
 import com.seguridad.utils.ComboSelect;
 import com.seguridad.utils.DateContable;
 import java.math.BigDecimal;
@@ -32,6 +31,12 @@ public class AsientoContableJSON {
     private BigDecimal haberMonNac;
     private String action;
 
+    private Integer idBoleto;
+    private Integer idCargo;
+    private Integer idNotaTransaccion;
+    private Integer idIngresoCajaTransaccion;
+    private String tipo;
+
     public static AsientoContable toAsientoContable(AsientoContableJSON a) {
         System.out.println(a.getIdPlanCuenta().getId());
         Number idPlanCuenta = a.getIdPlanCuenta().getId() instanceof Double ? (Double) a.getIdPlanCuenta().getId() : (BigDecimal) a.getIdPlanCuenta().getId();
@@ -42,7 +47,7 @@ public class AsientoContableJSON {
         anew.setIdAsiento(a.getIdAsiento());*/
         anew.setIdAsiento(a.getIdAsiento());
         anew.setGestion(a.getGestion());
-        
+
         anew.setIdLibro(a.getIdLibro());
         anew.setIdPlanCuenta(idPlanCuenta.intValue());
         anew.setMoneda(a.getMoneda());
@@ -79,10 +84,57 @@ public class AsientoContableJSON {
         s.setId(a.getIdPlanCuenta());
         json.setIdPlanCuenta(s);
         json.setMoneda(a.getMoneda());
+        
+        json.setTipo(a.getTipo());
+        json.setIdBoleto(a.getIdBoleto());
+        json.setIdNotaTransaccion(a.getIdNotaTransaccion());
+        json.setIdIngresoCajaTransaccion(a.getIdIngresoCajaTransaccion());
+        json.setIdCargo(a.getIdCargo());
 
         return json;
     }
 
+    public Integer getIdBoleto() {
+        return idBoleto;
+    }
+
+    public void setIdBoleto(Integer idBoleto) {
+        this.idBoleto = idBoleto;
+    }
+
+    public Integer getIdCargo() {
+        return idCargo;
+    }
+
+    public void setIdCargo(Integer idCargo) {
+        this.idCargo = idCargo;
+    }
+
+    public Integer getIdNotaTransaccion() {
+        return idNotaTransaccion;
+    }
+
+    public void setIdNotaTransaccion(Integer idNotaTransaccion) {
+        this.idNotaTransaccion = idNotaTransaccion;
+    }
+
+    public Integer getIdIngresoCajaTransaccion() {
+        return idIngresoCajaTransaccion;
+    }
+
+    public void setIdIngresoCajaTransaccion(Integer idIngresoCajaTransaccion) {
+        this.idIngresoCajaTransaccion = idIngresoCajaTransaccion;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    
     public String getAction() {
         return action;
     }

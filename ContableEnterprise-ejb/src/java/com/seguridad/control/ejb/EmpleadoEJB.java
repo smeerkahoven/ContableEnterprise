@@ -27,6 +27,20 @@ public class EmpleadoEJB extends FacadeEJB implements EmpleadoRemote {
     //ResourceBundle.getBundle("/servlet/Mensajes").getString("MENSAJITO")
 
     @Override
+    public void updateInfo(Empleado emp) throws CRUDException {
+        Query q = em.createNamedQuery("Empleado.updateFromDatosPersonales");
+        q.setParameter("apellido", emp.getApellido());
+        q.setParameter("email", emp.getEmail());
+        q.setParameter("nombre", emp.getNombre());
+        q.setParameter("sexo", emp.getSexo());
+        q.setParameter("telefono", emp.getTelefono());
+        q.setParameter("idEmpleado", emp.getIdEmpleado());
+        
+        q.executeUpdate();
+    }
+
+    
+    @Override
     public Empleado get(Empleado e) throws CRUDException {
         Empleado emp = em.find(Empleado.class, e.getIdEmpleado());
 

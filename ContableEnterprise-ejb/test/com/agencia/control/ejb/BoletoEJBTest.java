@@ -45,7 +45,6 @@ public class BoletoEJBTest {
         b.setFactorCambiario(new BigDecimal( 6.96));
         b.setImporteNeto(new BigDecimal(150));
         b.setTotalBoleto(new BigDecimal(150));
-        b.setTotalMontoCancelado(new BigDecimal(150));
         b.setMontoComision(new  BigDecimal(1.72));
         b.setFormaPago(FormasPago.CONTADO);
         b.setContadoTipo(FormasPago.EFECTIVO);

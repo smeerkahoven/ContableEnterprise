@@ -12,6 +12,8 @@ import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.ColumnResult;
+import javax.persistence.ConstructorResult;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -19,8 +21,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.SqlResultSetMapping;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -41,6 +45,56 @@ import javax.xml.bind.annotation.XmlRootElement;
     ,@NamedQuery(name = "Boleto.getAllAmadeusAutomaticos", query = "SELECT b FROM Boleto b WHERE (b.tipoBoleto='AM' or b.tipoBoleto='AV') and b.estado='C' and b.idEmpresa=:idEmpresa ORDER BY b.idBoleto")
     ,@NamedQuery(name = "Boleto.getAllSabreAutomaticos", query = "SELECT b FROM Boleto b WHERE (b.tipoBoleto='SA' or b.tipoBoleto='SV') and b.estado='C' and b.idEmpresa=:idEmpresa ORDER BY b.idBoleto")
 })
+
+@NamedNativeQuery(
+        name = "Boleto.getPlanillaBsp",
+        query = "select \n"
+        + "	 bo.id_boleto idBoleto, bo.id_aerolinea idAerolinea, ae.iata, ae.numero, ae.iva_it_comision ivaItComision,\n"
+        + "      bo.id_nota_debito idNotaDebito, bo.tipo_boleto tipoBoleto, bo.tipo_cupon tipoCupon, bo.numero ticketNumber,\n"
+        + "      date_format(bo.fecha_emision,'%d/%m/%y') fechaEmision,\n"
+        + "      coalesce(date_format(bo.fecha_viaje,'%d/%m/%y'),'') fechaViaje ,"
+        + "      coalesce (bo.importe_neto ,0)importeNeto,\n"
+        + "      (coalesce(bo.impuesto_bob,0) + coalesce(bo.impuesto_qm,0) \n"
+        + "		+ coalesce(bo.impuesto_1,0) + coalesce(bo.impuesto_2,0)\n"
+        + "             + coalesce(bo.impuesto_3,0) + coalesce(bo.impuesto_4,0) \n"
+        + "             + coalesce(bo.impuesto_5,0)) impuestos,\n"
+        + "      coalesce(bo.total_boleto,0) totalBoleto, coalesce(bo.comision,0) comision,\n"
+        + "      coalesce(bo.monto_comision,0) montoComision ,\n"
+        + "      bo.total_monto_cobrar totalMontoCobrar ,\n"
+        + "      case bo.tipo_boleto when 'MV' then 'VOID' when 'SV' then 'VOID' when 'AV' then 'VOID' else '' end estado\n"
+        + " from cnt_boleto bo\n"
+        + " inner join cnt_aerolinea ae on ae.id_aerolinea = bo.id_aerolinea\n"
+        + " where bo.id_nota_debito is not null and fecha_emision >= ?1 and fecha_emision <=?2 \n"
+        + " and bo.id_empresa = ?3 ORDER BY bo.fecha_emision",
+        resultSetMapping = "BoletoPlanillaBsp2"
+)
+
+@SqlResultSetMapping(
+        name = "BoletoPlanillaBsp2",
+        classes = @ConstructorResult(
+                targetClass = BoletoPlanillaBsp.class,
+                columns = {
+                    @ColumnResult(name = "idBoleto", type = Integer.class)
+                    ,@ColumnResult(name = "idAerolinea", type =Integer.class)
+                    ,@ColumnResult(name = "iata", type = String.class)
+                    ,@ColumnResult(name = "numero", type =String.class)
+                    ,@ColumnResult(name = "ivaItComision", type= Boolean.class)
+                    ,@ColumnResult(name = "idNotaDebito", type =Integer.class)
+                    ,@ColumnResult(name = "tipoBoleto", type =String.class)
+                    ,@ColumnResult(name = "tipoCupon", type =String.class)
+                    ,@ColumnResult(name = "ticketNumber", type = Long.class)
+                    ,@ColumnResult(name = "fechaEmision", type = String.class)
+                    ,@ColumnResult(name = "fechaViaje", type = String.class)
+                    ,@ColumnResult(name = "importeNeto" , type = BigDecimal.class)
+                    ,@ColumnResult(name = "impuestos", type = BigDecimal.class)
+                    ,@ColumnResult(name = "totalBoleto", type = BigDecimal.class)
+                    ,@ColumnResult(name = "comision", type = BigDecimal.class)
+                    ,@ColumnResult(name = "montoComision", type = BigDecimal.class)
+                    ,@ColumnResult(name = "totalMontoCobrar", type = BigDecimal.class)
+                    ,@ColumnResult(name = "estado", type=String.class)
+                }
+        )
+)
 public class Boleto extends Entidad {
 
     public static class Estado {
@@ -48,6 +102,7 @@ public class Boleto extends Entidad {
         public static final String EMITIDO = "E";
         public static final String PENDIENTE = "P";
         public static final String ANULADO = "A";
+        public static final String CANCELADO = "C";
         public static final String VOID = "V";
         public static final String CARGADO_AUTOMATICO = "C";
     }
@@ -202,23 +257,23 @@ public class Boleto extends Entidad {
     @Temporal(TemporalType.DATE)
     private Date creditoVencimiento;
     @Size(max = 1)
-    @Column(name = "moneda", updatable = false)
+    @Column(name = "moneda")
     private String moneda;
-    @Column(name = "importe_neto", updatable = false)
+    @Column(name = "importe_neto")
     private BigDecimal importeNeto;
-    @Column(name = "impuesto_bob", updatable = false)
+    @Column(name = "impuesto_bob")
     private BigDecimal impuestoBob;
-    @Column(name = "impuesto_qm", updatable = false)
+    @Column(name = "impuesto_qm")
     private BigDecimal impuestoQm;
-    @Column(name = "impuesto_1", updatable = false)
+    @Column(name = "impuesto_1")
     private BigDecimal impuesto1;
-    @Column(name = "impuesto_2", updatable = false)
+    @Column(name = "impuesto_2")
     private BigDecimal impuesto2;
-    @Column(name = "impuesto_3", updatable = false)
+    @Column(name = "impuesto_3")
     private BigDecimal impuesto3;
-    @Column(name = "impuesto_4", updatable = false)
+    @Column(name = "impuesto_4")
     private BigDecimal impuesto4;
-    @Column(name = "impuesto_5", updatable = false)
+    @Column(name = "impuesto_5")
     private BigDecimal impuesto5;
 
     @Column(name = "impuesto_1_nombre")
@@ -232,7 +287,7 @@ public class Boleto extends Entidad {
     @Column(name = "impuesto_5_nombre")
     private String impuesto5nombre;
 
-    @Column(name = "total_boleto", updatable = false)
+    @Column(name = "total_boleto")
     private BigDecimal totalBoleto;
     @Column(name = "comision")
     private BigDecimal comision;
@@ -244,10 +299,12 @@ public class Boleto extends Entidad {
     private BigDecimal montoFee;
     @Column(name = "descuento")
     private BigDecimal descuento;
-    @Column(name = "monto_descuento", updatable = false)
+    @Column(name = "monto_descuento")
     private BigDecimal montoDescuento;
-    @Column(name = "total_monto_cancelado", updatable = false)
-    private BigDecimal totalMontoCancelado;
+    @Column(name = "total_monto_cobrar")
+    private BigDecimal totalMontoCobrar;
+    @Column(name = "monto_pagar_linea_aerea")
+    private BigDecimal montoPagarLineaAerea;
 
     @Size(max = 1)
     @Column(name = "contado_tipo")
@@ -338,6 +395,14 @@ public class Boleto extends Entidad {
         this.idUsuarioCreador = idUsuarioCreador;
     }
 
+    public BigDecimal getMontoPagarLineaAerea() {
+        return montoPagarLineaAerea;
+    }
+
+    public void setMontoPagarLineaAerea(BigDecimal montoPagarLineaAerea) {
+        this.montoPagarLineaAerea = montoPagarLineaAerea;
+    }
+    
     public Integer getIdIngresoCaja() {
         return idIngresoCaja;
     }
@@ -682,13 +747,15 @@ public class Boleto extends Entidad {
         this.montoDescuento = montoDescuento;
     }
 
-    public BigDecimal getTotalMontoCancelado() {
-        return totalMontoCancelado;
+    public BigDecimal getTotalMontoCobrar() {
+        return totalMontoCobrar;
     }
 
-    public void setTotalMontoCancelado(BigDecimal totalMontoCancelado) {
-        this.totalMontoCancelado = totalMontoCancelado;
+    public void setTotalMontoCobrar(BigDecimal totalMontoCobrar) {
+        this.totalMontoCobrar = totalMontoCobrar;
     }
+
+
 
     public String getContadoTipo() {
         return contadoTipo;

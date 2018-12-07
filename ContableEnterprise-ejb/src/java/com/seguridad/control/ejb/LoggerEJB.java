@@ -14,8 +14,6 @@ import com.seguridad.utils.Accion;
 import com.seguridad.utils.DateContable;
 import java.util.List;
 import javax.ejb.Stateful;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 /**
  *

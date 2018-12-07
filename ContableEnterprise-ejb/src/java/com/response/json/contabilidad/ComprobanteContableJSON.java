@@ -5,8 +5,10 @@
  */
 package com.response.json.contabilidad;
 
+import com.agencia.entities.Cliente;
 import com.contabilidad.entities.ComprobanteContable;
 import com.contabilidad.entities.ComprobanteContablePK;
+import com.seguridad.utils.ComboSelect;
 import com.seguridad.utils.DateContable;
 import java.math.BigDecimal;
 import java.util.LinkedList;
@@ -30,7 +32,7 @@ public class ComprobanteContableJSON {
     private String estadoNombre;
     private BigDecimal factorCambiario;
     private String tipo;
-    private String tipoNombre ;
+    private String tipoNombre;
     private Integer idEmpresa;
     private String concepto;
     private String fechaInsert;
@@ -39,6 +41,7 @@ public class ComprobanteContableJSON {
     private BigDecimal totalHaberMonNac;
     private BigDecimal totalHaberMonExt;
     private String conErrores;
+    private ComboSelect idCliente;
 
     private List<AsientoContableJSON> transacciones = new LinkedList<AsientoContableJSON>();
 
@@ -50,11 +53,15 @@ public class ComprobanteContableJSON {
         newc.setEstado(c.getEstado());
         newc.setFactorCambiario(c.getFactorCambiario());
         newc.setFecha(DateContable.toLatinAmericaDateFormat(c.getFecha()));
-        
+
         newc.setIdNumeroGestion(c.getIdNumeroGestion());
         newc.setIdUsuarioAnulado(c.getIdUsuarioAnulado());
         newc.setIdUsuarioCreador(c.getIdUsuarioCreador());
-        newc.setNombre(c.getNombre());
+
+        if (c.getIdCliente() != null) {
+            newc.setIdCliente(new Cliente((Integer) c.getIdCliente().getId()));
+        }
+
         newc.setIdEmpresa(c.getIdEmpresa());
         newc.setTipo(c.getTipo());
         newc.setTotalDebeExt(c.getTotalDebeMonExt());
@@ -62,12 +69,10 @@ public class ComprobanteContableJSON {
         newc.setTotalHaberExt(c.getTotalHaberMonExt());
         newc.setTotalHaberNac(c.getTotalHaberMonNac());
         newc.setFechaInsert(DateContable.getCurrentDate());
-        newc.setConErrores(c.getConErrores() );
+        newc.setConErrores(c.getConErrores());
 
         return newc;
     }
-
-    
 
     public static ComprobanteContableJSON toComprobanteContableJSON(ComprobanteContable c) {
         ComprobanteContableJSON json = new ComprobanteContableJSON();
@@ -85,7 +90,9 @@ public class ComprobanteContableJSON {
         json.setIdNumeroGestion(c.getIdNumeroGestion());
         json.setIdUsuarioAnulado(c.getIdUsuarioAnulado());
         json.setIdUsuarioCreador(c.getIdUsuarioCreador());
-        json.setNombre(c.getNombre());
+        if (c.getIdCliente() != null) {
+            json.setIdCliente(new ComboSelect(c.getIdCliente().getIdCliente(), c.getIdCliente().getNombre()));
+        }
         json.setTipo(c.getTipo());
         json.setTotalDebeMonExt(c.getTotalDebeExt());
         json.setTotalDebeMonNac(c.getTotalDebeNac());
@@ -94,6 +101,14 @@ public class ComprobanteContableJSON {
         json.setEstadoNombre(ComprobanteContable.getEstadoNombre(c.getEstado()));
 
         return json;
+    }
+
+    public ComboSelect getIdCliente() {
+        return idCliente;
+    }
+
+    public void setIdCliente(ComboSelect idCliente) {
+        this.idCliente = idCliente;
     }
 
     public String getIdNumeroGestionColumna() {
@@ -111,8 +126,6 @@ public class ComprobanteContableJSON {
     public void setTipoNombre(String tipoNombre) {
         this.tipoNombre = tipoNombre;
     }
-    
-    
 
     public String getEstadoNombre() {
         return estadoNombre;

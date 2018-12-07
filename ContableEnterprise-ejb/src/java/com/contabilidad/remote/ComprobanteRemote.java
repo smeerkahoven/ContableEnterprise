@@ -13,7 +13,8 @@ import com.configuracion.entities.ContabilidadBoletaje;
 import com.contabilidad.entities.AsientoContable;
 import com.contabilidad.entities.CargoBoleto;
 import com.contabilidad.entities.ComprobanteContable;
-import com.contabilidad.entities.ComprobanteContablePK;
+import com.contabilidad.entities.IngresoCaja;
+import com.contabilidad.entities.IngresoTransaccion;
 import com.contabilidad.entities.NotaDebito;
 import com.contabilidad.entities.NotaDebitoTransaccion;
 import com.seguridad.control.entities.Entidad;
@@ -81,6 +82,9 @@ public interface ComprobanteRemote extends DaoRemoteFacade {
      */
     public ComprobanteContable createComprobante(Aerolinea a, Boleto boleto, Cliente cliente,
             String tipo, NotaDebito nota) throws CRUDException;
+    
+    public ComprobanteContable createComprobante(String tipo, String concepto, 
+            IngresoCaja ingreso) throws CRUDException; 
 
     public ComprobanteContable createComprobante(Aerolinea a,
             Boleto boleto, Cliente cliente, String tipo) throws CRUDException;
@@ -202,5 +206,37 @@ public interface ComprobanteRemote extends DaoRemoteFacade {
     public AsientoContable createTotalCancelarIngresoClienteHaber(ComprobanteContable c,
             ContabilidadBoletaje conf, NotaDebitoTransaccion ndt, NotaDebito nota, CargoBoleto cargo) throws CRUDException ;
             
+    
+    public AsientoContable createTotalCancelarIngresoCajaDebe(ComprobanteContable c,
+            ContabilidadBoletaje conf, NotaDebitoTransaccion ndt, IngresoCaja caja,
+            Boleto boleto, IngresoTransaccion ing) throws CRUDException;
+            
+    public AsientoContable createTotalCancelarIngresoClienteHaber(ComprobanteContable c,
+            ContabilidadBoletaje conf, NotaDebitoTransaccion ndt, IngresoCaja caja,
+            Boleto boleto, IngresoTransaccion ing) throws CRUDException ;
+    
+    public AsientoContable createTotalCancelarIngresoCajaDebe(ComprobanteContable c,
+            ContabilidadBoletaje conf, NotaDebitoTransaccion ndt, IngresoCaja caja,
+            CargoBoleto cargo, IngresoTransaccion ing) throws CRUDException;
+            
+    public AsientoContable createTotalCancelarIngresoClienteHaber(ComprobanteContable c,
+            ContabilidadBoletaje conf, NotaDebitoTransaccion ndt, IngresoCaja caja,
+            CargoBoleto cargo, IngresoTransaccion ing) throws CRUDException ;
+            
     public int anularAsientosContables(final Boleto boleto) throws CRUDException;
+
+    /**
+     * Retorna una Lista de Comprobantes de acuerdo al Id Nota de Debito
+     * @param idNota
+     * @return
+     * @throws CRUDException 
+     */
+    public List getComprobantesByNotaDebito(Integer idNota) throws CRUDException;
+
+    /**
+     * 
+     * @param tr
+     * @throws CRUDException 
+     */
+    public void anularAsientosContables(NotaDebitoTransaccion tr) throws CRUDException;
 }

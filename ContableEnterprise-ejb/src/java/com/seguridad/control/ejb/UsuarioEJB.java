@@ -5,6 +5,7 @@
  */
 package com.seguridad.control.ejb;
 
+import com.response.json.seguridad.UserPersonalJSON;
 import com.seguridad.control.FacadeEJB;
 import com.seguridad.control.FacadeEJBFirst;
 import com.seguridad.control.LoggerContable;
@@ -35,6 +36,7 @@ public class UsuarioEJB extends FacadeEJBFirst implements UsuarioRemote {
         return "";
     }
 
+    
     @Override
     public User get(User u) throws CRUDException {
         Query q = em.createNamedQuery("User.findUserName", User.class);
@@ -63,6 +65,7 @@ public class UsuarioEJB extends FacadeEJBFirst implements UsuarioRemote {
 
     @Override
     public boolean update(User e) throws CRUDException {
+        e.setPassword(EncryptionContable.encrypt(e.getPassword()));
         em.merge(e);
         LoggerContable.log(Thread.currentThread().getStackTrace()[1].getMethodName() + ":" + e.toString(), this, Level.SEVERE);
         return true;
@@ -162,6 +165,24 @@ public class UsuarioEJB extends FacadeEJBFirst implements UsuarioRemote {
         q.executeUpdate();
 
         return true;
+    }
+
+
+    public UserPersonalJSON getUsuario(User user)  throws CRUDException{
+        
+        UserPersonalJSON u = new UserPersonalJSON();
+        u.setApellido(user.getIdEmpleado().getApellido());
+        u.setCargo(user.getIdEmpleado().getCargo());
+        u.setEmail(user.getIdEmpleado().getEmail());
+        u.setIdEmpleado(user.getIdEmpleado().getIdEmpleado());
+        u.setNombre(user.getIdEmpleado().getNombre());
+        u.setPassword(user.getPassword());
+        u.setSexo(user.getIdEmpleado().getSexo());
+        u.setTelefono(user.getIdEmpleado().getTelefono());
+        u.setUserName(user.getUserName());
+        
+        return u ;
+        
     }
 
 }

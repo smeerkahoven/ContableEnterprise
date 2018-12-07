@@ -22,7 +22,9 @@ public enum Accion implements Serializable {
     INSERT("INSERT"),
     EDIT("EDIT"),
     DELETE("DELETE"),
-    UPDATE("UPDATE");
+    UPDATE("UPDATE"),
+    ANULAR("ANULAR"),
+    FINALIZAR("FINALIZAR");
 
     private final String value;
 

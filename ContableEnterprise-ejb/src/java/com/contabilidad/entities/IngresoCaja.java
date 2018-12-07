@@ -6,7 +6,6 @@
 package com.contabilidad.entities;
 
 import com.agencia.entities.Cliente;
-import com.agencia.entities.Promotor;
 import com.seguridad.control.entities.Entidad;
 import com.seguridad.control.exception.CRUDException;
 import java.math.BigDecimal;
@@ -54,8 +53,29 @@ import javax.validation.constraints.Size;
             @StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_ingreso")
         }
 )
+@NamedStoredProcedureQuery(
+        name = "IngresoCaja.updateMontosIngresoCaja",
+        procedureName = "updateMontosIngresoCaja",
+        parameters = {
+            @StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_ingreso_caja")
+        }
+)
 @NamedQueries({
-    @NamedQuery(name = "IngresoCaja.findAll", query = "SELECT i FROM IngresoCaja i")})
+    @NamedQuery(name = "IngresoCaja.findAll", query = "SELECT i FROM IngresoCaja i")
+    ,@NamedQuery(name = "IngresoCaja.findByIdCliente", query = "SELECT i FROM IngresoCaja i WHERE i.idCliente=:idCliente and i.idEmpresa=:idEmpresa")
+    ,@NamedQuery(name="IngresoCaja.updateToPendiente", 
+            query="UPDATE IngresoCaja i SET i.idCliente=:idCliente, "
+                    + "i.fechaEmision=:fechaEmision,"
+                    + "i.formaPago=:formaPago,"
+                    + "i.idBanco=:idBanco,"
+                    + "i.nroCheque=:nroCheque,"
+                    + "i.idTarjetaCredito=:idTarjetaCredito,"
+                    + "i.nroTarjeta=:nroTarjeta,"
+                    + "i.nroDeposito=:nroDeposito,"
+                    + "i.idCuentaDeposito=:idDeposito,"
+                    + "i.estado=:estado "
+                    + "WHERE i.idIngresoCaja=:idIngresoCaja")
+})
 public class IngresoCaja extends Entidad {
 
     public static final String EMITIDO = "E";
@@ -69,10 +89,7 @@ public class IngresoCaja extends Entidad {
     @Basic(optional = false)
     @Column(name = "id_ingreso_caja")
     private Integer idIngresoCaja;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "id_nota_debito")
-    private int idNotaDebito;
+    
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 16)
@@ -87,12 +104,11 @@ public class IngresoCaja extends Entidad {
     @JoinColumn(name = "id_cliente")
     private Cliente idCliente;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    /*@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_counter")
-    private Promotor idCounter;
+    private Promotor idCounter;*/
     
     @Basic(optional = false)
-    @NotNull
     @Column(name = "fecha_emision")
     @Temporal(TemporalType.DATE)
     private Date fechaEmision;
@@ -134,7 +150,7 @@ public class IngresoCaja extends Entidad {
     @Column(name = "id_cuenta_deposito")
     private Integer idCuentaDeposito;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idIngresoCaja")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idIngresoCaja",fetch = FetchType.EAGER)
     private Collection<IngresoTransaccion> ingresoTransaccionCollection;
 
     @Column(name = "estado")
@@ -147,9 +163,8 @@ public class IngresoCaja extends Entidad {
         this.idIngresoCaja = idIngresoCaja;
     }
 
-    public IngresoCaja(Integer idIngresoCaja, int idNotaDebito, String idUsuario, Date fechaEmision, Date fechaInsert, String moneda) {
+    public IngresoCaja(Integer idIngresoCaja, String idUsuario, Date fechaEmision, Date fechaInsert, String moneda) {
         this.idIngresoCaja = idIngresoCaja;
-        this.idNotaDebito = idNotaDebito;
         this.idUsuario = idUsuario;
         this.fechaEmision = fechaEmision;
         this.fechaInsert = fechaInsert;
@@ -187,14 +202,6 @@ public class IngresoCaja extends Entidad {
         this.idCliente = idCliente;
     }
 
-    public Promotor getIdCounter() {
-        return idCounter;
-    }
-
-    public void setIdCounter(Promotor idCounter) {
-        this.idCounter = idCounter;
-    }
-
     public Integer getIdIngresoCaja() {
         return idIngresoCaja;
     }
@@ -203,13 +210,6 @@ public class IngresoCaja extends Entidad {
         this.idIngresoCaja = idIngresoCaja;
     }
 
-    public int getIdNotaDebito() {
-        return idNotaDebito;
-    }
-
-    public void setIdNotaDebito(int idNotaDebito) {
-        this.idNotaDebito = idNotaDebito;
-    }
 
     public String getIdUsuario() {
         return idUsuario;
