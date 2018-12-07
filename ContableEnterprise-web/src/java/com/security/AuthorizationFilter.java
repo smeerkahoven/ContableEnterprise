@@ -9,8 +9,6 @@ import com.view.menu.Menu;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
@@ -46,7 +44,7 @@ public class AuthorizationFilter implements Filter {
             HttpSession ses = reqt.getSession(false);
 
             String servletPath = reqt.getServletPath();
-
+            System.out.println("Accessing to .." + servletPath);
             String reqURI = reqt.getRequestURI();
             if (reqURI.indexOf("/login.xhtml") >= 0
                     || (ses != null && ses.getAttribute(SessionUtils.SESION_USUARIO) != null)
@@ -60,45 +58,45 @@ public class AuthorizationFilter implements Filter {
                         chain.doFilter(request, response);
                     } else {
                         Optional op = Optional.ofNullable(ses.getAttribute(SessionUtils.SESION_MENU));
-                        if (servletPath.contains("/javax.faces.resource/jsf.js.xhtml")){
+                        if (servletPath.contains("/javax.faces.resource/jsf.js.xhtml")) {
                             chain.doFilter(request, response);
-                        }else{
-                              if (op.isPresent()) {
-                            boolean ok = false;
-                            List<Menu> l = (List<Menu>) ses.getAttribute(SessionUtils.SESION_MENU);
-                            for (Menu m : l) {
-                                if (m.getSubmenus() != null) {
-                                    for (Menu sb : m.getSubmenus()) {
-                                        if (servletPath.equals(sb.getFormulario().getFullPath())) {
-                                            if (sb.getFormulario().getAcceder() == Menu.IGUAL) {
-                                                ok = true;
-                                                break;
+                        } else {
+                            if (op.isPresent()) {
+                                boolean ok = false;
+                                List<Menu> l = (List<Menu>) ses.getAttribute(SessionUtils.SESION_MENU);
+                                for (Menu m : l) {
+                                    if (m.getSubmenus() != null) {
+                                        for (Menu sb : m.getSubmenus()) {
+                                            if (servletPath.equals(sb.getFormulario().getFullPath())) {
+                                                if (sb.getFormulario().getAcceder() == Menu.IGUAL) {
+                                                    ok = true;
+                                                    break;
+                                                }
                                             }
                                         }
                                     }
+                                    if (ok) {
+                                        break;
+                                    }
                                 }
-                                if (ok) {
-                                    break;
-                                }
-                            }
-                            /*if (l.size() > 0) {
+                                /*if (l.size() > 0) {
                                 chain.doFilter(request, response);
                             } else {
                                 resp.sendRedirect(reqt.getContextPath() + "/pages/index/error505.xhtml");
                             }*/
-                            //
-                            if (!ok) {
-                                System.out.println("Sigue ingresando al ERROR 505");
-                                resp.sendRedirect(reqt.getContextPath() + "/pages/index/error505.xhtml");
+                                //
+                                if (!ok) {
+                                    System.out.println("Sigue ingresando al ERROR 505");
+                                    resp.sendRedirect(reqt.getContextPath() + "/pages/index/error505.xhtml");
+                                } else {
+                                    System.out.println("Sigue ingresando al Ingresa al doFilter");
+                                    chain.doFilter(request, response);
+                                }
                             } else {
-                                  System.out.println("Sigue ingresando al Ingresa al doFilter");
                                 chain.doFilter(request, response);
                             }
-                        } else {
-                            chain.doFilter(request, response);
                         }
-                        }
-                      
+
                     }
                 } else {
                     chain.doFilter(request, response);

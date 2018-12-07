@@ -15,27 +15,27 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.inject.Named;
-import javax.enterprise.context.RequestScoped;
+import javax.enterprise.context.Dependent;
 
 /**
  *
  * @author xeio
  */
-@Named(value = "confBoletaje")
-@RequestScoped
-public class BoletajeManagedBean extends ViewManagedBean{
+@Named(value = "userPersonal")
+@Dependent
+public class UserPersonalManagedBean extends ViewManagedBean {
 
     /**
-     * Creates a new instance of BoletajeManagedBean
+     * Creates a new instance of UserPersonalManagedBean
      */
-    public BoletajeManagedBean() {
-        this.formName = "configuracion-boletaje";
+    public UserPersonalManagedBean() {
+        this.formName = "user-personal";
     }
-    
-        @PostConstruct
+
+       @PostConstruct
     public void init() {
         try {
-            this.formulario = SessionUtils.getFormulario(Formulario.CONFIGURACION_BOLETOS);
+            this.formulario = SessionUtils.getFormulario(Formulario.CONFIGURACION_USER);
             checkIfCanAccess();
 
             ejbLogger.add(Accion.ACCESS, user.getUserName(), this.formName, user.getIp());
@@ -43,5 +43,4 @@ public class BoletajeManagedBean extends ViewManagedBean{
             Logger.getLogger(PersonalManagedBean.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
 }

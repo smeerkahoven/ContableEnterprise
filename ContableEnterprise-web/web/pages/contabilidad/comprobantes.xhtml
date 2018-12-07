@@ -46,6 +46,7 @@
         <script type="text/javascript" src="../../js/angular.min.js" />
         <script type="text/javascript" src="../../js/ui-bootstrap-tpls.js" />
         <script type="text/javascript" src="../../js/smart-table.min.js" />
+
         <script type="text/javascript" src="../../assets/vendor/sweetalert/js/sweetalert.min.js"/>
         <script type="text/javascript" src="../../js/contabilidad/comprobantes.js" />
         <!--CORRIGE ng-show -->
@@ -103,7 +104,7 @@
                                             </div>
                                         </c:if>
                                         <button type="button" class="btn btn-warning " tabindex="0" ng-click="cancelar()"><span class="fa fa-undo"></span> Cancelar</button>
-                                        
+
                                     </div>
                                 </div>
                             </header>
@@ -180,6 +181,13 @@
                                                 <button type="button" class="btn btn-primary col-1"  ng-click="find()"><span class="fa fa-search"></span> Buscar</button>
                                             </div>
                                         </div>
+                                        <div class="tooltip bs-tooltip-top" role="tooltip">
+                                            <div class="arrow"></div>
+                                            <div class="tooltip-inner">
+                                                Some tooltip text!
+                                            </div>
+                                        </div>
+
                                         <!-- /Search Options -->
                                         <!-- Tabla Contenido -->
                                         <div  id="tableData" class="ng-hide table-responsive" ng-show="showTable" >
@@ -205,7 +213,7 @@
                                                     <tr>
                                                         <th>N&uacute;mero</th>
                                                         <th>Fecha Emisi&oacute;n</th>
-                                                        <th>Nombre</th>
+                                                        <th>Cliente</th>
                                                         <th>Concepto</th>
                                                         <th>Usuario Creador</th>
                                                         <th>Fecha Creaci&oacute;n</th>
@@ -213,9 +221,9 @@
                                                 </thead>
                                                 <tbody>
                                                     <tr st-select-row="row" st-select-mode="multiple" ng-repeat="row in display_records">
-                                                        <td>{{row.idNumeroGestionColumna}} </td>
+                                                        <td> {{row.idNumeroGestionColumna}} </td>   
                                                         <td>{{row.fecha}} </td>
-                                                        <td>{{row.nombre}} </td>
+                                                        <td>{{row.idCliente.id !== undefined ? row.idCliente.name : ''}} </td>
                                                         <td>{{row.concepto}} </td>
                                                         <td>{{row.idUsuarioCreador}} </td>
                                                         <td>{{row.fechaInsert}} </td>
@@ -252,9 +260,11 @@
                                                     <input type="hidden" id="hdUrlFactores" name="hdUrlFactores" value="#{factores.formulario.restful}"/>
                                                     <input type="hidden" id="hdFactorMaxMin" name="hdFactorMaxMin" value="#{comprobantes.factorCambiarioMaxMin.valor}"/>
                                                     <input type="hidden" id="hdUrlPlanCuentas" name="hdUrlPlanCuentas" value="#{planCuentas.formulario.restful}"/>
+                                                    <input type="hidden" id="hdUrlNotaDebito" name="hdUrlNotaDebito" value="#{boletajeOtros.formulario.restful}"/>
                                                     <input type="hidden" id="hdToken" name="hdToken" value="#{sessionView.token}"/>
                                                     <input type="hidden" id="idEmpresa" name="idEmpresa" value="#{login.empleado.idEmpresa.idEmpresa}"/>
                                                     <input type="hidden" id="hdToken" name="hdFormName" value="#{comprobantes.formulario.nombre}"/>
+                                                    <input type="hidden" id="hdUrlClientes" name="hdUrlClientes" value="#{cliente.formulario.restful}"/>
                                                     <input type="hidden" id="hdUserName" name="hdUserName" value="#{sessionView.user.userName}" />
                                                     <input type="hidden" id="hdDiferenciaIngresos" name="hdUserName" value="#{sessionView.user.userName}" />
                                                     <input type="hidden" id="hdDiferenciaEgresos" name="hdUserName" value="#{sessionView.user.userName}" />
@@ -325,15 +335,19 @@
                                                                    data-placement="top"  />-->
                                                         </div>
                                                     </div>
+
                                                     <div class="form-group row">
-                                                        <label for="txtGlosa" class=" col-form-label col-sm-2 text-right">Nombre</label>
-                                                        <div class="col-sm-8">
-                                                            <input type="text" class="form-control " name="txtNombre" required="required" onkeyup="this.value = this.value.toUpperCase()" maxlength="64" ng-model="formData.nombre"/>
-                                                            <span class="alert-danger"  ng-show="!myForm.txtNombre.$valid"  >
-                                                                Debe insertar un Nombre.
-                                                            </span>
+                                                        <label for="txtNombre" class=" col-form-label col-sm-2 text-right">Cliente</label>
+                                                        <div class="col-sm-6">
+                                                            <input type="text" ng-model="formData.idCliente" placeholder="Seleccione un Cliente"
+                                                                   uib-typeahead="cuenta as cuenta.name for cuenta in comboCliente | filter:{name:$viewValue}"
+                                                                   class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="1" 
+                                                                   typeahead-template-url="customTemplate.html"  typeahead-focus-first="true"/>
+                                                            <span class="alert-danger"  ng-show="formData.idCliente.id === undefined">Ingrese un Cliente V&aacute;lido.</span> 
                                                         </div>
+                                                        <!--<span class=" fa fa-info-circle text-blue" data-toggle="tooltip" data-placement="top" title="La secci&oacute;n de Formas de Pago se habilitar&aacute; al momento de seleccionar una Cuenta de Cliente v&aacute;lida."></span>-->
                                                     </div>
+
                                                     <div class="form-group row">
                                                         <label for="txtConcepto" class=" col-form-label col-sm-2 text-right">Concepto</label>
                                                         <div class="col-sm-8">
@@ -364,12 +378,12 @@
                                                             <thead>
                                                                 <tr class="d-flex" >
                                                                     <th style="width: 30%">Cuenta</th>
-                                                                    <th style="width: 9%">Mon.</th>
-                                                                    <th style="width: 14%">Debe M/N</th>
-                                                                    <th style="width: 14%">Haber M/N</th>
-                                                                    <th style="width: 14%">Debe M/E</th>
-                                                                    <th style="width: 14%">Haber M/E</th>
-                                                                    <th style="width: 5%"></th>
+                                                                    <th style="width: 9%">Moneda.</th>
+                                                                    <th style="width: 13%">Debe M/N</th>
+                                                                    <th style="width: 13%">Haber M/N</th>
+                                                                    <th style="width: 13%">Debe M/E</th>
+                                                                    <th style="width: 13%">Haber M/E</th>
+                                                                    <th style="width: 9%"></th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
@@ -396,7 +410,7 @@
                                                                             </select>
                                                                         </div>
                                                                     </td>
-                                                                    <td style="width: 14%">
+                                                                    <td style="width: 13%">
                                                                         <!--<td class="col-2">-->
                                                                         <div ng-show="!row.editable">{{row.debeMonNac == '0.00' ? '' : row.debeMonNac}}</div>
                                                                         <div ng-show="row.editable">
@@ -409,7 +423,7 @@
                                                                                    ng-model="row.debeMonNac" data-toggle="tooltip" 
                                                                                    data-placement="top"  /> --></div>
                                                                     </td>
-                                                                    <td style="width: 14%">
+                                                                    <td style="width: 13%">
                                                                         <!--<td class="col-2">-->
                                                                         <div ng-show="!row.editable">{{row.haberMonNac == '0.00' ? '' : row.haberMonNac }}</div>
                                                                         <div ng-show="row.editable">
@@ -419,7 +433,7 @@
                                                                                    ng-model="row.haberMonNac"  ng-keypress="ngChange($event, 'haber', row)"/>
                                                                         </div>
                                                                     </td>
-                                                                    <td style="width: 14%">
+                                                                    <td style="width: 13%">
                                                                         <!--<td class="col-2">-->
                                                                         <div ng-show="!row.editable">{{row.debeMonExt== '0.00' ? '' : row.debeMonExt }}</div>
                                                                         <div ng-show="row.editable">
@@ -429,7 +443,7 @@
                                                                                    ng-model="row.debeMonExt"  ng-keypress="ngChange($event, 'debe', row)" />
                                                                         </div>
                                                                     </td>
-                                                                    <td style="width: 14%">
+                                                                    <td style="width: 13%">
                                                                         <!--<td class="col-2">-->
                                                                         <div ng-show="!row.editable">{{row.haberMonExt== '0.00' ? '' : row.haberMonExt}}</div>
                                                                         <div ng-show="row.editable">
@@ -439,9 +453,11 @@
                                                                                    ng-model="row.haberMonExt" ng-keypress="ngChange($event, 'haber', row)"/>
                                                                         </div>
                                                                     </td>
-                                                                    <td style="width: 5%">
+                                                                    <td style="width: 9%">
                                                                         <!--<td class="col-1">-->
                                                                         <div class="btn-group" >
+                                                                            <button  type="button" title="Ver" class="btn btn-sm btn-warning" ng-click="verTransaccion(row)"><i class="fa fa-search"></i></button>
+
                                                                             <c:if test="${comprobantes.formulario.crear== comprobantes.formulario.PERMITIR }">
                                                                                 <button ng-show="!row.editable" ng-disabled="disableEditarTransaccion" type="button" title="Editar" class="btn btn-sm btn-info" ng-click="editTransaccion(row)"><i class="fa fa-pencil"></i></button>
                                                                             </c:if>
@@ -458,6 +474,7 @@
                                                             </tbody>
                                                         </table>
                                                     </div>
+
                                                     <!-- Tabla Transacciones -->
                                                     <div class=" table-responsive">
                                                         <table  class="table table-sm table-hover " >
@@ -469,19 +486,19 @@
                                                                     <td style="width: 9%">
                                                                         <div></div>
                                                                     </td>
-                                                                    <td style="width: 14%">
-                                                                        <div>{{formData.totalDebeMonNac}}</div>
+                                                                    <td style="width: 13%">
+                                                                        <div><strong>{{formData.totalDebeMonNac}} </strong></div>
                                                                     </td>
-                                                                    <td style="width: 14%">
-                                                                        <div >{{formData.totalHaberMonNac}}</div>
+                                                                    <td style="width: 13%">
+                                                                        <div><strong>{{formData.totalHaberMonNac}}</strong></div>
                                                                     </td>
-                                                                    <td style="width: 14%">
-                                                                        <div >{{formData.totalDebeMonExt}}</div>
+                                                                    <td style="width: 13%">
+                                                                        <div><strong>{{formData.totalDebeMonExt}}</strong></div>
                                                                     </td>
-                                                                    <td style="width: 14%">
-                                                                        <div >{{formData.totalHaberMonExt}}</div>
+                                                                    <td style="width: 13%">
+                                                                        <div><strong>{{formData.totalHaberMonExt}}</strong></div>
                                                                     </td>
-                                                                    <td style="width: 5%">
+                                                                    <td style="width: 9%">
                                                                     </td>
                                                                 </tr>
                                                                 <tr class="table-danger" >
@@ -491,19 +508,19 @@
                                                                     <td style="width: 9%">
                                                                         <div></div>
                                                                     </td>
-                                                                    <td style="width: 14%">
-                                                                        <div ng-show="showDifDebeNac">{{formData.difMonNac| makePositive}}</div>
+                                                                    <td style="width: 13%">
+                                                                        <div ng-show="showDifDebeNac"><strong>{{formData.difMonNac| makePositive}}</strong></div>
                                                                     </td>
-                                                                    <td style="width: 14%">
-                                                                        <div  ng-show="showDifHaberNac">{{formData.difMonNac| makePositive}}</div>
+                                                                    <td style="width: 13%">
+                                                                        <div ng-show="showDifHaberNac"><strong>{{formData.difMonNac| makePositive}}</strong></div>
                                                                     </td>
-                                                                    <td style="width: 14%">
-                                                                        <div  ng-show="showDifDebeExt">{{formData.difMonExt| makePositive}}</div>
+                                                                    <td style="width: 13%">
+                                                                        <div ng-show="showDifDebeExt"><strong>{{formData.difMonExt| makePositive}}</strong></div>
                                                                     </td>
-                                                                    <td style="width: 14%">
-                                                                        <div  ng-show="showDifHaberExt">{{formData.difMonExt| makePositive}}</div>
+                                                                    <td style="width: 13%">
+                                                                        <div ng-show="showDifHaberExt"><strong>{{formData.difMonExt| makePositive}}</strong></div>
                                                                     </td>
-                                                                    <td style="width: 5%">
+                                                                    <td style="width: 9%">
                                                                     </td>
                                                                 </tr>
                                                             </tbody>
@@ -618,6 +635,148 @@
                                 </div>
                             </div>
                             <!-- /Modal Anular-->
+
+
+                            <!-- ./Modal VER-->
+                            <form id="myFormTransaccion" name="myFormTransaccion">
+                                <div class="modal fade" id="frmTransaccion" tabindex="-1" role="dialog" aria-labelledby="modalAmadeus" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLongTitle">Datos Transacci&oacute;n</h5>
+                                            </div>
+                                            <div class="modal-body table-responsive-md">
+                                                <span ng-show="loadingFrmTransaccion" class="alert alert-info"><i class="loader loader-sm" ></i>  Cargando...</span>
+
+                                                <!--Mensaje Success -->
+                                                <div class="alert alert-success ng-hide" role="alert" ng-show="showFrmTransaccionRestfulSuccess">
+                                                    <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">&times;</a>
+                                                    {{ showFrmTransaccionRestfulMessage}}
+                                                </div>
+                                                <!--/Mensaje Success -->
+
+                                                <!--Mensaje Error -->
+                                                <div class="alert alert-danger ng-hide" role="alert" ng-show="showFrmVoidRestfulError">
+                                                    <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">&times;</a>
+                                                    {{ showFrmTransaccionRestfulMessage}}
+                                                </div>
+                                                <!-- /Mensaje Error -->
+                                                <div id="formData" class="container " ng-show="verForm.transaccion"  >
+                                                    <legend>Nota de D&eacute;bito</legend>
+                                                    <div class="form-group row">
+                                                        <label for="txtCodigo" class="col-form-label col-sm-3 text-right">Id. Transaccion</label>
+                                                        <div class="col-sm-6">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verForm.transaccion.idNotaDebito"></input>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="form-group row">
+                                                        <label for="txtCodigo" class="col-form-label col-sm-3 text-right">Nota de D&eacute;bito</label>
+                                                        <div class="col-sm-6">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verForm.transaccion.idNotaDebito"></input>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="form-group row">
+                                                        <label for="txtCodigo" class="col-form-label col-sm-3 text-right">Descripci&oacute;n</label>
+                                                        <div class="col-sm-6">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verForm.transaccion.descripcion"></input>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="form-group row">
+                                                        <label for="txtCodigo" class="col-form-label col-sm-3 text-right">Moneda</label>
+                                                        <div class="col-sm-6">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verForm.transaccion.moneda=='U'?'USD.':'BOB.'"></input>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="form-group row">
+                                                        <label for="txtCodigo" class="col-form-label col-sm-3 text-right">Fecha Insert:</label>
+                                                        <div class="col-sm-6">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verForm.transaccion.fechaInsert"></input>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="form-group row">
+                                                        <label for="txtCodigo" class="col-form-label col-sm-3 text-right">Usuario </label>
+                                                        <div class="col-sm-6">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verForm.transaccion.idUsuario"></input>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div id="formData" class="container " ng-show="verForm.boleto"  >
+                                                    <legend>Boleto</legend>
+                                                    <div class="form-group row">
+                                                        <label for="txtCodigo" class="col-form-label col-sm-3 text-right">Id. Boleto</label>
+                                                        <div class="col-sm-6">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verForm.transaccion.idBoleto"></input>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="form-group row">
+                                                        <label for="txtCodigo" class="col-form-label col-sm-3 text-right">No&uacute;mero de Boleto</label>
+                                                        <div class="col-sm-6">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verForm.boleto.numero"></input>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="form-group row">
+                                                        <label for="txtCodigo" class="col-form-label col-sm-3 text-right">Aerolinea</label>
+                                                        <div class="col-sm-6">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verForm.boleto.idAerolinea.nombre"></input>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="form-group row">
+                                                        <label for="txtCodigo" class="col-form-label col-sm-3 text-right">Tipo de Boleto</label>
+                                                        <div class="col-sm-6">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verForm.boleto.tipoBoleto|printTipoBoleto"></input>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div id="formData" class="container " ng-show="verForm.ingreso"  >
+                                                    <legend>Ingreso de Caja</legend>
+                                                    <div class="form-group row">
+                                                        <label for="txtCodigo" class="col-form-label col-sm-3 text-right">Nota de D&eacute;bito</label>
+                                                        <div class="col-sm-6">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verForm.transaccion.descripcion"></input>
+                                                            <label>{{tran.idNotaDebito}}</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                
+                                                <div id="formData" class="container " ng-show="verForm.cargo"  >
+                                                    <legend>Cargo de Boleto</legend>
+                                                    <div class="form-group row">
+                                                        <label for="txtCodigo" class="col-form-label col-sm-3 text-right">Nota de D&eacute;bito</label>
+                                                        <div class="col-sm-6">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verForm.transaccion.descripcion"></input>
+                                                            <label>{{tran.idNotaDebito}}</label>
+                                                        </div>
+                                                    </div>
+
+                                                   
+                                                </div>
+                                                
+                                            </div>
+                                            <div class="modal-footer">
+                                                <div class="btn-group" role="group"  >
+                                                    <!--<div class="form-group row ng-hide" ng-show="formData.idAerolinea.id">-->
+
+
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <!-- ./Modal VER-->
+
                         </div>
                         <!-- /.page-inner -->
                     </div>
@@ -653,6 +812,7 @@
         <!-- END PLUGINS JS -->
         <!-- BEGIN THEME JS -->
         <script src="../../assets/javascript/main.min.js"></script>
+        <script type="text/javascript" src="../../js/utils.js" />
         <!-- END THEME JS -->
         <!-- BEGIN PAGE LEVEL JS -->
         <script type="text/javascript" src="../../assets/javascript/pages/flatpickr-demo.js"></script>

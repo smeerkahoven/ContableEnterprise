@@ -36,14 +36,14 @@
         <link rel="stylesheet" href="../../assets/vendor/sweetalert/css/sweetalert.css"/>
 
         <script type="text/javascript" src="../../js/angular.min.js" />
-        
+
         <script type="text/javascript" src="../../js/ui-bootstrap-tpls.js" />
         <script type="text/javascript" src="../../js/smart-table.min.js" />
         <script type="text/javascript" src="../../assets/vendor/sweetalert/js/sweetalert.min.js"/>
 
         <script type="text/javascript" src="../../js/date.format.js" />
         <script type="text/javascript" src="../../js/moment.js" />
-        <script type="text/javascript" src="../../js/boletaje/boletosOtros.js" />
+        
 
         <!--CORRIGE ng-show -->
         <link rel="stylesheet" href="../../css/main.css"  />
@@ -131,18 +131,18 @@
                                                 <label class="col-form-label col-sm-2 text-right" for="flatpickr-wrap">N&uacute;mero Boleto</label>
                                                 <div class="col-sm-3">
 
-                                                    <input ng-model="search.numeroBoleto" class="form-control" maxlength="11" type="number" />
+                                                    <input id="txtSearchNumero" ng-model="search.numeroBoleto" class="form-control" maxlength="11" size="11" type="input" />
                                                 </div>
 
                                                 <label class="col-form-label col-sm-2 text-right" for="flatpickr-wrap">N&uacute;mero Nota de D&eacute;bito</label>
                                                 <div class="col-sm-3">
-                                                    <input ng-model="search.notaDebito" class="form-control" maxlength="8" type="number" />
+                                                    <input id="txtSearchNota" ng-model="search.notaDebito" class="form-control" maxlength="8" size="8" type="input" />
                                                 </div>
                                             </div>
 
 
                                             <div class="form-group row">
-                                                <label class="col-form-label col-sm-2 text-right" for="flatpickr-wrap">Fechaasdf Inicio</label>
+                                                <label class="col-form-label col-sm-2 text-right" for="flatpickr-wrap">Fecha Inicio</label>
                                                 <div class="col-sm-3 input-group input-group-alt flatpickr " id="flatpickr9">
                                                     <input id="txtFechaInicio" type="text" class="form-control flatpick-input" data-input="" 
                                                            ng-model="search.fechaInicio"/>
@@ -220,7 +220,7 @@
                                                                     </c:if>
 
                                                                     <c:if test="#{boletajeOtros.formulario.eliminar== boletajeOtros.formulario.PERMITIR}">
-                                                                        <button type="button" title="Anular" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#frmAnular" ng-click="modalAnular(row)"><i class="fa fa-trash"></i></button>
+                                                                        <button type="button" title="Anular" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#frmAnular" ng-click="modalAnular(row.idNotaDebito, 'la Nota Debito', NOTA_DEBITO, row)"><i class="fa fa-trash"></i></button>
                                                                     </c:if>
                                                                     <!--<button type="button" title="Ver" class="btn btn-default" ng-click="ver(row.idEmpleado)" data-toggle="modal" data-target="#verForm"><i class="fa fa-search"></i></button>-->
                                                                 </div>
@@ -262,6 +262,8 @@
                                                     <input type="hidden" id="hdComisionPromotor" name="hdComisionPromotor" value="#{boletajeOtros.comisionPromotor.valor}"/>
                                                     <input type="hidden" id="hdComisionAgencia" name="hdComisionAgencia" value="#{boletajeOtros.comisionAgencia.valor}"/>
                                                     <input type="hidden" id="hdPasivoMayorista" name="hdPasivoMayorista" value="#{boletajeOtros.pasivoMayorista.valor}"/>
+                                                    <input type="hidden" id="hdIngresoCaja" name="hdIngresoCaja" value="#{ingresoCaja.formulario.restful}"/>
+                                                    <input type="hidden" id="hdComprobante" name="hdComprobante" value="#{comprobantes.formulario.restful}"/>
                                                     <!--<input type="hidden" id="txtFechaAlta" name="txtFechaAlta" ng-model="formData.fechaAlta"/>-->
                                                     <!--<input type="hidden" id="txtFechaBaja" name="txtFechaBaja" ng-model="formData.fechaBaja"/>-->
                                                     <br />
@@ -277,6 +279,11 @@
                                                         <label for="txtCodigo" class="col-form-label col-sm-2 text-right">N&uacute;mero Nota D&eacute;bito</label>
                                                         <div class="col-sm-4">
                                                             <label for="txtIdLibro" class="col-form-label"  ><strong><h4>{{formData.idNotaDebito}}</h4></strong></label>
+                                                        </div>
+                                                        
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Estado</label>
+                                                        <div class="col-sm-4">
+                                                            <label for="txtIdLibro" class="col-form-label"  ><strong><h4>{{formData.estado|printEstado}}</h4></strong></label>
                                                         </div>
                                                     </div>
                                                     <!-- /Numero Nota Debito -->
@@ -294,10 +301,10 @@
                                                                 Ingrese un Cliente V&aacute;lido.
                                                             </span> 
                                                         </div>
-<!--
-                                                        <span class=" fa fa-info-circle text-blue" data-toggle="tooltip" data-placement="top" 
-                                                              title="La secci&oacute;n de Formas de Pago se habilitar&aacute; al momento de seleccionar una Cuenta de Cliente v&aacute;lida."></span>
--->
+                                                        <!--
+                                                                                                                <span class=" fa fa-info-circle text-blue" data-toggle="tooltip" data-placement="top" 
+                                                                                                                      title="La secci&oacute;n de Formas de Pago se habilitar&aacute; al momento de seleccionar una Cuenta de Cliente v&aacute;lida."></span>
+                                                        -->
                                                     </div>
                                                     <!-- Cuenta -->
 
@@ -355,6 +362,19 @@
                                                         <span class="alert-danger"  ng-show="!myForm.txtFechaEmision.$valid">Ingrese una fecha V&aacute;lida.</span> 
                                                     </div>
                                                     <!-- /Fecha Emision -->
+                                                    
+                                                    <!-- Creado por -->
+                                                    <div class="form-group row">
+                                                        <label class="col-form-label col-sm-2 text-right" for="flatpickr-wrap">Creado por</label>
+                                                        <div class="col-sm-4 " >
+                                                            <input id="txtFechaEmision" name="txtUsuarioCreador" type="text" 
+                                                                   class="form-control flatpick-input" data-input="" 
+                                                                   ng-model="formData.idUsuarioCreador" ng-disabled="true"/>
+                                                        </div>
+                                                        <span class="alert-danger"  ng-show="!myForm.txtFechaEmision.$valid">Ingrese una fecha V&aacute;lida.</span> 
+                                                    </div>
+                                                    
+                                                    <!--./ Creado por -->
 
                                                     <header class="card-header">
                                                         <div class="d-flex align-items-center">
@@ -415,7 +435,7 @@
                                                                                 <button ng-show="!row.editable" ng-disabled="disableEditarTransaccion" type="button" title="Editar" class="btn btn-sm btn-info" ng-click="editTransaccion(row)"><i class="fa fa-pencil"></i></button>
                                                                             </c:if>
                                                                             <c:if test="#{boletajeOtros.formulario.eliminar== boletajeOtros.formulario.PERMITIR}">
-                                                                                <button type="button" title="Eliminar" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#frmConfirmation" ng-click="modalEliminarTransaccion(row)"><i class="fa fa-remove"></i></button>
+                                                                                <button type="button" title="Anular" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#frmAnular" ng-click="modalAnular(row.idNotaDebitoTransaccion, 'la Transaccion', TRANSACCION, row)"><i class="fa fa-trash"></i></button>
                                                                             </c:if>
                                                                             <!--<button type="button" title="Ver" class="btn btn-default" ng-click="ver(row.idEmpleado)" data-toggle="modal" data-target="#verForm"><i class="fa fa-search"></i></button>-->
                                                                         </div>
@@ -448,7 +468,20 @@
                                                             <button  type="button" class="btn btn-warning" ng-click="pendiente()" ><span class="fa fa-clock"></span> Pendiente</button>
                                                         </c:if>
                                                         <c:if test="#{boletajeOtros.formulario.eliminar== boletajeOtros.formulario.PERMITIR}">
-                                                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#frmAnular" ng-click="modalAnular(formData)" value="Anular" > <span class="fa fa-trash"></span> Anular</button>
+                                                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#frmAnular" ng-click="modalAnular(formData.idNotaDebito, 'la Nota Debito', NOTA_DEBITO, formData)" value="Anular" > <span class="fa fa-trash"></span> Anular</button>
+                                                        </c:if>
+                                                        <c:if test="#{boletos.formulario.acceder== boletos.formulario.PERMITIR}">
+                                                            <div class="btn-group" role="group">
+                                                                <button class="btn btn-dark dropdown-toggle" type="button" id="dropDownImprimir" 
+                                                                        data-toggle="dropdown" aria-haspopup="true"  aria-expanded="true">
+                                                                    <span class="fa fa-print"></span> Imprimir
+                                                                </button>
+                                                                <div class="dropdown-menu" aria-labelledby="dropDownImprimir">
+                                                                    <a class="dropdown-item" ng-click="imprimir(NOTA_DEBITO)">Nota de Debito</a>
+                                                                    <a class="dropdown-item" ng-click="imprimir(COMPROBANTE_INGRESO)">Ingreso de Caja</a>
+                                                                    <a class="dropdown-item" ng-click="imprimir(COMPROBANTE_CONTABLE)">Comprobante Contable  </a>
+                                                                </div>
+                                                            </div>
                                                         </c:if>
                                                     </div>
                                                 </div>
@@ -464,27 +497,100 @@
                             </div>
                             <!-- /.page-section -->
 
-                            <!-- Modal Anular Boleto -->
-                            <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="frmAnularBoleto">
-                                <div class="modal-dialog modal-md">
+                            <!-- Modal Imprimir -->
+                            <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="frmImprimir">
+                                <div class="modal-dialog modal-lg modal-dialog-centered">
                                     <div class="modal-content">
                                         <div class="modal-header">
-                                            <h4 class="modal-title" id="myModalLabel">Confirmar</h4>
+                                            <h4 class="modal-title" id="myModalLabel">Mensaje</h4>
                                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                         </div>
                                         <div class="modal-body"> 
                                             <dl class="dl-horizontal">
-                                                Desea anular el boleto <strong> {{boletoAnular.numero}}</strong>  ?
+                                                <span class="alert alert-success fa fa-icon fa-check-circle"></span> {{mensajeImprimir}}. Si desea puede imprimir las siguiente opciones:
                                             </dl>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-default" id="modal-btn-si" ng-click="anularBoleto()"  data-dismiss="modal">Si</button>
-                                            <button type="button" class="btn btn-primary" id="modal-btn-no"  data-dismiss="modal">No</button>
+                                            <button type="button" class="btn btn-secondary"  value="Imprimir Nota de Debito" ng-click="imprimir(NOTA_DEBITO)" ><span class="fa fa-print"></span> Nota de Debito</button>
+                                            <button type="button" class="btn btn-secondary"  value="Imprimir Ingreso de Caja" ng-click="imprimir(COMPROBANTE_INGRESO)"  ><span class="fa fa-print"></span> Ingreso a Caja</button>
+                                            <button type="button" class="btn btn-secondary"  value="Imprimir Asiento Diario" ng-click="imprimir(COMPROBANTE_CONTABLE)"  ><span class="fa fa-print"></span> Comprobante Contable</button>
+                                            <button type="button" class="btn btn-light" id="modal-btn-no"  data-dismiss="modal">Cancelar</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <!-- /Modal Anular Boleto-->
+                            <!-- Modal Imprimir -->
+                            
+                            <!-- Modal Ingreso Caja -->
+                            <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="frmIngresosCaja">
+                                <div class="modal-dialog modal-md">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title" id="myModalLabel">Imprimir</h4>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        </div>
+                                        <div class="modal-body"> 
+                                            <table st-table="records" st-safe-src="gridIngresos">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Nro Ingreso Caja</th>
+                                                        <th>Fecha Emision</th>
+                                                    </tr>                                                    
+                                                </thead>
+                                                <tbody>
+                                                    <tr st-select-row="row" st-select-mode="multiple" ng-repeat="row in records">
+                                                        <td>{{row.idIngresoCaja}}</td>
+                                                        <td>{{row.fechaEmision}}</td>
+                                                        <td>
+                                                            <button type="button" class="btn btn-secondary"  value="Imprimir" ng-click="imprimirItemIngresoCaja(row)" ><span class="fa fa-print"></span> Imprimir</button>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="modal-footer">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /Modal Ingreso Caja-->
+
+
+                            <!-- Modal Comprobante Contable -->
+                            <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="frmComprobante">
+                                <div class="modal-dialog modal-md">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title" id="myModalLabel">Imprimir</h4>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        </div>
+                                        <div class="modal-body"> 
+                                            <table st-table="records" st-safe-src="gridIngresos">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Nro Comprobante Contable</th>
+                                                        <th>Tipo</th>
+                                                        <th>Fecha Emision</th>
+                                                    </tr>                                                    
+                                                </thead>
+                                                <tbody>
+                                                    <tr st-select-row="row" st-select-mode="multiple" ng-repeat="row in records">
+                                                        <td>{{row.idNumeroGestionColumna}}</td>
+                                                        <td>{{row.tipo|printTipoComprobante}}</td>
+                                                        <td>{{row.fecha}}</td>
+                                                        <td>
+                                                            <button type="button" class="btn btn-secondary"  value="Imprimir" ng-click="imprimirItemComprobante(row)" ><span class="fa fa-print"></span> Imprimir</button>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="modal-footer">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /Modal Comprobante Contable-->
 
                             <!-- Modal Amadeus-->
                             <div class="modal fade" id="frmAmadeus" tabindex="-1" role="dialog" aria-labelledby="modalAmadeus" aria-hidden="true">
@@ -574,7 +680,7 @@
                             </div>
                             <!-- ./Modal Amadeus-->
 
-                            
+
                             <!-- ./Modal Void-->
                             <form id="myFormVoid" name="myFormVoid">
                                 <div class="modal fade" id="frmBoletoVoid" tabindex="-1" role="dialog" aria-labelledby="modalAmadeus" aria-hidden="true">
@@ -648,8 +754,8 @@
                                                     <div class="form-group row">
                                                         <label for="txtCodigo" class="col-form-label col-sm-3 text-right">N&uacute;mero del Boleto</label>
                                                         <div class="col-sm-6">
-                                                            <input type="number" class="form-control" name="txtNumero" required=""
-                                                                   ng-model="boleto.numero" ng-blur="validarNroBoleto()"
+                                                            <input type="input" class="form-control" name="txtNumero" id="txtNumero" required=""
+                                                                   ng-model="boleto.numero" size="10" maxlength="10" ng-blur="validarNroBoleto()"
                                                                    data-toggle="tooltip" data-placement="top"   />                                                          
                                                             <span class="alert-danger" ng-show="!myFormVoid.txtNumero.$valid">Debe ingresar un Numero de Boleto</span>
                                                             <span ng-show="showCheckNumeroBoletoExists" class="alert-danger">{{showCheckNumeroBoletoMensaje}}</span>
@@ -668,8 +774,8 @@
                                                         </div>
                                                         <span ng-show="showLoadingBoletoOrigen"><i class="loader loader-sm" ></i></span>
                                                         <span ng-show="showBoletoOrigenExiste" class="fa fa-icon fa-check-circle alert-success" data-toggle="tooltip" data-placement="top" 
-                                                                  title="El boleto Origen Existe."><i class="check " ></i></span>
-                                                        
+                                                              title="El boleto Origen Existe."><i class="check " ></i></span>
+
                                                     </div>
 
                                                     <div class="form-group row">
@@ -726,9 +832,11 @@
                                                         <button  type="button" class="btn btn-primary" ng-click="updateVoid()" ng-if="showFrmBoletoEditar"><span class="fa fa-save"></span> Actualizar</button>
                                                     </c:if>
 
+                                                    <!-- YA NO HAY ANULAR 
                                                     <c:if test="#{boletajeOtros.formulario.eliminar== boletajeOtros.formulario.PERMITIR}">
-                                                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#frmAnular" ng-click="modalAnular(formData)" value="Anular" ng-if="showFrmBoletoEditar"> <span class="fa fa-trash"></span> Anular</button>
+                                                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#frmAnular" ng-click="modalAnular(boleto.idBoleto, 'el Boleto', BOLETO)" value="Anular" ng-if="showFrmBoletoEditar"> <span class="fa fa-trash"></span> Anular</button>
                                                     </c:if>
+                                                    -->
 
                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                                                 </div>
@@ -867,10 +975,11 @@
                                                     <c:if test="#{boletajeOtros.formulario.actualizar== boletajeOtros.formulario.PERMITIR}">
                                                         <button  type="button" class="btn btn-primary" ng-click="updateCargos()" ng-if="showFrmBoletoEditar"><span class="fa fa-save"></span> Actualizar</button>
                                                     </c:if>
-
+                                                    <!-- YA NO HAY ANULAR
                                                     <c:if test="#{boletajeOtros.formulario.eliminar== boletajeOtros.formulario.PERMITIR}">
-                                                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#frmAnular" ng-click="modalAnular(formData)" value="Anular" ng-if="showFrmBoletoEditar"> <span class="fa fa-trash"></span> Anular</button>
+                                                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#frmAnular" ng-click="modalAnular(cargos.idCargo, 'el Cargo', CARGO)" value="Anular" ng-if="showFrmBoletoEditar"> <span class="fa fa-trash"></span> Anular</button>
                                                     </c:if>
+                                                    -->
                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                                                 </div>
                                             </div>
@@ -967,8 +1076,8 @@
                                                         <div class="form-group row">
                                                             <label for="txtCodigo" class="col-form-label col-sm-3 text-right">N&uacute;mero del Boleto</label>
                                                             <div class="col-sm-7">
-                                                                <input type="number" class="form-control" name="txtNumero" required=""
-                                                                       ng-model="boleto.numero" ng-blur="validarNroBoleto()"
+                                                                <input type="input" class="form-control" name="txtNumero" id="txtNumero"  required=""
+                                                                       ng-model="boleto.numero" size="10" maxlength="10" ng-blur="validarNroBoleto()"
                                                                        data-toggle="tooltip" data-placement="top"   />                                                          
                                                                 <span class="alert-danger" ng-show="!myFormBoleto.txtNumero.$valid">Debe ingresar un Numero de Boleto</span>
                                                                 <span ng-show="showCheckNumeroBoletoExists" class="alert-danger">{{showCheckNumeroBoletoMensaje}}</span>
@@ -1141,7 +1250,7 @@
                                                 <hr />
 
                                                 <div ng-include="'../boletaje/montos_automaticos.html'" ng-if="showFrmBoletoAutomaticos" ng-show="boleto.idAerolinea.id"></div>
-                                                
+
                                                 <div ng-include="'../boletaje/montos_ver.html'" ng-if="showFrmBoletoVer" ng-show="boleto.idAerolinea.id"></div>
 
                                                 <div ng-include="'../boletaje/montos_manual.html'" ng-if="showFrmBoletoManual" ng-show="boleto.idAerolinea.id"></div>
@@ -1158,11 +1267,13 @@
                                                         <button  type="button" class="btn btn-primary" ng-click="updateBoleto()"  ng-show="showFrmBoletoEditar"  ><span class="fa fa-save"></span> Actualizar</button>
                                                     </c:if>
 
+                                                    <!--
+                                                    YA NO HAY ANULAR
                                                     <c:if test="#{boletajeOtros.formulario.eliminar== boletajeOtros.formulario.PERMITIR}">
                                                         <button type="button" class="btn btn-danger" data-toggle="modal" ng-if="showFrmBoletoEditar" data-target="#frmAnular" 
-                                                                ng-click="modalAnularBoleto(cargos)" value="Anular"> <span class="fa fa-trash"></span> Anular</button>
+                                                                ng-click="modalAnular(boleto.idBoleto, 'el Boleto', BOLETO)" value="Anular"> <span class="fa fa-trash"></span> Anular</button>
                                                     </c:if>
-
+                                                    -->
                                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                                                 </div>
                                             </div>
@@ -1203,6 +1314,29 @@
                                 </div>
                             </div>
                             <!-- /Modal Eliminar-->
+
+
+                            <!-- Modal Anular -->
+                            <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="frmAnular">
+                                <div class="modal-dialog modal-md modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title" id="myModalLabel">Confirmar</h4>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        </div>
+                                        <div class="modal-body"> 
+                                            <dl class="dl-horizontal">
+                                                Desea anular  {{itemAnular.title}} con ID <strong> {{itemAnular.id}}</strong>  ?
+                                            </dl>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" id="modal-btn-si" ng-click="anular()"  data-dismiss="modal">Si</button>
+                                            <button type="button" class="btn btn-primary" id="modal-btn-no"  data-dismiss="modal">No</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /Modal Anular-->
                         </div>
                         <!-- /.page-inner -->
                     </div>
@@ -1234,6 +1368,7 @@
         <!-- END PLUGINS JS -->
         <!-- BEGIN THEME JS -->
         <script src="../../assets/javascript/main.min.js"></script>
+        <script type="text/javascript" src="../../js/boletaje/boletosOtros.js" />
 
         <script type="text/javascript" src="../../assets/javascript/pages/flatpickr-demo.js"></script>
         <script type="text/javascript" src="../../assets/javascript/pages/typeahead-demo.js"></script>

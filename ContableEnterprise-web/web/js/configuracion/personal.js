@@ -3,15 +3,26 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-var app = angular.module("jsPromotores", ['jsPromotores.controllers', 'smart-table', 'ui.bootstrap']);
+function isNumberKey(evt)
+{
+    var charCode = (evt.which) ? evt.which : event.keyCode
+    if (charCode > 31 && (charCode < 48 || charCode > 57))
+        return false;
 
-angular.module('jsPromotores.controllers', []).controller('frmPromotores',
+    return true;
+}
+;
+
+
+
+var app = angular.module("jsUserPersonal", ['jsUserPersonal.controllers', 'smart-table', 'ui.bootstrap']);
+
+angular.module('jsUserPersonal.controllers', []).controller('frmUserPersonal',
         ['$scope', '$http', '$uibModal', '$window', function ($scope, $http, $window) {
 
                 var token = document.getElementsByName("hdToken")[0];
                 var url = document.getElementsByName("hdUrl")[0];
                 var urlEmpresa = document.getElementsByName("hdUrlEmpresa")[0];
-                var urlAerolinea = document.getElementsByName("hdUrlAerolinea")[0];
                 var formName = document.getElementsByName("hdFormName")[0];
                 var myForm = document.getElementById("myForm");
 
@@ -29,32 +40,16 @@ angular.module('jsPromotores.controllers', []).controller('frmPromotores',
 
                 $scope.itemsByPage = 15;
 
-                $scope.getData = function (urls, method) {
+                $scope.getData = function () {
                     $scope.loading = true;
                     return $http({
                         method: 'POST',
-                        url: urls + method,
+                        url: url.value ,
                         data: {token: token.value, content: ''},
                         headers: {'Content-Type': 'application/json'}
                     }).then(function (response) {
                         if (response.data.code === 201) {
-                            if (urls === url.value) {
-                                $scope.mainGrid = response.data.content;
-                                $scope.showTable = true;
-                            }
-
-                            if (urls === urlEmpresa.value) {
-                                $scope.comboSucursales = response.data.content;
-                            }
-
-                            if (method === "all-combo/B") {
-                                $scope.gridNacionales = response.data.content;
-                            }
-
-                            if (method === "all-combo/D") {
-                                $scope.gridInternacionales = response.data.content;
-                            }
-
+                            $scope.formData = response.data.content ;
                             $scope.loading = false;
                         } else {
                             $scope.showRestfulMessage = response.data.content;
@@ -67,37 +62,28 @@ angular.module('jsPromotores.controllers', []).controller('frmPromotores',
                     });
                 }
 
-                $scope.save = function () {
+                $scope.updateInfo = function () {
                     $scope.clickNuevo = false;
-                    if (!$scope.myForm.$valid) {
+                    if (!$scope.myFormInfo.$valid) {
                         //$scope.showAlert('Error de Verificacion', 'Verifique los mensajes de los valores requeridos')
-                        return;
-                    }
-                    if ($scope.formHasError()) {
-                        $scope.showAlert('Error de Verificacion', 'Verifique los mensajes de los valores requeridos')
                         return;
                     }
 
                     $scope.loading = true;
 
-                    $scope.formData.idEmpresa = $scope.formData.idEmpresa.id;
-
                     $http({
                         method: 'POST',
-                        url: url.value + 'save',
+                        url: url.value + 'update-info',
                         data: {token: token.value, content: angular.toJson($scope.formData)},
                         headers: {'Content-Type': 'application/json'}
                     }).then(function (response) {
                         if (response.data.code === 201) {
                             $scope.showRestfulMessage = response.data.content;
                             $scope.showRestfulSuccess = true;
-                            $scope.showForm = false;
-                            $scope.showTable = true;
-                            $scope.getData(url.value, 'all');
+                            goScrollToSuccess();
                         } else {
                             $scope.showRestfulMessage = response.data.content;
                             $scope.showRestfulError = true;
-                            $scope.showForm = false;
                         }
                         $scope.loading = false;
 
@@ -105,37 +91,28 @@ angular.module('jsPromotores.controllers', []).controller('frmPromotores',
                         $scope.loading = false;
                         $scope.showRestfulMessage = error.statusText;
                         $scope.showRestfulError = true;
-                        $scope.showForm = false;
+                        showAlert(ERROR_RESPUESTA_TITLE, error.statusText);
                     });
                 };
 
 
-
-
                 $scope.formHasError = function () {
-                    if ($scope.formData.idEmpresa == undefined) {
+                    if ($scope.formData.idEmpresa === undefined) {
                         return true;
                     }
                     return (!$scope.formData.idEmpresa.id);
                 }
 
-                $scope.update = function () {
-                    if (!$scope.myForm.$valid) {
+                $scope.updatePassword = function () {
+                    if (!$scope.myFormPassword.$valid) {
                         $scope.showAlert('Error de Verificacion', 'Verifique los mensajes de los valores requeridos')
                         return;
                     }
-                    if ($scope.formHasError()) {
-                        $scope.showAlert('Error de Verificacion', 'Verifique los mensajes de los valores requeridos')
-                        return;
-                    }
-
                     $scope.loading = true;
-
-                    $scope.formData.idEmpresa = $scope.formData.idEmpresa.id;
 
                     $http({
                         method: 'POST',
-                        url: url.value + 'update',
+                        url: url.value + 'update-password',
                         data: {token: token.value, content: angular.toJson($scope.formData)},
                         headers: {'Content-Type': 'application/json'}
                     }).then(function (response) {
@@ -143,87 +120,29 @@ angular.module('jsPromotores.controllers', []).controller('frmPromotores',
                         if (response.data.code === 201) {
                             $scope.showRestfulMessage = response.data.content;
                             $scope.showRestfulSuccess = true;
-                            $scope.showForm = false;
-                            $scope.showTable = true;
+                            goScrollToSuccess();
                             //$scope.getData();
                         } else {
                             $scope.showRestfulMessage = response.data.content;
                             $scope.showRestfulError = true;
-                            $scope.showForm = false;
+                            goScrollToSuccess();
                         }
 
                     }, function (error) {
                         $scope.loading = false;
-                        $scope.showRestfulMessage = error;
+                        $scope.showRestfulMessage = error.statusText;
                         $scope.showRestfulError = true;
+                        goScrollToSuccess();
                         //$scope.showForm = true;
                     });
                 };
 
-                $scope.delete = function () {
-
-                    if ($scope.modalConfirmation.method === 'delete-comision') {
-                        $scope.deleteComision();
-                    }
-                };
-
-
-                $scope.hideMessagesBox = function () {
-                    $scope.showRestfulSuccess = false;
-                    $scope.showRestfulError = false;
-                }
-
-                $scope.edit = function (item) {
-                    $scope.showTable = false;
-                    $scope.showForm = true;
-                    $scope.showBtnNuevo = false;
-                    $scope.showBtnEditar = true;
-                    $scope.hideMessagesBox();
-                    $scope.formData = item;
-
-                    $scope.formData.idEmpresa = $scope.findCta(item.idEmpresa, $scope.comboSucursales);
-                }
-
-                $scope.nuevo = function () {
-                    $scope.showForm = true;
-                    $scope.showBtnNuevo = true;
-                    $scope.showBtnEditar = false;
-                    $scope.showTable = false;
-                    $scope.showRestfulSuccess = false;
-                    $scope.showRestfulError = false;
-                    $scope.formData = {};
-                    $scope.clickNuevo = true;
-                    $scope.myForm.$setPristine();
-                    myForm.reset();
-                }
-
+                $scope.getData();
+                
                 $scope.cancelar = function () {
                     $scope.showForm = false;
                     $scope.showTable = true;
                     $scope.hideMessagesBox();
-                }
-
-                $scope.showAlert = function (title, message) {
-                    swal({
-                        title: title,
-                        text: message,
-                        type: 'error',
-                        closeOnConfirm: true
-                    });
-                }
-
-                $scope.modalEliminar = function (idx, nombrex, methodx) {
-                    $scope.modalConfirmation = {id: idx, nombre: nombrex, method: methodx};
-                }
-
-
-                $scope.findCta = function (cta, input) {
-                    var i = 0;
-                    for (i; i < input.length; i++) {
-                        if (input[i].id == cta) {
-                            return input[i];
-                        }
-                    }
                 }
 
                 // los watch sirven para verificar si el valor cambio

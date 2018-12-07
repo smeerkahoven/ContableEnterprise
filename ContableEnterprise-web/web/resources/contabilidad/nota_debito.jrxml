@@ -18,12 +18,9 @@
 	nd.forma_pago, nd.tipo_contado, nd.nro_cheque, nd.nro_deposito, nd.nro_tarjeta,
 	nd.id_banco, ba.nombre,
     case nd.forma_pago 	
-		when  'E' then 
-		case nd.tipo_contado 
-			when 'E' then 'CONTADO EFECTIVO' 
-			when 'D' then concat('CONTADO con DEPOSITO BANCARIO Nro Deposito:',nd.nro_deposito, ' en la Cuenta: ',coalesce( pc.cuenta,'SIN NOMBRE'))
-			when 'C' then concat('CONTADO con CHEQUE Nro:', nd.nro_cheque, ' del Banco:' , coalesce( ba.nombre,' SIN NOMBRE'))
-		end
+		when 'E' then 'CONTADO EFECTIVO' 
+		when 'D' then concat('CONTADO con DEPOSITO BANCARIO Nro Deposito:',nd.nro_deposito, ' en la Cuenta: ',coalesce( pc.cuenta,'SIN NOMBRE'))
+		when 'H' then concat('CONTADO con CHEQUE Nro:', nd.nro_cheque, ' del Banco:' , coalesce( ba.nombre,' SIN NOMBRE'))
 		when  'C' then concat('CREDITO con ', nd.credito_dias, ' dia(s) de Vencimiento, hasta el ', nd.credito_vencimiento ) 
 		when  'T' then concat('TARJETA CREDITO/DEBITO con Numero de Tarjeta: ', nd.nro_tarjeta )
 		when  'P' then concat(' ', 
@@ -38,7 +35,6 @@
 			coalesce(case nd.combinado_credito when '1' then concat(' CREDITO con ', nd.credito_dias, ' dia(s) de Vencimiento, hasta el ', nd.credito_vencimiento ) end,'' ),
 			coalesce(case nd.combinado_tarjeta when '1' then concat(' TARJETA CREDITO/DEBITO con Numero de Tarjeta: ', nd.nro_tarjeta ) end, '')
 		)
-                				
 	end forma_pago_literal,
 
 	nd.id_tarjeta_credito, tc.denominacion,

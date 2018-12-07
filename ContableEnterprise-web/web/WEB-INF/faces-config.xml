@@ -132,7 +132,7 @@
         </navigation-case>
     </navigation-rule>
     
-        <navigation-rule>
+    <navigation-rule>
         <from-view-id>pages/*</from-view-id>
         <navigation-case>
             <from-outcome>boletos</from-outcome>
@@ -165,6 +165,24 @@
         <navigation-case>
             <from-outcome>boletaje-otros</from-outcome>
             <to-view-id>pages/boletaje/boletos-otros.xhtml?faces-redirect=true</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>pages/*</from-view-id>
+        <navigation-case>
+            <from-outcome>planilla-bsp</from-outcome>
+            <to-view-id>pages/boletaje/planilla-bsp.xhtml?faces-redirect=true</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>pages/*</from-view-id>
+        <navigation-case>
+            <from-outcome>ingreso-caja</from-outcome>
+            <to-view-id>pages/boletaje/ingreso-caja.xhtml?faces-redirect=true</to-view-id>
             <redirect />
         </navigation-case>
     </navigation-rule>
@@ -211,6 +229,15 @@
         <navigation-case>
             <from-outcome>configuracion-parametros</from-outcome>
             <to-view-id>pages/configuracion/parametros.xhtml?faces-redirect=true</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>pages/*</from-view-id>
+        <navigation-case>
+            <from-outcome>user-personal</from-outcome>
+            <to-view-id>pages/configuracion/user-personal.xhtml?faces-redirect=true</to-view-id>
             <redirect />
         </navigation-case>
     </navigation-rule>

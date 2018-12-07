@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="cabecera_empresa" language="groovy" pageWidth="612" pageHeight="792" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e7d65f31-51ac-413c-a8a9-63c3c8f66715">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="cabecera_empresa" language="groovy" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e7d65f31-51ac-413c-a8a9-63c3c8f66715">
 	<property name="ireport.zoom" value="3.452271214393106"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.x" value="861"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="EMPRESA_ID" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA[1]]></defaultValueExpression>
@@ -92,7 +92,7 @@ WHERE
 				<textFieldExpression><![CDATA[$F{tb_empresa_email} + " / " + $F{tb_empresa_pagina_web}]]></textFieldExpression>
 			</textField>
 			<textField pattern="EEEEE dd MMMMM yyyy">
-				<reportElement x="388" y="2" width="184" height="14" uuid="9d3da0b7-1839-434c-b35b-b5996f7bf27a"/>
+				<reportElement x="568" y="2" width="184" height="14" uuid="9d3da0b7-1839-434c-b35b-b5996f7bf27a"/>
 				<textElement textAlignment="Right">
 					<font size="8"/>
 				</textElement>
@@ -103,7 +103,7 @@ WHERE
 				<imageExpression><![CDATA[$F{tb_empresa_logo}]]></imageExpression>
 			</image>
 			<textField pattern="HH:mm:ss">
-				<reportElement x="472" y="15" width="100" height="14" uuid="715b0222-40a9-4274-99d1-d33a9c87f81a"/>
+				<reportElement x="652" y="15" width="100" height="14" uuid="715b0222-40a9-4274-99d1-d33a9c87f81a"/>
 				<textElement textAlignment="Right">
 					<font size="8"/>
 				</textElement>
@@ -114,7 +114,7 @@ WHERE
 	<detail>
 		<band height="100" splitType="Stretch">
 			<subreport>
-				<reportElement x="6" y="0" width="200" height="100" uuid="9e5bdce7-711b-40e0-9b51-f915333152d9"/>
+				<reportElement x="0" y="0" width="200" height="100" uuid="9e5bdce7-711b-40e0-9b51-f915333152d9"/>
 				<subreportParameter name="ID_INGRESO">
 					<subreportParameterExpression><![CDATA[$P{ID_INGRESO}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -143,12 +143,12 @@ WHERE
 	<pageFooter>
 		<band height="26" splitType="Stretch">
 			<textField>
-				<reportElement x="460" y="5" width="112" height="20" uuid="9e752d41-da80-4741-80ac-949b907037fc"/>
+				<reportElement x="640" y="6" width="112" height="20" uuid="9e752d41-da80-4741-80ac-949b907037fc"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA["Página - "+$V{PAGE_NUMBER}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="3" y="1" width="569" height="1" uuid="87e80cd4-8555-4fef-a992-cb15f1d888c8"/>
+				<reportElement x="3" y="1" width="749" height="1" uuid="87e80cd4-8555-4fef-a992-cb15f1d888c8"/>
 			</line>
 		</band>
 	</pageFooter>

@@ -65,3 +65,7 @@ list-on-top {
     border: none;
   }
   
+.tip {
+	display: inline-block;
+	cursor: pointer;
+}

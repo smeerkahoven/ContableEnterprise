@@ -16,20 +16,16 @@ ic.id_counter, concat( upper(pr.nombre),' ', upper(pr.apellido)) counter,
 date_format(ic.fecha_emision,'%d/%m/%y')fecha_emision,
 ic.fecha_insert, 
 ic.factor_cambiario,
-ic.moneda, 
 ic.monto_abonado_bs,
 number_to_string(ic.monto_abonado_bs) literal_bs, round(abs(mod(ic.monto_abonado_bs,1)*100)) decimal_part_bs,
 ic.monto_abonado_usd,
 number_to_string (ic.monto_abonado_usd)literal_usd, round(abs(mod(ic.monto_abonado_usd,1)*100)) decimal_part_usd,
 case ic.forma_pago 	
-	when  'E' then 
-	case ic.tipo_contado 
-		when 'E' then 'CONTADO EFECTIVO' 
-		when 'D' then concat('CONTADO con DEPOSITO BANCARIO Nro Deposito:',ic.nro_deposito, ' en la Cuenta: ',coalesce( pc.cuenta,'SIN NOMBRE'))
-		when 'C' then concat('CONTADO con CHEQUE Nro:', ic.nro_cheque, ' del Banco:' , coalesce( ba.nombre,' SIN NOMBRE'))
-	end
+	when 'E' then 'CONTADO EFECTIVO' 
+	when 'D' then concat('CONTADO con DEPOSITO BANCARIO Nro Deposito:',ic.nro_deposito, ' en la Cuenta: ',coalesce( pc.cuenta,'SIN NOMBRE'))
+	when 'C' then concat('CONTADO con CHEQUE Nro:', ic.nro_cheque, ' del Banco:' , coalesce( ba.nombre,' SIN NOMBRE'))
 	when  'T' then concat('TARJETA CREDITO/DEBITO con Numero de Tarjeta: ', ic.nro_tarjeta )
-	when  'P' then 
+	/*when  'P' then 
 		concat('', 
 			coalesce(                
 				case ic.combinado_contado when '1' then 
@@ -41,8 +37,7 @@ case ic.forma_pago
 				end, ' CONTADO'
 			,''),			
 			coalesce(case ic.combinado_tarjeta when '1' then concat(' TARJETA CREDITO/DEBITO con Numero de Tarjeta: ', ic.nro_tarjeta ) end, '')
-		)
-                				
+		)*/
 	end forma_pago_literal,
     tr.id_ingreso_caja, tr.descripcion, tr.monto_bs monto_bs_tr, tr.monto_usd monto_usd_tr
 from cnt_ingreso_caja ic
@@ -86,9 +81,6 @@ sucursal]]></fieldDescription>
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="factor_cambiario" class="java.math.BigDecimal">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="moneda" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="monto_abonado_bs" class="java.math.BigDecimal">

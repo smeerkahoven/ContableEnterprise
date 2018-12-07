@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html  xmlns="http://www.w3.org/1999/xhtml"
        xmlns:h="http://xmlns.jcp.org/jsf/html"
-       xmlns:ui="http://xmlns.jcp.org/jsf/facelets" ng-app="jsAeropuerto"
+       xmlns:ui="http://xmlns.jcp.org/jsf/facelets" ng-app="jsUserPersonal"
        xmlns:c="http://java.sun.com/jsp/jstl/core"
        >
     <head>
@@ -38,7 +38,7 @@
         <script type="text/javascript" src="../../js/ui-bootstrap-tpls.js" />
         <script type="text/javascript" src="../../js/smart-table.min.js" />
         <script type="text/javascript" src="../../assets/vendor/sweetalert/js/sweetalert.min.js"/>
-        <script type="text/javascript" src="../../js/agencia/aeropuerto.js" />
+        <script type="text/javascript" src="../../js/configuracion/personal.js" />
 
         <!--CORRIGE ng-show -->
         <link rel="stylesheet" href="../../css/main.css"  />
@@ -65,7 +65,7 @@
             </aside>
             <!-- /.app-aside -->
             <!-- .app-main -->
-            <main class="app-main" ng-controller="frmAeropuerto">
+            <main class="app-main" ng-controller="frmUserPersonal">
                 <!-- .wrapper -->
                 <div class="wrapper">
                     <!-- .page -->
@@ -78,19 +78,19 @@
                                     <ol class="breadcrumb">
                                         <li class="breadcrumb-item active">
                                             <a href="#">
-                                                <i class="breadcrumb-icon fa fa-angle-left mr-2"></i>#{aeropuerto.formulario.modulo}
+                                                <i class="breadcrumb-icon fa fa-angle-left mr-2"></i>#{userPersonal.formulario.modulo}
                                             </a>
                                         </li>
                                     </ol>
                                 </nav>
                                 <div class="d-md-flex">
-                                    <h1 class="page-title mr-sm-auto"> #{aeropuerto.formulario.nombre}</h1>
-                                    <div class="dt-button btn-group">
-                                        <c:if test="#{aeropuerto.formulario.crear== aeropuerto.formulario.PERMITIR}">
+                                    <h1 class="page-title mr-sm-auto"> #{userPersonal.formulario.nombre}</h1>
+                                    <!--<div class="dt-button btn-group">
+                                        <c:if test="#{userPersonal.formulario.crear== userPersonal.formulario.PERMITIR}">
                                             <button type="button" class="btn btn-success buttons-html5" tabindex="0" ng-click="nuevo()"><span class="fa fa-plus"></span> Nuevo</button>
                                         </c:if>
                                         <button type="button" class="btn btn-warning buttons-html5" tabindex="0" ng-click="cancelar()"><span class="fa fa-undo"></span> Cancelar</button>
-                                    </div>
+                                    </div>-->
                                 </div>
                             </header>
                             <!-- /.page-title-bar -->
@@ -120,104 +120,88 @@
                                         <!-- /Mensaje Error -->
                                         <!-- .form-group -->
                                         <!-- Tabla Contenido -->
-                                        <div  id="tableData" class="ng-hide" ng-show="showTable" >
-                                            <div class="form-group row table-responsive">
-                                                <table st-table="display_records"    st-safe-src="mainGrid" 
-                                                       class="table  table-hover ">
-                                                    <thead >
-                                                        <c:if test="#{aeropuerto.formulario.buscar == aeropuerto.formulario.PERMITIR}">
-                                                            <tr>
-                                                                <th colspan="4">
-                                                                    <!-- .input-group -->
-                                                                    <div class="input-group has-clearable">
-                                                                        <div class="input-group-prepend">
-                                                                            <span class="input-group-text">
-                                                                                <span class="oi oi-magnifying-glass"></span>
-                                                                            </span>
-                                                                        </div>
-                                                                        <input st-search="" id="table-search" class="form-control placeholder-shown" placeholder="Busqueda" type="text" /> 
-                                                                    </div>
-                                                                    <!-- /.input-group -->
-                                                                </th>
-                                                            </tr>
-                                                        </c:if>
-                                                        <tr>
-                                                            <th>Codigo</th>
-                                                            <th>Aeropuerto/ Ciudad/ Pais</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr st-select-row="row" st-select-mode="multiple" ng-repeat="row in display_records">
-                                                            <td>{{row.idAeropuerto}} </td>
-                                                            <td>{{row.nombre}} </td>
-                                                            <td>
-                                                                <div class="btn-group" >
-                                                                    <c:if test="${aeropuerto.formulario.actualizar== aeropuerto.formulario.PERMITIR }">
-                                                                        <button type="button" title="Editar" class="btn btn-sm btn-info" ng-click="edit(row.idAeropuerto)"><i class="fa fa-pencil"></i></button>
-                                                                    </c:if>
 
-                                                                    <c:if test="#{aeropuerto.formulario.eliminar== aeropuerto.formulario.PERMITIR}">
-                                                                        <button type="button" title="Eliminar" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#frmConfirmation" ng-click="modalEliminar(row.idAeropuerto, row.nombre)"><i class="fa fa-remove"></i></button>
-                                                                    </c:if>
-                                                                    <!--<button type="button" title="Ver" class="btn btn-default" ng-click="ver(row.idEmpleado)" data-toggle="modal" data-target="#verForm"><i class="fa fa-search"></i></button>-->
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                    </tbody>
-                                                    <tfoot>
-                                                        <tr>
-                                                            <td colspan="10" class="text-center">
-                                                                <div class="container" st-items-by-page="itemsByPage" st-pagination="" st-template="../index/pagination.custom.html"></div>
-                                                            </td>
-                                                        </tr>
-                                                    </tfoot>
-                                                </table>
-                                            </div>
-                                        </div>
                                         <!-- /Tabla Contenido -->
-                                        <form name="myForm">
+                                        <form name="myFormPassword" id="myFormPassword">
                                             <!-- .form -->
-
                                             <!-- .fieldset -->
                                             <fieldset>
                                                 <!-- Contenido Formulario-->
-                                                <div id="formData" class="container animated fadeIn ng-hide"   ng-show="showForm" >
-                                                    <input type="text" ng-show="false"  name="txtIdAeropuerto"  ng-model="formData.idAeropuerto" />
-                                                    <input type="hidden" id="hdUrl" name="hdUrl" value="#{aeropuerto.formulario.restful}"/>
+                                                <div id="formData" class="container animated" >
+                                                    <input type="hidden" id="hdUrl" name="hdUrl" value="#{userPersonal.formulario.restful}"/>
                                                     <input type="hidden" id="hdToken" name="hdToken" value="#{sessionView.token}"/>
-                                                    <input type="hidden" id="hdToken" name="hdFormName" value="#{aeropuerto.formulario.nombre}"/>
+                                                    <input type="hidden" id="hdFormName" name="hdFormName" value="#{userPersonal.formulario.nombre}"/>
                                                     <!--<input type="hidden" id="txtFechaAlta" name="txtFechaAlta" ng-model="formData.fechaAlta"/>-->
                                                     <!--<input type="hidden" id="txtFechaBaja" name="txtFechaBaja" ng-model="formData.fechaBaja"/>-->
                                                     <br />
+
                                                     <div class="form-group row">
-                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Codigo</label>
+                                                        <label for="txtNombre" class=" col-form-label col-sm-2 text-right">Usuario</label>
                                                         <div class="col-sm-4">
-                                                            <input type="text" class="form-control " name="txtCodigo" required="true" maxlength="4" ng-model="formData.idAeropuerto"/>
+                                                            <input type="text" class="form-control" name="txtNombre" maxlength="64" readonly="true" ng-model="formData.userName"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label for="txtNombre" class=" col-form-label col-sm-2 text-right">Contrase&ntilde;a</label>
+                                                        <div class="col-sm-4">
+                                                            <input type="password" class="form-control" name="txtPassword" required="required" maxlength="12" ng-model="formData.password"/>
                                                         </div>
                                                     </div>
 
+                                                    <div class="form-group">
+                                                        <div class="row" >
+                                                            <label for="txtNombre" class="col-form-label col-sm-2" ></label>
+                                                            <button type="button" class="btn btn-primary" ng-click="updatePassword()" value="Actualizar"> <span class="fa fa-edit"></span> Actualizar</button>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </fieldset>
+                                        </form>
+                                        <hr />
+                                        <form id="myFormInfo" name="myFormInfo">
+                                            <fieldset>
+                                                <div  class="container animated">
                                                     <div class="form-group row">
-                                                        <label for="txtNombre" class=" col-form-label col-sm-2 text-right">Aeropuerto/Ciudad/Pais</label>
+                                                        <label for="txtNombre" class=" col-form-label col-sm-2 text-right">Nombre</label>
                                                         <div class="col-sm-4">
                                                             <input type="text" class="form-control" name="txtNombre" required="required" maxlength="64" ng-model="formData.nombre"/>
                                                         </div>
                                                     </div>
-
+                                                    <div class="form-group row">
+                                                        <label for="txtNombre" class=" col-form-label col-sm-2 text-right">Apellido</label>
+                                                        <div class="col-sm-4">
+                                                            <input type="text" class="form-control" name="txtNombre" required="required" maxlength="64" ng-model="formData.apellido"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label for="txtNombre" class=" col-form-label col-sm-2 text-right">Email</label>
+                                                        <div class="col-sm-4">
+                                                            <input type="text" class="form-control" name="txtNombre" required="required" maxlength="128" ng-model="formData.email"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label for="txtNombre" class=" col-form-label col-sm-2 text-right">Telefono</label>
+                                                        <div class="col-sm-4">
+                                                            <input type="text" class="form-control" name="txtNombre" required="required" maxlength="10" ng-model="formData.telefono"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label for="txtEstado" class="col-form-label col-sm-2 text-right">Sexo</label>
+                                                        <div class="col-sm-4">
+                                                            <select name="txtSexo" class="form-control" ng-model="formData.sexo" required="required">
+                                                                <option style="display:none" value="">seleccione un sexo</option>
+                                                                <option value="H" selected="selected">Hombre</option>
+                                                                <option value="M">Mujer</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
 
                                                     <div class="form-group">
-                                                        <c:if test="#{promotores.formulario.crear== promotores.formulario.PERMITIR}">
-                                                            <div class="row" ng-show="showBtnNuevo">
-                                                                <label for="txtNombre" class="col-form-label col-sm-3 text-right" ></label>
-                                                                <button  class="btn btn-primary" ng-click="save()"  value="Guardar"><span class="fa fa-save"></span> Guardar</button>
-                                                            </div>
-                                                        </c:if>                                    
-
-                                                        <c:if test="#{promotores.formulario.actualizar== promotores.formulario.PERMITIR}">
-                                                            <div class="row" ng-show="showBtnEditar">
-                                                                <label for="txtNombre" class="col-form-label col-sm-3 text-right" ></label>
-                                                                <button type="button" class="btn btn-primary" ng-click="update()" value="Actualizar"> <span class="fa fa-edit"></span> Actualizar</button>
-                                                            </div>
-                                                        </c:if>
+                                                        <div class="row" >
+                                                            <label for="txtNombre" class="col-form-label col-sm-2" ></label>
+                                                            <button type="button" class="btn btn-primary" ng-click="updateInfo()" value="Actualizar"> <span class="fa fa-edit"></span> Actualizar</button>
+                                                        </div>
                                                     </div>
                                                 </div>
                                                 <!-- /.form-group -->

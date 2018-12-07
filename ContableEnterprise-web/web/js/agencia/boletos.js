@@ -180,6 +180,10 @@ angular.module('jsBoletos.controllers', []).controller('frmBoletos',
                 $scope.NOTA_DEBITO = 'N';
                 $scope.COMPROBANTE_INGRESO = 'I';
                 $scope.COMPROBANTE_CONTABLE = 'C';
+                
+                $scope.NOTA_DEBITO = 'N' ;
+                $scope.COMPROBANTE_INGRESO = 'I' ;
+                $scope.COMPROBANTE_CONTABLE = 'C' ;
 
                 var token = document.getElementsByName("hdToken")[0];
                 var url = document.getElementsByName("hdUrl")[0];
@@ -1896,7 +1900,7 @@ angular.module('jsBoletos.controllers', []).controller('frmBoletos',
 
                 $scope.imprimir = function (option) {
                     switch (option) {
-                        case 'N'://Nota Debito
+                        case $scope.NOTA_DEBITO://Nota Debito
                             if (!$scope.formData.idNotaDebito) {
                                 $scope.showAlert('Error', 'El Boleto No tiene una Nota de Debito asignada.');
                                 return;
@@ -1904,7 +1908,7 @@ angular.module('jsBoletos.controllers', []).controller('frmBoletos',
                             window.open(`../../NotaDebitoReportServlet?idNota=${$scope.formData.idNotaDebito}`, '_target');
                             break;
 
-                        case 'I': //Ingreso de Caja
+                        case $scope.COMPROBANTE_INGRESO: //Ingreso de Caja
                             if (!$scope.formData.idIngresoCaja) {
                                 $scope.showAlert('Error', 'El Boleto No tiene un Ingreso de Caja asignado.');
                                 return;
@@ -1912,7 +1916,7 @@ angular.module('jsBoletos.controllers', []).controller('frmBoletos',
                             window.open(`../../IngresoCajaReportServlet?idIngreso=${$scope.formData.idIngresoCaja}`, '_target');
                             break;
 
-                        case 'C': // Comprobante de Ingreso
+                        case $scope.COMPROBANTE_CONTABLE: // Comprobante de Ingreso
                             if (!$scope.formData.idIngresoCaja) {
                                 $scope.showAlert('Error', 'El Boleto No tiene un Comprobante de Ingreso Asignado.');
                                 return;

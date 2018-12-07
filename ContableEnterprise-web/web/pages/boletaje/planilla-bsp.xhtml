@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html  xmlns="http://www.w3.org/1999/xhtml"
        xmlns:h="http://xmlns.jcp.org/jsf/html"
-       xmlns:ui="http://xmlns.jcp.org/jsf/facelets" ng-app="jsAeropuerto"
+       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"  
        xmlns:c="http://java.sun.com/jsp/jstl/core"
        >
     <head>
@@ -26,6 +26,7 @@
         <link rel="stylesheet" href="../../assets/vendor/open-iconic/css/open-iconic-bootstrap.min.css"/>
         <link rel="stylesheet" href="../../assets/vendor/fontawesome/css/fontawesome.all.css"/>
         <link rel="stylesheet" href="../../assets/vendor/font-awesome/css/font-awesome.min.css"  />
+        <link rel="stylesheet" href="../../assets/vendor/flatpickr/flatpickr.min.css" />
         <!-- END BASE STYLES -->
         <!-- BEGIN PLUGINS STYLES -->
         <link rel="stylesheet" href="../../assets/vendor/flatpickr/flatpickr.min.css"/>
@@ -35,10 +36,14 @@
         <link rel="stylesheet" href="../../assets/vendor/sweetalert/css/sweetalert.css"/>
 
         <script type="text/javascript" src="../../js/angular.min.js" />
+
         <script type="text/javascript" src="../../js/ui-bootstrap-tpls.js" />
         <script type="text/javascript" src="../../js/smart-table.min.js" />
         <script type="text/javascript" src="../../assets/vendor/sweetalert/js/sweetalert.min.js"/>
-        <script type="text/javascript" src="../../js/agencia/aeropuerto.js" />
+
+        <script type="text/javascript" src="../../js/date.format.js" />
+        <script type="text/javascript" src="../../js/moment.js" />
+        <script type="text/javascript" src="../../js/boletaje/planillabsp.js" />
 
         <!--CORRIGE ng-show -->
         <link rel="stylesheet" href="../../css/main.css"  />
@@ -65,11 +70,11 @@
             </aside>
             <!-- /.app-aside -->
             <!-- .app-main -->
-            <main class="app-main" ng-controller="frmAeropuerto">
+            <main class="app-main" >
                 <!-- .wrapper -->
                 <div class="wrapper">
                     <!-- .page -->
-                    <div class="page">
+                    <div class="page" ng-app="jsPlanillaBsp" ng-controller="frmPlanillaBsp">
                         <!-- .page-inner -->
                         <div class="page-inner">
                             <!-- .page-title-bar -->
@@ -78,15 +83,15 @@
                                     <ol class="breadcrumb">
                                         <li class="breadcrumb-item active">
                                             <a href="#">
-                                                <i class="breadcrumb-icon fa fa-angle-left mr-2"></i>#{aeropuerto.formulario.modulo}
+                                                <i class="breadcrumb-icon fa fa-angle-left mr-2"></i>#{planillaBsp.formulario.modulo}
                                             </a>
                                         </li>
                                     </ol>
                                 </nav>
                                 <div class="d-md-flex">
-                                    <h1 class="page-title mr-sm-auto"> #{aeropuerto.formulario.nombre}</h1>
+                                    <h1 class="page-title mr-sm-auto"> #{planillaBsp.formulario.nombre}</h1>
                                     <div class="dt-button btn-group">
-                                        <c:if test="#{aeropuerto.formulario.crear== aeropuerto.formulario.PERMITIR}">
+                                        <c:if test="#{planillaBsp.formulario.crear== planillaBsp.formulario.PERMITIR}">
                                             <button type="button" class="btn btn-success buttons-html5" tabindex="0" ng-click="nuevo()"><span class="fa fa-plus"></span> Nuevo</button>
                                         </c:if>
                                         <button type="button" class="btn btn-warning buttons-html5" tabindex="0" ng-click="cancelar()"><span class="fa fa-undo"></span> Cancelar</button>
@@ -95,7 +100,7 @@
                             </header>
                             <!-- /.page-title-bar -->
                             <!-- .page-section -->
-                            <div class="page-section">
+                            <div class="page-section" >
                                 <!-- .card -->
                                 <section id="base-style" class="card">
                                     <!-- .card-body -->
@@ -113,21 +118,54 @@
                                         <!--/Mensaje Success -->
 
                                         <!--Mensaje Error -->
-                                        <div class="alert alert-danger ng-hide" role="alert" ng-show="showRestfulError">
+                                        <div id="restful-error" class="alert alert-danger ng-hide" role="alert" ng-show="showRestfulError">
                                             <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">&times;</a>
                                             {{ showRestfulMessage}}
                                         </div>
                                         <!-- /Mensaje Error -->
                                         <!-- .form-group -->
                                         <!-- Tabla Contenido -->
-                                        <div  id="tableData" class="ng-hide" ng-show="showTable" >
-                                            <div class="form-group row table-responsive">
+                                        <div class=" ng-hide" ng-show="showTable">
+
+
+                                            <div class="form-group row">
+                                                <label class="col-form-label col-sm-2 text-right" for="flatpickr-wrap">Fecha Inicio</label>
+                                                <div class="col-sm-3 input-group input-group-alt flatpickr " id="flatpickr9">
+                                                    <input id="txtFechaInicio" type="text" class="form-control flatpick-input" data-input="" 
+                                                           ng-model="search.fechaInicio"/>
+                                                    <div class="input-group-append">
+                                                        <button type="button" class="btn btn-secondary" data-toggle="">
+                                                            <i class="far fa-calendar"></i>
+                                                        </button>
+                                                        <button type="button" class="btn btn-secondary" data-clear="">
+                                                            <i class="fa fa-times"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+                                                <label class="col-form-label col-sm-2 text-right" for="flatpickr-wrap">Fecha Fin</label>
+                                                <div class="col-sm-3 input-group input-group-alt flatpickr" id="flatpickr9">
+                                                    <input id="txtFechaFin" type="text" class="form-control flatpick-input" data-input="" ng-model="search.fechaFin"/>
+                                                    <div class="input-group-append">
+                                                        <button type="button" class="btn btn-secondary" data-toggle="">
+                                                            <i class="far fa-calendar"></i>
+                                                        </button>
+                                                        <button type="button" class="btn btn-secondary" data-clear="">
+                                                            <i class="fa fa-times"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+                                                <button type="button" class="btn btn-primary col-sm-2"  ng-click="find()"><span class="fa fa-search"></span> Buscar</button>
+                                            </div>
+
+                                            <div  id="tableData" class="ng-hide table-responsive" ng-show="showTable" >
                                                 <table st-table="display_records"    st-safe-src="mainGrid" 
                                                        class="table  table-hover ">
                                                     <thead >
-                                                        <c:if test="#{aeropuerto.formulario.buscar == aeropuerto.formulario.PERMITIR}">
+                                                        <c:if test="#{planillaBsp.formulario.buscar == planillaBsp.formulario.PERMITIR}">
                                                             <tr>
-                                                                <th colspan="4">
+                                                                <th colspan="8">
                                                                     <!-- .input-group -->
                                                                     <div class="input-group has-clearable">
                                                                         <div class="input-group-prepend">
@@ -141,30 +179,48 @@
                                                                 </th>
                                                             </tr>
                                                         </c:if>
-                                                        <tr>
-                                                            <th>Codigo</th>
-                                                            <th>Aeropuerto/ Ciudad/ Pais</th>
+                                                        <tr class="text-center">
+                                                            <th >Aerolinea</th>
+                                                            <th>Nro Boleto</th>
+                                                            <th>Fecha Emisi&oacute;n</th>
+                                                            <th>Importe Neto</th>
+                                                            <th>Impuestos</th>
+                                                            <th>Total Boleto</th>
+                                                            <th>% Comisi&oacute;n</th>
+                                                            <th>Monto Comisi&oacute;n + IVA</th>
+                                                            <th>Neto a Pagar</th>
+                                                            <th>Estado</th>
+                                                            <th>Id Nota D&eacute;bito</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr st-select-row="row" st-select-mode="multiple" ng-repeat="row in display_records">
-                                                            <td>{{row.idAeropuerto}} </td>
-                                                            <td>{{row.nombre}} </td>
-                                                            <td>
-                                                                <div class="btn-group" >
-                                                                    <c:if test="${aeropuerto.formulario.actualizar== aeropuerto.formulario.PERMITIR }">
-                                                                        <button type="button" title="Editar" class="btn btn-sm btn-info" ng-click="edit(row.idAeropuerto)"><i class="fa fa-pencil"></i></button>
-                                                                    </c:if>
+                                                        <tr  st-select-row="row" st-select-mode="multiple" ng-repeat="row in display_records">
+                                                            <td>{{row.iata}} </td>
+                                                            <td>{{row.ticketNumber}} </td>
+                                                            <td>{{row.fechaEmision}} </td>
+                                                            <td class="text-right">{{row.importeNeto|printNumber}} </td>
+                                                            <td class="text-right">{{row.impuestos|printNumber}} </td>
+                                                            <td class="text-right">{{row.totalBoleto|printNumber}} </td>
+                                                            <td class="text-right">{{row.comision|printNumber}} </td>
+                                                            <td class="text-right">{{row.montoComision|printNumber}} </td>
+                                                            <td class="text-right">{{row.totalMontoCancelado|printNumber}} </td>
+                                                            <td>{{row.estado}} </td>
+                                                            <td>{{row.idNotaDebito}} </td>
 
-                                                                    <c:if test="#{aeropuerto.formulario.eliminar== aeropuerto.formulario.PERMITIR}">
-                                                                        <button type="button" title="Eliminar" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#frmConfirmation" ng-click="modalEliminar(row.idAeropuerto, row.nombre)"><i class="fa fa-remove"></i></button>
-                                                                    </c:if>
-                                                                    <!--<button type="button" title="Ver" class="btn btn-default" ng-click="ver(row.idEmpleado)" data-toggle="modal" data-target="#verForm"><i class="fa fa-search"></i></button>-->
-                                                                </div>
-                                                            </td>
                                                         </tr>
                                                     </tbody>
                                                     <tfoot>
+                                                        <tr class="table-success" ng-show="mainGrid.length > 0">
+                                                            <td colspan="3"><strong>TOTALES</strong></td>
+                                                            <td class="text-right"><strong>{{totalImporteNeto}}</strong></td>
+                                                            <td class="text-right"><strong>{{totalImpuestos}}</strong></td>
+                                                            <td class="text-right"><strong>{{totalBoleto}}</strong></td>
+                                                            <td></td>
+                                                            <td class="text-right"><strong>{{totalMontoComision}}</strong></td>
+                                                            <td class="text-right"><strong>{{totalNetoAPagar}}</strong></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                        </tr>
                                                         <tr>
                                                             <td colspan="10" class="text-center">
                                                                 <div class="container" st-items-by-page="itemsByPage" st-pagination="" st-template="../index/pagination.custom.html"></div>
@@ -172,53 +228,30 @@
                                                         </tr>
                                                     </tfoot>
                                                 </table>
+
+                                                <div class="modal-footer" ng-show="mainGrid.length > 0">
+                                                    <button type="button" class="btn btn-primary" ng-click="exportar()">Exportar</button>
+                                                </div>
                                             </div>
                                         </div>
                                         <!-- /Tabla Contenido -->
-                                        <form name="myForm">
+                                        <form name="myForm" id="myForm">
                                             <!-- .form -->
-
                                             <!-- .fieldset -->
                                             <fieldset>
                                                 <!-- Contenido Formulario-->
                                                 <div id="formData" class="container animated fadeIn ng-hide"   ng-show="showForm" >
-                                                    <input type="text" ng-show="false"  name="txtIdAeropuerto"  ng-model="formData.idAeropuerto" />
-                                                    <input type="hidden" id="hdUrl" name="hdUrl" value="#{aeropuerto.formulario.restful}"/>
+                                                    <input type="hidden" id="hdUrl" name="hdUrl" value="#{planillaBsp.formulario.restful}"/>
                                                     <input type="hidden" id="hdToken" name="hdToken" value="#{sessionView.token}"/>
-                                                    <input type="hidden" id="hdToken" name="hdFormName" value="#{aeropuerto.formulario.nombre}"/>
-                                                    <!--<input type="hidden" id="txtFechaAlta" name="txtFechaAlta" ng-model="formData.fechaAlta"/>-->
-                                                    <!--<input type="hidden" id="txtFechaBaja" name="txtFechaBaja" ng-model="formData.fechaBaja"/>-->
+                                                    <input type="hidden" id="hdFormName" name="hdFormName" value="#{planillaBsp.formulario.nombre}"/>
                                                     <br />
-                                                    <div class="form-group row">
-                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Codigo</label>
-                                                        <div class="col-sm-4">
-                                                            <input type="text" class="form-control " name="txtCodigo" required="true" maxlength="4" ng-model="formData.idAeropuerto"/>
-                                                        </div>
-                                                    </div>
 
-                                                    <div class="form-group row">
-                                                        <label for="txtNombre" class=" col-form-label col-sm-2 text-right">Aeropuerto/Ciudad/Pais</label>
-                                                        <div class="col-sm-4">
-                                                            <input type="text" class="form-control" name="txtNombre" required="required" maxlength="64" ng-model="formData.nombre"/>
-                                                        </div>
-                                                    </div>
+                                                    <script  type="text/ng-template" id="customTemplate.html">
+                                                        <a><div >
+                                                        <span class=" tt-suggestion"  ng-bind-html="match.label | uibTypeaheadHighlight:query"></span>
+                                                        </div></a>
+                                                    </script>
 
-
-                                                    <div class="form-group">
-                                                        <c:if test="#{promotores.formulario.crear== promotores.formulario.PERMITIR}">
-                                                            <div class="row" ng-show="showBtnNuevo">
-                                                                <label for="txtNombre" class="col-form-label col-sm-3 text-right" ></label>
-                                                                <button  class="btn btn-primary" ng-click="save()"  value="Guardar"><span class="fa fa-save"></span> Guardar</button>
-                                                            </div>
-                                                        </c:if>                                    
-
-                                                        <c:if test="#{promotores.formulario.actualizar== promotores.formulario.PERMITIR}">
-                                                            <div class="row" ng-show="showBtnEditar">
-                                                                <label for="txtNombre" class="col-form-label col-sm-3 text-right" ></label>
-                                                                <button type="button" class="btn btn-primary" ng-click="update()" value="Actualizar"> <span class="fa fa-edit"></span> Actualizar</button>
-                                                            </div>
-                                                        </c:if>
-                                                    </div>
                                                 </div>
                                                 <!-- /.form-group -->
                                             </fieldset>
@@ -264,6 +297,7 @@
                                 </div>
                             </div>
                             <!-- /Modal Eliminar-->
+
                         </div>
                         <!-- /.page-inner -->
                     </div>
@@ -285,14 +319,20 @@
         <script src="../../assets/vendor/bootstrap/js/popper.min.js"></script>
         <script src="../../assets/vendor/bootstrap/js/bootstrap.min.js"></script>
         <script type="text/javascript" src="../../js/utils.js" />
-
         <!-- END BASE JS -->
         <!-- BEGIN PLUGINS JS -->
         <script src="../../assets/vendor/stacked-menu/stacked-menu.min.js"></script>
         <script src="../../assets/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+
+        <script src="../../assets/vendor/flatpickr/flatpickr.min.js"></script>
+        <script src="../../assets/vendor/typeahead.js/typeahead.bundle.min.js"></script>
         <!-- END PLUGINS JS -->
         <!-- BEGIN THEME JS -->
         <script src="../../assets/javascript/main.min.js"></script>
+
+        <script type="text/javascript" src="../../assets/javascript/pages/flatpickr-demo.js"></script>
+        <script type="text/javascript" src="../../assets/javascript/pages/typeahead-demo.js"></script>
+
         <!-- END THEME JS -->
         <!-- BEGIN PAGE LEVEL JS -->
         <!-- END PAGE LEVEL JS -->
