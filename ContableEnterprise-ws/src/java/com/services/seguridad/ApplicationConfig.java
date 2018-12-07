@@ -37,9 +37,12 @@ public class ApplicationConfig extends Application {
         resources.add(com.services.agencia.ClienteResource.class);
         resources.add(com.services.agencia.PromotorResource.class);
         resources.add(com.services.agencia.TarjetasCreditoResource.class);
+        resources.add(com.services.agencia.boletaje.PlanillaBspResource.class);
         resources.add(com.services.configuracion.BoletajeResource.class);
         resources.add(com.services.configuracion.FactoresResource.class);
+        resources.add(com.services.configuracion.UserPersonalResource.class);
         resources.add(com.services.contabilidad.ComprobantesResource.class);
+        resources.add(com.services.contabilidad.IngresoCajaResource.class);
         resources.add(com.services.contabilidad.PlanCuentasResource.class);
         resources.add(com.services.notadebito.NotadebitoResource.class);
         resources.add(com.services.seguridad.EmpresaServices.class);

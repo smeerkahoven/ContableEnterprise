@@ -280,7 +280,7 @@ public class BoletoResource extends TemplateResource {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @Path("update")
+    @Path("updateSimple")
     public RestResponse updateSimple(final RestRequest request) {
         RestResponse response = doValidations(request);
 
@@ -379,7 +379,7 @@ public class BoletoResource extends TemplateResource {
 
         return response;
     }
-    
+
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
@@ -470,6 +470,47 @@ public class BoletoResource extends TemplateResource {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
+    @Path("update")
+    public RestResponse update(final RestRequest request) {
+        RestResponse response = doValidations(request);
+
+        try {
+            if (response.getCode() == ResponseCode.RESTFUL_SUCCESS.getCode()) {
+
+                BoletoJSON bjson = convertToBoletoJSON(request);
+                Boleto boleto = BoletoJSON.toNewBoleto(bjson);
+
+                Optional op = Optional.ofNullable(boleto);
+                if (op.isPresent()) {
+
+                    ejbBoleto.updateBoleto(boleto);
+
+                    NotaDebito n = (NotaDebito) ejbNotaDebito.get(new NotaDebito(boleto.getIdNotaDebito()));
+
+                    response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
+                    response.setContent(mensajes.getProperty(RestResponse.RESTFUL_BOLETO_INSERTADO));
+
+                    NotaDebitoJSON njson = NotaDebitoJSON.toNotaDebitoJSON(n);
+
+                    response.setEntidad(njson);
+                }
+
+                ejbLogger.add(Accion.UPDATE, user.getUserName(), Formulario.BOLETOS, user.getIp(), Log.BOLETO_SAVE.replace("<boleto>", boleto.getNumero().toString()));
+            }
+
+        } catch (Exception ex) {
+            Logger.getLogger(BoletoResource.class
+                    .getName()).log(Level.SEVERE, null, ex);
+            response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+            response.setContent(ex.getMessage());
+        }
+
+        return response;
+    }
+
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
     @Path("save-void")
     public RestResponse saveVoid(final RestRequest request) {
         RestResponse response = new RestResponse();
@@ -505,7 +546,7 @@ public class BoletoResource extends TemplateResource {
                         response.setEntidad(bjson);
 
                         ejbLogger.add(Accion.INSERT, user.getUserName(), Formulario.BOLETOS, user.getIp(), Log.BOLETO_SAVE.replace("<id>", boleto.getNumero().toString()));
-                    }else {
+                    } else {
                         response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
                         response.setContent(mensajes.getProperty(RestResponse.RESTFUL_NO_EXISTE_NOTADEBITO));
                     }

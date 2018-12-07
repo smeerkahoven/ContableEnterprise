@@ -90,7 +90,6 @@ public class AerolineaResource extends TemplateResource {
     public RestResponse getAerolina(@PathParam("id") Integer id) {
         RestResponse response = new RestResponse();
         try {
-
             Optional op = Optional.ofNullable(id);
             if (!op.isPresent()) {
                 response.setCode(ResponseCode.RESTFUL_ERROR.getCode());

@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
@@ -75,6 +76,43 @@ public class ComprobantesResource extends TemplateResource {
     public void putJson(String content) {
     }
 
+    @GET
+    @Path("getall/notadebito/{idNota}")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public RestResponse getIngresosCajaByNotaDebito(@PathParam("idNota") Integer idNota) {
+        RestResponse response = new RestResponse();
+        try {
+            Optional op = Optional.ofNullable(idNota);
+            if (!op.isPresent()) {
+                response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+                response.setContent(mensajes.getProperty(RestResponse.RESTFUL_PARAMETERS_SENT));
+                return response;
+            }
+
+            HashMap<String, Integer> parameters = new HashMap<>();
+            parameters.put("idNotaDebito", idNota);
+
+            List<ComprobanteContable> l = ejbComprobante.getComprobantesByNotaDebito(idNota);
+
+            List r = new LinkedList();
+            for (ComprobanteContable c : l) {
+                ComprobanteContableJSON json = ComprobanteContableJSON.toComprobanteContableJSON(c);
+                r.add(json);
+            }
+
+            response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
+            response.setContent(r);
+
+        } catch (CRUDException ex) {
+            Logger.getLogger(IngresoCajaResource.class.getName()).log(Level.SEVERE, null, ex);
+            response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+            response.setContent(ex.getMessage());
+        }
+
+        return response;
+    }
+
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
@@ -116,7 +154,7 @@ public class ComprobantesResource extends TemplateResource {
      * Tambien revisar los begin y end Trnsaction para commit y rollback
      *
      * @param c
-     * @return 
+     * @return
      * @TODO
      */
     @POST
@@ -175,7 +213,7 @@ public class ComprobantesResource extends TemplateResource {
             }*/
 
             ComprobanteContable cc = ComprobanteContableJSON.toComprobanteContable(c);
-            
+
             //ComprobanteContablePK numero = ejbComprobante.getNextComprobantePK(c.getFecha(), c.getTipo());
 
             /*cc.setIdNumeroGestion(numero.getIdLibro());
@@ -191,7 +229,6 @@ public class ComprobantesResource extends TemplateResource {
 
             cc.getComprobanteContablePK().setIdLibro(idLibro);*/
             //insertamos las transacciones.
-            
             cc = ejbComprobante.procesarComprobante(cc);
             List<AsientoContableJSON> transacciones = c.getTransacciones();
             for (AsientoContableJSON t : transacciones) {
@@ -204,7 +241,7 @@ public class ComprobantesResource extends TemplateResource {
                 ejbComprobante.insert(a);*/
 
                 a = ejbComprobante.procesarAsientoContable(a, cc);
-                
+
                 t.setFechaMovimiento(DateContable.getDateFormat(a.getFechaMovimiento(), DateContable.LATIN_AMERICA_TIME_FORMAT));
                 t.setIdLibro(c.getIdLibro());
                 t.setGestion(a.getGestion());
@@ -621,13 +658,13 @@ public class ComprobantesResource extends TemplateResource {
         RestResponse response = doValidations(request);
         if (response.getCode() == ResponseCode.RESTFUL_SUCCESS.getCode()) {
             try {
-                
-                HashMap<String,Object> parameters = (HashMap<String,Object>)request.getContent();
-                String tipo = (String)parameters.get("tipo");
-                String estado = (String)parameters.get("estado");
-                String fechaI = (String)parameters.get("fechaInicio");
-                String fechaF = (String)parameters.get("fechaFin");
-                
+
+                HashMap<String, Object> parameters = (HashMap<String, Object>) request.getContent();
+                String tipo = (String) parameters.get("tipo");
+                String estado = (String) parameters.get("estado");
+                String fechaI = (String) parameters.get("fechaInicio");
+                String fechaF = (String) parameters.get("fechaFin");
+
                 List<ComprobanteContable> l = ejbComprobante.getComprobantes(tipo == null ? "" : tipo,
                         estado == null ? "" : estado,
                         fechaI == null ? "" : fechaI,
