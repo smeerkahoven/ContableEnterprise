@@ -5,6 +5,7 @@
  */
 package com.response.json.contabilidad;
 
+import com.agencia.entities.Cliente;
 import com.contabilidad.entities.IngresoCaja;
 import com.seguridad.utils.ComboSelect;
 import com.seguridad.utils.DateContable;
@@ -39,7 +40,26 @@ public class IngresoCajaJSON implements Serializable {
 
     public static IngresoCaja toIngresoCaja(IngresoCajaJSON json) {
         IngresoCaja caja = new IngresoCaja();
-        return caja ;
+
+        caja.setEstado(json.getEstado());
+        caja.setFactorCambiario(json.getFactorCambiario());
+        caja.setFechaEmision(DateContable.toLatinAmericaDateFormat(json.getFechaEmision()));
+        caja.setFormaPago(json.getFormaPago());
+        caja.setIdBanco(json.getIdBanco());
+        if (json.getIdCliente() != null) {
+            Double idCliente = (Double)json.getIdCliente().getId();
+            caja.setIdCliente(new Cliente(idCliente.intValue() ));
+        }
+        
+        caja.setIdCuentaDeposito(json.getIdCuentaDeposito());
+        caja.setIdEmpresa(json.getIdEmpresa());
+        caja.setIdIngresoCaja(json.getIdIngresoCaja());
+        caja.setIdTarjetaCredito(json.getIdTarjetaCredito());
+        caja.setIdUsuario(json.getIdUsuario());
+        caja.setMontoAbonadoBs(json.getMontoAbonadoBs());
+        caja.setMontoAbonadoUsd(json.getMontoAbonadoUsd());
+
+        return caja;
     }
 
     public static IngresoCajaJSON toJSON(IngresoCaja ingreso) {

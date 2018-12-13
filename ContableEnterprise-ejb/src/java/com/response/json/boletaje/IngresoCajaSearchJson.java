@@ -15,9 +15,37 @@ import java.io.Serializable;
 public class IngresoCajaSearchJson implements Serializable {
 
     private ComboSelect idCliente;
+    private String fechaInicio;
+    private String fechaFin;
+    private String estado ;
 
     private Integer idEmpresa;
 
+    public String getFechaInicio() {
+        return fechaInicio;
+    }
+
+    public void setFechaInicio(String fechaInicio) {
+        this.fechaInicio = fechaInicio;
+    }
+
+    public String getFechaFin() {
+        return fechaFin;
+    }
+
+    public void setFechaFin(String fechaFin) {
+        this.fechaFin = fechaFin;
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
+    }
+
+    
     public Integer getIdEmpresa() {
         return idEmpresa;
     }

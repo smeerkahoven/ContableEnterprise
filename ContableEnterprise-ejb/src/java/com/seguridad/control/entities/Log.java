@@ -41,7 +41,10 @@ public class Log implements Serializable {
     public static final String INGRESO_CAJA_NUEVO = "Creo el Ingreso de Caja <id> " ;
     public static final String INGRESO_CAJA_PENDIENTE = "Establecio el Ingreso de Caja <id> como PENDIENTE" ;
     public static final String INGRESO_CAJA_FINALIZAR = "Establecio el Ingreso de Caja <id> como FINALIZAR" ;
-    public static final String INGRESO_CAJA_ANULAR = "Establecio el Ingreso de Caja <id> como ANULADA. Sus Transacciones, Ingresos a Caja, Comprobantes Contables" ;
+    public static final String INGRESO_CAJA_ANULAR = "Establecio el Ingreso de Caja <id> como ANULADA. Si el Ingreso estaba en Contabilidad, los montos fueron revertidos, asi como sus Comprobantes Contables." ;
+    public static final String INGRESO_CAJA_ANULAR_TRANSACCION = "Establecio la Transaccion <id> como ANULADA. Si el Ingreso estaba en Contabilidad, los montos fueron revertidos, asi como sus Comprobantes Contables." ;
+    public static final String INGRESO_CAJA_NUEVA_TRANSACION = "Insercion de la transaccion <trx> para el Ingreso de Caja <id>." ;
+    public static final String INGRESO_CAJA_UPDATE_TRANSACCION = "Se ingreso el monto <monto> a la transaccion <trx> del ingreso de caja <id>." ;
 
     public static final String NOTA_DEBITO_CARGO_EDITAR = "Se edito el Cargo Nro <cargo> para la nota de Debito <nota>" ;
     public static final String NOTA_DEBITO_CARGO_ANULAR = "Se anulo el Cargo Nro<cargo> para la nota de Debito <nota>" ;

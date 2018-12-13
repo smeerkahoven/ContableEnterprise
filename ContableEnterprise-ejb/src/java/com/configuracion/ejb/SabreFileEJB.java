@@ -484,7 +484,7 @@ public class SabreFileEJB extends FacadeEJB implements SabreFileRemote {
                         Double totalBoleto = b.getTotalBoleto().doubleValue() ;
                         
                         Double montoPagarLinea = totalBoleto - comision ;
-                        b.setMontoPagarLineaAerea(new BigDecimal(montoPagarLinea).setScale(Contabilidad.VALOR_REDONDEO));
+                        b.setMontoPagarLineaAerea(new BigDecimal(montoPagarLinea));
                     }
                     
                     b.setTotalMontoCobrar(totalBoleto);

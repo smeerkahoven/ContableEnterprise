@@ -33,6 +33,10 @@ public interface IngresoCajaRemote extends DaoRemoteFacade {
     public void update(Entidad e) throws CRUDException;
 
     @Override
+    public Entidad get(Integer id, Class<?> typeClass) throws CRUDException;
+
+    
+    @Override
     public List get(String namedQuery, Class<?> typeClass) throws CRUDException;
 
     @Override
@@ -112,6 +116,25 @@ public interface IngresoCajaRemote extends DaoRemoteFacade {
      * @throws CRUDException 
      */
     public IngresoCaja finalizar(Integer idIngresoCaja) throws CRUDException ;
+
+    /**
+     * 
+     * @param data
+     * @return
+     * @throws CRUDException 
+     */
+    public IngresoTransaccion getIngresoTransaccion(IngresoTransaccion data) throws CRUDException;
+
+    /**
+     * Guarda la Transaccion de la Caja para la nota de Debito.
+     * @param trx
+     * @return
+     * @throws CRUDException 
+     */
+    public IngresoTransaccion saveTransaccion(IngresoTransaccion trx) throws CRUDException;
+
+    public IngresoTransaccion updateTransaccion(IngresoTransaccion trx) throws CRUDException;
+
 
 }
 

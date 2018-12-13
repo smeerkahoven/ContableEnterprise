@@ -82,15 +82,14 @@ public interface ComprobanteRemote extends DaoRemoteFacade {
      */
     public ComprobanteContable createComprobante(Aerolinea a, Boleto boleto, Cliente cliente,
             String tipo, NotaDebito nota) throws CRUDException;
-    
-    public ComprobanteContable createComprobante(String tipo, String concepto, 
-            IngresoCaja ingreso) throws CRUDException; 
+
+    public ComprobanteContable createComprobante(String tipo, String concepto,
+            IngresoCaja ingreso) throws CRUDException;
 
     public ComprobanteContable createComprobante(Aerolinea a,
             Boleto boleto, Cliente cliente, String tipo) throws CRUDException;
-    
-    
-    public ComprobanteContable createComprobante(String tipo, String concepto, NotaDebito nota) throws CRUDException ;
+
+    public ComprobanteContable createComprobante(String tipo, String concepto, NotaDebito nota) throws CRUDException;
 
     /**
      * Crea el Asiento Diario para el Boleto
@@ -101,7 +100,7 @@ public interface ComprobanteRemote extends DaoRemoteFacade {
      */
     public ComprobanteContable createAsientoDiarioBoleto(Boleto boleto) throws CRUDException;
 
-    public ComprobanteContable createAsientoDiarioBoleto( NotaDebito nota, String concepto) throws CRUDException;
+    public ComprobanteContable createAsientoDiarioBoleto(NotaDebito nota, String concepto) throws CRUDException;
 
     /**
      * Realiza la operaciones de proceso del comprobante contable y lo registra
@@ -129,16 +128,16 @@ public interface ComprobanteRemote extends DaoRemoteFacade {
             final ContabilidadBoletaje conf, final Aerolinea a, Integer idTransaccion) throws CRUDException;
 
     public AsientoContable crearMontoPagarLineaAerea(final Boleto b, final ComprobanteContable cc,
-            final ContabilidadBoletaje conf, final AerolineaCuenta ac, Integer idTransaccion) throws CRUDException;
+            final ContabilidadBoletaje conf, final AerolineaCuenta ac, NotaDebito nota) throws CRUDException;
 
     public AsientoContable crearMontoComision(final Boleto b, final ComprobanteContable cc,
-            final Aerolinea a, final AerolineaCuenta ac, Integer idTransaccion) throws CRUDException;
+            final Aerolinea a, final AerolineaCuenta ac, NotaDebito nota) throws CRUDException;
 
     public AsientoContable crearMontoFee(final Boleto b, final ComprobanteContable cc,
-            final ContabilidadBoletaje conf, final Aerolinea a, Integer idTransaccion) throws CRUDException;
+            final ContabilidadBoletaje conf, final Aerolinea a, NotaDebito nota) throws CRUDException;
 
     public AsientoContable crearMontoDescuentos(final Boleto b, final ComprobanteContable cc,
-            final ContabilidadBoletaje conf, final Aerolinea a, Integer idTransaccion) throws CRUDException;
+            final ContabilidadBoletaje conf, final Aerolinea a, NotaDebito nota) throws CRUDException;
 
     /**
      *
@@ -162,8 +161,8 @@ public interface ComprobanteRemote extends DaoRemoteFacade {
     public AsientoContable crearComisionCounterHaber(final CargoBoleto cargo, final NotaDebito nota, final ComprobanteContable cc,
             Integer idTransaccion) throws CRUDException;
 
-    
-    public ComprobanteContable actualizarMontosFinalizar( ComprobanteContable comprobante) throws CRUDException ;
+    public ComprobanteContable actualizarMontosFinalizar(ComprobanteContable comprobante) throws CRUDException;
+
     /**
      * Crea la transaccion para el comprobante de Ingreso a Caja al Haber
      *
@@ -175,9 +174,9 @@ public interface ComprobanteRemote extends DaoRemoteFacade {
      * @return
      * @throws CRUDException
      */
- /*   public AsientoContable createTotalCancelarIngresoCajaDebe(ComprobanteContable c,
+    /*   public AsientoContable createTotalCancelarIngresoCajaDebe(ComprobanteContable c,
             ContabilidadBoletaje conf, Aerolinea aerolinea, Boleto boleto) throws CRUDException;
-*/
+     */
     /**
      *
      * Crea la transaccion para el comprobante de Ingreso a Caja al Debe
@@ -192,51 +191,62 @@ public interface ComprobanteRemote extends DaoRemoteFacade {
      */
     /*public AsientoContable createTotalCancelarIngresoClienteHaber(ComprobanteContable c,
             ContabilidadBoletaje conf, Aerolinea aerolinea, Boleto boleto) throws CRUDException;*/
-
-    
     public AsientoContable createTotalCancelarIngresoCajaDebe(ComprobanteContable c,
             ContabilidadBoletaje conf, NotaDebitoTransaccion ndt, NotaDebito nota, Boleto boleto) throws CRUDException;
-    
+
     public AsientoContable createTotalCancelarIngresoClienteHaber(ComprobanteContable c,
-            ContabilidadBoletaje conf, NotaDebitoTransaccion ndt,  NotaDebito nota, Boleto boleto) throws CRUDException ;
-    
+            ContabilidadBoletaje conf, NotaDebitoTransaccion ndt, NotaDebito nota, Boleto boleto) throws CRUDException;
+
     public AsientoContable createTotalCancelarIngresoCajaDebe(ComprobanteContable c,
             ContabilidadBoletaje conf, NotaDebitoTransaccion ndt, NotaDebito nota, CargoBoleto cargoBoleto) throws CRUDException;
-    
+
     public AsientoContable createTotalCancelarIngresoClienteHaber(ComprobanteContable c,
-            ContabilidadBoletaje conf, NotaDebitoTransaccion ndt, NotaDebito nota, CargoBoleto cargo) throws CRUDException ;
-            
-    
+            ContabilidadBoletaje conf, NotaDebitoTransaccion ndt, NotaDebito nota, CargoBoleto cargo) throws CRUDException;
+
     public AsientoContable createTotalCancelarIngresoCajaDebe(ComprobanteContable c,
             ContabilidadBoletaje conf, NotaDebitoTransaccion ndt, IngresoCaja caja,
             Boleto boleto, IngresoTransaccion ing) throws CRUDException;
-            
+
     public AsientoContable createTotalCancelarIngresoClienteHaber(ComprobanteContable c,
             ContabilidadBoletaje conf, NotaDebitoTransaccion ndt, IngresoCaja caja,
-            Boleto boleto, IngresoTransaccion ing) throws CRUDException ;
-    
+            Boleto boleto, IngresoTransaccion ing) throws CRUDException;
+
     public AsientoContable createTotalCancelarIngresoCajaDebe(ComprobanteContable c,
             ContabilidadBoletaje conf, NotaDebitoTransaccion ndt, IngresoCaja caja,
             CargoBoleto cargo, IngresoTransaccion ing) throws CRUDException;
-            
+
     public AsientoContable createTotalCancelarIngresoClienteHaber(ComprobanteContable c,
             ContabilidadBoletaje conf, NotaDebitoTransaccion ndt, IngresoCaja caja,
-            CargoBoleto cargo, IngresoTransaccion ing) throws CRUDException ;
-            
+            CargoBoleto cargo, IngresoTransaccion ing) throws CRUDException;
+
     public int anularAsientosContables(final Boleto boleto) throws CRUDException;
 
     /**
+     * Anula los comprobantes contables y sus asientos
+     *
+     * @param ing
+     * @throws com.seguridad.control.exception.CRUDException
+     */
+    public void anularComprobanteContable(final IngresoCaja ing) throws CRUDException;
+
+    /**
      * Retorna una Lista de Comprobantes de acuerdo al Id Nota de Debito
+     *
      * @param idNota
      * @return
-     * @throws CRUDException 
+     * @throws CRUDException
      */
     public List getComprobantesByNotaDebito(Integer idNota) throws CRUDException;
 
+    public List getComprobantesByIngresoCaja(Integer idIngreso) throws CRUDException;
+
     /**
-     * 
+     *
      * @param tr
-     * @throws CRUDException 
+     * @throws CRUDException
      */
     public void anularAsientosContables(NotaDebitoTransaccion tr) throws CRUDException;
+
+    public void anularAsientosContables(IngresoTransaccion tr) throws CRUDException;
+
 }

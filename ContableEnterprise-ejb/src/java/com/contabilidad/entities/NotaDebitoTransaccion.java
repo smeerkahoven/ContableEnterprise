@@ -10,11 +10,15 @@ import com.seguridad.control.exception.CRUDException;
 import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -23,7 +27,6 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import jdk.nashorn.internal.runtime.regexp.joni.EncodingHelper;
 
 /**
  *
@@ -36,7 +39,7 @@ import jdk.nashorn.internal.runtime.regexp.joni.EncodingHelper;
     @NamedQuery(name = "NotaDebitoTransaccion.findAll", query = "SELECT n FROM NotaDebitoTransaccion n")
     ,@NamedQuery(name = "NotaDebitoTransaccion.updateBoletoEstado", query = "UPDATE NotaDebitoTransaccion n SET n.estado=:estado WHERE n.idBoleto=:idBoleto")
     ,@NamedQuery(name = "NotaDebitoTransaccion.findAllByIdNotaDebito", query = "SELECT n FROM NotaDebitoTransaccion n WHERE n.idNotaDebito=:idNotaDebito")
-    ,@NamedQuery(name = "NotaDebitoTransaccion.findAllByIdNotaDebitoAndPendientes", query = "SELECT n FROM NotaDebitoTransaccion n WHERE n.idNotaDebito=:idNotaDebito and n.estado='P'")
+    ,@NamedQuery(name = "NotaDebitoTransaccion.findAllByIdNotaDebitoAndPendientes", query = "SELECT n FROM NotaDebitoTransaccion n WHERE n.idNotaDebito=:idNotaDebito and n.estado in ('P','C')")
 })
 public class NotaDebitoTransaccion extends Entidad {
 
@@ -62,10 +65,9 @@ public class NotaDebitoTransaccion extends Entidad {
     @NotNull
     @Column(name = "gestion")
     private Integer gestion;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "id_nota_debito")
-    private Integer idNotaDebito;
+    @ManyToOne(fetch = FetchType.EAGER ,cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "id_nota_debito")
+    private NotaDebito idNotaDebito;
     @Size(max = 64)
     @Column(name = "descripcion")
     private String descripcion;
@@ -96,8 +98,17 @@ public class NotaDebitoTransaccion extends Entidad {
 
     public NotaDebitoTransaccion() {
     }
+
     public NotaDebitoTransaccion(Integer idNotaTransaccion) {
         this.idNotaDebitoTransaccion = idNotaTransaccion;
+    }
+
+    public NotaDebito getIdNotaDebito() {
+        return idNotaDebito;
+    }
+
+    public void setIdNotaDebito(NotaDebito idNotaDebito) {
+        this.idNotaDebito = idNotaDebito;
     }
 
     public String getIdUsuario() {
@@ -122,14 +133,6 @@ public class NotaDebitoTransaccion extends Entidad {
 
     public void setGestion(Integer gestion) {
         this.gestion = gestion;
-    }
-
-    public Integer getIdNotaDebito() {
-        return idNotaDebito;
-    }
-
-    public void setIdNotaDebito(Integer idNotaDebito) {
-        this.idNotaDebito = idNotaDebito;
     }
 
     public String getDescripcion() {
@@ -219,8 +222,6 @@ public class NotaDebitoTransaccion extends Entidad {
     public void setMontoAdeudadoUsd(BigDecimal montoAdeudadoUsd) {
         this.montoAdeudadoUsd = montoAdeudadoUsd;
     }
-    
-    
 
     @Override
     public String toString() {

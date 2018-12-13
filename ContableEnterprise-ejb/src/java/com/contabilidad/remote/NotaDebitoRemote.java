@@ -9,6 +9,7 @@ import com.agencia.entities.Boleto;
 import com.agencia.search.dto.BoletoSearchForm;
 import com.configuracion.entities.ContabilidadBoletaje;
 import com.contabilidad.entities.CargoBoleto;
+import com.contabilidad.entities.IngresoTransaccion;
 import com.contabilidad.entities.NotaDebito;
 import com.contabilidad.entities.NotaDebitoTransaccion;
 import com.seguridad.control.entities.Entidad;
@@ -109,6 +110,7 @@ public interface NotaDebitoRemote extends DaoRemoteFacade {
      * @throws CRUDException
      */
     public Integer actualizarMontosNotaDebito(Integer idNotaDebito) throws CRUDException;
+    public Integer actualizarMontosNotaDebitoEmitida(Integer idNotaDebito) throws CRUDException;
 
     /**
      * Asociacion en Base de datos del Boleto b con la Nota de Debito.
@@ -175,6 +177,17 @@ public interface NotaDebitoRemote extends DaoRemoteFacade {
      */
     public NotaDebitoTransaccion getNotaDebitoTransaccion(Integer idNotaTransaccion) throws CRUDException;
 
+    
+    /**
+     * Actualiza los montos adeudados de la transacion de la nota de debito
+     * y establece los estados de la nota de debito.
+     * 
+     * @param trx
+     * @throws CRUDException 
+     */
+    public void actualizarMontosAdeudadosTransaccion(IngresoTransaccion trx) throws CRUDException ;
+    
+    
     /**
      * REaliza la anulacion de la Nota de debito, sus transacciones, y todo lo
      * demas
@@ -183,5 +196,22 @@ public interface NotaDebitoRemote extends DaoRemoteFacade {
      * @throws CRUDException
      */
     public void anularNotaDebito(NotaDebito nota) throws CRUDException;
+
+    /**
+     * Devuelve todas las Notas de Debito que estan con forma de Pago al Credito y su estado
+     * es EN MORA, EMITIDA
+     * @param idCliente
+     * @return
+     * @throws CRUDException 
+     */
+    public List<NotaDebitoTransaccion> getAllNotaDebitoCreditoByCliente(Integer idCliente, Integer idEmpresa) throws CRUDException;
+
+    /**
+     * 
+     * @param it
+     * @param ndtx
+     * @throws CRUDException 
+     */
+    public void revertirMontosIngresoDeCaja(IngresoTransaccion it, NotaDebitoTransaccion ndtx) throws CRUDException;
 
 }

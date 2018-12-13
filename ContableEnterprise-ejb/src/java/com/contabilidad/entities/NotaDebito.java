@@ -68,6 +68,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 )
 
 @NamedStoredProcedureQuery(
+        name = "NotaDebito.updateMontosNotaDebitoEmitidos",
+        procedureName = "updateMontosNotaDebitoEmitidos",
+        parameters = {
+            @StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_nota_debito")
+        }
+)
+
+@NamedStoredProcedureQuery(
         name = "NotaDebito.updateNotaDebito",
         procedureName = "updateNotaDebito",
         parameters = {

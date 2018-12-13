@@ -32,12 +32,10 @@ import com.response.json.boletaje.PlanillaSearchForm;
 import com.seguridad.control.FacadeEJB;
 import com.seguridad.control.entities.Entidad;
 import com.seguridad.control.exception.CRUDException;
-import com.seguridad.queries.Queries;
 import com.seguridad.utils.ComboSelect;
 import com.seguridad.utils.DateContable;
 import com.seguridad.utils.Operacion;
 import java.math.BigDecimal;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -223,6 +221,7 @@ public class BoletoEJB extends FacadeEJB implements BoletoRemote {
      * @return
      * @throws CRUDException
      */
+    @Override
     public boolean validarConfiguracion(ContabilidadBoletaje conf) throws CRUDException {
         Optional op = Optional.ofNullable(conf.getIdTotalBoletoBs());
         if (!op.isPresent()) {
@@ -428,19 +427,19 @@ public class BoletoEJB extends FacadeEJB implements BoletoRemote {
                 insert(totalCancelar);
                 //ejbComprobante.insert(totalCancelar);
                 //DiferenciaTotalBoleto
-                montoPagarLinea = ejbComprobante.crearMontoPagarLineaAerea(b, comprobanteAsiento, cbconf, av, transaccion.getIdNotaDebitoTransaccion());
+                montoPagarLinea = ejbComprobante.crearMontoPagarLineaAerea(b, comprobanteAsiento, cbconf, av, null);
                 //ejbComprobante.insert(montoPagarLinea);
                 insert(montoPagarLinea);
                 //Comision
-                montoComision = ejbComprobante.crearMontoComision(b, comprobanteAsiento, a, ac, transaccion.getIdNotaDebitoTransaccion());
+                montoComision = ejbComprobante.crearMontoComision(b, comprobanteAsiento, a, ac, null);
                 //ejbComprobante.insert(montoComision);
                 insert(montoComision);
                 //Fee
-                montoFee = ejbComprobante.crearMontoFee(b, comprobanteAsiento, cbconf, a, transaccion.getIdNotaDebitoTransaccion());
+                montoFee = ejbComprobante.crearMontoFee(b, comprobanteAsiento, cbconf, a, null);
                 //ejbComprobante.insert(montoFee);
                 insert(montoFee);
                 //Descuento
-                montoDescuento = ejbComprobante.crearMontoDescuentos(b, comprobanteAsiento, cbconf, a, transaccion.getIdNotaDebitoTransaccion());
+                montoDescuento = ejbComprobante.crearMontoDescuentos(b, comprobanteAsiento, cbconf, a, null);
                 //ejbComprobante.insert(montoDescuento);
                 insert(montoDescuento);
 
@@ -688,19 +687,19 @@ public class BoletoEJB extends FacadeEJB implements BoletoRemote {
         insert(totalCancelar);
         //ejbComprobante.insert(totalCancelar);
         //DiferenciaTotalBoleto
-        montoPagarLinea = ejbComprobante.crearMontoPagarLineaAerea(boleto, comprobante, conf, av, boleto.getIdNotaDebitoTransaccion());
+        montoPagarLinea = ejbComprobante.crearMontoPagarLineaAerea(boleto, comprobante, conf, av, nota);
         //ejbComprobante.insert(montoPagarLinea);
         insert(montoPagarLinea);
         //Comision
-        montoComision = ejbComprobante.crearMontoComision(boleto, comprobante, boleto.getIdAerolinea(), ac, boleto.getIdNotaDebitoTransaccion());
+        montoComision = ejbComprobante.crearMontoComision(boleto, comprobante, boleto.getIdAerolinea(), ac, nota);
         //ejbComprobante.insert(montoComision);
         insert(montoComision);
         //Fee
-        montoFee = ejbComprobante.crearMontoFee(boleto, comprobante, conf, boleto.getIdAerolinea(), boleto.getIdNotaDebitoTransaccion());
+        montoFee = ejbComprobante.crearMontoFee(boleto, comprobante, conf, boleto.getIdAerolinea(), nota);
         //ejbComprobante.insert(montoFee);
         insert(montoFee);
         //Descuento
-        montoDescuento = ejbComprobante.crearMontoDescuentos(boleto, comprobante, conf, boleto.getIdAerolinea(), boleto.getIdNotaDebitoTransaccion());
+        montoDescuento = ejbComprobante.crearMontoDescuentos(boleto, comprobante, conf, boleto.getIdAerolinea(), nota);
         //ejbComprobante.insert(montoDescuento);
         insert(montoDescuento);
 
@@ -732,6 +731,7 @@ public class BoletoEJB extends FacadeEJB implements BoletoRemote {
 
     }
 
+    @Override
     public boolean crearTransaccionIngresoCaja(final Boleto boleto, final NotaDebito nota,
             final ComprobanteContable comprobante, final IngresoCaja caja, final NotaDebitoTransaccion notaTran) throws CRUDException {
 

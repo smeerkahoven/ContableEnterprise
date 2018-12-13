@@ -69,6 +69,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "ComprobanteContable.findAll", query = "SELECT c FROM ComprobanteContable c")
     , @NamedQuery(name = "ComprobanteContable.find", query = "SELECT c FROM ComprobanteContable c WHERE c.idLibro=:idLibro")
     , @NamedQuery(name = "ComprobanteContable.findAllComprobanteByNotaDebito", query = "SELECT c FROM ComprobanteContable c WHERE c.idNotaDebito=:idNotaDebito")
+    , @NamedQuery(name = "ComprobanteContable.findAllComprobanteByIngresoCaja", query = "SELECT c FROM ComprobanteContable c WHERE c.idIngresoCaja=:idIngresoCaja")
 
 })
 public class ComprobanteContable extends Entidad {
@@ -98,7 +99,7 @@ public class ComprobanteContable extends Entidad {
     @Basic(optional = false)
     @Column(name = "id_libro")
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private int idLibro;
+    private Integer idLibro;
     @Basic(optional = false)
     @NotNull
     @Column(name = "gestion")
@@ -334,11 +335,11 @@ public class ComprobanteContable extends Entidad {
         this.conErrores = conErrores;
     }
 
-    public int getIdLibro() {
+    public Integer getIdLibro() {
         return idLibro;
     }
 
-    public void setIdLibro(int idLibro) {
+    public void setIdLibro(Integer idLibro) {
         this.idLibro = idLibro;
     }
 

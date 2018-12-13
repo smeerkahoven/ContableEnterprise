@@ -10,6 +10,7 @@ import com.seguridad.control.exception.CRUDException;
 import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -64,10 +65,10 @@ public class IngresoTransaccion extends Entidad {
     private Date fechaInsert;
 
     @JoinColumn(name = "id_ingreso_caja", referencedColumnName = "id_ingreso_caja")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private IngresoCaja idIngresoCaja;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "id_nota_transaccion")
     private NotaDebitoTransaccion idNotaTransaccion;
 

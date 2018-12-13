@@ -33,6 +33,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "DebitoIngreso.findAll", query = "SELECT d FROM DebitoIngreso d")
     ,@NamedQuery(name = "DebitoIngreso.findByIdDebitoIngreso", query = "SELECT d FROM DebitoIngreso d WHERE d.idDebitoIngreso = :idDebitoIngreso")
     ,@NamedQuery(name = "DebitoIngreso.findAllIngresoCajaByNotaDebito", query = "SELECT d FROM DebitoIngreso d WHERE d.idNotaDebito=:idNotaDebito")
+    ,@NamedQuery(name = "DebitoIngreso.findByIngresoCajaNotaDebito", query = "SELECT d FROM DebitoIngreso d WHERE d.idNotaDebito=:idNotaDebito and d.idIngresoCaja=:idIngresoCaja")
     ,@NamedQuery(name = "DebitoIngreso.findAllByIngresoCaja", query = "SELECT d FROM DebitoIngreso d WHERE d.idIngresoCaja=:idIngresoCaja ORDER BY d.idNotaDebito")
 })
 public class DebitoIngreso extends Entidad {

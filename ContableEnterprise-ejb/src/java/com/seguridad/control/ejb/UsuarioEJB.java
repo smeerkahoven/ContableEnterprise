@@ -6,7 +6,6 @@
 package com.seguridad.control.ejb;
 
 import com.response.json.seguridad.UserPersonalJSON;
-import com.seguridad.control.FacadeEJB;
 import com.seguridad.control.FacadeEJBFirst;
 import com.seguridad.control.LoggerContable;
 import com.seguridad.control.encryption.EncryptionContable;

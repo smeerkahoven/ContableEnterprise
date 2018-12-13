@@ -61,8 +61,8 @@ import javax.validation.constraints.Size;
         }
 )
 @NamedQueries({
-    @NamedQuery(name = "IngresoCaja.findAll", query = "SELECT i FROM IngresoCaja i")
-    ,@NamedQuery(name = "IngresoCaja.findByIdCliente", query = "SELECT i FROM IngresoCaja i WHERE i.idCliente=:idCliente and i.idEmpresa=:idEmpresa")
+    @NamedQuery(name = "IngresoCaja.findAll", query = "SELECT i FROM IngresoCaja i WHERE i.idEmpresa=:idEmpresa ORDER By i.idIngresoCaja ")
+    ,@NamedQuery(name = "IngresoCaja.findByIdCliente", query = "SELECT i FROM IngresoCaja i WHERE i.idCliente=:idCliente and i.idEmpresa=:idEmpresa ORDER by i.idIngresoCaja")
     ,@NamedQuery(name="IngresoCaja.updateToPendiente", 
             query="UPDATE IngresoCaja i SET i.idCliente=:idCliente, "
                     + "i.fechaEmision=:fechaEmision,"
@@ -72,9 +72,10 @@ import javax.validation.constraints.Size;
                     + "i.idTarjetaCredito=:idTarjetaCredito,"
                     + "i.nroTarjeta=:nroTarjeta,"
                     + "i.nroDeposito=:nroDeposito,"
-                    + "i.idCuentaDeposito=:idDeposito,"
+                    + "i.idCuentaDeposito=:idCuentaDeposito,"
                     + "i.estado=:estado "
                     + "WHERE i.idIngresoCaja=:idIngresoCaja")
+
 })
 public class IngresoCaja extends Entidad {
 

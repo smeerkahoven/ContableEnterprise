@@ -5,6 +5,7 @@
  */
 package com.response.json.contabilidad;
 
+import com.contabilidad.entities.NotaDebito;
 import com.contabilidad.entities.NotaDebitoTransaccion;
 import com.seguridad.utils.DateContable;
 import java.io.Serializable;
@@ -22,6 +23,8 @@ public class NotaDebitoTransaccionJson implements Serializable {
     private String descripcion;
     private BigDecimal montoBs;
     private BigDecimal montoUsd;
+    private BigDecimal montoAdeudadoBs;
+    private BigDecimal montoAdeudadoUsd;
     private String fechaInsert;
     private Integer idBoleto;
     private Integer idCargo;
@@ -29,6 +32,10 @@ public class NotaDebitoTransaccionJson implements Serializable {
     private String moneda;
     private String tipo;
     private String idUsuario;
+
+    private String fechaVencimiento;
+    private String formaPago;
+    private String fechaEmision;
 
     public static NotaDebitoTransaccion toNotaDebitoTransaccion(NotaDebitoTransaccionJson json) {
         NotaDebitoTransaccion tr = new NotaDebitoTransaccion();
@@ -38,18 +45,18 @@ public class NotaDebitoTransaccionJson implements Serializable {
         tr.setGestion(json.getGestion());
         tr.setIdBoleto(json.getIdBoleto());
         tr.setIdCargo(json.getIdCargo());
-        tr.setIdNotaDebito(json.getIdNotaDebito());
+        tr.setIdNotaDebito(new NotaDebito(json.getIdNotaDebito()));
         tr.setIdNotaDebitoTransaccion(json.getIdNotaDebitoTransaccion());
         tr.setIdUsuario(json.getIdUsuario());
         tr.setMoneda(json.getMoneda());
         tr.setMontoBs(json.getMontoBs());
         tr.setMontoUsd(json.getMontoUsd());
         tr.setTipo(json.getTipo());
-        
+
         return tr;
     }
 
-    public NotaDebitoTransaccionJson toNotaDebitoTransaccionJson(NotaDebitoTransaccion tr) {
+    public static NotaDebitoTransaccionJson toNotaDebitoTransaccionJson(NotaDebitoTransaccion tr) {
         NotaDebitoTransaccionJson json = new NotaDebitoTransaccionJson();
 
         json.setDescripcion(tr.getDescripcion());
@@ -58,15 +65,64 @@ public class NotaDebitoTransaccionJson implements Serializable {
         json.setGestion(tr.getGestion());
         json.setIdBoleto(tr.getIdBoleto());
         json.setIdCargo(tr.getIdCargo());
-        json.setIdNotaDebito(tr.getIdNotaDebito());
+        json.setIdNotaDebito(tr.getIdNotaDebito().getIdNotaDebito());
         json.setIdNotaDebitoTransaccion(tr.getIdNotaDebitoTransaccion());
         json.setIdUsuario(tr.getIdUsuario());
         json.setMoneda(tr.getMoneda());
         json.setMontoBs(tr.getMontoBs());
         json.setMontoUsd(tr.getMontoUsd());
+        json.setMontoAdeudadoBs(tr.getMontoAdeudadoBs());
+        json.setMontoAdeudadoUsd(tr.getMontoAdeudadoUsd());
         json.setTipo(tr.getTipo());
 
+        if (tr.getIdNotaDebito() != null) {
+            json.setFechaEmision(DateContable.getDateFormat(tr.getIdNotaDebito().getFechaEmision(), DateContable.LATIN_AMERICA_FORMAT));
+            json.setFormaPago(tr.getIdNotaDebito().getFormaPago());
+            json.setFechaVencimiento(DateContable.getDateFormat(tr.getIdNotaDebito().getCreditoVencimiento(), DateContable.LATIN_AMERICA_FORMAT));
+        }
+
         return json;
+    }
+
+    public BigDecimal getMontoAdeudadoBs() {
+        return montoAdeudadoBs;
+    }
+
+    public void setMontoAdeudadoBs(BigDecimal montoAdeudadoBs) {
+        this.montoAdeudadoBs = montoAdeudadoBs;
+    }
+
+    public BigDecimal getMontoAdeudadoUsd() {
+        return montoAdeudadoUsd;
+    }
+
+    public void setMontoAdeudadoUsd(BigDecimal montoAdeudadoUsd) {
+        this.montoAdeudadoUsd = montoAdeudadoUsd;
+    }
+
+    
+    public String getFormaPago() {
+        return formaPago;
+    }
+
+    public void setFormaPago(String formaPago) {
+        this.formaPago = formaPago;
+    }
+
+    public String getFechaEmision() {
+        return fechaEmision;
+    }
+
+    public void setFechaEmision(String fechaEmision) {
+        this.fechaEmision = fechaEmision;
+    }
+
+    public String getFechaVencimiento() {
+        return fechaVencimiento;
+    }
+
+    public void setFechaVencimiento(String fechaVencimiento) {
+        this.fechaVencimiento = fechaVencimiento;
     }
 
     public Integer getIdNotaDebitoTransaccion() {

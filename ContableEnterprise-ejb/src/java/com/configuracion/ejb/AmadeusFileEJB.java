@@ -547,7 +547,7 @@ public class AmadeusFileEJB extends FacadeEJB implements AmadeusFileRemote {
                         Double totalBoleto = b.getTotalBoleto().doubleValue() ;
                         
                         Double montoPagarLinea = totalBoleto - comision ;
-                        b.setMontoPagarLineaAerea(new BigDecimal(montoPagarLinea).setScale(Contabilidad.VALOR_REDONDEO));
+                        b.setMontoPagarLineaAerea(new BigDecimal(montoPagarLinea));
                     }
                     //creamos el boleto
                     insert(b);

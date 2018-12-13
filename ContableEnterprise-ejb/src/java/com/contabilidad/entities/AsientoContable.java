@@ -35,6 +35,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "AsientoContable.findAll", query = "SELECT a FROM AsientoContable a")
     ,@NamedQuery(name = "AsientoContable.find", query = "SELECT a FROM AsientoContable a WHERE a.idLibro=:idLibro")
     ,@NamedQuery(name = "AsientoContable.findAllByIdNotaDebitoTransaccion", query = "SELECT a FROM AsientoContable a WHERE a.idNotaTransaccion =:idNotaTransaccion")
+    ,@NamedQuery(name = "AsientoContable.findAllByIdIngresoTransaccion", query = "SELECT a FROM AsientoContable a WHERE a.idIngresoCajaTransaccion=:idIngresoCajaTransaccion")
     ,@NamedQuery(name = "AsientoContable.updateEstadoFromBoleto", query = "UPDATE AsientoContable a SET a.estado=:estado WHERE a.idBoleto=:idBoleto")
 
 }
