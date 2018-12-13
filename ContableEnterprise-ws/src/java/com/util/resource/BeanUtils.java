@@ -13,6 +13,7 @@ import com.response.json.boletaje.IngresoCajaSearchJson;
 import com.response.json.contabilidad.AsientoContableJSON;
 import com.response.json.contabilidad.CargoBoletoJSON;
 import com.response.json.contabilidad.IngresoCajaJSON;
+import com.response.json.contabilidad.IngresoTransaccionJson;
 import com.response.json.contabilidad.NotaDebitoJSON;
 import com.response.json.contabilidad.NotaDebitoTransaccionJson;
 import com.response.json.seguridad.UserPersonalJSON;
@@ -23,19 +24,32 @@ import com.services.seguridad.util.RestRequest;
  * @author xeio
  */
 public class BeanUtils {
-    
-       public static IngresoCajaSearchJson convertoToIngresoCajaSearchJson(final RestRequest request) {
+
+    public static IngresoCajaSearchJson convertoToIngresoCajaSearchJson(final RestRequest request) {
         IngresoCajaSearchJson bjson;
         Gson gson = new GsonBuilder().create();
         JsonParser parser = new JsonParser();
+        if (request.getContent() == null){
+            return new IngresoCajaSearchJson();
+        }
         JsonObject object = parser.parse((String) request.getContent()).getAsJsonObject();
         System.out.println((String) request.getContent());
         bjson = gson.fromJson(object.toString(), IngresoCajaSearchJson.class);
 
         return bjson;
     }
-    
-    
+
+    public static IngresoTransaccionJson convertoToIngresoCajaTransaccionJson(final RestRequest request) {
+        IngresoTransaccionJson bjson;
+        Gson gson = new GsonBuilder().create();
+        JsonParser parser = new JsonParser();
+        JsonObject object = parser.parse((String) request.getContent()).getAsJsonObject();
+        System.out.println((String) request.getContent());
+        bjson = gson.fromJson(object.toString(), IngresoTransaccionJson.class);
+
+        return bjson;
+    }
+
     public static IngresoCajaJSON convertoToIngresoCajaJson(final RestRequest request) {
         IngresoCajaJSON bjson;
         Gson gson = new GsonBuilder().create();

@@ -518,7 +518,7 @@ public class NotadebitoResource extends TemplateResource {
                 String mensaje =mensajes.getProperty(RestResponse.RESTFUL_NOTA_DEBITO_TRANSACCION_ANULADA_OK).replace("<id>", nota.getIdNotaDebitoTransaccion().toString());
                 mensaje = mensaje.replace("<nota>", nota.getIdNotaDebito().toString());
                 
-                NotaDebito n = (NotaDebito)ejbNotaDebito.get(new NotaDebito(nota.getIdNotaDebito()));
+                NotaDebito n = (NotaDebito)ejbNotaDebito.get(new NotaDebito(nota.getIdNotaDebito().getIdNotaDebito()));
                 NotaDebitoJSON njson = NotaDebitoJSON.toNotaDebitoJSON(n);
                 
                 response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
