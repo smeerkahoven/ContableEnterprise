@@ -61,6 +61,8 @@ public class RecoverPasswordManagedBean {
             ExternalContext external = context.getExternalContext();
             HashMap<String, Object> parameters = new HashMap<>();
             parameters.put("idPasswordRecover", external.getRequestParameterMap().get("p_id"));
+            
+            parametros.setValor(parametros.getValor().replace("[id]", external.getRequestParameterMap().get("p_id")));
 
             List l = (List) ejbEmpleado.get("PasswordRecover.findAt", PasswordRecover.class, parameters);
             if (!l.isEmpty()) {

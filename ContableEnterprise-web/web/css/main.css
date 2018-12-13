@@ -69,3 +69,15 @@ list-on-top {
 	display: inline-block;
 	cursor: pointer;
 }
+
+.bg-selected {
+        background-color:#d6d6db;   
+}
+
+.bg-cancelado {
+        background-color:#ccffcc;   
+}
+
+.bg-adeudado {
+        background-color:#ffbb99;   
+}

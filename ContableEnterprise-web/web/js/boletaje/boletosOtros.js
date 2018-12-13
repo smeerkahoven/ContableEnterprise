@@ -392,10 +392,24 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                             $scope.showRestfulSuccess = true;
                             $scope.showRestfulMessage = response.data.content;
                         } else {
+                            $scope.showAlert(ERROR_RESPUESTA_TITLE, response.data.content);
+                        }
+                    }, $scope.errorFunction);
+                }
+
+                $scope.pendienteSinMensaje = function () {
+                    $http({
+                        method: 'POST',
+                        headers: {'Content-type': 'application/json'},
+                        url: `${url.value}pendiente`,
+                        data: {token: token.value, content: angular.toJson($scope.formData)}
+                    }).then(function (response) {
+                        $scope.showLoading = false;
+                        if (response.data.code === 201) {
+                        } else {
                             $scope.showAlert(ERROR_RESPUESTA_TITLE, reponse.data.content);
                         }
                     }, $scope.errorFunction);
-
                 }
 
                 $scope.finalizar = function () {
@@ -761,6 +775,8 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                             var nota = response.data.entidad;
                             $scope.formData.montoTotalBs = nota.montoTotalBs;
                             $scope.formData.montoTotalUsd = nota.montoTotalUsd;
+                            $scope.formData.montoAdeudadoBs = nota.montoAdeudadoBs;
+                            $scope.formData.montoAdeudadoUsd = nota.montoAdeudadoUsd;
 
                             $scope.loadTransacciones();
                         } else {
@@ -1186,6 +1202,8 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                             $scope.showFormAmadeus();
                             break;
                     }
+                    
+                    $scope.pendienteSinMensaje();
                 }
 
                 $scope.newOtroCargo = function (tipo) {
@@ -1210,6 +1228,7 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                     $scope.showFrmBoletoEditar = false;
 
                     showModalWindow('#frmCargos');
+                    $scope.pendienteSinMensaje();
                 }
 
                 $scope.showFormBoletoVoid = function () {
@@ -1241,6 +1260,7 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                         headers: {'Content-Type': 'application/json'}
                     }).then(
                             function (response) {
+                                console.log(response.data.content);
                                 $scope.loadingFrmAmadeus = false;
                                 $scope.showTableAmadeus = true;
                                 if (response.data.code === 201) {
@@ -1351,7 +1371,9 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                     if ($scope.formData.idCliente.id === undefined || $scope.formData.idPromotor.id === undefined)
                         return true;
 
-
+                    if ($scope.formData.fechaEmision === undefined)
+                        return true ;
+                    
                     return false;
                 }
 
@@ -2629,7 +2651,7 @@ app.filter('printEstado', function ($filter) {
             case 'D' :
                 return 'CANCELADO';
             default :
-                return 'SIN ESTADO';
+                return '-';
                 break;
         }
     }
@@ -2642,7 +2664,7 @@ app.filter('printMoneda', function ($filter) {
             case 'U' :
                 return 'USD.';
             default :
-                return 'SIN MONEDA';
+                return '-';
                 break;
         }
     }
@@ -2663,7 +2685,7 @@ app.filter('printTipo', function ($filter) {
             case 'R' :
                 return 'RESERVA';
             default :
-                return 'SIN TIPO';
+                return '-';
                 break;
         }
     }
@@ -2676,7 +2698,7 @@ app.filter('printTipoCupon', function ($filter) {
             case 'I' :
                 return 'INTERNACIONAL';
             default :
-                return 'SIN TIPO';
+                return '-';
                 break;
         }
     }
@@ -2702,6 +2724,14 @@ app.filter('printTipoComprobante', function ($filter) {
     }
 });
 
+
+app.filter('printNumber', function ($filter) {
+    return function (input, predicate) {
+        if (input === undefined || input === null || input === 0 || input === 0.00)
+            return '-';
+        return new Number(input).toFixed(2);
+    }
+});
 
 app.controller('frView', ['$scope', '$http', 'record', function ($scope, $http, record) {
         function init() {

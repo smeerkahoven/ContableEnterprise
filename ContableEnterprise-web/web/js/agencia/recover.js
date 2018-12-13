@@ -17,8 +17,6 @@ var app = angular.module("jsRecover", ['jsRecover.controllers', 'smart-table', '
 
 angular.module('jsRecover.controllers', []).controller('frmRecover',
         ['$scope', '$http', '$uibModal', '$window', function ($scope, $http, $window) {
-                //var token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhdXRoMCIsImV4cCI6MTUyNzg0MjcwNCwiaWF0IjoxNTI3Nzk5NTA0LCJ2YWx1ZSI6ImFkbWluIn0.20_NgML0xEVr3W9R7RuZOxqno1cLk7cMq5bOtNDLZGQ";//document.getElementsByName("hdToken")[0];
-                //var url = "http://localhost:8080/ContableEnterprise-ws/ws-api/roles/form-perm" //document.getElementsByName("hdUrl")[0];
 
                 var token = document.getElementsByName("hdToken")[0];
                 var url = document.getElementsByName("hdUrl")[0];
@@ -50,14 +48,19 @@ angular.module('jsRecover.controllers', []).controller('frmRecover',
                 }
 
                 $scope.save = function () {
+                    console.log(`url.value:${url.value}`);
                     $scope.showRecover = true;
                     var data = {usr: urlUser.value, pwd: $scope.newPassword};
+                    console.log(data);
+                    
+                    
                     return $http({
                         method: 'POST',
-                        url: url.value ,
+                        url: `${url.value}` ,
                         data: {token: '', content: data},
                         headers: {'Content-Type': 'application/json'}
                     }).then(function (response) {
+                        console.log(response);
                         if (response.data.code === 201) {
                             $scope.mainGrid = response.data.content;
                             $scope.showRecover = false;
@@ -71,92 +74,6 @@ angular.module('jsRecover.controllers', []).controller('frmRecover',
                         $scope.showRestfulError = true;
                     });
                 }
-
-
-                $scope.formHasError = function () {
-                    return (
-                            (!$scope.formData.boletosMonNac && !$scope.formData.boletosMonExt));
-
-                }
-
-                $scope.showAlert = function (title, message) {
-                    swal({
-                        title: title,
-                        text: message,
-                        type: 'error',
-                        closeOnConfirm: true
-                    });
-                }
-
-                $scope.update = function () {
-                    if (!$scope.myForm.$valid) {
-                        $scope.showAlert('Error de Verificacion', 'Verifique los mensajes de los valores requeridos');
-                        return;
-                    }
-                    if ($scope.formHasError()) {
-                        $scope.showAlert('Error de Verificacion', 'Verifique los mensajes de los valores requeridos');
-                        return;
-                    }
-
-                    $scope.loading = true;
-
-                    $http({
-                        method: 'POST',
-                        url: url.value + 'update',
-                        data: {token: token.value, content: angular.toJson($scope.formData), formName: formName.value},
-                        headers: {'Content-Type': 'application/json'}
-                    }).then(function (response) {
-                        $scope.loading = false;
-                        if (response.data.code === 201) {
-                            $scope.showRestfulMessage = response.data.content;
-                            $scope.showRestfulSuccess = true;
-                            $scope.showForm = false;
-                            $scope.showTable = true;
-                            //$scope.getData();
-                        } else {
-                            $scope.showRestfulMessage = response.data.content;
-                            $scope.showRestfulError = true;
-                            $scope.showForm = false;
-                        }
-
-                    }, function (error) {
-                        $scope.loading = false;
-                        $scope.showRestfulMessage = error.statusText;
-                        $scope.showRestfulError = true;
-                        //$scope.showForm = true;
-                    });
-                };
-
-                $scope.cancelar = function () {
-                    $scope.showForm = false;
-                    $scope.showTable = true;
-                    $scope.hideMessagesBox();
-                }
-
-                $scope.findCta = function (cta, input) {
-                    var i = 0;
-                    if (input) {
-                        for (i; i < input.length; i++) {
-                            if (input[i].id == cta) {
-                                //console.log(input[i]);
-                                return input[i];
-                            }
-                        }
-                    }
-                }
-
-                $scope.modalEliminar = function (idx, nombrex, methodx) {
-                    $scope.modalConfirmation = {id: idx, nombre: nombrex, method: methodx};
-                }
-
-
-                $scope.$watch('formData.ctaDevolucionMonExt.id', function (now, old) {
-                    if (now == undefined) {
-                        $scope.showErrorCtaDevolucionMonExt = true;
-                    } else {
-                        $scope.showErrorCtaDevolucionMonExt = false;
-                    }
-                });
             }
         ]);
 

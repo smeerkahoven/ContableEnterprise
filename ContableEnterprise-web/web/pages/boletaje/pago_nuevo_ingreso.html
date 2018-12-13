@@ -1,0 +1,147 @@
+<fieldset  >
+    <legend align="left">Forma de Pago</legend>
+    <div class="container-fluid" align="center">
+        <div class="row">
+            <div class="table-responsive">
+                <div class="col-10">
+                    <ul class="nav nav-tabs" id="myTab" role="tablist">
+
+                        <li class="nav-item">
+                            <a class="nav-link" ng-class="formData.formaPago ===EFECTIVO? 'active' : ''" ng-click="efectivoClick()" id="efectivo-tab" data-toggle="tab" href="#efectivo" role="tab" aria-controls="efectivo" aria-selected="false">Efectivo</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" ng-class="formData.formaPago ===CHEQUE? 'active' : ''" ng-click="chequeClick()" id="cheque-tab" data-toggle="tab" href="#cheque" role="tab" aria-controls="cheque" aria-selected="false">Cheque</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" ng-class="formData.formaPago ===DEPOSITO? 'active' : ''" ng-click="depositoClick()" id="deposito-tab" data-toggle="tab" href="#deposito" role="tab" aria-controls="deposito" aria-selected="false">Deposito</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" ng-class="formData.formaPago ===TARJETA? 'active' : ''" ng-click="tarjetaClick()" id="-tab" data-toggle="tab" href="#tarjeta" role="tab" aria-controls="tarjeta" aria-selected="false">Tarjeta</a>
+                        </li>
+                        <!--
+                        <li class="nav-item">
+                            <a class="nav-link" ng-click="combinadoClick()" id="contact-tab" data-toggle="tab" href="#combinado" role="tab" aria-controls="combinado" aria-selected="false">Combinado</a>
+                        </li>
+                        -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="tab-content" id="myTabContent">
+        <!-- Pagos Contado -->
+        <div class="tab-pane fade" ng-class="formData.formaPago ===EFECTIVO? 'active show' : ''" id="efectivo" role="tabpanel" aria-labelledby="efectivo-tab">
+          
+        </div>
+        <!-- /Pagos Contado -->
+
+        <!-- Pago Cheque -->
+        <div class="tab-pane fade" ng-class="formData.formaPago ===CHEQUE? 'active show' : ''" id="cheque" role="tabpanel" aria-labelledby="cheque-tab">
+            <div class="container-fluid" >
+                <br />
+                <div class="row">
+                    <div class="table-responsive">
+                        <div class="col-10">
+                            <div class="form-group row">
+                                <label for="txtNroCheque" class=" text-right col-sm-3" > N&uacute;mero de Cheque</label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control " id="txtContadoNroCheque"  name="txtContadoNroCheque"  
+                                           required="required" valid-number="valid-number"  onkeypress="return isNumberKey(event)" maxlength="16" ng-model="formData.nroCheque"/>
+                                    <span class="alert-danger " ng-show="!myForm.txtContadoNroCheque.$valid">Debe ingresar un N&uacute;mero de Cheque</span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="txtContadoBanco" class=" text-right col-sm-3" > Banco</label>
+                                <div class="col-sm-6">
+
+                                    <select class="form-control" ng-model="formData.idBanco" name="txtContadoIdBanco"
+                                            id="txtContadoIdBanco"
+                                            ng-options="option.id as option.name for option in comboAllBancos"> 
+                                        <option style="display:none" value="">seleccione un banco</option>
+                                    </select>
+                                    <span class="alert-danger" ng-show="!formData.idBanco">Debe ingresar un Banco</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>    
+        </div>
+        <!-- /Pago Cheque -->
+
+
+        <!-- Pago Deposito -->
+        <div class="tab-pane fade" ng-class="formData.formaPago ===DEPOSITO? 'active show' : ''" id="deposito" role="tabpanel" aria-labelledby="deposito-tab">
+            <div class="container-fluid" >
+                <br />
+                <div class="row">
+                    <div class="table-responsive">
+                        <div class="col-10">
+                            <div class="form-group row">
+                                <label for="txtContadoNroDeposito" class=" text-right col-sm-3" > N&uacute;mero de Dep&oacute;sito</label>
+                                <div class="col-sm-6">
+                                    <input type="text" class="form-control " id="txtContadoNroDeposito"  name="txtContadoNroDeposito"  
+                                           required="required" valid-number="valid-number"  onkeypress="return isNumberKey(event)" maxlength="16" ng-model="formData.nroDeposito"/>
+                                    <span class="alert-danger" ng-show="!myForm.txtContadoNroDeposito.$valid">Debe ingresar un N&uacute;mero de Dep&oacute;sito</span>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="txtContadoDeposito" class=" text-right col-sm-3" >Cuenta Banco</label>
+                                <div class="col-sm-6">
+                                    <select class="form-control" ng-model="formData.idCuentaDeposito" name="txtContadoIdBancoDeposito"
+                                            id="txtContadoIdBancoDeposito"
+                                            ng-options="option.id as option.name for option in comboBancosConCuenta"> 
+                                        <option style="display:none" value="">seleccione un banco</option>
+                                    </select>
+                                    <span class="alert-danger" ng-show="!formData.idCuentaDeposito">Debe ingresar un Banco</span>
+                                </div>
+                            </div>  
+                        </div>
+                    </div>
+                </div>
+            </div>    
+        </div>
+        <!-- /Pago Deposito -->
+
+        <!-- Pago con Tarjeta -->
+        <div class="tab-pane fade" ng-class="formData.formaPago ===TARJETA? 'active show' : ''" id="tarjeta" role="tabpanel" aria-labelledby="tarjeta-tab">
+            <div class="container-fluid">
+                <br />
+                <div class="row" >
+                    <div class="col-10">
+                        <div class="form-group row">
+                            <label for="txtCodigoLinea" class="text-right  col-sm-3" > Tipo de Tarjeta</label>
+                            <div class="col-sm-6">
+                                <select class="form-control" ng-model="formData.idTarjetaCredito" name="txtContadoIdTarjeta"
+                                        id="txtContadoIdTarjeta"
+                                        ng-options="option.id as option.name for option in comboTarjetas"> 
+                                    <option style="display:none" value="">seleccione una Tarjeta</option>
+                                </select>
+                                <span class="alert-danger" ng-show="!formData.idTarjetaCredito">Debe ingresar un tipo de Tarjeta</span>
+
+                            </div>    
+                        </div>
+                        <div class="form-group row">
+                            <label for="txtCodigoLinea" class=" text-right col-sm-3" > N&uacute;mero de tarjeta</label>
+                            <div class="col-sm-6">
+                                <input type="text" class="form-control " id="txtNroTarjeta"  name="txtNroTarjeta"  
+                                       valid-number="valid-number"  onkeypress="return isNumberKey(event)" maxlength="16" 
+                                       ng-model="formData.nroTarjeta"/>
+                                <span class="alert-danger" ng-show="!formData.nroTarjeta">Debe ingresar un numero de tarjeta</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /Pago con Tarjeta -->
+
+        <!-- Pagos Combinados-->
+        
+        <!-- /Pagos Combinados-->
+    </div>
+</fieldset>

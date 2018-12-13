@@ -43,7 +43,7 @@
 
         <script type="text/javascript" src="../../js/date.format.js" />
         <script type="text/javascript" src="../../js/moment.js" />
-        
+
 
         <!--CORRIGE ng-show -->
         <link rel="stylesheet" href="../../css/main.css"  />
@@ -169,7 +169,9 @@
                                                     </div>
                                                 </div>
 
-                                                <button type="button" class="btn btn-primary col-sm-2"  ng-click="find()"><span class="fa fa-search"></span> Buscar</button>
+                                                <c:if test="#{boletajeOtros.formulario.buscar == boletajeOtros.formulario.PERMITIR}">
+                                                    <button type="button" class="btn btn-primary col-sm-2"  ng-click="find()"><span class="fa fa-search"></span> Buscar</button>
+                                                </c:if>
                                             </div>
 
                                             <div  id="tableData" class="ng-hide table-responsive" ng-show="showTable" >
@@ -210,8 +212,8 @@
                                                             <td>{{row.idCounter.nombre}} {{row.idCounter.apellido}} </td>
                                                             <td>{{row.fechaEmision}} </td>
                                                             <td>{{row.fechaInsert}} </td>
-                                                            <td align="right">{{row.montoTotalBs}} </td>
-                                                            <td align="">{{row.montoTotalUsd}} </td>
+                                                            <td align="right">{{row.montoTotalBs|printNumber}} </td>
+                                                            <td align="">{{row.montoTotalUsd|printNumber}} </td>
                                                             <td>{{row.estado| printEstado }} </td>
                                                             <td>
                                                                 <div class="btn-group" >
@@ -280,7 +282,7 @@
                                                         <div class="col-sm-4">
                                                             <label for="txtIdLibro" class="col-form-label"  ><strong><h4>{{formData.idNotaDebito}}</h4></strong></label>
                                                         </div>
-                                                        
+
                                                         <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Estado</label>
                                                         <div class="col-sm-4">
                                                             <label for="txtIdLibro" class="col-form-label"  ><strong><h4>{{formData.estado|printEstado}}</h4></strong></label>
@@ -362,7 +364,7 @@
                                                         <span class="alert-danger"  ng-show="!myForm.txtFechaEmision.$valid">Ingrese una fecha V&aacute;lida.</span> 
                                                     </div>
                                                     <!-- /Fecha Emision -->
-                                                    
+
                                                     <!-- Creado por -->
                                                     <div class="form-group row">
                                                         <label class="col-form-label col-sm-2 text-right" for="flatpickr-wrap">Creado por</label>
@@ -373,7 +375,7 @@
                                                         </div>
                                                         <span class="alert-danger"  ng-show="!myForm.txtFechaEmision.$valid">Ingrese una fecha V&aacute;lida.</span> 
                                                     </div>
-                                                    
+
                                                     <!--./ Creado por -->
 
                                                     <header class="card-header">
@@ -427,8 +429,8 @@
                                                                     <td>{{row.moneda|printMoneda}}</td>
                                                                     <td>{{row.tipo|printTipo}}</td>
                                                                     <td>{{row.estado|printEstado}}</td>
-                                                                    <td align="right">{{row.montoBs}}</td>
-                                                                    <td align="right">{{row.montoUsd}}</td>
+                                                                    <td align="right">{{row.montoBs|printNumber}}</td>
+                                                                    <td align="right">{{row.montoUsd|printNumber}}</td>
                                                                     <td>
                                                                         <div class="btn-group" >
                                                                             <c:if test="${boletajeOtros.formulario.crear== boletajeOtros.formulario.PERMITIR }">
@@ -445,8 +447,14 @@
                                                             <tfoot>
                                                                 <tr class="table-success">
                                                                     <td colspan="5"><strong>TOTAL</strong></td>
-                                                                    <td align="right"><strong>{{formData.montoTotalBs}}</strong></td>
-                                                                    <td align="right"><strong>{{formData.montoTotalUsd}}</strong></td>
+                                                                    <td align="right"><strong>{{formData.montoTotalBs|printNumber}}</strong></td>
+                                                                    <td align="right"><strong>{{formData.montoTotalUsd|printNumber}}</strong></td>
+                                                                    <td ></td>
+                                                                </tr>
+                                                                <tr class="table-danger">
+                                                                    <td colspan="5"><strong>MONTO ADEUDADO</strong></td>
+                                                                    <td align="right"><strong>{{formData.montoAdeudadoBs|printNumber}}</strong></td>
+                                                                    <td align="right"><strong>{{formData.montoAdeudadoUsd|printNumber}}</strong></td>
                                                                     <td ></td>
                                                                 </tr>
                                                             </tfoot>
@@ -520,7 +528,7 @@
                                 </div>
                             </div>
                             <!-- Modal Imprimir -->
-                            
+
                             <!-- Modal Ingreso Caja -->
                             <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="frmIngresosCaja">
                                 <div class="modal-dialog modal-md">
@@ -655,7 +663,7 @@
                                                         <td>{{row.nombrePasajero}}</td>
                                                         <td>{{row.tipoBoleto|printTipoBoleto}}</td>
                                                         <td align="center">{{row.moneda|printMoneda}}</td>
-                                                        <td align="right">{{row.moneda?row.totalBoletoUsd:row.totalBoletoBs}}</td>
+                                                        <td align="right">{{row.moneda === MONEDA_EXTRANJERA ?row.totalBoletoUsd:row.totalBoletoBs}}</td>
                                                         <td>
                                                             <input ng-model="row.selected" type="checkbox"/>
                                                         </td>
@@ -1314,7 +1322,6 @@
                                 </div>
                             </div>
                             <!-- /Modal Eliminar-->
-
 
                             <!-- Modal Anular -->
                             <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="frmAnular">

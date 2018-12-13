@@ -236,6 +236,13 @@ angular.module('jsPromotores.controllers', []).controller('frmPromotores',
                 });
             }
         ]);
+app.filter('printNumber', function ($filter) {
+    return function (input, predicate) {
+        if (input === undefined || input === null || input === 0 || input === 0.00)
+            return '-';
+        return new Number(input).toFixed(2);
+    }
+});
 
 app.filter('myStrictFilter', function ($filter) {
     return function (input, predicate) {

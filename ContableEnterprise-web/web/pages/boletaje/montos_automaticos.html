@@ -154,8 +154,8 @@
                             <tr class="d-flex">
                                 <td class="col-sm-3"><strong class="table-danger">TOTAL BOLETO</strong></td>
                                 <td class="col-sm-3"></td>
-                                <td class="col-sm-3"><div><strong>{{boleto.totalBoletoBs}}</strong></div></td>
-                                <td class="col-sm-3"><div ><strong>{{boleto.totalBoletoUsd}}</strong></div></td>
+                                <td class="col-sm-3"><div><strong>{{boleto.totalBoletoBs|printNumber}}</strong></div></td>
+                                <td class="col-sm-3"><div ><strong>{{boleto.totalBoletoUsd|printNumber}}</strong></div></td>
                             </tr>
                         </tbody>
                     </table>
@@ -204,10 +204,10 @@
                                 <td class="col-sm-6"><strong>TOTAL A PAGAR A LA LINEA AEREA</strong></td>
 
                                 <td class="col-sm-3">
-                                    <strong>{{boleto.montoPagarLineaAereaBs!= null ? boleto.montoPagarLineaAereaBs : '' }}</strong>
+                                    <strong>{{boleto.montoPagarLineaAereaBs|printNumber }}</strong>
                                 </td>
                                 <td class="col-sm-3">
-                                    <strong>{{boleto.montoPagarLineaAereaUsd != null ? boleto.montoPagarLineaAereaUsd : ''}}</strong>
+                                    <strong>{{boleto.montoPagarLineaAereaUsd|printNumber}}</strong>
                                 </td>
                             </tr>
 
@@ -265,8 +265,8 @@
                             <tr class="d-flex">
                                 <td class="col-sm-3"><strong >TOTAL A CANCELAR</strong></td>
                                 <td class="col-sm-3"></td>
-                                <td class="col-sm-3"><div><strong>{{boleto.totalMontoCobrarBs}}</strong></div></td>
-                                <td class="col-sm-3"><div ><strong>{{boleto.totalMontoCobrarUsd}}</strong></div></td>
+                                <td class="col-sm-3"><div><strong>{{boleto.totalMontoCobrarBs|printNumber}}</strong></div></td>
+                                <td class="col-sm-3"><div ><strong>{{boleto.totalMontoCobrarUsd|printNumber}}</strong></div></td>
                             </tr>
                         </tbody>
                     </table>
