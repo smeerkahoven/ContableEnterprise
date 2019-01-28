@@ -49,8 +49,10 @@ and open the template in the editor.
                     <h:outputLabel value="">
                     </h:outputLabel>
                     <br />
-                    <h:panelGroup class="wrap-input100 m-b-10 p-t-10 bg-danger text-white"
+                    <h:panelGroup class="wrap-input100 m-b-10 p-t-10  text-danger "
                                   rendered="#{ not empty login.errorMessage}"> 
+                        
+                        <h:panelGrid class="fa fa-exclamation-circle " ></h:panelGrid>
                         <h:outputLabel value="#{login.errorMessage}">
                         </h:outputLabel>
                     </h:panelGroup>

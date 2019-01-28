@@ -140,6 +140,7 @@ angular.module('jsIngresoCaja.controllers', []).controller('frmIngresoCaja',
                         } else {
                             $scope.showRestfulMessage = response.data.content;
                             $scope.showRestfulError = true;
+                            $scope.mainGrid = [];
                         }
                     }, $scope.errorFunction);
                 }
@@ -178,8 +179,6 @@ angular.module('jsIngresoCaja.controllers', []).controller('frmIngresoCaja',
                     $scope.itemAnular.title = title;
                     $scope.itemAnular.tipo = tipo;
                     $scope.itemAnular.item = item;
-                    console.log($scope.itemAnular);
-
                 }
 
                 $scope.anular = function () {
@@ -357,8 +356,8 @@ angular.module('jsIngresoCaja.controllers', []).controller('frmIngresoCaja',
                 $scope.imprimir = function () {
                     if ($scope.formData.estado !== $scope.PENDIENTE) {
                         window.open(`../../IngresoCajaReportServlet?idIngreso=${$scope.formData.idIngresoCaja}`, '_blank');
-                    }else {
-                        showWarning(WARNING_TITLE,'Debe emitir el Ingreso de caja para Imprimirlo');
+                    } else {
+                        showWarning(WARNING_TITLE, 'Debe emitir el Ingreso de caja para Imprimirlo');
                     }
                 }
 
@@ -488,7 +487,6 @@ angular.module('jsIngresoCaja.controllers', []).controller('frmIngresoCaja',
                         data: {token: token.value, content: angular.toJson(row)},
                         headers: {'Content-Type': 'application/json'}
                     }).then(function (response) {
-                        console.log(response.data.content);
                         if (response.data.code === 201) {
                             $scope.trx = response.data.content;
                             showModalWindow('#frmIngresoTransaccion');
@@ -602,11 +600,13 @@ angular.module('jsIngresoCaja.controllers', []).controller('frmIngresoCaja',
                     }).then(function (response) {
                         if (response.data.code === 201) {
                             $scope.gridNotaDebito = response.data.content;
+                            showModalWindow('#frmNotasDebitos');
                         } else {
+                            $scope.gridNotaDebito = [];
                             showWarning(WARNING_TITLE, response.data.content);
                         }
 
-                        showModalWindow('#frmNotasDebitos');
+
                     }, $scope.errorFunction);
                 }
 
@@ -655,9 +655,9 @@ angular.module('jsIngresoCaja.controllers', []).controller('frmIngresoCaja',
                             $scope.formData.montoAbonadoBs = ingreso.montoAbonadoBs;
                             $scope.formData.montoAbonadoUsd = ingreso.montoAbonadoUsd;
                             $scope.loadTransacciones();
-
                             hideModalWindow('#frmIngresoTransaccion');
-
+                        } else {
+                            showAlert(ERROR_RESPUESTA_TITLE, response.data.content);
                         }
                     }, $scope.errorFunction);
                 }
@@ -829,7 +829,10 @@ app.filter('printNumber', function ($filter) {
     return function (input, predicate) {
         if (input === undefined || input === null || input === 0 || input === 0.00)
             return '-';
-        return new Number(input).toFixed(2);
+        else {
+            var value = new Number(input).toFixed(2);
+            return  value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
     }
 });
 app.filter('printEstado', function ($filter) {

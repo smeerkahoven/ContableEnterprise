@@ -23,7 +23,7 @@ import javax.enterprise.context.RequestScoped;
  */
 @Named(value = "confBoletaje")
 @RequestScoped
-public class BoletajeManagedBean extends ViewManagedBean{
+public class BoletajeManagedBean extends ViewManagedBean {
 
     /**
      * Creates a new instance of BoletajeManagedBean
@@ -31,17 +31,17 @@ public class BoletajeManagedBean extends ViewManagedBean{
     public BoletajeManagedBean() {
         this.formName = "configuracion-boletaje";
     }
-    
-        @PostConstruct
-    public void init() {
-        try {
-            this.formulario = SessionUtils.getFormulario(Formulario.CONFIGURACION_BOLETOS);
-            checkIfCanAccess();
 
-            ejbLogger.add(Accion.ACCESS, user.getUserName(), this.formName, user.getIp());
-        } catch (CRUDException ex) {
+    @PostConstruct
+    public void init() {
+        //try {
+        this.formulario = SessionUtils.getFormulario(Formulario.CONFIGURACION_BOLETOS);
+        checkIfCanAccess();
+
+        //ejbLogger.add(Accion.ACCESS, user.getUserName(), this.formName, user.getIp());
+        /*} catch (CRUDException ex) {
             Logger.getLogger(PersonalManagedBean.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }*/
     }
-    
+
 }

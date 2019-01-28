@@ -9,15 +9,9 @@ import com.configuracion.remote.ParametrosRemote;
 import com.security.SessionUtils;
 import com.seguridad.control.entities.User;
 import com.seguridad.control.remote.LoggerRemote;
-import com.view.agencia.BoletosManagedBean;
 import com.view.menu.Formulario;
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
-import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpServletRequest;
 
 /**
  *

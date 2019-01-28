@@ -6,6 +6,9 @@
 package com.view.menu;
 
 import com.security.SessionUtils;
+import com.seguridad.control.exception.CRUDException;
+import com.seguridad.utils.Accion;
+import com.view.ViewManagedBean;
 import java.io.Serializable;
 import java.util.ArrayList;
 import javax.enterprise.context.RequestScoped;
@@ -17,7 +20,7 @@ import javax.inject.Named;
  */
 @Named(value = "menu")
 @RequestScoped
-public class MenuManagedBean implements Serializable {
+public class MenuManagedBean extends ViewManagedBean  {
 
 
     private String errorMessage;
@@ -50,8 +53,11 @@ public class MenuManagedBean implements Serializable {
         this.menuList = menuList;
     }
     
-    public String navegar(String action){
+    public String navegar(String action) throws CRUDException{
         System.out.println("Navegar:" +action);
+        
+        ejbLogger.add(Accion.ACCESS, user.getUserName(), action, user.getIp());
+        
         return action ;
     }
 

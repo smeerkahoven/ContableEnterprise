@@ -107,14 +107,14 @@
                                         <!-- /Mensaje Cargando -->
 
                                         <!--Mensaje Success -->
-                                        <div class="alert alert-success ng-hide" role="alert" ng-show="showRestfulSuccess">
+                                        <div id="restful-success" class="alert alert-success ng-hide" role="alert" ng-show="showRestfulSuccess">
                                             <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">&times;</a>
                                             {{ showRestfulMessage}}
                                         </div>
                                         <!--/Mensaje Success -->
 
                                         <!--Mensaje Error -->
-                                        <div class="alert alert-danger ng-hide" role="alert" ng-show="showRestfulError">
+                                        <div id="restful-error" class="alert alert-danger ng-hide" role="alert" ng-show="showRestfulError">
                                             <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">&times;</a>
                                             {{ showRestfulMessage}}
                                         </div>
@@ -233,7 +233,7 @@
                                                         <fieldset>
                                                             <legend>Configuraci&oacute;n Contable: Formas de Pago</legend>
                                                         </fieldset>
-                                                        
+
                                                         <div class="form-group row">
                                                             <label for="txtNombre" class=" col-form-label col-sm-4 text-right"></label>
                                                             <div class="col-sm-4">
@@ -266,7 +266,7 @@
                                                                 </span> 
                                                             </div>
                                                         </div>
-                                                        
+
                                                         <div class="form-group row">
                                                             <label for="txtNombre" class=" col-form-label col-sm-4 text-right">Efectivo Cheque <strong>USD.</strong></label>
                                                             <div class="col-sm-4">
@@ -290,8 +290,8 @@
                                                                 </span> 
                                                             </div>
                                                         </div>
-                                                        
-                                                        
+
+
                                                         <div class="form-group row">
                                                             <label for="txtNombre" class=" col-form-label col-sm-4 text-right">Efectivo Cheque, Tarjeta de Cr&eacute;dito para L&iacute;nea 
                                                                 A&eacute;rea sin BSP <strong>Bs.</strong></label>
@@ -388,8 +388,8 @@
                                                                 </span> 
                                                             </div>
                                                         </div>
-                                                        
-                                                        
+
+
                                                         <div class="form-group row">
                                                             <label for="txtNombre" class=" col-form-label col-sm-4 text-right">D&eacute;posito Bancario sin o con BSP <strong>Bs.</strong></label>
                                                             <div class="col-sm-4">
@@ -413,7 +413,7 @@
                                                                 </span> 
                                                             </div>
                                                         </div>
-                                                        
+
                                                         <div class="form-group row">
                                                             <label for="txtNombre" class=" col-form-label col-sm-4 text-right">D&eacute;posito Bancario sin o con BSP<strong>USD.</strong></label>
                                                             <div class="col-sm-4">
@@ -437,9 +437,9 @@
                                                                 </span> 
                                                             </div>
                                                         </div>
-                                                        
-                                                        <legend>Otros Cargos (Boletos)</legend>
-                                                        
+
+                                                        <legend>Paquetes y Otros (Nota de Debito)</legend>
+
                                                         <div class="form-group row">
                                                             <label for="txtNombre" class=" col-form-label col-sm-4 text-right"></label>
                                                             <div class="col-sm-4">
@@ -449,16 +449,16 @@
                                                                 <label>USD.</label>
                                                             </div>
                                                         </div>
-                                                        
+
                                                         <div class="form-group row">
                                                             <label for="txtNombre" class=" col-form-label col-sm-4 text-right">Cuenta Clientes x Cobrar</label>
                                                             <div class="col-sm-4">
-                                                                <input type="text" ng-model="formData.otroCargosClienteCobrarDebeBs" placeholder="Seleccione una cuenta"
+                                                                <input type="text" ng-model="formData.otrosCargosClienteCobrarDebeBs" placeholder="Seleccione una cuenta"
                                                                        uib-typeahead="cuenta as cuenta.name for cuenta in comboCuentas | filter:{name:$viewValue}"
                                                                        class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="0" 
                                                                        typeahead-template-url="customTemplate.html" 
                                                                        />
-                                                                <span class="alert-danger"  ng-show="formData.otroCargosClienteCobrarDebeBs.id === undefined"  >
+                                                                <span class="alert-danger"  ng-show="formData.otrosCargosClienteCobrarDebeBs.id === undefined"  >
                                                                     Ingrese una cuenta para clientes x cobrar
                                                                 </span> 
                                                             </div>
@@ -473,7 +473,186 @@
                                                                 </span> 
                                                             </div>
                                                         </div>
-                                                        
+
+
+                                                        <legend>Nota de Cr&eacute;dito</legend>
+
+                                                        <div class="form-group row">
+                                                            <label for="txtNombre" class=" col-form-label col-sm-4 text-right"></label>
+                                                            <div class="col-sm-4">
+                                                                <label>BOB. - HABER</label>
+                                                            </div>
+                                                            <div class="col-sm-4">
+                                                                <label>USD. - HABER</label>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group row">
+                                                            <label for="txtNombre" class=" col-form-label col-sm-4 text-right">Cuenta Clientes x Cobrar</label>
+                                                            <div class="col-sm-4">
+                                                                <input type="text" ng-model="formData.notaCreditoHaberBs" placeholder="Seleccione una cuenta"
+                                                                       uib-typeahead="cuenta as cuenta.name for cuenta in comboCuentas | filter:{name:$viewValue}"
+                                                                       class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="0" 
+                                                                       typeahead-template-url="customTemplate.html" 
+                                                                       />
+                                                                <span class="alert-danger"  ng-show="formData.notaCreditoHaberBs.id === undefined"  >
+                                                                    Ingrese una cuenta para clientes x cobrar
+                                                                </span> 
+                                                            </div>
+                                                            <div class="col-sm-4">
+                                                                <input type="text" ng-model="formData.notaCreditoHaberUsd" placeholder="Seleccione una cuenta"
+                                                                       uib-typeahead="cuenta as cuenta.name for cuenta in comboCuentas | filter:{name:$viewValue}"
+                                                                       class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="0" 
+                                                                       typeahead-template-url="customTemplate.html" 
+                                                                       />
+                                                                <span class="alert-danger"  ng-show="formData.notaCreditoHaberUsd.id === undefined"  >
+                                                                    Ingrese una cuenta para clientes x cobrar
+                                                                </span> 
+                                                            </div>
+                                                        </div>
+
+
+                                                        <legend>Dep&oacute;sitos Anticipados </legend>
+
+                                                        <div class="form-group row">
+                                                            <label for="txtNombre" class=" col-form-label col-sm-4 text-right"></label>
+                                                            <div class="col-sm-4">
+                                                                <label>BOB. - HABER</label>
+                                                            </div>
+                                                            <div class="col-sm-4">
+                                                                <label>USD. - HABER</label>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group row">
+                                                            <label for="txtNombre" class=" col-form-label col-sm-4 text-right">Deposito Cliente Anticipado</label>
+                                                            <div class="col-sm-4">
+                                                                <input type="text" ng-model="formData.depositoClienteAnticipadoBs" placeholder="Seleccione una cuenta"
+                                                                       uib-typeahead="cuenta as cuenta.name for cuenta in comboCuentas | filter:{name:$viewValue}"
+                                                                       class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="0" 
+                                                                       typeahead-template-url="customTemplate.html" 
+                                                                       />
+                                                                <span class="alert-danger"  ng-show="formData.depositoClienteAnticipadoBs.id === undefined"  >
+                                                                    Ingrese una cuenta para Dep&oacute;sito Clientes Anticipados Bs
+                                                                </span> 
+                                                            </div>
+                                                            <div class="col-sm-4">
+                                                                <input type="text" ng-model="formData.depositoClienteAnticipadoUsd" placeholder="Seleccione una cuenta"
+                                                                       uib-typeahead="cuenta as cuenta.name for cuenta in comboCuentas | filter:{name:$viewValue}"
+                                                                       class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="0" 
+                                                                       typeahead-template-url="customTemplate.html" 
+                                                                       />
+                                                                <span class="alert-danger"  ng-show="formData.depositoClienteAnticipadoUsd.id === undefined"  >
+                                                                    Ingrese una cuenta para Dep&oacute;sito Clientes Anticipados Usd
+                                                                </span> 
+                                                            </div>
+                                                        </div>
+
+
+                                                        <div class="form-group row">
+                                                            <label for="txtNombre" class=" col-form-label col-sm-4 text-right"></label>
+                                                            <div class="col-sm-4">
+                                                                <label>DEBE</label>
+                                                            </div>
+                                                            <div class="col-sm-4">
+                                                                <label>HABER</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <label for="txtNombre" class=" col-form-label col-sm-4 text-right">Acreditaci&oacute;n Dep&oacute;sito Cliente Anticipado <strong>Bs.</strong></label>
+                                                            <div class="col-sm-4">
+                                                                <input type="text" ng-model="formData.acreditacionDepositoAnticipadoDebeBs" placeholder="Seleccione una cuenta"
+                                                                       uib-typeahead="cuenta as cuenta.name for cuenta in comboCuentas | filter:{name:$viewValue}"
+                                                                       class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="0" 
+                                                                       typeahead-template-url="customTemplate.html" 
+                                                                       />
+                                                                <span class="alert-danger"  ng-show="formData.acreditacionDepositoAnticipadoDebeBs.id === undefined"  >
+                                                                    Ingrese una cuenta para Acreditaci&oacute;n Dep&oacute;sito Cliente Anticipado
+                                                                </span> 
+                                                            </div>
+                                                            <div class="col-sm-4">
+                                                                <input type="text" ng-model="formData.acreditacionDepositoAnticipadoHaberBs" placeholder="Seleccione una cuenta"
+                                                                       uib-typeahead="cuenta as cuenta.name for cuenta in comboCuentas | filter:{name:$viewValue}"
+                                                                       class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="0" 
+                                                                       typeahead-template-url="customTemplate.html" 
+                                                                       />
+                                                                <span class="alert-danger"  ng-show="formData.acreditacionDepositoAnticipadoHaberBs.id === undefined"  >
+                                                                    Ingrese una cuenta para Acreditaci&oacute;n Dep&oacute;sito Cliente Anticipado
+                                                                </span> 
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group row">
+                                                            <label for="txtNombre" class=" col-form-label col-sm-4 text-right">Acreditaci&oacute;n Dep&oacute;sito Cliente Anticipado <strong>USD.</strong></label>
+                                                            <div class="col-sm-4">
+                                                                <input type="text" ng-model="formData.acreditacionDepositoAnticipadoDebeUsd" placeholder="Seleccione una cuenta"
+                                                                       uib-typeahead="cuenta as cuenta.name for cuenta in comboCuentas | filter:{name:$viewValue}"
+                                                                       class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="0" 
+                                                                       typeahead-template-url="customTemplate.html" 
+                                                                       />
+                                                                <span class="alert-danger"  ng-show="formData.acreditacionDepositoAnticipadoDebeUsd.id === undefined"  >
+                                                                    Ingrese una cuenta para Acreditaci&oacute;n Dep&oacute;sito Cliente Anticipado
+                                                                </span> 
+                                                            </div>
+                                                            <div class="col-sm-4">
+                                                                <input type="text" ng-model="formData.acreditacionDepositoAnticipadoHaberUsd" placeholder="Seleccione una cuenta"
+                                                                       uib-typeahead="cuenta as cuenta.name for cuenta in comboCuentas | filter:{name:$viewValue}"
+                                                                       class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="0" 
+                                                                       typeahead-template-url="customTemplate.html" 
+                                                                       />
+                                                                <span class="alert-danger"  ng-show="formData.acreditacionDepositoAnticipadoHaberUsd.id === undefined"  >
+                                                                    Ingrese una cuenta para Acreditaci&oacute;n Dep&oacute;sito Cliente Anticipado
+                                                                </span> 
+                                                            </div>
+                                                        </div>
+                                                        <!-- Devolucion Deposito -->
+                                                        <div class="form-group row">
+                                                            <label for="txtNombre" class=" col-form-label col-sm-4 text-right">Devoluci&oacute;n Dep&oacute;sito Cliente Anticipado <strong>Bs.</strong></label>
+                                                            <div class="col-sm-4">
+                                                                <input type="text" ng-model="formData.devolucionDepositoAnticipadoDebeBs" placeholder="Seleccione una cuenta"
+                                                                       uib-typeahead="cuenta as cuenta.name for cuenta in comboCuentas | filter:{name:$viewValue}"
+                                                                       class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="0" 
+                                                                       typeahead-template-url="customTemplate.html" 
+                                                                       />
+                                                                <span class="alert-danger"  ng-show="formData.devolucionDepositoAnticipadoDebeBs.id === undefined"  >
+                                                                    Ingrese una cuenta de Devoluci&oacute;n Dep&oacute;sito Cliente Anticipado
+                                                                </span> 
+                                                            </div>
+                                                            <div class="col-sm-4">
+                                                                <input type="text" ng-model="formData.devolucionDepositoAnticipadoHaberBs" placeholder="Seleccione una cuenta"
+                                                                       uib-typeahead="cuenta as cuenta.name for cuenta in comboCuentas | filter:{name:$viewValue}"
+                                                                       class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="0" 
+                                                                       typeahead-template-url="customTemplate.html" 
+                                                                       />
+                                                                <span class="alert-danger"  ng-show="formData.devolucionDepositoAnticipadoHaberBs.id === undefined"  >
+                                                                    Ingrese una cuenta de Devoluci&oacute;n Dep&oacute;sito
+                                                                </span> 
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group row">
+                                                            <label for="txtNombre" class=" col-form-label col-sm-4 text-right">Devoluci&oacute;n Dep&oacute;sito Cliente Anticipado <strong>USD.</strong></label>
+                                                            <div class="col-sm-4">
+                                                                <input type="text" ng-model="formData.devolucionDepositoAnticipadoDebeUsd" placeholder="Seleccione una cuenta"
+                                                                       uib-typeahead="cuenta as cuenta.name for cuenta in comboCuentas | filter:{name:$viewValue}"
+                                                                       class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="0" 
+                                                                       typeahead-template-url="customTemplate.html" 
+                                                                       />
+                                                                <span class="alert-danger"  ng-show="formData.devolucionDepositoAnticipadoDebeUsd.id === undefined"  >
+                                                                    Ingrese una cuenta de Devoluci&oacute;n Dep&oacute;sito
+                                                                </span> 
+                                                            </div>
+                                                            <div class="col-sm-4">
+                                                                <input type="text" ng-model="formData.devolucionDepositoAnticipadoHaberUsd" placeholder="Seleccione una cuenta"
+                                                                       uib-typeahead="cuenta as cuenta.name for cuenta in comboCuentas | filter:{name:$viewValue}"
+                                                                       class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="0" 
+                                                                       typeahead-template-url="customTemplate.html" 
+                                                                       />
+                                                                <span class="alert-danger"  ng-show="formData.devolucionDepositoAnticipadoHaberUsd.id === undefined"  >
+                                                                    Ingrese una cuenta de Devoluci&oacute;n Dep&oacute;sito
+                                                                </span> 
+                                                            </div>
+                                                        </div>
 
                                                         <div class="form-group">
                                                             <c:if test="#{confBoletaje.formulario.crear== confBoletaje.formulario.PERMITIR}">

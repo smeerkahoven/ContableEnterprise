@@ -29,18 +29,18 @@ public class PromotoresManagedBean extends ViewManagedBean {
      * Creates a new instance of PromotoresManagedBean
      */
     public PromotoresManagedBean() {
-        this.formName = "promotores" ;
+        this.formName = "promotores";
     }
-    
-        @PostConstruct
-    public void init() {
-        try {
-            this.formulario = SessionUtils.getFormulario(Formulario.PROMOTORES);
-            checkIfCanAccess();
 
-            ejbLogger.add(Accion.ACCESS, user.getUserName(), this.formName, user.getIp());
-        } catch (CRUDException ex) {
-            Logger.getLogger(PersonalManagedBean.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    @PostConstruct
+    public void init() {
+        //try {
+        this.formulario = SessionUtils.getFormulario(Formulario.PROMOTORES);
+        checkIfCanAccess();
+
+        //ejbLogger.add(Accion.ACCESS, user.getUserName(), this.formName, user.getIp());
+        //} catch (CRUDException ex) {
+        // Logger.getLogger(PersonalManagedBean.class.getName()).log(Level.SEVERE, null, ex);
+        //}
     }
 }

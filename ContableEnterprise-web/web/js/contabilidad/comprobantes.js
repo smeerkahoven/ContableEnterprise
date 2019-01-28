@@ -3,6 +3,8 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
+
+
 function isNumberKey(evt)
 {
     var charCode = (evt.which) ? evt.which : event.keyCode
@@ -30,6 +32,13 @@ function AsientoContable() {
 
     this.idPlanCuenta = '';
     this.idLibro = '0';
+    this.idNotaTransaccion = null;
+    this.idIngresoCajaTransaccion = null;
+    this.idNotaCreditoTransaccion = null;
+    this.tipo = null;
+    this.idBoleto = null;
+    this.idCargo = null;
+
     this.fechaMovimiento = '';
     this.debeMonNac = 0.00;
     this.haberMonNac = 0.00;
@@ -75,8 +84,9 @@ Comprobante.prototype = Object.create(Comprobante.prototype);
 Comprobante.prototype = Comprobante;
 
 let date = new Date();
-let firstDay = new Date(date.getFullYear(), date.getMonth(), 1).toLocaleDateString();
-let today = new Date().toLocaleDateString();
+let firstDay = new Date(date.getFullYear(), date.getMonth(), 1).toLocaleDateString('en-GB');
+let today = new Date().toLocaleDateString('en-GB');
+let todayDate = new Date();
 
 let ALL_TIPO_COMPROBANTES = 'all-tipo-comprobantes';
 let ALL_PLAN_CUENTAS = "combo/";
@@ -273,11 +283,18 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                             $scope.disableEliminarTransaccion = false;
                             $scope.disableGuardarTransaccion = false;
                             break;
-
                     }
+
                 }
 
                 $scope.anular = function () {
+
+                    if ($scope.formData.estado === $scope.INICIAL) {
+                        $scope.showForm = false;
+                        $scope.showTable = true;
+                        return;
+                    }
+
                     $scope.loading = true;
                     return $http({
                         method: 'POST',
@@ -306,10 +323,30 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                     window.open(`../../ComprobanteReporteServlet?idLibro=${data.idLibro}`, '_target');
                 }
 
+                $scope.formHasErrors = function () {
+                    if ($scope.formData.idCliente === undefined) {
+                        return true;
+                    }
+                    if ($scope.formData.idCliente.id === undefined) {
+                        return true;
+                    }
+                    if ($scope.formData.concepto === undefined) {
+                        return true;
+                    }
+
+                    return false;
+                }
+
                 $scope.pendiente = function () {
                     //$("frmPendiente").modal() ;
+                    if ($scope.formHasErrors()) {
+                        showAlert(ERROR_RESPUESTA_TITLE, VERIFIQUE_VALORES_REQUERIDOS);
+                        return;
+                    }
+
                     if (!$scope.myForm.$valid)
                         return;
+
                     showModal("frmPendiente");
                 }
 
@@ -344,6 +381,7 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                 $scope.newComprobante = function (tipo) {
                     $scope.formData = new Comprobante();
                     $scope.formData.factorCambiario = $scope.dollarToday.valor;
+                    $scope.formData.estado = $scope.INICIAL;
                     $scope.formData.factorUfv = $scope.ufvToday.valor;
                     $scope.formData.fecha = $scope.dollarToday.fecha;
                     $scope.formData.tipo = tipo;
@@ -363,11 +401,11 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
 
                     $scope.formData.factorMax = parseFloat($scope.formData.factorCambiario) + parseFloat(factorMaxMin.value);
                     $scope.formData.factorMin = parseFloat($scope.formData.factorCambiario) - parseFloat(factorMaxMin.value);
+                    myForm.reset();
 
                     $scope.habilitarBotones();
 
-                    $scope.myForm.$setPristine();
-                    myForm.reset();
+
                 }
 
                 $scope.verTransaccion = function (row) {
@@ -376,18 +414,62 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                         //BOLETO
                         $scope.loadTransaccionBoleto(row);
                         showModalWindow('#frmTransaccion');
-                    }else if (row.tipo === 'C'){
+                    } else if (row.tipo === 'C') {
                         //CARGO
                         $scope.loadTransaccionCargo(row);
                         showModalWindow('#frmTransaccion');
+                    } else if (row.tipo === 'P') {
+                        //PAQUETE
+                        $scope.loadTransaccionPaquete(row);
+                        showModalWindow('#frmTransaccion');
                     }
-                    
+
+                }
+
+                $scope.loadTransaccionBoleto = function (row) {
+                    return $http({
+                        method: 'POST',
+                        url: `${url.value}transaccion-boleto/get`,
+                        data: {token: token.value, content: angular.toJson(row)},
+                        headers: {'Content-Type': 'application/json'}
+                    }).then(function (response) {
+                        if (response.data.code === 201) {
+                            $scope.verForm = response.data.content;
+                        } else {
+                            $scope.showRestfulMessage = response.data.content;
+                            $scope.showRestfulError = true;
+                            return {};
+                        }
+                    }, function (error) {
+                        $scope.showRestfulMessage = error.statusText;
+                        $scope.showRestfulError = true;
+                    });
+                }
+
+                $scope.loadTransaccionCargo = function (row) {
+                    return $http({
+                        method: 'POST',
+                        url: `${url.value}transaccion-cargo/get`,
+                        data: {token: token.value, content: angular.toJson(row)},
+                        headers: {'Content-Type': 'application/json'}
+                    }).then(function (response) {
+                        if (response.data.code === 201) {
+                            $scope.verForm = response.data.content;
+                        } else {
+                            $scope.showRestfulMessage = response.data.content;
+                            $scope.showRestfulError = true;
+                            return {};
+                        }
+                    }, function (error) {
+                        $scope.showRestfulMessage = error.statusText;
+                        $scope.showRestfulError = true;
+                    });
                 }
                 
-                $scope.loadTransaccionBoleto = function (row){
-                   return $http({
+                $scope.loadTransaccionPaquete = function (row) {
+                    return $http({
                         method: 'POST',
-                        url: `${urlNotaDebito.value}transaccion-boleto/get`,
+                        url: `${url.value}transaccion-paquete/get`,
                         data: {token: token.value, content: angular.toJson(row)},
                         headers: {'Content-Type': 'application/json'}
                     }).then(function (response) {
@@ -404,28 +486,7 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                         $scope.showRestfulError = true;
                     });
                 }
-                
-                $scope.loadTransaccionCargo = function (row){
-                   return $http({
-                        method: 'POST',
-                        url: `${urlNotaDebito.value}transaccion-cargo/get`,
-                        data: {token: token.value, content: angular.toJson(row)},
-                        headers: {'Content-Type': 'application/json'}
-                    }).then(function (response) {
-                        if (response.data.code === 201) {
-                            $scope.verForm = response.data.content;
-                            console.log($scope.verForm);
-                        } else {
-                            $scope.showRestfulMessage = response.data.content;
-                            $scope.showRestfulError = true;
-                            return {};
-                        }
-                    }, function (error) {
-                        $scope.showRestfulMessage = error.statusText;
-                        $scope.showRestfulError = true;
-                    });
-                }
-                
+
                 $scope.existenTransaccionesInvalidas = function () {
 
                     if ($scope.formData.transacciones === undefined) {
@@ -538,15 +599,6 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                         $scope.update();
                     }
                 };
-
-                $scope.formHasError = function () {
-                    /*if ($scope.formData.idEmpresa == undefined) {
-                     return true;
-                     }
-                     return (!$scope.formData.idEmpresa.id);
-                     */
-                    return true;
-                }
 
                 $scope.update = function () {
                     if (!$scope.myForm.$valid) {
@@ -724,36 +776,160 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                         $scope.disableGuardarButton = false;
                     }
 
-                    if ($scope.formData.estado === $scope.PENDIENTE) {
-                        if (item.idAsiento === ZERO) {
-                            $http({
-                                method: 'POST',
-                                url: `${url.value}add-transaction`,
-                                data: {token: token.value, content: angular.toJson($scope.formData)},
-                                headers: {'Content-Type': 'application/json'}
-                            }).then(function (response) {
-                                item = response.data.entidad;
-                                $scope.formData.transacciones[$scope.formData.transacciones.length - 1].idAsiento = item.idAsiento;
-                                $scope.formData.transacciones[$scope.formData.transacciones.length - 1].idLibro = item.idLibro;
-                                $scope.formData.transacciones[$scope.formData.transacciones.length - 1].gestion = item.gestion;
-                            }, function (error) {
-                                $scope.showRestfulError = true;
-                                $scope.showRestfulMessage = error.statusText;
-                            })
-                        } else {
-                            $http({
-                                method: 'POST',
-                                url: `${url.value}update-transaction`,
-                                data: {token: token.value, content: angular.toJson($scope.formData)},
-                                headers: {'Content-Type': 'application/json'}
-                            }).then(function (response) {
+                    if ($scope.existeDiferencias) {
+                        $scope.existeDiferencias = false;
+                    }
 
-                            }, function (error) {
-                                $scope.showRestfulError = true;
-                                $scope.showRestfulMessage = error.statusText;
-                            })
+                    if ($scope.formData.estado === $scope.PENDIENTE) {
+                    if (item.idAsiento === ZERO) {
+                        $http({
+                            method: 'POST',
+                            url: `${url.value}add-transaction`,
+                            data: {token: token.value, content: angular.toJson($scope.formData)},
+                            headers: {'Content-Type': 'application/json'}
+                        }).then(function (response) {
+                            item = response.data.entidad;
+                            $scope.formData.transacciones[$scope.formData.transacciones.length - 1].idAsiento = item.idAsiento;
+                            $scope.formData.transacciones[$scope.formData.transacciones.length - 1].idLibro = item.idLibro;
+                            $scope.formData.transacciones[$scope.formData.transacciones.length - 1].gestion = item.gestion;
+                        }, function (error) {
+                            $scope.showRestfulError = true;
+                            $scope.showRestfulMessage = error.statusText;
+                        })
+                    } else {
+                        $http({
+                            method: 'POST',
+                            url: `${url.value}update-transaction`,
+                            data: {token: token.value, content: angular.toJson($scope.formData)},
+                            headers: {'Content-Type': 'application/json'}
+                        }).then(function (response) {
+
+                        }, function (error) {
+                            $scope.showRestfulError = true;
+                            $scope.showRestfulMessage = error.statusText;
+                        })
+                    }
+                   }
+                }
+
+
+
+                $scope.corregirTransaccion = function (item) {
+                    $scope.showRowError = false;
+                    if (item.idPlanCuenta.id === undefined) {
+                        $scope.showRowError = true;
+                        $scope.showRowMessage = "Debe ingresar una Cuenta Valida.";
+                        return false;
+                    }
+
+                    if (item.moneda === '') {
+                        $scope.showRowError = true;
+                        $scope.showRowMessage = "Debe seleccionar un tipo de moneda.";
+                        return false;
+                    }
+
+                    if (item.moneda === MONEDA_NACIONAL) {
+                        if (item.debeMonNac === undefined || item.haberMonNac === undefined) {
+                            $scope.showRowError = true;
+                            $scope.showRowMessage = "Ingrese valores a los montos de Moneda nacional";
+                            return false;
+                        }
+
+                        if (item.debeMonNac === 0 && item.haberMonNac === 0) {
+                            $scope.showRowError = true;
+                            $scope.showRowMessage = "Ingrese valores a los montos de Moneda nacional";
+                            return false;
                         }
                     }
+
+                    if (item.moneda === MONEDA_EXTRANJERA) {
+                        if (item.debeMonExt === undefined || item.haberMonExt === undefined) {
+                            $scope.showRowError = true;
+                            $scope.showRowMessage = "Ingrese valores a los montos de Moneda Extranjera";
+                            return false;
+                        }
+
+                        if (item.debeMonExt === 0 && item.haberMonExt === 0) {
+                            $scope.showRowError = true;
+                            $scope.showRowMessage = "Ingrese valores a los montos de Moneda Extranjera";
+                            return false;
+                        }
+                    }
+
+                    if (item.moneda === MONEDA_NACIONAL) {
+                        item.debeMonNac = parseFloat(Math.round(item.debeMonNac * 100) / 100).toFixed(2);
+                        item.haberMonNac = parseFloat(Math.round(item.haberMonNac * 100) / 100).toFixed(2);
+
+                        if (item.idPlanCuenta.comodin === "N") {
+                            //if (item.debeMonExt === undefined || item.debeMonExt <= 0) {
+                            item.debeMonExt = parseFloat(item.debeMonNac / $scope.formData.factorCambiario).toFixed(2);
+                            //}
+                            //if (item.haberMonExt === undefined || item.haberMonExt <= 0) {
+                            item.haberMonExt = parseFloat(item.haberMonNac / $scope.formData.factorCambiario).toFixed(2);
+                            //}
+                        }
+
+                    } else if (item.moneda === MONEDA_EXTRANJERA) {
+                        item.debeMonExt = parseFloat(Math.round(item.debeMonExt * 100) / 100).toFixed(2);
+                        item.haberMonExt = parseFloat(Math.round(item.haberMonExt * 100) / 100).toFixed(2);
+
+                        if (item.idPlanCuenta.comodin === "N") {
+                            //if (item.debeMonNac <= 0) {
+                            item.debeMonNac = parseFloat(item.debeMonExt * $scope.formData.factorCambiario).toFixed(2);
+                            //}
+
+                            //if (item.haberMonNac <= 0) {
+                            item.haberMonNac = parseFloat(item.haberMonExt * $scope.formData.factorCambiario).toFixed(2);
+                            //}
+                        }
+                    }
+
+                    $scope.sumarTotales();
+                    $scope.sumarDiferencias();
+                    item.editable = false;
+                    item.action = ACTION_UPDATE;
+                    item.isOK = true;
+
+                    if ($scope.existenTransaccionesInvalidas()) {
+                        $scope.disableGuardarButton = true;
+                    } else {
+                        $scope.disableGuardarButton = false;
+                    }
+
+                    if ($scope.existeDiferencias) {
+                        $scope.existeDiferencias = false;
+                    }
+
+                    //if ($scope.formData.estado === $scope.PENDIENTE) {
+                    if (item.idAsiento === ZERO) {
+                        $http({
+                            method: 'POST',
+                            url: `${url.value}add-correccion`,
+                            data: {token: token.value, content: angular.toJson($scope.formData)},
+                            headers: {'Content-Type': 'application/json'}
+                        }).then(function (response) {
+                            item = response.data.entidad;
+                            $scope.formData.transacciones[$scope.formData.transacciones.length - 1].idAsiento = item.idAsiento;
+                            $scope.formData.transacciones[$scope.formData.transacciones.length - 1].idLibro = item.idLibro;
+                            $scope.formData.transacciones[$scope.formData.transacciones.length - 1].gestion = item.gestion;
+                        }, function (error) {
+                            $scope.showRestfulError = true;
+                            $scope.showRestfulMessage = error.statusText;
+                        })
+                    } else {
+                        $http({
+                            method: 'POST',
+                            url: `${url.value}update-transaction`,
+                            data: {token: token.value, content: angular.toJson($scope.formData)},
+                            headers: {'Content-Type': 'application/json'}
+                        }).then(function (response) {
+
+                        }, function (error) {
+                            $scope.showRestfulError = true;
+                            $scope.showRestfulMessage = error.statusText;
+                        })
+                    }
+                    // }
                 }
 
                 $scope.sumarTotales = function () {
@@ -762,10 +938,10 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                     $scope.formData.totalHaberMonExt = 0;
                     $scope.formData.totalDebeMonExt = 0;
                     for (var i in $scope.formData.transacciones) {
-                        $scope.formData.totalDebeMonNac = parseFloat((parseFloat($scope.formData.totalDebeMonNac)) + (parseFloat($scope.formData.transacciones[i].debeMonNac))).toFixed(2);
-                        $scope.formData.totalHaberMonNac = parseFloat((parseFloat($scope.formData.totalHaberMonNac)) + (parseFloat($scope.formData.transacciones[i].haberMonNac))).toFixed(2);
-                        $scope.formData.totalDebeMonExt = parseFloat((parseFloat($scope.formData.totalDebeMonExt)) + (parseFloat($scope.formData.transacciones[i].debeMonExt))).toFixed(2);
-                        $scope.formData.totalHaberMonExt = parseFloat((parseFloat($scope.formData.totalHaberMonExt)) + (parseFloat($scope.formData.transacciones[i].haberMonExt))).toFixed(2);
+                        $scope.formData.totalDebeMonNac = parseFloat((Number($scope.formData.totalDebeMonNac)) + (Number($scope.formData.transacciones[i].debeMonNac === undefined ? Number(null) : $scope.formData.transacciones[i].debeMonNac))).toFixed(2);
+                        $scope.formData.totalHaberMonNac = parseFloat((Number($scope.formData.totalHaberMonNac)) + (Number($scope.formData.transacciones[i].haberMonNac === undefined ? Number(null) : $scope.formData.transacciones[i].haberMonNac))).toFixed(2);
+                        $scope.formData.totalDebeMonExt = parseFloat((Number($scope.formData.totalDebeMonExt)) + (Number($scope.formData.transacciones[i].debeMonExt === undefined ? Number(null) : $scope.formData.transacciones[i].debeMonExt))).toFixed(2);
+                        $scope.formData.totalHaberMonExt = parseFloat((Number($scope.formData.totalHaberMonExt)) + (Number($scope.formData.transacciones[i].haberMonExt === undefined ? Number(null) : $scope.formData.transacciones[i].haberMonExt))).toFixed(2);
                     }
                 }
 
@@ -778,6 +954,14 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
 
                     $scope.showDifHaberExt = ($scope.formData.difMonExt > 0);
                     $scope.showDifDebeExt = ($scope.formData.difMonExt < 0);
+
+                    $scope.existeDiferencias = $scope.showDifDebeExt || $scope.showDifDebeNac || $scope.showDifHaberExt || $scope.showDifHaberNac;
+
+                    if ($scope.existeDiferencias) {
+                        $scope.ngDisabledBtnCorregir = false;
+                    } else {
+                        $scope.ngDisabledBtnCorregir = true;
+                    }
                 }
 
                 $scope.ngChange = function (key, method, row) {
@@ -789,6 +973,11 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                         row.debeMonNac = (method == 'haber') ? 0 : row.debeMonNac;
                         row.debeMonExt = (method == 'haber') ? 0 : row.debeMonExt;
                     }
+                }
+
+                $scope.clickCorregir = function () {
+                    $scope.ngDisabledBtnCorregir = true;
+                    $scope.addTransaccion();
                 }
 
                 $scope.addTransaccion = function () {
@@ -848,7 +1037,7 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                         }
                     }
                 }
-                
+
                 $scope.getClientes = function () {
                     return $http({
                         url: `${urlClientes.value}all-cliente-combo`,
@@ -886,16 +1075,26 @@ app.filter('myStrictFilter', function ($filter) {
 });
 
 app.filter('makePositive', function () {
-    return function (num) {
-        return Math.abs(num);
+    return function (input, predicate) {
+        if (input === undefined || input === null || input === 0 || input === 0.00)
+            return '-';
+        return  Math.abs(new Number(input).toFixed(2));
     }
 });
 
 app.filter('tipoComprobante', function () {
     return function (tipo, scope) {
-        let object = scope.findCta(tipo, scope.comboTiposComprobantes);
-        if (object !== undefined) {
-            return object.name;
+        switch (tipo) {
+            case 'AD':
+                return 'Asiento Diario';
+            case 'CI' :
+                return 'Comprobante de Ingreso';
+            case 'AJ' :
+                return 'Asiento de Ajuste';
+            case 'CE' :
+                return 'Comprobante de Egreso';
+            case 'CT' :
+                return 'Comprobante de Traspaso';
         }
     }
 });
@@ -928,6 +1127,39 @@ app.filter('checkStatus', function () {
     }
 });
 
+app.filter('printTipo', function ($filter) {
+    return function (input, predicate) {
+        switch (input) {
+            case 'B':
+                return 'BOLETO';
+            case 'P' :
+                return 'PAQUETE';
+            case 'A' :
+                return 'ALQUILER AUTO';
+            case 'H' :
+                return 'HOTEL';
+            case 'S' :
+                return 'SEGURO';
+            case 'R' :
+                return 'RESERVA';
+            default :
+                return '-';
+                break;
+        }
+    }
+});
+
+app.filter('printMoneda', function ($filter) {
+    return function (input, predicate) {
+        switch (input) {
+            case 'B':
+                return 'BOB.';
+            case 'U' :
+                return 'USD.';
+        }
+    }
+});
+
 app.filter('printTipoBoleto', function () {
     return function (estado) {
         switch (estado) {
@@ -945,6 +1177,17 @@ app.filter('printTipoBoleto', function () {
                 return "RECUPERADO";
             default :
                 return '';
+        }
+    }
+});
+
+app.filter('printNumber', function ($filter) {
+    return function (input, predicate) {
+        if (input === undefined || input === null || input === 0 || input === 0.00)
+            return '-';
+        else {
+            var value = new Number(input).toFixed(2);
+            return  value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         }
     }
 });

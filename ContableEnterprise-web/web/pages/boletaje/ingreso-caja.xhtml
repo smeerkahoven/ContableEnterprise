@@ -19,7 +19,7 @@
         <link rel="shortcut icon" href="../../assets/favicon.ico" />
         <meta name="theme-color" content="#3063A0" />
         <!-- End FAVICONS -->
-        <script src="../../assets/vendor/pace/pace.min.js"></script>
+        <script src="../../assets/vendor/pace/pace.min.js"></script>f
         <!-- BEGIN BASE STYLES -->
         <link rel="stylesheet" href="../../assets/vendor/pace/pace.min.css" />
         <link rel="stylesheet" href="../../assets/vendor/bootstrap/css/bootstrap.min.css" />
@@ -392,7 +392,7 @@
                                                                             <button ng-show="!row.editable"  type="button" title="Editar" class="btn btn-sm btn-info" ng-click="editTransaccion(row)"><i class="fa fa-pencil"></i></button>
                                                                         </c:if>
 
-                                                                        <c:if test="#{ingresoCaja.formulario.eliminar== ingresoCaja.formulario.PERMITIR}">
+                                                                        <c:if test="#{ingresoCaja.formulario.anular== ingresoCaja.formulario.PERMITIR}">
                                                                             <button type="button" title="Anular" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#frmAnular" ng-show="row.estado !== EMITIDO"
                                                                                     ng-click="modalAnular(row.idTransaccion, 'la Transaccion', TRANSACCION, row)"><i class="fa fa-trash"></i></button>
                                                                         </c:if>
@@ -429,10 +429,10 @@
                                                     <c:if test="#{ingresoCaja.formulario.crear== ingresoCaja.formulario.PERMITIR}">
                                                         <button  type="button" class="btn btn-warning" ng-click="pendiente()" ><span class="fa fa-clock"></span> Pendiente</button>
                                                     </c:if>
-                                                    <c:if test="#{ingresoCaja.formulario.eliminar== ingresoCaja.formulario.PERMITIR}">
+                                                    <c:if test="#{ingresoCaja.formulario.anular== ingresoCaja.formulario.PERMITIR}">
                                                         <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#frmAnular" ng-click="modalAnular(formData.idIngresoCaja, 'el Ingreso a Caja', INGRESO, formData)" value="Anular" > <span class="fa fa-trash"></span> Anular</button>
                                                     </c:if>
-                                                    <c:if test="#{ingresoCaja.formulario.acceder== ingresoCaja.formulario.PERMITIR}">
+                                                    <c:if test="#{ingresoCaja.formulario.crear== ingresoCaja.formulario.PERMITIR}">
                                                         <button type="button" class="btn btn-dark" ng-click="imprimir()" value="Imprimir" > <span class="fa fa-print"></span> Imprimir</button>
                                                     </c:if>
                                                 </div>

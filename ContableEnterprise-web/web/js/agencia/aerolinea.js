@@ -161,6 +161,7 @@ angular.module('jsAerolinea.controllers', []).controller('frmAerolinea',
 
                 $scope.save = function () {
                     if (!$scope.myForm.$valid) {
+                        console.log($scope.myForm);
                         $scope.showAlert('Error de Verificacion', 'Verifique los mensajes de los valores requeridos')
                         return;
                     }
@@ -285,10 +286,12 @@ angular.module('jsAerolinea.controllers', []).controller('frmAerolinea',
 
                 $scope.update = function () {
                     if (!$scope.myForm.$valid) {
+                        console.log($scope.myForm);
                         $scope.showAlert('Error de Verificacion', 'Verifique los mensajes de los valores requeridos');
                         return;
                     }
                     if ($scope.formHasError()) {
+                        console.log($scope.formData);
                         $scope.showAlert('Error de Verificacion', 'Verifique los mensajes de los valores requeridos');
                         return;
                     }

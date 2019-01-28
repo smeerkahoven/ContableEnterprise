@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="05708238-32c6-4b2d-94c3-a78b24b631fb">
-	<property name="ireport.zoom" value="2.5937424601000028"/>
+	<property name="ireport.zoom" value="3.0"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.y" value="144"/>
 	<parameter name="ID_INGRESO" class="java.lang.String">
 		<defaultValueExpression><![CDATA[6]]></defaultValueExpression>
 	</parameter>
@@ -12,13 +12,12 @@ ic.id_ingreso_caja,
 ic.id_usuario,
 ic.id_empresa, em.tipo,
 ic.id_cliente, upper(cl.nombre) cliente, cl.telefono_fijo,
-ic.id_counter, concat( upper(pr.nombre),' ', upper(pr.apellido)) counter,
 date_format(ic.fecha_emision,'%d/%m/%y')fecha_emision,
 ic.fecha_insert, 
 ic.factor_cambiario,
-ic.monto_abonado_bs,
+coalesce(ic.monto_abonado_bs,0)monto_abonado_bs,
 number_to_string(ic.monto_abonado_bs) literal_bs, round(abs(mod(ic.monto_abonado_bs,1)*100)) decimal_part_bs,
-ic.monto_abonado_usd,
+coalesce(ic.monto_abonado_usd,0)monto_abonado_usd,
 number_to_string (ic.monto_abonado_usd)literal_usd, round(abs(mod(ic.monto_abonado_usd,1)*100)) decimal_part_usd,
 case ic.forma_pago 	
 	when 'E' then 'CONTADO EFECTIVO' 
@@ -39,16 +38,17 @@ case ic.forma_pago
 			coalesce(case ic.combinado_tarjeta when '1' then concat(' TARJETA CREDITO/DEBITO con Numero de Tarjeta: ', ic.nro_tarjeta ) end, '')
 		)*/
 	end forma_pago_literal,
-    tr.id_ingreso_caja, tr.descripcion, tr.monto_bs monto_bs_tr, tr.monto_usd monto_usd_tr
+    tr.id_ingreso_caja, tr.descripcion,
+    coalesce(tr.monto_bs,0) monto_bs_tr, 
+    coalesce(tr.monto_usd,0) monto_usd_tr
 from cnt_ingreso_caja ic
 inner join tb_empresa em on em.id_empresa = ic.id_empresa
 inner join cnt_cliente cl on cl.id_cliente = ic.id_cliente
-inner join cnt_promotor pr on pr.id_promotor = ic.id_counter
 inner join cnt_ingreso_transaccion tr on tr.id_ingreso_caja = ic.id_ingreso_caja
 left join cnt_bancos ba on ba.id_banco = ic.id_banco
 left join cnt_plan_cuentas pc on pc.id_plan_cuentas = ic.id_cuenta_deposito
 left join cnt_tarjetas_credito tc on tc.id_tarjeta_credito = ic.id_tarjeta_credito
-WHERE ic.id_ingreso_caja=$P{ID_INGRESO}]]>
+WHERE ic.id_ingreso_caja=$P{ID_INGRESO} and tr.estado in ('E','D','M')]]>
 	</queryString>
 	<field name="id_ingreso_caja" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -70,10 +70,6 @@ sucursal]]></fieldDescription>
 	<field name="telefono_fijo" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="id_counter" class="java.lang.Integer">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="counter" class="java.lang.String"/>
 	<field name="fecha_emision" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
@@ -130,18 +126,9 @@ sucursal]]></fieldDescription>
 				<textElement textAlignment="Right"/>
 				<text><![CDATA[Señores:]]></text>
 			</staticText>
-			<staticText>
-				<reportElement x="10" y="16" width="77" height="14" uuid="a85539fa-f2ca-4021-b73c-6ad3e7e89532"/>
-				<textElement textAlignment="Right"/>
-				<text><![CDATA[Counter:]]></text>
-			</staticText>
 			<textField>
 				<reportElement x="453" y="1" width="100" height="14" uuid="0a5f2962-fe77-45a2-9edc-3e9ce5e12258"/>
 				<textFieldExpression><![CDATA[$F{factor_cambiario}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement x="87" y="16" width="286" height="14" uuid="0b8ea35e-6838-49ec-ac9f-4b6de3e090d2"/>
-				<textFieldExpression><![CDATA[$F{counter}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="453" y="16" width="100" height="14" uuid="a9d48ee5-0099-44bc-8274-1bd1eea5a0dd"/>
@@ -189,12 +176,12 @@ sucursal]]></fieldDescription>
 				<reportElement x="10" y="0" width="342" height="14" uuid="36e191bc-a6a8-49df-9aa2-efa6f75bbf99"/>
 				<textFieldExpression><![CDATA[$F{descripcion}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
 				<reportElement x="353" y="0" width="100" height="14" uuid="335d3751-78ee-4576-b673-2bc65539e8df"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[$F{monto_bs_tr}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
 				<reportElement x="455" y="0" width="100" height="14" uuid="b92f8830-1c43-4b73-b1c9-e44e8b399e07"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[$F{monto_usd_tr}]]></textFieldExpression>
@@ -219,14 +206,14 @@ sucursal]]></fieldDescription>
 				</textElement>
 				<text><![CDATA[TOTAL]]></text>
 			</staticText>
-			<textField isBlankWhenNull="true">
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
 				<reportElement x="353" y="7" width="100" height="14" uuid="7a01dcb6-ec36-4051-a7a7-28e9b3e309a3"/>
 				<textElement textAlignment="Right">
 					<font fontName="SansSerif" isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{monto_abonado_bs}]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="true">
+			<textField pattern="#,##0.00" isBlankWhenNull="false">
 				<reportElement x="455" y="7" width="100" height="14" uuid="9e4e95d1-c2a4-40d8-a922-d62d34cb0dce"/>
 				<textElement textAlignment="Right">
 					<font fontName="SansSerif" isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>

@@ -11,13 +11,14 @@ import com.view.menu.Formulario;
 import javax.annotation.PostConstruct;
 import javax.inject.Named;
 import javax.enterprise.context.Dependent;
+import javax.enterprise.context.RequestScoped;
 
 /**
  *
  * @author xeio
  */
 @Named(value = "ingresoCaja")
-@Dependent
+@RequestScoped
 public class IngresoCajaManagedBean extends ViewManagedBean {
 
     /**

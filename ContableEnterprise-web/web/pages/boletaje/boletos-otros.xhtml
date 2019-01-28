@@ -140,6 +140,15 @@
                                                 </div>
                                             </div>
 
+                                            <div class="form-group row">
+                                                <label class="col-form-label col-sm-2 text-right" for="flatpickr-wrap">Nombre de Pasajero</label>
+                                                <div class="col-sm-3">
+
+                                                    <input id="txtSearchPasajero" ng-model="search.nombrePasajero" class="form-control"  />
+                                                </div>
+
+                                            </div>
+
 
                                             <div class="form-group row">
                                                 <label class="col-form-label col-sm-2 text-right" for="flatpickr-wrap">Fecha Inicio</label>
@@ -198,8 +207,9 @@
                                                             <th>Nro. Nota Debito</th>
                                                             <th>Cliente</th>
                                                             <th>Counter</th>
+                                                            <th>Forma de Pago</th>
                                                             <th>Fecha Emision</th>
-                                                            <th>Fecha Creaci&oacute;n</th>
+                                                            <th>Fecha Vencimiento</th>
                                                             <th>Monto Total Bs.</th>
                                                             <th>Monto Total Usd.</th>
                                                             <th>Estado</th>
@@ -208,12 +218,13 @@
                                                     <tbody>
                                                         <tr st-select-row="row" st-select-mode="multiple" ng-repeat="row in display_records" class="boleto-estado-{{row.estado}}">
                                                             <td>{{row.idNotaDebito}} </td>
-                                                            <td>{{row.idCliente.nombre}} </td>
-                                                            <td>{{row.idCounter.nombre}} {{row.idCounter.apellido}} </td>
+                                                            <td>{{row.idCliente.name}} </td>
+                                                            <td>{{row.idPromotor.name}} </td>
+                                                            <td>{{row.formaPago|printFormaPago}}  </td>
                                                             <td>{{row.fechaEmision}} </td>
-                                                            <td>{{row.fechaInsert}} </td>
+                                                            <td>{{row.creditoVencimiento}} </td>
                                                             <td align="right">{{row.montoTotalBs|printNumber}} </td>
-                                                            <td align="">{{row.montoTotalUsd|printNumber}} </td>
+                                                            <td align="right">{{row.montoTotalUsd|printNumber}} </td>
                                                             <td>{{row.estado| printEstado }} </td>
                                                             <td>
                                                                 <div class="btn-group" >
@@ -221,7 +232,7 @@
                                                                         <button type="button" title="Editar" class="btn btn-sm btn-info" ng-click="edit(row)" ><i class="fa fa-pencil"></i></button>
                                                                     </c:if>
 
-                                                                    <c:if test="#{boletajeOtros.formulario.eliminar== boletajeOtros.formulario.PERMITIR}">
+                                                                    <c:if test="#{boletajeOtros.formulario.anular== boletajeOtros.formulario.PERMITIR}">
                                                                         <button type="button" title="Anular" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#frmAnular" ng-click="modalAnular(row.idNotaDebito, 'la Nota Debito', NOTA_DEBITO, row)"><i class="fa fa-trash"></i></button>
                                                                     </c:if>
                                                                     <!--<button type="button" title="Ver" class="btn btn-default" ng-click="ver(row.idEmpleado)" data-toggle="modal" data-target="#verForm"><i class="fa fa-search"></i></button>-->
@@ -269,7 +280,6 @@
                                                     <!--<input type="hidden" id="txtFechaAlta" name="txtFechaAlta" ng-model="formData.fechaAlta"/>-->
                                                     <!--<input type="hidden" id="txtFechaBaja" name="txtFechaBaja" ng-model="formData.fechaBaja"/>-->
                                                     <br />
-
                                                     <script  type="text/ng-template" id="customTemplate.html">
                                                         <a><div >
                                                         <span class=" tt-suggestion"  ng-bind-html="match.label | uibTypeaheadHighlight:query"></span>
@@ -282,7 +292,6 @@
                                                         <div class="col-sm-4">
                                                             <label for="txtIdLibro" class="col-form-label"  ><strong><h4>{{formData.idNotaDebito}}</h4></strong></label>
                                                         </div>
-
                                                         <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Estado</label>
                                                         <div class="col-sm-4">
                                                             <label for="txtIdLibro" class="col-form-label"  ><strong><h4>{{formData.estado|printEstado}}</h4></strong></label>
@@ -297,7 +306,7 @@
                                                             <input type="text" ng-model="formData.idCliente" placeholder="Seleccione un Cliente"
                                                                    uib-typeahead="cuenta as cuenta.name for cuenta in comboCliente | filter:{name:$viewValue}"
                                                                    class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="1" 
-                                                                   typeahead-template-url="customTemplate.html"  typeahead-focus-first="true"
+                                                                   typeahead-template-url="customTemplate.html" ng-disabled="formData.transacciones.length > 0"  typeahead-focus-first="true"
                                                                    />
                                                             <span class="alert-danger"  ng-show="formData.idCliente.id === undefined"  >
                                                                 Ingrese un Cliente V&aacute;lido.
@@ -314,7 +323,7 @@
                                                     <div class="form-group row">
                                                         <label for="txtFactor" class=" col-form-label col-sm-2 text-right">Factor USD</label>
                                                         <div class="col-sm-4">
-                                                            <input type="number" class="form-control col-sm" name="txtFactor" placeholder="0.00 BOB" 
+                                                            <input type="number" class="form-control col-sm input-number" name="txtFactor" placeholder="0.00 BOB" 
                                                                    ng-pattern="/^(10|\d)(\.\d{1,2})?$/" step="0.01" min="{{formData.factorMin}}" max="{{formData.factorMax}}"
                                                                    ng-model="formData.factorCambiario"  data-toggle="tooltip" 
                                                                    data-placement="top"  />
@@ -332,7 +341,7 @@
                                                             <input type="text" ng-model="formData.idPromotor" placeholder="Seleccione un Counter"
                                                                    uib-typeahead="cuenta as cuenta.name for cuenta in comboCounter | filter:{name:$viewValue}"
                                                                    class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="1" 
-                                                                   typeahead-template-url="customTemplate.html" />
+                                                                   typeahead-template-url="customTemplate.html" ng-disabled="formData.transacciones.length > 0" />
                                                             <span class="alert-danger"  ng-show="formData.idPromotor.id === undefined"  >
                                                                 Ingrese un Counter V&aacute;lido.
                                                             </span> 
@@ -348,14 +357,14 @@
                                                     <div class="form-group row">
                                                         <label class="col-form-label col-sm-2 text-right" for="flatpickr-wrap">Fecha de Emisi&oacute;n</label>
                                                         <div class="col-sm-4 input-group input-group-alt flatpickr" id="flatpickr9">
-                                                            <input id="txtFechaEmision" name="txtFechaEmision" type="text" 
+                                                            <input id="txtFechaEmision" readonly="" name="txtFechaEmision" type="text" 
                                                                    class="form-control flatpick-input" data-input="" 
                                                                    ng-model="formData.fechaEmision" required=""/>
                                                             <div class="input-group-append">
-                                                                <button type="button" class="btn btn-secondary" data-toggle="">
+                                                                <button type="button" disabled="true" class="btn btn-secondary" data-toggle="">
                                                                     <i class="far fa-calendar"></i>
                                                                 </button>
-                                                                <button type="button" class="btn btn-secondary" data-clear="">
+                                                                <button type="button"  disabled="true" class="btn btn-secondary" data-clear="">
                                                                     <i class="fa fa-times"></i>
                                                                 </button>
                                                             </div>
@@ -420,23 +429,27 @@
                                                                     <th>Estado</th>
                                                                     <th>Monto Bs</th>
                                                                     <th>Monto Usd</th>
+                                                                    <th>Monto Adeudado Bs</th>
+                                                                    <th>Monto Adeudado Usd</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
                                                                 <tr class="boleto-estado-{{row.estado}}" st-select-row="row" st-select-mode="multiple" ng-repeat="row in transacciones"  >
                                                                     <td>{{row.idNotaDebitoTransaccion}}</td>
-                                                                    <td>{{row.descripcion| limitTo:35}}{{ row.descripcion.length > 35 ?'...':''}}</td>
+                                                                    <td>{{row.descripcion| limitTo:64}}{{ row.descripcion.length > 64 ?'...':''}}</td>
                                                                     <td>{{row.moneda|printMoneda}}</td>
                                                                     <td>{{row.tipo|printTipo}}</td>
                                                                     <td>{{row.estado|printEstado}}</td>
                                                                     <td align="right">{{row.montoBs|printNumber}}</td>
                                                                     <td align="right">{{row.montoUsd|printNumber}}</td>
+                                                                    <td align="right">{{row.montoAdeudadoBs|printNumber}}</td>
+                                                                    <td align="right">{{row.montoAdeudadoUsd|printNumber}}</td>
                                                                     <td>
                                                                         <div class="btn-group" >
                                                                             <c:if test="${boletajeOtros.formulario.crear== boletajeOtros.formulario.PERMITIR }">
                                                                                 <button ng-show="!row.editable" ng-disabled="disableEditarTransaccion" type="button" title="Editar" class="btn btn-sm btn-info" ng-click="editTransaccion(row)"><i class="fa fa-pencil"></i></button>
                                                                             </c:if>
-                                                                            <c:if test="#{boletajeOtros.formulario.eliminar== boletajeOtros.formulario.PERMITIR}">
+                                                                            <c:if test="#{boletajeOtros.formulario.anular== boletajeOtros.formulario.PERMITIR}">
                                                                                 <button type="button" title="Anular" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#frmAnular" ng-click="modalAnular(row.idNotaDebitoTransaccion, 'la Transaccion', TRANSACCION, row)"><i class="fa fa-trash"></i></button>
                                                                             </c:if>
                                                                             <!--<button type="button" title="Ver" class="btn btn-default" ng-click="ver(row.idEmpleado)" data-toggle="modal" data-target="#verForm"><i class="fa fa-search"></i></button>-->
@@ -450,12 +463,17 @@
                                                                     <td align="right"><strong>{{formData.montoTotalBs|printNumber}}</strong></td>
                                                                     <td align="right"><strong>{{formData.montoTotalUsd|printNumber}}</strong></td>
                                                                     <td ></td>
+                                                                    <td ></td>
+                                                                    <td ></td>
                                                                 </tr>
                                                                 <tr class="table-danger">
                                                                     <td colspan="5"><strong>MONTO ADEUDADO</strong></td>
+                                                                    <td ></td>
+                                                                    <td ></td>
                                                                     <td align="right"><strong>{{formData.montoAdeudadoBs|printNumber}}</strong></td>
                                                                     <td align="right"><strong>{{formData.montoAdeudadoUsd|printNumber}}</strong></td>
                                                                     <td ></td>
+
                                                                 </tr>
                                                             </tfoot>
                                                         </table>
@@ -475,10 +493,10 @@
                                                         <c:if test="#{boletajeOtros.formulario.crear== boletajeOtros.formulario.PERMITIR}">
                                                             <button  type="button" class="btn btn-warning" ng-click="pendiente()" ><span class="fa fa-clock"></span> Pendiente</button>
                                                         </c:if>
-                                                        <c:if test="#{boletajeOtros.formulario.eliminar== boletajeOtros.formulario.PERMITIR}">
+                                                        <c:if test="#{boletajeOtros.formulario.anular== boletajeOtros.formulario.PERMITIR}">
                                                             <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#frmAnular" ng-click="modalAnular(formData.idNotaDebito, 'la Nota Debito', NOTA_DEBITO, formData)" value="Anular" > <span class="fa fa-trash"></span> Anular</button>
                                                         </c:if>
-                                                        <c:if test="#{boletos.formulario.acceder== boletos.formulario.PERMITIR}">
+                                                        <c:if test="#{boletos.formulario.crear== boletos.formulario.PERMITIR}">
                                                             <div class="btn-group" role="group">
                                                                 <button class="btn btn-dark dropdown-toggle" type="button" id="dropDownImprimir" 
                                                                         data-toggle="dropdown" aria-haspopup="true"  aria-expanded="true">
@@ -507,7 +525,7 @@
 
                             <!-- Modal Imprimir -->
                             <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="frmImprimir">
-                                <div class="modal-dialog modal-lg modal-dialog-centered">
+                                <div class="modal-dialog modal-md modal-dialog-centered">
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <h4 class="modal-title" id="myModalLabel">Mensaje</h4>
@@ -515,14 +533,13 @@
                                         </div>
                                         <div class="modal-body"> 
                                             <dl class="dl-horizontal">
-                                                <span class="alert alert-success fa fa-icon fa-check-circle"></span> {{mensajeImprimir}}. Si desea puede imprimir las siguiente opciones:
+                                                <span class="alert alert-success fa fa-icon fa-check-circle"></span>Si desea puede imprimir las siguiente opciones:
                                             </dl>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary"  value="Imprimir Nota de Debito" ng-click="imprimir(NOTA_DEBITO)" ><span class="fa fa-print"></span> Nota de Debito</button>
-                                            <button type="button" class="btn btn-secondary"  value="Imprimir Ingreso de Caja" ng-click="imprimir(COMPROBANTE_INGRESO)"  ><span class="fa fa-print"></span> Ingreso a Caja</button>
-                                            <button type="button" class="btn btn-secondary"  value="Imprimir Asiento Diario" ng-click="imprimir(COMPROBANTE_CONTABLE)"  ><span class="fa fa-print"></span> Comprobante Contable</button>
-                                            <button type="button" class="btn btn-light" id="modal-btn-no"  data-dismiss="modal">Cancelar</button>
+                                            <button type="button" class="btn btn-secondary"  value="Imprimir Nota de Debito" ng-click="imprimir(NOTA_DEBITO)" ><span class="fa fa-print"></span>Nota de Debito</button>
+                                            <button type="button" class="btn btn-secondary"  value="Imprimir Ingreso de Caja" ng-click="imprimir(COMPROBANTE_INGRESO)"  ><span class="fa fa-print"></span>Ingreso a Caja</button>
+                                            <button type="button" class="btn btn-secondary"  value="Imprimir Asiento Diario" ng-click="imprimir(COMPROBANTE_CONTABLE)"  ><span class="fa fa-print"></span>Comprobante Contable</button>
                                         </div>
                                     </div>
                                 </div>
@@ -663,9 +680,10 @@
                                                         <td>{{row.nombrePasajero}}</td>
                                                         <td>{{row.tipoBoleto|printTipoBoleto}}</td>
                                                         <td align="center">{{row.moneda|printMoneda}}</td>
-                                                        <td align="right">{{row.moneda === MONEDA_EXTRANJERA ?row.totalBoletoUsd:row.totalBoletoBs}}</td>
+                                                        <td align="right">{{row.moneda === MONEDA_EXTRANJERA ? (row.totalBoletoUsd | printNumber) : (row.totalBoletoBs | printNumber)}}</td>
                                                         <td>
                                                             <input ng-model="row.selected" type="checkbox"/>
+                                                            
                                                         </td>
                                                         <td></td>
                                                     </tr>
@@ -687,7 +705,6 @@
                                 </div>
                             </div>
                             <!-- ./Modal Amadeus-->
-
 
                             <!-- ./Modal Void-->
                             <form id="myFormVoid" name="myFormVoid">
@@ -746,12 +763,12 @@
                                                             <div class="form-inline">
                                                                 <div class="custom-control custom-control-inline custom-radio">
                                                                     <input type="radio" class="custom-control-input" id="rdInternacional" name="rdTipoCupon"
-                                                                           ng-model="boleto.tipoCupon" value="I"  />
+                                                                           ng-model="boleto.tipoCupon" value="I" ng-click="changeTipoCupon()" />
                                                                     <label class="custom-control-label" for="rdInternacional">Internacional</label>
                                                                 </div>
                                                                 <div class="custom-control custom-control-inline custom-radio">
                                                                     <input type="radio" class="custom-control-input" id="rdNacional" name="rdTipoCupon"
-                                                                           ng-model="boleto.tipoCupon" value="N"  />
+                                                                           ng-model="boleto.tipoCupon" value="N" ng-click="changeTipoCupon()" />
                                                                     <label class="custom-control-label" for="rdNacional" >Nacional</label>
                                                                 </div>
                                                             </div>
@@ -909,7 +926,7 @@
                                                         </div>
                                                         <label for="txtNombre" class=" col-form-label text-right">Monto</label>
                                                         <div class="col-sm-2">
-                                                            <input type="number" class="form-control" name="txtImporteTotal" placeholder="0.00" 
+                                                            <input type="number" class="form-control input-number" name="txtImporteTotal" placeholder="0.00" 
                                                                    ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01" min="0" 
                                                                    ng-model="cargos.comisionMayorista" 
                                                                    data-toggle="tooltip" data-placement="top"  />
@@ -930,7 +947,7 @@
                                                         </div>
                                                         <label for="txtNombre" class=" col-form-label text-right">Monto</label>
                                                         <div class="col-sm-2">
-                                                            <input type="number" class="form-control" name="txtComisionAgencia" placeholder="0.00" 
+                                                            <input type="number" class="form-control input-number" name="txtComisionAgencia" placeholder="0.00" 
                                                                    ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01" min="0" 
                                                                    ng-model="cargos.comisionAgencia"
                                                                    data-toggle="tooltip" data-placement="top"  />
@@ -952,7 +969,7 @@
                                                         </div>
                                                         <label for="txtNombre" class=" col-form-label text-right">Monto</label>
                                                         <div class="col-sm-2">
-                                                            <input type="number" class="form-control" name="txtComisionPromotor" placeholder="0.00" 
+                                                            <input type="number" class="form-control input-number" name="txtComisionPromotor" placeholder="0.00" 
                                                                    ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01" min="0" 
                                                                    ng-model="cargos.comisionPromotor" 
                                                                    data-toggle="tooltip" data-placement="top"  />
@@ -1197,12 +1214,12 @@
                                                             <label class="col-form-label col-sm-3 text-right" for="flatpickr-wrap">Fecha de Emisi&oacute;n</label>
                                                             <div class="col-sm-7">
                                                                 <div class="input-group input-group-alt flatpickr" id="flatpickr10">
-                                                                    <input id="txtFechaEmision" name="txtFechaEmision" type="text" 
+                                                                    <input id="txtFechaEmision" readonly="" name="txtFechaEmision" type="text" 
                                                                            class="form-control flatpick-input" data-input="" 
                                                                            ng-model="boleto.fechaEmision" required=""/>
                                                                     <div class="input-group-append">
-                                                                        <button type="button" class="btn btn-secondary" data-toggle=""><i class="far fa-calendar"></i></button>
-                                                                        <button type="button" class="btn btn-secondary" data-clear=""><i class="fa fa-times"></i></button>
+                                                                        <button type="button" disabled="true" class="btn btn-secondary" data-toggle=""><i class="far fa-calendar"></i></button>
+                                                                        <button type="button" disabled="true" class="btn btn-secondary" data-clear=""><i class="fa fa-times"></i></button>
                                                                     </div>
                                                                 </div>
                                                                 <span class="alert-danger"  ng-show="!myFormBoleto.txtFechaEmision.$valid">Ingrese una fecha V&aacute;lida.</span> 
@@ -1256,11 +1273,8 @@
                                                 </fieldset>
                                                 <!-- Datos Cabecera -->
                                                 <hr />
-
                                                 <div ng-include="'../boletaje/montos_automaticos.html'" ng-if="showFrmBoletoAutomaticos" ng-show="boleto.idAerolinea.id"></div>
-
                                                 <div ng-include="'../boletaje/montos_ver.html'" ng-if="showFrmBoletoVer" ng-show="boleto.idAerolinea.id"></div>
-
                                                 <div ng-include="'../boletaje/montos_manual.html'" ng-if="showFrmBoletoManual" ng-show="boleto.idAerolinea.id"></div>
 
                                             </div>
@@ -1302,8 +1316,8 @@
                             <!-- /Modal Background -->
 
                             <!-- Modal Eliminar -->
-                            <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="frmConfirmation">
-                                <div class="modal-dialog modal-md">
+                            <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="frmEliminar">
+                                <div class="modal-dialog modal-md modal-dialog-centered">
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <h4 class="modal-title" id="myModalLabel">Confirmar</h4>
@@ -1311,11 +1325,11 @@
                                         </div>
                                         <div class="modal-body"> 
                                             <dl class="dl-horizontal">
-                                                Desea elimnar el registro <strong> {{nombreEliminar}}</strong>  ?
+                                                Desea eliminar  {{itemEliminar.title}} con ID <strong> {{itemEliminar.id}}</strong>  ?
                                             </dl>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-default" id="modal-btn-si" ng-click="eliminar()"  data-dismiss="modal">Si</button>
+                                            <button type="button" class="btn btn-default" id="modal-btn-si" ng-click="eliminarBoleto()"  data-dismiss="modal">Si</button>
                                             <button type="button" class="btn btn-primary" id="modal-btn-no"  data-dismiss="modal">No</button>
                                         </div>
                                     </div>

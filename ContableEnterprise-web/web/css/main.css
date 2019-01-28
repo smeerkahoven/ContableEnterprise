@@ -81,3 +81,7 @@ list-on-top {
 .bg-adeudado {
         background-color:#ffbb99;   
 }
+
+.input-number{
+    text-align: right
+}

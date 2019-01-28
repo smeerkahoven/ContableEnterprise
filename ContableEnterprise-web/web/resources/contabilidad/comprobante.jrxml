@@ -1,45 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="612" pageHeight="792" columnWidth="577" leftMargin="5" rightMargin="30" topMargin="5" bottomMargin="20" uuid="c6d5ac85-d154-42b4-b451-dcd03b103eae">
-	<property name="ireport.zoom" value="1.6105100000000014"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+	<property name="ireport.zoom" value="6.115909044841468"/>
+	<property name="ireport.x" value="1127"/>
+	<property name="ireport.y" value="298"/>
 	<parameter name="ID_LIBRO" class="java.lang.Integer">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
 	</parameter>
 	<queryString>
 		<![CDATA[select cc.id_numero_gestion, cc.gestion, date_format(cc.fecha,'%d/%m/%y')fecha,
-cc.nombre, cc.concepto, cc.factor_cambiario, 
-case tipo 	when  'AD' then 'Asiento Diario'   
-			when  'AJ' then 'Asiento de Ajuste' 
+ cc.concepto, cc.factor_cambiario,  cl.nombre,
+case cc.tipo 	when  'AD' then 'Asiento Diario'   
+	  when  'AJ' then 'Asiento de Ajuste' 
             when  'CI' then 'Comprobante de Ingreso' 
             when  'CE' then 'Comprobante de Egreso' 
-            when  'CT' then 'Comprobante de Traspaso' end tipo ,
-cc.totalDebeNac, cc.totalDebeExt, cc.totalHaberExt, cc.totalHaberNac,
-number_to_string(cc.totalDebeNac) as literal,
-ac.gestion, ac.fecha_movimiento,
-ac.monto_debe_nac, ac.monto_debe_ext, 
-ac.monto_haber_nac, ac.monto_haber_ext,
-pc.nro_plan_cuenta, pc.cuenta,
- round(abs(mod(totalDebeNac,1)*100)) decimal_part,
-case tipo 	when  'AD' then 'Contabilidad'   
-			when  'AJ' then 'Contabilidad' 
-            when  'CI' then 'Contabilidad' 
-            when  'CE' then 'Caja' 
-            when  'CT' then 'Contabilidad' end firma1 ,
-case tipo 	when  'AD' then 'Cliente'   
-			when  'AJ' then 'Administracion' 
-            when  'CI' then 'Cliente' 
-            when  'CE' then 'Administracion' 
-            when  'CT' then 'Administracion' end  firma2 ,
-case tipo 	when  'CE' then 'Cliente' else '' end firma3,
+            when  'CT' then 'Comprobante de Traspaso' end tipo 
+, coalesce(cc.total_debe_nac,0)total_debe_nac
+, coalesce(cc.total_debe_ext,0)total_debe_ext
+, coalesce(cc.total_haber_ext,0)total_haber_ext
+, coalesce(cc.total_haber_nac,0)total_haber_nac
+, number_to_string(cc.total_debe_nac) as literal
+, number_to_string(cc.total_debe_ext) as literal_usd
+, case ac.moneda when 'B' then 'BOB' when 'U' then 'USD' end moneda_trx
+, ac.gestion
+, ac.fecha_movimiento
+, coalesce(ac.monto_debe_nac,0)monto_debe_nac
+, coalesce(ac.monto_debe_ext,0)monto_debe_ext
+, coalesce(ac.monto_haber_nac,0)monto_haber_nac
+, coalesce(ac.monto_haber_ext,0)monto_haber_ext
+, pc.nro_plan_cuenta
+, pc.cuenta
+, round(abs(mod(total_debe_nac,1)*100)) decimal_part
+, round(abs(mod(total_debe_ext,1)*100)) decimal_part_usd
+, case cc.tipo 	when  'AD' then 'Contabilidad'   
+	when  'AJ' then 'Contabilidad' 
+           when  'CI' then 'Contabilidad' 
+           when  'CE' then 'Caja' 
+           when  'CT' then 'Contabilidad' end firma1 ,
+case cc.tipo 	when  'AD' then 'Cliente'   
+	when  'AJ' then 'Administracion' 
+           when  'CI' then 'Cliente' 
+           when  'CE' then 'Administracion' 
+           when  'CT' then 'Administracion' end  firma2 ,
+case cc.tipo 	when  'CE' then 'Cliente' else '' end firma3,
 concat(emp.nombre, ' ' , emp.apellido)usuario_completo,cc.id_usuario_creador,
 cc.fecha_insert
  from cnt_comprobante_contable  cc
  inner join cnt_asiento_contable ac on ac.id_libro = cc.id_libro
  inner join cnt_plan_cuentas pc on pc.id_plan_cuentas = ac.id_plan_cuenta
+ inner join cnt_cliente cl on cl.id_cliente = cc.id_cliente
  inner join tb_user u on u.user_name = cc.id_usuario_creador
  inner join tb_empleado emp on emp.id_empleado = u.id_empleado
-where cc.id_libro=$P{ID_LIBRO} order by nro_plan_cuenta asc]]>
+where cc.id_libro=$P{ID_LIBRO} order by id_asiento, nro_plan_cuenta asc]]>
 	</queryString>
 	<field name="id_numero_gestion" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -50,31 +61,33 @@ where cc.id_libro=$P{ID_LIBRO} order by nro_plan_cuenta asc]]>
 	<field name="fecha" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="nombre" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
 	<field name="concepto" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="factor_cambiario" class="java.math.BigDecimal">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
+	<field name="nombre" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<field name="tipo" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="totalDebeNac" class="java.math.BigDecimal">
+	<field name="total_debe_nac" class="java.math.BigDecimal">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="totalDebeExt" class="java.math.BigDecimal">
+	<field name="total_debe_ext" class="java.math.BigDecimal">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="totalHaberExt" class="java.math.BigDecimal">
+	<field name="total_haber_ext" class="java.math.BigDecimal">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="totalHaberNac" class="java.math.BigDecimal">
+	<field name="total_haber_nac" class="java.math.BigDecimal">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="literal" class="java.lang.String"/>
+	<field name="literal_usd" class="java.lang.String"/>
+	<field name="moneda_trx" class="java.lang.String"/>
 	<field name="fecha_movimiento" class="java.sql.Date">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
@@ -97,6 +110,7 @@ where cc.id_libro=$P{ID_LIBRO} order by nro_plan_cuenta asc]]>
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="decimal_part" class="java.math.BigDecimal"/>
+	<field name="decimal_part_usd" class="java.math.BigDecimal"/>
 	<field name="firma1" class="java.lang.String"/>
 	<field name="firma2" class="java.lang.String"/>
 	<field name="firma3" class="java.lang.String"/>
@@ -176,28 +190,28 @@ where cc.id_libro=$P{ID_LIBRO} order by nro_plan_cuenta asc]]>
 				<text><![CDATA[Bolivianos]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="277" y="81" width="69" height="14" uuid="7c3a83d3-717d-4bc1-9ec9-d8b66c04f926"/>
+				<reportElement x="321" y="81" width="60" height="14" uuid="7c3a83d3-717d-4bc1-9ec9-d8b66c04f926"/>
 				<textElement textAlignment="Right">
 					<font size="11"/>
 				</textElement>
 				<text><![CDATA[DEBE]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="346" y="81" width="69" height="14" uuid="1d77fb8d-da00-4fc0-9991-696e598c58a8"/>
+				<reportElement x="381" y="81" width="60" height="14" uuid="1d77fb8d-da00-4fc0-9991-696e598c58a8"/>
 				<textElement textAlignment="Right">
 					<font size="11"/>
 				</textElement>
 				<text><![CDATA[HABER]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="425" y="81" width="69" height="14" uuid="d5ca1bbd-0e24-40ee-ac8a-7fee7574df5f"/>
+				<reportElement x="441" y="81" width="60" height="14" uuid="d5ca1bbd-0e24-40ee-ac8a-7fee7574df5f"/>
 				<textElement textAlignment="Right">
 					<font size="11"/>
 				</textElement>
 				<text><![CDATA[DEBE]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="1" y="81" width="267" height="14" uuid="4445ffa0-b853-4ac3-9181-f52967b946cd"/>
+				<reportElement x="1" y="81" width="275" height="14" uuid="4445ffa0-b853-4ac3-9181-f52967b946cd"/>
 				<textElement>
 					<font size="11"/>
 				</textElement>
@@ -211,7 +225,7 @@ where cc.id_libro=$P{ID_LIBRO} order by nro_plan_cuenta asc]]>
 				<text><![CDATA[Dolares]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="494" y="81" width="69" height="14" uuid="69e09b42-4a16-40d6-9699-7fbce044da95"/>
+				<reportElement x="501" y="81" width="60" height="14" uuid="69e09b42-4a16-40d6-9699-7fbce044da95"/>
 				<textElement textAlignment="Right">
 					<font size="11"/>
 				</textElement>
@@ -229,33 +243,45 @@ where cc.id_libro=$P{ID_LIBRO} order by nro_plan_cuenta asc]]>
 				<reportElement x="466" y="17" width="85" height="14" uuid="77f82a8f-d4ba-4edf-be63-73edbe9e3d8c"/>
 				<textFieldExpression><![CDATA[$F{fecha}]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement x="277" y="81" width="44" height="14" uuid="502237d9-551f-4235-8d3b-f81d052e7174"/>
+				<textElement textAlignment="Center">
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[MON.]]></text>
+			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
 		<band height="20" splitType="Stretch">
-			<textField>
-				<reportElement x="425" y="2" width="68" height="15" uuid="d9c38372-d189-4e7e-9abc-3155bb63bb7f"/>
+			<textField pattern="#,##0.00">
+				<reportElement x="443" y="2" width="60" height="15" uuid="d9c38372-d189-4e7e-9abc-3155bb63bb7f"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[$F{monto_debe_ext}==null?"":$F{monto_debe_ext}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="346" y="2" width="69" height="15" uuid="5691d379-149f-482b-9ebf-89f0263fa4da"/>
+			<textField pattern="#,##0.00">
+				<reportElement x="381" y="2" width="60" height="15" uuid="5691d379-149f-482b-9ebf-89f0263fa4da"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[$F{monto_haber_nac}==null?"":$F{monto_haber_nac}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="494" y="2" width="69" height="15" uuid="630221c6-73f1-4cf9-bf02-e68f8664f660"/>
+			<textField pattern="#,##0.00">
+				<reportElement x="503" y="2" width="60" height="15" uuid="630221c6-73f1-4cf9-bf02-e68f8664f660"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[$F{monto_haber_ext}==null?"":$F{monto_haber_ext}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="277" y="2" width="69" height="15" uuid="f79fa554-01ff-410b-babc-43781708fb91"/>
+				<reportElement x="1" y="2" width="275" height="15" uuid="13262b30-feac-40f7-9718-8dba224fefdd"/>
+				<textFieldExpression><![CDATA[$F{nro_plan_cuenta} +"-"+ $F{cuenta}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="321" y="2" width="60" height="15" uuid="f79fa554-01ff-410b-babc-43781708fb91"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[$F{monto_debe_nac}==null?"":$F{monto_debe_nac}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="1" y="2" width="275" height="15" uuid="13262b30-feac-40f7-9718-8dba224fefdd"/>
-				<textFieldExpression><![CDATA[$F{nro_plan_cuenta} +"-"+ $F{cuenta}]]></textFieldExpression>
+			<textField pattern="#,##0.00">
+				<reportElement x="277" y="2" width="44" height="15" uuid="2c123fe5-5f38-40b0-adb3-8f05f1b1144a"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$F{moneda_trx}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
@@ -288,7 +314,7 @@ where cc.id_libro=$P{ID_LIBRO} order by nro_plan_cuenta asc]]>
 			</textField>
 			<textField>
 				<reportElement x="0" y="18" width="559" height="20" uuid="d45cc385-ed17-47a3-ad5d-7dfb271c36f6"/>
-				<textFieldExpression><![CDATA["Son:" +$F{literal} + " " + ($F{decimal_part}>0?$F{decimal_part}:"0"+$F{decimal_part})+"/100 BOLIVIANOS."]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Son:" +$F{literal} + " " + ($F{decimal_part}<10?"0"+$F{decimal_part}:$F{decimal_part})+"/100 BOLIVIANOS."]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="0" y="2" width="267" height="14" uuid="b348fcd7-5e1a-4f32-a23e-1d7984f9d15f"/>
@@ -297,33 +323,33 @@ where cc.id_libro=$P{ID_LIBRO} order by nro_plan_cuenta asc]]>
 				</textElement>
 				<text><![CDATA[TOTALES]]></text>
 			</staticText>
-			<textField>
-				<reportElement x="276" y="2" width="69" height="14" uuid="0b3235f4-0b24-442b-9636-25f6085ab125"/>
+			<textField pattern="#,##0.00">
+				<reportElement x="312" y="0" width="69" height="14" uuid="0b3235f4-0b24-442b-9636-25f6085ab125"/>
 				<textElement textAlignment="Right">
 					<font fontName="SansSerif" isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{totalDebeNac}==null?"":$F{totalDebeNac}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{total_debe_nac}==null?"":$F{total_debe_nac}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="345" y="2" width="70" height="14" uuid="1ab629f5-8a81-4813-8fde-d526be78f7a5"/>
+			<textField pattern="#,##0.00">
+				<reportElement x="382" y="1" width="60" height="14" uuid="1ab629f5-8a81-4813-8fde-d526be78f7a5"/>
 				<textElement textAlignment="Right">
 					<font fontName="SansSerif" isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{totalHaberNac}==null?"":$F{totalHaberNac}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{total_haber_nac}==null?"":$F{total_haber_nac}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="424" y="2" width="69" height="14" uuid="0763f3e7-9293-48ee-b773-df61afc01898"/>
+			<textField pattern="#,##0.00">
+				<reportElement x="443" y="1" width="60" height="14" uuid="0763f3e7-9293-48ee-b773-df61afc01898"/>
 				<textElement textAlignment="Right">
 					<font fontName="SansSerif" isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{totalDebeExt}==null?"":$F{totalDebeExt}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{total_debe_ext}==null?"":$F{total_debe_ext}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="493" y="2" width="70" height="14" uuid="a171fefb-5cfe-4015-9e37-482e64d3ef41"/>
+			<textField pattern="#,##0.00">
+				<reportElement x="503" y="1" width="60" height="14" uuid="a171fefb-5cfe-4015-9e37-482e64d3ef41"/>
 				<textElement textAlignment="Right">
 					<font fontName="SansSerif" isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{totalHaberExt}==null?"":$F{totalDebeExt}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{total_haber_ext}==null?"":$F{total_haber_ext}]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement x="3" y="0" width="558" height="1" uuid="00c21694-87ae-4484-8db1-e32d3c723b4d"/>
@@ -348,6 +374,10 @@ where cc.id_libro=$P{ID_LIBRO} order by nro_plan_cuenta asc]]>
 					<font size="7"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Creado por: " + $F{usuario_completo} + " fecha: " + $F{fecha_insert}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="38" width="559" height="20" uuid="13b73cd0-5691-4777-82d5-ba4720db7aa1"/>
+				<textFieldExpression><![CDATA["Son:" +$F{literal_usd} + " " + ($F{decimal_part_usd}<10?"0"+$F{decimal_part_usd}:$F{decimal_part_usd})+"/100 DOLARES."]]></textFieldExpression>
 			</textField>
 		</band>
 	</summary>

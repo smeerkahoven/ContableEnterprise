@@ -48,7 +48,7 @@
 	left join cnt_bancos ba on ba.id_banco = nd.id_banco
     	left join cnt_plan_cuentas pc on pc.id_plan_cuentas = nd.id_cuenta_deposito
 	left join cnt_tarjetas_credito tc on tc.id_tarjeta_credito = nd.id_tarjeta_credito
-	WHERE nd.id_nota_debito=$P{ID_NOTA_DEBITO}]]>
+	WHERE nd.id_nota_debito=$P{ID_NOTA_DEBITO}  and tr.estado in ('E','D','M')]]>
 	</queryString>
 	<field name="id_nota_debito" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -277,13 +277,13 @@ sucursal]]></fieldDescription>
 				<reportElement x="2" y="49" width="551" height="14" uuid="62cf3f0f-7abe-46bc-833e-db4167f89e98">
 					<printWhenExpression><![CDATA[$F{monto_total_usd}!= null]]></printWhenExpression>
 				</reportElement>
-				<textFieldExpression><![CDATA["Son:" + $F{literal_usd} + " " + ($F{decimal_part_usd}>10?$F{decimal_part_usd}:"0"+$F{decimal_part_usd})+"/100 DOLARES."]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{monto_total_usd}==0?"":("Son:" + $F{literal_usd} + " " + ($F{decimal_part_usd}>10?$F{decimal_part_usd}:"0"+$F{decimal_part_usd})+"/100 DOLARES.")]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="2" y="65" width="551" height="14" uuid="f9c8a09b-c6ae-4eb0-869c-615f891952ef">
 					<printWhenExpression><![CDATA[$F{monto_total_bs}!= null]]></printWhenExpression>
 				</reportElement>
-				<textFieldExpression><![CDATA["Son:"+$F{literal_bs} + " " + $F{decimal_part_bs} + "/100 BOLIVIANOS."]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{monto_total_bs}==0?"":( "Son:"+$F{literal_bs} + " " + $F{decimal_part_bs} + "/100 BOLIVIANOS.")]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="10" y="203" width="342" height="12" uuid="83dfc52a-30a8-4e49-b459-08cb1f53f8af"/>

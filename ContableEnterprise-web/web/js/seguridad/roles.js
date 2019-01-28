@@ -149,7 +149,6 @@ angular.module('jsRoles.controllers', []).controller('frmRoles', ['$scope', '$ht
         $scope.delete = function () {
             /*if (!$scope.formEdit.$valid)
                 return;*/
-            console.log("delete;" + $scope.idDelete);
             $scope.loading = true;
 
             $http({
@@ -177,6 +176,13 @@ angular.module('jsRoles.controllers', []).controller('frmRoles', ['$scope', '$ht
                 //$scope.showForm = true;
             });
         };
+
+        $scope.ngShowRow = function (modulo,form){
+            if (modulo.moduloNombre === 'Boletaje' && form.formularioNombre === 'Boletos')
+                return false ;
+            
+            return true ;
+        }
 
         $scope.editar = function (id) {
             $scope.loading = true;

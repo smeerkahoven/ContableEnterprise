@@ -37,7 +37,6 @@
         <script type="text/javascript" src="../../js/angular.min.js" />
         <script type="text/javascript" src="../../js/ui-bootstrap-tpls.js" />
         <script type="text/javascript" src="../../js/smart-table.min.js" />
-        <script type="text/javascript" src="../../js/seguridad/usuario.js" />
 
     </head>
     <h:body>
@@ -192,14 +191,25 @@
                                                     <br />
                                                     <div class="form-group row">
                                                         <label for="txtUserName" class="col-form-label col-sm-3 text-right">Nombre Usuario</label>
-                                                        <div class="col-sm-5">
-                                                            <input type="text" class="form-control" name="txtUsername" required="required" maxlength="16" 
-                                                                   ng-model="formData.username" ng-disabled="userAgree"/>
-                                                            <div ng-show="userExists"><span class="text-danger">El nombre de usuario ya existe</span></div>
-                                                            <div ng-show="userLength"><span class="text-danger">Debe ingresar un nombre de usuario mayor a 4 caracteres</span></div>
-                                                            <div ng-show="userAgree"><span class="text-success">El nombre esta disponible</span></div> 
+                                                        <div class="form-group col-sm-6 row">
+                                                            <input type="text" class="form-control col-sm-8" name="txtUsername" required="required" maxlength="16" 
+                                                                   ng-model="formData.username"  onkeypress="return IsAlphaNumeric(event);" ng-disabled="userAgree"/>
+                                                            <span class=" fa fa-info-circle text-blue" data-toggle="tooltip" data-placement="top" 
+                                                                  title="El nombre de usuario solo puede contener letras (a-z, A-Z) y numeros"></span>
+                                                            &nbsp;&nbsp;
+                                                            <button ng-click="validar()" class="btn btn-info btn-sm" >Validar</button>
+
+
+                                                            <div class="invalid-feedback" ng-show="userExists">
+                                                                <i class="fa fa-exclamation-circle fa-fw"></i>El nombre de usuario ya existe</div>
+                                                            <div class="text-success" ng-show="userAgree">
+                                                                <i class="fa fa-exclamation-circle fa-fw"></i>El nombre esta disponible</div>
+                                                            <div class="text-success" ng-show="userLength">
+                                                                <i class="fa fa-exclamation-circle fa-fw"></i>Debe ingresar un nombre de usuario mayor a 4 caracteres</div>
+
+
                                                         </div>
-                                                        <button ng-click="validar()" class="btn btn-info col-sm-1" >Validar</button>
+
                                                     </div>
 
                                                     <div class="form-group row">
@@ -282,7 +292,7 @@
                                                         <label for="txtUserNameEdit" class="col-form-label col-sm-3 text-right">Nombre Usuario</label>
                                                         <div class="col-sm-5">
                                                             <input type="text" class="form-control" name="txtUsernameEdit" required="required" maxlength="16" 
-                                                                   ng-model="formData.username"  ng-disabled="true"/>
+                                                                   ng-model="formData.username"   ng-disabled="true"/>
                                                             <div ng-show="userExists"><span class="text-danger">El nombre de usuario ya existe</span></div>
                                                             <div ng-show="userLength"><span class="text-danger">Debe ingresar un nombre de usuario mayor a 4 caracteres</span></div>
                                                             <div ng-show="userAgree"><span class="text-success">El nombre esta disponible</span></div> 
@@ -389,7 +399,7 @@
                 <ui:include src="../index/footer.xhtml" />
                 <!-- /.app-footer -->
                 <!-- /.wrapper -->
-                 <!-- Logout Form -->
+                <!-- Logout Form -->
                 <ui:include src="../index/logout.xhtml" />
                 <!-- /Logout Form -->
             </main>
@@ -400,6 +410,7 @@
         <script src="../../assets/vendor/jquery/jquery.min.js"></script>
         <script src="../../assets/vendor/bootstrap/js/popper.min.js"></script>
         <script src="../../assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="../../js/utils.js" />
         <!-- END BASE JS -->
         <!-- BEGIN PLUGINS JS -->
         <script src="../../assets/vendor/stacked-menu/stacked-menu.min.js"></script>
@@ -407,6 +418,9 @@
         <!-- END PLUGINS JS -->
         <!-- BEGIN THEME JS -->
         <script src="../../assets/javascript/main.min.js"></script>
+
+        <script type="text/javascript" src="../../js/seguridad/usuario.js" />
+
         <!-- END THEME JS -->
         <!-- BEGIN PAGE LEVEL JS -->
         <!-- END PAGE LEVEL JS -->

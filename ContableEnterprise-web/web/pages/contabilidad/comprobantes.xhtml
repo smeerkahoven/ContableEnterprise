@@ -181,12 +181,6 @@
                                                 <button type="button" class="btn btn-primary col-1"  ng-click="find()"><span class="fa fa-search"></span> Buscar</button>
                                             </div>
                                         </div>
-                                        <div class="tooltip bs-tooltip-top" role="tooltip">
-                                            <div class="arrow"></div>
-                                            <div class="tooltip-inner">
-                                                Some tooltip text!
-                                            </div>
-                                        </div>
 
                                         <!-- /Search Options -->
                                         <!-- Tabla Contenido -->
@@ -285,14 +279,8 @@
                                                     </div>
                                                     <div class="form-group row">
                                                         <label for="txtSucursal" class="col-form-label col-sm-2 text-right">Tipo de Comprobante</label>
-                                                        <div class="col-sm-3">
-                                                            <select class="form-control" name="txtComprobante" ng-model="formData.tipo" required="required"
-                                                                    ng-options="option.id as option.name for option in comboTiposComprobantes">
-                                                                <option style="display:none" value="">seleccione un tipo</option>
-                                                            </select>
-                                                            <span class="alert-danger"  ng-show="!myForm.txtComprobante.$valid"  >
-                                                                Debe seleccionar una opci&oacute;n.
-                                                            </span>
+                                                        <div class="col-sm-4">
+                                                            <input class="form-control" value="{{formData.tipo|tipoComprobante}}" readonly="" />
                                                         </div>
                                                         <label for="txtFactor" class=" col-form-label col-sm-2 text-right"><strong>Factor USD</strong></label>
                                                         <div class="col-sm-3">
@@ -412,7 +400,8 @@
                                                                     </td>
                                                                     <td style="width: 13%">
                                                                         <!--<td class="col-2">-->
-                                                                        <div ng-show="!row.editable">{{row.debeMonNac == '0.00' ? '' : row.debeMonNac}}</div>
+                                                                        <!--<div ng-show="!row.editable">{{row.debeMonNac == '0.00' ? '' : row.debeMonNac}}</div>-->
+                                                                        <div ng-show="!row.editable">{{row.debeMonNac| printNumber}}</div>
                                                                         <div ng-show="row.editable">
                                                                             <input type="number" string-to-number="string-to-number" class="form-control col" placeholder="0.00 Bs" required="required" name="txtDebeMonNac" min="0" value="0" 
                                                                                    step="0.01" title="Monto Debe Moneda Nacional" pattern="^\d+(?:\.\d{1,2})?$" 
@@ -425,7 +414,8 @@
                                                                     </td>
                                                                     <td style="width: 13%">
                                                                         <!--<td class="col-2">-->
-                                                                        <div ng-show="!row.editable">{{row.haberMonNac == '0.00' ? '' : row.haberMonNac }}</div>
+                                                                        <!--<div ng-show="!row.editable">{{row.haberMonNac == '0.00' ? '' : row.haberMonNac }}</div> -->
+                                                                        <div ng-show="!row.editable">{{row.haberMonNac| printNumber }}</div>
                                                                         <div ng-show="row.editable">
                                                                             <input type="number" string-to-number="string-to-number" class="form-control col" placeholder="0.00 Bs" required="required" name="txtHaberMonNac" min="0" value="0" 
                                                                                    step="0.01" title="Monto Haber Moneda Nacional" pattern="^\d+(?:\.\d{1,2})?$" 
@@ -435,7 +425,8 @@
                                                                     </td>
                                                                     <td style="width: 13%">
                                                                         <!--<td class="col-2">-->
-                                                                        <div ng-show="!row.editable">{{row.debeMonExt== '0.00' ? '' : row.debeMonExt }}</div>
+                                                                        <!-- <div ng-show="!row.editable">{{row.debeMonExt == '0.00' ? '' : row.debeMonExt }}</div> -->
+                                                                        <div ng-show="!row.editable">{{row.debeMonExt| printNumber  }}</div>
                                                                         <div ng-show="row.editable">
                                                                             <input type="number" string-to-number="string-to-number" class="form-control col" placeholder="0.00 Bs" required="required" name="txtDebeMonExt" min="0" value="0" 
                                                                                    step="0.01" title="Monto Debe Moneda Extranjera" pattern="^\d+(?:\.\d{1,2})?$" 
@@ -445,7 +436,8 @@
                                                                     </td>
                                                                     <td style="width: 13%">
                                                                         <!--<td class="col-2">-->
-                                                                        <div ng-show="!row.editable">{{row.haberMonExt== '0.00' ? '' : row.haberMonExt}}</div>
+                                                                        <!--<div ng-show="!row.editable">{{row.haberMonExt== '0.00' ? '' : row.haberMonExt}}</div> -->
+                                                                        <div ng-show="!row.editable">{{row.haberMonExt|printNumber}}</div>
                                                                         <div ng-show="row.editable">
                                                                             <input type="number" string-to-number="string-to-number" class="form-control col" placeholder="0.00 Bs" required="required" name="txtHaberMonExt" min="0" value="0" 
                                                                                    step="0.01" title="Monto Haber Moneda Extranjera" pattern="^\d+(?:\.\d{1,2})?$" 
@@ -463,6 +455,9 @@
                                                                             </c:if>
                                                                             <c:if test="${comprobantes.formulario.crear== comprobantes.formulario.PERMITIR }">
                                                                                 <button ng-show="row.editable" ng-disabled="disableGuardarTransaccion" type="button" title="Guardar" class="btn btn-sm btn-primary" ng-click="saveTransaccion(row)"><i class="fa fa-save"></i></button>
+                                                                            </c:if>
+                                                                            <c:if test="${comprobantes.formulario.crear== comprobantes.formulario.PERMITIR }">
+                                                                                <button ng-show="row.editable" type="button" title="Corregir" class="btn btn-sm btn-success" ng-click="corregirTransaccion(row)"><i class="fa fa-save"></i></button>
                                                                             </c:if>
                                                                             <c:if test="#{comprobantes.formulario.crear== comprobantes.formulario.PERMITIR}">
                                                                                 <button type="button" title="Eliminar" ng-disabled="disableEliminarTransaccion" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#frmConfirmation" ng-click="modalEliminarAsiento(row)"><i class="fa fa-remove"></i></button>
@@ -487,16 +482,16 @@
                                                                         <div></div>
                                                                     </td>
                                                                     <td style="width: 13%">
-                                                                        <div><strong>{{formData.totalDebeMonNac}} </strong></div>
+                                                                        <div><strong>{{formData.totalDebeMonNac|printNumber}} </strong></div>
                                                                     </td>
                                                                     <td style="width: 13%">
-                                                                        <div><strong>{{formData.totalHaberMonNac}}</strong></div>
+                                                                        <div><strong>{{formData.totalHaberMonNac|printNumber }}</strong></div>
                                                                     </td>
                                                                     <td style="width: 13%">
-                                                                        <div><strong>{{formData.totalDebeMonExt}}</strong></div>
+                                                                        <div><strong>{{formData.totalDebeMonExt|printNumber}}</strong></div>
                                                                     </td>
                                                                     <td style="width: 13%">
-                                                                        <div><strong>{{formData.totalHaberMonExt}}</strong></div>
+                                                                        <div><strong>{{formData.totalHaberMonExt|printNumber}}</strong></div>
                                                                     </td>
                                                                     <td style="width: 9%">
                                                                     </td>
@@ -521,6 +516,7 @@
                                                                         <div ng-show="showDifHaberExt"><strong>{{formData.difMonExt| makePositive}}</strong></div>
                                                                     </td>
                                                                     <td style="width: 9%">
+                                                                        <button type="button" class="btn btn-sm btn-success" ng-click="clickCorregir()" ng-disabled="ngDisabledBtnCorregir" ng-show="existeDiferencias"><span class="fa fa-book"></span> Corregir</button>
                                                                     </td>
                                                                 </tr>
                                                             </tbody>
@@ -538,7 +534,7 @@
                                                         <c:if test="#{comprobantes.formulario.crear== comprobantes.formulario.PERMITIR}">
                                                             <div class="row" >
                                                                 <label for="txtNombre" class="col-form-label col-sm-3 text-right" ></label>
-                                                                <button  class="btn btn-warning"  value="Pendiente" ng-disabled="disablePendienteButton" ng-click="pendiente()" data-toggle="modal" data-target="#frmPendiente"><span class="fa fa-hourglass-half"></span> Pendiente</button>
+                                                                <button  class="btn btn-warning"  value="Pendiente" ng-disabled="disablePendienteButton" ng-click="pendiente()" ><span class="fa fa-hourglass-half"></span> Pendiente</button>
                                                             </div>
                                                         </c:if> 
                                                         <c:if test="#{comprobantes.formulario.eliminar== comprobantes.formulario.PERMITIR}">
@@ -640,7 +636,7 @@
                             <!-- ./Modal VER-->
                             <form id="myFormTransaccion" name="myFormTransaccion">
                                 <div class="modal fade" id="frmTransaccion" tabindex="-1" role="dialog" aria-labelledby="modalAmadeus" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+                                    <div class="modal-dialog modal-dialog-centered modal-mlg" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <h5 class="modal-title" id="exampleModalLongTitle">Datos Transacci&oacute;n</h5>
@@ -661,6 +657,7 @@
                                                     {{ showFrmTransaccionRestfulMessage}}
                                                 </div>
                                                 <!-- /Mensaje Error -->
+                                                <!-- TRANSACCION -->
                                                 <div id="formData" class="container " ng-show="verForm.transaccion"  >
                                                     <legend>Nota de D&eacute;bito</legend>
                                                     <div class="form-group row">
@@ -669,35 +666,35 @@
                                                             <input class="form-control" ng-disabled="true" ng-value="verForm.transaccion.idNotaDebito"></input>
                                                         </div>
                                                     </div>
-                                                    
+
                                                     <div class="form-group row">
                                                         <label for="txtCodigo" class="col-form-label col-sm-3 text-right">Nota de D&eacute;bito</label>
                                                         <div class="col-sm-6">
                                                             <input class="form-control" ng-disabled="true" ng-value="verForm.transaccion.idNotaDebito"></input>
                                                         </div>
                                                     </div>
-                                                    
+
                                                     <div class="form-group row">
                                                         <label for="txtCodigo" class="col-form-label col-sm-3 text-right">Descripci&oacute;n</label>
                                                         <div class="col-sm-6">
                                                             <input class="form-control" ng-disabled="true" ng-value="verForm.transaccion.descripcion"></input>
                                                         </div>
                                                     </div>
-                                                    
+
                                                     <div class="form-group row">
                                                         <label for="txtCodigo" class="col-form-label col-sm-3 text-right">Moneda</label>
                                                         <div class="col-sm-6">
-                                                            <input class="form-control" ng-disabled="true" ng-value="verForm.transaccion.moneda=='U'?'USD.':'BOB.'"></input>
+                                                            <input class="form-control" ng-disabled="true" value="{{verForm.transaccion.moneda|printMoneda}}"></input>
                                                         </div>
                                                     </div>
-                                                    
+
                                                     <div class="form-group row">
                                                         <label for="txtCodigo" class="col-form-label col-sm-3 text-right">Fecha Insert:</label>
                                                         <div class="col-sm-6">
                                                             <input class="form-control" ng-disabled="true" ng-value="verForm.transaccion.fechaInsert"></input>
                                                         </div>
                                                     </div>
-                                                    
+
                                                     <div class="form-group row">
                                                         <label for="txtCodigo" class="col-form-label col-sm-3 text-right">Usuario </label>
                                                         <div class="col-sm-6">
@@ -705,63 +702,182 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                
+                                                <!-- TRANSACCION -->
+
+                                                <!-- BOLETO -->
                                                 <div id="formData" class="container " ng-show="verForm.boleto"  >
                                                     <legend>Boleto</legend>
                                                     <div class="form-group row">
-                                                        <label for="txtCodigo" class="col-form-label col-sm-3 text-right">Id. Boleto</label>
-                                                        <div class="col-sm-6">
-                                                            <input class="form-control" ng-disabled="true" ng-value="verForm.transaccion.idBoleto"></input>
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Id.</label>
+                                                        <div class="col-sm-4">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verForm.boleto.idBoleto"></input>
                                                         </div>
-                                                    </div>
-                                                    
-                                                    <div class="form-group row">
-                                                        <label for="txtCodigo" class="col-form-label col-sm-3 text-right">No&uacute;mero de Boleto</label>
-                                                        <div class="col-sm-6">
+
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Nro. Boleto</label>
+                                                        <div class="col-sm-4">
                                                             <input class="form-control" ng-disabled="true" ng-value="verForm.boleto.numero"></input>
                                                         </div>
+
                                                     </div>
-                                                    
+
                                                     <div class="form-group row">
-                                                        <label for="txtCodigo" class="col-form-label col-sm-3 text-right">Aerolinea</label>
-                                                        <div class="col-sm-6">
-                                                            <input class="form-control" ng-disabled="true" ng-value="verForm.boleto.idAerolinea.nombre"></input>
-                                                        </div>
-                                                    </div>
-                                                    
-                                                    <div class="form-group row">
-                                                        <label for="txtCodigo" class="col-form-label col-sm-3 text-right">Tipo de Boleto</label>
-                                                        <div class="col-sm-6">
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Tipo</label>
+                                                        <div class="col-sm-4">
                                                             <input class="form-control" ng-disabled="true" ng-value="verForm.boleto.tipoBoleto|printTipoBoleto"></input>
                                                         </div>
-                                                    </div>
-                                                </div>
-                                                
-                                                <div id="formData" class="container " ng-show="verForm.ingreso"  >
-                                                    <legend>Ingreso de Caja</legend>
-                                                    <div class="form-group row">
-                                                        <label for="txtCodigo" class="col-form-label col-sm-3 text-right">Nota de D&eacute;bito</label>
-                                                        <div class="col-sm-6">
-                                                            <input class="form-control" ng-disabled="true" ng-value="verForm.transaccion.descripcion"></input>
-                                                            <label>{{tran.idNotaDebito}}</label>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                
-                                                
-                                                <div id="formData" class="container " ng-show="verForm.cargo"  >
-                                                    <legend>Cargo de Boleto</legend>
-                                                    <div class="form-group row">
-                                                        <label for="txtCodigo" class="col-form-label col-sm-3 text-right">Nota de D&eacute;bito</label>
-                                                        <div class="col-sm-6">
-                                                            <input class="form-control" ng-disabled="true" ng-value="verForm.transaccion.descripcion"></input>
-                                                            <label>{{tran.idNotaDebito}}</label>
+
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Aerolinea</label>
+                                                        <div class="col-sm-4">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verForm.boleto.idAerolinea.name"></input>
                                                         </div>
                                                     </div>
 
-                                                   
+                                                    <div class="form-group row">
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Pasajero</label>
+                                                        <div class="col-sm-10">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verForm.boleto.nombrePasajero"></input>
+                                                        </div>
+
+                                                    </div>
+
+
                                                 </div>
-                                                
+                                                <!-- BOLETO -->
+
+                                                <!-- INGRESO DE CAJA -->
+                                                <div id="formData" class="container " ng-show="verForm.ingreso"  >
+                                                    <legend>Ingreso de Caja</legend>
+                                                    <div class="form-group row">
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Nro.</label>
+                                                        <div class="col-sm-4">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verForm.ingreso.idIngresoCaja"></input>
+                                                        </div>
+
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Transacci&oacute;n</label>
+                                                        <div class="col-sm-4">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verForm.ingreso.idIngresoTransaccion"></input>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- INGRESO DE CAJA -->
+
+                                                <!-- CARGO -->
+                                                <div id="formData" class="container " ng-show="verForm.cargo"  >
+                                                    <legend>Datos de {{verForm.tipo|printTipo}}</legend>
+
+                                                    <div class="form-group row">
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Id Cargo</label>
+                                                        <div class="col-sm-4">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verForm.cargo.idCargo"></input>
+                                                        </div>
+
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Fecha Insert:</label>
+                                                        <div class="col-sm-3">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verForm.cargo.fechaInsert"></input>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group row">
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Concepto</label>
+                                                        <div class="col-sm-6">
+                                                            <textarea class="form-control" ng-disabled="true" ng-value="verForm.cargo.concepto" rows="3"></textarea>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group row">
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Nro. Nota de D&eacute;bito</label>
+                                                        <div class="col-sm-4">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verForm.cargo.idNotaDebito"></input>
+                                                        </div>
+                                                        
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Moneda</label>
+                                                        <div class="col-sm-2">
+                                                            <input class="form-control" ng-disabled="true" value="{{verForm.cargo.moneda|printMoneda}}"></input>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group row">
+                                                        
+                                                    </div>
+
+
+
+                                                    <div class="form-group row">
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Cuenta Agencia:</label>
+                                                        <div class="col-sm-6">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verForm.cargo.idCuentaAgencia.name"></input>
+                                                        </div>
+                                                        <label for="txtCodigo" class="col-form-label col-sm-1 text-right">Monto:</label>
+                                                        <div class="col-sm-2">
+                                                            <input class="form-control" ng-disabled="true" align="right" value="{{verForm.cargo.comisionAgencia|printNumber}}" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Cuenta Mayorista</label>
+                                                        <div class="col-sm-6">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verForm.cargo.idCuentaMayorista.name"></input>
+                                                        </div>
+                                                        <label for="txtCodigo" class="col-form-label col-sm-1 text-right">Monto:</label>
+                                                        <div class="col-sm-2">
+                                                            <input class="form-control" ng-disabled="true" align="right" value="{{verForm.cargo.comisionMayorista|printNumber}}" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Cuenta Promotor:</label>
+                                                        <div class="col-sm-6">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verForm.cargo.idCuentaPromotor.name"></input>
+                                                        </div>
+                                                        <label for="txtCodigo" class="col-form-label col-sm-1 text-right">Monto:</label>
+                                                        <div class="col-sm-2">
+                                                            <input class="form-control" ng-disabled="true" align="right" value="{{verForm.cargo.comisionPromotor|printNumber}}" />
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group row">
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Usuario Creador</label>
+                                                        <div class="col-sm-6">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verForm.cargo.usuarioCreador"></input>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- ./CARGO -->
+
+                                                <!-- NOTA CREDITO -->
+                                                <div id="formData" class="container " ng-show="verForm.notaCredito"  >
+                                                    <legend>Nota de Cr&eacute;dito</legend>
+                                                    <div class="form-group row">
+
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Nro.</label>
+                                                        <div class="col-sm-4">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verForm.notaCredito.idNotaCredito"></input>
+                                                        </div>
+
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Transaccion</label>
+                                                        <div class="col-sm-4">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verForm.notaCredito.idNotaCreditoTransaccion"></input>
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div class="form-group row">
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Descripci&oacute;n</label>
+                                                        <div class="col-sm-10">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verForm.notaCredito.descripcion"></input>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group row">
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Plan Cuenta</label>
+                                                        <div class="col-sm-10">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verForm.notaCredito.idPlanCuenta.name"></input>
+                                                        </div>
+
+                                                    </div>
+
+
+                                                </div>
+
+                                                <!-- ./NOTA CREDITO -->
                                             </div>
                                             <div class="modal-footer">
                                                 <div class="btn-group" role="group"  >

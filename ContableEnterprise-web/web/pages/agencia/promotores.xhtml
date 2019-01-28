@@ -352,7 +352,7 @@
                                                                        typeahead-template-url="customTemplate.html" 
                                                                        />
                                                                 <input type="number" class="form-control col-sm-2" name="txtComisionInt" placeholder="0.00 %" 
-                                                                       ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="1.00" max="99"
+                                                                       ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01" max="99"
                                                                        ng-model="formData.comisionNacionalMonto" data-toggle="tooltip" 
                                                                        data-placement="top" title="El Porcentaje se aplica sobre el Total" />
 
@@ -402,7 +402,7 @@
                                                                        typeahead-template-url="customTemplate.html"
                                                                        />
                                                                 <input type="number" class="form-control col-sm-2" name="txtComisionInt" placeholder="0.00 %" 
-                                                                       ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="1.00" max="99"
+                                                                       ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01" max="99"
                                                                        ng-model="formData.comisionInternacionalMonto" data-toggle="tooltip" data-placement="top" title="El Porcentaje se aplica sobre el Total" />
 
                                                                 <a title="Ingresar" class="btn btn-sm btn-success" ng-click="updateAddComisionInternacional()" ng-show="showBtnEditar &#38;&#38; formData.comisionInternacional.idAerolinea &#38;&#38; formData.comisionInternacionalMonto" >

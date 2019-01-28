@@ -36,14 +36,14 @@ public class AeropuertoManagedBean extends ViewManagedBean{
     
         @PostConstruct
     public void init() {
-        try {
+//        try {
             this.formulario = SessionUtils.getFormulario(Formulario.AEROPUERTO);
             checkIfCanAccess();
 
-            ejbLogger.add(Accion.ACCESS, user.getUserName(), this.formName, user.getIp());
-        } catch (CRUDException ex) {
-            Logger.getLogger(PersonalManagedBean.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//            ejbLogger.add(Accion.ACCESS, user.getUserName(), this.formName, user.getIp());
+//        } catch (CRUDException ex) {
+//            Logger.getLogger(PersonalManagedBean.class.getName()).log(Level.SEVERE, null, ex);
+//        }
     }
 
 }

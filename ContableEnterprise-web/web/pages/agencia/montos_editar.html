@@ -18,15 +18,15 @@
                                 <td class="col-sm-3"><label class="text-right">Importe Neto</label></td>
                                 <td class="col-sm-3"></td>
                                 <td class="col-sm-3">
-                                    <input type="number" class="form-control" name="txtImporteNeto" placeholder="0.00 BOB" 
+                                    <input type="number" class="form-control input-number" name="txtImporteNeto" placeholder="0.00 BOB" 
                                            ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01" min="0" ng-change="calculateImporteNetoBs()"
-                                           ng-model="formData.importeNetoBs" 
+                                           ng-model="formData.importeNetoBs" align="right" ng-value="formData.importeNetoBs|printNumber"
                                            data-toggle="tooltip" data-placement="top" ng-disabled="true" />
                                 </td>
                                 <td class="col-sm-3">
-                                    <input type="number" class="form-control" name="txtImporteNeto" placeholder="0.00 USD" 
+                                    <input type="number" class="form-control input-number" name="txtImporteNeto" placeholder="0.00 USD" 
                                            ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01" min="0" ng-change="calculateImporteNetoUsd()"
-                                           ng-model="formData.importeNetoUsd" 
+                                           ng-model="formData.importeNetoUsd" ng-value="formData.importeNetoUsd|printNumber"
                                            data-toggle="tooltip" data-placement="top" ng-disabled="true" />
                                 </td>
                             </tr>
@@ -34,13 +34,13 @@
                                 <td class="col-sm-3"><label class="text-right">Impuesto BO</label></td>
                                 <td class="col-sm-3">
                                 </td>
-                                <td class="col-sm-3"> <input type="number" class="form-control" name="txtImpuestoBobBs" placeholder="0.00 " 
+                                <td class="col-sm-3"> <input type="number" class="form-control input-number" name="txtImpuestoBobBs" placeholder="0.00 " 
                                                              ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01" min="0" ng-change="calculateImpuestoBobBs()"
-                                                             ng-model="formData.impuestoBobBs" 
+                                                             ng-model="formData.impuestoBobBs"  ng-value="formData.impuestoBobBs|printNumber"  
                                                              data-toggle="tooltip" data-placement="top"  ng-disabled="true"/></td>
-                                <td class="col-sm-3"> <input type="number" class="form-control" name="txtImpuestoBobUsd" placeholder="0.00 " 
+                                <td class="col-sm-3"> <input type="number" class="form-control input-number" name="txtImpuestoBobUsd" placeholder="0.00 " 
                                                              ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01" min="0" ng-change="calculateImpuestoBobUsd()"
-                                                             ng-model="formData.impuestoBobUsd" 
+                                                             ng-model="formData.impuestoBobUsd" ng-value="formData.impuestoBobUsd|printNumber"
                                                              data-toggle="tooltip" data-placement="top" ng-disabled="true"  /></td>
                             </tr>
                             <tr class="d-flex" ng-show="aerolinea.impuestoQm">
@@ -48,14 +48,14 @@
                                 <td class="col-sm-3">
                                 </td>
                                 <td class="col-sm-3">
-                                    <input type="number" class="form-control" name="txtImpuestoQmBs" placeholder="0.00" 
+                                    <input type="number" class="form-control input-number" name="txtImpuestoQmBs" placeholder="0.00" 
                                            ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01" min="0" ng-change="calculateImpuestoQmBs()"
-                                           ng-model="formData.impuestoQmBs" 
+                                           ng-model="formData.impuestoQmBs" ng-value="formData.impuestoQmBs|printNumber"
                                            data-toggle="tooltip" data-placement="top" ng-disabled="true"  /></td>
                                 <td class="col-sm-3">
-                                    <input type="number" class="form-control" name="txtImpuestoQmUsd" placeholder="0.00" 
+                                    <input type="number" class="form-control input-number" name="txtImpuestoQmUsd" placeholder="0.00" 
                                            ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01" min="0"  ng-change="calculateImpuestoQmUsd()"
-                                           ng-model="formData.impuestoQmUsd" 
+                                           ng-model="formData.impuestoQmUsd" ng-value="formData.impuestoQmUsd|printNumber"
                                            data-toggle="tooltip" data-placement="top"  ng-disabled="true"/>
                                 </td>
                             </tr>
@@ -64,16 +64,16 @@
                                 <td class="col-sm-3">
                                 </td>
                                 <td class="col-sm-3">
-                                    <input type="number" class="form-control" name="txtImpuesto" placeholder="0.00 " 
+                                    <input type="number" class="form-control input-number" name="txtImpuesto" placeholder="0.00 " 
                                            ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01" min="0" max="99" 
-                                           ng-model="row.valorImpuestoBs"   ng-change="calculateListaImpuestosBs()"
-                                           data-toggle="tooltip" data-placement="top" ng-disabled="true" />
+                                           ng-model="row.valorImpuestoBs"  ng-value="row.valorImpuestoBs|printNumber"
+                                           ng-change="calculateListaImpuestosBs()"data-toggle="tooltip" data-placement="top" ng-disabled="true" />
                                 </td>
                                 <td class="col-sm-3">
-                                    <input type="number" class="form-control" name="txtImpuestoQm" placeholder="0.00 " 
+                                    <input type="number" class="form-control input-number" name="txtImpuestoQm" placeholder="0.00 " 
                                            ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01" min="0" max="99" 
-                                           ng-model="row.valorImpuestoUsd"  ng-change="calculateListaImpuestosUsd()"
-                                           data-toggle="tooltip" data-placement="top" ng-disabled="true" />
+                                           ng-model="row.valorImpuestoUsd" ng-value="row.valorImpuestoUsd|printNumber"
+                                           ng-change="calculateListaImpuestosUsd()" data-toggle="tooltip" data-placement="top" ng-disabled="true" />
                                 </td>
                             </tr>
                         </tbody>
@@ -85,8 +85,8 @@
                             <tr class="d-flex">
                                 <td class="col-sm-3"><strong class="table-danger">TOTAL BOLETO</strong></td>
                                 <td class="col-sm-3"></td>
-                                <td class="col-sm-3"><div><strong>{{formData.totalBoletoBs}}</strong></div></td>
-                                <td class="col-sm-3"><div ><strong>{{formData.totalBoletoUsd}}</strong></div></td>
+                                <td class="col-sm-3" align="right"><div><strong>{{formData.totalBoletoBs|printNumber}}</strong></div></td>
+                                <td class="col-sm-3" align="right"><div ><strong>{{formData.totalBoletoUsd|printNumber}}</strong></div></td>
                             </tr>
                         </tbody>
                     </table>
@@ -97,31 +97,33 @@
                             <tr class="d-flex" >
                                 <td class="col-sm-3"><label class="text-right">Comision %</label></td>
                                 <td class="col-sm-3">
-                                    <input type="number" class="form-control" name="txtComision" placeholder="0.00 %" 
-                                           ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01" min="0" max="99"
-                                           ng-model="formData.comision" 
+                                    <input type="number" class="form-control input-number" name="txtComision" placeholder="0.00 %" 
+                                           ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01" min="0" max="99" ng-disabled="true"
+                                           ng-model="formData.comision" ng-value="formData.comision|printNumber"
                                            data-toggle="tooltip" data-placement="top" ng-change="calculateComision()" /></td>
                                 <td class="col-sm-3">
-                                    <input type="number" class="form-control" name="txtComisionBs" placeholder="0.00 BOB" 
+                                    <input type="number" class="form-control input-number" name="txtComisionBs" placeholder="0.00 BOB" 
                                            ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01" min="0" 
-                                           ng-model="formData.montoComisionBs"  ng-change="calculateComisionBs()"
-                                           data-toggle="tooltip" data-placement="top" ng-disabled="true" />
+                                           ng-model="formData.montoComisionBs" ng-value="formData.montoComisionBs|printNumber"
+                                           ng-change="calculateComisionBs()" data-toggle="tooltip" data-placement="top" ng-disabled="true" />
 
                                 </td>
-                                <td class="col-sm-3"><input type="number" class="form-control" name="txtImporteNeto" placeholder="0.00 USD" 
-                                                            ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01" min="0" 
-                                                            ng-model="formData.montoComisionUsd" ng-change="calculateComisionUsd()"
+                                <td class="col-sm-3">
+                                    <input type="number" class="form-control input-number" name="txtImporteNeto" placeholder="0.00 USD" 
+                                                            ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01" min="0"
+                                                            ng-model="formData.montoComisionUsd" ng-value="formData.montoComisionUsd|printNumber" 
+                                                            ng-change="calculateComisionUsd()" ng-disabled="true"
                                                             data-toggle="tooltip" data-placement="top"/></td>
                             </tr>
 
                             <tr class="d-flex table-warning"  >
                                 <td class="col-sm-6"><strong>TOTAL A PAGAR A LA LINEA AEREA</strong></td>
 
-                                <td class="col-sm-3">
-                                    <strong>{{formData.montoPagarLineaAereaBs!= null ? formData.montoPagarLineaAereaBs : '' }}</strong>
+                                <td class="col-sm-3" align="right">
+                                    <strong>{{formData.montoPagarLineaAereaBs!= null ? (formData.montoPagarLineaAereaBs|printNumber) : '' }}</strong>
                                 </td>
-                                <td class="col-sm-3">
-                                    <strong>{{formData.montoPagarLineaAereaUsd != null ? formData.montoPagarLineaAereaUsd : ''}}</strong>
+                                <td class="col-sm-3" align="right">
+                                    <strong >{{formData.montoPagarLineaAereaUsd != null ? (formData.montoPagarLineaAereaUsd|printNumber) : ''}}</strong>
                                 </td>
                             </tr>
 
@@ -134,39 +136,48 @@
                             <tr class="d-flex">
                                 <td class="col-sm-3"><label class="text-left">FEE ( Otros Comisionables %)</label></td>
                                 <td class="col-sm-3">
-                                    <input type="number" class="form-control" name="txtMontoFee" placeholder="0.00 %" 
+                                    <input type="number" class="form-control input-number" name="txtMontoFee" placeholder="0.00 %" 
                                            ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01" min="0" max="99" 
-                                           ng-model="formData.fee" ng-change="calculateFeeMonto()"
+                                           ng-model="formData.fee" ng-value="formData.fee|printNumber" ng-change="calculateFeeMonto()"
                                            data-toggle="tooltip" data-placement="top"  ng-disabled="true" />
                                 </td>
-                                <td class="col-sm-3"><input type="number" class="form-control" name="txtMontoFeeBs" placeholder="0.00 BOB" 
-                                                            ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01" min="0" 
-                                                            ng-model="formData.montoFeeBs" ng-change="calculateFeeMontoBs()"
+                                <td class="col-sm-3">
+                                    <input type="number" class="form-control input-number" name="txtMontoFeeBs" placeholder="0.00 BOB" 
+                                                            ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01" min="0"
+                                                            ng-model="formData.montoFeeBs" ng-value="formData.montoFeeBs|printNumber" 
+                                                            ng-change="calculateFeeMontoBs()"
                                                             data-toggle="tooltip" data-placement="top"  ng-disabled="true"/></td>
 
-                                <td class="col-sm-3"><input type="number" class="form-control" name="txtMontoFeeUsd" placeholder="0.00 USD" 
-                                                            ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01" min="0" 
-                                                            ng-model="formData.montoFeeUsd" ng-change="calculateFeeMontoUsd()"
+                                <td class="col-sm-3"><input type="number" class="form-control input-number" name="txtMontoFeeUsd" placeholder="0.00 USD" 
+                                                            ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01" min="0"
+                                                            ng-model="formData.montoFeeUsd" ng-value="formData.montoFeeUsd|printNumber"
+                                                            ng-change="calculateFeeMontoUsd()"
                                                             data-toggle="tooltip" data-placement="top" ng-disabled="true"/></td>
                             </tr>
                             <tr class="d-flex">
                                 <td class="col-sm-3"><label class="text-right">Descuento %</label></td>
                                 <td class="col-sm-3">
-                                    <input type="number" class="form-control" name="txtDescuentoMonto" placeholder="0.00 %" 
-                                           ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01" 
-                                           ng-model="formData.descuento" ng-change="calculateDescuentoMonto()"
+                                    <input type="number" class="form-control input-number" name="txtDescuentoMonto" placeholder="0.00 %" 
+                                           ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01"
+                                           ng-model="formData.descuento"
+                                           ng-value="formData.descuento|printNumber"
+                                           ng-change="calculateDescuentoMonto()"
                                            data-toggle="tooltip" data-placement="top" ng-disabled="true"  />
                                 </td>
                                 <td class="col-sm-3">
-                                    <input type="number" class="form-control" name="txtDescuentoMontoBs" placeholder="0.00 BOB" 
-                                           ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01" 
-                                           ng-model="formData.montoDescuentoBs" ng-change="calculateDescuentoMontoBs()"
+                                    <input type="number" class="form-control input-number" name="txtDescuentoMontoBs" placeholder="0.00 BOB" 
+                                           ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01"
+                                           ng-model="formData.montoDescuentoBs"
+                                           ng-value="formData.montoDescuentoBs|printNumber"
+                                           ng-change="calculateDescuentoMontoBs()"
                                            data-toggle="tooltip" data-placement="top" ng-disabled="true" />
                                 </td>
                                 <td class="col-sm-3">
-                                    <input type="number" class="form-control" name="txtDescuentoMontoUsd" placeholder="0.00 USD" 
-                                           ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01"  
-                                           ng-model="formData.montoDescuentoUsd" ng-change="calculateDescuentoMontoUsd()" 
+                                    <input type="number" class="form-control input-number" name="txtDescuentoMontoUsd" placeholder="0.00 USD" 
+                                           ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01"
+                                           ng-model="formData.montoDescuentoUsd"
+                                           ng-value="formData.montoDescuentoUsd|printNumber"
+                                           ng-change="calculateDescuentoMontoUsd()" 
                                            data-toggle="tooltip" data-placement="top" ng-disabled="true" />
                                 </td>
                             </tr>
@@ -179,8 +190,8 @@
                             <tr class="d-flex">
                                 <td class="col-sm-3"><strong >TOTAL A CANCELAR</strong></td>
                                 <td class="col-sm-3"></td>
-                                <td class="col-sm-3"><div><strong>{{formData.totalMontoCanceladoBs}}</strong></div></td>
-                                <td class="col-sm-3"><div ><strong>{{formData.totalMontoCanceladoUsd}}</strong></div></td>
+                                <td class="col-sm-3" align="right"><div><strong>{{formData.totalMontoCobrarBs|printNumber}}</strong></div></td>
+                                <td class="col-sm-3" align="right"><div ><strong>{{formData.totalMontoCobrarUsd|printNumber}}</strong></div></td>
                             </tr>
                         </tbody>
                     </table>

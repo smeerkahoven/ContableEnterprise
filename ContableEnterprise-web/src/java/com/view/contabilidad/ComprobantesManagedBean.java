@@ -11,7 +11,6 @@ import com.contabilidad.entities.Dolar;
 import com.reports.ReportUtil;
 import com.security.SessionUtils;
 import com.seguridad.control.exception.CRUDException;
-import com.seguridad.utils.Accion;
 import com.view.ViewManagedBean;
 import com.view.menu.Formulario;
 import java.util.logging.Level;
@@ -81,7 +80,7 @@ public class ComprobantesManagedBean extends ViewManagedBean {
             
             checkIfCanAccess();
 
-            ejbLogger.add(Accion.ACCESS, user.getUserName(), this.formName, user.getIp());
+            //ejbLogger.add(Accion.ACCESS, user.getUserName(), this.formName, user.getIp());
 
         } catch (CRUDException ex) {
             Logger.getLogger(ComprobantesManagedBean.class.getName()).log(Level.SEVERE, null, ex);

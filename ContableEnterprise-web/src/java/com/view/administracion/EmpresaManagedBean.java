@@ -74,7 +74,7 @@ public class EmpresaManagedBean extends ViewManagedBean {
             
             checkIfCanAccess();
             
-            ejbLogger.add(Accion.ACCESS, user.getUserName(), this.formName, user.getIp());
+            //ejbLogger.add(Accion.ACCESS, user.getUserName(), this.formName, user.getIp());
         } catch (CRUDException ex) {
             Logger.getLogger(EmpresaManagedBean.class.getName()).log(Level.SEVERE, null, ex);
         }

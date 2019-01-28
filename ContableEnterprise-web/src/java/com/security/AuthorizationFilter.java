@@ -68,6 +68,7 @@ public class AuthorizationFilter implements Filter {
                                     if (m.getSubmenus() != null) {
                                         for (Menu sb : m.getSubmenus()) {
                                             if (servletPath.equals(sb.getFormulario().getFullPath())) {
+                                                System.out.println(servletPath + ":" + sb.getFormulario().getNombre() + ":" + sb.getFormulario().getAcceder());
                                                 if (sb.getFormulario().getAcceder() == Menu.IGUAL) {
                                                     ok = true;
                                                     break;

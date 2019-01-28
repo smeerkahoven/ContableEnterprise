@@ -42,7 +42,7 @@ public class BoletoOtrosCargosManagedBean extends ViewManagedBean {
             this.comisionAgencia = (Parametros) ejbParametros.get(new Parametros(Parametros.COMBO_CUENTA_COMISION_AGENCIA));
             this.pasivoMayorista = (Parametros) ejbParametros.get(new Parametros(Parametros.COMBO_CUENTA_PASIVO_MAYORISTAS));
             
-            ejbLogger.add(Accion.ACCESS, user.getUserName(), this.formName, user.getIp());
+            //ejbLogger.add(Accion.ACCESS, user.getUserName(), this.formName, user.getIp());
         } catch (CRUDException ex) {
             Logger.getLogger(BoletoOtrosCargosManagedBean.class.getName()).log(Level.SEVERE, null, ex);
         }

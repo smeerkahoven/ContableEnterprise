@@ -7,15 +7,23 @@
 		<defaultValueExpression><![CDATA[1]]></defaultValueExpression>
 	</parameter>
 	<parameter name="PATH_SUBREPORTE" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["boletos/planilla_bsp.jasper"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["contabilidad/pago_anticipado_todo.jasper"]]></defaultValueExpression>
 	</parameter>
-	<parameter name="ID_LIBRO" class="java.lang.Integer">
+	<parameter name="ID_LIBRO" class="java.lang.Integer" isForPrompting="false">
 		<defaultValueExpression><![CDATA[22]]></defaultValueExpression>
 	</parameter>
-	<parameter name="ID_NOTA_DEBITO" class="java.lang.Integer"/>
-	<parameter name="ID_INGRESO" class="java.lang.Integer"/>
-	<parameter name="FECHA_INICIO" class="java.lang.String"/>
-	<parameter name="FECHA_FIN" class="java.lang.String"/>
+	<parameter name="ID_NOTA_DEBITO" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="ID_INGRESO" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="FECHA_INICIO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="FECHA_FIN" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="ID_CREDITO" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="ID_PAGO" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[40000001]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ID_TRANSACCION" class="java.lang.Integer" isForPrompting="false">
+		<defaultValueExpression><![CDATA[50000001]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ID_DEVOLUCION" class="java.lang.Integer"/>
 	<queryString>
 		<![CDATA[SELECT
      tb_empresa.`id_empresa` AS tb_empresa_id_empresa,
@@ -115,6 +123,9 @@ WHERE
 		<band height="100" splitType="Stretch">
 			<subreport>
 				<reportElement x="6" y="0" width="200" height="100" uuid="9e5bdce7-711b-40e0-9b51-f915333152d9"/>
+				<subreportParameter name="ID_DEVOLUCION">
+					<subreportParameterExpression><![CDATA[$P{ID_DEVOLUCION}]]></subreportParameterExpression>
+				</subreportParameter>
 				<subreportParameter name="ID_INGRESO">
 					<subreportParameterExpression><![CDATA[$P{ID_INGRESO}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -125,9 +136,18 @@ WHERE
 					<subreportParameterExpression><![CDATA[$P{ID_NOTA_DEBITO}]]></subreportParameterExpression>
 				</subreportParameter>
 				<subreportParameter name="SUBREPORT_DIR"/>
+				<subreportParameter name="ID_CREDITO">
+					<subreportParameterExpression><![CDATA[$P{ID_CREDITO}]]></subreportParameterExpression>
+				</subreportParameter>
 				<subreportParameter name="EMPRESA_ID"/>
 				<subreportParameter name="FECHA_INICIO">
 					<subreportParameterExpression><![CDATA[$P{FECHA_INICIO}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ID_PAGO">
+					<subreportParameterExpression><![CDATA[$P{ID_PAGO}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ID_TRANSACCION">
+					<subreportParameterExpression><![CDATA[$P{ID_TRANSACCION}]]></subreportParameterExpression>
 				</subreportParameter>
 				<subreportParameter name="FECHA_FIN">
 					<subreportParameterExpression><![CDATA[$P{FECHA_FIN}]]></subreportParameterExpression>

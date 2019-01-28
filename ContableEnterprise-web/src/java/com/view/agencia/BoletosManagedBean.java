@@ -38,12 +38,12 @@ public class BoletosManagedBean extends ViewManagedBean {
     public void init() {
         try {
             this.formulario = SessionUtils.getFormulario(com.view.menu.Formulario.BOLETOS);
-            System.out.println("ACCEDER BOLETOS:" + this.formulario.getAcceder());
+            //System.out.println("ACCEDER BOLETOS:" + this.formulario.getAcceder());
             this.porcentaje = (Parametros) ejbParametros.get(new Parametros(Parametros.PORCENTAJE_COMISION));
 
             checkIfCanAccess();
             
-            ejbLogger.add(Accion.ACCESS, user.getUserName(), this.formName, user.getIp());
+            //ejbLogger.add(Accion.ACCESS, user.getUserName(), this.formName, user.getIp());
         } catch (CRUDException ex) {
             Logger.getLogger(BoletosManagedBean.class.getName()).log(Level.SEVERE.SEVERE, null, ex);
         }

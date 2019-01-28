@@ -23,7 +23,7 @@ import javax.enterprise.context.RequestScoped;
  */
 @Named(value = "bancos")
 @RequestScoped
-public class BancosManagedBean  extends ViewManagedBean{
+public class BancosManagedBean extends ViewManagedBean {
 
     /**
      * Creates a new instance of BancosManagedBean
@@ -31,17 +31,17 @@ public class BancosManagedBean  extends ViewManagedBean{
     public BancosManagedBean() {
         this.formName = "bancos";
     }
-    
-        @PostConstruct
+
+    @PostConstruct
     public void init() {
-        try {
+        //try {
             this.formulario = SessionUtils.getFormulario(Formulario.BANCOS);
             checkIfCanAccess();
 
-            ejbLogger.add(Accion.ACCESS, user.getUserName(), this.formName, user.getIp());
-        } catch (CRUDException ex) {
+            //ejbLogger.add(Accion.ACCESS, user.getUserName(), this.formName, user.getIp());
+        /*} catch (CRUDException ex) {
             Logger.getLogger(PersonalManagedBean.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }*/
     }
 
 }

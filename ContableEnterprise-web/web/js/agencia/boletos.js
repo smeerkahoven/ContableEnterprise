@@ -237,6 +237,7 @@ angular.module('jsBoletos.controllers', []).controller('frmBoletos',
                         console.log(response);
                         if (response.data.code === 201) {
                             $scope.mainGrid = response.data.content;
+                            console.log($scope.mainGrid);
                             $scope.loading = false;
                         } else {
                             $scope.showRestfulMessage = response.data.content;
@@ -1269,8 +1270,8 @@ angular.module('jsBoletos.controllers', []).controller('frmBoletos',
                                         $scope.showBoletoOrigenExiste = true;
                                         
                                         $scope.formData.nombrePasajero = boleto.nombrePasajero ;
-                                        $scope.formData.idCliente = $scope.findCta(boleto.idCliente.id, $scope.comboCliente);
-                                        $scope.formData.idPromotor = $scope.findCta(boleto.idPromotor.id, $scope.comboCliente);
+                                        $scope.formData.idCliente = $scope.findCta(boleto.idCliente, $scope.comboCliente);
+                                        $scope.formData.idPromotor = $scope.findCta(boleto.idPromotor, $scope.comboCliente);
                                         $scope.formData.fechaEmision = boleto.fechaEmision ;
                                         $scope.formData.fechaViaje = boleto.fechaViaje ;
                                         $scope.formData.moneda = boleto.moneda ;
@@ -1637,7 +1638,7 @@ angular.module('jsBoletos.controllers', []).controller('frmBoletos',
                 }
 
                 $scope.edit = function (item) {
-
+                    console.log(item);
                     $scope.hideMessagesBox();
 
                     if (item.tipoBoleto !== $scope.VOID) {
@@ -1650,15 +1651,16 @@ angular.module('jsBoletos.controllers', []).controller('frmBoletos',
                         $scope.showFormVoid = false;
 
                         console.log(item);
+                        console.log($scope.comboAeropuerto);
                         $scope.formData = item;
-                        $scope.formData.idAerolinea = $scope.findCta(item.idAerolinea.id, $scope.comboAerolineas);
-                        $scope.formData.idCliente = $scope.findCta(item.idCliente.id, $scope.comboCliente);
-                        $scope.formData.idPromotor = $scope.findCta(item.idPromotor.id, $scope.comboCounter);
-                        $scope.formData.idRuta1 = $scope.findCta(item.idRuta1.id, $scope.comboAeropuerto);
-                        $scope.formData.idRuta2 = $scope.findCta(item.idRuta2.id, $scope.comboAeropuerto);
-                        $scope.formData.idRuta3 = $scope.findCta(item.idRuta3 !== undefined ? item.idRuta3.id : null, $scope.comboAeropuerto);
-                        $scope.formData.idRuta4 = $scope.findCta(item.idRuta4 !== undefined ? item.idRuta4.id : null, $scope.comboAeropuerto);
-                        $scope.formData.idRuta5 = $scope.findCta(item.idRuta5 !== undefined ? item.idRuta5.id : null, $scope.comboAeropuerto);
+                        $scope.formData.idAerolinea = $scope.findCta(item.idAerolinea, $scope.comboAerolineas);
+                        $scope.formData.idCliente = $scope.findCta(item.idCliente, $scope.comboCliente);
+                        $scope.formData.idPromotor = $scope.findCta(item.idPromotor, $scope.comboCounter);
+                        $scope.formData.idRuta1 = $scope.findCta(item.idRuta1, $scope.comboAeropuerto);
+                        $scope.formData.idRuta2 = $scope.findCta(item.idRuta2, $scope.comboAeropuerto);
+                        $scope.formData.idRuta3 = $scope.findCta(item.idRuta3 !== undefined ? item.idRuta3 : null, $scope.comboAeropuerto);
+                        $scope.formData.idRuta4 = $scope.findCta(item.idRuta4 !== undefined ? item.idRuta4 : null, $scope.comboAeropuerto);
+                        $scope.formData.idRuta5 = $scope.findCta(item.idRuta5 !== undefined ? item.idRuta5 : null, $scope.comboAeropuerto);
 
                         $scope.getImpuestosEditar({idAerolinea: item.idAerolinea.id});
                         //$scope.formData.idEmpresa = $scope.findCta(item.idEmpresa, $scope.comboSucursales);
@@ -1715,8 +1717,8 @@ angular.module('jsBoletos.controllers', []).controller('frmBoletos',
                         $scope.showFormNuevo = false;
                         $scope.showFormEditar = true
 
-                        $scope.formData.idPromotor = $scope.findCta(item.idPromotor.id, $scope.comboCounter);
-                        $scope.formData.idAerolinea = $scope.findCta(item.idAerolinea.id, $scope.comboAerolineas);
+                        $scope.formData.idPromotor = $scope.findCta(item.idPromotor, $scope.comboCounter);
+                        $scope.formData.idAerolinea = $scope.findCta(item.idAerolinea, $scope.comboAerolineas);
                     }
                 }
 
@@ -1734,14 +1736,14 @@ angular.module('jsBoletos.controllers', []).controller('frmBoletos',
                     $scope.showRestfulError = false;
                     $scope.showRestfulSuccess = false;
                     $scope.formData = item;
-                    $scope.formData.idAerolinea = $scope.findCta(item.idAerolinea.id, $scope.comboAerolineas);
-                    $scope.formData.idCliente = $scope.findCta(item.idCliente.id, $scope.comboCliente);
-                    $scope.formData.idPromotor = $scope.findCta(item.idPromotor.id, $scope.comboCounter);
-                    $scope.formData.idRuta1 = $scope.findCta(item.idRuta1.id, $scope.comboAeropuerto);
-                    $scope.formData.idRuta2 = $scope.findCta(item.idRuta2.id, $scope.comboAeropuerto);
-                    $scope.formData.idRuta3 = $scope.findCta(item.idRuta3 !== undefined ? item.idRuta3.id : null, $scope.comboAeropuerto);
-                    $scope.formData.idRuta4 = $scope.findCta(item.idRuta4 !== undefined ? item.idRuta4.id : null, $scope.comboAeropuerto);
-                    $scope.formData.idRuta5 = $scope.findCta(item.idRuta5 !== undefined ? item.idRuta5.id : null, $scope.comboAeropuerto);
+                    $scope.formData.idAerolinea = $scope.findCta(item.idAerolinea, $scope.comboAerolineas);
+                    $scope.formData.idCliente = $scope.findCta(item.idCliente, $scope.comboCliente);
+                    $scope.formData.idPromotor = $scope.findCta(item.idPromotor, $scope.comboCounter);
+                    $scope.formData.idRuta1 = $scope.findCta(item.idRuta1, $scope.comboAeropuerto);
+                    $scope.formData.idRuta2 = $scope.findCta(item.idRuta2, $scope.comboAeropuerto);
+                    $scope.formData.idRuta3 = $scope.findCta(item.idRuta3 !== undefined ? item.idRuta3 : null, $scope.comboAeropuerto);
+                    $scope.formData.idRuta4 = $scope.findCta(item.idRuta4 !== undefined ? item.idRuta4 : null, $scope.comboAeropuerto);
+                    $scope.formData.idRuta5 = $scope.findCta(item.idRuta5 !== undefined ? item.idRuta5 : null, $scope.comboAeropuerto);
 
                     $scope.getImpuestosEditar({idAerolinea: item.idAerolinea.id});
                     //$scope.formData.idEmpresa = $scope.findCta(item.idEmpresa, $scope.comboSucursales);
@@ -1885,9 +1887,16 @@ angular.module('jsBoletos.controllers', []).controller('frmBoletos',
 
                 $scope.findCta = function (cta, input) {
                     var i = 0;
-                    if (cta !== undefined) {
+                    if (cta === undefined){
+                        return ;
+                    }
+                    
+                    if (cta === null){
+                        return;
+                    }
+                    if (cta.id !== undefined) {
                         for (i; i < input.length; i++) {
-                            if (input[i].id == cta) {
+                            if (input[i].id === cta.id) {
                                 return input[i];
                             }
                         }
@@ -2087,6 +2096,64 @@ app.filter('myStrictFilter', function ($filter) {
     }
 });
 
+app.filter('printNumber', function ($filter) {
+    return function (input, predicate) {
+        if (input === undefined || input === null || input === 0 || input === 0.00)
+            return '-';
+        else {
+            var value = new Number(input).toFixed(2);
+            return  value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+    }
+});
+
+app.filter('printRuta', function ($filter) {
+    return function (input, predicate) {
+        if (input !== null && input !== undefined){
+            return input.id ;
+        }else {
+            return "";
+        }
+    }
+});
+
+app.filter('printMoneda', function ($filter) {
+    return function (input, predicate) {
+        switch (input) {
+            case 'B':
+                return 'BOB.';
+            case 'U' :
+                return 'USD.';
+            default :
+                return '-';
+                break;
+        }
+    }
+});
+
+
+app.filter('printTipoBoleto', function ($filter) {
+    return function (input, predicate) {
+        switch (input) {
+            case 'AM':
+                return 'AMADEUS';
+            case 'AV' :
+                return 'AMADEUS VOID';
+            case 'SA' :
+                return 'SABRE';
+            case 'SV' :
+                return 'SABRE VOID';
+            case 'MA' :
+                return 'MANUAL';
+            case 'MV' :
+                return 'MANUAL VOID';
+            default :
+                return '-';
+                break;
+        }
+    }
+});
+
 app.filter('printEstado', function ($filter) {
     return function (input, predicate) {
         switch (input) {
@@ -2099,7 +2166,7 @@ app.filter('printEstado', function ($filter) {
             case 'A' :
                 return 'ANULADO';
             default :
-                return 'SIN ESTADO';
+                return '-';
                 break;
         }
     }

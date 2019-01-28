@@ -66,9 +66,6 @@ angular.module('jsBoletaje.controllers', []).controller('frmBoletaje',
                 }
 
                 $scope.save = function () {
-                    console.log($scope.formData);
-                }
-                $scope.save = function () {
                     let saveData = $scope.formData;
                     if (!$scope.myForm.$valid) {
                         //$scope.showAlert('Error de Verificacion', 'Verifique los mensajes de los valores requeridos')
@@ -78,223 +75,6 @@ angular.module('jsBoletaje.controllers', []).controller('frmBoletaje',
                         $scope.showAlert('Error de Verificacion', 'Verifique los mensajes de los valores requeridos')
                         return;
                     }
-                    // EFECTIVO CHEQUE
-                    if ($scope.formData.cuentaEfectivoDebeBs) {
-                        if ($scope.formData.cuentaEfectivoDebeBs.id === undefined) {
-                            $scope.showAlert('Error de Verificacion', 'Ingrese un cuenta para Efectivo Debe Bs');
-                            return;
-                        } else {
-                            saveData.cuentaEfectivoDebeBs = $scope.formData.cuentaEfectivoDebeBs.id;
-                        }
-                    }
-
-                    if ($scope.formData.cuentaEfectivoHaberBs) {
-                        if ($scope.formData.cuentaEfectivoHaberBs.id === undefined) {
-                            $scope.showAlert('Error de Verificacion', 'Ingrese un cuenta para Efectivo Haber Bolivianos');
-                            return;
-                        } else {
-                            saveData.cuentaEfectivoHaberBs = $scope.formData.cuentaEfectivoHaberBs.id;
-                        }
-                    }
-
-                    if ($scope.formData.cuentaEfectivoHaberUsd) {
-                        if ($scope.formData.cuentaEfectivoHaberUsd.id === undefined) {
-                            $scope.showAlert('Error de Verificacion', 'Ingrese un cuenta para Cuenta Efectivo Haber Dolares');
-                            return;
-                        } else {
-                            saveData.cuentaEfectivoHaberUsd = $scope.formData.cuentaEfectivoHaberUsd.id;
-                        }
-                    }
-
-                    if ($scope.formData.cuentaEfectivoDebeUsd) {
-                        if ($scope.formData.cuentaEfectivoDebeUsd.id === undefined) {
-                            $scope.showAlert('Error de Verificacion', 'Ingrese un cuenta para Cuenta Efectivo Debe Dolares');
-                            return;
-                        } else {
-                            saveData.cuentaEfectivoDebeUsd = $scope.formData.cuentaEfectivoDebeUsd.id;
-                        }
-                    }
-
-
-                    // Banco
-                    if ($scope.formData.depositoBancoDebeBs) {
-                        if ($scope.formData.depositoBancoDebeBs.id === undefined) {
-                            $scope.showAlert('Error de Verificacion', 'Ingrese un cuenta para Deposito Banco Debe Bs');
-                            return;
-                        } else {
-                            saveData.depositoBancoDebeBs = $scope.formData.depositoBancoDebeBs.id;
-                        }
-                    }
-
-                    if ($scope.formData.depositoBancoHaberBs) {
-                        if ($scope.formData.depositoBancoHaberBs.id === undefined) {
-                            $scope.showAlert('Error de Verificacion', 'Ingrese un cuenta para Deposito Banco Bolivianos');
-                            return;
-                        } else {
-                            saveData.depositoBancoHaberBs = $scope.formData.depositoBancoHaberBs.id;
-                        }
-                    }
-
-                    if ($scope.formData.depositoBancoDebeUsd) {
-                        if ($scope.formData.depositoBancoDebeUsd.id === undefined) {
-                            $scope.showAlert('Error de Verificacion', 'Ingrese un cuenta para Deposito Banco Debe Dolares');
-                            return;
-                        } else {
-                            saveData.depositoBancoDebeUsd = $scope.formData.depositoBancoDebeUsd.id;
-                        }
-                    }
-
-                    if ($scope.formData.depositoBancoHaberUsd) {
-                        if ($scope.formData.depositoBancoHaberUsd.id === undefined) {
-                            $scope.showAlert('Error de Verificacion', 'Ingrese un cuenta para Deposito Banco Haber Dolares');
-                            return;
-                        } else {
-                            saveData.depositoBancoHaberUsd = $scope.formData.depositoBancoHaberUsd.id;
-                        }
-                    }
-
-                    // Emision Bolivianos
-
-                    if ($scope.formData.emisionBolivianos) {
-                        if ($scope.formData.idTotalBoletoBs.id === undefined) {
-                            $scope.showAlert('Error de Verificacion', 'Ingrese un cuenta para Total Boletos en Bolivianos');
-                            return;
-                        } else {
-                            saveData.idTotalBoletoBs = $scope.formData.idTotalBoletoBs.id;
-                        }
-                    }
-                    if ($scope.formData.emisionDolares) {
-                        if ($scope.formData.idTotalBoletoUs.id === undefined) {
-                            $scope.showAlert('Error de Verificacion', 'Ingrese un cuenta para Total Boletos en Dolares');
-                            return;
-                        } else {
-                            saveData.idTotalBoletoUs = $scope.formData.idTotalBoletoUs.id;
-                        }
-                    }
-
-                    if ($scope.formData.idCuentaFee !== undefined) {
-                        if ($scope.formData.idCuentaFee.id === undefined) {
-                            $scope.showAlert('Error de Verificacion', 'Ingrese un cuenta para cuenta FEE');
-                            return;
-                        } else {
-                            saveData.idCuentaFee = $scope.formData.idCuentaFee.id;
-                        }
-                    }
-
-                    if ($scope.formData.idDescuentos !== undefined) {
-                        if ($scope.formData.idDescuentos.id === undefined) {
-                            $scope.showAlert('Error de Verificacion', 'Ingrese un cuenta para Descuentos');
-                            return;
-                        } else {
-                            saveData.idDescuentos = $scope.formData.idDescuentos.id;
-                        }
-                    }
-
-                    //formas de PAgo
-
-                    // NO BSP Bs
-                    if ($scope.formData.cuentaEfectivoNoBspDebeBs !== undefined) {
-                        if ($scope.formData.cuentaEfectivoNoBspDebeBs.id === undefined) {
-                            $scope.showAlert('Error de Verificacion', 'Ingrese un cuenta para Efectivos en el Debe');
-                            return;
-                        } else {
-                            saveData.cuentaEfectivoNoBspDebeBs = $scope.formData.cuentaEfectivoNoBspDebeBs.id;
-                        }
-                    }
-
-
-                    if ($scope.formData.cuentaEfectivoNoBspHaberBs !== undefined) {
-                        if ($scope.formData.cuentaEfectivoNoBspHaberBs.id === undefined) {
-                            $scope.showAlert('Error de Verificacion', 'Ingrese un cuenta para Efectivos en el Haber');
-                            return;
-                        } else {
-                            saveData.cuentaEfectivoNoBspHaberBs = $scope.formData.cuentaEfectivoNoBspHaberBs.id;
-                        }
-                    }
-
-                    // NO BSP Usd
-                    if ($scope.formData.cuentaEfectivoNoBspDebeUsd !== undefined) {
-                        if ($scope.formData.cuentaEfectivoNoBspDebeUsd.id === undefined) {
-                            $scope.showAlert('Error de Verificacion', 'Ingrese un cuenta para Efectivos en el Debe');
-                            return;
-                        } else {
-                            saveData.cuentaEfectivoNoBspDebeUsd = $scope.formData.cuentaEfectivoNoBspDebeUsd.id;
-                        }
-                    }
-
-
-                    if ($scope.formData.cuentaEfectivoNoBspHaberUsd !== undefined) {
-                        if ($scope.formData.cuentaEfectivoNoBspHaberUsd.id === undefined) {
-                            $scope.showAlert('Error de Verificacion', 'Ingrese un cuenta para Efectivos en el Haber');
-                            return;
-                        } else {
-                            saveData.cuentaEfectivoNoBspHaberUsd = $scope.formData.cuentaEfectivoNoBspHaberUsd.id;
-                        }
-                    }
-
-
-                    // CON BSP Bs
-
-                    if ($scope.formData.tarjetaCreditoBspDebeBs !== undefined) {
-                        if ($scope.formData.tarjetaCreditoBspDebeBs.id === undefined) {
-                            $scope.showAlert('Error de Verificacion', 'Ingrese un cuenta para Efectivos en el Debe');
-                            return;
-                        } else {
-                            saveData.tarjetaCreditoBspDebeBs = $scope.formData.tarjetaCreditoBspDebeBs.id;
-                        }
-                    }
-
-
-                    if ($scope.formData.tarjetaCreditoBspHaberBs !== undefined) {
-                        if ($scope.formData.tarjetaCreditoBspHaberBs.id === undefined) {
-                            $scope.showAlert('Error de Verificacion', 'Ingrese un cuenta para Efectivos en el Haber');
-                            return;
-                        } else {
-                            saveData.tarjetaCreditoBspHaberBs = $scope.formData.tarjetaCreditoBspHaberBs.id;
-                        }
-                    }
-
-                    //Con BSP USd
-                    if ($scope.formData.tarjetaCreditoBspDebeUsd !== undefined) {
-                        if ($scope.formData.tarjetaCreditoBspDebeUsd.id === undefined) {
-                            $scope.showAlert('Error de Verificacion', 'Ingrese un cuenta para Efectivos en el Debe');
-                            return;
-                        } else {
-                            saveData.tarjetaCreditoBspDebeUsd = $scope.formData.tarjetaCreditoBspDebeUsd.id;
-                        }
-                    }
-
-
-                    if ($scope.formData.tarjetaCreditoBspHaberUsd !== undefined) {
-                        if ($scope.formData.tarjetaCreditoBspHaberUsd.id === undefined) {
-                            $scope.showAlert('Error de Verificacion', 'Ingrese un cuenta para Efectivos en el Haber');
-                            return;
-                        } else {
-                            saveData.tarjetaCreditoBspHaberUsd = $scope.formData.tarjetaCreditoBspHaberUsd.id;
-                        }
-                    }
-
-                    // Otros Cargos
-
-                    if ($scope.formData.otroCargosClienteCobrarDebeBs !== undefined) {
-                        if ($scope.formData.otroCargosClienteCobrarDebeBs.id === undefined) {
-                            $scope.showAlert('Error de Verificacion', 'Ingrese un cuenta para Cargos Clientes x Cobrar BOB');
-                            return;
-                        } else {
-                            saveData.otroCargosClienteCobrarDebeBs = $scope.formData.otroCargosClienteCobrarDebeBs.id;
-                        }
-                    }
-
-
-                    if ($scope.formData.otrosCargosClienteCobrarDebeUsd !== undefined) {
-                        if ($scope.formData.otrosCargosClienteCobrarDebeUsd.id === undefined) {
-                            $scope.showAlert('Error de Verificacion', 'Ingrese un cuenta para Cargos Clientes x Cobrar USD');
-                            return;
-                        } else {
-                            saveData.otrosCargosClienteCobrarDebeUsd = $scope.formData.otrosCargosClienteCobrarDebeUsd.id;
-                        }
-                    }
-
                     $scope.loading = true;
                     saveData.emisionBolivianos = $scope.formData.emisionBolivianos ? SI : NO;
                     saveData.emisionDolares = $scope.formData.emisionDolares ? SI : NO;
@@ -327,7 +107,6 @@ angular.module('jsBoletaje.controllers', []).controller('frmBoletaje',
 
                 $scope.getComboEmpresas = function () {
                     $scope.loading = true;
-                    //console.log(formName);
                     return $http({
                         method: 'POST',
                         url: `${urlEmpresa.value}all-combo`,
@@ -360,11 +139,11 @@ angular.module('jsBoletaje.controllers', []).controller('frmBoletaje',
                     }).then(function (response) {
                         if (response.data.code === 201) {
                             $scope.comboCuentas = response.data.content;
+                            
                             $scope.formData.idTotalBoletoBs = $scope.findCta($scope.formData.idTotalBoletoBs, $scope.comboCuentas);
                             $scope.formData.idTotalBoletoUs = $scope.findCta($scope.formData.idTotalBoletoUs, $scope.comboCuentas);
                             $scope.formData.idCuentaFee = $scope.findCta($scope.formData.idCuentaFee, $scope.comboCuentas);
                             $scope.formData.idDescuentos = $scope.findCta($scope.formData.idDescuentos, $scope.comboCuentas);
-
 
                             $scope.formData.cuentaEfectivoDebeBs = $scope.findCta($scope.formData.cuentaEfectivoDebeBs, $scope.comboCuentas);
                             $scope.formData.cuentaEfectivoHaberBs = $scope.findCta($scope.formData.cuentaEfectivoHaberBs, $scope.comboCuentas);
@@ -374,7 +153,7 @@ angular.module('jsBoletaje.controllers', []).controller('frmBoletaje',
                             $scope.formData.depositoBancoHaberBs = $scope.findCta($scope.formData.depositoBancoHaberBs, $scope.comboCuentas);
                             $scope.formData.depositoBancoDebeBs = $scope.findCta($scope.formData.depositoBancoDebeBs, $scope.comboCuentas);
                             $scope.formData.depositoBancoHaberUsd = $scope.findCta($scope.formData.depositoBancoHaberUsd, $scope.comboCuentas);
-                            $scope.formData.depositoBancoDebeUsd = $scope.findCta($scope.formData.cuentaEfectivoHaberUsd, $scope.comboCuentas);
+                            $scope.formData.depositoBancoDebeUsd = $scope.findCta($scope.formData.depositoBancoDebeUsd, $scope.comboCuentas);
 
                             $scope.formData.cuentaEfectivoNoBspDebeBs = $scope.findCta($scope.formData.cuentaEfectivoNoBspDebeBs, $scope.comboCuentas);
                             $scope.formData.cuentaEfectivoNoBspHaberBs = $scope.findCta($scope.formData.cuentaEfectivoNoBspHaberBs, $scope.comboCuentas);
@@ -384,8 +163,32 @@ angular.module('jsBoletaje.controllers', []).controller('frmBoletaje',
                             $scope.formData.tarjetaCreditoBspHaberBs = $scope.findCta($scope.formData.tarjetaCreditoBspHaberBs, $scope.comboCuentas);
                             $scope.formData.tarjetaCreditoBspDebeUsd = $scope.findCta($scope.formData.tarjetaCreditoBspDebeUsd, $scope.comboCuentas);
                             $scope.formData.tarjetaCreditoBspHaberUsd = $scope.findCta($scope.formData.tarjetaCreditoBspHaberUsd, $scope.comboCuentas);
+                            //Paquetes y Otros
+                            $scope.formData.otrosCargosClienteCobrarDebeBs =  $scope.findCta($scope.formData.otrosCargosClienteCobrarDebeBs, $scope.comboCuentas);
+                            $scope.formData.otrosCargosClienteCobrarDebeUsd =  $scope.findCta($scope.formData.otrosCargosClienteCobrarDebeUsd, $scope.comboCuentas);
 
-
+                            //Nota CRedito 
+                            $scope.formData.notaCreditoHaberBs =  $scope.findCta($scope.formData.notaCreditoHaberBs, $scope.comboCuentas);
+                            $scope.formData.notaCreditoHaberUsd =  $scope.findCta($scope.formData.notaCreditoHaberUsd, $scope.comboCuentas);
+                            
+                            //Depositos Anticipados
+                            $scope.formData.depositoClienteAnticipadoBs =  $scope.findCta($scope.formData.depositoClienteAnticipadoBs, $scope.comboCuentas);
+                            $scope.formData.depositoClienteAnticipadoUsd =  $scope.findCta($scope.formData.depositoClienteAnticipadoUsd, $scope.comboCuentas);
+                            
+                            //Acreditacion
+                            $scope.formData.acreditacionDepositoAnticipadoDebeBs =  $scope.findCta($scope.formData.acreditacionDepositoAnticipadoDebeBs, $scope.comboCuentas);
+                            $scope.formData.acreditacionDepositoAnticipadoHaberBs =  $scope.findCta($scope.formData.acreditacionDepositoAnticipadoHaberBs, $scope.comboCuentas);
+                            $scope.formData.acreditacionDepositoAnticipadoDebeUsd =  $scope.findCta($scope.formData.acreditacionDepositoAnticipadoDebeUsd, $scope.comboCuentas);
+                            $scope.formData.acreditacionDepositoAnticipadoHaberUsd =  $scope.findCta($scope.formData.acreditacionDepositoAnticipadoHaberUsd, $scope.comboCuentas);
+                            
+                            //Devolucion
+                            $scope.formData.devolucionDepositoAnticipadoDebeBs =  $scope.findCta($scope.formData.devolucionDepositoAnticipadoDebeBs, $scope.comboCuentas);
+                            $scope.formData.devolucionDepositoAnticipadoHaberBs =  $scope.findCta($scope.formData.devolucionDepositoAnticipadoHaberBs, $scope.comboCuentas);
+                            $scope.formData.devolucionDepositoAnticipadoDebeUsd =  $scope.findCta($scope.formData.devolucionDepositoAnticipadoDebeUsd, $scope.comboCuentas);
+                            $scope.formData.devolucionDepositoAnticipadoHaberUsd =  $scope.findCta($scope.formData.devolucionDepositoAnticipadoHaberUsd, $scope.comboCuentas);
+                            
+                            
+                            
                             $scope.loading = false;
                             $scope.showBtnNuevo = true;
                         } else {
@@ -504,6 +307,143 @@ angular.module('jsBoletaje.controllers', []).controller('frmBoletaje',
                             return true;
                         }
                     }
+                    
+                    //Deposito Bancario Sin o Con BSP
+                    if ($scope.formData.depositoBancoDebeBs === undefined) {
+                        return true;
+                    } else {
+                        if ($scope.formData.depositoBancoDebeBs.id === undefined) {
+                            return true;
+                        }
+                    }
+                    if ($scope.formData.depositoBancoHaberBs === undefined) {
+                        return true;
+                    } else {
+                        if ($scope.formData.depositoBancoHaberBs.id === undefined) {
+                            return true;
+                        }
+                    }
+                    if ($scope.formData.depositoBancoDebeUsd === undefined) {
+                        return true;
+                    } else {
+                        if ($scope.formData.depositoBancoDebeUsd.id === undefined) {
+                            return true;
+                        }
+                    }
+                    if ($scope.formData.depositoBancoHaberUsd === undefined) {
+                        return true;
+                    } else {
+                        if ($scope.formData.depositoBancoHaberUsd.id === undefined) {
+                            return true;
+                        }
+                    }
+
+                    //PAQUETES y OTROS
+                    //Cuenta Clientes x Cobrar
+                    if ($scope.formData.otrosCargosClienteCobrarDebeBs === undefined) {
+                        return true;
+                    } else {
+                        if ($scope.formData.otrosCargosClienteCobrarDebeBs.id === undefined) {
+                            return true;
+                        }
+                    }
+                    
+                    if ($scope.formData.otrosCargosClienteCobrarDebeUsd === undefined) {
+                        return true;
+                    } else {
+                        if ($scope.formData.otrosCargosClienteCobrarDebeUsd.id === undefined) {
+                            return true;
+                        }
+                    }
+                    
+                    //NOTA CREDITO
+                    //Deposito Cliente
+                    if ($scope.formData.notaCreditoHaberBs === undefined) {
+                        return true;
+                    } else {
+                        if ($scope.formData.notaCreditoHaberBs.id === undefined) {
+                            return true;
+                        }
+                    }
+                    
+                    if ($scope.formData.notaCreditoHaberUsd === undefined) {
+                        return true;
+                    } else {
+                        if ($scope.formData.notaCreditoHaberUsd.id === undefined) {
+                            return true;
+                        }
+                    }
+                    
+                    //DEPOSITOS ANTICIPADOS
+                    //Deposito Cliente Anticipado
+                    if ($scope.formData.depositoClienteAnticipadoBs === undefined) {
+                        return true;
+                    } else {
+                        if ($scope.formData.depositoClienteAnticipadoBs.id === undefined) {
+                            return true;
+                        }
+                    }
+                    //Acreditacion Deposito Cliente bs
+                    if ($scope.formData.acreditacionDepositoAnticipadoDebeBs === undefined) {
+                        return true;
+                    } else {
+                        if ($scope.formData.acreditacionDepositoAnticipadoDebeBs.id === undefined) {
+                            return true;
+                        }
+                    }
+                    if ($scope.formData.acreditacionDepositoAnticipadoHaberBs === undefined) {
+                        return true;
+                    } else {
+                        if ($scope.formData.acreditacionDepositoAnticipadoHaberBs.id === undefined) {
+                            return true;
+                        }
+                    }
+                    if ($scope.formData.acreditacionDepositoAnticipadoDebeUsd === undefined) {
+                        return true;
+                    } else {
+                        if ($scope.formData.acreditacionDepositoAnticipadoDebeUsd.id === undefined) {
+                            return true;
+                        }
+                    }
+                    if ($scope.formData.acreditacionDepositoAnticipadoHaberUsd === undefined) {
+                        return true;
+                    } else {
+                        if ($scope.formData.acreditacionDepositoAnticipadoHaberUsd.id === undefined) {
+                            return true;
+                        }
+                    }
+                    
+                    //DEvolucion Deposito Cliente Usd
+                     if ($scope.formData.devolucionDepositoAnticipadoDebeBs === undefined) {
+                        return true;
+                    } else {
+                        if ($scope.formData.devolucionDepositoAnticipadoDebeBs.id === undefined) {
+                            return true;
+                        }
+                    }
+                     if ($scope.formData.devolucionDepositoAnticipadoHaberBs === undefined) {
+                        return true;
+                    } else {
+                        if ($scope.formData.devolucionDepositoAnticipadoHaberBs.id === undefined) {
+                            return true;
+                        }
+                    }
+                     if ($scope.formData.devolucionDepositoAnticipadoDebeUsd === undefined) {
+                        return true;
+                    } else {
+                        if ($scope.formData.devolucionDepositoAnticipadoDebeUsd.id === undefined) {
+                            return true;
+                        }
+                    }
+                     if ($scope.formData.devolucionDepositoAnticipadoHaberUsd === undefined) {
+                        return true;
+                    } else {
+                        if ($scope.formData.devolucionDepositoAnticipadoHaberUsd.id === undefined) {
+                            return true;
+                        }
+                    }
+                    
+                    return false ;
                 }
 
                 $scope.update = function () {
@@ -522,7 +462,7 @@ angular.module('jsBoletaje.controllers', []).controller('frmBoletaje',
 
                     $http({
                         method: 'POST',
-                        url: url.value + 'update',
+                        url: `${url.value}update`,
                         data: {token: token.value, content: angular.toJson($scope.formData)},
                         headers: {'Content-Type': 'application/json'}
                     }).then(function (response) {
@@ -533,16 +473,19 @@ angular.module('jsBoletaje.controllers', []).controller('frmBoletaje',
                             $scope.showForm = false;
                             $scope.showTable = true;
                             //$scope.getData();
+                            
                         } else {
                             $scope.showRestfulMessage = response.data.content;
                             $scope.showRestfulError = true;
                             $scope.showForm = false;
                         }
+                        goScrollToSuccess();
 
                     }, function (error) {
                         $scope.loading = false;
                         $scope.showRestfulMessage = error;
                         $scope.showRestfulError = true;
+                        goScrollToSuccess();
                         //$scope.showForm = true;
                     });
                 };
@@ -588,9 +531,9 @@ angular.module('jsBoletaje.controllers', []).controller('frmBoletaje',
 
                 $scope.findCta = function (cta, input) {
                     var i = 0;
-                    if (cta !== undefined) {
+                    if (cta.id !== undefined) {
                         for (i; i < input.length; i++) {
-                            if (input[i].id === cta) {
+                            if (input[i].id === cta.id) {
                                 return input[i];
                             }
                         }
@@ -598,15 +541,6 @@ angular.module('jsBoletaje.controllers', []).controller('frmBoletaje',
                 }
 
                 $scope.getComboEmpresas();
-
-                // los watch sirven para verificar si el valor cambio
-                $scope.$watch('formData.ctaDevolucionMonExt.id', function (now, old) {
-                    if (now == undefined) {
-                        $scope.showErrorCtaDevolucionMonExt = true;
-                    } else {
-                        $scope.showErrorCtaDevolucionMonExt = false;
-                    }
-                });
             }
         ]);
 

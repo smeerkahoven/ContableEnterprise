@@ -184,7 +184,7 @@
                                                 <div class="form-group row">
                                                     <label for="txtNombre" class="col-form-label col-sm-2 text-right">Nombre</label>
                                                     <div class="col-sm-4">
-                                                        <input type="text" class="form-control" name="txtNombre" required="true" maxlength="32" ng-model="formDataNew.nombre"/>
+                                                        <input type="text" class="form-control" name="txtNombre" oninput='this.value=this.value.toUpperCase();' required="true" maxlength="32" ng-model="formDataNew.nombre"/>
                                                     </div>
 
                                                 </div>
@@ -225,10 +225,9 @@
                                                                                     <th>Crear</th>
                                                                                     <th>Eliminar</th>
                                                                                     <th>Anular</th>
-                                                                                    <th>Ejecutar</th>
                                                                                 </thead>
                                                                                 <tbody>
-                                                                                    <tr ng-repeat="c in row.flist">
+                                                                                    <tr ng-repeat="c in row.flist" ng-show="ngShowRow(row, c)">
                                                                                         <td>{{c.formularioNombre}}</td>
                                                                                         <td>{{c.formularioStatus}}</td>
                                                                                         <td><input class="form-control" type="checkbox" ng-true-value="1" ng-false-value="0" ng-checked="c.rolAcceder" ng-model="c.rolAcceder" /></td>
@@ -239,7 +238,6 @@
                                                                                         <td><input class="form-control" type="checkbox" ng-true-value="1" ng-false-value="0" ng-checked="c.rolCrear" ng-model="c.rolCrear"/></td>
                                                                                         <td><input class="form-control" type="checkbox" ng-true-value="1" ng-false-value="0" ng-checked="c.rolEliminar" ng-model="c.rolEliminar"/></td>
                                                                                         <td><input class="form-control" type="checkbox" ng-true-value="1" ng-false-value="0" ng-checked="c.rolAnular" ng-model="c.rolAnular"/></td>
-                                                                                        <td><input class="form-control" type="checkbox" ng-true-value="1" ng-false-value="0" ng-checked="c.rolEjecutar" ng-model="c.rolEjecutar"/></td>
                                                                                     </tr>
                                                                                 </tbody>
                                                                             </table>
@@ -318,7 +316,6 @@
                                                                                     <th>Crear</th>
                                                                                     <th>Eliminar</th>
                                                                                     <th>Anular</th>
-                                                                                    <th>Ejecutar</th>
                                                                                 </thead>
                                                                                 <tbody>
                                                                                     <tr ng-repeat="c in row.flist">
@@ -332,7 +329,6 @@
                                                                                         <td><input class="form-control" type="checkbox" ng-true-value="1" ng-false-value="0" ng-checked="c.rolCrear" ng-model="c.rolCrear" /></td>
                                                                                         <td><input class="form-control" type="checkbox" ng-true-value="1" ng-false-value="0" ng-checked="c.rolEliminar" ng-model="c.rolEliminar" /></td>
                                                                                         <td><input class="form-control" type="checkbox" ng-true-value="1" ng-false-value="0" ng-checked="c.rolAnular" ng-model="c.rolAnular" /></td>
-                                                                                        <td><input class="form-control" type="checkbox" ng-true-value="1" ng-false-value="0" ng-checked="c.rolEjecutar" ng-model="c.rolEjecutar" /></td>
                                                                                     </tr>
                                                                                 </tbody>
                                                                             </table>

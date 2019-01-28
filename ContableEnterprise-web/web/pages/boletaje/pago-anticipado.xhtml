@@ -1,0 +1,1007 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html  xmlns="http://www.w3.org/1999/xhtml"
+       xmlns:h="http://xmlns.jcp.org/jsf/html"
+       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"  
+       xmlns:c="http://java.sun.com/jsp/jstl/core"
+       >
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <!-- End Required meta tags -->
+        <title>#{login.systemName.valor} - #{login.razonSocial}</title>
+        <!-- FAVICONS -->
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/apple-touch-icon.png" />
+        <link rel="shortcut icon" href="../../assets/favicon.ico" />
+        <meta name="theme-color" content="#3063A0" />
+        <!-- End FAVICONS -->
+        <script src="../../assets/vendor/pace/pace.min.js"></script>
+        <!-- BEGIN BASE STYLES -->
+        <link rel="stylesheet" href="../../assets/vendor/pace/pace.min.css" />
+        <link rel="stylesheet" href="../../assets/vendor/bootstrap/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="../../assets/vendor/open-iconic/css/open-iconic-bootstrap.min.css"/>
+        <link rel="stylesheet" href="../../assets/vendor/fontawesome/css/fontawesome.all.css"/>
+        <link rel="stylesheet" href="../../assets/vendor/font-awesome/css/font-awesome.min.css"  />
+        <link rel="stylesheet" href="../../assets/vendor/flatpickr/flatpickr.min.css" />
+        <!-- END BASE STYLES -->
+        <!-- BEGIN PLUGINS STYLES -->
+        <link rel="stylesheet" href="../../assets/vendor/flatpickr/flatpickr.min.css"/>
+        <!-- END PLUGINS STYLES -->
+        <!-- BEGIN THEME STYLES -->
+        <link rel="stylesheet" href="../../assets/stylesheets/main.min.css"/>
+        <link rel="stylesheet" href="../../assets/vendor/sweetalert/css/sweetalert.css"/>
+
+        <script type="text/javascript" src="../../js/angular.min.js" />
+
+        <script type="text/javascript" src="../../js/ui-bootstrap-tpls.js" />
+        <script type="text/javascript" src="../../js/smart-table.min.js" />
+        <script type="text/javascript" src="../../js/jcs-auto-validate.min.js" />
+        <script type="text/javascript" src="../../assets/vendor/sweetalert/js/sweetalert.min.js"/>
+
+        <script type="text/javascript" src="../../js/date.format.js" />
+        <script type="text/javascript" src="../../js/moment.js" />
+
+
+        <!--CORRIGE ng-show -->
+        <link rel="stylesheet" href="../../css/main.css"  />
+    </head>
+    <h:body>
+        <!-- .app -->
+        <div class="app">
+            <!-- .app-header -->
+            <header class="app-header">
+                <!-- .top-bar -->
+                <ui:include src="../index/top-bar.xhtml" />
+                <!-- /.top-bar -->
+            </header>
+            <!-- /.app-header -->
+            <!-- .app-aside -->
+            <aside class="app-aside">
+                <!-- .aside-content -->
+                <div class="aside-content">
+                    <!-- .aside-menu -->
+                    <ui:include src="../index/menu.xhtml" />
+                    <!-- /.aside-menu -->
+                </div>
+                <!-- /.aside-content -->
+            </aside>
+            <!-- /.app-aside -->
+            <!-- .app-main -->
+            <main class="app-main" >
+                <!-- .wrapper -->
+                <div class="wrapper">
+                    <!-- .page -->
+                    <div class="page" ng-app="jsPagoAnticipado" ng-controller="frmPagoAnticipado">
+                        <!-- .page-inner -->
+                        <div class="page-inner">
+                            <!-- .page-title-bar -->
+                            <header class="page-title-bar">
+                                <nav aria-label="breadcrumb">
+                                    <ol class="breadcrumb">
+                                        <li class="breadcrumb-item active">
+                                            <a href="#">
+                                                <i class="breadcrumb-icon fa fa-angle-left mr-2"></i>#{pagoAnticipado.formulario.modulo}
+                                            </a>
+                                        </li>
+                                    </ol>
+                                </nav>
+                                <div class="d-md-flex">
+                                    <h1 class="page-title mr-sm-auto"> #{pagoAnticipado.formulario.nombre}</h1>
+                                    <div class="dt-button btn-group">
+                                        <c:if test="#{pagoAnticipado.formulario.crear== pagoAnticipado.formulario.PERMITIR}">
+                                            <button type="button" class="btn btn-success buttons-html5" tabindex="0" ng-click="nuevo()"><span class="fa fa-plus"></span> Nuevo</button>
+                                        </c:if>
+                                        <button type="button" class="btn btn-warning buttons-html5" tabindex="0" ng-click="cancelar()"><span class="fa fa-undo"></span> Cancelar</button>
+                                    </div>
+                                </div>
+                            </header>
+                            <!-- /.page-title-bar -->
+                            <!-- .page-section -->
+                            <div class="page-section" >
+                                <!-- .card -->
+                                <section id="base-style" class="card">
+                                    <!-- .card-body -->
+                                    <div class="card-body">
+
+                                        <!--Mensaje Cargando -->
+                                        <span ng-show="loading" class="alert alert-info"><i class="loader loader-sm" ></i>  Cargando...</span>
+                                        <!-- /Mensaje Cargando -->
+
+                                        <!--Mensaje Success -->
+                                        <div id="restful-success" class="alert alert-success ng-hide" role="alert" ng-show="showRestfulSuccess">
+                                            <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">&times;</a>
+                                            {{ showRestfulMessage}}
+                                        </div>
+                                        <!--/Mensaje Success -->
+
+                                        <!--Mensaje Error -->
+                                        <div id="restful-error" class="alert alert-danger ng-hide" role="alert" ng-show="showRestfulError">
+                                            <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">&times;</a>
+                                            {{ showRestfulMessage}}
+                                        </div>
+                                        <!-- /Mensaje Error -->
+                                        <!-- .form-group -->
+                                        <!-- Tabla Contenido -->
+                                        <div class=" ng-hide" ng-show="showTable">
+
+                                            <div class="form-group row" >
+                                                <label for="txtNombre" class=" control-label col-form-label col-sm-2 text-right ">Cliente</label>
+                                                <div class="col-sm-6">
+                                                    <input type="text" ng-model="search.idCliente" placeholder="Seleccione un Cliente"
+                                                           uib-typeahead="cuenta as cuenta.name for cuenta in comboCliente | filter:{name:$viewValue}"
+                                                           class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="1" 
+                                                           typeahead-template-url="customTemplate.html"
+                                                           name="txtCliente" id="txtCliente" 
+                                                           ng-disabled="formData.transacciones.length > 0"  typeahead-focus-first="true"
+                                                           />
+                                                    <span class="alert-danger"  ng-show="showClienteRequieredSearch"  >
+                                                        Ingrese un Cliente V&aacute;lido.
+                                                    </span> 
+                                                </div>
+
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <label class="col-form-label col-sm-2 text-right" for="flatpickr-wrap"> Concepto de Pago</label>
+                                                <div class="col-sm-6">
+                                                    <input id="txtSearchPasajero" ng-model="search.conceptoPago" class="form-control"  />
+                                                </div>
+
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <label class="col-form-label col-sm-2 text-right" for="flatpickr-wrap">N&uacute;mero Nota de Dep&oacute;sito</label>
+                                                <div class="col-sm-6">
+                                                    <input id="txtSearchNota" ng-model="search.nroDeposito" class="form-control" maxlength="8" size="8" type="input" />
+                                                </div>
+                                            </div>
+
+
+                                            <div class="form-group row">
+                                                <label class="col-form-label col-sm-2 text-right" for="flatpickr-wrap">Fecha Inicio</label>
+                                                <div class="col-sm-3 input-group input-group-alt flatpickr " id="flatpickr9">
+                                                    <input id="txtFechaInicio" type="text" class="form-control flatpick-input" data-input="" 
+                                                           ng-model="search.fechaInicio"/>
+                                                    <div class="input-group-append">
+                                                        <button type="button" class="btn btn-secondary" data-toggle="">
+                                                            <i class="far fa-calendar"></i>
+                                                        </button>
+                                                        <button type="button" class="btn btn-secondary" data-clear="">
+                                                            <i class="fa fa-times"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+                                                <label class="col-form-label col-sm-2 text-right" for="flatpickr-wrap">Fecha Fin</label>
+                                                <div class="col-sm-3 input-group input-group-alt flatpickr" id="flatpickr9">
+                                                    <input id="txtFechaFin" type="text" class="form-control flatpick-input" data-input="" ng-model="search.fechaFin"/>
+                                                    <div class="input-group-append">
+                                                        <button type="button" class="btn btn-secondary" data-toggle="">
+                                                            <i class="far fa-calendar"></i>
+                                                        </button>
+                                                        <button type="button" class="btn btn-secondary" data-clear="">
+                                                            <i class="fa fa-times"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+                                                <c:if test="#{pagoAnticipado.formulario.buscar == pagoAnticipado.formulario.PERMITIR}">
+                                                    <button type="button" class="btn btn-primary col-sm-2"  ng-click="find()"><span class="fa fa-search"></span> Buscar</button>
+                                                </c:if>
+                                            </div>
+
+                                            <div  id="tableData" class="ng-hide table-responsive" ng-show="showTable" >
+                                                <table st-table="display_records"    st-safe-src="mainGrid" 
+                                                       class="table  table-hover ">
+                                                    <thead>
+                                                        <c:if test="#{pagoAnticipado.formulario.buscar == pagoAnticipado.formulario.PERMITIR}">
+                                                            <tr>
+                                                                <th colspan="8">
+                                                                    <!-- .input-group -->
+                                                                    <div class="input-group has-clearable">
+                                                                        <div class="input-group-prepend">
+                                                                            <span class="input-group-text">
+                                                                                <span class="oi oi-magnifying-glass"></span>
+                                                                            </span>
+                                                                        </div>
+                                                                        <input st-search="" id="table-search" class="form-control placeholder-shown" placeholder="Busqueda" type="text" /> 
+                                                                    </div>
+                                                                    <!-- /.input-group -->
+                                                                </th>
+                                                            </tr>
+                                                        </c:if>
+                                                        <tr>
+                                                            <th>Nro. Pago Anticipado</th>
+                                                            <th>Fecha</th>
+                                                            <th>Concepto</th>
+                                                            <th>Forma de Pago</th>
+                                                            <th>Moneda</th>
+                                                            <th>Monto Anticipado aa</th>
+                                                            <th>Total Acreditado</th>
+                                                            <th>Estado</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr st-select-row="row" st-select-mode="multiple" ng-repeat="row in display_records" class="boleto-estado-{{row.estado}}">
+                                                            <td>{{row.idPagoAnticipado}} </td>
+                                                            <td>{{row.fechaEmision}} </td>
+                                                            <td>{{row.concepto| limitTo:64}}{{ row.concepto.length > 64 ?'...':''}}</td>
+                                                            <td>{{row.formaPago|printFormaPago}}  </td>
+                                                            <td>{{row.moneda|printMoneda}} </td>
+                                                            <td align="right" >{{row.montoAnticipado|printNumber}} </td>
+                                                            <td align="right" >{{row.montoTotalAcreditado|printNumber}} </td>
+                                                            <td>{{row.estado| printEstado }} </td>
+                                                            <td>
+                                                                <div class="btn-group" >
+                                                                    <c:if test="${pagoAnticipado.formulario.acceder == pagoAnticipado.formulario.PERMITIR }">
+                                                                        <button type="button" title="Editar" class="btn btn-sm btn-info" ng-click="edit(row)" ><i class="fa fa-pencil"></i></button>
+                                                                    </c:if>
+
+                                                                    <c:if test="#{pagoAnticipado.formulario.anular== pagoAnticipado.formulario.PERMITIR}">
+                                                                        <button type="button" title="Anular" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#frmAnular" ng-click="modalAnular(row.idNotaDebito, 'el Pago Anticipado', PAGO_ANTICIPADO, row)"><i class="fa fa-trash"></i></button>
+                                                                    </c:if>
+                                                                    <!--<button type="button" title="Ver" class="btn btn-default" ng-click="ver(row.idEmpleado)" data-toggle="modal" data-target="#verForm"><i class="fa fa-search"></i></button>-->
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                    <tfoot>
+                                                        <tr>
+                                                            <td colspan="10" class="text-center">
+                                                                <div class="container" st-items-by-page="itemsByPage" st-pagination="" st-template="../index/pagination.custom.html"></div>
+                                                            </td>
+                                                        </tr>
+                                                    </tfoot>
+                                                </table>
+                                            </div>
+                                        </div>
+                                        <!-- /Tabla Contenido -->
+                                        <form name="myForm" id="myForm"  ng-submit="save()">
+                                            <!-- .form -->
+                                            <!-- .fieldset -->
+                                            <fieldset>
+                                                <!-- Contenido Formulario-->
+                                                <div id="formData" class="container animated fadeIn ng-hide"   ng-show="showForm" >
+                                                    <input type="hidden" id="hdUrl" name="hdUrl" value="#{pagoAnticipado.formulario.restful}"/>
+                                                    <input type="hidden" id="hdToken" name="hdToken" value="#{sessionView.token}"/>
+                                                    <input type="hidden" id="hdFormName" name="hdFormName" value="#{pagoAnticipado.formulario.nombre}"/>
+                                                    <input type="hidden" id="hdUrlFactores" name="hdUrlFactores" value="#{factores.formulario.restful}"/>
+                                                    <input type="hidden" id="hdUrlClientes" name="hdUrlClientes" value="#{cliente.formulario.restful}"/>
+                                                    <input type="hidden" id="hdUrlBancos" name="hdUrlBancos" value="#{bancos.formulario.restful}"/>
+                                                    <input type="hidden" id="hdUrlTarjetas" name="hdUrlTarjetas" value="#{tarjetaCredito.formulario.restful}"/>
+                                                    <input type="hidden" id="hdUrlAerolinea" name="hdUrlAerolinea" value="#{aerolinea.formulario.restful}"/>
+                                                    <input type="hidden" id="hdUrlPromotores" name="hdUrlPromotores" value="#{promotores.formulario.restful}"/>
+                                                    <input type="hidden" id="hdUrlAeropuertos" name="hdUrlAeropuertos" value="#{aeropuerto.formulario.restful}"/>
+                                                    <input type="hidden" id="hdUrlBoletos" name="hdUrlBoletos" value="#{boletos.formulario.restful}"/>
+                                                    <input type="hidden" id="idEmpresa" name="idEmpresa" value="#{login.empleado.idEmpresa.idEmpresa}"/>
+                                                    <input type="hidden" id="hdPorcentaje" name="hdPorcentaje" value="#{boletos.porcentaje.valor}" />
+                                                    <input type="hidden" id="hdFactorMaxMin" name="hdFactorMaxMin" value="#{comprobantes.factorCambiarioMaxMin.valor}"/>
+                                                    <input type="hidden" id="hdUrlPlanCuentas" name="hdUrlPlanCuentas" value="#{planCuentas.formulario.restful}"/>
+                                                    <input type="hidden" id="hdIngresoCaja" name="hdIngresoCaja" value="#{ingresoCaja.formulario.restful}"/>
+                                                    <input type="hidden" id="hdComprobante" name="hdComprobante" value="#{comprobantes.formulario.restful}"/>
+                                                    <!--<input type="hidden" id="txtFechaAlta" name="txtFechaAlta" ng-model="formData.fechaAlta"/>-->
+                                                    <!--<input type="hidden" id="txtFechaBaja" name="txtFechaBaja" ng-model="formData.fechaBaja"/>-->
+                                                    <br />
+                                                    <script  type="text/ng-template" id="customTemplate.html">
+                                                        <a><div >
+                                                        <span class=" tt-suggestion"  ng-bind-html="match.label | uibTypeaheadHighlight:query"></span>
+                                                        </div></a>
+                                                    </script>
+
+                                                    <!-- Numero Nota Debito -->
+                                                    <div class="form-group row">
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">N&uacute;mero Pago Anticipado</label>
+                                                        <div class="col-sm-4">
+                                                            <label for="txtIdLibro" class="col-form-label"><strong><h4>{{formData.idPagoAnticipado}}</h4></strong></label>
+                                                        </div>
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Estado</label>
+                                                        <div class="col-sm-4">
+                                                            <label for="txtIdLibro" class="col-form-label"  ><strong><h4>{{formData.estado|printEstado}}</h4></strong></label>
+                                                        </div>
+                                                    </div>
+                                                    <!-- /Numero Nota Debito -->
+
+                                                    <!-- Cuenta -->
+                                                    <div class="form-group row" >
+                                                        <label for="txtNombre" class=" control-label col-form-label col-sm-2 text-right ">Cliente</label>
+                                                        <div class="col-sm-6">
+                                                            <input type="text" ng-model="formData.idCliente" placeholder="Seleccione un Cliente"
+                                                                   uib-typeahead="cuenta as cuenta.name for cuenta in comboCliente | filter:{name:$viewValue}"
+                                                                   class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="1" 
+                                                                   typeahead-template-url="customTemplate.html"
+                                                                   name="txtCliente" id="txtCliente" 
+                                                                   ng-disabled="formData.transacciones.length > 0 || formData.estado !== PENDIENTE"  typeahead-focus-first="true"
+                                                                   />
+                                                            <span class="alert-danger"  ng-show="formData.idCliente.id === undefined"  >
+                                                                Ingrese un Cliente V&aacute;lido.
+                                                            </span> 
+                                                        </div>
+
+                                                    </div>
+                                                    <!-- Cuenta -->
+
+                                                    <!-- Factor USD -->
+                                                    <div class="form-group row">
+                                                        <label for="txtFactor" class=" col-form-label col-sm-2 text-right control-label">Factor USD</label>
+                                                        <div class="col-sm-4">
+                                                            <input type="number" class="form-control col-sm" name="txtFactor" placeholder="0.00 BOB" 
+                                                                   ng-pattern="/^(10|\d)(\.\d{1,2})?$/" step="0.01" min="{{formData.factorMin}}" max="{{formData.factorMax}}"
+                                                                   ng-model="formData.factorCambiario"  data-toggle="tooltip" ng-disabled="formData.estado !== PENDIENTE" 
+                                                                   data-placement="top"  />
+                                                            <span class="alert-danger"  ng-show="!myForm.txtFactor.$valid"  >
+                                                                Debe seleccionar un valor entre {{formData.factorMin}} y {{formData.factorMax}}.
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <!-- /Factor USD -->
+
+
+                                                    <!-- Fecha Emision -->
+                                                    <div class="form-group row">
+                                                        <label class="col-form-label col-sm-2 text-right control-label" for="flatpickr-wrap">Fecha de Emisi&oacute;n</label>
+                                                        <div class="col-sm-4 input-group input-group-alt flatpickr" id="flatpickr9">
+                                                            <input id="txtFechaEmision" name="txtFechaEmision" type="text" 
+                                                                   class="form-control flatpick-input" data-input=""  ng-disabled="formData.estado !== PENDIENTE" 
+                                                                   ng-model="formData.fechaEmision" required=""/>
+                                                            <div class="input-group-append">
+                                                                <button type="button" class="btn btn-secondary" data-toggle="">
+                                                                    <i class="far fa-calendar"></i>
+                                                                </button>
+                                                                <button type="button" class="btn btn-secondary" data-clear="">
+                                                                    <i class="fa fa-times"></i>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                        <span class="alert-danger"  ng-show="!myForm.txtFechaEmision.$valid">Ingrese una fecha V&aacute;lida.</span> 
+                                                    </div>
+                                                    <!-- /Fecha Emision -->
+
+                                                    <!-- Moneda -->
+                                                    <div class="form-group row">
+                                                        <label for="txtStatus" class="col-form-label col-sm-2 text-right control-label">Moneda</label>
+                                                        <div class="col-sm-4">
+                                                            <select name="txtMoneda" class="form-control" ng-model="formData.moneda" required="" ng-disabled="formData.estado !== PENDIENTE" >
+                                                                <option style="display:none" value="">seleccione una opcion</option>
+                                                                <option value="B" selected="selected">Bolivianos</option>
+                                                                <option value="U">Dolares</option>
+                                                            </select>
+                                                            <span class="alert-danger" ng-show="!formData.moneda">Debe seleccionar una opci&oacute;n.</span>
+                                                        </div>
+
+                                                    </div>
+
+                                                    <!-- Factor USD -->
+                                                    <div class="form-group row">
+                                                        <label for="txtFactor" class=" col-form-label col-sm-2 text-right control-label">Monto </label>
+                                                        <div class="col-sm-4">
+                                                            <input type="number" class="form-control col-sm" name="txtMonto" placeholder="0.00" 
+                                                                   ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01" min="1.00" max="1000000"
+                                                                   ng-model="formData.montoAnticipado"  data-toggle="tooltip" required="required" ng-disabled="formData.estado !== PENDIENTE" 
+                                                                   data-placement="top"  />
+                                                            <p class="alert-danger"  ng-show="!myForm.txtMonto.$valid">
+                                                                Debe seleccionar un valor entre 1 y 1,000,000.
+                                                            </p>
+                                                            <p class="alert-danger"  ng-show="!formData.montoAnticipado">
+                                                                Debe ingresar un monto.
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                    <!-- /Factor USD -->
+
+                                                    <!-- /Moneda -->
+
+                                                    <!-- Concepto-->
+                                                    <div class="form-group row">
+                                                        <label for="txtConcepto" class="col-form-label col-sm-2 text-right control-label">Concepto</label>
+                                                        <div class="col-sm-8">
+                                                            <div >
+                                                                <textarea type="text" class="form-control" rows="3" name="txtConcepto" required="required" 
+                                                                          onkeyup="this.value = this.value.toUpperCase()" maxlength="256" ng-model="formData.concepto"/>
+                                                                <span class="alert-danger"  ng-show="!myForm.txtConcepto.$valid"  >
+                                                                    Debe insertar un concepto.
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <!-- /Concepto-->
+
+                                                    <!-- Creado por -->
+                                                    <div class="form-group row">
+                                                        <label class="col-form-label col-sm-2 text-right" for="flatpickr-wrap">Creado por</label>
+                                                        <div class="col-sm-4 " >
+                                                            <input id="txtFechaEmision" name="txtUsuarioCreador" type="text" 
+                                                                   class="form-control flatpick-input" data-input="" 
+                                                                   ng-model="formData.idUsuarioCreador" ng-disabled="true"/>
+                                                        </div>
+                                                    </div>
+                                                    <!--./ Creado por -->
+
+                                                    <!-- Forma de Pago -->
+                                                    <div ng-include="'../boletaje/pago_anticipado/forma_pago_nuevo.html'" ></div>
+                                                    <!-- /Forma de Pago -->
+
+
+                                                    <!-- Tabla transacciones -->
+                                                    <div class="table-responsive" ng-show="formData.estado !== PENDIENTE">
+                                                        <legend>Dep&oacute;sitos Anticipados</legend>
+                                                        <table st-table="transacciones" st-safe-src="formData.transacciones" class="table table-hover">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>Id</th>
+                                                                    <th>Fecha</th>
+                                                                    <th>Descripci&oacute;n</th>
+                                                                    <th>Moneda</th>
+                                                                    <th>Tipo</th>
+                                                                    <th>Estado</th>
+                                                                    <th>Monto</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr class="boleto-estado-{{row.estado}}" st-select-row="row" st-select-mode="multiple" ng-repeat="row in transacciones"  >
+                                                                    <td>{{row.idPagoAnticipadoTransaccion}}</td>
+                                                                    <td>{{row.fechaInsert}}</td>
+                                                                    <td>{{row.descripcion| limitTo:64}}{{ row.descripcion.length > 64 ?'...':''}}</td>
+                                                                    <td>{{row.moneda|printMoneda}}</td>
+                                                                    <td>{{row.tipo|printTipo}}</td>
+                                                                    <td>{{row.estado|printEstado}}</td>
+                                                                    <td align="right">{{row.monto|printNumber}}</td>
+                                                                    <td>
+                                                                        <div class="btn-group" >
+                                                                            <c:if test="${pagoAnticipado.formulario.crear== pagoAnticipado.formulario.PERMITIR }">
+                                                                                <button ng-show="!row.editable" ng-disabled="disableEditarTransaccion" type="button" title="Ver" class="btn btn-sm btn-info" ng-click="editTransaccion(row)"><i class="fa fa-search"></i></button>
+                                                                            </c:if>
+                                                                            <c:if test="${pagoAnticipado.formulario.crear== pagoAnticipado.formulario.PERMITIR }">
+                                                                                <button ng-show="!row.editable" ng-disabled="disableEditarTransaccion" type="button" title="Imprimir" class="btn btn-sm btn-dark" ng-click="imprimir(TRANSACCION, row)"><i class="fa fa-print"></i></button>
+                                                                            </c:if>
+                                                                            <c:if test="#{pagoAnticipado.formulario.anular== pagoAnticipado.formulario.PERMITIR}">
+                                                                                <button type="button" title="Anular" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#frmAnular" ng-click="modalAnular(row.idPagoAnticipadoTransaccion, 'la Transaccion', TRANSACCION, row)"><i class="fa fa-trash"></i></button>
+                                                                            </c:if>
+                                                                            <!--<button type="button" title="Ver" class="btn btn-default" ng-click="ver(row.idEmpleado)" data-toggle="modal" data-target="#verForm"><i class="fa fa-search"></i></button>-->
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                            <tfoot>
+                                                                <tr class="table-success">
+                                                                    <td colspan="6"><strong>TOTAL ACREDITADO</strong></td>
+                                                                    <td align="right"><strong>{{formData.montoTotalAcreditado|printNumber}}</strong></td>
+                                                                    <td ></td>
+                                                                </tr>
+                                                                <tr class="table-warning">
+                                                                    <td colspan="6"><strong>MONTO TOTAL DISPONIBLE</strong></td>
+                                                                    <td align="right"><strong>{{formData.montoTotalDisponible|printNumber}}</strong></td>
+                                                                    <td ></td>
+
+                                                                </tr>
+                                                            </tfoot>
+                                                        </table>
+                                                    </div>
+                                                    <br />
+                                                    <br />
+
+                                                    <div class="btn-group ng-hide" ng-show="showForm" role="group"  >
+                                                        <!--<div class="form-group row ng-hide" ng-show="formData.idAerolinea.id">-->
+                                                        <c:if test="#{pagoAnticipado.formulario.crear== pagoAnticipado.formulario.PERMITIR}">
+                                                            <button name="btnSave"  type="button" class="btn btn-primary" ng-click="save()" ng-show="formData.estado === PENDIENTE"><span class="fa fa-save"></span> Guardar</button>
+                                                        </c:if>
+
+                                                        <c:if test="#{pagoAnticipado.formulario.crear== pagoAnticipado.formulario.PERMITIR}">
+                                                            <button  type="button" class="btn btn-primary" ng-click="update()" ng-show="formData.estado !== PENDIENTE"><span class="fa fa-save"></span> Actualizar</button>
+                                                        </c:if>
+
+                                                        <c:if test="#{pagoAnticipado.formulario.crear== pagoAnticipado.formulario.PERMITIR}">
+                                                            <button ng-show="formData.estado === CON_SALDO"  type="button" class="btn btn-warning" ng-click="acreditar()" ><span class="fa fa-money"></span> Acreditar</button>
+                                                        </c:if>
+
+                                                        <c:if test="#{pagoAnticipado.formulario.crear == pagoAnticipado.formulario.PERMITIR}">
+                                                            <button ng-show="formData.estado === CON_SALDO" type="button" class="btn btn-info" ng-click="devolver()" value="Devolver" > <span class="fa fa-undo"></span> Devolver</button>
+                                                        </c:if>
+
+                                                        <c:if test="#{pagoAnticipado.formulario.anular== pagoAnticipado.formulario.PERMITIR}">
+                                                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#frmAnular" ng-click="modalAnular(formData.idPagoAnticipado, 'el Pago Anticipado', PAGO_ANTICIPADO, formData)" value="Anular" > <span class="fa fa-trash"></span> Anular</button>
+                                                        </c:if>
+
+                                                        <c:if test="#{pagoAnticipado.formulario.crear== pagoAnticipado.formulario.PERMITIR}">
+                                                            <div class="btn-group" role="group">
+                                                                <button class="btn btn-dark dropdown-toggle" type="button" id="dropDownImprimir" 
+                                                                        data-toggle="dropdown" aria-haspopup="true"  aria-expanded="true">
+                                                                    <span class="fa fa-print"></span> Imprimir
+                                                                </button>
+                                                                <div class="dropdown-menu" aria-labelledby="dropDownImprimir">
+                                                                    <a class="dropdown-item" ng-click="imprimir(CABECERA, formData)">Cabecera del Pago</a>
+                                                                    <a class="dropdown-item" ng-click="imprimir(TODO, formData)">Todo</a>
+                                                                </div>
+                                                            </div>
+                                                        </c:if>
+
+                                                    </div>
+                                                </div>
+                                                <!-- /.form-group -->
+                                            </fieldset>
+                                            <!-- /.fieldset -->
+                                        </form>
+                                        <!-- /.form -->
+                                    </div>
+                                    <!-- /.card-body -->
+                                </section>
+                                <!-- /.card -->
+                            </div>
+                            <!-- /.page-section -->
+
+
+                            <!-- Modal Nota Debito -->
+                            <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="frmNotasDebitos">
+                                <div class="modal-dialog modal-xlg">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title" id="myModalLabel">Notas de D&eacute;bito Impagas</h4>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        </div>
+                                        <div class="modal-body" > 
+
+
+                                            <table st-table="gridRecords"    st-safe-src="gridNotaDebito" 
+                                                   class="table  table-hover " id="tblNotas" name="tblNotas">
+                                                <thead >
+                                                    <c:if test="#{pagoAnticipado.formulario.buscar == pagoAnticipado.formulario.PERMITIR}">
+                                                        <tr>
+                                                            <th colspan="5">
+                                                                <!-- .input-group -->
+                                                                <div class="input-group has-clearable">
+                                                                    <div class="input-group-prepend">
+                                                                        <span class="input-group-text">
+                                                                            <span class="oi oi-magnifying-glass"></span>
+                                                                        </span>
+                                                                    </div>
+                                                                    <input st-search="" id="table-search" class="form-control placeholder-shown" placeholder="Busqueda" type="text" /> 
+                                                                </div>
+                                                                <!-- /.input-group -->
+                                                            </th>
+                                                        </tr>
+                                                    </c:if>
+                                                    <tr>
+                                                        <th>Nota D&eacute;bito</th>
+                                                        <th>Fecha Emision</th>
+                                                        <th>Tipo</th>
+                                                        <th>Descripci&oacute;n</th>
+                                                        <th>Fecha Creaci&oacute;n</th>
+                                                        <th>Vence</th>
+                                                        <th>Monto Bs.</th>
+                                                        <th>Monto Usd.</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr  ng-repeat="row in gridRecords" 
+                                                         class="clickable-row" ng-click="seleccionarItemNotaDebito(row)">
+                                                        <td>{{row.idNotaDebito}} </td>
+                                                        <td>{{row.fechaEmision}} </td>
+                                                        <td>{{row.tipo|printTipo}}</td>
+                                                        <td>{{row.descripcion}} </td>
+                                                        <td>{{row.fechaInsert}} </td>
+                                                        <td>{{row.fechaVencimiento}} </td>
+                                                        <td align="right">{{row.montoBs}} </td>
+                                                        <td align="">{{row.montoUsd}} </td>
+                                                    </tr>
+                                                </tbody>
+                                                <tfoot>
+                                                    <tr>
+                                                        <td colspan="10" class="text-center">
+                                                            <div class="container" st-items-by-page="itemsByPage" st-pagination="" st-template="../index/pagination.custom.html"></div>
+                                                        </td>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+
+
+                                        <div class="modal-footer">
+                                            <div class="btn-group" role="group"  >
+                                                <!--<div class="form-group row ng-hide" ng-show="formData.idAerolinea.id">-->
+                                                <c:if test="#{pagoAnticipado.formulario.crear== pagoAnticipado.formulario.PERMITIR}">
+                                                    <button  type="button" class="btn btn-primary" ng-click="seleccionarTransaccion()" ><span class="fa fa-chevron-circle-right"></span> Seleccionar</button>
+                                                </c:if>
+
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /Modal Nota Debito-->
+
+                            <!-- Modal Transaccion-->
+                            <form id="myFormTrx" name="myFormTrx">
+                                <div class="modal fade table-responsive-md" id="frmPagoAnticipadoTransaccion" tabindex="-1" role="dialog" aria-labelledby="modalAmadeus" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered modal-md table-responsive-md" role="document">
+                                        <div class="modal-content table-responsive-md">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLongTitle">Datos de la Nota de D&eacute;bito</h5>
+                                            </div>
+                                            <div class="modal-body table-responsive-md">
+                                                <span ng-show="loadingFrmBoleto" class="alert alert-info"><i class="loader loader-sm" ></i>  Cargando...</span>
+
+                                                <!--Mensaje Success -->
+                                                <div class="alert alert-success ng-hide" role="alert" ng-show="showRestfulSuccess">
+                                                    <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">&times;</a>
+                                                    {{ showRestfulMessage}}
+                                                </div>
+                                                <!--/Mensaje Success -->
+
+                                                <!--Mensaje Error -->
+                                                <div class="alert alert-danger ng-hide" role="alert" ng-show="showRestfulError">
+                                                    <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">&times;</a>
+                                                    {{ showRestfulMessage}}
+                                                </div>
+                                                <!-- /Mensaje Error -->
+
+                                                <!-- Datos Cabecera -->
+                                                <!-- .Datos Generales -->
+                                                <fieldset  >
+                                                    <!-- Container -->
+                                                    <div id="formData" class="container">
+
+                                                        <div class="form-group row">
+                                                            <label for="txtNombre" class=" col-form-label col-sm-3 text-right"> Nota de D&eacute;bito</label>
+                                                            <div class="col-sm-3">
+                                                                <input readonly="readonly" class="form-control" value="{{trx.idNotaDebito}}" ng-value="trx.idNotaDebito" />
+                                                            </div>
+
+                                                            <label for="txtMoneda" class="col-form-label col-sm-2 text-right">Moneda</label>
+                                                            <div class="col-sm-3">
+                                                                <input readonly="readonly" class="form-control" value="{{trx.monedaTransaccion|printMoneda}}"  />
+                                                            </div>
+                                                        </div>
+
+
+                                                        <div class="form-group row">
+                                                            <label for="txtMoneda" class="col-form-label col-sm-3 text-right">Factor</label>
+                                                            <div class="col-sm-3">
+                                                                <input readonly="readonly" class="form-control" value="{{formData.factorCambiario}}" ng-value="formData.factorCambiario" />
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group row">
+                                                            <label for="txtCodigoLinea" class="col-sm-3 text-right" >Concepto</label>
+                                                            <div class="col-sm-9">
+                                                                <div >
+                                                                    <textarea type="text" class="form-control" rows="3" name="txtDescripcion" readonly="readonly" 
+                                                                              onkeyup="this.value = this.value.toUpperCase()" maxlength="128" 
+                                                                              ng-value="trx.descripcion" ng-model="trx.descripcionTransaccion"/>
+                                                                    <span class="alert-danger"  ng-show="!myFormTrx.txtDescripcion.$valid"  >
+                                                                        Debe insertar un concepto.
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group row bg-adeudado">
+                                                            <label for="txtCodigo" class="col-form-label col-sm-4 text-right">Saldo Deuda</label>
+                                                            <div class="col-sm-8 row">
+                                                                <label class="col-form-label col-sm-1 ">BOB.</label>
+                                                                <label class="col-form-label col-sm-5 text-right"><strong> {{trx.montoAdeudadoBs| printNumber}}</strong> </label>
+
+                                                                <label class="col-form-label col-sm-1 ">USD.</label>
+                                                                <label class="col-form-label col-sm-5 text-right"><strong> {{trx.montoAdeudadoUsd|printNumber}}</strong> </label>
+
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group row bg-cancelado">
+                                                            <label for="txtCodigo" class="col-form-label col-sm-4 text-right">Monto Total</label>
+                                                            <div class="col-sm-8 row">
+                                                                <label class="col-form-label col-sm-1 ">BOB.</label>
+                                                                <label class="col-form-label col-sm-5 text-right"><strong> {{trx.montoBs| printNumber}}</strong> </label>
+
+                                                                <label class="col-form-label col-sm-1 ">USD.</label>
+                                                                <label class="col-form-label col-sm-5 text-right"><strong> {{trx.montoUsd|printNumber}}</strong> </label>
+
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="card">
+                                                            <div class="card-header bg-gray text-white">
+                                                                Transacci&oacute;n - Pago Anticipado
+                                                            </div>
+                                                            <div class="card-body bg-light">
+
+                                                                <div class="form-group row">
+                                                                    <label for="txtMoneda" class="col-form-label col-sm-3 text-right">Factor</label>
+                                                                    <div class="col-sm-5">
+                                                                        <input readonly="readonly" class="form-control" value="{{formData.factorCambiario}}" ng-value="formData.factorCambiario" />
+                                                                    </div>
+                                                                </div>
+
+                                                                <!-- Moneda Transaccion -->
+                                                                <div class="form-group row">
+                                                                    <label for="txtStatus" class="col-form-label col-sm-3 text-right"> Moneda</label>
+                                                                    <div class="col-sm-5">
+                                                                        <select name="txtMoneda" class="form-control" ng-model="trx.moneda" required="">
+                                                                            <option style="display:none" value="">seleccione una opcion</option>
+                                                                            <option value="B" selected="selected">Bolivianos</option>
+                                                                            <option value="U">Dolares</option>
+                                                                        </select>
+                                                                        <span class="alert-danger" ng-show="!myFormTrx.txtMoneda.$valid">Debe seleccionar una opcion.</span>
+                                                                    </div>
+                                                                </div>
+
+                                                                <!-- Monto -->
+                                                                <div class="form-group row">
+                                                                    <label for="txtNombre" class=" col-form-label text-right col-sm-3"><strong>Monto</strong></label>
+                                                                    <div class="col-sm-5">
+                                                                        <input type="number" class="form-control col-sm" name="txtMonto" placeholder="0.00" 
+                                                                               ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01" min="0" max="{{trx.montoAdeudadoBs}}"
+                                                                               ng-model="trx.monto" required="" ng-change="checkMontoIngresado()"
+                                                                               data-toggle="tooltip" data-placement="top" />
+                                                                        <span class="alert-danger bg-light" ng-show="!myFormTrx.txtMonto.$valid">Debe ingresar un monto v&aacute;lido.</span>
+                                                                        <span class="alert-danger bg-light" ng-show="showErrorMontoIngresado">Debe ingresar un monto igual o menor a {{montoQueDebeIngresar}}</span>
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <div class="btn-group" role="group"  >
+                                                                    <!--<div class="form-group row ng-hide" ng-show="formData.idAerolinea.id">-->
+                                                                    <c:if test="#{pagoAnticipado.formulario.crear== pagoAnticipado.formulario.PERMITIR}">
+                                                                        <button  type="button" class="btn btn-primary btn-sm" ng-click="saveTransaccion()" ng-if="showFrmNuevaTrx"><span class="fa fa-save"></span> Guardar</button>
+                                                                    </c:if>
+                                                                    <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cerrar</button>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                    <!-- Container -->
+                                                </fieldset>
+                                                <!-- Datos Cabecera -->
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+
+                            <!-- /Modal Transaccion-->
+
+                            <!-- Modal Devolucion-->
+                            <form id="myFormDev" name="myFormDev">
+                                <div class="modal fade table-responsive-md" id="frmDevolucion" tabindex="-1" role="dialog" aria-labelledby="modalAmadeus" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered modal-md table-responsive-md" role="document">
+                                        <div class="modal-content table-responsive-md">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLongTitle">Devoluci&oacute;n</h5>
+                                            </div>
+                                            <div class="modal-body table-responsive-md">
+                                                <span ng-show="loadingFrmBoleto" class="alert alert-info"><i class="loader loader-sm" ></i>  Cargando...</span>
+
+                                                <!--Mensaje Success -->
+                                                <div class="alert alert-success ng-hide" role="alert" ng-show="showRestfulSuccess">
+                                                    <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">&times;</a>
+                                                    {{ showRestfulMessage}}
+                                                </div>
+                                                <!--/Mensaje Success -->
+
+                                                <!--Mensaje Error -->
+                                                <div class="alert alert-danger ng-hide" role="alert" ng-show="showRestfulError">
+                                                    <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">&times;</a>
+                                                    {{ showRestfulMessage}}
+                                                </div>
+                                                <!-- /Mensaje Error -->
+
+                                                <!-- Datos Cabecera -->
+                                                <!-- .Datos Generales -->
+                                                <fieldset  >
+                                                    <!-- Container -->
+                                                    <div id="formData" class="container">
+
+                                                        <div class="form-group row">
+                                                            <label for="txtNombre" class=" col-form-label col-sm-3 text-right"> Cliente</label>
+                                                            <div class="col-sm-8">
+                                                                <input readonly="readonly" class="form-control" ng-value="dev.nombreCliente" />
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group row">
+                                                            <label for="txtMoneda" class="col-form-label col-sm-3 text-right">Moneda</label>
+                                                            <div class="col-sm-8">
+                                                                <input readonly="readonly" class="form-control" value="{{dev.moneda|printMoneda}}"  />
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- FACTOR -->
+                                                        <div class="form-group row">
+                                                            <label for="txtMoneda" class="col-form-label col-sm-3 text-right">Factor</label>
+                                                            <div class="col-sm-8">
+                                                                <input readonly="readonly" class="form-control" value="{{formData.factorCambiario}}" ng-value="formData.factorCambiario" />
+                                                            </div>
+                                                        </div>
+                                                        <!-- FACTOR -->
+
+                                                        <!-- Monto -->
+                                                        <div class="form-group row ">
+                                                            <label for="txtNombre" class=" col-form-label text-right col-sm-3 label"><strong>Monto a Devolver</strong></label>
+                                                            <div class="col-sm-8">
+                                                                <input type="number" class="form-control col-sm" name="txtImporte" placeholder="0.00" 
+                                                                       ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01" min="0"
+                                                                       ng-model="dev.monto" required="" ng-change="checkMontoIngresadoDevolver()"
+                                                                       data-toggle="tooltip" data-placement="top" />
+                                                                <span class="alert-danger bg-light" ng-show="!myFormDev.txtImporte.$valid">Debe ingresar un monto v&aacute;lido.</span>
+                                                                <span class="alert-danger bg-light" ng-show="showErrorImporteIngresado">Debe ingresar un monto igual o menor a {{dev.montoMaximoDevolucion}}</span>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group row">
+                                                            <label for="txtConcepto2" class="col-form-label col-sm-2 text-right control-label">Concepto</label>
+                                                            <div class="col-sm-8">
+                                                                <div >
+                                                                    <textarea type="text" class="form-control" rows="3" name="txtConcepto2" required="required" 
+                                                                              onkeyup="this.value = this.value.toUpperCase()" maxlength="256" ng-model="dev.concepto"/>
+                                                                    <span class="alert-danger"  ng-show="!myForm.txtConcepto.$valid"  >
+                                                                        Debe insertar un concepto.
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- Moneda Transaccion -->
+                                                        <div class="form-group row">
+                                                            <label for="txtStatus" class="col-form-label col-sm-3 text-right"> Tipo de Devoluci&oacute;n</label>
+                                                            <div class="col-sm-8">
+                                                                <select name="txtTipoDevolucion" class="form-control" ng-model="dev.tipoDevolucion" required="">
+                                                                    <option style="display:none" value="">seleccione una opcion</option>
+                                                                    <option value="{{EFECTIVO}}" selected="selected">EFECTIVO</option>
+                                                                    <option value="{{CHEQUE}}">CHEQUE</option>
+                                                                </select>
+                                                                <span class="alert-danger" ng-show="!myFormDev.txtTipoDevolucion.$valid">Debe seleccionar una opci&oacute;n.</span>
+                                                            </div>
+                                                        </div>
+
+
+                                                        <div  ng-show="dev.tipoDevolucion === DEPOSITO">
+                                                            <div class="form-group row">
+                                                                <label for="txtContadoNroDeposito" class=" text-right col-sm-3" > N&uacute;mero de Cheque</label>
+                                                                <div class="col-sm-8">
+                                                                    <input type="text" class="form-control " id="txtNroCheque"  name="txtNroCheque"  
+                                                                           required="required" valid-number="valid-number"  onkeypress="return isNumberKey(event)" maxlength="16" ng-model="dev.nroCheque"/>
+                                                                    <span class="alert-danger" ng-show="!myFormDev.txtNroCheque.$valid">Debe ingresar un N&uacute;mero de Cheque</span>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="form-group row">
+                                                                <label for="txtContadoDeposito" class=" text-right col-sm-3" >Cuenta Banco</label>
+                                                                <div class="col-sm-8">
+                                                                    <select class="form-control" ng-model="dev.idCuentaDeposito" name="txtIdCuentaDeposito"
+                                                                            id="txtContadoIdBancoDeposito"
+                                                                            ng-options="option.id as option.name for option in comboBancosConCuenta"> 
+                                                                        <option style="display:none" value="">seleccione un banco</option>
+                                                                    </select>
+                                                                    <span class="alert-danger" ng-show="!dev.idCuentaDeposito">Debe ingresar un Banco</span>
+                                                                </div>
+                                                            </div>  
+                                                        </div>
+
+                                                        <div class="modal-footer">
+                                                            <div class="btn-group" role="group"  >
+                                                                <c:if test="#{pagoAnticipado.formulario.crear== pagoAnticipado.formulario.PERMITIR}">
+                                                                    <button  type="button" class="btn btn-primary btn-sm" ng-click="saveDevolucion()" ><span class="fa fa-save"></span> Guardar</button>
+                                                                </c:if>
+                                                                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cerrar</button>
+                                                            </div>
+                                                        </div>
+
+
+                                                    </div>
+                                                    <!-- Container -->
+                                                </fieldset>
+                                                <!-- Datos Cabecera -->
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+
+                            <!-- /Modal Transaccion-->
+
+                            <!-- Modal Background -->
+                            <div class="modal fade bd-example-modal-lg" data-backdrop="static" data-keyboard="false" tabindex="-1" id="frmBackground">
+                                <div class="modal-dialog modal-sm">
+                                    <div class="modal-content" style="width: 48px">
+                                        <span class="fa fa-spinner fa-spin fa-3x"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /Modal Background -->
+
+                            <!-- Modal Eliminar -->
+                            <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="frmConfirmation">
+                                <div class="modal-dialog modal-md">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title" id="myModalLabel">Confirmar</h4>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        </div>
+                                        <div class="modal-body"> 
+                                            <dl class="dl-horizontal">
+                                                Desea elimnar el registro <strong> {{nombreEliminar}}</strong>  ?
+                                            </dl>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" id="modal-btn-si" ng-click="eliminar()"  data-dismiss="modal">Si</button>
+                                            <button type="button" class="btn btn-primary" id="modal-btn-no"  data-dismiss="modal">No</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /Modal Eliminar-->
+
+                            <!-- Modal Anular -->
+                            <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="frmAnular">
+                                <div class="modal-dialog modal-md modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title" id="myModalLabel">Confirmar</h4>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        </div>
+                                        <div class="modal-body"> 
+                                            <dl class="dl-horizontal">
+                                                Desea anular  {{itemAnular.title}} con ID <strong> {{itemAnular.id}}</strong>  ?
+                                            </dl>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" id="modal-btn-si" ng-click="anular()"  data-dismiss="modal">Si</button>
+                                            <button type="button" class="btn btn-primary" id="modal-btn-no"  data-dismiss="modal">No</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /Modal Anular-->
+                        </div>
+                        <!-- /.page-inner -->
+                    </div>
+                    <!-- /.page -->
+                </div>
+                <!-- .app-footer -->
+                <ui:include src="../index/footer.xhtml" />
+                <!-- /.app-footer -->
+                <!-- /.wrapper -->
+                <!-- Logout Form -->
+                <ui:include src="../index/logout.xhtml" />
+                <!-- /Logout Form -->
+            </main>
+            <!-- /.app-main -->
+        </div>
+        <!-- /.app -->
+        <!-- BEGIN BASE JS -->
+        <script src="../../assets/vendor/jquery/jquery.min.js"></script>
+        <script src="../../assets/vendor/bootstrap/js/popper.min.js"></script>
+        <script src="../../assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="../../js/utils.js" />
+        <!-- END BASE JS -->
+        <!-- BEGIN PLUGINS JS -->
+        <script src="../../assets/vendor/stacked-menu/stacked-menu.min.js"></script>
+        <script src="../../assets/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+
+        <script src="../../assets/vendor/flatpickr/flatpickr.min.js"></script>
+        <script src="../../assets/vendor/typeahead.js/typeahead.bundle.min.js"></script>
+        <!-- END PLUGINS JS -->
+        <!-- BEGIN THEME JS -->
+        <script src="../../assets/javascript/main.min.js"></script>
+        <script type="text/javascript" src="../../js/boletaje/pagoAnticipado.js" />
+
+        <script type="text/javascript" src="../../assets/javascript/pages/flatpickr-demo.js"></script>
+        <script type="text/javascript" src="../../assets/javascript/pages/typeahead-demo.js"></script>
+
+        <!-- END THEME JS -->
+        <!-- BEGIN PAGE LEVEL JS -->
+        <!-- END PAGE LEVEL JS -->
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+    </h:body>
+</html>
+
+

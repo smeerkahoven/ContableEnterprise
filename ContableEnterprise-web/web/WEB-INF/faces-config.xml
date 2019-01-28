@@ -80,6 +80,15 @@
     <navigation-rule>
         <from-view-id>pages/*</from-view-id>
         <navigation-case>
+            <from-outcome>logs</from-outcome>
+            <to-view-id>pages/seguridad/logs.xhtml?faces-redirect=true</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>pages/*</from-view-id>
+        <navigation-case>
             <from-outcome>aeropuerto</from-outcome>
             <to-view-id>pages/agencia/aeropuerto.xhtml?faces-redirect=true</to-view-id>
             <redirect />
@@ -160,6 +169,15 @@
         </navigation-case>
     </navigation-rule>
     
+     <navigation-rule>
+        <from-view-id>pages/*</from-view-id>
+        <navigation-case>
+            <from-outcome>mayores</from-outcome>
+            <to-view-id>pages/contabilidad/mayores.xhtml?faces-redirect=true</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
     <navigation-rule>
         <from-view-id>pages/*</from-view-id>
         <navigation-case>
@@ -183,6 +201,25 @@
         <navigation-case>
             <from-outcome>ingreso-caja</from-outcome>
             <to-view-id>pages/boletaje/ingreso-caja.xhtml?faces-redirect=true</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>pages/*</from-view-id>
+        <navigation-case>
+            <from-outcome>notas-credito</from-outcome>
+            <to-view-id>pages/boletaje/notas-credito.xhtml?faces-redirect=true</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    
+     <navigation-rule>
+        <from-view-id>pages/*</from-view-id>
+        <navigation-case>
+            <from-outcome>pago-anticipado</from-outcome>
+            <to-view-id>pages/boletaje/pago-anticipado.xhtml?faces-redirect=true</to-view-id>
             <redirect />
         </navigation-case>
     </navigation-rule>
@@ -214,6 +251,17 @@
             <redirect />
         </navigation-case>
     </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>pages/*</from-view-id>
+        <navigation-case>
+            <from-outcome>reportes-ventas-boletos</from-outcome>
+            <to-view-id>pages/reports/ventas-boletos.xhtml?faces-redirect=true</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    <!-- configuracion -->
     
     <navigation-rule>
         <from-view-id>pages/*</from-view-id>

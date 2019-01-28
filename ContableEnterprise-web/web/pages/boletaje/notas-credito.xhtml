@@ -1,0 +1,829 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html  xmlns="http://www.w3.org/1999/xhtml"
+       xmlns:h="http://xmlns.jcp.org/jsf/html"
+       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"  
+       xmlns:c="http://java.sun.com/jsp/jstl/core"
+       >
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <!-- End Required meta tags -->
+        <title>#{login.systemName.valor} - #{login.razonSocial}</title>
+        <!-- FAVICONS -->
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/apple-touch-icon.png" />
+        <link rel="shortcut icon" href="../../assets/favicon.ico" />
+        <meta name="theme-color" content="#3063A0" />
+        <!-- End FAVICONS -->
+        <script src="../../assets/vendor/pace/pace.min.js"></script>f
+        <!-- BEGIN BASE STYLES -->
+        <link rel="stylesheet" href="../../assets/vendor/pace/pace.min.css" />
+        <link rel="stylesheet" href="../../assets/vendor/bootstrap/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="../../assets/vendor/open-iconic/css/open-iconic-bootstrap.min.css"/>
+        <link rel="stylesheet" href="../../assets/vendor/fontawesome/css/fontawesome.all.css"/>
+        <link rel="stylesheet" href="../../assets/vendor/font-awesome/css/font-awesome.min.css"  />
+        <link rel="stylesheet" href="../../assets/vendor/flatpickr/flatpickr.min.css" />
+        <!-- END BASE STYLES -->
+        <!-- BEGIN PLUGINS STYLES -->
+        <link rel="stylesheet" href="../../assets/vendor/flatpickr/flatpickr.min.css"/>
+        <!-- END PLUGINS STYLES -->
+        <!-- BEGIN THEME STYLES -->
+        <link rel="stylesheet" href="../../assets/stylesheets/main.min.css"/>
+        <link rel="stylesheet" href="../../assets/vendor/sweetalert/css/sweetalert.css"/>
+
+        <script type="text/javascript" src="../../js/angular.min.js" />
+
+        <script type="text/javascript" src="../../js/ui-bootstrap-tpls.js" />
+        <script type="text/javascript" src="../../js/smart-table.min.js" />
+        <script type="text/javascript" src="../../assets/vendor/sweetalert/js/sweetalert.min.js"/>
+
+        <script type="text/javascript" src="../../js/date.format.js" />
+        <script type="text/javascript" src="../../js/moment.js" />
+
+        <!--CORRIGE ng-show -->
+        <link rel="stylesheet" href="../../css/main.css"  />
+    </head>
+    <h:body>
+        <!-- .app -->
+        <div class="app">
+            <!-- .app-header -->
+            <header class="app-header">
+                <!-- .top-bar -->
+                <ui:include src="../index/top-bar.xhtml" />
+                <!-- /.top-bar -->
+            </header>
+            <!-- /.app-header -->
+            <!-- .app-aside -->
+            <aside class="app-aside">
+                <!-- .aside-content -->
+                <div class="aside-content">
+                    <!-- .aside-menu -->
+                    <ui:include src="../index/menu.xhtml" />
+                    <!-- /.aside-menu -->
+                </div>
+                <!-- /.aside-content -->
+            </aside>
+            <!-- /.app-aside -->
+            <!-- .app-main -->
+            <main class="app-main" >
+                <!-- .wrapper -->
+                <div class="wrapper">
+                    <!-- .page -->
+                    <div class="page" ng-app="jsNotasCredito" ng-controller="frmNotasCredito">
+                        <!-- .page-inner -->
+                        <div class="page-inner">
+                            <!-- .page-title-bar -->
+                            <header class="page-title-bar">
+                                <nav aria-label="breadcrumb">
+                                    <ol class="breadcrumb">
+                                        <li class="breadcrumb-item active">
+                                            <a href="#">
+                                                <i class="breadcrumb-icon fa fa-angle-left mr-2"></i>#{notasCredito.formulario.modulo}
+                                            </a>
+                                        </li>
+                                    </ol>
+                                </nav>
+                                <div class="d-md-flex">
+                                    <h1 class="page-title mr-sm-auto"> #{notasCredito.formulario.nombre}</h1>
+                                    <div class="dt-button btn-group">
+                                        <c:if test="#{notasCredito.formulario.crear== notasCredito.formulario.PERMITIR}">
+                                            <button type="button" class="btn btn-success buttons-html5" tabindex="0" ng-click="nuevo()"><span class="fa fa-plus"></span> Nuevo</button>
+                                        </c:if>
+                                        <button type="button" class="btn btn-warning buttons-html5" tabindex="0" ng-click="cancelar()"><span class="fa fa-undo"></span> Cancelar</button>
+                                    </div>
+                                </div>
+                            </header>
+                            <!-- /.page-title-bar -->
+                            <!-- .page-section -->
+                            <div class="page-section" >
+                                <!-- .card -->
+                                <section id="base-style" class="card">
+                                    <!-- .card-body -->
+                                    <div class="card-body">
+
+                                        <!--Mensaje Cargando -->
+                                        <span ng-show="loading" class="alert alert-info"><i class="loader loader-sm" ></i>  Cargando...</span>
+                                        <!-- /Mensaje Cargando -->
+
+                                        <!--Mensaje Success -->
+                                        <div id="restful-success" class="alert alert-success ng-hide" role="alert" ng-show="showRestfulSuccess">
+                                            <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">&times;</a>
+                                            {{ showRestfulMessage}}
+                                        </div>
+                                        <!--/Mensaje Success -->
+
+                                        <!--Mensaje Error -->
+                                        <div id="restful-error" class="alert alert-danger ng-hide" role="alert" ng-show="showRestfulError">
+                                            <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">&times;</a>
+                                            {{ showRestfulMessage}}
+                                        </div>
+                                        <!-- /Mensaje Error -->
+                                        <!-- .form-group -->
+                                        <!-- Tabla Contenido -->
+                                        <div class=" ng-hide" ng-show="showTable">
+                                            <div class="form-group row">
+                                                <label for="txtNombre" class=" col-form-label col-sm-2 text-right">Cuenta</label>
+                                                <div class="col-sm-4">
+                                                    <input type="text" ng-model="search.idCliente" placeholder="Seleccione un Cliente"
+                                                           uib-typeahead="cuenta as cuenta.name for cuenta in comboCliente | filter:{name:$viewValue}"
+                                                           class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="1" 
+                                                           typeahead-template-url="customTemplate.html"  typeahead-focus-first="true"
+                                                           />
+                                                    <!--<span class="alert-danger"  ng-show="search.idCliente.id === undefined"  >
+                                                        Ingrese un Cliente V&aacute;lido.
+                                                    </span>
+                                                    -->
+                                                </div>
+
+                                            </div>
+
+                                            <div class="form-group row">
+                                                <label class="col-form-label col-sm-2 text-right" for="flatpickr-wrap">Fecha Inicio</label>
+                                                <div class="col-sm-3 input-group input-group-alt flatpickr " id="flatpickr9">
+                                                    <input id="txtFechaInicio" type="text" class="form-control flatpick-input" data-input="" 
+                                                           ng-model="search.fechaInicio"/>
+                                                    <div class="input-group-append">
+                                                        <button type="button" class="btn btn-secondary" data-toggle="">
+                                                            <i class="far fa-calendar"></i>
+                                                        </button>
+                                                        <button type="button" class="btn btn-secondary" data-clear="">
+                                                            <i class="fa fa-times"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+                                                <label class="col-form-label col-sm-2 text-right" for="flatpickr-wrap">Fecha Fin</label>
+                                                <div class="col-sm-3 input-group input-group-alt flatpickr" id="flatpickr9">
+                                                    <input id="txtFechaFin" type="text" class="form-control flatpick-input" data-input="" ng-model="search.fechaFin"/>
+                                                    <div class="input-group-append">
+                                                        <button type="button" class="btn btn-secondary" data-toggle="">
+                                                            <i class="far fa-calendar"></i>
+                                                        </button>
+                                                        <button type="button" class="btn btn-secondary" data-clear="">
+                                                            <i class="fa fa-times"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+
+                                                <c:if test="#{notasCredito.formulario.buscar == notasCredito.formulario.PERMITIR}">
+                                                    <button type="button" class="btn btn-primary col-sm-2"  ng-click="find()"><span class="fa fa-search"></span> Buscar</button>
+                                                </c:if>
+                                            </div>
+
+                                        </div>
+
+                                        <div  id="tableData" class="ng-hide table-responsive" ng-show="showTable" >
+                                            <table st-table="display_records"    st-safe-src="mainGrid" 
+                                                   class="table  table-hover ">
+                                                <thead >
+                                                    <c:if test="#{notasCredito.formulario.buscar == notasCredito.formulario.PERMITIR}">
+                                                        <tr>
+                                                            <th colspan="8">
+                                                                <!-- .input-group -->
+                                                                <div class="input-group has-clearable">
+                                                                    <div class="input-group-prepend">
+                                                                        <span class="input-group-text">
+                                                                            <span class="oi oi-magnifying-glass"></span>
+                                                                        </span>
+                                                                    </div>
+                                                                    <input st-search="" id="table-search" class="form-control placeholder-shown" placeholder="Busqueda" type="text" /> 
+                                                                </div>
+                                                                <!-- /.input-group -->
+                                                            </th>
+                                                        </tr>
+                                                    </c:if>
+                                                    <tr>
+                                                        <th>Nro. Nota Cr&eacute;dito</th>
+                                                        <th>Cliente</th>
+                                                        <th>Estado</th>
+                                                        <th>Fecha Emision</th>
+                                                        <th>Fecha Creaci&oacute;n</th>
+                                                        <th>Monto Abonado Bs.</th>
+                                                        <th>Monto Abonado Usd.</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr st-select-row="row" st-select-mode="multiple" ng-repeat="row in display_records" class="boleto-estado-{{row.estado}}">
+                                                        <td>{{row.idNotaCredito}} </td>
+                                                        <td>{{row.idCliente.name}} </td>
+                                                        <td>{{row.estado| printEstado }} </td>
+                                                        <td>{{row.fechaEmision}} </td>
+                                                        <td>{{row.fechaInsert}} </td>
+                                                        <td align="center" class="text-right">{{row.montoAbonadoBs|printNumber}} </td>
+                                                        <td align="center" class="text-right">{{row.montoAbonadoUsd|printNumber}} </td>
+                                                        <td>
+                                                            <div class="btn-group" >
+                                                                <c:if test="${notasCredito.formulario.acceder == notasCredito.formulario.PERMITIR }">
+                                                                    <button type="button" title="Editar" class="btn btn-sm btn-info" ng-click="edit(row)" ><i class="fa fa-pencil"></i></button>
+                                                                </c:if>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                                <tfoot>
+                                                    <tr>
+                                                        <td colspan="10" class="text-center">
+                                                            <div class="container" st-items-by-page="itemsByPage" st-pagination="" st-template="../index/pagination.custom.html"></div>
+                                                        </td>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                    </div>
+
+                                    <script  type="text/ng-template" id="customTemplate.html">
+                                        <a><div >
+                                        <span class=" tt-suggestion"  ng-bind-html="match.label | uibTypeaheadHighlight:query"></span>
+                                        </div></a>
+                                    </script>
+                                    <!-- /Tabla Contenido -->
+                                    <form name="myForm" id="myForm">
+                                        <!-- .form -->
+                                        <!-- .fieldset -->
+                                        <fieldset>
+                                            <!-- Contenido Formulario-->
+                                            <div id="formData" class="container animated fadeIn ng-hide"   ng-show="showForm" >
+                                                <input type="hidden" id="hdUrl" name="hdUrl" value="#{notasCredito.formulario.restful}"/>
+                                                <input type="hidden" id="hdToken" name="hdToken" value="#{sessionView.token}"/>
+                                                <input type="hidden" id="hdFormName" name="hdFormName" value="#{notasCredito.formulario.nombre}"/>
+                                                <input type="hidden" id="hdUrlFactores" name="hdUrlFactores" value="#{factores.formulario.restful}"/>
+                                                <input type="hidden" id="hdUrlClientes" name="hdUrlClientes" value="#{cliente.formulario.restful}"/>
+                                                <input type="hidden" id="hdUrlPromotores" name="hdUrlPromotores" value="#{promotores.formulario.restful}"/>
+                                                <input type="hidden" id="hdUrlBoletos" name="hdUrlBoletos" value="#{boletos.formulario.restful}"/>
+                                                <input type="hidden" id="idEmpresa" name="idEmpresa" value="#{login.empleado.idEmpresa.idEmpresa}"/>
+                                                <input type="hidden" id="hdPorcentaje" name="hdPorcentaje" value="#{boletos.porcentaje.valor}" />
+                                                <input type="hidden" id="hdFactorMaxMin" name="hdFactorMaxMin" value="#{comprobantes.factorCambiarioMaxMin.valor}"/>
+                                                <input type="hidden" id="hdUrlPlanCuentas" name="hdUrlPlanCuentas" value="#{planCuentas.formulario.restful}"/>
+                                                <input type="hidden" id="hdComprobante" name="hdComprobante" value="#{comprobantes.formulario.restful}"/>
+
+                                                <br />
+
+                                                <!-- Numero Ingreso Caja -->
+                                                <div class="form-group row">
+                                                    <label for="txtCodigo" class="col-form-label col-sm-2 text-right">N&uacute;mero Nota de Cr&eacute;dito</label>
+                                                    <div class="col-sm-4">
+                                                        <label for="txtIdLibro" class="col-form-label"  ><strong><h4>{{formData.idNotaCredito}}</h4></strong></label>
+                                                    </div>
+
+                                                    <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Estado</label>
+                                                    <div class="col-sm-4">
+                                                        <label for="txtIdLibro" class="col-form-label"  ><strong><h4>{{formData.estado|printEstado}}</h4></strong></label>
+                                                    </div>
+                                                </div>
+                                                <!-- /Numero Ingreso Caja-->
+
+                                                <!-- Cuenta -->
+                                                <div class="form-group row">
+                                                    <label for="txtNombre" class=" col-form-label col-sm-2 text-right">Cuenta</label>
+                                                    <div class="col-sm-4">
+                                                        <input type="text" ng-model="formData.idCliente" placeholder="Seleccione un Cliente"
+                                                               uib-typeahead="cuenta as cuenta.name for cuenta in comboCliente | filter:{name:$viewValue}"
+                                                               class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="1" 
+                                                               typeahead-template-url="customTemplate.html"  typeahead-focus-first="true" ng-disabled="formData.transacciones.length > 0"
+                                                               />
+                                                        <span class="alert-danger"  ng-show="formData.idCliente.id === undefined"  >
+                                                            Ingrese un Cliente V&aacute;lido.
+                                                        </span> 
+                                                    </div>
+
+
+                                                    <label class="col-form-label col-sm-2 text-right" for="flatpickr-wrap">Creado por</label>
+                                                    <div class="col-sm-3 " >
+                                                        <input id="txtIdUsuario" name="txtIdUsuario" type="text" class="form-control flatpick-input" data-input="" 
+                                                               ng-model="formData.idUsuario" readonly="true"/>
+                                                    </div>
+                                                </div>
+                                                <!-- Cuenta -->
+
+
+                                                <!-- Factor USD -->
+                                                <div class="form-group row">
+                                                    <label for="txtFactor" class=" col-form-label col-sm-2 text-right">Factor USD</label>
+                                                    <div class="col-sm-4">
+                                                        <input type="number" class="form-control col-sm" name="txtFactor" placeholder="0.00 BOB" 
+                                                               ng-pattern="/^(10|\d)(\.\d{1,2})?$/" step="0.01" min="{{formData.factorMin}}" max="{{formData.factorMax}}"
+                                                               ng-model="formData.factorCambiario"  data-toggle="tooltip" 
+                                                               data-placement="top"  />
+                                                        <span class="alert-danger"  ng-show="!myForm.txtFactor.$valid"  >
+                                                            Debe seleccionar un valor entre {{formData.factorMin}} y {{formData.factorMax}}.
+                                                        </span>
+                                                    </div>
+
+
+                                                </div>
+                                                <!-- /Factor USD -->
+
+                                                <!-- Fecha Emision -->
+                                                <div class="form-group row">
+                                                    <label class="col-form-label col-sm-2 text-right" for="flatpickr-wrap">Fecha de Emisi&oacute;n</label>
+                                                    <div class="col-sm-4 input-group input-group-alt flatpickr" id="flatpickr9">
+                                                        <input id="txtFechaEmision" name="txtFechaEmision" type="text" 
+                                                               class="form-control flatpick-input" data-input="" 
+                                                               ng-model="formData.fechaEmision" required=""/>
+                                                        <div class="input-group-append">
+                                                            <button type="button" class="btn btn-secondary" data-toggle="">
+                                                                <i class="far fa-calendar"></i>
+                                                            </button>
+                                                            <button type="button" class="btn btn-secondary" data-clear="">
+                                                                <i class="fa fa-times"></i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    <span class="alert-danger"  ng-show="!myForm.txtFechaEmision.$valid">Ingrese una fecha V&aacute;lida.</span> 
+                                                </div>
+                                                <!-- /Fecha Emision -->
+
+                                                <!-- Concepto -->
+                                                <div class="form-group row">
+                                                    <label for="txtConcepto" class=" col-form-label col-sm-2 text-right">Concepto</label>
+                                                    <div class="col-sm-6">
+                                                        <textarea id="txtConcepto" type="text" class="form-control" rows="3" name="txtConcepto" 
+                                                                  required="required" onKeyUp="document.getElementById(this.id).value = document.getElementById(this.id).value.toUpperCase()" 
+                                                                  maxlength="128" ng-model="formData.concepto"/>
+                                                        <span class="alert-danger"  ng-show="!myForm.txtConcepto.$valid"  >
+                                                            Debe insertar un concepto.
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <!-- ./Concepto -->
+
+
+                                                <!-- Creado por -->
+                                                <div class="form-group row">
+                                                </div>
+
+                                                <!--./ Creado por -->
+                                                <header class="card-header">
+                                                    <div class="d-flex align-items-center">
+                                                        <div class="alert alert-danger" ng-show="showRowError">
+                                                            <span class="alert-danger">{{ showRowMessage}}</span>
+                                                        </div>
+                                                        <span class="mr-auto"></span>
+
+                                                        <div class="btn-group" ng-show="formData.estado === CREADO || formData.estado === PENDIENTE">
+                                                            <button class="btn btn-success" type="button" id="idAnadir" 
+                                                                    ng-disabled="disableButtonAnadir()" ng-click="addTransaccion()" >
+                                                                <span class="fa fa-plus"></span> A&ntilde;adir
+                                                            </button>
+                                                        </div>
+
+                                                    </div>
+                                                </header>
+                                                <!-- Tabla transacciones -->
+                                                <div class="table-responsive">
+                                                    <table st-table="transacciones" st-safe-src="formData.transacciones" class="table table-hover">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Id</th>
+                                                                <th>Nota D&eacute;bito</th>
+                                                                <th>Descripci&oacute;n</th>
+                                                                <th>Moneda</th>
+                                                                <th>Estado</th>
+                                                                <th>Monto Bs.</th>
+                                                                <th>Monto Usd.</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr class="boleto-estado-{{row.estado}}" st-select-row="row" st-select-mode="multiple" ng-repeat="row in transacciones"  >
+                                                                <td>{{row.idNotaCreditoTransaccion}}</td>
+                                                                <td>{{row.idNotaDebito}}</td>
+                                                                <td>{{row.descripcion| limitTo:35}}{{ row.descripcion.length > 35 ?'...':''}}</td>
+                                                                <td>{{row.moneda|printMoneda}}</td>
+                                                                <td>{{row.estado|printEstado}}</td>
+                                                                <td align="right">{{row.montoBs|printNumber}}</td>
+                                                                <td align="right">{{row.montoUsd|printNumber}}</td>
+                                                                <td>
+                                                                    <div class="btn-group" >
+                                                                        <c:if test="${notasCredito.formulario.crear== notasCredito.formulario.PERMITIR }">
+                                                                            <button ng-show="!row.editable"  type="button" title="Editar" class="btn btn-sm btn-info" ng-click="editTransaccion(row)"><i class="fa fa-pencil"></i></button>
+                                                                        </c:if>
+
+                                                                        <c:if test="#{notasCredito.formulario.anular== notasCredito.formulario.PERMITIR}">
+                                                                            <button type="button" title="Anular" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#frmAnular" ng-show="row.estado !== EMITIDO"
+                                                                                    ng-click="modalAnular(row.idTransaccion, 'la Transaccion', TRANSACCION, row)"><i class="fa fa-trash"></i></button>
+                                                                        </c:if>
+
+                                                                        <!--<button type="button" title="Ver" class="btn btn-default" ng-click="ver(row.idEmpleado)" data-toggle="modal" data-target="#verForm"><i class="fa fa-search"></i></button>-->
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                        <tfoot>
+                                                            <tr class="table-success">
+                                                                <td colspan="5"><strong>TOTAL</strong></td>
+                                                                <td align="right"><strong>{{formData.montoAbonadoBs|printNumber}}</strong></td>
+                                                                <td align="right"><strong>{{formData.montoAbonadoUsd|printNumber}}</strong></td>
+                                                                <td ></td>
+                                                            </tr>
+
+                                                        </tfoot>
+                                                    </table>
+                                                </div>
+
+                                                <br />
+                                                <!-- Botones Imprimir -->
+                                                <div class="btn-group ng-hide" ng-show="showForm" role="group"  >
+                                                    <!--<div class="form-group row ng-hide" ng-show="formData.idAerolinea.id">-->
+                                                    <c:if test="#{notasCredito.formulario.crear== notasCredito.formulario.PERMITIR}">
+                                                        <button  type="button" class="btn btn-primary" ng-click="finalizar()"><span class="fa fa-save"></span> Finalizar</button>
+                                                    </c:if>
+                                                    <c:if test="#{notasCredito.formulario.crear== notasCredito.formulario.PERMITIR}">
+                                                        <button  type="button" class="btn btn-warning" ng-click="pendiente()" ><span class="fa fa-clock"></span> Pendiente</button>
+                                                    </c:if>
+                                                    <c:if test="#{notasCredito.formulario.anular== notasCredito.formulario.PERMITIR}">
+                                                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#frmAnular" ng-click="modalAnular(formData.idNotaCredito, 'la Nota de Credito', NOTA, formData)" value="Anular" > <span class="fa fa-trash"></span> Anular</button>
+                                                    </c:if>
+                                                    <c:if test="#{notasCredito.formulario.crear== notasCredito.formulario.PERMITIR}">
+                                                        <button type="button" class="btn btn-dark" ng-click="imprimir()" value="Imprimir" > <span class="fa fa-print"></span> Imprimir</button>
+                                                    </c:if>
+                                                </div>
+                                                <!-- Botones Imprimir -->
+                                            </div>
+                                            <!-- /.form-group -->
+                                        </fieldset>
+                                        <!-- /.fieldset -->
+                                    </form>
+                                    <!-- /.form -->
+
+                                    <!-- /.card-body -->
+                                </section>
+                                <!-- /.card -->
+                            </div>
+                        </div>
+                        <!-- /.page-section -->
+
+                        <!-- Modal Imprimir -->
+                        <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="frmImprimir">
+                            <div class="modal-dialog modal-lg modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title" id="myModalLabel">Mensaje</h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    </div>
+                                    <div class="modal-body"> 
+                                        <dl class="dl-horizontal">
+                                            <span class="alert alert-success fa fa-icon fa-check-circle"></span> {{mensajeImprimir}}. Si desea puede imprimir las siguiente opciones:
+                                        </dl>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary"  value="Imprimir Nota de Crédito" ng-click="imprimir(COMPROBANTE_INGRESO)"  ><span class="fa fa-print"></span> Nota de Cr&eacute;dito</button>
+                                        <button type="button" class="btn btn-secondary"  value="Imprimir Comprobante de Ingreso" ng-click="imprimir(COMPROBANTE_CONTABLE)"  ><span class="fa fa-print"></span> Comprobante de Ingreso</button>
+                                        <button type="button" class="btn btn-light" id="modal-btn-no"  data-dismiss="modal">Cancelar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Modal Imprimir -->
+
+                        <!-- Modal Nota Debito -->
+                        <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="frmNotasDebitos">
+                            <div class="modal-dialog modal-xlg">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title" id="myModalLabel">Notas de D&eacute;bito Impagas</h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    </div>
+                                    <div class="modal-body" > 
+
+
+                                        <table st-table="gridRecords"    st-safe-src="gridNotaDebito" 
+                                               class="table  table-hover " id="tblNotas" name="tblNotas">
+                                            <thead >
+                                                <c:if test="#{notasCredito.formulario.buscar == notasCredito.formulario.PERMITIR}">
+                                                    <tr>
+                                                        <th colspan="5">
+                                                            <!-- .input-group -->
+                                                            <div class="input-group has-clearable">
+                                                                <div class="input-group-prepend">
+                                                                    <span class="input-group-text">
+                                                                        <span class="oi oi-magnifying-glass"></span>
+                                                                    </span>
+                                                                </div>
+                                                                <input st-search="" id="table-search" class="form-control placeholder-shown" placeholder="Busqueda" type="text" /> 
+                                                            </div>
+                                                            <!-- /.input-group -->
+                                                        </th>
+                                                    </tr>
+                                                </c:if>
+                                                <tr>
+                                                    <th>Nota D&eacute;bito</th>
+                                                    <th>Fecha Emision</th>
+                                                    <th>Tipo</th>
+                                                    <th>Descripci&oacute;n</th>
+                                                    <th>Fecha Creaci&oacute;n</th>
+                                                    <th>Vence</th>
+                                                    <th>Monto Bs.</th>
+                                                    <th>Monto Usd.</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr  ng-repeat="row in gridRecords" 
+                                                     class="clickable-row" ng-click="seleccionarItemNotaDebito(row)">
+                                                    <td>{{row.idNotaDebito}} </td>
+                                                    <td>{{row.fechaEmision}} </td>
+                                                    <td>{{row.tipo|printTipo}}</td>
+                                                    <td>{{row.descripcion}} </td>
+                                                    <td>{{row.fechaInsert}} </td>
+                                                    <td>{{row.fechaVencimiento}} </td>
+                                                    <td align="right">{{row.montoBs|printNumber}} </td>
+                                                    <td align="">{{row.montoUsd|printNumber}} </td>
+                                                </tr>
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <td colspan="10" class="text-center">
+                                                        <div class="container" st-items-by-page="itemsByPage" st-pagination="" st-template="../index/pagination.custom.html"></div>
+                                                    </td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+                                    </div>
+
+
+                                    <div class="modal-footer">
+                                        <div class="btn-group" role="group"  >
+                                            <!--<div class="form-group row ng-hide" ng-show="formData.idAerolinea.id">-->
+                                            <c:if test="#{notasCredito.formulario.crear== notasCredito.formulario.PERMITIR}">
+                                                <button  type="button" class="btn btn-primary" ng-click="seleccionarTransaccion()" ><span class="fa fa-chevron-circle-right"></span> Seleccionar</button>
+                                            </c:if>
+
+                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /Modal Nota Debito-->
+
+
+                        <!-- Modal Transaccion-->
+
+                        <form id="myFormTrx" name="myFormTrx">
+                            <div class="modal fade table-responsive-md" id="frmNotaCreditoTransaccion" tabindex="-1" role="dialog" aria-labelledby="modalAmadeus" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered modal-md table-responsive-md" role="document">
+                                    <div class="modal-content table-responsive-md">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="exampleModalLongTitle">Datos de la Nota de D&eacute;bito</h5>
+                                        </div>
+                                        <div class="modal-body table-responsive-md">
+                                            <span ng-show="loadingFrmBoleto" class="alert alert-info"><i class="loader loader-sm" ></i>  Cargando...</span>
+
+                                            <!--Mensaje Success -->
+                                            <div class="alert alert-success ng-hide" role="alert" ng-show="showFrmBoletoRestfulSuccess">
+                                                <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">&times;</a>
+                                                {{ showFrmBoletoRestfulMessage}}
+                                            </div>
+                                            <!--/Mensaje Success -->
+
+                                            <!--Mensaje Error -->
+                                            <div class="alert alert-danger ng-hide" role="alert" ng-show="showFrmBoletoRestfulError">
+                                                <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">&times;</a>
+                                                {{ showRestfulMessage}}
+                                            </div>
+                                            <!-- /Mensaje Error -->
+
+                                            <!-- Datos Cabecera -->
+                                            <!-- .Datos Generales -->
+                                            <fieldset  >
+                                                <!-- Container -->
+                                                <div id="formData" class="container">
+
+                                                    <div class="form-group row">
+                                                        <label for="txtNombre" class=" col-form-label col-sm-3 text-right"> Nota de D&eacute;bito</label>
+                                                        <div class="col-sm-3">
+                                                            <input readonly="readonly" class="form-control" value="{{trx.idNotaDebito}}" ng-value="trx.idNotaDebito" />
+                                                        </div>
+
+                                                        <label for="txtMoneda" class="col-form-label col-sm-3 text-right">Moneda</label>
+                                                        <div class="col-sm-3">
+                                                            <input readonly="readonly" class="form-control" value="{{trx.monedaTransaccion|printMoneda}}"  />
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div class="form-group row">
+                                                        <label for="txtMoneda" class="col-form-label col-sm-3 text-right">Factor</label>
+                                                        <div class="col-sm-6">
+                                                            <input readonly="readonly" class="form-control" value="{{formData.factorCambiario}}" ng-value="formData.factorCambiario" />
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group row">
+                                                        <label for="txtCodigoLinea" class="col-sm-3 text-right" >Concepto</label>
+                                                        <div class="col-sm-9">
+                                                            <div >
+                                                                <textarea type="text" class="form-control" rows="3" name="txtDescripcion" readonly="readonly" 
+                                                                          onkeyup="this.value = this.value.toUpperCase()" maxlength="128" 
+                                                                          ng-value="trx.descripcion" ng-model="trx.descripcionTransaccion"/>
+                                                                <span class="alert-danger"  ng-show="!myFormTrx.txtDescripcion.$valid"  >
+                                                                    Debe insertar un concepto.
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group row bg-adeudado">
+                                                        <label for="txtCodigo" class="col-form-label col-sm-4 text-right">Saldo Deuda</label>
+                                                        <div class="col-sm-8 row">
+                                                            <label class="col-form-label col-sm-1 ">BOB.</label>
+                                                            <label class="col-form-label col-sm-5 text-right"><strong> {{trx.montoAdeudadoBs| printNumber}}</strong> </label>
+
+                                                            <label class="col-form-label col-sm-1 ">USD.</label>
+                                                            <label class="col-form-label col-sm-5 text-right"><strong> {{trx.montoAdeudadoUsd|printNumber}}</strong> </label>
+
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group row bg-cancelado">
+                                                        <label for="txtCodigo" class="col-form-label col-sm-4 text-right">Monto Total</label>
+                                                        <div class="col-sm-8 row">
+                                                            <label class="col-form-label col-sm-1 ">BOB.</label>
+                                                            <label class="col-form-label col-sm-5 text-right"><strong> {{trx.montoBs| printNumber}}</strong> </label>
+
+                                                            <label class="col-form-label col-sm-1 ">USD.</label>
+                                                            <label class="col-form-label col-sm-5 text-right"><strong> {{trx.montoUsd|printNumber}}</strong> </label>
+
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="card">
+                                                        <div class="card-header bg-gray text-white">
+                                                            Transacci&oacute;n a Acreditar - Nota de Cr&eacute;dito
+                                                        </div>
+                                                        <div class="card-body bg-light">
+                                                            <div class="form-group row">
+
+                                                                <!-- Moneda Transaccion -->
+                                                                <label for="txtStatus" class="col-form-label col-sm-2 text-right">Moneda </label>
+                                                                <div class="col-sm-10">
+                                                                    <select name="txtMoneda" class="form-control" ng-model="trx.moneda" required="">
+                                                                        <option style="display:none" value="">seleccione una opcion</option>
+                                                                        <option value="B" selected="selected">Bolivianos</option>
+                                                                        <option value="U">Dolares</option>
+                                                                    </select>
+                                                                    <span class="alert-danger" ng-show="!myFormTrx.txtMoneda.$valid">Debe seleccionar una opcion.</span>
+                                                                </div>
+                                                            </div>
+
+                                                            <!-- Cuenta -->
+                                                            <div class="form-group row">
+                                                                <label for="txtStatus" class="col-form-label col-sm-2 text-right">Cuenta </label>
+                                                                <div class="col-sm-10">
+
+                                                                    <input type="text" ng-model="trx.idPlanCuenta" placeholder="Seleccione una cuenta"
+                                                                           uib-typeahead="cuenta as cuenta.name for cuenta in comboCuentas | filter:{name:$viewValue}"
+                                                                           class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="0" 
+                                                                           typeahead-template-url="customTemplate.html" 
+                                                                           />
+                                                                    <span class="alert-danger"  ng-show="trx.idPlanCuenta.id === undefined"  >
+                                                                        Ingrese una cuenta para la Transacci&oacute;n
+                                                                    </span> 
+                                                                </div>
+                                                            </div>
+                                                            <!-- ./Cuenta -->
+
+                                                            <!-- Monto -->
+                                                            <div class="form-group row">
+                                                                <label for="txtNombre" class=" col-form-label text-right col-sm-2"><strong>Monto</strong></label>
+                                                                <div class="col-sm-10">
+                                                                    <input type="number" class="form-control col-sm" name="txtMonto" placeholder="0.00" 
+                                                                           ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01" min="0" 
+                                                                           ng-model="trx.monto" required="" ng-change="checkMontoIngresado()"
+                                                                           data-toggle="tooltip" data-placement="top" />
+                                                                    <span class="alert-danger bg-light" ng-show="!myFormTrx.txtMonto.$valid">Debe ingresar un monto v&aacute;lido.</span>
+                                                                    <span class="alert-danger bg-light" ng-show="showErrorMontoIngresado">Debe ingresar un monto igual o menor a {{montoQueDebeIngresar}}</span>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <div class="btn-group" role="group"  >
+                                                                <!--<div class="form-group row ng-hide" ng-show="formData.idAerolinea.id">-->
+                                                                <c:if test="#{notasCredito.formulario.crear== notasCredito.formulario.PERMITIR}">
+                                                                    <button  type="button" class="btn btn-primary btn-sm" ng-click="saveTransaccion()" ng-if="showFrmNuevaTrx"><span class="fa fa-save"></span> Guardar</button>
+                                                                </c:if>
+
+                                                                <c:if test="#{notasCredito.formulario.actualizar== notasCredito.formulario.PERMITIR}">
+                                                                    <button  type="button" class="btn btn-primary btn-sm" ng-click="updateTransaccion()" ng-if="showFrmEditarTrx"><span class="fa fa-save"></span> Actualizar</button>
+                                                                </c:if>
+
+                                                                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Cerrar</button>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                <!-- Container -->
+                                            </fieldset>
+                                            <!-- Datos Cabecera -->
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
+                        <!-- /Modal Transaccion-->
+
+                        <!-- Modal Background -->
+                        <div class="modal fade bd-example-modal-lg" data-backdrop="static" data-keyboard="false" tabindex="-1" id="frmBackground">
+                            <div class="modal-dialog modal-sm">
+                                <div class="modal-content" style="width: 48px">
+                                    <span class="fa fa-spinner fa-spin fa-3x"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /Modal Background -->
+
+                        <!-- Modal Eliminar -->
+                        <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="frmConfirmation">
+                            <div class="modal-dialog modal-md">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title" id="myModalLabel">Confirmar</h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    </div>
+                                    <div class="modal-body"> 
+                                        <dl class="dl-horizontal">
+                                            Desea elimnar el registro <strong> {{nombreEliminar}}</strong>  ?
+                                        </dl>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" id="modal-btn-si" ng-click="eliminar()"  data-dismiss="modal">Si</button>
+                                        <button type="button" class="btn btn-primary" id="modal-btn-no"  data-dismiss="modal">No</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /Modal Eliminar-->
+
+
+                        <!-- Modal Anular -->
+                        <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="frmAnular">
+                            <div class="modal-dialog modal-md modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h4 class="modal-title" id="myModalLabel">Confirmar</h4>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    </div>
+                                    <div class="modal-body"> 
+                                        <dl class="dl-horizontal">
+                                            Desea anular  {{itemAnular.title}} con ID <strong> {{itemAnular.id}}</strong>  ?
+                                        </dl>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" id="modal-btn-si" ng-click="anular()"  data-dismiss="modal">Si</button>
+                                        <button type="button" class="btn btn-primary" id="modal-btn-no"  data-dismiss="modal">No</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /Modal Anular-->
+                    </div>
+                    <!-- /.page-inner -->
+                </div>
+                <!-- /.page -->
+                <!-- .app-footer -->
+                <ui:include src="../index/footer.xhtml" />
+                <!-- /.app-footer -->
+                <!-- /.wrapper -->
+                <!-- Logout Form -->
+                <ui:include src="../index/logout.xhtml" />
+                <!-- /Logout Form -->
+            </main>
+            <!-- /.app-main -->
+        </div>
+        <!-- /.app -->
+        <!-- BEGIN BASE JS -->
+        <script src="../../assets/vendor/jquery/jquery.min.js"></script>
+        <script src="../../assets/vendor/bootstrap/js/popper.min.js"></script>
+        <script src="../../assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="../../js/utils.js" />
+        <!-- END BASE JS -->
+        <!-- BEGIN PLUGINS JS -->
+        <script src="../../assets/vendor/stacked-menu/stacked-menu.min.js"></script>
+        <script src="../../assets/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+
+        <script src="../../assets/vendor/flatpickr/flatpickr.min.js"></script>
+        <script src="../../assets/vendor/typeahead.js/typeahead.bundle.min.js"></script>
+        <!-- END PLUGINS JS -->
+        <!-- BEGIN THEME JS -->
+        <script src="../../assets/javascript/main.min.js"></script>
+        <script type="text/javascript" src="../../js/boletaje/notasCredito.js" />
+
+        <script type="text/javascript" src="../../assets/javascript/pages/flatpickr-demo.js"></script>
+        <script type="text/javascript" src="../../assets/javascript/pages/typeahead-demo.js"></script>
+
+        <!-- END THEME JS -->
+        <!-- BEGIN PAGE LEVEL JS -->
+        <!-- END PAGE LEVEL JS -->
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+    </h:body>
+</html>
+
+

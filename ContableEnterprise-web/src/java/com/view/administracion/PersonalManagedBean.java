@@ -40,15 +40,16 @@ public class PersonalManagedBean extends ViewManagedBean {
     }
     
      @PostConstruct
-    public void init() {
-        try {
+    public void init() 
+    {
+        //try {
             this.formulario = SessionUtils.getFormulario(Formulario.PERSONAL);
             checkIfCanAccess();
             
-            ejbLogger.add(Accion.ACCESS, user.getUserName(), this.formName, user.getIp());
-        } catch (CRUDException ex) {
-            Logger.getLogger(PersonalManagedBean.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            //ejbLogger.add(Accion.ACCESS, user.getUserName(), this.formName, user.getIp());
+//        } catch (CRUDException ex) {
+//            Logger.getLogger(PersonalManagedBean.class.getName()).log(Level.SEVERE, null, ex);
+//        }
     }
 
     public String getErrorMessage() {

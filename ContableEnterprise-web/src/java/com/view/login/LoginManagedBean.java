@@ -16,9 +16,11 @@ import com.seguridad.control.entities.UserLogin;
 import com.seguridad.control.entities.UserToken;
 import com.seguridad.control.exception.CRUDException;
 import com.seguridad.control.remote.EmpresaRemote;
+import com.seguridad.control.remote.LoggerRemote;
 import com.seguridad.control.remote.LoginRemote;
 import com.seguridad.control.remote.UsuarioRemote;
 import com.seguridad.mensajes.BeanMensaje;
+import com.seguridad.utils.Accion;
 import com.seguridad.utils.DateContable;
 import com.seguridad.utils.Navegacion;
 import com.seguridad.utils.ResponseCode;
@@ -76,6 +78,9 @@ public class LoginManagedBean implements Serializable {
 
     @EJB
     private ParametrosRemote ejbParametros;
+    
+    @EJB
+    protected LoggerRemote ejbLogger;
 
     private Empleado empleado;
 
@@ -203,6 +208,8 @@ public class LoginManagedBean implements Serializable {
             SessionUtils.setSession(SessionUtils.SESION_MENU, createNavegacion(u));
 
             SessionUtils.setSession(SessionUtils.SESION_LOGIN, ul);
+            
+            ejbLogger.add(Accion.LOGIN, usuario, Formulario.SISTEMA, sessionUser.getIp());
 
             return true;
         } catch (CRUDException ex) {
@@ -388,6 +395,8 @@ public class LoginManagedBean implements Serializable {
             ejbLogin.logOut(u, ul);
             SessionUtils.setSession(SessionUtils.SESION_USUARIO, null);
             SessionUtils.setSession(SessionUtils.SESION_MENU, null);
+            
+            ejbLogger.add(Accion.LOGOUT, usuario, Formulario.SISTEMA, ul.getIp());
         }
 
         System.out.println("Sesion del usuario :" + (User) SessionUtils.getSession(SessionUtils.SESION_USUARIO));

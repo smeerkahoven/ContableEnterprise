@@ -90,18 +90,38 @@ function validateNumber(event) {
     var key = window.event ? event.keyCode : event.which;
     if (event.keyCode === 8 || event.keyCode === 46) {
         return true;
-    } else if ( key < 48 || key > 57 ) {
+    } else if (key < 48 || key > 57) {
         return false;
     } else {
-    	return true;
+        return true;
     }
-};
+}
+;
 
 function validateOnlyNumber(event) {
     var key = window.event ? event.keyCode : event.which;
-     if ( key < 48 || key > 57 ) {
+    if (key < 48 || key > 57) {
         return false;
     } else {
-    	return true;
+        return true;
     }
-};
+}
+;
+
+var specialKeys = new Array();
+specialKeys.push(8); //Backspace
+specialKeys.push(9); //Tab
+specialKeys.push(46); //Delete
+specialKeys.push(36); //Home
+specialKeys.push(35); //End
+specialKeys.push(37); //Left
+specialKeys.push(39); //Right
+
+function IsAlphaNumeric(e) {
+    var keyCode = e.keyCode == 0 ? e.charCode : e.keyCode;
+    var ret = ((keyCode >= 48 && keyCode <= 57) || 
+            (keyCode >= 65 && keyCode <= 90) || 
+            (keyCode >= 97 && keyCode <= 122) ||
+            (specialKeys.indexOf(e.keyCode) != -1 && e.charCode != e.keyCode));
+    return ret;
+}
