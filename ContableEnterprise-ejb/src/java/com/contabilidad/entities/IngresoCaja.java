@@ -79,10 +79,6 @@ import javax.validation.constraints.Size;
 })
 public class IngresoCaja extends Entidad {
 
-    public static final String EMITIDO = "E";
-    public static final String PENDIENTE = "P";
-    public static final String ANULADO = "A";
-    public static final String CREADO = "C";
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -105,10 +101,6 @@ public class IngresoCaja extends Entidad {
     @JoinColumn(name = "id_cliente")
     private Cliente idCliente;
 
-    /*@ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_counter")
-    private Promotor idCounter;*/
-    
     @Basic(optional = false)
     @Column(name = "fecha_emision")
     @Temporal(TemporalType.DATE)

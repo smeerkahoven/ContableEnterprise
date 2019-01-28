@@ -11,5 +11,6 @@ package com.seguridad.utils;
  */
 public class Contabilidad {
     
-    public static final Integer VALOR_REDONDEO = 2 ;
+    public static final Integer VALOR_DECIMAL_2 = 2 ;
+    public static final Integer VALOR_DECIMAL_0 = 1 ;
 }

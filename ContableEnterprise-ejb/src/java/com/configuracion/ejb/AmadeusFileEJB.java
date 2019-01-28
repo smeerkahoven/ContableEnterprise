@@ -502,13 +502,17 @@ public class AmadeusFileEJB extends FacadeEJB implements AmadeusFileRemote {
                             Double total = (valor * comision) / 100;
 
                             b.setComision(aerolinea.getComisionPromInt());
-                            b.setMontoComision(new BigDecimal(total).setScale(Contabilidad.VALOR_REDONDEO, RoundingMode.HALF_DOWN));
+                            b.setMontoComision(new BigDecimal(total).setScale(Contabilidad.VALOR_DECIMAL_2, RoundingMode.HALF_DOWN));
 
                             if (aerolinea.getIvaItComision()) {
                                 if (porcentajeComision != null) {
                                     Double porcentaje = Double.parseDouble(porcentajeComision.getValor());
                                     Double totalComisonIva = (total * porcentaje) / 100 + total;
-                                    b.setMontoComision(new BigDecimal(totalComisonIva).setScale(Contabilidad.VALOR_REDONDEO, RoundingMode.HALF_DOWN));
+                                    if (aerolinea.getRoundComisionUsd()) {
+                                        b.setMontoComision(new BigDecimal(Math.round( totalComisonIva)).setScale(Contabilidad.VALOR_DECIMAL_0, RoundingMode.HALF_DOWN));
+                                    } else {
+                                        b.setMontoComision(new BigDecimal(totalComisonIva).setScale(Contabilidad.VALOR_DECIMAL_2, RoundingMode.HALF_DOWN));
+                                    }
                                 }
 
                             }
@@ -528,13 +532,17 @@ public class AmadeusFileEJB extends FacadeEJB implements AmadeusFileRemote {
                             Double total = (valor * comision) / 100;
 
                             b.setComision(aerolinea.getComisionPromNac());
-                            b.setMontoComision(new BigDecimal(total).setScale(Contabilidad.VALOR_REDONDEO, RoundingMode.HALF_DOWN));
+                            b.setMontoComision(new BigDecimal(total).setScale(Contabilidad.VALOR_DECIMAL_2, RoundingMode.HALF_DOWN));
 
                             if (aerolinea.getIvaItComision()) {
                                 if (porcentajeComision != null) {
                                     Double porcentaje = Double.parseDouble(porcentajeComision.getValor());
                                     Double totalComisonIva = ((total * porcentaje) / 100) + total;
-                                    b.setMontoComision(new BigDecimal(totalComisonIva).setScale(Contabilidad.VALOR_REDONDEO, RoundingMode.HALF_DOWN));
+                                    if (aerolinea.getRoundComisionBob()) {
+                                        b.setMontoComision(new BigDecimal(Math.round(totalComisonIva)).setScale(Contabilidad.VALOR_DECIMAL_0, RoundingMode.HALF_DOWN));
+                                    } else {
+                                        b.setMontoComision(new BigDecimal(totalComisonIva).setScale(Contabilidad.VALOR_DECIMAL_2, RoundingMode.HALF_DOWN));
+                                    }
                                 }
 
                             }
@@ -542,11 +550,11 @@ public class AmadeusFileEJB extends FacadeEJB implements AmadeusFileRemote {
                     }
                 }
                 try {
-                    if (b.getMontoComision() != null){
-                        Double comision = b.getMontoComision().doubleValue() ;
-                        Double totalBoleto = b.getTotalBoleto().doubleValue() ;
-                        
-                        Double montoPagarLinea = totalBoleto - comision ;
+                    if (b.getMontoComision() != null) {
+                        Double comision = b.getMontoComision().doubleValue();
+                        Double totalBoleto = b.getTotalBoleto().doubleValue();
+
+                        Double montoPagarLinea = totalBoleto - comision;
                         b.setMontoPagarLineaAerea(new BigDecimal(montoPagarLinea));
                     }
                     //creamos el boleto

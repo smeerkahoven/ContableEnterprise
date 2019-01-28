@@ -7,7 +7,6 @@ package com.configuracion.entities;
 
 import com.seguridad.control.entities.Entidad;
 import com.seguridad.control.exception.CRUDException;
-import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Date;
 import javax.persistence.Basic;

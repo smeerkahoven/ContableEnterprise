@@ -10,7 +10,6 @@ import com.seguridad.control.exception.CRUDException;
 import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -65,7 +64,7 @@ public class NotaDebitoTransaccion extends Entidad {
     @NotNull
     @Column(name = "gestion")
     private Integer gestion;
-    @ManyToOne(fetch = FetchType.EAGER ,cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.EAGER )
     @JoinColumn(name = "id_nota_debito")
     private NotaDebito idNotaDebito;
     @Size(max = 64)

@@ -9,51 +9,58 @@ import com.agencia.entities.Boleto;
 import com.contabilidad.entities.CargoBoleto;
 import com.contabilidad.entities.IngresoTransaccion;
 import com.contabilidad.entities.NotaDebitoTransaccion;
+import com.response.json.agencia.BoletoJSON;
 
 /**
  *
  * @author xeio
  */
 public class AsientoAnswerJSON {
-    
-    private NotaDebitoTransaccion transaccion ;
-    private Boleto boleto ;
-    private CargoBoleto cargo ;
-    private IngresoTransaccion ingreso ;
 
-    public IngresoTransaccion getIngreso() {
-        return ingreso;
+    private NotaDebitoTransaccionJson notaDebito;
+    private BoletoJSON boleto;
+    private CargoBoletoJSON cargo;
+    private IngresoTransaccionJson ingreso;
+    private NotaCreditoTransaccionJson notaCredito;
+
+    public NotaDebitoTransaccionJson getNotaDebito() {
+        return notaDebito;
     }
 
-    public void setIngreso(IngresoTransaccion ingreso) {
-        this.ingreso = ingreso;
-    }
-    
-    public NotaDebitoTransaccion getTransaccion() {
-        return transaccion;
+    public void setNotaDebito(NotaDebitoTransaccionJson notaDebito) {
+        this.notaDebito = notaDebito;
     }
 
-    public void setTransaccion(NotaDebitoTransaccion transaccion) {
-        this.transaccion = transaccion;
+    public NotaCreditoTransaccionJson getNotaCredito() {
+        return notaCredito;
     }
 
-    public Boleto getBoleto() {
+    public void setNotaCredito(NotaCreditoTransaccionJson notaCredito) {
+        this.notaCredito = notaCredito;
+    }
+
+    public BoletoJSON getBoleto() {
         return boleto;
     }
 
-    public void setBoleto(Boleto boleto) {
+    public void setBoleto(BoletoJSON boleto) {
         this.boleto = boleto;
     }
 
-    public CargoBoleto getCargo() {
+    public CargoBoletoJSON getCargo() {
         return cargo;
     }
 
-    public void setCargo(CargoBoleto cargo) {
+    public void setCargo(CargoBoletoJSON cargo) {
         this.cargo = cargo;
     }
 
-    
-    
-    
+    public IngresoTransaccionJson getIngreso() {
+        return ingreso;
+    }
+
+    public void setIngreso(IngresoTransaccionJson ingreso) {
+        this.ingreso = ingreso;
+    }
+
 }

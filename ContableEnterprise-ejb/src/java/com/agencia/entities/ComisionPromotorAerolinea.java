@@ -7,7 +7,6 @@ package com.agencia.entities;
 
 import com.seguridad.control.entities.Entidad;
 import com.seguridad.control.exception.CRUDException;
-import java.io.Serializable;
 import java.math.BigDecimal;
 import javax.persistence.Basic;
 import javax.persistence.Column;

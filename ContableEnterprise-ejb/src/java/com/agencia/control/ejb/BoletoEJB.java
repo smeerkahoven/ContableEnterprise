@@ -291,7 +291,7 @@ public class BoletoEJB extends FacadeEJB implements BoletoRemote {
             throw new CRUDException("No existe Cuenta Configurada para Cuenta Efectivo No BSP Haber USD");
         }
 
-        op = Optional.ofNullable(conf.getOtroCargosClienteCobrarDebeBs());
+        op = Optional.ofNullable(conf.getOtrosCargosClienteCobrarDebeBs());
         if (!op.isPresent()) {
             throw new CRUDException("No existe Cuenta Configurada para Otros Cargos Clientes x Cobrar Debe Bs.");
         }
@@ -829,7 +829,7 @@ public class BoletoEJB extends FacadeEJB implements BoletoRemote {
     }
 
     @Override
-    public Boleto saveBoletoVoid(Boleto b, NotaDebito n) throws CRUDException {
+    public Boleto saveBoletoVoid(Boleto b, NotaDebito n, String usuario) throws CRUDException {
         Optional op;
         Aerolinea a = em.find(Aerolinea.class, b.getIdAerolinea().getIdAerolinea());
 
@@ -847,9 +847,9 @@ public class BoletoEJB extends FacadeEJB implements BoletoRemote {
 
         b.setEstado(Boleto.Estado.PENDIENTE);
 
-        insert(b);
+        ejbNotaDebito.asociarBoletoNotaDebito(n, b.getIdBoleto(), usuario);
 
-        ejbNotaDebito.asociarBoletoNotaDebito(b, n);
+        insert(b);
 
         return b;
     }
@@ -1016,8 +1016,8 @@ public class BoletoEJB extends FacadeEJB implements BoletoRemote {
             //anulamos las transacciones del Ingreso de Caja
             //ejbIngresoCaja.anularTransaccion(boleto) ;
             // si esta en Pendiente solo debe cambiar el estado
-        } else if (boletoAnular.getEstado().equals(Boleto.Estado.PENDIENTE) ||
-                boletoAnular.getEstado().equals(Boleto.Estado.CANCELADO)) {
+        } else if (boletoAnular.getEstado().equals(Boleto.Estado.PENDIENTE)
+                || boletoAnular.getEstado().equals(Boleto.Estado.CANCELADO)) {
             boletoAnular.setEstado(Boleto.Estado.ANULADO);
             em.merge(boletoAnular);
             //Si el Boleto es Void, se puede volver a ingresar el boleto.
@@ -1082,18 +1082,36 @@ public class BoletoEJB extends FacadeEJB implements BoletoRemote {
             throw new CRUDException("El Numero de Boleto ya ha sido registrado");
         }
 
-        NotaDebito n = (NotaDebito) ejbNotaDebito.get(new NotaDebito(boleto.getIdNotaDebito()));
+        NotaDebito n = em.find(NotaDebito.class, boleto.getIdNotaDebito());
+        Optional op = Optional.ofNullable(n);
+        if (!op.isPresent()) {
+            throw new CRUDException("No existe la nota de Debito %s en la Base de datos.".replace("%s", boleto.getIdNotaDebito().toString()));
+        }
         // Se guarda el Boleto
         boleto.setIdBoleto(insert(boleto));
 
         saveClientePasajero(boleto);
         //se asocia el Boleto con la Transaccion
-        ejbNotaDebito.asociarBoletoNotaDebito(boleto, n);
+        ejbNotaDebito.asociarBoletoNotaDebitoManual(n, boleto);
 
         //actualizamos los montos de la Nota de debito
         ejbNotaDebito.actualizarMontosNotaDebito(n.getIdNotaDebito());
 
         return Operacion.REALIZADA;
+
+    }
+
+    @Override
+    public void eliminar(Boleto b) throws CRUDException {
+
+        Boleto fromDb = em.find(Boleto.class, b.getIdBoleto());
+        Optional op = Optional.ofNullable(fromDb);
+
+        if (!op.isPresent()) {
+            throw new CRUDException("No se econtro el Boleto %s.".replace("%s", b.getNumero().toString()));
+        }
+
+        em.remove(fromDb);
 
     }
 
@@ -1114,6 +1132,7 @@ public class BoletoEJB extends FacadeEJB implements BoletoRemote {
         // Se guarda el Boleto
 
         saveClientePasajero(boleto);
+
         //se asocia el Boleto con la Transaccion
         ejbNotaDebito.updateBoletoNotaDebito(boleto, n);
 
@@ -1126,18 +1145,16 @@ public class BoletoEJB extends FacadeEJB implements BoletoRemote {
 
     @Override
     public List<BoletoPlanillaBsp> getPlanillaBsp(PlanillaSearchForm search) throws CRUDException {
-        
+
         Query q = em.createNamedQuery("Boleto.getPlanillaBsp");
-        q.setParameter("1", DateContable.toLatinAmericaDateFormat(search.getFechaInicio())) ;
-        q.setParameter("2", DateContable.toLatinAmericaDateFormat(search.getFechaFin()) ) ;
-        q.setParameter("3", search.getIdEmpresa()) ;
-         
-        List <BoletoPlanillaBsp> l = q.getResultList() ;
-        
-        return l ;
-        
+        q.setParameter("1", DateContable.toLatinAmericaDateFormat(search.getFechaInicio()));
+        q.setParameter("2", DateContable.toLatinAmericaDateFormat(search.getFechaFin()));
+        q.setParameter("3", search.getIdEmpresa());
+
+        List<BoletoPlanillaBsp> l = q.getResultList();
+
+        return l;
+
     }
-    
-    
 
 }

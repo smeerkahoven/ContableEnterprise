@@ -65,7 +65,7 @@ public class ContabilidadBoletaje extends Entidad {
     private Integer cuentaEfectivoDebeUsd;
     @Column(name = "cuenta_efectivo_debe_usd")
     private Integer cuentaEfectivoHaberUsd;
-    
+
     @Column(name = "deposito_banco_haber_bs")
     private Integer depositoBancoHaberBs;
     @Column(name = "deposito_banco_debe_bs")
@@ -74,8 +74,7 @@ public class ContabilidadBoletaje extends Entidad {
     private Integer depositoBancoDebeUsd;
     @Column(name = "deposito_banco_haber_usd")
     private Integer depositoBancoHaberUsd;
-    
-    
+
     @Column(name = "cuenta_efectivo_no_bsp_debe_bs")
     private Integer cuentaEfectivoNoBspDebeBs;
 
@@ -99,23 +98,157 @@ public class ContabilidadBoletaje extends Entidad {
 
     @Column(name = "tarjeta_credito_bsp_haber_usd")
     private Integer tarjetaCreditoBspHaberUsd;
-    
-    
+
     @Column(name = "otros_cargos_cliente_cobrar_debe_bs")
-    private Integer otroCargosClienteCobrarDebeBs;
+    private Integer otrosCargosClienteCobrarDebeBs;
 
     @Column(name = "otros_cargos_cliente_cobrar_debe_usd")
     private Integer otrosCargosClienteCobrarDebeUsd;
 
+    //Nota Credito
+    @Column(name = "nota_credito_haber_bs")
+    private Integer notaCreditoHaberBs;
+
+    @Column(name = "nota_credito_haber_usd")
+    private Integer notaCreditoHaberUsd;
+
+    //Depositos Anticipados
+    @Column(name = "deposito_cliente_anticipado_bs")
+    private Integer depositoClienteAnticipadoBs;
+
+    @Column(name = "deposito_cliente_anticipado_usd")
+    private Integer depositoClienteAnticipadoUsd;
+
+    //Acreditacion
+    @Column(name = "acreditacion_deposito_anticipado_debe_bs")
+    private Integer acreditacionDepositoAnticipadoDebeBs;
+
+    @Column(name = "acreditacion_deposito_anticipado_haber_bs")
+    private Integer acreditacionDepositoAnticipadoHaberBs;
+
+    @Column(name = "acreditacion_deposito_anticipado_debe_usd")
+    private Integer acreditacionDepositoAnticipadoDebeUsd;
+
+    @Column(name = "acreditacion_deposito_anticipado_haber_usd")
+    private Integer acreditacionDepositoAnticipadoHaberUsd;
+
+    @Column(name = "devolucion_deposito_anticipado_haber_bs")
+    private Integer devolucionDepositoAnticipadoHaberBs;
+
+    @Column(name = "devolucion_deposito_anticipado_debe_bs")
+    private Integer devolucionDepositoAnticipadoDebeBs;
+
+    @Column(name = "devolucion_deposito_anticipado_haber_usd")
+    private Integer devolucionDepositoAnticipadoHaberUsd;
+
+    @Column(name = "devolucion_deposito_anticipado_debe_usd")
+    private Integer devolucionDepositoAnticipadoDebeUsd;
+
     public ContabilidadBoletaje() {
     }
 
-    public Integer getOtroCargosClienteCobrarDebeBs() {
-        return otroCargosClienteCobrarDebeBs;
+    public Integer getNotaCreditoHaberBs() {
+        return notaCreditoHaberBs;
     }
 
-    public void setOtroCargosClienteCobrarDebeBs(Integer otroCargosClienteCobrarDebeBs) {
-        this.otroCargosClienteCobrarDebeBs = otroCargosClienteCobrarDebeBs;
+    public void setNotaCreditoHaberBs(Integer notaCreditoHaberBs) {
+        this.notaCreditoHaberBs = notaCreditoHaberBs;
+    }
+
+    public Integer getNotaCreditoHaberUsd() {
+        return notaCreditoHaberUsd;
+    }
+
+    public void setNotaCreditoHaberUsd(Integer notaCreditoHaberUsd) {
+        this.notaCreditoHaberUsd = notaCreditoHaberUsd;
+    }
+
+    public Integer getDepositoClienteAnticipadoBs() {
+        return depositoClienteAnticipadoBs;
+    }
+
+    public void setDepositoClienteAnticipadoBs(Integer depositoClienteAnticipadoBs) {
+        this.depositoClienteAnticipadoBs = depositoClienteAnticipadoBs;
+    }
+
+    public Integer getDepositoClienteAnticipadoUsd() {
+        return depositoClienteAnticipadoUsd;
+    }
+
+    public void setDepositoClienteAnticipadoUsd(Integer depositoClienteAnticipadoUsd) {
+        this.depositoClienteAnticipadoUsd = depositoClienteAnticipadoUsd;
+    }
+
+    public Integer getAcreditacionDepositoAnticipadoDebeBs() {
+        return acreditacionDepositoAnticipadoDebeBs;
+    }
+
+    public void setAcreditacionDepositoAnticipadoDebeBs(Integer acreditacionDepositoAnticipadoDebeBs) {
+        this.acreditacionDepositoAnticipadoDebeBs = acreditacionDepositoAnticipadoDebeBs;
+    }
+
+    public Integer getAcreditacionDepositoAnticipadoHaberBs() {
+        return acreditacionDepositoAnticipadoHaberBs;
+    }
+
+    public void setAcreditacionDepositoAnticipadoHaberBs(Integer acreditacionDepositoAnticipadoHaberBs) {
+        this.acreditacionDepositoAnticipadoHaberBs = acreditacionDepositoAnticipadoHaberBs;
+    }
+
+    public Integer getAcreditacionDepositoAnticipadoDebeUsd() {
+        return acreditacionDepositoAnticipadoDebeUsd;
+    }
+
+    public void setAcreditacionDepositoAnticipadoDebeUsd(Integer acreditacionDepositoAnticipadoDebeUsd) {
+        this.acreditacionDepositoAnticipadoDebeUsd = acreditacionDepositoAnticipadoDebeUsd;
+    }
+
+    public Integer getAcreditacionDepositoAnticipadoHaberUsd() {
+        return acreditacionDepositoAnticipadoHaberUsd;
+    }
+
+    public void setAcreditacionDepositoAnticipadoHaberUsd(Integer acreditacionDepositoAnticipadoHaberUsd) {
+        this.acreditacionDepositoAnticipadoHaberUsd = acreditacionDepositoAnticipadoHaberUsd;
+    }
+
+    public Integer getDevolucionDepositoAnticipadoHaberBs() {
+        return devolucionDepositoAnticipadoHaberBs;
+    }
+
+    public void setDevolucionDepositoAnticipadoHaberBs(Integer devolucionDepositoAnticipadoHaberBs) {
+        this.devolucionDepositoAnticipadoHaberBs = devolucionDepositoAnticipadoHaberBs;
+    }
+
+    public Integer getDevolucionDepositoAnticipadoDebeBs() {
+        return devolucionDepositoAnticipadoDebeBs;
+    }
+
+    public void setDevolucionDepositoAnticipadoDebeBs(Integer devolucionDepositoAnticipadoDebeBs) {
+        this.devolucionDepositoAnticipadoDebeBs = devolucionDepositoAnticipadoDebeBs;
+    }
+
+    public Integer getDevolucionDepositoAnticipadoHaberUsd() {
+        return devolucionDepositoAnticipadoHaberUsd;
+    }
+
+    public void setDevolucionDepositoAnticipadoHaberUsd(Integer devolucionDepositoAnticipadoHaberUsd) {
+        this.devolucionDepositoAnticipadoHaberUsd = devolucionDepositoAnticipadoHaberUsd;
+    }
+
+    public Integer getDevolucionDepositoAnticipadoDebeUsd() {
+        return devolucionDepositoAnticipadoDebeUsd;
+    }
+
+    public void setDevolucionDepositoAnticipadoDebeUsd(Integer devolucionDepositoAnticipadoDebeUsd) {
+        this.devolucionDepositoAnticipadoDebeUsd = devolucionDepositoAnticipadoDebeUsd;
+    }
+
+    public Integer getOtrosCargosClienteCobrarDebeBs() {
+        return otrosCargosClienteCobrarDebeBs;
+    }
+
+    public void setOtrosCargosClienteCobrarDebeBs(Integer otroCargosClienteCobrarDebeBs) {
+        this.otrosCargosClienteCobrarDebeBs = otroCargosClienteCobrarDebeBs;
     }
 
     public Integer getOtrosCargosClienteCobrarDebeUsd() {
@@ -126,7 +259,6 @@ public class ContabilidadBoletaje extends Entidad {
         this.otrosCargosClienteCobrarDebeUsd = otrosCargosClienteCobrarDebeUsd;
     }
 
-    
     public Integer getCuentaEfectivoNoBspDebeBs() {
         return cuentaEfectivoNoBspDebeBs;
     }
@@ -314,8 +446,6 @@ public class ContabilidadBoletaje extends Entidad {
     public void setDepositoBancoHaberUsd(Integer depositoBancoHaberUsd) {
         this.depositoBancoHaberUsd = depositoBancoHaberUsd;
     }
-    
-    
 
     @Override
     public int hashCode() {

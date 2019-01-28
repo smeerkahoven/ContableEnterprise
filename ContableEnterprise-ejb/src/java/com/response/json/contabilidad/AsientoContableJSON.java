@@ -35,6 +35,7 @@ public class AsientoContableJSON {
     private Integer idCargo;
     private Integer idNotaTransaccion;
     private Integer idIngresoCajaTransaccion;
+    private Integer idNotaCreditoTransaccion ;
     private String tipo;
 
     public static AsientoContable toAsientoContable(AsientoContableJSON a) {
@@ -89,10 +90,21 @@ public class AsientoContableJSON {
         json.setIdBoleto(a.getIdBoleto());
         json.setIdNotaTransaccion(a.getIdNotaTransaccion());
         json.setIdIngresoCajaTransaccion(a.getIdIngresoCajaTransaccion());
+        json.setIdNotaCreditoTransaccion(a.getIdNotaCreditoTransaccion());
         json.setIdCargo(a.getIdCargo());
 
         return json;
     }
+
+    public Integer getIdNotaCreditoTransaccion() {
+        return idNotaCreditoTransaccion;
+    }
+
+    public void setIdNotaCreditoTransaccion(Integer idNotaCreditoTransaccion) {
+        this.idNotaCreditoTransaccion = idNotaCreditoTransaccion;
+    }
+    
+    
 
     public Integer getIdBoleto() {
         return idBoleto;

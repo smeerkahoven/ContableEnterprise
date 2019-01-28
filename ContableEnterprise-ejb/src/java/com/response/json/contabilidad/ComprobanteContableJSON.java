@@ -7,7 +7,6 @@ package com.response.json.contabilidad;
 
 import com.agencia.entities.Cliente;
 import com.contabilidad.entities.ComprobanteContable;
-import com.contabilidad.entities.ComprobanteContablePK;
 import com.seguridad.utils.ComboSelect;
 import com.seguridad.utils.DateContable;
 import java.math.BigDecimal;
@@ -59,7 +58,7 @@ public class ComprobanteContableJSON {
         newc.setIdUsuarioCreador(c.getIdUsuarioCreador());
 
         if (c.getIdCliente() != null) {
-            newc.setIdCliente(new Cliente((Integer) c.getIdCliente().getId()));
+            newc.setIdCliente(new Cliente(((BigDecimal) c.getIdCliente().getId()).intValue()));
         }
 
         newc.setIdEmpresa(c.getIdEmpresa());

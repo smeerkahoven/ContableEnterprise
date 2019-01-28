@@ -10,8 +10,10 @@ import com.agencia.search.dto.BoletoSearchForm;
 import com.configuracion.entities.ContabilidadBoletaje;
 import com.contabilidad.entities.CargoBoleto;
 import com.contabilidad.entities.IngresoTransaccion;
+import com.contabilidad.entities.NotaCreditoTransaccion;
 import com.contabilidad.entities.NotaDebito;
 import com.contabilidad.entities.NotaDebitoTransaccion;
+import com.contabilidad.entities.PagoAnticipadoTransaccion;
 import com.seguridad.control.entities.Entidad;
 import com.seguridad.control.exception.CRUDException;
 import com.seguridad.control.remote.DaoRemoteFacade;
@@ -26,9 +28,8 @@ import javax.ejb.Remote;
 @Remote
 public interface NotaDebitoRemote extends DaoRemoteFacade {
 
-    
     public ContabilidadBoletaje getConfiguracion(Integer idEmpresa) throws CRUDException;
-    
+
     @Override
     public void executeNative(String query, HashMap<String, Object> parameters) throws CRUDException;
 
@@ -75,10 +76,10 @@ public interface NotaDebitoRemote extends DaoRemoteFacade {
      */
     public int anularTransaccion(Boleto boleto) throws CRUDException;
 
-    public void anularTransaccion(NotaDebitoTransaccion tr) throws CRUDException;
+    public void anularTransaccion(NotaDebitoTransaccion tr, String usuario) throws CRUDException;
 
     public List<NotaDebito> getAllNotaDebito(BoletoSearchForm search) throws CRUDException;
-    
+
     public List<NotaDebito> getAllByCliente(Integer idCliente) throws CRUDException;
 
     /**
@@ -110,6 +111,7 @@ public interface NotaDebitoRemote extends DaoRemoteFacade {
      * @throws CRUDException
      */
     public Integer actualizarMontosNotaDebito(Integer idNotaDebito) throws CRUDException;
+
     public Integer actualizarMontosNotaDebitoEmitida(Integer idNotaDebito) throws CRUDException;
 
     /**
@@ -120,7 +122,9 @@ public interface NotaDebitoRemote extends DaoRemoteFacade {
      * @return El id de la transaccion a la cual esta relacionada el Boleto
      * @throws CRUDException
      */
-    public Integer asociarBoletoNotaDebito(Boleto b, NotaDebito n) throws CRUDException;
+    public Boleto asociarBoletoNotaDebito(NotaDebito n, Integer idBoleto, String usuario) throws CRUDException;
+
+    public Boleto asociarBoletoNotaDebitoManual(NotaDebito n, Boleto b) throws CRUDException;
 
     /**
      *
@@ -151,6 +155,14 @@ public interface NotaDebitoRemote extends DaoRemoteFacade {
     public CargoBoleto saveCargo(CargoBoleto cargo) throws CRUDException;
 
     /**
+     *
+     * @param cargo
+     * @return
+     * @throws CRUDException
+     */
+    public CargoBoleto updateCargo(CargoBoleto cargo) throws CRUDException;
+
+    /**
      * Obtiene la informacion del cargo de la Nota de Debito
      *
      * @param cargo
@@ -177,17 +189,19 @@ public interface NotaDebitoRemote extends DaoRemoteFacade {
      */
     public NotaDebitoTransaccion getNotaDebitoTransaccion(Integer idNotaTransaccion) throws CRUDException;
 
-    
     /**
-     * Actualiza los montos adeudados de la transacion de la nota de debito
-     * y establece los estados de la nota de debito.
-     * 
+     * Actualiza los montos adeudados de la transacion de la nota de debito y
+     * establece los estados de la nota de debito.
+     *
      * @param trx
-     * @throws CRUDException 
+     * @throws CRUDException
      */
-    public void actualizarMontosAdeudadosTransaccion(IngresoTransaccion trx) throws CRUDException ;
-    
-    
+    public void actualizarMontosAdeudadosTransaccion(IngresoTransaccion trx) throws CRUDException;
+
+    public void actualizarMontosAdeudadosTransaccion(NotaCreditoTransaccion trx) throws CRUDException;
+
+    public void actualizarMontosAdeudadosTransaccion(PagoAnticipadoTransaccion trx) throws CRUDException;
+
     /**
      * REaliza la anulacion de la Nota de debito, sus transacciones, y todo lo
      * demas
@@ -198,20 +212,27 @@ public interface NotaDebitoRemote extends DaoRemoteFacade {
     public void anularNotaDebito(NotaDebito nota) throws CRUDException;
 
     /**
-     * Devuelve todas las Notas de Debito que estan con forma de Pago al Credito y su estado
-     * es EN MORA, EMITIDA
+     * Devuelve todas las Notas de Debito que estan con forma de Pago al Credito
+     * y su estado es EN MORA, EMITIDA
+     *
      * @param idCliente
      * @return
-     * @throws CRUDException 
+     * @throws CRUDException
      */
     public List<NotaDebitoTransaccion> getAllNotaDebitoCreditoByCliente(Integer idCliente, Integer idEmpresa) throws CRUDException;
 
     /**
-     * 
+     * Revierte los montos de las transacciones hacia la nota de debito. Esto se
+     * hace cuando la transaccion ha sido ANULADA
+     *
      * @param it
      * @param ndtx
-     * @throws CRUDException 
+     * @throws CRUDException
      */
     public void revertirMontosIngresoDeCaja(IngresoTransaccion it, NotaDebitoTransaccion ndtx) throws CRUDException;
+
+    public void revertirMontosNotaCredito(NotaCreditoTransaccion it, NotaDebitoTransaccion ndtx) throws CRUDException;
+
+    public void revertirMontosPagosAnticipados(PagoAnticipadoTransaccion it, NotaDebitoTransaccion ndtx) throws CRUDException;
 
 }

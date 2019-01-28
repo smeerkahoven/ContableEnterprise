@@ -45,13 +45,32 @@ public class Log implements Serializable {
     public static final String INGRESO_CAJA_ANULAR_TRANSACCION = "Establecio la Transaccion <id> como ANULADA. Si el Ingreso estaba en Contabilidad, los montos fueron revertidos, asi como sus Comprobantes Contables." ;
     public static final String INGRESO_CAJA_NUEVA_TRANSACION = "Insercion de la transaccion <trx> para el Ingreso de Caja <id>." ;
     public static final String INGRESO_CAJA_UPDATE_TRANSACCION = "Se ingreso el monto <monto> a la transaccion <trx> del ingreso de caja <id>." ;
+    
+    public static final String NOTA_CREDITO_NUEVO = "Creo la Nota de Crédito<id> " ;
+    public static final String NOTA_CREDITO_PENDIENTE = "Establecio la Nota de Crédito <id> como PENDIENTE" ;
+    public static final String NOTA_CREDITO_FINALIZAR = "Establecio la Nota de Crédito <id> como FINALIZAR" ;
+    public static final String NOTA_CREDITO_ANULAR = "Establecio la Nota de Crédito <id> como ANULADA. Si Nota de Crédito estaba en Contabilidad, los montos fueron revertidos, asi como sus Comprobantes Contables." ;
+    public static final String NOTA_CREDITO_ANULAR_TRANSACCION = "Establecio la Transaccion <id> como ANULADA. Si el Nota de Crédito estaba en Contabilidad, los montos fueron revertidos, asi como sus Comprobantes Contables." ;
+    public static final String NOTA_CREDITO_NUEVA_TRANSACION = "Insercion de la transaccion <trx> para Nota de Crédito <id>." ;
+    public static final String NOTA_CREDITO_UPDATE_TRANSACCION = "Se ingreso el monto <monto> a la transaccion <trx> de Nota de Crédito <id>." ;
 
     public static final String NOTA_DEBITO_CARGO_EDITAR = "Se edito el Cargo Nro <cargo> para la nota de Debito <nota>" ;
     public static final String NOTA_DEBITO_CARGO_ANULAR = "Se anulo el Cargo Nro<cargo> para la nota de Debito <nota>" ;
     public static final String BOLETO_ASOCIAR_AUTOMATICO = "Asocio el Boleto <boleto> con la Nota <id>" ;
     public static final String BOLETO_ANULAR = "Establecio <boleto> como ANULADO" ;
+    public static final String BOLETO_ELIMINAR = "Establecio <boleto> como ELIMINADO" ;
     public static final String BOLETO_SAVE = "Creacion del Boleto <boleto>" ;
     
+    
+    public static final String PAGO_ANTICIPADO_NUEVO = "Creacion Pago Anticipado <id> " ;
+    public static final String PAGO_ANTICIPADO_PENDIENTE = "Establecio el Pago Anticipado <id> como PENDIENTE" ;
+    public static final String PAGO_ANTICIPADO_FINALIZAR = "Establecio el Pago Anticipado <id> como FINALIZAR" ;
+    public static final String PAGO_ANTICIPADO_ANULAR = "Establecio el Pago Anticipado <id> como ANULADA. Si el Pago Anticipado estaba en Contabilidad, los montos fueron revertidos, asi como sus Comprobantes Contables." ;
+    public static final String PAGO_ANTICIPADO_ANULAR_TRANSACCION = "Establecio la Transaccion <id> como ANULADA. Si el el Pago Anticipado estaba en Contabilidad, los montos fueron revertidos, asi como sus Comprobantes Contables." ;
+    public static final String PAGO_ANTICIPADO_DEVOLVER_TRANSACCION = "Establecio la Transaccion <id> como DEVUELTA. Si el el Pago Anticipado estaba en Contabilidad, los montos fueron revertidos, asi como sus Comprobantes Contables." ;
+    public static final String PAGO_ANTICIPADO_NUEVA_TRANSACION = "Insercion de la transaccion <trx> para el Pago Anticipado <id>." ;
+    public static final String PAGO_ANTICIPADO_DEVOLUCION = "Devolucion de <monto> para el Pago Anticipado <id>."; ;
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

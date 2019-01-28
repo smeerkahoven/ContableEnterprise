@@ -98,9 +98,10 @@ public interface IngresoCajaRemote extends DaoRemoteFacade {
      * Coloca el ingreso a Caja a ANULADO y sus transacciones automaticamente pasan a ANULADO
      * por medio de los TRiggers en BD
      * @param idIngresoCaja
+     * @param usuario
      * @throws CRUDException 
      */
-    public void anularIngresoCaja(Integer idIngresoCaja) throws CRUDException;
+    public void anularIngresoCaja(Integer idIngresoCaja, String usuario) throws CRUDException;
     
     /**
      * 

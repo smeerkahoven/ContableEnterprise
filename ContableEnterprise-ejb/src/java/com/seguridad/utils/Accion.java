@@ -13,13 +13,14 @@ import java.io.Serializable;
  */
 public enum Accion implements Serializable {
 
-    LOGIN("Login"),
-    LOGOUT("Logout"),
+    LOGIN("LOGIN"),
+    LOGOUT("LOGOUT"),
     ACCESS("ACCESS"),
     SEARCH("SEARCH"),
     TRANSACTION("TRANSACTION"),
     PENDIENTE("PENDIENTE"),
     INSERT("INSERT"),
+    DEVOLUCION("DEVOLUCION"),
     EDIT("EDIT"),
     DELETE("DELETE"),
     UPDATE("UPDATE"),

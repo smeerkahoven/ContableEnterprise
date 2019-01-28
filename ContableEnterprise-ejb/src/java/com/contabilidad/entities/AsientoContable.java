@@ -34,9 +34,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "AsientoContable.findAll", query = "SELECT a FROM AsientoContable a")
     ,@NamedQuery(name = "AsientoContable.find", query = "SELECT a FROM AsientoContable a WHERE a.idLibro=:idLibro")
-    ,@NamedQuery(name = "AsientoContable.findAllByIdNotaDebitoTransaccion", query = "SELECT a FROM AsientoContable a WHERE a.idNotaTransaccion =:idNotaTransaccion")
-    ,@NamedQuery(name = "AsientoContable.findAllByIdIngresoTransaccion", query = "SELECT a FROM AsientoContable a WHERE a.idIngresoCajaTransaccion=:idIngresoCajaTransaccion")
-    ,@NamedQuery(name = "AsientoContable.updateEstadoFromBoleto", query = "UPDATE AsientoContable a SET a.estado=:estado WHERE a.idBoleto=:idBoleto")
+    ,@NamedQuery(name = "AsientoContable.findAllByIdNotaDebitoTransaccion", query = "SELECT a FROM AsientoContable a WHERE a.idNotaTransaccion = :idNotaTransaccion")
+    ,@NamedQuery(name = "AsientoContable.findAllByIdIngresoTransaccion", query = "SELECT a FROM AsientoContable a WHERE a.idIngresoCajaTransaccion= :idIngresoCajaTransaccion")
+    ,@NamedQuery(name = "AsientoContable.findAllByNotaCreditoTransaccion", query = "SELECT a FROM AsientoContable a WHERE a.idNotaCreditoTransaccion= :idNotaCreditoTransaccion")
+    ,@NamedQuery(name = "AsientoContable.findAllByPagoAnticipadoTransaccion", query = "SELECT a FROM AsientoContable a WHERE a.idPagoAnticipadoTransaccion = :idPagoAnticipadoTransaccion")
+    ,@NamedQuery(name = "AsientoContable.updateEstadoFromBoleto", query = "UPDATE AsientoContable a SET a.estado=:estado WHERE a.idBoleto= :idBoleto")
 
 }
 )
@@ -52,6 +54,7 @@ public class AsientoContable extends Entidad {
         public static final String HOTEL = "H";
         public static final String ALQUILER_AUTO = "A";
         public static final String RESERVA = "R";
+        //---------------------------------------------
     }
 
     private static final long serialVersionUID = 1L;
@@ -91,14 +94,47 @@ public class AsientoContable extends Entidad {
     private Integer idBoleto;
     @Column(name = "id_nota_transaccion")
     private Integer idNotaTransaccion;
+    @Column(name = "id_nota_credito_transaccion")
+    private Integer idNotaCreditoTransaccion;
     @Column(name = "id_ingreso_caja_transaccion")
     private Integer idIngresoCajaTransaccion;
+    @Column(name = "id_pago_anticipado")
+    private Integer idPagoAnticipado;
+    @Column(name = "id_pago_anticipado_transaccion")
+    private Integer idPagoAnticipadoTransaccion;
     @Column(name = "id_cargo")
     private Integer idCargo;
     @Column(name = "tipo")
     private String tipo;
 
+    @Column(name = "id_usuario_anular")
+    private String idUsuarioAnular;
+
     public AsientoContable() {
+    }
+
+    public String getIdUsuarioAnular() {
+        return idUsuarioAnular;
+    }
+
+    public void setIdUsuarioAnular(String idUsuarioAnular) {
+        this.idUsuarioAnular = idUsuarioAnular;
+    }
+
+    public Integer getIdPagoAnticipadoTransaccion() {
+        return idPagoAnticipadoTransaccion;
+    }
+
+    public void setIdPagoAnticipadoTransaccion(Integer idPagoAnticipadoTransaccion) {
+        this.idPagoAnticipadoTransaccion = idPagoAnticipadoTransaccion;
+    }
+
+    public Integer getIdNotaCreditoTransaccion() {
+        return idNotaCreditoTransaccion;
+    }
+
+    public void setIdNotaCreditoTransaccion(Integer idNotaCreditoTransaccion) {
+        this.idNotaCreditoTransaccion = idNotaCreditoTransaccion;
     }
 
     public String getTipo() {
@@ -261,6 +297,14 @@ public class AsientoContable extends Entidad {
     @Override
     public int getId() throws CRUDException {
         return this.idAsiento;
+    }
+
+    public Integer getIdPagoAnticipado() {
+        return idPagoAnticipado;
+    }
+
+    public void setIdPagoAnticipado(Integer idPagoAnticipado) {
+        this.idPagoAnticipado = idPagoAnticipado;
     }
 
     @Override

@@ -17,6 +17,8 @@ import javax.ejb.Remote;
  */
 @Remote
 public interface RolRemoto {
+    
+    public RolFormulario get(Integer idRolFormulario) throws CRUDException ;
 
     public List<Object[]> get(String qu ,Rol r) throws CRUDException;
     

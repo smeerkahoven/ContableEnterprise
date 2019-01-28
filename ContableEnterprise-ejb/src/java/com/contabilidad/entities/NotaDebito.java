@@ -104,13 +104,6 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "NotaDebito.findAll", query = "SELECT n FROM NotaDebito n")})
 public class NotaDebito extends Entidad {
 
-    public static final String EMITIDO = "E";
-    public static final String PENDIENTE = "P";
-    public static final String ANULADO = "A";
-    public static final String CREADO = "C";
-    public static final String CANCELADO = "D";
-    public static final String EN_MORA = "M";
-
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)

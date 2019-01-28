@@ -12,6 +12,7 @@ import com.seguridad.control.entities.RolFormulario;
 import com.seguridad.control.exception.CRUDException;
 import com.seguridad.control.remote.RolRemoto;
 import java.util.List;
+import java.util.Optional;
 import javax.ejb.Stateless;
 import javax.persistence.Query;
 
@@ -63,6 +64,21 @@ public class RolEJB extends FacadeEJBFirst implements RolRemoto {
 
         return l;
     }
+
+    @Override
+    public RolFormulario get(Integer idRolFormulario) throws CRUDException {
+        
+        RolFormulario fromBd = em.find(RolFormulario.class, idRolFormulario);
+        
+        Optional op = Optional.ofNullable(fromBd);
+        if (!op.isPresent()){
+            return null ;
+        }
+        
+        return fromBd;
+    }
+    
+    
 
     @Override
     public List<Rol> get() throws CRUDException {

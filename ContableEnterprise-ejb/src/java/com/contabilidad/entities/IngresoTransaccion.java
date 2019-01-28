@@ -10,7 +10,6 @@ import com.seguridad.control.exception.CRUDException;
 import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -39,11 +38,6 @@ import javax.validation.constraints.Size;
 })
 public class IngresoTransaccion extends Entidad {
 
-    public static final String EMITIDO = "E";
-    public static final String PENDIENTE = "P";
-    public static final String ANULADO = "A";
-    public static final String CREADO = "C";
-
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -65,10 +59,10 @@ public class IngresoTransaccion extends Entidad {
     private Date fechaInsert;
 
     @JoinColumn(name = "id_ingreso_caja", referencedColumnName = "id_ingreso_caja")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private IngresoCaja idIngresoCaja;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_nota_transaccion")
     private NotaDebitoTransaccion idNotaTransaccion;
 

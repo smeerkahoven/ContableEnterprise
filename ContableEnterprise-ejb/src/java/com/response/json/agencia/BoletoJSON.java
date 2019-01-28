@@ -375,61 +375,61 @@ public class BoletoJSON implements Serializable {
                 }
 
                 if (boleto.getImporteNeto() != null) {
-                    bjson.setImporteNetoBs(boleto.getImporteNeto().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
+                    bjson.setImporteNetoBs(boleto.getImporteNeto().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_DECIMAL_2, BigDecimal.ROUND_DOWN));
                 }
                 if (boleto.getImpuestoBob() != null) {
-                    bjson.setImpuestoBobBs(boleto.getImpuestoBob().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
+                    bjson.setImpuestoBobBs(boleto.getImpuestoBob().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_DECIMAL_2, BigDecimal.ROUND_DOWN));
                 }
 
                 if (boleto.getImpuestoQm() != null) {
-                    bjson.setImpuestoQmBs(boleto.getImpuestoQm().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
+                    bjson.setImpuestoQmBs(boleto.getImpuestoQm().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_DECIMAL_2, BigDecimal.ROUND_DOWN));
                 }
 
                 if (boleto.getImpuesto1() != null) {
-                    bjson.setImpuesto1Bs(boleto.getImpuesto1().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
+                    bjson.setImpuesto1Bs(boleto.getImpuesto1().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_DECIMAL_2, BigDecimal.ROUND_DOWN));
                 }
 
                 if (boleto.getImpuesto2() != null) {
-                    bjson.setImpuesto2Bs(boleto.getImpuesto2().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
+                    bjson.setImpuesto2Bs(boleto.getImpuesto2().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_DECIMAL_2, BigDecimal.ROUND_DOWN));
                 }
 
                 if (boleto.getImpuesto3() != null) {
-                    bjson.setImpuesto3Bs(boleto.getImpuesto3().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
+                    bjson.setImpuesto3Bs(boleto.getImpuesto3().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_DECIMAL_2, BigDecimal.ROUND_DOWN));
                 }
 
                 if (boleto.getImpuesto4() != null) {
-                    bjson.setImpuesto4Bs(boleto.getImpuesto4().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
+                    bjson.setImpuesto4Bs(boleto.getImpuesto4().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_DECIMAL_2, BigDecimal.ROUND_DOWN));
                 }
 
                 if (boleto.getImpuesto5() != null) {
-                    bjson.setImpuesto5Bs(boleto.getImpuesto5().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
+                    bjson.setImpuesto5Bs(boleto.getImpuesto5().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_DECIMAL_2, BigDecimal.ROUND_DOWN));
                 }
 
                 if (boleto.getTotalBoleto() != null) {
-                    bjson.setTotalBoletoBs(boleto.getTotalBoleto().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
+                    bjson.setTotalBoletoBs(boleto.getTotalBoleto().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_DECIMAL_2, BigDecimal.ROUND_DOWN));
                 }
 
                 if (boleto.getMontoComision() != null) {
-                    bjson.setMontoComisionBs(boleto.getMontoComision().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
+                    bjson.setMontoComisionBs(boleto.getMontoComision().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_DECIMAL_2, BigDecimal.ROUND_DOWN));
                 }
 
                 if (boleto.getMontoFee() != null) {
-                    bjson.setMontoFeeBs(boleto.getMontoFee().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
+                    bjson.setMontoFeeBs(boleto.getMontoFee().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_DECIMAL_2, BigDecimal.ROUND_DOWN));
                 }
                 if (boleto.getMontoDescuento() != null) {
-                    bjson.setMontoDescuentoBs(boleto.getMontoDescuento().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
+                    bjson.setMontoDescuentoBs(boleto.getMontoDescuento().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_DECIMAL_2, BigDecimal.ROUND_DOWN));
                 }
 
                 if (boleto.getTotalMontoCobrar() != null) {
-                    bjson.setTotalMontoCobrarBs(boleto.getTotalMontoCobrar().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
+                    bjson.setTotalMontoCobrarBs(boleto.getTotalMontoCobrar().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_DECIMAL_2, BigDecimal.ROUND_DOWN));
                 }
                 if (boleto.getMontoComision() != null) {
                     if (boleto.getTotalBoleto() != null) {
-                        bjson.setMontoPagarLineaAereaBs(boleto.getTotalBoleto().subtract(boleto.getMontoComision()).multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
+                        bjson.setMontoPagarLineaAereaBs(boleto.getTotalBoleto().subtract(boleto.getMontoComision()).multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_DECIMAL_2, BigDecimal.ROUND_DOWN));
                     }
                 } else {
                     if (boleto.getTotalBoleto() != null) {
-                        bjson.setMontoPagarLineaAereaBs(boleto.getTotalBoleto().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
+                        bjson.setMontoPagarLineaAereaBs(boleto.getTotalBoleto().multiply(boleto.getFactorCambiario()).setScale(Contabilidad.VALOR_DECIMAL_2, BigDecimal.ROUND_DOWN));
                     }
                 }
 
@@ -462,62 +462,62 @@ public class BoletoJSON implements Serializable {
                 //System.out.println("Divide :" + boleto.getImporteNeto().doubleValue() / boleto.getFactorCambiario().doubleValue());
 
                 if (boleto.getImporteNeto() != null) {
-                    bjson.setImporteNetoUsd(boleto.getImporteNeto().divide(boleto.getFactorCambiario(), RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
+                    bjson.setImporteNetoUsd(boleto.getImporteNeto().divide(boleto.getFactorCambiario(), RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_DECIMAL_2, BigDecimal.ROUND_DOWN));
                 }
                 if (boleto.getImpuestoBob() != null) {
-                    bjson.setImpuestoBobUsd(boleto.getImpuestoBob().divide(boleto.getFactorCambiario(), RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
+                    bjson.setImpuestoBobUsd(boleto.getImpuestoBob().divide(boleto.getFactorCambiario(), RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_DECIMAL_2, BigDecimal.ROUND_DOWN));
                 }
 
                 if (boleto.getImpuestoQm() != null) {
-                    bjson.setImpuestoQmUsd(boleto.getImpuestoQm().divide(boleto.getFactorCambiario(), RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
+                    bjson.setImpuestoQmUsd(boleto.getImpuestoQm().divide(boleto.getFactorCambiario(), RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_DECIMAL_2, BigDecimal.ROUND_DOWN));
                 }
 
                 if (boleto.getImpuesto1() != null) {
-                    bjson.setImpuesto1Usd(boleto.getImpuesto1().divide(boleto.getFactorCambiario(), RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
+                    bjson.setImpuesto1Usd(boleto.getImpuesto1().divide(boleto.getFactorCambiario(), RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_DECIMAL_2, BigDecimal.ROUND_DOWN));
                 }
 
                 if (boleto.getImpuesto2() != null) {
-                    bjson.setImpuesto2Usd(boleto.getImpuesto2().divide(boleto.getFactorCambiario(), RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
+                    bjson.setImpuesto2Usd(boleto.getImpuesto2().divide(boleto.getFactorCambiario(), RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_DECIMAL_2, BigDecimal.ROUND_DOWN));
                 }
 
                 if (boleto.getImpuesto3() != null) {
-                    bjson.setImpuesto3Usd(boleto.getImpuesto3().divide(boleto.getFactorCambiario(), RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
+                    bjson.setImpuesto3Usd(boleto.getImpuesto3().divide(boleto.getFactorCambiario(), RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_DECIMAL_2, BigDecimal.ROUND_DOWN));
                 }
 
                 if (boleto.getImpuesto4() != null) {
-                    bjson.setImpuesto4Usd(boleto.getImpuesto4().divide(boleto.getFactorCambiario(), RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
+                    bjson.setImpuesto4Usd(boleto.getImpuesto4().divide(boleto.getFactorCambiario(), RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_DECIMAL_2, BigDecimal.ROUND_DOWN));
                 }
 
                 if (boleto.getImpuesto5() != null) {
-                    bjson.setImpuesto5Usd(boleto.getImpuesto5().divide(boleto.getFactorCambiario(), RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
+                    bjson.setImpuesto5Usd(boleto.getImpuesto5().divide(boleto.getFactorCambiario(), RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_DECIMAL_2, BigDecimal.ROUND_DOWN));
                 }
 
                 if (boleto.getTotalBoleto() != null) {
-                    bjson.setTotalBoletoUsd(boleto.getTotalBoleto().divide(boleto.getFactorCambiario(), RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
+                    bjson.setTotalBoletoUsd(boleto.getTotalBoleto().divide(boleto.getFactorCambiario(), RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_DECIMAL_2, BigDecimal.ROUND_DOWN));
                 }
 
                 if (boleto.getMontoComision() != null) {
-                    bjson.setMontoComisionUsd(boleto.getMontoComision().divide(boleto.getFactorCambiario(), RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
+                    bjson.setMontoComisionUsd(boleto.getMontoComision().divide(boleto.getFactorCambiario(), RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_DECIMAL_2, BigDecimal.ROUND_DOWN));
                 }
 
                 if (boleto.getMontoFee() != null) {
-                    bjson.setMontoFeeUsd(boleto.getMontoFee().divide(boleto.getFactorCambiario(), RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
+                    bjson.setMontoFeeUsd(boleto.getMontoFee().divide(boleto.getFactorCambiario(), RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_DECIMAL_2, BigDecimal.ROUND_DOWN));
                 }
                 if (boleto.getMontoDescuento() != null) {
-                    bjson.setMontoDescuentoUsd(boleto.getMontoDescuento().divide(boleto.getFactorCambiario(), RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
+                    bjson.setMontoDescuentoUsd(boleto.getMontoDescuento().divide(boleto.getFactorCambiario(), RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_DECIMAL_2, BigDecimal.ROUND_DOWN));
                 }
 
                 if (boleto.getTotalMontoCobrar() != null) {
-                    bjson.setTotalMontoCobrarUsd(boleto.getTotalMontoCobrar().divide(boleto.getFactorCambiario(), RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
+                    bjson.setTotalMontoCobrarUsd(boleto.getTotalMontoCobrar().divide(boleto.getFactorCambiario(), RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_DECIMAL_2, BigDecimal.ROUND_DOWN));
                 }
 
                 if (boleto.getMontoComision() != null) {
                     if (boleto.getTotalBoleto() != null) {
-                        bjson.setMontoPagarLineaAereaUsd(boleto.getTotalBoleto().subtract(boleto.getMontoComision()).divide(boleto.getFactorCambiario(), RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
+                        bjson.setMontoPagarLineaAereaUsd(boleto.getTotalBoleto().subtract(boleto.getMontoComision()).divide(boleto.getFactorCambiario(), RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_DECIMAL_2, BigDecimal.ROUND_DOWN));
                     }
                 } else {
                     if (boleto.getTotalBoleto() != null) {
-                        bjson.setMontoPagarLineaAereaUsd(boleto.getTotalBoleto().divide(boleto.getFactorCambiario(), RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_REDONDEO, BigDecimal.ROUND_DOWN));
+                        bjson.setMontoPagarLineaAereaUsd(boleto.getTotalBoleto().divide(boleto.getFactorCambiario(), RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_DECIMAL_2, BigDecimal.ROUND_DOWN));
                     }
                 }
             }

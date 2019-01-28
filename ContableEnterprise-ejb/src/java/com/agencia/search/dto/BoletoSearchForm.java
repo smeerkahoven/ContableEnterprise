@@ -25,6 +25,16 @@ public class BoletoSearchForm implements Serializable {
 
     private Integer notaDebito;
 
+    private String nombrePasajero;
+
+    public String getNombrePasajero() {
+        return nombrePasajero;
+    }
+
+    public void setNombrePasajero(String nombrePasajero) {
+        this.nombrePasajero = nombrePasajero;
+    }
+
     public Integer getNotaDebito() {
         return notaDebito;
     }

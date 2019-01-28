@@ -22,8 +22,10 @@ import com.contabilidad.entities.DebitoIngreso;
 import com.contabilidad.entities.IngresoCaja;
 import com.contabilidad.entities.IngresoTransaccion;
 import com.contabilidad.entities.Moneda;
+import com.contabilidad.entities.NotaCreditoTransaccion;
 import com.contabilidad.entities.NotaDebito;
 import com.contabilidad.entities.NotaDebitoTransaccion;
+import com.contabilidad.entities.PagoAnticipadoTransaccion;
 import com.contabilidad.remote.ComprobanteRemote;
 import com.contabilidad.remote.IngresoCajaRemote;
 import com.contabilidad.remote.NotaDebitoRemote;
@@ -32,6 +34,7 @@ import com.seguridad.control.entities.Entidad;
 import com.seguridad.control.exception.CRUDException;
 import com.seguridad.queries.Queries;
 import com.seguridad.utils.DateContable;
+import com.seguridad.utils.Estado;
 import com.seguridad.utils.Operacion;
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -74,7 +77,7 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
     }
 
     @Override
-    public NotaDebito createNotaDebito(Boleto boleto) throws CRUDException {
+    public synchronized NotaDebito createNotaDebito(Boleto boleto) throws CRUDException {
 
         NotaDebito notaDebito = new NotaDebito();
 
@@ -86,7 +89,7 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
         notaDebito.setIdEmpresa(boleto.getIdEmpresa());
         notaDebito.setIdUsuarioCreador(boleto.getIdUsuarioCreador());
         notaDebito.setGestion(DateContable.getPartitionDateInt(DateContable.getDateFormat(DateContable.getCurrentDate(), DateContable.LATIN_AMERICA_FORMAT)));
-        notaDebito.setEstado(NotaDebito.EMITIDO);
+        notaDebito.setEstado(Estado.EMITIDO);
 
         if (boleto.getTipoCupon().equals(Boleto.Cupon.INTERNACIONAL)) {
             notaDebito.setMontoTotalUsd(boleto.getTotalMontoCobrar());
@@ -151,7 +154,7 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
         transaccion.setFechaInsert(DateContable.getCurrentDate());
         transaccion.setMoneda(boleto.getMoneda());
         transaccion.setTipo(NotaDebitoTransaccion.Tipo.BOLETO);
-        transaccion.setEstado(NotaDebito.EMITIDO);
+        transaccion.setEstado(Estado.EMITIDO);
         transaccion.setIdBoleto(boleto.getIdBoleto());
 
         StringBuilder buff = new StringBuilder();
@@ -250,6 +253,11 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
             }
         }
 
+        op = Optional.ofNullable(search.getNombrePasajero());
+        if (op.isPresent()) {
+            q += " AND bo.nombre_pasajero like ?6 ";
+        }
+
         q += " ORDER BY nd.id_nota_debito";
 
         Query query = em.createNativeQuery(q, NotaDebito.class);
@@ -274,6 +282,11 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
             query.setParameter("5", DateContable.toLatinAmericaDateFormat(search.getFechaFin()));
         }
 
+        op = Optional.ofNullable(search.getNombrePasajero());
+        if (op.isPresent()) {
+            query.setParameter("6", "%" + search.getNombrePasajero() + "%");
+        }
+
         query.setParameter("1", search.getIdEmpresa());
 
         System.out.println("Query:" + q);
@@ -289,7 +302,7 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
         NotaDebito nota = new NotaDebito();
         nota.setIdEmpresa(idEmpresa);
         nota.setIdUsuarioCreador(usuario);
-        nota.setEstado(NotaDebito.CREADO);
+        nota.setEstado(Estado.CREADO);
         nota.setFechaInsert(DateContable.getCurrentDate());
         nota.setFechaEmision(DateContable.getCurrentDate());
         nota.setGestion(DateContable.getPartitionDateInt(date));
@@ -357,11 +370,44 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
         return Operacion.REALIZADA;
 
     }
-
+    
     @Override
-    public Integer asociarBoletoNotaDebito(Boleto b, NotaDebito n) throws CRUDException {
+    public Boleto asociarBoletoNotaDebito( NotaDebito n, Integer idBoleto, String user) throws CRUDException {
+        
+        Boleto bFromDb = em.find(Boleto.class, idBoleto);
+        
+        if (bFromDb == null){
+            throw new CRUDException("No existe el boleto %s".replace("%s", idBoleto.toString()));
+        }
+        
+        if (bFromDb.getIdNotaDebito() != null) {
+            throw new CRUDException("El Boleto ya se encuentra asociado a la nota de Debito %s.".replace("%s", bFromDb.getIdNotaDebito().toString()));
+        }
+        
         Integer idTransaccion = -1;
 
+        // En la BD crea la transaccion de la nota de debito asociandola con los montos del Boleto
+        // Asocia el Boleto con la Transaccion
+        StoredProcedureQuery spq = em.createNamedStoredProcedureQuery("NotaDebito.asociarBoletoNotaDebito");
+        spq.setParameter("in_id_boleto", bFromDb.getIdBoleto());
+        spq.setParameter("in_id_nota_debito", n.getIdNotaDebito());
+        spq.setParameter("in_id_cliente", n.getIdCliente().getIdCliente());
+        spq.setParameter("in_id_counter", n.getIdCounter().getIdPromotor());
+        spq.setParameter("in_factor", n.getFactorCambiario());
+        spq.setParameter("in_usuario_creador", bFromDb.getIdUsuarioCreador());
+        spq.setParameter("out_id_transacion", idTransaccion);
+
+        System.out.println("factor:" + n.getFactorCambiario());
+
+        spq.executeUpdate();
+
+        return bFromDb;
+    }
+
+    @Override
+    public Boleto asociarBoletoNotaDebitoManual( NotaDebito n, Boleto b) throws CRUDException {
+        
+        Integer idTransaccion = -1;
         // En la BD crea la transaccion de la nota de debito asociandola con los montos del Boleto
         // Asocia el Boleto con la Transaccion
         StoredProcedureQuery spq = em.createNamedStoredProcedureQuery("NotaDebito.asociarBoletoNotaDebito");
@@ -377,7 +423,7 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
 
         spq.executeUpdate();
 
-        return Operacion.REALIZADA;
+        return b;
     }
 
     @Override
@@ -403,12 +449,16 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
             throw new CRUDException("La Nota de Debito %s No existe".replace("%s", n.getIdNotaDebito().toString()));
         }
 
-        if (fromDB.getEstado().equals(NotaDebito.ANULADO)) {
+        if (fromDB.getEstado().equals(Estado.ANULADO)) {
             throw new CRUDException("La Nota de Debito %s se encuentra ANULADA. No se puede pasar a PENDIENTE".replace("%s", fromDB.getIdNotaDebito().toString()));
         }
 
-        if (fromDB.getEstado().equals(NotaDebito.EMITIDO)) {
+        if (fromDB.getEstado().equals(Estado.EMITIDO)) {
             throw new CRUDException("La Nota de Debito %s se encuentra EMITIDA. No se puede pasar a PENDIENTE".replace("%s", fromDB.getIdNotaDebito().toString()));
+        }
+
+        if (fromDB.getEstado().equals(Estado.CANCELADO)) {
+            throw new CRUDException("La Nota de Debito %s se encuentra CANCELADA. No se puede pasar a PENDIENTE".replace("%s", fromDB.getIdNotaDebito().toString()));
         }
 
         Query q = em.createNativeQuery(queries.getPropertie(Queries.UPDATE_NOTA_DEBITO_ESTADO));
@@ -418,7 +468,7 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
         q.setParameter("3", n.getIdCounter().getIdPromotor());
         q.setParameter("4", n.getFechaEmision());
         q.setParameter("5", n.getFactorCambiario());
-        q.setParameter("6", NotaDebito.PENDIENTE);
+        q.setParameter("6", Estado.PENDIENTE);
         q.setParameter("7", n.getFormaPago());
         q.setParameter("8", n.getIdBanco());
         q.setParameter("9", n.getNroCheque());
@@ -441,7 +491,7 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
         NotaDebitoTransaccion transaccion = new NotaDebitoTransaccion();
         transaccion.setDescripcion(cargo.getConcepto());
         transaccion.setGestion(DateContable.getPartitionDateInt(DateContable.getCurrentDateStr(DateContable.LATIN_AMERICA_FORMAT)));
-        transaccion.setEstado(NotaDebito.PENDIENTE);
+        transaccion.setEstado(Estado.PENDIENTE);
         transaccion.setFechaInsert(DateContable.getCurrentDate());
         transaccion.setIdCargo(cargo.getIdCargo());
 
@@ -477,6 +527,57 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
 
         return cargo;
     }
+    
+    
+    @Override
+       public CargoBoleto updateCargo(CargoBoleto cargo) throws CRUDException {
+           CargoBoleto fromDb = em.find(CargoBoleto.class, cargo.getIdCargo());
+          Optional op = Optional.ofNullable(fromDb);
+          
+           if (!op.isPresent()){
+               throw new CRUDException("No se encontra el Cargo del Boleto para actualizar.");
+           }
+        // 1. Insertamo el cargo
+        cargo.setIdCargo(insert(cargo));
+
+        NotaDebitoTransaccion trxFromDb = em.find(NotaDebitoTransaccion.class, fromDb.getIdNotaDebitoTransaccion());
+        op = Optional.ofNullable(trxFromDb);
+        if (!op.isPresent()){
+            throw new CRUDException("No se encuentra la transaccion de la Nota de Debito para actualizar.");
+        }
+        
+        trxFromDb.setDescripcion(cargo.getConcepto());
+        trxFromDb.setGestion(DateContable.getPartitionDateInt(DateContable.getCurrentDateStr(DateContable.LATIN_AMERICA_FORMAT)));
+        trxFromDb.setEstado(Estado.PENDIENTE);
+        trxFromDb.setIdCargo(cargo.getIdCargo());
+
+
+        trxFromDb.setMoneda(cargo.getMoneda());
+        if (cargo.getMoneda().equals(Moneda.NACIONAL)) {
+            trxFromDb.setMontoBs(cargo.getComisionAgencia());
+            trxFromDb.setMontoBs(trxFromDb.getMontoBs().add(cargo.getComisionMayorista()));
+            trxFromDb.setMontoBs(trxFromDb.getMontoBs().add(cargo.getComisionPromotor()));
+            trxFromDb.setMontoAdeudadoBs(trxFromDb.getMontoBs());
+        } else {
+            trxFromDb.setMontoUsd(cargo.getComisionAgencia());
+            trxFromDb.setMontoUsd(trxFromDb.getMontoUsd().add(cargo.getComisionMayorista()));
+            trxFromDb.setMontoUsd(trxFromDb.getMontoUsd().add(cargo.getComisionPromotor()));
+            trxFromDb.setMontoAdeudadoUsd(trxFromDb.getMontoUsd());
+        }
+        trxFromDb.setTipo(cargo.getTipo());
+
+        //2. ACtualizamos la transaccion
+        update(trxFromDb);
+
+        //3. Actualizamos la transaccion al cargo
+        update(cargo);
+
+        //4. Actualizamos los montos de la Nota de Debito
+        actualizarMontosNotaDebito(cargo.getIdNotaDebito());
+
+        return cargo;
+    }
+
 
     @Override
     public CargoBoleto getCargo(CargoBoleto cargo) throws CRUDException {
@@ -507,7 +608,7 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
     }
 
     @Override
-    public boolean finalizar(NotaDebito nota) throws CRUDException {
+    public synchronized boolean finalizar(NotaDebito nota) throws CRUDException {
 
         NotaDebito fromBD = em.find(NotaDebito.class, nota.getId());
         Optional op = Optional.ofNullable(fromBD);
@@ -515,13 +616,13 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
             throw new CRUDException("No se encontro la Nota de Debito");
         }
 
-        if (fromBD.getEstado().equals(NotaDebito.ANULADO)) {
+        if (fromBD.getEstado().equals(Estado.ANULADO)) {
             throw new CRUDException("La nota de Debito : %s Se encuentra ANULADA".replace("%s", fromBD.getIdNotaDebito().toString()));
-        } else if (fromBD.getEstado().equals(NotaDebito.EMITIDO)) {
+        } else if (fromBD.getEstado().equals(Estado.EMITIDO)) {
             throw new CRUDException("La nota de Debito : %s Se encuentra EMITIDA".replace("%s", fromBD.getIdNotaDebito().toString()));
-        } else if (fromBD.getEstado().equals(NotaDebito.CANCELADO)) {
+        } else if (fromBD.getEstado().equals(Estado.CANCELADO)) {
             throw new CRUDException("La nota de Debito : %s Se encuentra CANCELADA".replace("%s", fromBD.getIdNotaDebito().toString()));
-        } else if (fromBD.getEstado().equals(NotaDebito.EN_MORA)) {
+        } else if (fromBD.getEstado().equals(Estado.EN_MORA)) {
             throw new CRUDException("La nota de Debito : %s Se encuentra EN MORA".replace("%s", fromBD.getIdNotaDebito().toString()));
         }
 
@@ -545,21 +646,10 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
         // 1. Obtenemos las transacciones de las notas de debito
         Query q = em.createNamedQuery("NotaDebitoTransaccion.findAllByIdNotaDebitoAndPendientes", NotaDebitoTransaccion.class);
 
-        q.setParameter(
-                "idNotaDebito", nota);
+        q.setParameter("idNotaDebito", nota);
 
         List<NotaDebitoTransaccion> list = q.getResultList();
 
-        // 2. Obtenemos la configuracion de Contabilidad
-        /*HashMap<String, Integer> parameters = new HashMap<>();
-        parameters.put("idEmpresa", nota.getIdEmpresa());
-        List lconf = ejbComprobante.get("ContabilidadBoletaje.find", ContabilidadBoletaje.class, parameters);
-
-        if (lconf.isEmpty()) {
-            throw new CRUDException("Los parametros de Contabilidad para la empresa no estan Configurados");
-        }
-
-        ContabilidadBoletaje conf = (ContabilidadBoletaje) lconf.get(0);*/
         ContabilidadBoletaje conf = getConfiguracion(nota.getIdEmpresa());
 
         int cntBoletos = 0, cntPaquetes = 0, cntAlquileres = 0, cntSeguro = 0;
@@ -587,6 +677,15 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
                         cntPaquetes++;
                     } else if (nt.getTipo().equals(NotaDebitoTransaccion.Tipo.SEGURO)) {
                         cntSeguro++;
+                    }
+
+                    if (nota.getFormaPago().equals(FormasPago.EFECTIVO)
+                            || nota.getFormaPago().equals(FormasPago.CHEQUE)
+                            || nota.getFormaPago().equals(FormasPago.DEPOSITO)
+                            || nota.getFormaPago().equals(FormasPago.TARJETA)) {
+                        nt.setEstado(Estado.CANCELADO);
+                    } else {
+                        nt.setEstado(Estado.EMITIDO);
                     }
                 }
 
@@ -621,9 +720,14 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
                     // COn esto solucionamos el problema de la nota de debito y los ingresos de Caja
                     debitoIngreso = ejbIngresoCaja.createDebitoIngresoCaja(nota, caja);
                     debitoIngreso.setIdDebitoIngreso(insert(debitoIngreso));
+
+                    fromBD.setEstado(Estado.CANCELADO);
+                } else {
+                    fromBD.setEstado(Estado.EMITIDO);
                 }
 
                 for (NotaDebitoTransaccion nt : list) {
+                    nt = em.find(NotaDebitoTransaccion.class, nt.getIdNotaDebitoTransaccion());
                     //Si es Boleto
                     if (nt.getTipo().equals(NotaDebitoTransaccion.Tipo.BOLETO)) {
                         Boleto boleto = (Boleto) ejbBoleto.get(nt.getIdBoleto(), Boleto.class);
@@ -671,8 +775,6 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
                             } else {
                                 boleto.setEstado(Boleto.Estado.EMITIDO);
                             }
-
-                            em.merge(boleto);
                         }
                     } else {
                         //Si es un paquete, alquiler, u otro
@@ -711,19 +813,8 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
                             } else {
                                 cargo.setEstado(Boleto.Estado.EMITIDO);
                             }
-
-                            em.merge(cargo);
                         }
                     }
-
-                    if (insertRecibo) {
-                        nt.setEstado(NotaDebito.CANCELADO);
-                    } else {
-                        nt.setEstado(NotaDebito.EMITIDO);
-                    }
-
-                    em.merge(nt);
-
                 }
                 // Actualizamos el comprobante contable de los AD de los Boletos
                 ejbComprobante.actualizarMontosFinalizar(diario);
@@ -736,12 +827,6 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
                     ejbIngresoCaja.actualizarMontosFinalizar(caja);
                 }
 
-                if (insertRecibo) {
-                    fromBD.setEstado(NotaDebito.CANCELADO);
-                } else {
-                    fromBD.setEstado((NotaDebito.EMITIDO));
-                }
-                em.merge(fromBD);
                 // Actualizamos el Comprobante Contable de Ingreso CI
                 // Actualizamos los montos del Recibo de Caja -- NO es necesario, ya que se crean de arriba
                 //EFECTIVO CHEQUE 
@@ -808,7 +893,7 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
             op = Optional.ofNullable(fromDB);
 
             if (op.isPresent()) {
-                if (!fromDB.getEstado().equals(NotaDebito.ANULADO)) {
+                if (!fromDB.getEstado().equals(Estado.ANULADO)) {
                     //obtenemos las transacciones de la nota de debito
                     List<NotaDebitoTransaccion> l = getAllTransacciones(fromDB.getIdNotaDebito());
                     for (NotaDebitoTransaccion n : l) {
@@ -821,7 +906,7 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
                     //Obtenemos los Ingresos a Caja
                     List<IngresoCaja> lic = ejbIngresoCaja.getIngresoCajaByNotaDebito(fromDB.getIdNotaDebito());
                     for (IngresoCaja in : lic) {
-                        in.setEstado(IngresoCaja.ANULADO);
+                        in.setEstado(Estado.ANULADO);
                         em.merge(in);
                     }
                     //Obtenemos los Comprobantes Contables
@@ -831,7 +916,7 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
                         em.merge(cc);
                     }
 
-                    fromDB.setEstado(NotaDebito.ANULADO);
+                    fromDB.setEstado(Estado.ANULADO);
 
                     em.flush();
 
@@ -847,14 +932,14 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
     }
 
     @Override
-    public void anularTransaccion(NotaDebitoTransaccion tr) throws CRUDException {
+    public void anularTransaccion(NotaDebitoTransaccion tr, String usuario) throws CRUDException {
 
         NotaDebitoTransaccion fromDb = em.find(NotaDebitoTransaccion.class,
                 tr.getIdNotaDebitoTransaccion());
 
         Optional op = Optional.ofNullable(fromDb);
         if (op.isPresent()) {
-            if (!fromDb.getEstado().equals(NotaDebito.ANULADO)) {
+            if (!fromDb.getEstado().equals(Estado.ANULADO)) {
                 //anular los ingresos de caja de la transaccion
                 if (fromDb.getTipo().equals(NotaDebitoTransaccion.Tipo.BOLETO)) {
                     //anular boleto
@@ -872,7 +957,7 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
                     }
                 }
 
-                fromDb.setEstado(NotaDebito.ANULADO);
+                fromDb.setEstado(Estado.ANULADO);
                 em.merge(fromDb);
 
                 //anular Transaccion del Ingreso a Caja
@@ -883,7 +968,7 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
                 }
                 //anular los asientos Contables
                 try {
-                    ejbComprobante.anularAsientosContables(fromDb);
+                    ejbComprobante.anularAsientosContables(fromDb,  usuario);
                 } catch (CRUDException ex) {
 
                 }
@@ -901,7 +986,7 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
 
         Optional op = Optional.ofNullable(tr);
         if (op.isPresent()) {
-            if (!tr.getEstado().equals(NotaDebito.ANULADO)) {
+            if (!tr.getEstado().equals(Estado.ANULADO)) {
                 //anular los ingresos de caja de la transaccion
                 if (tr.getTipo().equals(NotaDebitoTransaccion.Tipo.BOLETO)) {
                     //anular boleto
@@ -1023,14 +1108,173 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
             notaFromDb.setMontoAdeudadoBs(new BigDecimal(montoTotal));
 
             if (notaFromDb.getMontoAdeudadoBs().doubleValue() == 0d) {
-                notaFromDb.setEstado(NotaDebito.CANCELADO);
+                notaFromDb.setEstado(Estado.CANCELADO);
             }
 
         } else if (notaFromDb.getMoneda().equals(Moneda.EXTRANJERA)) {
             notaFromDb.setMontoAdeudadoUsd(new BigDecimal(montoTotal));
 
             if (notaFromDb.getMontoAdeudadoUsd().doubleValue() == 0d) {
-                notaFromDb.setEstado(NotaDebito.CANCELADO);
+                notaFromDb.setEstado(Estado.CANCELADO);
+            }
+        }
+
+        em.merge(notaFromDb);
+
+        //actualizamos notas debitos
+        actualizarMontosNotaDebitoEmitida(notaFromDb.getIdNotaDebito().getIdNotaDebito());
+    }
+
+    @Override
+    public void actualizarMontosAdeudadosTransaccion(NotaCreditoTransaccion trx) throws CRUDException {
+        /*BEGIN  */
+        // Calculo de la reduccion del monto adeudado sea cual sea la moneda del pago
+
+        // del ingreso de caja
+        NotaDebitoTransaccion notaFromDb = em.find(NotaDebitoTransaccion.class, trx.getIdNotaTransaccion().getIdNotaDebitoTransaccion());
+        Optional op = Optional.ofNullable(notaFromDb);
+        if (!op.isPresent()) {
+            throw new CRUDException("No se ha encontrado la Nota de Debito para la transaccion de la Nota de Crédito.");
+        }
+
+        //obtenemos el factor del ingreso de caja
+        Double factorCambio = trx.getIdNotaCredito().getFactorCambiario().doubleValue();
+
+        op = Optional.ofNullable(factorCambio);
+        if (!op.isPresent()) {
+            throw new CRUDException("No se especifico un Factor Cambiario para la Nota de Crédito : " + trx.getIdNotaCredito().getIdNotaCredito().toString());
+        }
+
+        Double montoAdeudado = 0d;
+        if (notaFromDb.getMoneda().equals(Moneda.EXTRANJERA)) {
+            montoAdeudado = notaFromDb.getMontoAdeudadoUsd().doubleValue();
+        } else {
+            montoAdeudado = notaFromDb.getMontoAdeudadoBs().doubleValue();
+        }
+
+        op = Optional.ofNullable(montoAdeudado);
+        if (!op.isPresent()) {
+            throw new CRUDException("No existe un monto Adeudado para la moneda especificada en la Transaccion " + notaFromDb.getIdNotaDebitoTransaccion().toString() + " de la Nota de Credito : " + notaFromDb.getIdNotaDebito().getIdNotaDebito().toString());
+        }
+
+        Double montoIngresado = 0d;
+        //Si las monedas son iguales
+        if (trx.getMoneda().equals(notaFromDb.getMoneda())) {
+            if (trx.getMoneda().equals(Moneda.EXTRANJERA)) {
+                montoIngresado = trx.getMontoUsd().doubleValue();
+            } else {
+                montoIngresado = trx.getMontoBs().doubleValue();
+            }
+        } else {
+            if (trx.getMoneda().equals(Moneda.EXTRANJERA)
+                    && notaFromDb.getMoneda().equals(Moneda.NACIONAL)) {
+                montoIngresado = trx.getMontoUsd().doubleValue() * factorCambio;
+            } else if (trx.getMoneda().equals(Moneda.NACIONAL)
+                    && notaFromDb.getMoneda().equals(Moneda.EXTRANJERA)) {
+                montoIngresado = trx.getMontoBs().doubleValue() / factorCambio;
+            }
+        }
+
+        if (montoIngresado > montoAdeudado) {
+            String mensaje = "El monto de Pago de la transaccion de Nota de Crédito:";
+            mensaje += montoIngresado.toString();
+            mensaje += " es mayor que el monto adeudado: ";
+            mensaje += montoAdeudado.toString();
+            throw new CRUDException(mensaje);
+        }
+
+        Double montoTotal = montoAdeudado - montoIngresado;
+        if (notaFromDb.getMoneda().equals(Moneda.NACIONAL)) {
+            notaFromDb.setMontoAdeudadoBs(new BigDecimal(montoTotal));
+
+            if (notaFromDb.getMontoAdeudadoBs().doubleValue() == 0d) {
+                notaFromDb.setEstado(Estado.CANCELADO);
+            }
+
+        } else if (notaFromDb.getMoneda().equals(Moneda.EXTRANJERA)) {
+            notaFromDb.setMontoAdeudadoUsd(new BigDecimal(montoTotal));
+
+            if (notaFromDb.getMontoAdeudadoUsd().doubleValue() == 0d) {
+                notaFromDb.setEstado(Estado.CANCELADO);
+            }
+        }
+
+        em.merge(notaFromDb);
+
+        //actualizamos notas debitos
+        actualizarMontosNotaDebitoEmitida(notaFromDb.getIdNotaDebito().getIdNotaDebito());
+    }
+    
+    
+        @Override
+    public void actualizarMontosAdeudadosTransaccion(PagoAnticipadoTransaccion trx) throws CRUDException {
+        /*BEGIN  */
+        // Calculo de la reduccion del monto adeudado sea cual sea la moneda del pago
+
+        // del ingreso de caja
+        NotaDebitoTransaccion notaFromDb = em.find(NotaDebitoTransaccion.class, trx.getIdNotaTransaccion().getIdNotaDebitoTransaccion());
+        Optional op = Optional.ofNullable(notaFromDb);
+        if (!op.isPresent()) {
+            throw new CRUDException("No se ha encontrado la Nota de Debito para la transaccion del Pago Anticipado.");
+        }
+
+        //obtenemos el factor del ingreso de caja
+        Double factorCambio = trx.getIdPagoAnticipado().getFactorCambiario().doubleValue();
+
+        op = Optional.ofNullable(factorCambio);
+        if (!op.isPresent()) {
+            throw new CRUDException("No se especifico un Factor Cambiario para el Pago Anticipado : " + trx.getIdPagoAnticipado().getIdPagoAnticipado().toString());
+        }
+
+        Double montoAdeudado = 0d;
+        if (notaFromDb.getMoneda().equals(Moneda.EXTRANJERA)) {
+            montoAdeudado = notaFromDb.getMontoAdeudadoUsd().doubleValue();
+        } else {
+            montoAdeudado = notaFromDb.getMontoAdeudadoBs().doubleValue();
+        }
+
+        op = Optional.ofNullable(montoAdeudado);
+        if (!op.isPresent()) {
+            throw new CRUDException("No existe un monto Adeudado para la moneda especificada en la Transaccion " + notaFromDb.getIdNotaDebitoTransaccion().toString() + " del Pago Anticipado : " + notaFromDb.getIdNotaDebito().getIdNotaDebito().toString());
+        }
+
+        Double montoIngresado = 0d;
+        //Si las monedas son iguales
+        if (trx.getMoneda().equals(notaFromDb.getMoneda())) {
+                montoIngresado = trx.getMonto().doubleValue();
+        } else {
+            if (trx.getMoneda().equals(Moneda.EXTRANJERA)
+                    && notaFromDb.getMoneda().equals(Moneda.NACIONAL)) {
+                montoIngresado = trx.getMonto().doubleValue() * factorCambio;
+            } else if (trx.getMoneda().equals(Moneda.NACIONAL)
+                    && notaFromDb.getMoneda().equals(Moneda.EXTRANJERA)) {
+                montoIngresado = trx.getMonto().doubleValue() / factorCambio;
+            }
+        }
+
+        if (montoIngresado > montoAdeudado) {
+            String mensaje = "El monto de Pago de la transaccion de Nota de Crédito:";
+            mensaje += montoIngresado.toString();
+            mensaje += " es mayor que el monto adeudado: ";
+            mensaje += montoAdeudado.toString();
+            throw new CRUDException(mensaje);
+        }
+
+        //El monto adeudado se suma al monto que se anulo
+        Double montoTotal = montoAdeudado - montoIngresado;
+        
+        if (notaFromDb.getMoneda().equals(Moneda.NACIONAL)) {
+            notaFromDb.setMontoAdeudadoBs(new BigDecimal(montoTotal));
+
+            if (notaFromDb.getMontoAdeudadoBs().doubleValue() == 0d) {
+                notaFromDb.setEstado(Estado.CANCELADO);
+            }
+
+        } else if (notaFromDb.getMoneda().equals(Moneda.EXTRANJERA)) {
+            notaFromDb.setMontoAdeudadoUsd(new BigDecimal(montoTotal));
+
+            if (notaFromDb.getMontoAdeudadoUsd().doubleValue() == 0d) {
+                notaFromDb.setEstado(Estado.CANCELADO);
             }
         }
 
@@ -1081,16 +1325,126 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
         }
 
         //Actualizamos el estado de la Transaccion de la Nota de Debito
-        if (ndtx.getEstado().equals(NotaDebito.CANCELADO)) {
-            ndtx.setEstado(NotaDebito.EMITIDO);
+        if (ndtx.getEstado().equals(Estado.CANCELADO)) {
+            ndtx.setEstado(Estado.EMITIDO);
         }
 
         //Actualizamos los montos de la Nota de Debito
         em.merge(ndtx);
 
         //Verificamos el estado de la nota de Debito
-        if (ndtx.getIdNotaDebito().getEstado().equals(NotaDebito.CANCELADO)) {
-            ndtx.getIdNotaDebito().setEstado(NotaDebito.EMITIDO);
+        if (ndtx.getIdNotaDebito().getEstado().equals(Estado.CANCELADO)) {
+            ndtx.getIdNotaDebito().setEstado(Estado.EMITIDO);
+        }
+
+        em.merge(ndtx.getIdNotaDebito());
+
+    }
+
+    @Override
+    public void revertirMontosNotaCredito(NotaCreditoTransaccion it, NotaDebitoTransaccion ndtx) throws CRUDException {
+
+        //Monto del ingreso de Caja
+        Double montoIngreso = 0d;
+        if (it.getMoneda().equals(Moneda.NACIONAL)) {
+            montoIngreso = it.getMontoBs() == null ? 0d : it.getMontoBs().doubleValue();
+        } else {
+            montoIngreso = it.getMontoUsd() == null ? 0d : it.getMontoUsd().doubleValue();
+        }
+
+        //Monto adeudado de la Nota de Debito
+        Double montoAdeudadoNota = 0d;
+        if (ndtx.getMoneda().equals(Moneda.NACIONAL)) {
+            montoAdeudadoNota = ndtx.getMontoAdeudadoBs() == null ? 0 : ndtx.getMontoAdeudadoBs().doubleValue();
+        } else {
+            montoAdeudadoNota = ndtx.getMontoAdeudadoUsd() == null ? 0 : ndtx.getMontoAdeudadoUsd().doubleValue();
+        }
+
+        //MOnto adeudado Actual
+        Double montoActual = 0d;
+        Double factorCambiario = it.getIdNotaCredito().getFactorCambiario().doubleValue();
+
+        if (it.getMoneda().equals(Moneda.NACIONAL) && ndtx.getMoneda().equals(Moneda.NACIONAL)) {
+            montoActual = montoIngreso + montoAdeudadoNota;
+        } else if (it.getMoneda().equals(Moneda.NACIONAL) && ndtx.getMoneda().equals(Moneda.EXTRANJERA)) {
+            montoActual = (montoIngreso / factorCambiario) + montoAdeudadoNota;
+        } else if (it.getMoneda().equals(Moneda.EXTRANJERA) && ndtx.getMoneda().equals(Moneda.NACIONAL)) {
+            montoActual = (montoIngreso * factorCambiario) + montoAdeudadoNota;
+        } else if (it.getMoneda().equals(Moneda.EXTRANJERA) && ndtx.getMoneda().equals(Moneda.EXTRANJERA)) {
+            montoActual = montoIngreso + montoAdeudadoNota;
+        }
+
+        //Actualizamos el monto Adeudado
+        if (ndtx.getMoneda().equals(Moneda.NACIONAL)) {
+            ndtx.setMontoAdeudadoBs(new BigDecimal(montoActual));
+        } else {
+            ndtx.setMontoAdeudadoUsd(new BigDecimal(montoActual));
+        }
+
+        //Actualizamos el estado de la Transaccion de la Nota de Debito
+        if (ndtx.getEstado().equals(Estado.CANCELADO)) {
+            ndtx.setEstado(Estado.EMITIDO);
+        }
+
+        //Actualizamos los montos de la Nota de Debito
+        em.merge(ndtx);
+
+        //Verificamos el estado de la nota de Debito
+        if (ndtx.getIdNotaDebito().getEstado().equals(Estado.CANCELADO)) {
+            ndtx.getIdNotaDebito().setEstado(Estado.EMITIDO);
+        }
+
+        em.merge(ndtx.getIdNotaDebito());
+
+    }
+
+    @Override
+    public void revertirMontosPagosAnticipados(PagoAnticipadoTransaccion it, NotaDebitoTransaccion ndtx) throws CRUDException {
+
+        //Monto del ingreso de Caja
+        Double montoIngreso = 0d;
+        montoIngreso = it.getMonto() == null ? 0d : it.getMonto().doubleValue();
+
+        //Monto adeudado de la Nota de Debito
+        Double montoAdeudadoNota = 0d;
+        if (ndtx.getMoneda().equals(Moneda.NACIONAL)) {
+            montoAdeudadoNota = ndtx.getMontoAdeudadoBs() == null ? 0 : ndtx.getMontoAdeudadoBs().doubleValue();
+        } else {
+            montoAdeudadoNota = ndtx.getMontoAdeudadoUsd() == null ? 0 : ndtx.getMontoAdeudadoUsd().doubleValue();
+        }
+
+        //MOnto adeudado Actual
+        Double montoActual = 0d;
+        Double factorCambiario = it.getIdPagoAnticipado().getFactorCambiario().doubleValue();
+
+        if (it.getMoneda().equals(Moneda.NACIONAL) && ndtx.getMoneda().equals(Moneda.NACIONAL)) {
+            montoActual = montoIngreso + montoAdeudadoNota;
+        } else if (it.getMoneda().equals(Moneda.NACIONAL) && ndtx.getMoneda().equals(Moneda.EXTRANJERA)) {
+            montoActual = (montoIngreso / factorCambiario) + montoAdeudadoNota;
+        } else if (it.getMoneda().equals(Moneda.EXTRANJERA) && ndtx.getMoneda().equals(Moneda.NACIONAL)) {
+            montoActual = (montoIngreso * factorCambiario) + montoAdeudadoNota;
+        } else if (it.getMoneda().equals(Moneda.EXTRANJERA) && ndtx.getMoneda().equals(Moneda.EXTRANJERA)) {
+            montoActual = montoIngreso + montoAdeudadoNota;
+        }
+
+        //Actualizamos el monto Adeudado
+        if (ndtx.getMoneda().equals(Moneda.NACIONAL)) {
+            ndtx.setMontoAdeudadoBs(new BigDecimal(montoActual));
+        } else {
+            ndtx.setMontoAdeudadoUsd(new BigDecimal(montoActual));
+        }
+
+        //Actualizamos el estado de la Transaccion de la Nota de Debito
+        if (ndtx.getEstado().equals(Estado.CANCELADO)) {
+            ndtx.setEstado(Estado.EMITIDO);
+        }
+
+        //Actualizamos los montos de la Nota de Debito
+        em.merge(ndtx);
+
+        //Verificamos el estado de la nota de Debito
+        if (ndtx.getIdNotaDebito().getEstado().equals(Estado.CANCELADO)) {
+            ndtx.getIdNotaDebito().setEstado(Estado.EMITIDO);
         }
 
         em.merge(ndtx.getIdNotaDebito());

@@ -70,7 +70,7 @@ public interface BoletoRemote extends DaoRemoteFacade {
 
     public Boleto saveBoletoMultiple(Boleto b) throws CRUDException;
 
-    public Boleto saveBoletoVoid(Boleto b, NotaDebito n) throws CRUDException;
+    public Boleto saveBoletoVoid(Boleto b, NotaDebito n, String usuario) throws CRUDException;
 
     /**
      * Busqueda de Boletos por medio de los parametros de entrada
@@ -113,6 +113,12 @@ public interface BoletoRemote extends DaoRemoteFacade {
     public Boleto anularBoleto(Integer boleto) throws CRUDException;
     public CargoBoleto anularCargo(Integer cargo) throws CRUDException;
 
+    /**
+     * 
+     * @param b
+     * @throws CRUDException 
+     */
+    public void eliminar(Boleto b) throws CRUDException;
     /**
      * Busqueda en la cnt_boletos de los boletos AM=AMADEUS con estado
      * C=CARAGADO AUTOMATICO para poder anexarlo a una nota de debito
