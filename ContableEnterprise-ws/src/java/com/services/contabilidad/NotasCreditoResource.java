@@ -5,14 +5,14 @@
  */
 package com.services.contabilidad;
 
-import com.contabilidad.entities.IngresoCaja;
-import com.contabilidad.entities.IngresoTransaccion;
+import com.contabilidad.entities.NotaCredito;
+import com.contabilidad.entities.NotaCreditoTransaccion;
 import com.contabilidad.entities.NotaDebitoTransaccion;
-import com.contabilidad.remote.IngresoCajaRemote;
 import com.contabilidad.remote.NotaDebitoRemote;
-import com.response.json.boletaje.IngresoCajaSearchJson;
-import com.response.json.contabilidad.IngresoCajaJSON;
-import com.response.json.contabilidad.IngresoTransaccionJson;
+import com.contabilidad.remote.NotasCreditoRemote;
+import com.response.json.boletaje.NotaCreditoSearchJson;
+import com.response.json.contabilidad.NotaCreditoJson;
+import com.response.json.contabilidad.NotaCreditoTransaccionJson;
 import com.response.json.contabilidad.NotaDebitoTransaccionJson;
 import com.seguridad.control.entities.Log;
 import com.seguridad.control.exception.CRUDException;
@@ -23,13 +23,14 @@ import com.services.seguridad.util.RestRequest;
 import com.services.seguridad.util.RestResponse;
 import com.util.resource.BeanUtils;
 import com.view.menu.Formulario;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
@@ -44,24 +45,24 @@ import javax.ws.rs.core.MediaType;
  *
  * @author xeio
  */
-@Path("ingreso-caja")
-public class IngresoCajaResource extends TemplateResource {
+@Path("notas-credito")
+public class NotasCreditoResource extends TemplateResource {
 
     @EJB
-    private IngresoCajaRemote ejbIngresoCaja;
+    private NotasCreditoRemote ejbNotaCredito;
 
     @EJB
     private NotaDebitoRemote ejbNotaDebito;
 
     /**
-     * Creates a new instance of IngresoCajaResource
+     * Creates a new instance of NotasCreditoResource
      */
-    public IngresoCajaResource() {
+    public NotasCreditoResource() {
     }
 
     /**
      * Retrieves representation of an instance of
-     * com.services.contabilidad.IngresoCajaResource
+     * com.services.contabilidad.NotasCreditoResource
      *
      * @return an instance of java.lang.String
      */
@@ -73,7 +74,7 @@ public class IngresoCajaResource extends TemplateResource {
     }
 
     /**
-     * PUT method for updating or creating an instance of IngresoCajaResource
+     * PUT method for updating or creating an instance of NotasCreditoResource
      *
      * @param content representation for the resource
      */
@@ -91,15 +92,15 @@ public class IngresoCajaResource extends TemplateResource {
 
         try {
 
-            IngresoCajaSearchJson search = BeanUtils.convertoToIngresoCajaSearchJson(request);
+            NotaCreditoSearchJson search = BeanUtils.convertoToNotaCreditoSearchJson(request);
             search.setIdEmpresa(user.getIdEmpleado().getIdEmpresa().getIdEmpresa());
 
-            List<IngresoCaja> list = ejbIngresoCaja.findAllIngresoCaja(search);
+            List<NotaCredito> list = ejbNotaCredito.findAllNotaCredito(search);
 
-            List<IngresoCajaJSON> r = new LinkedList<>();
+            List<NotaCreditoJson> r = new LinkedList<>();
 
-            for (IngresoCaja ic : list) {
-                r.add(IngresoCajaJSON.toJSON(ic));
+            for (NotaCredito ic : list) {
+                r.add(NotaCreditoJson.toNotaCreditoJson(ic));
             }
 
             if (list.isEmpty()) {
@@ -112,12 +113,12 @@ public class IngresoCajaResource extends TemplateResource {
             }
 
             ejbLogger.add(Accion.SEARCH, user.getUserName(),
-                    com.view.menu.Formulario.INGRESO_CAJA, user.getIp());
+                    com.view.menu.Formulario.NOTA_CREDITO, user.getIp());
 
         } catch (CRUDException ex) {
             response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
             response.setContent(ex.getMessage());
-            Logger.getLogger(IngresoCajaResource.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(NotasCreditoResource.class.getName()).log(Level.SEVERE, null, ex);
 
             /*String mensaje = Logger.NOTA_DEBITO_CARGO_GUARDAR.replace("<cargo>", cargo.getIdCargo().toString());
                     mensaje = mensaje.replace("<nota>", cargo.getIdNotaDebito().toString());
@@ -137,13 +138,13 @@ public class IngresoCajaResource extends TemplateResource {
 
         if (response.getCode() == ResponseCode.RESTFUL_SUCCESS.getCode()) {
             try {
-                IngresoTransaccionJson json = BeanUtils.convertoToIngresoCajaTransaccionJson(request);
+                NotaCreditoTransaccionJson json = BeanUtils.convertToNotaCreditoTransaccionJson(request);
 
-                IngresoTransaccion data = IngresoTransaccionJson.toIngresoCaja(json);
+                NotaCreditoTransaccion data = NotaCreditoTransaccionJson.toNotaCreditoTransaccion(json);
 
-                data = ejbIngresoCaja.getIngresoTransaccion(data);
+                data = ejbNotaCredito.getNotaCreditoTransaccion(data);
 
-                json = IngresoTransaccionJson.toIngresoTransaccionJson(data);
+                json = NotaCreditoTransaccionJson.toNotaCreditoTransaccionJsOn(data);
 
                 response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
                 response.setContent(json);
@@ -167,19 +168,19 @@ public class IngresoCajaResource extends TemplateResource {
 
         if (response.getCode() == ResponseCode.RESTFUL_SUCCESS.getCode()) {
             try {
-                IngresoCajaJSON json = BeanUtils.convertoToIngresoCajaJson(request);
+                NotaCreditoJson json = BeanUtils.convertToNotaCreditoJson(request);
 
-                List<IngresoTransaccion> list = ejbIngresoCaja.findAllIngresoCajaTransacciones(json.getIdIngresoCaja());
+                List<NotaCreditoTransaccion> list = ejbNotaCredito.findAllNotaCreditoTransacciones(json.getIdNotaCredito());
 
                 if (list.isEmpty()) {
-                    response.setContent("No se encontraron Transacciones para el Ingreso de Caja %s".replace("%s", json.getIdIngresoCaja().toString()));
+                    response.setContent("No se encontraron Transacciones para la Nota de Credito %s".replace("%s", json.getIdNotaCredito().toString()));
                     response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
                     return response;
                 }
 
-                List<IngresoTransaccionJson> r = new LinkedList<>();
-                for (IngresoTransaccion i : list) {
-                    IngresoTransaccionJson trJson = IngresoTransaccionJson.toIngresoTransaccionJson(i);
+                List<NotaCreditoTransaccionJson> r = new LinkedList<>();
+                for (NotaCreditoTransaccion i : list) {
+                    NotaCreditoTransaccionJson trJson = NotaCreditoTransaccionJson.toNotaCreditoTransaccionJsOn(i);
                     r.add(trJson);
                 }
 
@@ -187,7 +188,7 @@ public class IngresoCajaResource extends TemplateResource {
                 response.setContent(r);
 
             } catch (CRUDException ex) {
-                Logger.getLogger(IngresoCajaResource.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(NotasCreditoResource.class.getName()).log(Level.SEVERE, null, ex);
 
                 response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
                 response.setContent(ex.getMessage());
@@ -206,24 +207,24 @@ public class IngresoCajaResource extends TemplateResource {
 
         if (response.getCode() == ResponseCode.RESTFUL_SUCCESS.getCode()) {
             try {
-                IngresoTransaccionJson json = BeanUtils.convertoToIngresoCajaTransaccionJson(request);
+                NotaCreditoTransaccionJson json = BeanUtils.convertToNotaCreditoTransaccionJson(request);
 
-                IngresoTransaccion trx = IngresoTransaccionJson.toIngresoCaja(json);
+                NotaCreditoTransaccion trx = NotaCreditoTransaccionJson.toNotaCreditoTransaccion(json);
 
-                trx = ejbIngresoCaja.saveTransaccion(trx);
+                trx = ejbNotaCredito.saveTransaccion(trx, user.getUserName());
 
-                IngresoCajaJSON tmpJson = IngresoCajaJSON.toJSON((IngresoCaja) ejbIngresoCaja.get(trx.getIdIngresoCaja().getIdIngresoCaja(), IngresoCaja.class));
+                NotaCreditoJson tmpJson = NotaCreditoJson.toNotaCreditoJson((NotaCredito) ejbNotaCredito.get(trx.getIdNotaCredito().getIdNotaCredito(), NotaCredito.class));
 
                 response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
                 response.setContent(mensajes.getProperty(RestResponse.RESTFUL_SUCCESS));
                 response.setEntidad(tmpJson);
 
-                String mensaje = Log.INGRESO_CAJA_NUEVA_TRANSACION.replace("trx", trx.getIdTransaccion().toString());
-                mensaje = mensaje.replace("<id>", trx.getIdIngresoCaja().getIdIngresoCaja().toString());
-                ejbLogger.add(Accion.INSERT, user.getUserName(), com.view.menu.Formulario.INGRESO_CAJA, user.getIp(), mensaje);
+                String mensaje = Log.NOTA_CREDITO_NUEVA_TRANSACION.replace("trx", trx.getIdNotaCreditoTransaccion().toString());
+                mensaje = mensaje.replace("<id>", trx.getIdNotaCredito().getIdNotaCredito().toString());
+                ejbLogger.add(Accion.INSERT, user.getUserName(), com.view.menu.Formulario.NOTA_CREDITO, user.getIp(), mensaje);
 
             } catch (CRUDException ex) {
-                Logger.getLogger(IngresoCajaResource.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(NotasCreditoResource.class.getName()).log(Level.SEVERE, null, ex);
 
                 response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
                 response.setContent(ex.getMessage());
@@ -243,25 +244,25 @@ public class IngresoCajaResource extends TemplateResource {
 
         if (response.getCode() == ResponseCode.RESTFUL_SUCCESS.getCode()) {
             try {
-                IngresoTransaccionJson json = BeanUtils.convertoToIngresoCajaTransaccionJson(request);
+                NotaCreditoTransaccionJson json = BeanUtils.convertToNotaCreditoTransaccionJson(request);
 
-                IngresoTransaccion trx = IngresoTransaccionJson.toIngresoCaja(json);
+                NotaCreditoTransaccion trx = NotaCreditoTransaccionJson.toNotaCreditoTransaccion(json);
 
-                trx = ejbIngresoCaja.updateTransaccion(trx);
+                trx = ejbNotaCredito.updateTransaccion(trx);
 
-                IngresoCajaJSON tmpJson = IngresoCajaJSON.toJSON((IngresoCaja) ejbIngresoCaja.get(trx.getIdIngresoCaja().getIdIngresoCaja(), IngresoCaja.class));
+                NotaCreditoJson tmpJson = NotaCreditoJson.toNotaCreditoJson((NotaCredito) ejbNotaCredito.get(trx.getIdNotaCredito().getIdNotaCredito(), NotaCredito.class));
 
                 response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
                 response.setContent(mensajes.getProperty(RestResponse.RESTFUL_SUCCESS));
                 response.setEntidad(tmpJson);
 
-                String mensaje = Log.INGRESO_CAJA_UPDATE_TRANSACCION.replace("trx", trx.getIdTransaccion().toString());
-                mensaje = mensaje.replace("<id>", trx.getIdIngresoCaja().getIdIngresoCaja().toString());
+                String mensaje = Log.NOTA_CREDITO_UPDATE_TRANSACCION.replace("trx", trx.getIdNotaCreditoTransaccion().toString());
+                mensaje = mensaje.replace("<id>", trx.getIdNotaCredito().getIdNotaCredito().toString());
                 mensaje = mensaje.replace("<monto>", trx.getMontoBs() != null ? trx.getMontoBs().toString() : trx.getMontoUsd().toString());
-                ejbLogger.add(Accion.UPDATE, user.getUserName(), com.view.menu.Formulario.INGRESO_CAJA, user.getIp(), mensaje);
+                ejbLogger.add(Accion.UPDATE, user.getUserName(), com.view.menu.Formulario.NOTA_CREDITO, user.getIp(), mensaje);
 
             } catch (CRUDException ex) {
-                Logger.getLogger(IngresoCajaResource.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(NotasCreditoResource.class.getName()).log(Level.SEVERE, null, ex);
 
                 response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
                 response.setContent(ex.getMessage());
@@ -281,22 +282,23 @@ public class IngresoCajaResource extends TemplateResource {
 
         if (response.getCode() == ResponseCode.RESTFUL_SUCCESS.getCode()) {
             try {
-                IngresoCaja caja = ejbIngresoCaja.createNewIngresoCaja(user.getUserName(), user.getIdEmpleado().getIdEmpresa().getIdEmpresa());
+                NotaCredito nota = ejbNotaCredito.createNewNotaCredito(user.getUserName(), user.getIdEmpleado().getIdEmpresa().getIdEmpresa());
 
-                Optional op = Optional.ofNullable(caja);
+                Optional op = Optional.ofNullable(nota);
                 if (!op.isPresent()) {
-                    throw new CRUDException("No se puede crear el Ingreso a Caja.");
+                    throw new CRUDException("No se puede crear la Nota de Crédito.");
                 }
 
-                IngresoCajaJSON json = IngresoCajaJSON.toJSON(caja);
+                NotaCreditoJson json = NotaCreditoJson.toNotaCreditoJson(nota);
 
                 response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
                 response.setContent(json);
 
-                ejbLogger.add(Accion.INSERT, user.getUserName(), com.view.menu.Formulario.NOTA_DEBITO, user.getIp(), Log.INGRESO_CAJA_NUEVO.replace("<id>", caja.getIdIngresoCaja().toString()));
+                ejbLogger.add(Accion.INSERT, user.getUserName(),
+                        com.view.menu.Formulario.NOTA_CREDITO, user.getIp(), Log.NOTA_CREDITO_NUEVO.replace("<id>", nota.getIdNotaCredito().toString()));
 
             } catch (CRUDException ex) {
-                Logger.getLogger(IngresoCajaResource.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(NotasCreditoResource.class.getName()).log(Level.SEVERE, null, ex);
 
                 response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
                 response.setContent(ex.getMessage());
@@ -314,11 +316,11 @@ public class IngresoCajaResource extends TemplateResource {
         RestResponse response = doValidations(request);
         try {
             if (response.getCode() == ResponseCode.RESTFUL_SUCCESS.getCode()) {
-                IngresoCajaJSON json = BeanUtils.convertoToIngresoCajaJson(request);
+                NotaCreditoJson json = BeanUtils.convertToNotaCreditoJson(request);
 
-                ejbIngresoCaja.anularIngresoCaja(json.getIdIngresoCaja(), user.getUserName());
+                ejbNotaCredito.anularNotaCredito(json.getIdNotaCredito(), user.getUserName());
 
-                String mensaje = Log.INGRESO_CAJA_ANULAR.replace("<id>", json.getIdIngresoCaja().toString());
+                String mensaje = Log.NOTA_CREDITO_ANULAR.replace("<id>", json.getIdNotaCredito().toString());
                 ejbLogger.add(Accion.ANULAR, user.getUserName(), com.view.menu.Formulario.INGRESO_CAJA, user.getIp(), mensaje);
 
                 response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
@@ -328,7 +330,7 @@ public class IngresoCajaResource extends TemplateResource {
         } catch (CRUDException ex) {
             response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
             response.setContent(ex.getMessage());
-            Logger.getLogger(IngresoCajaResource.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(NotasCreditoResource.class.getName()).log(Level.SEVERE, null, ex);
         }
         return response;
     }
@@ -337,16 +339,17 @@ public class IngresoCajaResource extends TemplateResource {
     @Path("anular/transaccion")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public RestResponse anularIngresoCajaTransaccion(final RestRequest request) {
+    public RestResponse anularNotaCreditoTransaccion(final RestRequest request) {
         RestResponse response = doValidations(request);
         try {
             if (response.getCode() == ResponseCode.RESTFUL_SUCCESS.getCode()) {
-                IngresoTransaccionJson json = BeanUtils.convertoToIngresoCajaTransaccionJson(request);
+                NotaCreditoTransaccionJson json = BeanUtils.convertToNotaCreditoTransaccionJson(request);
+                NotaCreditoTransaccion tmp = NotaCreditoTransaccionJson.toNotaCreditoTransaccion(json);
 
-                ejbIngresoCaja.anularTransaccion(json.getIdTransaccion());
+                ejbNotaCredito.anularTransaccion(tmp, user.getUserName());
 
-                String mensaje = Log.INGRESO_CAJA_ANULAR_TRANSACCION.replace("<id>", json.getIdTransaccion().toString());
-                ejbLogger.add(Accion.ANULAR, user.getUserName(), com.view.menu.Formulario.INGRESO_CAJA, user.getIp(), mensaje);
+                String mensaje = Log.NOTA_CREDITO_ANULAR_TRANSACCION.replace("<id>", json.getIdNotaCreditoTransaccion().toString());
+                ejbLogger.add(Accion.ANULAR, user.getUserName(), com.view.menu.Formulario.NOTA_CREDITO, user.getIp(), mensaje);
 
                 response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
                 response.setContent(mensaje);
@@ -355,7 +358,7 @@ public class IngresoCajaResource extends TemplateResource {
         } catch (CRUDException ex) {
             response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
             response.setContent(ex.getMessage());
-            Logger.getLogger(IngresoCajaResource.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(NotasCreditoResource.class.getName()).log(Level.SEVERE, null, ex);
         }
         return response;
     }
@@ -369,17 +372,17 @@ public class IngresoCajaResource extends TemplateResource {
 
         if (response.getCode() == ResponseCode.RESTFUL_SUCCESS.getCode()) {
             try {
-                IngresoCajaJSON json = BeanUtils.convertoToIngresoCajaJson(request);
+                NotaCreditoJson json = BeanUtils.convertToNotaCreditoJson(request);
 
-                ejbIngresoCaja.finalizar(json.getIdIngresoCaja());
+                ejbNotaCredito.finalizar(json.getIdNotaCredito());
 
                 response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
                 response.setContent(mensajes.getProperty(RestResponse.RESTFUL_SUCCESS));
 
-                ejbLogger.add(Accion.FINALIZAR, user.getUserName(), Formulario.INGRESO_CAJA, user.getIp(), Log.INGRESO_CAJA_FINALIZAR.replace("<id>", json.getIdIngresoCaja().toString()));
+                ejbLogger.add(Accion.FINALIZAR, user.getUserName(), Formulario.NOTA_CREDITO, user.getIp(), Log.NOTA_CREDITO_FINALIZAR.replace("<id>", json.getIdNotaCredito().toString()));
 
             } catch (CRUDException ex) {
-                Logger.getLogger(IngresoCajaResource.class.getName()).log(Level.SEVERE, null, ex);
+                Logger.getLogger(NotasCreditoResource.class.getName()).log(Level.SEVERE, null, ex);
                 response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
                 response.setContent(ex.getMessage());
             }
@@ -396,20 +399,20 @@ public class IngresoCajaResource extends TemplateResource {
         RestResponse response = doValidations(request);
         try {
 
-            IngresoCajaJSON json = BeanUtils.convertoToIngresoCajaJson(request);
+            NotaCreditoJson json = BeanUtils.convertToNotaCreditoJson(request);
 
-            IngresoCaja caja = IngresoCajaJSON.toIngresoCaja(json);
+            NotaCredito nota = NotaCreditoJson.toNotaCredito(json);
 
-            ejbIngresoCaja.pendiente(caja);
+            ejbNotaCredito.pendiente(nota);
 
-            String mensaje = Log.INGRESO_CAJA_PENDIENTE.replace("<id>", json.getIdIngresoCaja().toString());
-            ejbLogger.add(Accion.PENDIENTE, user.getUserName(), com.view.menu.Formulario.INGRESO_CAJA, user.getIp(), mensaje);
+            String mensaje = Log.NOTA_CREDITO_PENDIENTE.replace("<id>", json.getIdNotaCredito().toString());
+            ejbLogger.add(Accion.PENDIENTE, user.getUserName(), com.view.menu.Formulario.NOTA_DEBITO, user.getIp(), mensaje);
 
             response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
             response.setContent(mensajes.getProperty(RestResponse.RESTFUL_SUCCESS));
 
         } catch (Exception ex) {
-            Logger.getLogger(IngresoCajaResource.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(NotasCreditoResource.class.getName()).log(Level.SEVERE, null, ex);
             response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
             response.setContent(ex.getMessage());
         }
@@ -428,10 +431,10 @@ public class IngresoCajaResource extends TemplateResource {
         if (response.getCode() == ResponseCode.RESTFUL_SUCCESS.getCode()) {
             try {
 
-                IngresoCajaJSON json = BeanUtils.convertoToIngresoCajaJson(request);
-                IngresoCaja data = IngresoCajaJSON.toIngresoCaja(json);
+                NotaCreditoJson json = BeanUtils.convertToNotaCreditoJson(request);
+                NotaCredito data = NotaCreditoJson.toNotaCredito(json);
 
-                ejbIngresoCaja.pendiente(data);
+                ejbNotaCredito.pendiente(data);
 
                 Optional op = Optional.ofNullable(idCliente);
                 if (!op.isPresent()) {
@@ -465,40 +468,4 @@ public class IngresoCajaResource extends TemplateResource {
         return response;
     }
 
-    @GET
-    @Path("getall/notadebito/{idNota}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public RestResponse getIngresosCajaByNotaDebito(@PathParam("idNota") Integer idNota) {
-        RestResponse response = new RestResponse();
-        try {
-            Optional op = Optional.ofNullable(idNota);
-            if (!op.isPresent()) {
-                response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
-                response.setContent(mensajes.getProperty(RestResponse.RESTFUL_PARAMETERS_SENT));
-                return response;
-            }
-
-            HashMap<String, Integer> parameters = new HashMap<>();
-            parameters.put("idNotaDebito", idNota);
-
-            List<IngresoCaja> l = ejbIngresoCaja.getIngresoCajaByNotaDebito(idNota);
-
-            List r = new LinkedList();
-            for (IngresoCaja c : l) {
-                IngresoCajaJSON json = IngresoCajaJSON.toJSON(c);
-                r.add(json);
-            }
-
-            response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
-            response.setContent(r);
-
-        } catch (CRUDException ex) {
-            Logger.getLogger(IngresoCajaResource.class.getName()).log(Level.SEVERE, null, ex);
-            response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
-            response.setContent(ex.getMessage());
-        }
-
-        return response;
-    }
 }

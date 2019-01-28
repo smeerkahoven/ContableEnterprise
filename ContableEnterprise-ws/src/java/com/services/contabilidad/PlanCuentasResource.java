@@ -26,6 +26,7 @@ import com.services.seguridad.util.RestRequest;
 import com.services.seguridad.util.RestResponse;
 import com.seguridad.utils.ComboSelect;
 import com.util.resource.Mensajes;
+import com.view.menu.Formulario;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -104,7 +105,7 @@ public class PlanCuentasResource extends TemplateResource {
                 //r.setCode(u.getIdEmpleado().getIdEmpresa().getIdEmpresa());
                 response.setContent(json);
 
-                ejbLogger.add(Accion.ACCESS, user.getUserName(), request.getFormName(), user.getIp());
+                ejbLogger.add(Accion.SEARCH, user.getUserName(), Formulario.PLAN_CUENTAS, user.getIp());
             } catch (CRUDException ex) {
                 Logger.getLogger(PlanCuentasResource.class.getName()).log(Level.SEVERE, null, ex);
             }

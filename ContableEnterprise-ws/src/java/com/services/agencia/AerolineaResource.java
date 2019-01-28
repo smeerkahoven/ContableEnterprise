@@ -28,6 +28,7 @@ import com.services.TemplateResource;
 import com.services.seguridad.util.RestRequest;
 import com.services.seguridad.util.RestResponse;
 import com.util.resource.Mensajes;
+import com.view.menu.Formulario;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -146,7 +147,7 @@ public class AerolineaResource extends TemplateResource {
                         //r.setCode(u.getIdEmpleado().getIdEmpresa().getIdEmpresa());
                         r.setContent(lcomsion);
 
-                        ejbLogger.add(Accion.ACCESS, t.getUserName(), request.getFormName(), "");
+                        ejbLogger.add(Accion.ACCESS, t.getUserName(), Formulario.AEROLINEA, "");
 
                         return r;
                     } else {
@@ -193,7 +194,7 @@ public class AerolineaResource extends TemplateResource {
                         //r.setCode(u.getIdEmpleado().getIdEmpresa().getIdEmpresa());
                         r.setContent(l);
 
-                        ejbLogger.add(Accion.ACCESS, t.getUserName(), request.getFormName(), "");
+                        ejbLogger.add(Accion.ACCESS, t.getUserName(), Formulario.AEROLINEA, "");
 
                         return r;
                     } else {
@@ -268,7 +269,7 @@ public class AerolineaResource extends TemplateResource {
                         //r.setCode(u.getIdEmpleado().getIdEmpresa().getIdEmpresa());
                         r.setContent(l);
 
-                        ejbLogger.add(Accion.ACCESS, t.getUserName(), request.getFormName(), "");
+                        ejbLogger.add(Accion.ACCESS, t.getUserName(), Formulario.AEROLINEA, "");
 
                         return r;
                     } else {
@@ -344,7 +345,7 @@ public class AerolineaResource extends TemplateResource {
                         //r.setCode(u.getIdEmpleado().getIdEmpresa().getIdEmpresa());
                         r.setContent(AerolineaCuentaJSON.toAerolinaJSON(l));
 
-                        ejbLogger.add(Accion.ACCESS, t.getUserName(), request.getFormName(), "");
+                        ejbLogger.add(Accion.ACCESS, t.getUserName(), Formulario.AEROLINEA, "");
 
                         return r;
                     } else {

@@ -5,16 +5,32 @@
  */
 package com.services.contabilidad;
 
+import com.agencia.control.remote.BoletoRemote;
+import com.agencia.entities.Boleto;
 import com.contabilidad.entities.AsientoContable;
+import com.contabilidad.entities.CargoBoleto;
 import com.contabilidad.entities.ComprobanteContable;
+import com.contabilidad.entities.IngresoCaja;
+import com.contabilidad.entities.IngresoTransaccion;
+import com.contabilidad.entities.NotaCreditoTransaccion;
+import com.contabilidad.entities.NotaDebitoTransaccion;
 import com.contabilidad.entities.TipoComprobante;
 import com.contabilidad.remote.ComprobanteRemote;
+import com.contabilidad.remote.IngresoCajaRemote;
+import com.contabilidad.remote.NotaDebitoRemote;
+import com.contabilidad.remote.NotasCreditoRemote;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.response.json.agencia.BoletoJSON;
+import com.response.json.contabilidad.AsientoAnswerJSON;
 import com.response.json.contabilidad.AsientoContableJSON;
+import com.response.json.contabilidad.CargoBoletoJSON;
 import com.response.json.contabilidad.ComprobanteContableJSON;
+import com.response.json.contabilidad.IngresoTransaccionJson;
+import com.response.json.contabilidad.NotaCreditoTransaccionJson;
+import com.response.json.contabilidad.NotaDebitoTransaccionJson;
 import com.seguridad.control.exception.CRUDException;
 import com.seguridad.queries.Queries;
 import com.seguridad.utils.Accion;
@@ -24,6 +40,9 @@ import com.services.TemplateResource;
 import com.services.seguridad.util.RestRequest;
 import com.services.seguridad.util.RestResponse;
 import com.seguridad.utils.ComboSelect;
+import com.seguridad.utils.Estado;
+import com.services.notadebito.NotadebitoResource;
+import com.util.resource.BeanUtils;
 import com.view.menu.Formulario;
 import java.math.BigDecimal;
 import java.util.HashMap;
@@ -54,6 +73,18 @@ public class ComprobantesResource extends TemplateResource {
     @EJB
     private ComprobanteRemote ejbComprobante;
 
+    @EJB
+    private NotaDebitoRemote ejbNotaDebito;
+
+    @EJB
+    private IngresoCajaRemote ejbIngresoCaja;
+
+    @EJB
+    private NotasCreditoRemote ejbNotaCredito;
+
+    @EJB
+    private BoletoRemote ejbBoleto;
+
     /**
      * Creates a new instance of ComprobantesResource
      */
@@ -74,6 +105,228 @@ public class ComprobantesResource extends TemplateResource {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     public void putJson(String content) {
+    }
+
+    @POST
+    @Path("transaccion-boleto/get")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public RestResponse getTransaccionBoleto(final RestRequest request) {
+        RestResponse response = doValidations(request);
+
+        AsientoContableJSON json = BeanUtils.convertToAsientoContable(request);
+        Optional op = Optional.ofNullable(json);
+
+        try {
+            NotaDebitoTransaccion ndtr = null;
+            Boleto b = null;
+            IngresoTransaccion itr = null;
+            NotaCreditoTransaccion nctr = null;
+
+            if (json.getIdNotaTransaccion() != null) {
+                ndtr = ejbNotaDebito.getNotaDebitoTransaccion(json.getIdNotaTransaccion());
+            }
+
+            if (json.getIdBoleto() != null) {
+                b = (Boleto) ejbBoleto.get(new Boleto(json.getIdBoleto()));
+            }
+
+            if (json.getIdIngresoCajaTransaccion() != null) {
+                itr = ejbIngresoCaja.getIngresoTransaccion(new IngresoTransaccion(json.getIdIngresoCajaTransaccion()));
+            }
+
+            if (json.getIdNotaCreditoTransaccion() != null) {
+                nctr = ejbNotaCredito.getNotaCreditoTransaccion(new NotaCreditoTransaccion(json.getIdNotaCreditoTransaccion()));
+            }
+
+            AsientoAnswerJSON asw = new AsientoAnswerJSON();
+
+            op = Optional.ofNullable(ndtr);
+            if (op.isPresent()) {
+                asw.setNotaDebito(NotaDebitoTransaccionJson.toNotaDebitoTransaccionJson(ndtr));
+            }
+
+            op = Optional.ofNullable(b);
+            if (op.isPresent()) {
+                asw.setBoleto(BoletoJSON.toBoletoJSON(b));
+            }
+
+            op = Optional.ofNullable(nctr);
+            if (op.isPresent()) {
+                asw.setNotaCredito(NotaCreditoTransaccionJson.toNotaCreditoTransaccionJsOn(nctr));
+            }
+
+            op = Optional.ofNullable(itr);
+            if (op.isPresent()) {
+                asw.setIngreso(IngresoTransaccionJson.toIngresoTransaccionJson(itr));
+            }
+
+            response.setContent(asw);
+            response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
+
+            ejbLogger.add(Accion.SEARCH, user.getUserName(), Formulario.NOTA_DEBITO, user.getIp());
+
+        } catch (CRUDException ex) {
+            Logger.getLogger(NotadebitoResource.class.getName()).log(Level.SEVERE, null, ex);
+            response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+            response.setContent(ex.getMessage());
+        }
+        return response;
+    }
+
+    @POST
+    @Path("transaccion-cargo/get")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public RestResponse getTransaccionCargo(final RestRequest request) {
+        RestResponse response = doValidations(request);
+
+        AsientoContableJSON json = BeanUtils.convertToAsientoContable(request);
+        Optional op = Optional.ofNullable(json);
+
+        try {
+            NotaDebitoTransaccion ndtr = null;
+            Boleto b = null;
+            IngresoTransaccion itr = null;
+            NotaCreditoTransaccion nctr = null;
+            CargoBoleto cb = null;
+            IngresoCaja ic = null;
+
+            if (json.getIdNotaTransaccion() != null) {
+                ndtr = ejbNotaDebito.getNotaDebitoTransaccion(json.getIdNotaTransaccion());
+            }
+
+            if (json.getIdBoleto() != null) {
+                b = (Boleto) ejbBoleto.get(new Boleto(json.getIdBoleto()));
+            }
+
+            if (json.getIdIngresoCajaTransaccion() != null) {
+                itr = ejbIngresoCaja.getIngresoTransaccion(new IngresoTransaccion(json.getIdIngresoCajaTransaccion()));
+            }
+
+            if (json.getIdNotaCreditoTransaccion() != null) {
+                nctr = ejbNotaCredito.getNotaCreditoTransaccion(new NotaCreditoTransaccion(json.getIdNotaCreditoTransaccion()));
+            }
+
+            if (json.getIdCargo() != null) {
+                cb = ejbNotaDebito.getCargo(new CargoBoleto(json.getIdCargo()));
+            }
+
+            AsientoAnswerJSON asw = new AsientoAnswerJSON();
+
+            op = Optional.ofNullable(ndtr);
+            if (op.isPresent()) {
+                asw.setNotaDebito(NotaDebitoTransaccionJson.toNotaDebitoTransaccionJson(ndtr));
+            }
+
+            op = Optional.ofNullable(b);
+            if (op.isPresent()) {
+                asw.setBoleto(BoletoJSON.toBoletoJSON(b));
+            }
+
+            op = Optional.ofNullable(nctr);
+            if (op.isPresent()) {
+                asw.setNotaCredito(NotaCreditoTransaccionJson.toNotaCreditoTransaccionJsOn(nctr));
+            }
+
+            op = Optional.ofNullable(itr);
+            if (op.isPresent()) {
+                asw.setIngreso(IngresoTransaccionJson.toIngresoTransaccionJson(itr));
+            }
+
+            op = Optional.ofNullable(cb);
+            if (op.isPresent()) {
+                asw.setCargo(CargoBoletoJSON.toCargoBoletoJSON(cb));
+            }
+
+            response.setContent(asw);
+            response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
+
+            ejbLogger.add(Accion.SEARCH, user.getUserName(), Formulario.NOTA_DEBITO, user.getIp());
+
+        } catch (CRUDException ex) {
+            Logger.getLogger(NotadebitoResource.class.getName()).log(Level.SEVERE, null, ex);
+            response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+            response.setContent(ex.getMessage());
+        }
+        return response;
+    }
+
+    @POST
+    @Path("transaccion-paquete/get")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public RestResponse getTransaccionPaquete(final RestRequest request) {
+        RestResponse response = doValidations(request);
+
+        AsientoContableJSON json = BeanUtils.convertToAsientoContable(request);
+        Optional op = Optional.ofNullable(json);
+
+        try {
+            NotaDebitoTransaccion ndtr = null;
+            Boleto b = null;
+            IngresoTransaccion itr = null;
+            NotaCreditoTransaccion nctr = null;
+            CargoBoleto cb = null;
+
+            if (json.getIdNotaTransaccion() != null) {
+                ndtr = ejbNotaDebito.getNotaDebitoTransaccion(json.getIdNotaTransaccion());
+            }
+
+            if (json.getIdBoleto() != null) {
+                b = (Boleto) ejbBoleto.get(new Boleto(json.getIdBoleto()));
+            }
+
+            if (json.getIdIngresoCajaTransaccion() != null) {
+                itr = ejbIngresoCaja.getIngresoTransaccion(new IngresoTransaccion(json.getIdIngresoCajaTransaccion()));
+            }
+
+            if (json.getIdNotaCreditoTransaccion() != null) {
+                nctr = ejbNotaCredito.getNotaCreditoTransaccion(new NotaCreditoTransaccion(json.getIdNotaCreditoTransaccion()));
+            }
+
+            if (json.getIdCargo() != null) {
+                cb = ejbNotaDebito.getCargo(new CargoBoleto(json.getIdCargo()));
+            }
+
+            AsientoAnswerJSON asw = new AsientoAnswerJSON();
+
+            op = Optional.ofNullable(ndtr);
+            if (op.isPresent()) {
+                asw.setNotaDebito(NotaDebitoTransaccionJson.toNotaDebitoTransaccionJson(ndtr));
+            }
+
+            op = Optional.ofNullable(b);
+            if (op.isPresent()) {
+                asw.setBoleto(BoletoJSON.toBoletoJSON(b));
+            }
+
+            op = Optional.ofNullable(nctr);
+            if (op.isPresent()) {
+                asw.setNotaCredito(NotaCreditoTransaccionJson.toNotaCreditoTransaccionJsOn(nctr));
+            }
+
+            op = Optional.ofNullable(itr);
+            if (op.isPresent()) {
+                asw.setIngreso(IngresoTransaccionJson.toIngresoTransaccionJson(itr));
+            }
+
+            op = Optional.ofNullable(cb);
+            if (op.isPresent()) {
+                asw.setCargo(CargoBoletoJSON.toCargoBoletoJSON(cb));
+            }
+
+            response.setContent(asw);
+            response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
+
+            ejbLogger.add(Accion.SEARCH, user.getUserName(), Formulario.NOTA_DEBITO, user.getIp());
+
+        } catch (CRUDException ex) {
+            Logger.getLogger(NotadebitoResource.class.getName()).log(Level.SEVERE, null, ex);
+            response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+            response.setContent(ex.getMessage());
+        }
+        return response;
     }
 
     @GET
@@ -164,84 +417,14 @@ public class ComprobantesResource extends TemplateResource {
     public RestResponse insertComprobante(final ComprobanteContableJSON c) {
         RestResponse response = new RestResponse();
         try {
-            //RestResponse response = //doValidations(request);
-            /*if (response.getCode() == ResponseCode.RESTFUL_SUCCESS.getCode()) {
-            try {
-            ComprobanteContableJSON pc = new ComprobanteContableJSON();
-            Gson gson = new GsonBuilder().create();
-            JsonParser parser = new JsonParser();
-            JsonObject object = parser.parse((String) request.getContent()).getAsJsonObject();
-            pc = gson.fromJson(object.toString(), ComprobanteContableJSON.class);
-            
-            ComprobanteContablePK numero = ejbComprobante.getNextComprobantePK(pc.getFecha(), pc.getTipo());
-            
-            ComprobanteContable cc = ComprobanteContableJSON.toComprobanteContable(pc);
-            
-            cc.setIdNumeroGestion(numero.getIdLibro());
-            cc.setIdUsuarioCreador(user.getUserName());
-            cc.setIdEmpresa(user.getIdEmpleado().getIdEmpresa().getIdEmpresa());
-            cc.setFechaInsert(DateContable.getCurrentDate());
-            cc.setGestion(numero.getGestion());
-            
-            ejbComprobante.beginTransaction();
-            
-            cc.setIdLibro(ejbComprobante.insert(cc));
-            //insertamos las transacciones.
-            List<AsientoContable>transacciones = cc.getTransacciones();
-            for (AsientoContable t : transacciones) {
-            t.setFechaMovimiento(DateContable.getCurrentDate());
-            t.setGestion(cc.getGestion());
-            t.setIdLibro(cc.getIdLibro());
-
-            t.setIdAsiento(ejbComprobante.insert(t));
-            }
-            
-            ejbComprobante.endTransaction();
-            
-            response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
-            response.setContent(mensajes.getProperty(RestResponse.RESTFUL_SUCCESS));
-            response.setEntidad(cc);
-            
-            } catch (CRUDException ex) {
-            try {
-            Logger.getLogger(ComprobantesResource.class.getName()).log(Level.SEVERE, null, ex);
-            ejbComprobante.rollback();
-            } catch (CRUDException ex1) {
-            Logger.getLogger(ComprobantesResource.class.getName()).log(Level.SEVERE, null, ex1);
-            }
-            }
-            }*/
 
             ComprobanteContable cc = ComprobanteContableJSON.toComprobanteContable(c);
-
-            //ComprobanteContablePK numero = ejbComprobante.getNextComprobantePK(c.getFecha(), c.getTipo());
-
-            /*cc.setIdNumeroGestion(numero.getIdLibro());
-            //cc.setIdUsuarioCreador(user.getUserName());
-            //cc.setIdEmpresa(user.getIdEmpleado().getIdEmpresa().getIdEmpresa());
-            cc.setIdUsuarioCreador(c.getIdUsuarioCreador());
-            cc.setIdEmpresa(c.getIdEmpresa());
-            cc.setFechaInsert(DateContable.getCurrentDate());
-            cc.setComprobanteContablePK(new ComprobanteContablePK(0, numero.getGestion()));
-
-            //  ejbComprobante.beginTransaction();
-            Integer idLibro = ejbComprobante.insert(cc);
-
-            cc.getComprobanteContablePK().setIdLibro(idLibro);*/
-            //insertamos las transacciones.
             cc = ejbComprobante.procesarComprobante(cc);
             List<AsientoContableJSON> transacciones = c.getTransacciones();
             for (AsientoContableJSON t : transacciones) {
 
                 AsientoContable a = AsientoContableJSON.toAsientoContable(t);
-                /*a.setFechaMovimiento(DateContable.getCurrentDate());
-                a.setIdLibro(idLibro);
-                a.setAsientoContablePK(new AsientoContablePK(0, cc.getComprobanteContablePK().getGestion()));
-
-                ejbComprobante.insert(a);*/
-
                 a = ejbComprobante.procesarAsientoContable(a, cc);
-
                 t.setFechaMovimiento(DateContable.getDateFormat(a.getFechaMovimiento(), DateContable.LATIN_AMERICA_TIME_FORMAT));
                 t.setIdLibro(c.getIdLibro());
                 t.setGestion(a.getGestion());
@@ -300,10 +483,43 @@ public class ComprobantesResource extends TemplateResource {
             insert.setIdLibro(pc.getIdLibro());
             insert.setFechaMovimiento(DateContable.getCurrentDate());
 
-            Integer idAsiento = ejbComprobante.insert(insert);
+            insert = ejbComprobante.addTransaccion(insert);
             ejbLogger.add(Accion.INSERT, user.getUserName(), Formulario.COMPROBANTES, user.getIp());
 
-            insert.setIdAsiento(idAsiento);
+            response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
+            response.setContent(mensajes.getProperty(RestResponse.RESTFUL_SUCCESS));
+            response.setEntidad(AsientoContableJSON.toAsientoContableJSON(insert));
+
+        } catch (CRUDException ex) {
+            Logger.getLogger(ComprobantesResource.class.getName()).log(Level.SEVERE, null, ex);
+            response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+            response.setContent(mensajes.getProperty(RestResponse.RESTFUL_ERROR));
+        }
+        return response;
+    }
+
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("add-correccion")
+    public RestResponse addCorreccion(final RestRequest request) {
+        RestResponse response = doValidations(request);
+        try {
+
+            ComprobanteContableJSON pc = new ComprobanteContableJSON();
+            Gson gson = new GsonBuilder().create();
+            JsonParser parser = new JsonParser();
+            JsonObject object = parser.parse((String) request.getContent()).getAsJsonObject();
+            pc = gson.fromJson(object.toString(), ComprobanteContableJSON.class);
+
+            AsientoContable insert = AsientoContableJSON.toAsientoContable(pc.getTransacciones().get(pc.getTransacciones().size() - 1));
+            insert.setGestion(pc.getGestion());
+            insert.setIdLibro(pc.getIdLibro());
+            insert.setFechaMovimiento(DateContable.getCurrentDate());
+            insert.setEstado(Estado.EMITIDO);
+
+            insert = ejbComprobante.addTransaccion(insert);
+            ejbLogger.add(Accion.INSERT, user.getUserName(), Formulario.COMPROBANTES, user.getIp());
 
             response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
             response.setContent(mensajes.getProperty(RestResponse.RESTFUL_SUCCESS));
@@ -469,103 +685,6 @@ public class ComprobantesResource extends TemplateResource {
 
             ejbComprobante.update(cc);
 
-            /* ComprobanteContable cc = ComprobanteContableJSON.toComprobanteContable(c);
-
-            ejbComprobante.beginTransaction();
-            Integer idLibro = ejbComprobante.insert(cc);
-
-            cc.getComprobanteContablePK().setIdLibro(idLibro);
-            //insertamos las transacciones.
-            List<AsientoContableJSON> transacciones = c.getTransacciones();
-            for (AsientoContableJSON t : transacciones) {
-
-                AsientoContable a = AsientoContableJSON.toAsientoContable(t);
-                a.setFechaMovimiento(DateContable.getCurrentDate());
-                a.setIdLibro(idLibro);
-                a.setAsientoContablePK(new AsientoContablePK(0, cc.getComprobanteContablePK().getGestion()));
-
-                ejbComprobante.insert(a);
-
-                t.setFechaMovimiento(DateContable.getDateFormat(a.getFechaMovimiento(), DateContable.LATIN_AMERICA_TIME_FORMAT));
-                t.setIdLibro(idLibro);
-                t.setGestion(a.getAsientoContablePK().getGestion());
-                t.setIdAsiento(a.getAsientoContablePK().getIdAsiento());
-            }
-
-            cc.setIdNumeroGestion(cc.getIdNumeroGestion());
-            
-
-            ejbComprobante.endTransaction();
-            response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
-            response.setContent(mensajes.getProperty(RestResponse.RESTFUL_SUCCESS));
-            //retorna el objeto
-            response.setEntidad(c);
-
-            response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
-
-            switch (cc.getEstado()) {
-                case ComprobanteContable.APROBADO:
-                    response.setContent(mensajes.getProperty(RestResponse.RESTFUL_COMPROBANTE_GENERADO_SUCCESS));
-                    break;
-                case ComprobanteContable.PENDIENTE:
-                    response.setContent(mensajes.getProperty(RestResponse.RESTFUL_COMPROBANTE_PENDIENTE_SUCCESS));
-                    break;
-            }*/
-
- /*ComprobanteContablePK numero = ejbComprobante.getNextComprobantePK(c.getFecha(), c.getTipo());
-
-            ComprobanteContable cc = ComprobanteContableJSON.toComprobanteContable(c);
-
-            cc.setIdNumeroGestion(numero.getIdLibro());
-            //cc.setIdUsuarioCreador(user.getUserName());
-            //cc.setIdEmpresa(user.getIdEmpleado().getIdEmpresa().getIdEmpresa());
-            cc.setIdUsuarioCreador(c.getIdUsuarioCreador());
-            cc.setIdEmpresa(c.getIdEmpresa());
-            cc.setFechaInsert(DateContable.getCurrentDate());
-            cc.setComprobanteContablePK(new ComprobanteContablePK(0, numero.getGestion()));
-
-            ejbComprobante.beginTransaction();
-            Integer idLibro = ejbComprobante.insert(cc);
-
-            cc.getComprobanteContablePK().setIdLibro(idLibro);
-            //insertamos las transacciones.
-            List<AsientoContableJSON> transacciones = c.getTransacciones();
-            for (AsientoContableJSON t : transacciones) {
-
-                AsientoContable a = AsientoContableJSON.toAsientoContable(t);
-                a.setFechaMovimiento(DateContable.getCurrentDate());
-                a.setIdLibro(idLibro);
-                a.setAsientoContablePK(new AsientoContablePK(0, cc.getComprobanteContablePK().getGestion()));
-
-                ejbComprobante.insert(a);
-
-                t.setFechaMovimiento(DateContable.getDateFormat(a.getFechaMovimiento(), DateContable.LATIN_AMERICA_TIME_FORMAT));
-                t.setIdLibro(idLibro);
-                t.setGestion(a.getAsientoContablePK().getGestion());
-                t.setIdAsiento(a.getAsientoContablePK().getIdAsiento());
-            }
-
-            c.setIdNumeroGestion(cc.getIdNumeroGestion());
-            c.setFechaInsert(DateContable.getDateFormat(cc.getFechaInsert(), DateContable.LATIN_AMERICA_TIME_FORMAT));
-            c.setIdLibro(cc.getComprobanteContablePK().getIdLibro());
-            c.setGestion(cc.getComprobanteContablePK().getGestion());
-
-            ejbComprobante.endTransaction();
-            response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
-            response.setContent(mensajes.getProperty(RestResponse.RESTFUL_SUCCESS));
-            //retorna el objeto
-            response.setEntidad(c);
-
-            response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
-            
-            switch (cc.getEstado()){
-                case ComprobanteContable.APROBADO:
-                    response.setContent(mensajes.getProperty(RestResponse.RESTFUL_COMPROBANTE_GENERADO_SUCCESS));
-                    break;
-                case ComprobanteContable.PENDIENTE:
-                    response.setContent(mensajes.getProperty(RestResponse.RESTFUL_COMPROBANTE_PENDIENTE_SUCCESS));
-                    break ;
-            }*/
             ejbLogger.add(Accion.INSERT, c.getIdUsuarioCreador(), Formulario.COMPROBANTES, "");
             return response;
         } catch (CRUDException ex) {
@@ -627,12 +746,8 @@ public class ComprobantesResource extends TemplateResource {
                 JsonObject object = parser.parse((String) request.getContent()).getAsJsonObject();
                 pc = gson.fromJson(object.toString(), ComprobanteContableJSON.class);
 
-                HashMap<String, Object> parameters = new HashMap<>();
-                parameters.put("1", ComprobanteContable.PENDIENTE);
-                parameters.put("2", user.getUserName());
-                parameters.put("3", pc.getIdLibro());
+                ejbComprobante.pendiente(pc.getIdLibro(), user.getUserName());
 
-                ejbComprobante.executeNative(Queries.UPDATE_COMPROBANTE_CONTABLE_ESTADO, parameters);
                 ejbLogger.add(Accion.INSERT, user.getUserName(), Formulario.COMPROBANTES, user.getIp());
 
                 response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());

@@ -355,6 +355,9 @@ public class UsuarioResource extends TemplateResource {
                 r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
                 r.setContent(m.getProperty(RestResponse.RESTFUL_TOKEN_MANDATORY));
             }
+            
+            ejbLogger.add(Accion.SEARCH, user.getUserName(),
+                    com.view.menu.Formulario.USUARIO, user.getIp());
 
         } catch (CRUDException ex) {
             Logger.getLogger(EmpresaServices.class.getName()).log(Level.SEVERE, null, ex);

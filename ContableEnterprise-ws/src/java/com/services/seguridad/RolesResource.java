@@ -89,7 +89,7 @@ public class RolesResource {
 
                         List<Object[]> l = ejbRol.get(queries.getPropertie(Queries.GET_MODULO_NUEVO));
                         LinkedList<ModuloJSON> lm = new LinkedList<>();
-                       
+
                         r.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
                         r.setContent(create(l));
 
@@ -119,9 +119,9 @@ public class RolesResource {
     }
 
     /**
-     * 
+     *
      * @param request
-     * @return 
+     * @return
      */
     @POST
     @Path("get")
@@ -178,9 +178,9 @@ public class RolesResource {
     }
 
     /**
-     * 
+     *
      * @param request
-     * @return 
+     * @return
      */
     @POST
     @Path("save")
@@ -283,8 +283,6 @@ public class RolesResource {
 
     }
 
-    
-    
     @POST
     @Path("delete")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -336,6 +334,7 @@ public class RolesResource {
         return r;
 
     }
+
     /**
      *
      * @param request
@@ -471,10 +470,13 @@ public class RolesResource {
 
                 rf.setIdFormularios(new Formulario(((BigDecimal) hperm.get("idFormulario")).intValue()));
                 rf.setAcceder((((BigDecimal) hperm.get("rolAcceder")).shortValue()));
+                rf.setVer((((BigDecimal) hperm.get("rolVer")).shortValue()));
                 rf.setActualizar((((BigDecimal) hperm.get("rolActualizar")).shortValue()));
+                rf.setEditar((((BigDecimal) hperm.get("rolEditar")).shortValue()));
                 rf.setBuscar((((BigDecimal) hperm.get("rolBuscar")).shortValue()));
                 rf.setCrear((((BigDecimal) hperm.get("rolCrear")).shortValue()));
                 rf.setEliminar((((BigDecimal) hperm.get("rolEliminar")).shortValue()));
+                rf.setAnular((((BigDecimal) hperm.get("rolAnular")).shortValue()));
 
                 //insertamos el permiso
                 ejbRol.insert(rf);
@@ -507,20 +509,28 @@ public class RolesResource {
             ArrayList plist = (ArrayList) hmap.get("flist");
             for (Object ph : plist) {
                 HashMap<String, Object> hperm = (HashMap<String, Object>) ph;
-                RolFormulario rf = new RolFormulario();
-                rf.setIdRol(r);
-                rf.setIdFormularios(new Formulario(((BigDecimal) hperm.get("idFormulario")).intValue()));
 
-                rf.setIdRolFormulario((((BigDecimal) hperm.get("idRolFormulario")).intValue()));
-                rf.setAcceder((((BigDecimal) hperm.get("rolAcceder")).shortValue()));
-                rf.setActualizar((((BigDecimal) hperm.get("rolActualizar")).shortValue()));
-                rf.setBuscar((((BigDecimal) hperm.get("rolBuscar")).shortValue()));
-                rf.setCrear((((BigDecimal) hperm.get("rolCrear")).shortValue()));
-                rf.setEliminar((((BigDecimal) hperm.get("rolEliminar")).shortValue()));
+                Integer idRolFormulario = ((BigDecimal) hperm.get("idRolFormulario")).intValue();
 
-                //insertamos el permiso
-                ejbRol.update(rf);
+                RolFormulario rf = ejbRol.get(idRolFormulario);
 
+                if (rf != null) {
+                    rf.setIdRol(r);
+
+                    rf.setIdFormularios(new Formulario(((BigDecimal) hperm.get("idFormulario")).intValue()));
+
+                    rf.setAcceder((((BigDecimal) hperm.get("rolAcceder")).shortValue()));
+                    rf.setVer((((BigDecimal) hperm.get("rolVer")).shortValue()));
+                    rf.setActualizar((((BigDecimal) hperm.get("rolActualizar")).shortValue()));
+                    rf.setEditar((((BigDecimal) hperm.get("rolEditar")).shortValue()));
+                    rf.setBuscar((((BigDecimal) hperm.get("rolBuscar")).shortValue()));
+                    rf.setCrear((((BigDecimal) hperm.get("rolCrear")).shortValue()));
+                    rf.setEliminar((((BigDecimal) hperm.get("rolEliminar")).shortValue()));
+                    rf.setAnular((((BigDecimal) hperm.get("rolAnular")).shortValue()));
+
+                    //insertamos el permiso
+                    ejbRol.update(rf);
+                }
             }
         }
 

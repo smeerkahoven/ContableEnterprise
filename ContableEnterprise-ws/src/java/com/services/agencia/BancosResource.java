@@ -30,6 +30,7 @@ import com.services.seguridad.util.RestRequest;
 import com.services.seguridad.util.RestResponse;
 import com.seguridad.utils.ComboSelect;
 import com.util.resource.Mensajes;
+import com.view.menu.Formulario;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -116,7 +117,7 @@ public class BancosResource extends TemplateResource {
                         r.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
                         r.setContent(l);
 
-                        ejbLogger.add(Accion.ACCESS, t.getUserName(), request.getFormName(), "");
+                        ejbLogger.add(Accion.ACCESS, t.getUserName(), Formulario.BANCOS, "");
 
                         return r;
                     } else {
@@ -498,7 +499,7 @@ public class BancosResource extends TemplateResource {
                         r.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
                         r.setContent(l);
 
-                        ejbLogger.add(Accion.ACCESS, t.getUserName(), request.getFormName(), "");
+                        ejbLogger.add(Accion.ACCESS, t.getUserName(),Formulario.BANCOS, "");
 
                         return r;
                     } else {
@@ -553,7 +554,7 @@ public class BancosResource extends TemplateResource {
                         r.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
                         r.setContent(m.getProperty(RestResponse.RESTFUL_SUCCESS));
 
-                        ejbLogger.add(Accion.ACCESS, t.getUserName(), request.getFormName(), "");
+                        ejbLogger.add(Accion.ACCESS, t.getUserName(), Formulario.BANCOS, "");
 
                         return r;
                     } else {

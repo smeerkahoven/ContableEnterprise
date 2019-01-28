@@ -25,6 +25,7 @@ import com.services.seguridad.EmpresaServices;
 import com.services.seguridad.util.RestRequest;
 import com.services.seguridad.util.RestResponse;
 import com.util.resource.Mensajes;
+import com.view.menu.Formulario;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -125,7 +126,7 @@ public class FactoresResource {
                         r.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
                         r.setContent(list);
 
-                        ejbLogger.add(Accion.ACCESS, t.getUserName(), request.getFormName(), "");
+                        ejbLogger.add(Accion.ACCESS, t.getUserName(), Formulario.FACTORES, "");
 
                         return r;
                     } else {
@@ -193,7 +194,7 @@ public class FactoresResource {
                         r.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
                         r.setContent(today);
 
-                        ejbLogger.add(Accion.ACCESS, t.getUserName(), request.getFormName(), "");
+                        //ejbLogger.add(Accion.ACCESS, t.getUserName(), Formulario.FACTORES, "");
 
                         return r;
                     } else {
@@ -251,7 +252,7 @@ public class FactoresResource {
                         r.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
                         r.setContent(m.getProperty(RestResponse.RESTFUL_SUCCESS));
 
-                        ejbLogger.add(Accion.ACCESS, t.getUserName(), request.getFormName(), "");
+                        ejbLogger.add(Accion.ACCESS, t.getUserName(), Formulario.FACTORES, "");
 
                         return r;
                     } else {
@@ -308,7 +309,7 @@ public class FactoresResource {
                         r.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
                         r.setContent(m.getProperty(RestResponse.RESTFUL_SUCCESS));
 
-                        ejbLogger.add(Accion.ACCESS, t.getUserName(), request.getFormName(), "");
+                        ejbLogger.add(Accion.ACCESS, t.getUserName(), Formulario.FACTORES, "");
 
                         return r;
                     } else {
@@ -364,7 +365,7 @@ public class FactoresResource {
                         r.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
                         r.setContent(m.getProperty(RestResponse.RESTFUL_SUCCESS));
 
-                        ejbLogger.add(Accion.ACCESS, t.getUserName(), request.getFormName(), "");
+                        ejbLogger.add(Accion.ACCESS, t.getUserName(), Formulario.FACTORES, "");
 
                         return r;
                     } else {
@@ -419,7 +420,7 @@ public class FactoresResource {
                         r.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
                         r.setContent(list);
 
-                        ejbLogger.add(Accion.ACCESS, t.getUserName(), request.getFormName(), "");
+                        ejbLogger.add(Accion.ACCESS, t.getUserName(), Formulario.FACTORES, "");
 
                         return r;
                     } else {
@@ -470,12 +471,11 @@ public class FactoresResource {
                         }else {
                             today= new CambioJSON();
                         }
-                        
 
                         r.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
                         r.setContent(today);
 
-                        ejbLogger.add(Accion.ACCESS, t.getUserName(), request.getFormName(), "");
+                        //ejbLogger.add(Accion.ACCESS, t.getUserName(), Formulario.FACTORES, "");
 
                         return r;
                     } else {

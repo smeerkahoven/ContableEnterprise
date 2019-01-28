@@ -26,6 +26,7 @@ import com.services.seguridad.util.RestRequest;
 import com.services.seguridad.util.RestResponse;
 import com.seguridad.utils.ComboSelect;
 import com.util.resource.Mensajes;
+import com.view.menu.Formulario;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -119,7 +120,7 @@ public class PromotorResource extends TemplateResource {
                         //r.setCode(u.getIdEmpleado().getIdEmpresa().getIdEmpresa());
                         r.setContent(l);
 
-                        ejbLogger.add(Accion.ACCESS, t.getUserName(), request.getFormName(), "");
+                        ejbLogger.add(Accion.ACCESS, t.getUserName(), Formulario.PROMOTORES, "");
 
                         return r;
                     } else {
@@ -359,7 +360,7 @@ public class PromotorResource extends TemplateResource {
                         //r.setCode(u.getIdEmpleado().getIdEmpresa().getIdEmpresa());
                         r.setContent(lreturn);
 
-                        ejbLogger.add(Accion.ACCESS, t.getUserName(), request.getFormName(), "");
+                        ejbLogger.add(Accion.ACCESS, t.getUserName(), Formulario.PROMOTORES, "");
 
                         return r;
                     } else {

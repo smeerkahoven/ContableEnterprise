@@ -11,6 +11,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.response.json.ContabilidadBoletajeJSon;
 import com.seguridad.control.exception.CRUDException;
 import com.seguridad.utils.ResponseCode;
 import com.services.TemplateResource;
@@ -93,11 +94,16 @@ public class BoletajeResource extends TemplateResource {
                 List<ContabilidadBoletaje> list = ejbBoletaje.get("ContabilidadBoletaje.find", ContabilidadBoletaje.class, parameters);
                 if (list.isEmpty()) {
                     ContabilidadBoletaje newBoletaje = new ContabilidadBoletaje(idEmpresa);
-                    response.setContent(newBoletaje);
+                    
+                    ContabilidadBoletajeJSon json = ContabilidadBoletajeJSon.toJSon(newBoletaje);
+                    
+                    response.setContent(json);
                     response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
                 } else {
                     ContabilidadBoletaje boletaje = (ContabilidadBoletaje) list.get(0);
-                    response.setContent(boletaje);
+                    
+                    ContabilidadBoletajeJSon json = ContabilidadBoletajeJSon.toJSon(boletaje);
+                    response.setContent(json);
                     response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
                 }
             } catch (CRUDException ex) {
@@ -122,10 +128,12 @@ public class BoletajeResource extends TemplateResource {
                 Gson gson = new GsonBuilder().create();
                 JsonParser parser = new JsonParser();
                 JsonObject object = parser.parse((String)request.getContent()).getAsJsonObject();
+                System.out.println(object.toString());
+                ContabilidadBoletajeJSon json = gson.fromJson(object.toString(), ContabilidadBoletajeJSon.class);
                 
-                ContabilidadBoletaje boletaje = gson.fromJson(object.toString(), ContabilidadBoletaje.class);
+                ContabilidadBoletaje data = ContabilidadBoletajeJSon.toContabilidadBoletaje(json);
                 
-                ejbBoletaje.insert(boletaje);
+                ejbBoletaje.insert(data);
             } catch (CRUDException ex) {
                 Logger.getLogger(BoletajeResource.class.getName()).log(Level.SEVERE, null, ex);
             }

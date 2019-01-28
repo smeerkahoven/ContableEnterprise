@@ -443,7 +443,6 @@ public class BoletoResource extends TemplateResource {
                 if (op.isPresent()) {
 
                     ejbBoleto.insertarBoleto(boleto);
-
                     NotaDebito n = (NotaDebito) ejbNotaDebito.get(new NotaDebito(boleto.getIdNotaDebito()));
 
                     response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
@@ -455,6 +454,39 @@ public class BoletoResource extends TemplateResource {
                 }
 
                 ejbLogger.add(Accion.INSERT, user.getUserName(), Formulario.BOLETOS, user.getIp(), Log.BOLETO_SAVE.replace("<boleto>", boleto.getNumero().toString()));
+            }
+
+        } catch (Exception ex) {
+            Logger.getLogger(BoletoResource.class
+                    .getName()).log(Level.SEVERE, null, ex);
+            response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+            response.setContent(ex.getMessage());
+        }
+
+        return response;
+    }
+
+    @POST
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Path("delete")
+    public RestResponse delete(final RestRequest request) {
+        RestResponse response = doValidations(request);
+
+        try {
+            if (response.getCode() == ResponseCode.RESTFUL_SUCCESS.getCode()) {
+
+                BoletoJSON bjson = convertToBoletoJSON(request);
+                Boleto boleto = BoletoJSON.toNewBoleto(bjson);
+
+                Optional op = Optional.ofNullable(boleto);
+                if (op.isPresent()) {
+                    ejbBoleto.eliminar(boleto);
+                }
+                
+                ejbLogger.add(Accion.DELETE, user.getUserName(), Formulario.BOLETOS, user.getIp(), Log.BOLETO_ANULAR.replace("<boleto>", boleto.getNumero().toString()));
+                response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
+                response.setContent(mensajes.getProperty(RestResponse.RESTFUL_SUCCESS));
             }
 
         } catch (Exception ex) {
@@ -537,7 +569,7 @@ public class BoletoResource extends TemplateResource {
                     op = Optional.ofNullable(n);
                     if (op.isPresent()) {
 
-                        boleto = ejbBoleto.saveBoletoVoid(boleto, n);
+                        boleto = ejbBoleto.saveBoletoVoid(boleto, n, user.getUserName());
 
                         bjson.setIdBoleto(boleto.getIdBoleto());
 
