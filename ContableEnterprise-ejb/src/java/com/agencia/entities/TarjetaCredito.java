@@ -38,7 +38,7 @@ public class TarjetaCredito extends Entidad {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id_tarjeta_credito")
     private Integer idTarjetaCredito;
 

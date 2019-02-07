@@ -5,7 +5,6 @@
  */
 package com.contabilidad.entities;
 
-import com.agencia.entities.BoletoPlanillaBsp;
 import com.agencia.entities.Cliente;
 import com.seguridad.control.entities.Entidad;
 import com.seguridad.control.exception.CRUDException;
@@ -74,7 +73,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "ComprobanteContable.findAll", query = "SELECT c FROM ComprobanteContable c")
     , @NamedQuery(name = "ComprobanteContable.find", query = "SELECT c FROM ComprobanteContable c WHERE c.idLibro=:idLibro")
     , @NamedQuery(name = "ComprobanteContable.findAllComprobanteByNotaDebito", query = "SELECT c FROM ComprobanteContable c WHERE c.idNotaDebito=:idNotaDebito")
-    , @NamedQuery(name = "ComprobanteContable.findAllComprobanteByNotaCredito", query = "SELECT c FROM ComprobanteContable c WHERE c.idNotaDebito=:idNotaDebito")
+    , @NamedQuery(name = "ComprobanteContable.findAllComprobanteByNotaCredito", query = "SELECT c FROM ComprobanteContable c WHERE c.idNotaCredito=:idNotaCredito")
     , @NamedQuery(name = "ComprobanteContable.findAllComprobanteByIngresoCaja", query = "SELECT c FROM ComprobanteContable c WHERE c.idIngresoCaja=:idIngresoCaja")
     , @NamedQuery(name = "ComprobanteContable.findAllComprobanteByPagoAnticipado", query = "SELECT c FROM ComprobanteContable c WHERE c.idPagoAnticipado=:idPagoAnticipado")
 
@@ -85,8 +84,15 @@ import javax.xml.bind.annotation.XmlRootElement;
         query = "select ac.id_asiento idAsiento, ac.id_libro idLibro ,cc.fecha, ac.gestion, ac.fecha_movimiento fechaMovimiento ,ac. id_plan_cuenta idPlanCuenta,\n"
         + "coalesce(ac.monto_debe_nac,0)  montoDebe, coalesce(ac.monto_haber_nac,0)  montoHaber,\n"
         + "ac.id_boleto idBoleto, ac.id_cargo idCargo, ac.id_nota_transaccion idNotaTransaccion, ac.id_ingreso_caja_transaccion idIngresoCajaTransaccion,\n"
-        + "ac.id_nota_credito_transaccion idNotaCreditoTransaccion, ac.id_pago_anticipado idPagoAnticipado, ac.id_pago_anticipado_transaccion idPagoAnticipadoTransaccion, cc.id_cliente idCliente,\n"
+        + "ac.id_nota_credito_transaccion idNotaCreditoTransaccion, ac.id_pago_anticipado idPagoAnticipado,\n"
+        + "ac.id_pago_anticipado_transaccion idPagoAnticipadoTransaccion, ac.id_devolucion idDevolucion, cc.id_cliente idCliente,\n"
         + "cc.id_numero_gestion idNumeroGestion, cc.gestion, cc.concepto, cc.factor_cambiario factorCambiario, cc.tipo\n"
+        + ",(select descripcion from cnt_nota_debito_transaccion where id_nota_debito_transaccion = ac.id_nota_transaccion) ndtrxDescripcion \n"
+        + ",(select descripcion from cnt_nota_credito_transaccion where id_nota_credito_transaccion = ac.id_nota_credito_transaccion) nctrxDescripcion \n"
+        + ",(select descripcion from cnt_ingreso_transaccion where id_transaccion = ac.id_ingreso_caja_transaccion)ictrxDescripcion \n"
+        + ",(select concepto from cnt_pago_anticipado where id_pago_anticipado = ac.id_pago_anticipado) paDescripcion \n"
+        + ",(select descripcion from cnt_pago_anticipado_transaccion where id_pago_anticipado_transaccion=ac.id_pago_anticipado_transaccion)patrxDescripcion \n"
+        + ",(select concepto from cnt_devolucion where id_devolucion = ac.id_devolucion) deDescripcion \n"
         + "from cnt_asiento_contable ac\n"
         + "inner join cnt_comprobante_contable cc on cc.id_libro = ac.id_libro\n"
         + "where cc.id_empresa=?1 and cc.fecha>=?2 and cc.fecha<=?3 and ac.id_plan_cuenta = ?4 and cc.estado='E'",
@@ -98,8 +104,15 @@ import javax.xml.bind.annotation.XmlRootElement;
         query = "select ac.id_asiento idAsiento, ac.id_libro idLibro ,cc.fecha, ac.gestion, ac.fecha_movimiento fechaMovimiento ,ac. id_plan_cuenta idPlanCuenta,\n"
         + "coalesce(ac.monto_debe_ext,0)  montoDebe, coalesce(ac.monto_haber_ext)  montoHaber,\n"
         + "ac.id_boleto idBoleto, ac.id_cargo idCargo, ac.id_nota_transaccion idNotaTransaccion, ac.id_ingreso_caja_transaccion idIngresoTransaccion,\n"
-        + "ac.id_nota_credito_transaccion idNotaCreditoTransaccion, ac.id_pago_anticipado idPagoAnticipado, ac.id_pago_anticipado_transaccion idPagoAnticipadoTransaccion, cc.id_cliente idCliente,\n"
+        + "ac.id_nota_credito_transaccion idNotaCreditoTransaccion, ac.id_pago_anticipado idPagoAnticipado, \n"
+        + "ac.id_pago_anticipado_transaccion idPagoAnticipadoTransaccion, ac.id_devolucion idDevolucion, cc.id_cliente idCliente,\n"
         + "cc.id_numero_gestion idNumeroGestion, cc.gestion, cc.concepto, cc.factor_cambiario factorCambiario, cc.tipo\n"
+        + ",(select descripcion from cnt_nota_debito_transaccion where id_nota_debito_transaccion = ac.id_nota_transaccion) ndtrxDescripcion \n"
+        + ",(select descripcion from cnt_nota_credito_transaccion where id_nota_credito_transaccion = ac.id_nota_credito_transaccion) nctrxDescripcion \n"
+        + ",(select descripcion from cnt_ingreso_transaccion where id_transaccion = ac.id_ingreso_caja_transaccion)ictrxDescripcion \n"
+        + ",(select concepto from cnt_pago_anticipado where id_pago_anticipado = ac.id_pago_anticipado) paDescripcion \n"
+        + ",(select descripcion from cnt_pago_anticipado_transaccion where id_pago_anticipado_transaccion=ac.id_pago_anticipado_transaccion)patrxDescripcion \n"
+        + ",(select concepto from cnt_devolucion where id_devolucion = ac.id_devolucion) deDescripcion \n"
         + "from cnt_asiento_contable ac\n"
         + "inner join cnt_comprobante_contable cc on cc.id_libro = ac.id_libro\n"
         + "where cc.id_empresa=?1 and cc.fecha>=?2 and cc.fecha<=?3 and ac.id_plan_cuenta = ?4 and cc.estado='E'",
@@ -154,12 +167,19 @@ import javax.xml.bind.annotation.XmlRootElement;
                     ,@ColumnResult(name = "idNotaCreditoTransaccion", type = Integer.class)
                     ,@ColumnResult(name = "idPagoAnticipado", type = Integer.class)
                     ,@ColumnResult(name = "idPagoAnticipadoTransaccion", type = Integer.class)
+                    ,@ColumnResult(name = "idDevolucion", type = Integer.class)
                     ,@ColumnResult(name = "idCliente", type = Integer.class)
                     ,@ColumnResult(name = "idNumeroGestion", type = Integer.class)
                     ,@ColumnResult(name = "gestion", type = Integer.class)
                     ,@ColumnResult(name = "concepto", type = String.class)
                     ,@ColumnResult(name = "factorCambiario", type = BigDecimal.class)
                     ,@ColumnResult(name = "tipo", type = String.class)
+                    ,@ColumnResult(name = "ndtrxDescripcion", type = String.class)
+                    ,@ColumnResult(name = "nctrxDescripcion", type = String.class)
+                    ,@ColumnResult(name = "ictrxDescripcion", type = String.class)
+                    ,@ColumnResult(name = "paDescripcion", type = String.class)
+                    ,@ColumnResult(name = "patrxDescripcion", type = String.class)
+                    ,@ColumnResult(name = "deDescripcion", type = String.class)
                 }
         )
 )
@@ -250,11 +270,17 @@ public class ComprobanteContable extends Entidad {
     @Column(name = "con_errores")
     private String conErrores;
 
+    @Column(name = "nombre", length = 64)
+    private String nombre;
+    
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_cliente")
     private Cliente idCliente;
 
     public static String getEstadoNombre(String estado) {
+        if (estado == null){
+            return "-" ;
+        }
         switch (estado) {
             case ComprobanteContable.ANULADO:
                 return "Anulado";
@@ -272,9 +298,22 @@ public class ComprobanteContable extends Entidad {
     @Transient
     private List<AsientoContable> transacciones = new LinkedList<AsientoContable>();
 
+    public ComprobanteContable(Integer idLibro){
+        this.idLibro = idLibro ;
+    }
+    
     public ComprobanteContable() {
     }
 
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    
     public Integer getIdPagoAnticipado() {
         return idPagoAnticipado;
     }

@@ -9,6 +9,7 @@ import com.agencia.entities.Cliente;
 import com.contabilidad.entities.PagoAnticipado;
 import com.seguridad.utils.ComboSelect;
 import com.seguridad.utils.DateContable;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.LinkedList;
 
@@ -16,7 +17,7 @@ import java.util.LinkedList;
  *
  * @author xeio
  */
-public class PagoAnticipadoJson {
+public class PagoAnticipadoJson implements Serializable {
 
     private Integer idPagoAnticipado;
     private Integer idEmpresa;

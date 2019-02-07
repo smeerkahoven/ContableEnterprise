@@ -8,6 +8,7 @@ package com.seguridad.control.remote;
 import com.seguridad.control.entities.Log;
 import com.seguridad.control.entities.UserLogin;
 import com.seguridad.control.exception.CRUDException;
+import com.seguridad.search.LogSearch;
 import com.seguridad.utils.Accion;
 import java.io.Serializable;
 import java.util.List;
@@ -31,6 +32,8 @@ public interface LoggerRemote extends Serializable {
     public boolean add(UserLogin u) throws CRUDException ;
     
     public boolean add(String ip, int intento, String user) throws CRUDException ;
+    
+    public List<Log> find(final LogSearch search) throws CRUDException ;
     
     
 }

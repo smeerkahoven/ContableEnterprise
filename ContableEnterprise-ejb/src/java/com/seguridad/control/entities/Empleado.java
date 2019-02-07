@@ -45,7 +45,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Empleado extends Entidad {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id_empleado")
     private int idEmpleado;
 

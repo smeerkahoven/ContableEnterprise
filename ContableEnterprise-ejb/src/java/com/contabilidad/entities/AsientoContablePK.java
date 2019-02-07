@@ -23,7 +23,7 @@ public class AsientoContablePK implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "id_asiento", updatable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private int idAsiento;
     @Basic(optional = false)
     @NotNull

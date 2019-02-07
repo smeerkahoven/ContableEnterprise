@@ -29,6 +29,7 @@ public class Mayores implements Serializable {
     private Integer idNotaCreditoTransaccion;
     private Integer idPagoAnticipado;
     private Integer idPagoAnticipadoTransaccion;
+    private Integer idDevolucion;
     private Integer idCliente;
     private Integer idNumeroGestion;
     private Integer gestion;
@@ -38,14 +39,26 @@ public class Mayores implements Serializable {
     private Double saldoDebe;
     private Double saldoHaber;
 
+    private String ndtrxDescripcion;
+    private String nctrxDescripcion;
+    private String ictrxDescripcion;
+    private String paDescripcion;
+    private String patrxDescripcion;
+    private String deDescripcion;
+
     public Mayores(Integer idAsiento, Integer idLibro,
             Date fecha, Date fechaMovimiento, Integer idPlanCuenta,
             BigDecimal montoDebe, BigDecimal montoHaber, Integer idBoleto,
             Integer idCargo, Integer idNotaTransaccion,
             Integer idIngresoCajaTransaccion, Integer idNotaCreditoTransaccion,
             Integer idPagoAnticipado, Integer idPagoAnticipadoTransaccion,
+            Integer idDevolucion,
             Integer idCliente, Integer idNumeroGestion, Integer gestion,
-            String concepto, BigDecimal factorCambiario, String tipo) {
+            String concepto, BigDecimal factorCambiario, String tipo,
+            String ndtrxDescripcion, String nctrxDescripcion,
+            String ictrxDescripcion, String paDescripcion,
+            String patrxDescripcion, String deDescripcion
+    ) {
         this.idAsiento = idAsiento;
         this.idLibro = idLibro;
         this.fecha = fecha;
@@ -60,12 +73,76 @@ public class Mayores implements Serializable {
         this.idNotaCreditoTransaccion = idNotaCreditoTransaccion;
         this.idPagoAnticipado = idPagoAnticipado;
         this.idPagoAnticipadoTransaccion = idPagoAnticipadoTransaccion;
+        this.idDevolucion = idDevolucion;
         this.idCliente = idCliente;
         this.idNumeroGestion = idNumeroGestion;
         this.gestion = gestion;
         this.concepto = concepto;
         this.factorCambiario = factorCambiario;
         this.tipo = tipo;
+
+        this.ndtrxDescripcion = ndtrxDescripcion;
+        this.nctrxDescripcion = nctrxDescripcion;
+        this.ictrxDescripcion = ictrxDescripcion;
+        this.paDescripcion = paDescripcion;
+        this.patrxDescripcion = patrxDescripcion;
+        this.deDescripcion = deDescripcion;
+    }
+
+    public Integer getIdDevolucion() {
+        return idDevolucion;
+    }
+
+    public void setIdDevolucion(Integer idDevolucion) {
+        this.idDevolucion = idDevolucion;
+    }
+
+    public String getNdtrxDescripcion() {
+        return ndtrxDescripcion;
+    }
+
+    public void setNdtrxDescripcion(String ndtrxDescripcion) {
+        this.ndtrxDescripcion = ndtrxDescripcion;
+    }
+
+    public String getNctrxDescripcion() {
+        return nctrxDescripcion;
+    }
+
+    public void setNctrxDescripcion(String nctrxDescripcion) {
+        this.nctrxDescripcion = nctrxDescripcion;
+    }
+
+    public String getIctrxDescripcion() {
+        return ictrxDescripcion;
+    }
+
+    public void setIctrxDescripcion(String ictrxDescripcion) {
+        this.ictrxDescripcion = ictrxDescripcion;
+    }
+
+    public String getPaDescripcion() {
+        return paDescripcion;
+    }
+
+    public void setPaDescripcion(String paDescripcion) {
+        this.paDescripcion = paDescripcion;
+    }
+
+    public String getPatrxDescripcion() {
+        return patrxDescripcion;
+    }
+
+    public void setPatrxDescripcion(String patrxDescripcion) {
+        this.patrxDescripcion = patrxDescripcion;
+    }
+
+    public String getDeDescripcion() {
+        return deDescripcion;
+    }
+
+    public void setDeDescripcion(String deDescripcion) {
+        this.deDescripcion = deDescripcion;
     }
 
     public Double getSaldoDebe() {

@@ -32,6 +32,13 @@ public class BoletoPlanillaBsp implements Serializable {
     private BigDecimal montoComision;
     private BigDecimal totalMontoCobrar;
     private String estado;
+    // reporte ventas
+    private String ruta;
+    private String nombrePasajero ;
+    private BigDecimal montoPagarLineaAerea ;
+    // reporte comision cliente
+    private BigDecimal fee;
+    private BigDecimal descuento;
 
     public BoletoPlanillaBsp(Integer idBoleto, Integer idAerolinea, String iata,
             String numero, Boolean ivaItComision, Integer idNotaDebito, String tipoBoleto,
@@ -58,6 +65,105 @@ public class BoletoPlanillaBsp implements Serializable {
         this.estado = estado;
 
     }
+
+    public BoletoPlanillaBsp(Integer idBoleto, Integer idAerolinea, String iata, String numero,
+            Boolean ivaItComision, Integer idNotaDebito, String tipoBoleto, String tipoCupon, 
+            Long ticketNumber, String fechaEmision, String fechaViaje, BigDecimal importeNeto,
+            BigDecimal impuestos, BigDecimal totalBoleto, BigDecimal comision, 
+            BigDecimal montoComision, BigDecimal montoPagarLineaAerea, String estado, 
+            String ruta, String nombrePasajero) {
+        this.idBoleto = idBoleto;
+        this.idAerolinea = idAerolinea;
+        this.iata = iata;
+        this.numero = numero;
+        this.ivaItComision = ivaItComision;
+        this.idNotaDebito = idNotaDebito;
+        this.tipoBoleto = tipoBoleto;
+        this.tipoCupon = tipoCupon;
+        this.ticketNumber = ticketNumber;
+        this.fechaEmision = fechaEmision;
+        this.fechaViaje = fechaViaje;
+        this.importeNeto = importeNeto;
+        this.impuestos = impuestos;
+        this.totalBoleto = totalBoleto;
+        this.comision = comision;
+        this.montoComision = montoComision;
+        this.montoPagarLineaAerea = montoPagarLineaAerea;
+        this.estado = estado;
+        this.ruta = ruta;
+        this.nombrePasajero = nombrePasajero;
+    }
+
+    public BoletoPlanillaBsp(Integer idBoleto, Integer idAerolinea, String iata, String numero,
+            Integer idNotaDebito, String tipoBoleto, String tipoCupon,
+            Long ticketNumber, String fechaEmision, String fechaViaje, 
+            BigDecimal importeNeto, BigDecimal impuestos, 
+            BigDecimal totalBoleto, String ruta, String nombrePasajero, 
+            BigDecimal fee, BigDecimal descuento) {
+        this.idBoleto = idBoleto;
+        this.idAerolinea = idAerolinea;
+        this.iata = iata;
+        this.numero = numero;
+        this.idNotaDebito = idNotaDebito;
+        this.tipoBoleto = tipoBoleto;
+        this.tipoCupon = tipoCupon;
+        this.ticketNumber = ticketNumber;
+        this.fechaEmision = fechaEmision;
+        this.fechaViaje = fechaViaje;
+        this.importeNeto = importeNeto;
+        this.impuestos = impuestos;
+        this.totalBoleto = totalBoleto;
+        this.ruta = ruta;
+        this.nombrePasajero = nombrePasajero;
+        this.fee = fee;
+        this.descuento = descuento;
+    }
+
+    public BigDecimal getMontoPagarLineaAerea() {
+        return montoPagarLineaAerea;
+    }
+
+    public void setMontoPagarLineaAerea(BigDecimal montoPagarLineaAerea) {
+        this.montoPagarLineaAerea = montoPagarLineaAerea;
+    }
+
+    
+    
+    public BigDecimal getFee() {
+        return fee;
+    }
+
+    public void setFee(BigDecimal fee) {
+        this.fee = fee;
+    }
+
+    public BigDecimal getDescuento() {
+        return descuento;
+    }
+
+    public void setDescuento(BigDecimal descuento) {
+        this.descuento = descuento;
+    }
+    
+    
+
+    public String getRuta() {
+        return ruta;
+    }
+
+    public void setRuta(String ruta) {
+        this.ruta = ruta;
+    }
+
+    public String getNombrePasajero() {
+        return nombrePasajero;
+    }
+
+    public void setNombrePasajero(String nombrePasajero) {
+        this.nombrePasajero = nombrePasajero;
+    }
+    
+    
 
     public BigDecimal getTotalMontoCobrar() {
         return totalMontoCobrar;

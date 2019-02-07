@@ -12,6 +12,7 @@ import com.contabilidad.entities.NotaDebitoTransaccion;
 import com.contabilidad.entities.PlanCuentas;
 import com.seguridad.utils.ComboSelect;
 import com.seguridad.utils.DateContable;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
@@ -20,7 +21,7 @@ import java.util.List;
  *
  * @author xeio
  */
-public class NotaCreditoTransaccionJson {
+public class NotaCreditoTransaccionJson implements Serializable {
 
     private Integer idNotaCreditoTransaccion;
     private String descripcion;

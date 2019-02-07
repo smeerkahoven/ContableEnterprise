@@ -9,6 +9,7 @@ import com.agencia.entities.Cliente;
 import com.contabilidad.entities.ComprobanteContable;
 import com.seguridad.utils.ComboSelect;
 import com.seguridad.utils.DateContable;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
@@ -17,7 +18,7 @@ import java.util.List;
  *
  * @author xeio
  */
-public class ComprobanteContableJSON {
+public class ComprobanteContableJSON implements Serializable{
 
     private Integer idLibro;
     private Integer idNumeroGestion;
@@ -69,6 +70,7 @@ public class ComprobanteContableJSON {
         newc.setTotalHaberNac(c.getTotalHaberMonNac());
         newc.setFechaInsert(DateContable.getCurrentDate());
         newc.setConErrores(c.getConErrores());
+        newc.setNombre(c.getNombre());
 
         return newc;
     }
@@ -98,6 +100,7 @@ public class ComprobanteContableJSON {
         json.setTotalHaberMonExt(c.getTotalHaberExt());
         json.setTotalHaberMonNac(c.getTotalHaberNac());
         json.setEstadoNombre(ComprobanteContable.getEstadoNombre(c.getEstado()));
+        json.setNombre(c.getNombre());
 
         return json;
     }

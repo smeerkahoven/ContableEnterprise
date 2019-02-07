@@ -33,8 +33,9 @@ import javax.validation.constraints.Size;
 @Table(name = "cnt_ingreso_transaccion")
 @NamedQueries({
     @NamedQuery(name = "IngresoTransaccion.findAll", query = "SELECT i FROM IngresoTransaccion i")
-    ,@NamedQuery(name = "IngresoTransaccion.findByIdNotaTransaccion", query = "SELECT i from IngresoTransaccion i WHERE i.idNotaTransaccion=:idNotaTransaccion and i.estado='E'")
+    ,@NamedQuery(name = "IngresoTransaccion.findByIdNotaTransaccion", query = "SELECT i from IngresoTransaccion i WHERE i.idNotaTransaccion=:idNotaTransaccion")
     ,@NamedQuery(name = "IngresoTransaccion.findByIdIngresoCaja", query = "SELECT i from IngresoTransaccion i WHERE i.idIngresoCaja=:idIngresoCaja")
+    ,@NamedQuery(name = "IngresoTransaccion.findByIdNotaDebito", query = "SELECT i from IngresoTransaccion i WHERE i.idNotaTransaccion.idNotaDebito = :idNotaDebito")
 })
 public class IngresoTransaccion extends Entidad {
 

@@ -12,21 +12,14 @@ import java.io.Serializable;
  *
  * @author xeio
  */
-public class PlanillaSearchForm implements Serializable {
+public class VentaBoletosSearchJson implements Serializable {
 
     private String fechaInicio;
     private String fechaFin;
-    private ComboSelect idPromotor;
+    private ComboSelect idAerolinea;
+    private ComboSelect idCliente;
     private Integer idEmpresa;
     private String tipoCupon;
-
-    public Integer getIdEmpresa() {
-        return idEmpresa;
-    }
-
-    public void setIdEmpresa(Integer idEmpresa) {
-        this.idEmpresa = idEmpresa;
-    }
 
     public String getTipoCupon() {
         return tipoCupon;
@@ -34,6 +27,14 @@ public class PlanillaSearchForm implements Serializable {
 
     public void setTipoCupon(String tipoCupon) {
         this.tipoCupon = tipoCupon;
+    }
+
+    public Integer getIdEmpresa() {
+        return idEmpresa;
+    }
+
+    public void setIdEmpresa(Integer idEmpresa) {
+        this.idEmpresa = idEmpresa;
     }
 
     public String getFechaInicio() {
@@ -52,12 +53,20 @@ public class PlanillaSearchForm implements Serializable {
         this.fechaFin = fechaFin;
     }
 
-    public ComboSelect getIdPromotor() {
-        return idPromotor;
+    public ComboSelect getIdAerolinea() {
+        return idAerolinea;
     }
 
-    public void setIdPromotor(ComboSelect idPromotor) {
-        this.idPromotor = idPromotor;
+    public void setIdAerolinea(ComboSelect idAerolinea) {
+        this.idAerolinea = idAerolinea;
+    }
+
+    public ComboSelect getIdCliente() {
+        return idCliente;
+    }
+
+    public void setIdCliente(ComboSelect idCliente) {
+        this.idCliente = idCliente;
     }
 
 }

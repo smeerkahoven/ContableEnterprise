@@ -44,6 +44,9 @@ public class Formulario implements Serializable {
     public static final String REPORTES_AGENCIA = "reportes-agencia";
     public static final String REPORTES_CONTABILIDAD = "reportes-contabilidad";
     public static final String REPORTES_VENTAS_BOLETOS = "reportes-ventas-boletos";
+    public static final String REPORTES_COMISION_CLIENTE = "reportes-comision-cliente";
+    //cobranzas
+    public static final String KARDEX_CLIENTE = "kardex-cliente";
 
     public int PERMITIR = 1;
     public int DENEGAR = 0;

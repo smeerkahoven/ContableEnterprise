@@ -5,6 +5,7 @@
  */
 package com.contabilidad.entities;
 
+import com.agencia.entities.Boleto;
 import com.seguridad.control.entities.Entidad;
 import com.seguridad.control.exception.CRUDException;
 import java.math.BigDecimal;
@@ -12,9 +13,12 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -55,27 +59,35 @@ public class AsientoContable extends Entidad {
         public static final String ALQUILER_AUTO = "A";
         public static final String RESERVA = "R";
         //---------------------------------------------
+        public static final String NOTA_DEBITO_TRANSACCION = "N";
+        public static final String NOTA_CREDITO_TRANSACCION = "E";
+        public static final String INGRESO_CAJA_TRANSACCION = "I";
+        public static final String PAGO_ANTICIPADO = "G";
+        public static final String PAGO_ANTICIPADO_TRANSACCION = "O";
+        public static final String DEVOLUCION = "D";
     }
 
     private static final long serialVersionUID = 1L;
     @Id
+    @Column(name = "id_asiento")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Integer idAsiento;
     @Basic(optional = false)
     @NotNull
-    @Column(name = "id_asiento", updatable = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int idAsiento;
-    @Basic(optional = false)
-    @NotNull
+    
     @Column(name = "gestion", updatable = false)
-    private int gestion;
+    private Integer gestion;
     @Size(max = 2)
     @Column(name = "estado")
     private String estado;
     @Column(name = "fecha_movimiento", updatable = false)
     @Temporal(TemporalType.DATE)
     private Date fechaMovimiento;
-    @Column(name = "id_libro", updatable = false)
-    private Integer idLibro;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_libro")
+    private ComprobanteContable idLibro;
+
     @Column(name = "id_plan_cuenta")
     private Integer idPlanCuenta;
     @Size(max = 1)
@@ -90,20 +102,39 @@ public class AsientoContable extends Entidad {
     @Column(name = "monto_haber_nac")
     private BigDecimal montoHaberNac;
 
-    @Column(name = "id_boleto")
-    private Integer idBoleto;
-    @Column(name = "id_nota_transaccion")
-    private Integer idNotaTransaccion;
-    @Column(name = "id_nota_credito_transaccion")
-    private Integer idNotaCreditoTransaccion;
-    @Column(name = "id_ingreso_caja_transaccion")
-    private Integer idIngresoCajaTransaccion;
-    @Column(name = "id_pago_anticipado")
-    private Integer idPagoAnticipado;
-    @Column(name = "id_pago_anticipado_transaccion")
-    private Integer idPagoAnticipadoTransaccion;
-    @Column(name = "id_cargo")
-    private Integer idCargo;
+    // Relaciones con los Objetos
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_boleto")
+    private Boleto idBoleto;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_nota_transaccion")
+    private NotaDebitoTransaccion idNotaTransaccion;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_nota_credito_transaccion")
+    private NotaCreditoTransaccion idNotaCreditoTransaccion;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_ingreso_caja_transaccion")
+    private IngresoTransaccion idIngresoCajaTransaccion;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_pago_anticipado")
+    private PagoAnticipado idPagoAnticipado;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_pago_anticipado_transaccion")
+    private PagoAnticipadoTransaccion idPagoAnticipadoTransaccion;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_devolucion")
+    private Devolucion idDevolucion;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_cargo")
+    private CargoBoleto idCargo;
+
     @Column(name = "tipo")
     private String tipo;
 
@@ -121,22 +152,6 @@ public class AsientoContable extends Entidad {
         this.idUsuarioAnular = idUsuarioAnular;
     }
 
-    public Integer getIdPagoAnticipadoTransaccion() {
-        return idPagoAnticipadoTransaccion;
-    }
-
-    public void setIdPagoAnticipadoTransaccion(Integer idPagoAnticipadoTransaccion) {
-        this.idPagoAnticipadoTransaccion = idPagoAnticipadoTransaccion;
-    }
-
-    public Integer getIdNotaCreditoTransaccion() {
-        return idNotaCreditoTransaccion;
-    }
-
-    public void setIdNotaCreditoTransaccion(Integer idNotaCreditoTransaccion) {
-        this.idNotaCreditoTransaccion = idNotaCreditoTransaccion;
-    }
-
     public String getTipo() {
         return tipo;
     }
@@ -145,28 +160,12 @@ public class AsientoContable extends Entidad {
         this.tipo = tipo;
     }
 
-    public Integer getIdCargo() {
+    public CargoBoleto getIdCargo() {
         return idCargo;
     }
 
-    public void setIdCargo(Integer idCargo) {
+    public void setIdCargo(CargoBoleto idCargo) {
         this.idCargo = idCargo;
-    }
-
-    public Integer getIdIngresoCajaTransaccion() {
-        return idIngresoCajaTransaccion;
-    }
-
-    public void setIdIngresoCajaTransaccion(Integer idIngresoCajaTransaccion) {
-        this.idIngresoCajaTransaccion = idIngresoCajaTransaccion;
-    }
-
-    public Integer getIdNotaTransaccion() {
-        return idNotaTransaccion;
-    }
-
-    public void setIdNotaTransaccion(Integer idNotaTransaccion) {
-        this.idNotaTransaccion = idNotaTransaccion;
     }
 
     public String getEstado() {
@@ -185,11 +184,11 @@ public class AsientoContable extends Entidad {
         this.fechaMovimiento = fechaMovimiento;
     }
 
-    public Integer getIdLibro() {
+    public ComprobanteContable getIdLibro() {
         return idLibro;
     }
 
-    public void setIdLibro(Integer idLibro) {
+    public void setIdLibro(ComprobanteContable idLibro) {
         this.idLibro = idLibro;
     }
 
@@ -241,12 +240,36 @@ public class AsientoContable extends Entidad {
         this.montoHaberNac = montoHaberNac;
     }
 
-    public Integer getIdBoleto() {
+    public Boleto getIdBoleto() {
         return idBoleto;
     }
 
-    public void setIdBoleto(Integer idBoleto) {
+    public void setIdBoleto(Boleto idBoleto) {
         this.idBoleto = idBoleto;
+    }
+
+    public NotaDebitoTransaccion getIdNotaTransaccion() {
+        return idNotaTransaccion;
+    }
+
+    public void setIdNotaTransaccion(NotaDebitoTransaccion idNotaTransaccion) {
+        this.idNotaTransaccion = idNotaTransaccion;
+    }
+
+    public NotaCreditoTransaccion getIdNotaCreditoTransaccion() {
+        return idNotaCreditoTransaccion;
+    }
+
+    public void setIdNotaCreditoTransaccion(NotaCreditoTransaccion idNotaCreditoTransaccion) {
+        this.idNotaCreditoTransaccion = idNotaCreditoTransaccion;
+    }
+
+    public IngresoTransaccion getIdIngresoCajaTransaccion() {
+        return idIngresoCajaTransaccion;
+    }
+
+    public void setIdIngresoCajaTransaccion(IngresoTransaccion idIngresoCajaTransaccion) {
+        this.idIngresoCajaTransaccion = idIngresoCajaTransaccion;
     }
 
     @Override
@@ -278,19 +301,19 @@ public class AsientoContable extends Entidad {
         return true;
     }
 
-    public int getIdAsiento() {
+    public Integer getIdAsiento() {
         return idAsiento;
     }
 
-    public void setIdAsiento(int idAsiento) {
+    public void setIdAsiento(Integer idAsiento) {
         this.idAsiento = idAsiento;
     }
 
-    public int getGestion() {
+    public Integer getGestion() {
         return gestion;
     }
 
-    public void setGestion(int gestion) {
+    public void setGestion(Integer gestion) {
         this.gestion = gestion;
     }
 
@@ -299,12 +322,28 @@ public class AsientoContable extends Entidad {
         return this.idAsiento;
     }
 
-    public Integer getIdPagoAnticipado() {
+    public PagoAnticipado getIdPagoAnticipado() {
         return idPagoAnticipado;
     }
 
-    public void setIdPagoAnticipado(Integer idPagoAnticipado) {
+    public void setIdPagoAnticipado(PagoAnticipado idPagoAnticipado) {
         this.idPagoAnticipado = idPagoAnticipado;
+    }
+
+    public PagoAnticipadoTransaccion getIdPagoAnticipadoTransaccion() {
+        return idPagoAnticipadoTransaccion;
+    }
+
+    public void setIdPagoAnticipadoTransaccion(PagoAnticipadoTransaccion idPagoAnticipadoTransaccion) {
+        this.idPagoAnticipadoTransaccion = idPagoAnticipadoTransaccion;
+    }
+
+    public Devolucion getIdDevolucion() {
+        return idDevolucion;
+    }
+
+    public void setIdDevolucion(Devolucion idDevolucion) {
+        this.idDevolucion = idDevolucion;
     }
 
     @Override

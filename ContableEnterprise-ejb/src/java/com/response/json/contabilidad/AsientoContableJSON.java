@@ -6,8 +6,11 @@
 package com.response.json.contabilidad;
 
 import com.contabilidad.entities.AsientoContable;
+import com.contabilidad.entities.ComprobanteContable;
+import com.response.json.agencia.BoletoJSON;
 import com.seguridad.utils.ComboSelect;
 import com.seguridad.utils.DateContable;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.LinkedList;
 import java.util.List;
@@ -16,13 +19,13 @@ import java.util.List;
  *
  * @author xeio
  */
-public class AsientoContableJSON {
+public class AsientoContableJSON implements Serializable {
 
-    private int idAsiento;
-    private int gestion;
+    private Integer idAsiento;
+    private Integer gestion;
     private String estado;
     private String fechaMovimiento;
-    private Integer idLibro;
+    private ComprobanteContableJSON idLibro;
     private ComboSelect idPlanCuenta;
     private String moneda;
     private BigDecimal debeMonExt;
@@ -31,12 +34,20 @@ public class AsientoContableJSON {
     private BigDecimal haberMonNac;
     private String action;
 
-    private Integer idBoleto;
-    private Integer idCargo;
-    private Integer idNotaTransaccion;
-    private Integer idIngresoCajaTransaccion;
-    private Integer idNotaCreditoTransaccion ;
+    private BoletoJSON idBoleto;
+    private CargoBoletoJSON idCargo;
+    private NotaDebitoTransaccionJson idNotaTransaccion;
+    private IngresoTransaccionJson idIngresoCajaTransaccion;
+    private NotaCreditoTransaccionJson idNotaCreditoTransaccion;
+    private PagoAnticipadoJson idPagoAnticipado;
+    private PagoAnticipadoTransaccionJson idPagoAnticipadoTransaccion;
+    private DevolucionJson idDevolucion;
+    private String idUsuarioAnular;
     private String tipo;
+
+    private String concepto;
+    private Integer idTransaccion;
+    private String tipoTransaccion;
 
     public static AsientoContable toAsientoContable(AsientoContableJSON a) {
         System.out.println(a.getIdPlanCuenta().getId());
@@ -49,7 +60,10 @@ public class AsientoContableJSON {
         anew.setIdAsiento(a.getIdAsiento());
         anew.setGestion(a.getGestion());
 
-        anew.setIdLibro(a.getIdLibro());
+        if (a.getIdLibro() != null) {
+            anew.setIdLibro(new ComprobanteContable(a.getIdLibro().getIdLibro()));
+        }
+
         anew.setIdPlanCuenta(idPlanCuenta.intValue());
         anew.setMoneda(a.getMoneda());
         anew.setMontoDebeExt(a.getDebeMonExt());
@@ -80,61 +94,172 @@ public class AsientoContableJSON {
         json.setFechaMovimiento(DateContable.getDateFormat(a.getFechaMovimiento(), DateContable.LATIN_AMERICA_TIME_FORMAT));
         json.setHaberMonExt(a.getMontoHaberExt());
         json.setHaberMonNac(a.getMontoHaberNac());
-        json.setIdLibro(a.getIdLibro());
+        json.setIdLibro(ComprobanteContableJSON.toComprobanteContableJSON(a.getIdLibro()));
         ComboSelect s = new ComboSelect();
         s.setId(a.getIdPlanCuenta());
         json.setIdPlanCuenta(s);
         json.setMoneda(a.getMoneda());
-        
+
         json.setTipo(a.getTipo());
-        json.setIdBoleto(a.getIdBoleto());
-        json.setIdNotaTransaccion(a.getIdNotaTransaccion());
-        json.setIdIngresoCajaTransaccion(a.getIdIngresoCajaTransaccion());
-        json.setIdNotaCreditoTransaccion(a.getIdNotaCreditoTransaccion());
-        json.setIdCargo(a.getIdCargo());
+
+        if (a.getIdCargo() != null) {
+            json.setIdCargo(CargoBoletoJSON.toCargoBoletoJSON(a.getIdCargo()));
+        }
+
+        if (a.getIdPagoAnticipado() != null) {
+            json.setIdPagoAnticipado(PagoAnticipadoJson.toPagoAnticipadoJson(a.getIdPagoAnticipado()));
+        }
+
+        if (a.getIdBoleto() != null) {
+            json.setIdBoleto(BoletoJSON.toBoletoJSON(a.getIdBoleto()));
+        }
+
+        if (a.getIdNotaTransaccion() != null) {
+            json.setIdNotaTransaccion(NotaDebitoTransaccionJson.toNotaDebitoTransaccionJson(a.getIdNotaTransaccion()));
+        }
+
+        if (a.getIdIngresoCajaTransaccion() != null) {
+            json.setIdIngresoCajaTransaccion(IngresoTransaccionJson.toIngresoTransaccionJson(a.getIdIngresoCajaTransaccion()));
+        }
+
+        if (a.getIdNotaCreditoTransaccion() != null) {
+            json.setIdNotaCreditoTransaccion(NotaCreditoTransaccionJson.toNotaCreditoTransaccionJsOn(a.getIdNotaCreditoTransaccion()));
+        }
+
+        if (a.getIdPagoAnticipadoTransaccion() != null) {
+            json.setIdPagoAnticipadoTransaccion(PagoAnticipadoTransaccionJson.toPagoAnticipadoTransaccionJsOn(a.getIdPagoAnticipadoTransaccion()));
+        }
+
+        if (a.getIdDevolucion() != null) {
+            json.setIdDevolucion(DevolucionJson.toDevolucionJson(a.getIdDevolucion()));
+        }
+
+        if (a.getIdNotaTransaccion() != null) {
+            json.setConcepto(a.getIdNotaTransaccion().getDescripcion());
+            json.setIdTransaccion(a.getIdNotaTransaccion().getIdNotaDebito().getIdNotaDebito());
+            json.setTipoTransaccion("ND");//NOTA DEBITO
+        } else if (a.getIdNotaCreditoTransaccion() != null) {
+            json.setConcepto(a.getIdNotaCreditoTransaccion().getDescripcion());
+            json.setIdTransaccion(a.getIdNotaCreditoTransaccion().getIdNotaCredito().getIdNotaCredito());
+            json.setTipoTransaccion("NC"); // NOTA CREDITO
+        } else if (a.getIdIngresoCajaTransaccion() != null) {
+            json.setConcepto(a.getIdIngresoCajaTransaccion().getDescripcion());
+            json.setIdTransaccion(a.getIdIngresoCajaTransaccion().getIdIngresoCaja().getIdIngresoCaja());
+            json.setTipoTransaccion("IC");// INGRESO CAJA
+        } else if (a.getIdPagoAnticipadoTransaccion() != null) {
+            json.setConcepto(a.getIdPagoAnticipadoTransaccion().getDescripcion());
+            json.setIdTransaccion(a.getIdPagoAnticipadoTransaccion().getIdPagoAnticipado().getIdPagoAnticipado());
+            json.setTipoTransaccion("PA"); //PAGO ANTICIPADO
+        } else if (a.getIdPagoAnticipado() != null) {
+            json.setConcepto(a.getIdPagoAnticipado().getConcepto());
+            json.setIdTransaccion(a.getIdPagoAnticipado().getIdPagoAnticipado());
+            json.setTipoTransaccion("PA"); //PAGO ANTICIPADO
+        } else if (a.getIdDevolucion() != null) {
+            json.setConcepto(a.getIdDevolucion().getConcepto());
+            json.setIdTransaccion(a.getIdDevolucion().getIdDevolucion());
+            json.setTipoTransaccion("DE"); // DEVOLUCION
+        } else {
+            json.setConcepto(a.getIdLibro().getConcepto());
+        }
+
+        json.setIdUsuarioAnular(a.getIdUsuarioAnular());
 
         return json;
     }
 
-    public Integer getIdNotaCreditoTransaccion() {
-        return idNotaCreditoTransaccion;
+    public String getConcepto() {
+        return concepto;
     }
 
-    public void setIdNotaCreditoTransaccion(Integer idNotaCreditoTransaccion) {
-        this.idNotaCreditoTransaccion = idNotaCreditoTransaccion;
-    }
-    
-    
-
-    public Integer getIdBoleto() {
-        return idBoleto;
+    public void setConcepto(String concepto) {
+        this.concepto = concepto;
     }
 
-    public void setIdBoleto(Integer idBoleto) {
-        this.idBoleto = idBoleto;
+    public Integer getIdTransaccion() {
+        return idTransaccion;
     }
 
-    public Integer getIdCargo() {
+    public void setIdTransaccion(Integer idTransaccion) {
+        this.idTransaccion = idTransaccion;
+    }
+
+    public String getTipoTransaccion() {
+        return tipoTransaccion;
+    }
+
+    public void setTipoTransaccion(String tipoTransaccion) {
+        this.tipoTransaccion = tipoTransaccion;
+    }
+
+    public CargoBoletoJSON getIdCargo() {
         return idCargo;
     }
 
-    public void setIdCargo(Integer idCargo) {
+    public void setIdCargo(CargoBoletoJSON idCargo) {
         this.idCargo = idCargo;
     }
 
-    public Integer getIdNotaTransaccion() {
+    public PagoAnticipadoJson getIdPagoAnticipado() {
+        return idPagoAnticipado;
+    }
+
+    public void setIdPagoAnticipado(PagoAnticipadoJson idPagoAnticipado) {
+        this.idPagoAnticipado = idPagoAnticipado;
+    }
+
+    public PagoAnticipadoTransaccionJson getIdPagoAnticipadoTransaccion() {
+        return idPagoAnticipadoTransaccion;
+    }
+
+    public void setIdPagoAnticipadoTransaccion(PagoAnticipadoTransaccionJson idPagoAnticipadoTransaccion) {
+        this.idPagoAnticipadoTransaccion = idPagoAnticipadoTransaccion;
+    }
+
+    public DevolucionJson getIdDevolucion() {
+        return idDevolucion;
+    }
+
+    public void setIdDevolucion(DevolucionJson idDevolucion) {
+        this.idDevolucion = idDevolucion;
+    }
+
+    public String getIdUsuarioAnular() {
+        return idUsuarioAnular;
+    }
+
+    public void setIdUsuarioAnular(String idUsuarioAnular) {
+        this.idUsuarioAnular = idUsuarioAnular;
+    }
+
+    public NotaCreditoTransaccionJson getIdNotaCreditoTransaccion() {
+        return idNotaCreditoTransaccion;
+    }
+
+    public void setIdNotaCreditoTransaccion(NotaCreditoTransaccionJson idNotaCreditoTransaccion) {
+        this.idNotaCreditoTransaccion = idNotaCreditoTransaccion;
+    }
+
+    public BoletoJSON getIdBoleto() {
+        return idBoleto;
+    }
+
+    public void setIdBoleto(BoletoJSON idBoleto) {
+        this.idBoleto = idBoleto;
+    }
+
+    public NotaDebitoTransaccionJson getIdNotaTransaccion() {
         return idNotaTransaccion;
     }
 
-    public void setIdNotaTransaccion(Integer idNotaTransaccion) {
+    public void setIdNotaTransaccion(NotaDebitoTransaccionJson idNotaTransaccion) {
         this.idNotaTransaccion = idNotaTransaccion;
     }
 
-    public Integer getIdIngresoCajaTransaccion() {
+    public IngresoTransaccionJson getIdIngresoCajaTransaccion() {
         return idIngresoCajaTransaccion;
     }
 
-    public void setIdIngresoCajaTransaccion(Integer idIngresoCajaTransaccion) {
+    public void setIdIngresoCajaTransaccion(IngresoTransaccionJson idIngresoCajaTransaccion) {
         this.idIngresoCajaTransaccion = idIngresoCajaTransaccion;
     }
 
@@ -146,7 +271,6 @@ public class AsientoContableJSON {
         this.tipo = tipo;
     }
 
-    
     public String getAction() {
         return action;
     }
@@ -187,11 +311,11 @@ public class AsientoContableJSON {
         this.fechaMovimiento = fechaMovimiento;
     }
 
-    public Integer getIdLibro() {
+    public ComprobanteContableJSON getIdLibro() {
         return idLibro;
     }
 
-    public void setIdLibro(Integer idLibro) {
+    public void setIdLibro(ComprobanteContableJSON idLibro) {
         this.idLibro = idLibro;
     }
 

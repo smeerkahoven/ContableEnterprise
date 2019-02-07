@@ -60,13 +60,69 @@ import javax.xml.bind.annotation.XmlRootElement;
         + "             + coalesce(bo.impuesto_5,0)) impuestos,\n"
         + "      coalesce(bo.total_boleto,0) totalBoleto, coalesce(bo.comision,0) comision,\n"
         + "      coalesce(bo.monto_comision,0) montoComision ,\n"
-        + "      bo.total_monto_cobrar totalMontoCobrar ,\n"
+        + "      bo.monto_pagar_linea_aerea totalMontoCobrar ,\n"
         + "      case bo.tipo_boleto when 'MV' then 'VOID' when 'SV' then 'VOID' when 'AV' then 'VOID' else '' end estado\n"
         + " from cnt_boleto bo\n"
         + " inner join cnt_aerolinea ae on ae.id_aerolinea = bo.id_aerolinea\n"
         + " where bo.id_nota_debito is not null and fecha_emision >= ?1 and fecha_emision <=?2 \n"
-        + " and bo.id_empresa = ?3 ORDER BY bo.fecha_emision",
+        + " and bo.id_empresa = ?3 and bo.tipo_cupon = ?4 ORDER BY bo.fecha_emision",
         resultSetMapping = "BoletoPlanillaBsp2"
+)
+
+@NamedNativeQuery(
+        name = "Boleto.getReporteVentas",
+        query = "select \n"
+        + "	 bo.id_boleto idBoleto, bo.id_aerolinea idAerolinea, ae.iata, ae.numero, ae.iva_it_comision ivaItComision,\n"
+        + "      bo.id_nota_debito idNotaDebito, bo.tipo_boleto tipoBoleto, bo.tipo_cupon tipoCupon, bo.numero ticketNumber,\n"
+        + "      date_format(bo.fecha_emision,'%d/%m/%y') fechaEmision,\n"
+        + "      coalesce(date_format(bo.fecha_viaje,'%d/%m/%y'),'') fechaViaje , \n"
+        + "      coalesce (bo.importe_neto ,0)importeNeto,\n"
+        + "      (coalesce(bo.impuesto_bob,0) + coalesce(bo.impuesto_qm,0) \n"
+        + "		+ coalesce(bo.impuesto_1,0) + coalesce(bo.impuesto_2,0)\n"
+        + "             + coalesce(bo.impuesto_3,0) + coalesce(bo.impuesto_4,0) \n"
+        + "             + coalesce(bo.impuesto_5,0)) impuestos,\n"
+        + "      coalesce(bo.total_boleto,0) totalBoleto, coalesce(bo.comision,0) comision,\n"
+        + "      coalesce(bo.monto_comision,0) montoComision ,\n"
+        + "      bo.monto_pagar_linea_aerea montoPagarLineaAerea ,\n"
+        + "      case bo.tipo_boleto when 'MV' then 'VOID' when 'SV' then 'VOID' when 'AV' then 'VOID' else '' end estado,\n"
+        + "      concat (coalesce(bo.id_ruta_1,''),'/', coalesce(bo.id_ruta_2,''),'/',coalesce(bo.id_ruta_3,''),'/',coalesce(bo.id_ruta_4,''),'/',coalesce(bo.id_ruta_5,'')) ruta, \n"
+	+ "      coalesce(bo.nombre_pasajero,'') nombrePasajero \n"
+        + " from cnt_boleto bo\n"
+        + " inner join cnt_aerolinea ae on ae.id_aerolinea = bo.id_aerolinea\n"
+        + " where bo.id_nota_debito is not null and bo.fecha_emision >= ?2 and bo.fecha_emision <=?3  and bo.id_aerolinea =?4 \n"
+        + " and bo.id_empresa = ?1 and bo.tipo_cupon=?5 ORDER BY bo.fecha_emision",
+        resultSetMapping = "BoletoPlanillaBsp3"
+)
+
+@NamedNativeQuery(
+        name = "Boleto.getReporteComisionCliente",
+        query = "select \n"
+        + "      bo.id_boleto idBoleto\n"
+        + "      , bo.id_aerolinea idAerolinea\n"
+        + "      , ae.iata\n"
+        + "      , ae.numero\n"
+        + "      , bo.id_nota_debito idNotaDebito\n"
+        + "      , bo.tipo_boleto tipoBoleto\n"
+        + "      , bo.tipo_cupon tipoCupon\n"
+        + "      , bo.numero ticketNumber\n"
+        + "      , date_format(bo.fecha_emision,'%d/%m/%y') fechaEmision,\n"
+        + "      coalesce(date_format(bo.fecha_viaje,'%d/%m/%y'),'') fechaViaje , \n"
+        + "      coalesce (bo.importe_neto ,0)importeNeto,\n"
+        + "      (coalesce(bo.impuesto_bob,0) + coalesce(bo.impuesto_qm,0) \n"
+        + "      + coalesce(bo.impuesto_1,0) + coalesce(bo.impuesto_2,0)\n"
+        + "      + coalesce(bo.impuesto_3,0) + coalesce(bo.impuesto_4,0) \n"
+        + "      + coalesce(bo.impuesto_5,0)) impuestos\n"
+        + "      , coalesce(bo.total_boleto,0) totalBoleto\n"
+        + "      , concat (coalesce(bo.id_ruta_1,''),'/', coalesce(bo.id_ruta_2,''),'/',coalesce(bo.id_ruta_3,''),'/',coalesce(bo.id_ruta_4,''),'/',coalesce(bo.id_ruta_5,'')) ruta\n"
+        + "      , coalesce(bo.nombre_pasajero,'') nombrePasajero\n"
+        + "      , coalesce(bo.monto_fee, 0.00) fee\n"
+        + "      , coalesce(bo.monto_descuento,0.00)descuento\n"
+        + " from cnt_boleto bo\n"
+        + " inner join cnt_aerolinea ae on ae.id_aerolinea = bo.id_aerolinea\n"
+        + " inner join cnt_nota_debito nd on nd.id_nota_debito = bo.id_nota_debito\n"
+        + " where bo.id_nota_debito is not null and bo.fecha_emision >= ?2 and bo.fecha_emision <=?3  and nd.id_cliente=?4 \n"
+        + " and bo.id_empresa = ?1 and bo.tipo_cupon=?5 ORDER BY bo.fecha_emision",
+        resultSetMapping = "BoletoComisionCliente"
 )
 
 @SqlResultSetMapping(
@@ -95,6 +151,65 @@ import javax.xml.bind.annotation.XmlRootElement;
                 }
         )
 )
+
+// Reporte Venta Boletos
+@SqlResultSetMapping(
+        name = "BoletoPlanillaBsp3",
+        classes = @ConstructorResult(
+                targetClass = BoletoPlanillaBsp.class,
+                columns = {
+                    @ColumnResult(name = "idBoleto", type = Integer.class)
+                    ,@ColumnResult(name = "idAerolinea", type =Integer.class)
+                    ,@ColumnResult(name = "iata", type = String.class)
+                    ,@ColumnResult(name = "numero", type =String.class)
+                    ,@ColumnResult(name = "ivaItComision", type= Boolean.class)
+                    ,@ColumnResult(name = "idNotaDebito", type =Integer.class)
+                    ,@ColumnResult(name = "tipoBoleto", type =String.class)
+                    ,@ColumnResult(name = "tipoCupon", type =String.class)
+                    ,@ColumnResult(name = "ticketNumber", type = Long.class)
+                    ,@ColumnResult(name = "fechaEmision", type = String.class)
+                    ,@ColumnResult(name = "fechaViaje", type = String.class)
+                    ,@ColumnResult(name = "importeNeto" , type = BigDecimal.class)
+                    ,@ColumnResult(name = "impuestos", type = BigDecimal.class)
+                    ,@ColumnResult(name = "totalBoleto", type = BigDecimal.class)
+                    ,@ColumnResult(name = "comision", type = BigDecimal.class)
+                    ,@ColumnResult(name = "montoComision", type = BigDecimal.class)
+                    ,@ColumnResult(name = "montoPagarLineaAerea", type = BigDecimal.class)
+                    ,@ColumnResult(name = "estado", type=String.class)
+                    ,@ColumnResult(name = "ruta", type=String.class)
+                    ,@ColumnResult(name = "nombrePasajero", type=String.class)
+                }
+        )
+)
+
+// Reporte Comision Cliente
+@SqlResultSetMapping(
+        name = "BoletoComisionCliente",
+        classes = @ConstructorResult(
+                targetClass = BoletoPlanillaBsp.class,
+                columns = {
+                    @ColumnResult(name = "idBoleto", type = Integer.class)
+                    ,@ColumnResult(name = "idAerolinea", type =Integer.class)
+                    ,@ColumnResult(name = "iata", type = String.class)
+                    ,@ColumnResult(name = "numero", type =String.class)
+                    ,@ColumnResult(name = "idNotaDebito", type =Integer.class)
+                    ,@ColumnResult(name = "tipoBoleto", type =String.class)
+                    ,@ColumnResult(name = "tipoCupon", type =String.class)
+                    ,@ColumnResult(name = "ticketNumber", type = Long.class)
+                    ,@ColumnResult(name = "fechaEmision", type = String.class)
+                    ,@ColumnResult(name = "fechaViaje", type = String.class)
+                    ,@ColumnResult(name = "importeNeto" , type = BigDecimal.class)
+                    ,@ColumnResult(name = "impuestos", type = BigDecimal.class)
+                    ,@ColumnResult(name = "totalBoleto", type = BigDecimal.class)
+                    ,@ColumnResult(name = "ruta", type=String.class)
+                    ,@ColumnResult(name = "nombrePasajero", type=String.class)
+                    ,@ColumnResult(name = "fee", type=BigDecimal.class)
+                    ,@ColumnResult(name = "descuento", type=BigDecimal.class)
+                }
+        )
+)
+
+
 public class Boleto extends Entidad {
 
     public static class Estado {

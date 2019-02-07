@@ -5,6 +5,7 @@
  */
 package com.response.json.boletaje;
 
+import com.contabilidad.entities.ComprobanteContable;
 import com.contabilidad.entities.Mayores;
 import com.seguridad.utils.DateContable;
 import java.math.BigDecimal;
@@ -37,11 +38,13 @@ public class MayoresJson {
     private String tipo;
     private Double saldoDebe;
     private Double saldoHaber;
-    
-    public static MayoresJson toMayoresJson(Mayores data){
+
+    private String descripcion;
+
+    public static MayoresJson toMayoresJson(Mayores data) {
         MayoresJson json = new MayoresJson();
-        
-        json.setConcepto(data.getConcepto());
+
+        //json.setConcepto(data.getConcepto());
         json.setFactorCambiario(data.getFactorCambiario());
         json.setFecha(DateContable.getDateFormat(data.getFecha(), DateContable.LATIN_AMERICA_FORMAT));
         json.setFechaMovimiento(DateContable.getDateFormat(data.getFechaMovimiento(), DateContable.LATIN_AMERICA_FORMAT));
@@ -62,8 +65,57 @@ public class MayoresJson {
         json.setSaldoDebe(data.getSaldoDebe());
         json.setSaldoHaber(data.getSaldoHaber());
         json.setTipo(data.getTipo());
-        
-        return json ;
+
+        if (data.getTipo().equals(ComprobanteContable.Tipo.ASIENTO_DIARIO)) {
+            // Nota Debito            
+            if (data.getIdNotaTransaccion() != null) {
+                json.setConcepto(data.getNdtrxDescripcion());
+                // Nota Credito
+            } else if (data.getIdNotaCreditoTransaccion() != null) {
+                json.setConcepto(data.getNctrxDescripcion());
+            } else if (data.getIdPagoAnticipadoTransaccion() != null) {
+                json.setConcepto(data.getPatrxDescripcion());
+            } else if (data.getIdPagoAnticipado() != null) {
+                json.setConcepto(data.getPaDescripcion());
+            } else {
+                json.setConcepto(data.getConcepto());
+            }
+
+            // Acreditacion
+        } else if (data.getTipo().equals(ComprobanteContable.Tipo.COMPROBANTE_EGRESO)) {
+            // Devoluciones
+            if (data.getIdDevolucion() != null) {
+                json.setConcepto(data.getDeDescripcion());
+            } else {
+                json.setConcepto(data.getConcepto());
+            }
+            // Egresos Manuales tiene q salir de la cabecera del comprobante
+        } else if (data.getTipo().equals(ComprobanteContable.Tipo.COMPROBANTE_INGRESO)) {
+            // Ingreso a caja
+            if (data.getIdIngresoCajaTransaccion() != null) {
+                json.setConcepto(data.getIctrxDescripcion());
+            } else {
+                json.setConcepto(data.getConcepto());
+            }
+        } else if (data.getTipo().equals(ComprobanteContable.Tipo.COMPROBANTE_TRASPASO)) {
+            //Cabecera Comprobante
+            //TODO hay  q extraer del comprobante de Transapaso su detalle
+            json.setConcepto(data.getConcepto());
+        } else if (data.getTipo().equals(ComprobanteContable.Tipo.ASIENTO_AJUSTE)) {
+            //CABECERA Comprobante
+            //TODO hay q extraer del comprobante de Ajuste su detalle
+            json.setConcepto(data.getConcepto());
+        }
+
+        return json;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 
     public Integer getIdAsiento() {

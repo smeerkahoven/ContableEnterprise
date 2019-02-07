@@ -45,7 +45,7 @@ public class PlanCuentas extends Entidad {
 
     @Id
     @Basic(optional = false)
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id_plan_cuentas")
     private Integer idPlanCuentas;
 

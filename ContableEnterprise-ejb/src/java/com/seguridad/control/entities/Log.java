@@ -73,7 +73,7 @@ public class Log implements Serializable {
 
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "id_log")
     private Integer idLog;
     @Column(name = "fecha_log")

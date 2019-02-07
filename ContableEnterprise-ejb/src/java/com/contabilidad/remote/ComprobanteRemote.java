@@ -157,19 +157,23 @@ public interface ComprobanteRemote extends DaoRemoteFacade {
     public AsientoContable procesarAsientoContable(AsientoContable a, ComprobanteContable c) throws CRUDException;
 
     public AsientoContable crearTotalCancelar(final Boleto b, final ComprobanteContable cc,
-            final ContabilidadBoletaje conf, final Aerolinea a, Integer idTransaccion) throws CRUDException;
+            final ContabilidadBoletaje conf, final Aerolinea a, NotaDebitoTransaccion idTransaccion) throws CRUDException;
 
     public AsientoContable crearMontoPagarLineaAerea(final Boleto b, final ComprobanteContable cc,
-            final ContabilidadBoletaje conf, final AerolineaCuenta ac, NotaDebito nota) throws CRUDException;
+            final ContabilidadBoletaje conf, final AerolineaCuenta ac, NotaDebito nota, 
+            final NotaDebitoTransaccion idTransaccion) throws CRUDException;
 
     public AsientoContable crearMontoComision(final Boleto b, final ComprobanteContable cc,
-            final Aerolinea a, final AerolineaCuenta ac, NotaDebito nota) throws CRUDException;
+            final Aerolinea a, final AerolineaCuenta ac, final NotaDebito nota,
+            final NotaDebitoTransaccion idTransaccion) throws CRUDException;
 
     public AsientoContable crearMontoFee(final Boleto b, final ComprobanteContable cc,
-            final ContabilidadBoletaje conf, final Aerolinea a, NotaDebito nota) throws CRUDException;
+            final ContabilidadBoletaje conf, final Aerolinea a, final NotaDebito nota,
+            final NotaDebitoTransaccion idTransaccion) throws CRUDException;
 
     public AsientoContable crearMontoDescuentos(final Boleto b, final ComprobanteContable cc,
-            final ContabilidadBoletaje conf, final Aerolinea a, NotaDebito nota) throws CRUDException;
+            final ContabilidadBoletaje conf, final Aerolinea a, NotaDebito nota,
+            final NotaDebitoTransaccion idTransaccion) throws CRUDException;
 
     /**
      *
@@ -182,16 +186,16 @@ public interface ComprobanteRemote extends DaoRemoteFacade {
      * @throws CRUDException
      */
     public AsientoContable crearClienteXCobrar(final CargoBoleto cargo, final NotaDebito nota, final ComprobanteContable cc,
-            final ContabilidadBoletaje conf, Integer idTransaccion) throws CRUDException;
+            final ContabilidadBoletaje conf, NotaDebitoTransaccion idTransaccion) throws CRUDException;
 
     public AsientoContable crearOperadorMayotistaXPagar(final CargoBoleto cargo, final NotaDebito nota, final ComprobanteContable cc,
-            Integer idTransaccion) throws CRUDException;
+            NotaDebitoTransaccion idTransaccion) throws CRUDException;
 
     public AsientoContable crearComisionAgenciaHaber(final CargoBoleto cargo, final NotaDebito nota, final ComprobanteContable cc,
-            Integer idTransaccion) throws CRUDException;
+            NotaDebitoTransaccion idTransaccion) throws CRUDException;
 
     public AsientoContable crearComisionCounterHaber(final CargoBoleto cargo, final NotaDebito nota, final ComprobanteContable cc,
-            Integer idTransaccion) throws CRUDException;
+            NotaDebitoTransaccion idTransaccion) throws CRUDException;
 
     public ComprobanteContable actualizarMontosFinalizar(ComprobanteContable comprobante) throws CRUDException;
 

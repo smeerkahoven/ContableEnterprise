@@ -73,7 +73,7 @@ public interface IngresoCajaRemote extends DaoRemoteFacade {
      * @param update
      * @throws CRUDException
      */
-    public void anularTransaccion(NotaDebitoTransaccion tr, boolean update) throws CRUDException;
+    public void anularTransaccion(NotaDebitoTransaccion tr, String usuario) throws CRUDException;
 
     /**
      * Retorna todos los ingresos de Caja por Cliente y por empresa
@@ -104,11 +104,13 @@ public interface IngresoCajaRemote extends DaoRemoteFacade {
     public void anularIngresoCaja(Integer idIngresoCaja, String usuario) throws CRUDException;
     
     /**
-     * 
+     * Anula la transaccion. Actualiza los montos del Ingreso de Caja
      * @param idTransaccion
      * @throws CRUDException 
      */
-    public void anularTransaccion (Integer idTransaccion) throws CRUDException ;
+    public void anularTransaccion (Integer idTransaccion , String usuario) throws CRUDException ;
+    
+    public void anularTransaccion(IngresoTransaccion idTransaccion, String usuario) throws CRUDException ;
     
     /**
      * 
@@ -116,7 +118,7 @@ public interface IngresoCajaRemote extends DaoRemoteFacade {
      * @return
      * @throws CRUDException 
      */
-    public IngresoCaja finalizar(Integer idIngresoCaja) throws CRUDException ;
+    public IngresoCaja finalizar(IngresoCaja idIngresoCaja) throws CRUDException ;
 
     /**
      * 
@@ -136,6 +138,14 @@ public interface IngresoCajaRemote extends DaoRemoteFacade {
 
     public IngresoTransaccion updateTransaccion(IngresoTransaccion trx) throws CRUDException;
 
+    
+    /**
+     * Devuelve la lista de las transacciones de los ingresos de Caja de acuerdo a un Nro de Ingreso de Caja
+     * @param idNotaDebito
+     * @return
+     * @throws CRUDException 
+     */
+    public List<IngresoTransaccion> getIngresoCajaTrxByIdNotaDebito(NotaDebito idNotaDebito) throws CRUDException ;
 
 }
 

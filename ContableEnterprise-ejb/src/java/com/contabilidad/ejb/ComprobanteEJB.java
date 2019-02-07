@@ -106,6 +106,11 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
     @Override
     public AsientoContable addTransaccion(AsientoContable asiento) throws CRUDException {
 
+        ComprobanteContable fromDb = em.find(ComprobanteContable.class, asiento.getIdLibro().getIdLibro());
+        if (fromDb == null) {
+            throw new CRUDException("No existe el Comprobante Contable:" + asiento.getIdLibro().getIdLibro());
+        }
+
         asiento.setIdAsiento(insert(asiento));
 
         actualizarMontosFinalizar(asiento.getIdLibro());
@@ -237,6 +242,7 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
             Devolucion dev) throws CRUDException {
         ComprobanteContable comprobante = new ComprobanteContable();
         comprobante.setIdCliente(dev.getIdCliente());
+        comprobante.setNombre(dev.getIdCliente().getNombre());
         comprobante.setConcepto(concepto);
         comprobante.setFactorCambiario(dev.getFactorCambiario());
         comprobante.setFecha(dev.getFechaEmision());
@@ -257,6 +263,7 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
     public ComprobanteContable createComprobante(String tipo, String concepto, IngresoCaja ingreso) throws CRUDException {
         ComprobanteContable comprobante = new ComprobanteContable();
         comprobante.setIdCliente(ingreso.getIdCliente());
+        comprobante.setNombre(ingreso.getIdCliente().getNombre());
         comprobante.setConcepto(concepto);
         comprobante.setFactorCambiario(ingreso.getFactorCambiario());
         comprobante.setFecha(ingreso.getFechaEmision());
@@ -533,7 +540,7 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
     public AsientoContable procesarAsientoContable(AsientoContable a, ComprobanteContable c) throws CRUDException {
 
         a.setFechaMovimiento(DateContable.getCurrentDate());
-        a.setIdLibro(c.getIdLibro());
+        a.setIdLibro(c);
         a.setGestion(c.getGestion());
         a.setIdAsiento(insert(a));
 
@@ -553,17 +560,18 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
      */
     @Override
     public AsientoContable crearTotalCancelar(final Boleto b, final ComprobanteContable cc,
-            final ContabilidadBoletaje conf, final Aerolinea a, Integer idTransaccion) {
+            final ContabilidadBoletaje conf, final Aerolinea a, final NotaDebitoTransaccion idTransaccion) {
 
         AsientoContable totalCancelar = new AsientoContable();
 
         totalCancelar.setGestion(cc.getGestion());
         //totalCancelar.setAsientoContablePK(new AsientoContablePK(0, cc.getGestion()));
-        totalCancelar.setIdLibro(cc.getIdLibro());
+        totalCancelar.setIdLibro(cc);
         totalCancelar.setGestion(cc.getGestion());
         totalCancelar.setFechaMovimiento(DateContable.getCurrentDate());
         totalCancelar.setEstado(ComprobanteContable.EMITIDO);
-        totalCancelar.setIdBoleto(b.getIdBoleto());
+        //totalCancelar.setIdBoleto(b.getIdBoleto);
+        totalCancelar.setIdBoleto(b);
         totalCancelar.setIdNotaTransaccion(idTransaccion);
         totalCancelar.setTipo(AsientoContable.Tipo.BOLETO);
 
@@ -587,17 +595,17 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
 
     @Override
     public AsientoContable crearClienteXCobrar(final CargoBoleto cargo, final NotaDebito nota, final ComprobanteContable cc,
-            final ContabilidadBoletaje conf, Integer idTransaccion) {
+            final ContabilidadBoletaje conf, NotaDebitoTransaccion idTransaccion) {
 
         AsientoContable clientexCobrar = new AsientoContable();
 
         clientexCobrar.setGestion(cc.getGestion());
         //totalCancelar.setAsientoContablePK(new AsientoContablePK(0, cc.getGestion()));
-        clientexCobrar.setIdLibro(cc.getIdLibro());
+        clientexCobrar.setIdLibro(cc);
         clientexCobrar.setGestion(cc.getGestion());
         clientexCobrar.setFechaMovimiento(DateContable.getCurrentDate());
         clientexCobrar.setEstado(ComprobanteContable.EMITIDO);
-        clientexCobrar.setIdCargo(cargo.getIdCargo());
+        clientexCobrar.setIdCargo(cargo);
         clientexCobrar.setIdNotaTransaccion(idTransaccion);
         clientexCobrar.setTipo(AsientoContable.Tipo.CARGO);
 
@@ -625,16 +633,16 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
 
     @Override
     public AsientoContable crearOperadorMayotistaXPagar(final CargoBoleto cargo, final NotaDebito nota, final ComprobanteContable cc,
-            Integer idTransaccion) throws CRUDException {
+            NotaDebitoTransaccion idTransaccion) throws CRUDException {
         AsientoContable mayoristaXPagar = new AsientoContable();
 
         mayoristaXPagar.setGestion(cc.getGestion());
         //totalCancelar.setAsientoContablePK(new AsientoContablePK(0, cc.getGestion()));
-        mayoristaXPagar.setIdLibro(cc.getIdLibro());
+        mayoristaXPagar.setIdLibro(cc);
         mayoristaXPagar.setGestion(cc.getGestion());
         mayoristaXPagar.setFechaMovimiento(DateContable.getCurrentDate());
         mayoristaXPagar.setEstado(ComprobanteContable.EMITIDO);
-        mayoristaXPagar.setIdCargo(cargo.getIdCargo());
+        mayoristaXPagar.setIdCargo(cargo);
         mayoristaXPagar.setIdNotaTransaccion(idTransaccion);
         mayoristaXPagar.setTipo(AsientoContable.Tipo.CARGO);
 
@@ -658,16 +666,16 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
 
     @Override
     public AsientoContable crearComisionAgenciaHaber(final CargoBoleto cargo, final NotaDebito nota, final ComprobanteContable cc,
-            Integer idTransaccion) throws CRUDException {
+            NotaDebitoTransaccion idTransaccion) throws CRUDException {
         AsientoContable comisionAgenciaHaber = new AsientoContable();
 
         comisionAgenciaHaber.setGestion(cc.getGestion());
         //totalCancelar.setAsientoContablePK(new AsientoContablePK(0, cc.getGestion()));
-        comisionAgenciaHaber.setIdLibro(cc.getIdLibro());
+        comisionAgenciaHaber.setIdLibro(cc);
         comisionAgenciaHaber.setGestion(cc.getGestion());
         comisionAgenciaHaber.setFechaMovimiento(DateContable.getCurrentDate());
         comisionAgenciaHaber.setEstado(ComprobanteContable.EMITIDO);
-        comisionAgenciaHaber.setIdCargo(cargo.getIdCargo());
+        comisionAgenciaHaber.setIdCargo(cargo);
         comisionAgenciaHaber.setIdNotaTransaccion(idTransaccion);
         comisionAgenciaHaber.setTipo(AsientoContable.Tipo.CARGO);
 
@@ -691,16 +699,16 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
 
     @Override
     public AsientoContable crearComisionCounterHaber(final CargoBoleto cargo, final NotaDebito nota, final ComprobanteContable cc,
-            Integer idTransaccion) throws CRUDException {
+            NotaDebitoTransaccion idTransaccion) throws CRUDException {
         AsientoContable comisionCounterHaber = new AsientoContable();
 
         comisionCounterHaber.setGestion(cc.getGestion());
         //totalCancelar.setAsientoContablePK(new AsientoContablePK(0, cc.getGestion()));
-        comisionCounterHaber.setIdLibro(cc.getIdLibro());
+        comisionCounterHaber.setIdLibro(cc);
         comisionCounterHaber.setGestion(cc.getGestion());
         comisionCounterHaber.setFechaMovimiento(DateContable.getCurrentDate());
         comisionCounterHaber.setEstado(ComprobanteContable.EMITIDO);
-        comisionCounterHaber.setIdCargo(cargo.getIdCargo());
+        comisionCounterHaber.setIdCargo(cargo);
         comisionCounterHaber.setIdNotaTransaccion(idTransaccion);
         comisionCounterHaber.setTipo(AsientoContable.Tipo.CARGO);
 
@@ -728,24 +736,26 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
      * @param cc
      * @param conf
      * @param ac
+     * @param nota
      * @param idTransaccion
-     * @param a
      * @return
      * @throws CRUDException
      */
     @Override
     public AsientoContable crearMontoPagarLineaAerea(final Boleto b, final ComprobanteContable cc,
-            final ContabilidadBoletaje conf, final AerolineaCuenta ac, NotaDebito nota) throws CRUDException {
+            final ContabilidadBoletaje conf, final AerolineaCuenta ac, NotaDebito nota,
+            final NotaDebitoTransaccion idTransaccion) throws CRUDException {
         Optional op;
         try {
 
             AsientoContable montoPagar = new AsientoContable();
             montoPagar.setGestion(cc.getGestion());
-            montoPagar.setIdLibro(cc.getIdLibro());
+            montoPagar.setIdLibro(cc);
             montoPagar.setFechaMovimiento(DateContable.getCurrentDate());
             montoPagar.setEstado(ComprobanteContable.EMITIDO);
-            montoPagar.setIdBoleto(b.getIdBoleto());
-            montoPagar.setIdNotaTransaccion(b.getIdNotaDebitoTransaccion());
+            montoPagar.setIdBoleto(b);
+            //montoPagar.setIdBoleto(b.getIdBoleto());
+            montoPagar.setIdNotaTransaccion(idTransaccion);
             montoPagar.setTipo(AsientoContable.Tipo.BOLETO);
 
             if (b.getTipoCupon().equals(Boleto.Cupon.INTERNACIONAL)) {
@@ -792,22 +802,26 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
      * @param cc
      * @param a
      * @param ac
+     * @param nota
      * @param idTransaccion
      * @return
      * @throws CRUDException
      */
     @Override
     public AsientoContable crearMontoComision(final Boleto b, final ComprobanteContable cc,
-            final Aerolinea a, final AerolineaCuenta ac, NotaDebito nota) throws CRUDException {
+            final Aerolinea a, final AerolineaCuenta ac, NotaDebito nota,
+            final NotaDebitoTransaccion idTransaccion) throws CRUDException {
         Optional op;
         AsientoContable montoComision = new AsientoContable();
 
         montoComision.setGestion(cc.getGestion());
-        montoComision.setIdLibro(cc.getIdLibro());
+        montoComision.setIdLibro(cc);
         montoComision.setFechaMovimiento(DateContable.getCurrentDate());
         montoComision.setEstado(ComprobanteContable.EMITIDO);
-        montoComision.setIdBoleto(b.getIdBoleto());
-        montoComision.setIdNotaTransaccion(b.getIdNotaDebitoTransaccion());
+        //montoComision.setIdBoleto(b.getIdBoleto());
+        montoComision.setIdBoleto(b);
+        //montoComision.setIdNotaTransaccion(b.getIdNotaDebitoTransaccion());
+        montoComision.setIdNotaTransaccion(idTransaccion);
         montoComision.setTipo(AsientoContable.Tipo.BOLETO);
 
         System.out.println("Monto Comision: " + b.getMontoComision());
@@ -853,20 +867,25 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
      * @param cc
      * @param conf
      * @param a
+     * @param nota
+     * @param idTransaccion
      * @return
      * @throws CRUDException
      */
     @Override
     public AsientoContable crearMontoFee(final Boleto b, final ComprobanteContable cc,
-            final ContabilidadBoletaje conf, final Aerolinea a, NotaDebito nota) throws CRUDException {
+            final ContabilidadBoletaje conf, final Aerolinea a, final NotaDebito nota,
+            final NotaDebitoTransaccion idTransaccion) throws CRUDException {
         AsientoContable montoFee = new AsientoContable();
 
         montoFee.setGestion(cc.getGestion());
-        montoFee.setIdLibro(cc.getIdLibro());
+        montoFee.setIdLibro(cc);
         montoFee.setFechaMovimiento(DateContable.getCurrentDate());
         montoFee.setEstado(ComprobanteContable.EMITIDO);
-        montoFee.setIdBoleto(b.getIdBoleto());
-        montoFee.setIdNotaTransaccion(b.getIdNotaDebitoTransaccion());
+        //montoFee.setIdBoleto(b.getIdBoleto());
+        montoFee.setIdBoleto(b);
+        //montoFee.setIdNotaTransaccion(b.getIdNotaDebitoTransaccion());
+        montoFee.setIdNotaTransaccion(idTransaccion);
         montoFee.setTipo(AsientoContable.Tipo.BOLETO);
 
         if (b.getTipoCupon().equals(Boleto.Cupon.INTERNACIONAL)) {
@@ -900,20 +919,25 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
      * @param cc
      * @param conf
      * @param a
+     * @param nota
+     * @param idTransaccion
      * @return
      * @throws CRUDException
      */
     @Override
     public AsientoContable crearMontoDescuentos(final Boleto b, final ComprobanteContable cc,
-            final ContabilidadBoletaje conf, final Aerolinea a, NotaDebito nota) throws CRUDException {
+            final ContabilidadBoletaje conf, final Aerolinea a, NotaDebito nota,
+            final NotaDebitoTransaccion idTransaccion) throws CRUDException {
         AsientoContable montoDescuentos = new AsientoContable();
 
         montoDescuentos.setGestion(cc.getGestion());
-        montoDescuentos.setIdLibro(cc.getIdLibro());
+        montoDescuentos.setIdLibro(cc);
         montoDescuentos.setFechaMovimiento(DateContable.getCurrentDate());
         montoDescuentos.setEstado(ComprobanteContable.EMITIDO);
-        montoDescuentos.setIdBoleto(b.getIdBoleto());
-        montoDescuentos.setIdNotaTransaccion(b.getIdNotaDebitoTransaccion());
+        //montoDescuentos.setIdBoleto(b.getIdBoleto());
+        montoDescuentos.setIdBoleto(b);
+        //montoDescuentos.setIdNotaTransaccion(b.getIdNotaDebitoTransaccion());
+        montoDescuentos.setIdNotaTransaccion(idTransaccion);
         montoDescuentos.setTipo(AsientoContable.Tipo.BOLETO);
 
         if (b.getTipoCupon().equals(Boleto.Cupon.INTERNACIONAL)) {
@@ -946,11 +970,13 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
     public AsientoContable createTotalDebe(ComprobanteContable c, ContabilidadBoletaje conf, Devolucion dev) throws CRUDException {
         AsientoContable ingDebe = new AsientoContable();
 
-        ingDebe.setIdLibro(c.getIdLibro());
+        ingDebe.setIdLibro(c);
         ingDebe.setGestion(c.getGestion());
         ingDebe.setFechaMovimiento(DateContable.getCurrentDate());
         ingDebe.setEstado(ComprobanteContable.EMITIDO);
         ingDebe.setMoneda(dev.getMoneda());
+        ingDebe.setIdDevolucion(dev);
+        ingDebe.setTipo(AsientoContable.Tipo.DEVOLUCION);
 
         if (dev.getMoneda().equals(Moneda.EXTRANJERA)) {
             ingDebe.setMontoDebeNac(dev.getMonto() != null
@@ -983,11 +1009,13 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
     public AsientoContable createTotalHaber(ComprobanteContable c, ContabilidadBoletaje conf, Devolucion dev) throws CRUDException {
         AsientoContable ingDebe = new AsientoContable();
 
-        ingDebe.setIdLibro(c.getIdLibro());
+        ingDebe.setIdLibro(c);
         ingDebe.setGestion(c.getGestion());
         ingDebe.setFechaMovimiento(DateContable.getCurrentDate());
         ingDebe.setEstado(ComprobanteContable.EMITIDO);
         ingDebe.setMoneda(dev.getMoneda());
+        ingDebe.setIdDevolucion(dev);
+        ingDebe.setTipo(AsientoContable.Tipo.DEVOLUCION);
 
         if (dev.getMoneda().equals(Moneda.EXTRANJERA)) {
             ingDebe.setMontoHaberNac(dev.getMonto() != null
@@ -1018,17 +1046,18 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
 
     @Override
     public AsientoContable createTotalCancelarIngresoCajaDebe(ComprobanteContable c,
-            ContabilidadBoletaje conf, NotaDebitoTransaccion ndt, NotaDebito nota,
-            Boleto boleto) throws CRUDException {
+            final ContabilidadBoletaje conf, final NotaDebitoTransaccion ndt, final NotaDebito nota,
+            final Boleto boleto) throws CRUDException {
 
         AsientoContable ingCajaDebe = new AsientoContable();
 
-        ingCajaDebe.setIdLibro(c.getIdLibro());
+        ingCajaDebe.setIdLibro(c);
         ingCajaDebe.setGestion(c.getGestion());
         ingCajaDebe.setFechaMovimiento(DateContable.getCurrentDate());
         ingCajaDebe.setEstado(ComprobanteContable.EMITIDO);
-        ingCajaDebe.setIdBoleto(boleto.getIdBoleto());
-        ingCajaDebe.setIdNotaTransaccion(ndt.getIdNotaDebitoTransaccion());
+        //ingCajaDebe.setIdBoleto(boleto.getIdBoleto());
+        ingCajaDebe.setIdBoleto(boleto);
+        ingCajaDebe.setIdNotaTransaccion(ndt);
         ingCajaDebe.setTipo(ndt.getTipo());
         ingCajaDebe.setMoneda(ndt.getMoneda());
 
@@ -1076,18 +1105,20 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
 
     @Override
     public AsientoContable createTotalCancelarIngresoCajaDebe(ComprobanteContable c,
-            ContabilidadBoletaje conf, NotaDebitoTransaccion ndt, IngresoCaja caja,
-            Boleto boleto, IngresoTransaccion ing) throws CRUDException {
+            ContabilidadBoletaje conf, final NotaDebitoTransaccion ndt,
+            final IngresoCaja caja,
+            final Boleto boleto, final IngresoTransaccion ing) throws CRUDException {
 
         AsientoContable ingCajaDebe = new AsientoContable();
 
-        ingCajaDebe.setIdLibro(c.getIdLibro());
+        ingCajaDebe.setIdLibro(c);
         ingCajaDebe.setGestion(c.getGestion());
         ingCajaDebe.setFechaMovimiento(DateContable.getCurrentDate());
         ingCajaDebe.setEstado(ComprobanteContable.EMITIDO);
-        ingCajaDebe.setIdBoleto(boleto.getIdBoleto());
-        ingCajaDebe.setTipo(ndt.getTipo());
-        ingCajaDebe.setIdIngresoCajaTransaccion(ing.getIdTransaccion());
+        //ingCajaDebe.setIdBoleto(boleto.getIdBoleto());
+        ingCajaDebe.setIdBoleto(boleto);
+        ingCajaDebe.setTipo(AsientoContable.Tipo.INGRESO_CAJA_TRANSACCION);
+        ingCajaDebe.setIdIngresoCajaTransaccion(ing);
         ingCajaDebe.setMoneda(ing.getMoneda());
 
         if (ing.getMoneda().equals(Moneda.EXTRANJERA)) {
@@ -1134,18 +1165,18 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
 
     @Override
     public AsientoContable createTotalCancelarIngresoCajaDebe(ComprobanteContable c,
-            ContabilidadBoletaje conf, NotaDebitoTransaccion ndt, IngresoCaja caja,
-            CargoBoleto cargo, IngresoTransaccion ing) throws CRUDException {
+            ContabilidadBoletaje conf, final NotaDebitoTransaccion ndt, final IngresoCaja caja,
+            final CargoBoleto cargo, final IngresoTransaccion ing) throws CRUDException {
 
         AsientoContable ingCajaDebe = new AsientoContable();
 
-        ingCajaDebe.setIdLibro(c.getIdLibro());
+        ingCajaDebe.setIdLibro(c);
         ingCajaDebe.setGestion(c.getGestion());
         ingCajaDebe.setFechaMovimiento(DateContable.getCurrentDate());
         ingCajaDebe.setEstado(ComprobanteContable.EMITIDO);
-        ingCajaDebe.setIdCargo(cargo.getIdCargo());
-        ingCajaDebe.setTipo(ndt.getTipo());
-        ingCajaDebe.setIdIngresoCajaTransaccion(ing.getIdTransaccion());
+        ingCajaDebe.setIdCargo(cargo);
+        ingCajaDebe.setTipo(AsientoContable.Tipo.INGRESO_CAJA_TRANSACCION);
+        ingCajaDebe.setIdIngresoCajaTransaccion(ing);
         ingCajaDebe.setMoneda(ing.getMoneda());
 
         if (ing.getMoneda().equals(Moneda.EXTRANJERA)) {
@@ -1192,18 +1223,19 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
 
     @Override
     public AsientoContable createTotalCancelarIngresoClienteHaber(ComprobanteContable c,
-            ContabilidadBoletaje conf, NotaDebitoTransaccion ndt, NotaDebito nota,
-            Boleto boleto) {
+            ContabilidadBoletaje conf, final NotaDebitoTransaccion ndt,
+            final NotaDebito nota, final Boleto boleto) {
         AsientoContable ingCajaHaber = new AsientoContable();
 
-        ingCajaHaber.setIdLibro(c.getIdLibro());
+        ingCajaHaber.setIdLibro(c);
         ingCajaHaber.setGestion(c.getGestion());
         ingCajaHaber.setFechaMovimiento(DateContable.getCurrentDate());
         ingCajaHaber.setEstado(ComprobanteContable.EMITIDO);
-        ingCajaHaber.setIdBoleto(boleto.getIdBoleto());
+        //ingCajaHaber.setIdBoleto(boleto.getIdBoleto());
+        ingCajaHaber.setIdBoleto(boleto);
         ingCajaHaber.setTipo(ndt.getTipo());
         ingCajaHaber.setMoneda(ndt.getMoneda());
-        ingCajaHaber.setIdNotaTransaccion(ndt.getIdNotaDebitoTransaccion());
+        ingCajaHaber.setIdNotaTransaccion(ndt);
 
         if (ndt.getMoneda().equals(Moneda.EXTRANJERA)) {
             ingCajaHaber.setMontoHaberNac(ndt.getMontoUsd() != null
@@ -1248,16 +1280,19 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
 
     @Override
     public AsientoContable createTotalCancelarIngresoClienteHaber(ComprobanteContable c,
-            ContabilidadBoletaje conf, NotaCreditoTransaccion ndt, NotaCredito nota, Boleto b) {
+            ContabilidadBoletaje conf, final NotaCreditoTransaccion ndt,
+            final NotaCredito nota, Boleto b) {
         AsientoContable ingCajaHaber = new AsientoContable();
 
-        ingCajaHaber.setIdLibro(c.getIdLibro());
+        ingCajaHaber.setIdLibro(c);
         ingCajaHaber.setGestion(c.getGestion());
         ingCajaHaber.setFechaMovimiento(DateContable.getCurrentDate());
         ingCajaHaber.setEstado(Estado.EMITIDO);
-        ingCajaHaber.setIdBoleto(b.getIdBoleto());
-        ingCajaHaber.setTipo(ndt.getIdNotaTransaccion().getTipo());
-        ingCajaHaber.setIdNotaCreditoTransaccion(ndt.getIdNotaCreditoTransaccion());
+        //ingCajaHaber.setIdBoleto(b.getIdBoleto());
+        ingCajaHaber.setIdBoleto(b);
+        ingCajaHaber.setTipo(AsientoContable.Tipo.NOTA_CREDITO_TRANSACCION);
+        //ingCajaHaber.setIdNotaCreditoTransaccion(ndt.getIdNotaCreditoTransaccion());
+        ingCajaHaber.setIdNotaCreditoTransaccion(ndt);
         ingCajaHaber.setMoneda(ndt.getMoneda());
 
         if (ndt.getMoneda().equals(Moneda.EXTRANJERA)) {
@@ -1282,13 +1317,14 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
             ContabilidadBoletaje conf, PagoAnticipadoTransaccion ndt, PagoAnticipado nota, Boleto b) {
         AsientoContable ingCajaHaber = new AsientoContable();
 
-        ingCajaHaber.setIdLibro(c.getIdLibro());
+        ingCajaHaber.setIdLibro(c);
         ingCajaHaber.setGestion(c.getGestion());
         ingCajaHaber.setFechaMovimiento(DateContable.getCurrentDate());
         ingCajaHaber.setEstado(Estado.EMITIDO);
-        ingCajaHaber.setIdBoleto(b.getIdBoleto());
-        ingCajaHaber.setTipo(ndt.getIdNotaTransaccion().getTipo());
-        ingCajaHaber.setIdPagoAnticipadoTransaccion(ndt.getIdPagoAnticipadoTransaccion());
+        //ingCajaHaber.setIdBoleto(b.getIdBoleto());
+        ingCajaHaber.setIdBoleto(b);
+        ingCajaHaber.setTipo(AsientoContable.Tipo.PAGO_ANTICIPADO);
+        ingCajaHaber.setIdPagoAnticipadoTransaccion(ndt);
         ingCajaHaber.setMoneda(ndt.getMoneda());
 
         if (ndt.getMoneda().equals(Moneda.EXTRANJERA)) {
@@ -1315,13 +1351,14 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
 
         AsientoContable ingCajaDebe = new AsientoContable();
 
-        ingCajaDebe.setIdLibro(c.getIdLibro());
+        ingCajaDebe.setIdLibro(c);
         ingCajaDebe.setGestion(c.getGestion());
         ingCajaDebe.setFechaMovimiento(DateContable.getCurrentDate());
         ingCajaDebe.setEstado(Estado.EMITIDO);
-        ingCajaDebe.setIdBoleto(boleto.getIdBoleto());
-        ingCajaDebe.setTipo(ndt.getTipo());
-        ingCajaDebe.setIdPagoAnticipadoTransaccion(trx.getIdPagoAnticipadoTransaccion());
+        //ingCajaDebe.setIdBoleto(boleto.getIdBoleto());
+        ingCajaDebe.setIdBoleto(boleto);
+        ingCajaDebe.setTipo(AsientoContable.Tipo.PAGO_ANTICIPADO_TRANSACCION);
+        ingCajaDebe.setIdPagoAnticipadoTransaccion(trx);
         ingCajaDebe.setMoneda(trx.getMoneda());
 
         if (trx.getMoneda().equals(Moneda.EXTRANJERA)) {
@@ -1350,14 +1387,14 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
             PagoAnticipado nota, CargoBoleto cargo, PagoAnticipadoTransaccion trx) throws CRUDException {
         AsientoContable ingCajaHaber = new AsientoContable();
 
-        ingCajaHaber.setIdLibro(c.getIdLibro());
+        ingCajaHaber.setIdLibro(c);
         ingCajaHaber.setGestion(c.getGestion());
         ingCajaHaber.setFechaMovimiento(DateContable.getCurrentDate());
         ingCajaHaber.setEstado(ComprobanteContable.EMITIDO);
-        ingCajaHaber.setIdCargo(cargo.getIdCargo());
-        ingCajaHaber.setTipo(ndt.getTipo());
+        ingCajaHaber.setIdCargo(cargo);
+        ingCajaHaber.setTipo(AsientoContable.Tipo.PAGO_ANTICIPADO_TRANSACCION);
         ingCajaHaber.setMoneda(trx.getMoneda());
-        ingCajaHaber.setIdPagoAnticipadoTransaccion(trx.getIdPagoAnticipadoTransaccion());
+        ingCajaHaber.setIdPagoAnticipadoTransaccion(trx);
 
         if (trx.getMoneda().equals(Moneda.EXTRANJERA)) {
             ingCajaHaber.setMontoHaberNac(trx.getMonto() != null
@@ -1383,19 +1420,20 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
 
     @Override
     public AsientoContable createTotalCancelarIngresoClienteHaber(ComprobanteContable c,
-            ContabilidadBoletaje conf, NotaDebitoTransaccion ndt, NotaCredito nota,
-            CargoBoleto cargo, NotaCreditoTransaccion trx) throws CRUDException {
+            ContabilidadBoletaje conf, final NotaDebitoTransaccion ndt,
+            final NotaCredito nota, final CargoBoleto cargo,
+            final NotaCreditoTransaccion trx) throws CRUDException {
 
         AsientoContable ingCajaHaber = new AsientoContable();
 
-        ingCajaHaber.setIdLibro(c.getIdLibro());
+        ingCajaHaber.setIdLibro(c);
         ingCajaHaber.setGestion(c.getGestion());
         ingCajaHaber.setFechaMovimiento(DateContable.getCurrentDate());
         ingCajaHaber.setEstado(ComprobanteContable.EMITIDO);
-        ingCajaHaber.setIdCargo(cargo.getIdCargo());
-        ingCajaHaber.setTipo(ndt.getTipo());
+        ingCajaHaber.setIdCargo(cargo);
+        ingCajaHaber.setTipo(AsientoContable.Tipo.NOTA_CREDITO_TRANSACCION);
         ingCajaHaber.setMoneda(trx.getMoneda());
-        ingCajaHaber.setIdNotaCreditoTransaccion(trx.getIdNotaCreditoTransaccion());
+        ingCajaHaber.setIdNotaCreditoTransaccion(trx);
 
         if (trx.getMoneda().equals(Moneda.EXTRANJERA)) {
             ingCajaHaber.setMontoHaberNac(trx.getMontoUsd() != null
@@ -1418,18 +1456,19 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
 
     @Override
     public AsientoContable createTotalCancelarIngresoCajaDebe(ComprobanteContable c,
-            ContabilidadBoletaje conf, NotaDebitoTransaccion ndt, NotaCredito nota,
-            CargoBoleto cargo, NotaCreditoTransaccion trx) throws CRUDException {
+            ContabilidadBoletaje conf, final NotaDebitoTransaccion ndt,
+            final NotaCredito nota, final CargoBoleto cargo,
+            final NotaCreditoTransaccion trx) throws CRUDException {
 
         AsientoContable ingCajaDebe = new AsientoContable();
 
-        ingCajaDebe.setIdLibro(c.getIdLibro());
+        ingCajaDebe.setIdLibro(c);
         ingCajaDebe.setGestion(c.getGestion());
         ingCajaDebe.setFechaMovimiento(DateContable.getCurrentDate());
         ingCajaDebe.setEstado(ComprobanteContable.EMITIDO);
-        ingCajaDebe.setIdCargo(cargo.getIdCargo());
-        ingCajaDebe.setTipo(ndt.getTipo());
-        ingCajaDebe.setIdNotaCreditoTransaccion(trx.getIdNotaCreditoTransaccion());
+        ingCajaDebe.setIdCargo(cargo);
+        ingCajaDebe.setTipo(AsientoContable.Tipo.NOTA_CREDITO_TRANSACCION);
+        ingCajaDebe.setIdNotaCreditoTransaccion(trx);
         ingCajaDebe.setMoneda(trx.getMoneda());
 
         if (trx.getMoneda().equals(Moneda.EXTRANJERA)) {
@@ -1458,13 +1497,13 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
 
         AsientoContable ingCajaDebe = new AsientoContable();
 
-        ingCajaDebe.setIdLibro(c.getIdLibro());
+        ingCajaDebe.setIdLibro(c);
         ingCajaDebe.setGestion(c.getGestion());
         ingCajaDebe.setFechaMovimiento(DateContable.getCurrentDate());
         ingCajaDebe.setEstado(ComprobanteContable.EMITIDO);
-        ingCajaDebe.setIdCargo(cargo.getIdCargo());
-        ingCajaDebe.setTipo(ndt.getTipo());
-        ingCajaDebe.setIdPagoAnticipadoTransaccion(trx.getIdPagoAnticipadoTransaccion());
+        ingCajaDebe.setIdCargo(cargo);
+        ingCajaDebe.setTipo(AsientoContable.Tipo.PAGO_ANTICIPADO_TRANSACCION);
+        ingCajaDebe.setIdPagoAnticipadoTransaccion(trx);
         ingCajaDebe.setMoneda(trx.getMoneda());
 
         if (trx.getMoneda().equals(Moneda.EXTRANJERA)) {
@@ -1488,18 +1527,21 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
 
     @Override
     public AsientoContable createTotalCancelarIngresoCajaDebe(ComprobanteContable c,
-            ContabilidadBoletaje conf, NotaDebitoTransaccion ndt, NotaCredito nota,
-            Boleto boleto, NotaCreditoTransaccion trx) throws CRUDException {
+            ContabilidadBoletaje conf, final NotaDebitoTransaccion ndt,
+            final NotaCredito nota, final Boleto boleto,
+            final NotaCreditoTransaccion trx) throws CRUDException {
 
         AsientoContable ingCajaDebe = new AsientoContable();
 
-        ingCajaDebe.setIdLibro(c.getIdLibro());
+        ingCajaDebe.setIdLibro(c);
         ingCajaDebe.setGestion(c.getGestion());
         ingCajaDebe.setFechaMovimiento(DateContable.getCurrentDate());
         ingCajaDebe.setEstado(Estado.EMITIDO);
-        ingCajaDebe.setIdBoleto(boleto.getIdBoleto());
+        //ingCajaDebe.setIdBoleto(boleto.getIdBoleto());
+        ingCajaDebe.setIdBoleto(boleto);
         ingCajaDebe.setTipo(ndt.getTipo());
-        ingCajaDebe.setIdNotaCreditoTransaccion(trx.getIdNotaCreditoTransaccion());
+        //ingCajaDebe.setIdNotaCreditoTransaccion(trx.getIdNotaCreditoTransaccion());
+        ingCajaDebe.setIdNotaCreditoTransaccion(trx);
         ingCajaDebe.setMoneda(trx.getMoneda());
 
         if (trx.getMoneda().equals(Moneda.EXTRANJERA)) {
@@ -1523,18 +1565,20 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
 
     @Override
     public AsientoContable createTotalCancelarIngresoClienteHaber(ComprobanteContable c,
-            ContabilidadBoletaje conf, NotaDebitoTransaccion ndt, IngresoCaja caja,
-            Boleto boleto, IngresoTransaccion ing) {
+            ContabilidadBoletaje conf, final NotaDebitoTransaccion ndt, final IngresoCaja caja,
+            final Boleto boleto, final IngresoTransaccion ing) {
         AsientoContable ingCajaHaber = new AsientoContable();
 
-        ingCajaHaber.setIdLibro(c.getIdLibro());
+        ingCajaHaber.setIdLibro(c);
         ingCajaHaber.setGestion(c.getGestion());
         ingCajaHaber.setFechaMovimiento(DateContable.getCurrentDate());
         ingCajaHaber.setEstado(ComprobanteContable.EMITIDO);
-        ingCajaHaber.setIdBoleto(boleto.getIdBoleto());
+        //ingCajaHaber.setIdBoleto(boleto.getIdBoleto());
+        ingCajaHaber.setIdBoleto(boleto);
         ingCajaHaber.setTipo(ndt.getTipo());
         ingCajaHaber.setMoneda(ing.getMoneda());
-        ingCajaHaber.setIdIngresoCajaTransaccion(ing.getIdTransaccion());
+        // ingCajaHaber.setIdIngresoCajaTransaccion(ing.getIdTransaccion());
+        ingCajaHaber.setIdIngresoCajaTransaccion(ing);
 
         if (ing.getMoneda().equals(Moneda.EXTRANJERA)) {
             ingCajaHaber.setMontoHaberNac(ing.getMontoUsd() != null
@@ -1579,18 +1623,20 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
 
     @Override
     public AsientoContable createTotalCancelarIngresoClienteHaber(ComprobanteContable c,
-            ContabilidadBoletaje conf, NotaDebitoTransaccion ndt, IngresoCaja caja,
-            CargoBoleto cargo, IngresoTransaccion ing) {
+            ContabilidadBoletaje conf, final NotaDebitoTransaccion ndt,
+            final IngresoCaja caja,
+            final CargoBoleto cargo, final IngresoTransaccion ing) {
         AsientoContable ingCajaHaber = new AsientoContable();
 
-        ingCajaHaber.setIdLibro(c.getIdLibro());
+        ingCajaHaber.setIdLibro(c);
         ingCajaHaber.setGestion(c.getGestion());
         ingCajaHaber.setFechaMovimiento(DateContable.getCurrentDate());
         ingCajaHaber.setEstado(ComprobanteContable.EMITIDO);
-        ingCajaHaber.setIdCargo(cargo.getIdCargo());
+        ingCajaHaber.setIdCargo(cargo);
         ingCajaHaber.setTipo(ndt.getTipo());
         ingCajaHaber.setMoneda(ing.getMoneda());
-        ingCajaHaber.setIdIngresoCajaTransaccion(ing.getIdTransaccion());
+        //ingCajaHaber.setIdIngresoCajaTransaccion(ing.getIdTransaccion());
+        ingCajaHaber.setIdIngresoCajaTransaccion(ing);
 
         if (ing.getMoneda().equals(Moneda.EXTRANJERA)) {
             ingCajaHaber.setMontoHaberNac(ing.getMontoUsd() != null
@@ -1640,14 +1686,15 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
 
         AsientoContable ingCajaDebe = new AsientoContable();
 
-        ingCajaDebe.setIdLibro(c.getIdLibro());
+        ingCajaDebe.setIdLibro(c);
         ingCajaDebe.setGestion(c.getGestion());
         ingCajaDebe.setFechaMovimiento(DateContable.getCurrentDate());
         ingCajaDebe.setEstado(ComprobanteContable.EMITIDO);
-        ingCajaDebe.setIdCargo(cargoBoleto.getIdCargo());
+        ingCajaDebe.setIdCargo(cargoBoleto);
         ingCajaDebe.setTipo(ndt.getTipo());
         ingCajaDebe.setMoneda(ndt.getMoneda());
-        ingCajaDebe.setIdNotaTransaccion(ndt.getIdNotaDebitoTransaccion());
+        //ingCajaDebe.setIdNotaTransaccion(ndt.getIdNotaDebitoTransaccion());
+        ingCajaDebe.setIdNotaTransaccion(ndt);
 
         if (ndt.getMoneda().equals(Moneda.EXTRANJERA)) {
             ingCajaDebe.setMontoDebeExt(ndt.getMontoUsd());
@@ -1687,11 +1734,11 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
 
         AsientoContable ingCajaDebe = new AsientoContable();
 
-        ingCajaDebe.setIdLibro(c.getIdLibro());
+        ingCajaDebe.setIdLibro(c);
         ingCajaDebe.setGestion(c.getGestion());
         ingCajaDebe.setFechaMovimiento(DateContable.getCurrentDate());
         ingCajaDebe.setEstado(ComprobanteContable.EMITIDO);
-        ingCajaDebe.setIdPagoAnticipado(pago.getIdPagoAnticipado());
+        ingCajaDebe.setIdPagoAnticipado(pago);
         ingCajaDebe.setMoneda(pago.getMoneda());
 
         if (pago.getMoneda().equals(Moneda.EXTRANJERA)) {
@@ -1730,11 +1777,11 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
 
         AsientoContable ingCajaHaber = new AsientoContable();
 
-        ingCajaHaber.setIdLibro(c.getIdLibro());
+        ingCajaHaber.setIdLibro(c);
         ingCajaHaber.setGestion(c.getGestion());
         ingCajaHaber.setFechaMovimiento(DateContable.getCurrentDate());
         ingCajaHaber.setEstado(ComprobanteContable.EMITIDO);
-        ingCajaHaber.setIdPagoAnticipado(pago.getIdPagoAnticipado());
+        ingCajaHaber.setIdPagoAnticipado(pago);
         ingCajaHaber.setMoneda(pago.getMoneda());
 
         if (pago.getMoneda().equals(Moneda.EXTRANJERA)) {
@@ -1745,8 +1792,8 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
             /*if (pago.getFormaPago().equals(FormasPago.EFECTIVO)
                     || pago.getFormaPago().equals(FormasPago.CHEQUE)
                     || pago.getFormaPago().equals(FormasPago.TARJETA)) {*/
-                ingCajaHaber.setIdPlanCuenta(conf.getDepositoClienteAnticipadoUsd());
-           /* } else if (pago.getFormaPago().equals(FormasPago.DEPOSITO)) {
+            ingCajaHaber.setIdPlanCuenta(conf.getDepositoClienteAnticipadoUsd());
+            /* } else if (pago.getFormaPago().equals(FormasPago.DEPOSITO)) {
                 ingCajaHaber.setIdPlanCuenta(pago.getIdCuentaDeposito());
             }*/
 
@@ -1757,7 +1804,7 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
             /*if (pago.getFormaPago().equals(FormasPago.EFECTIVO)
                     || pago.getFormaPago().equals(FormasPago.CHEQUE)
                     || pago.getFormaPago().equals(FormasPago.TARJETA)) {*/
-                ingCajaHaber.setIdPlanCuenta(conf.getDepositoClienteAnticipadoBs());
+            ingCajaHaber.setIdPlanCuenta(conf.getDepositoClienteAnticipadoBs());
             /*} else if (pago.getFormaPago().equals(FormasPago.DEPOSITO)) {
                 ingCajaHaber.setIdPlanCuenta(pago.getIdCuentaDeposito());
             }*/
@@ -1767,23 +1814,21 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
 
     }
 
-    
-    
-
     @Override
     public AsientoContable createTotalCancelarIngresoClienteHaber(ComprobanteContable c,
             ContabilidadBoletaje conf, NotaDebitoTransaccion ndt, NotaDebito nota,
             CargoBoleto cargo) {
         AsientoContable ingCajaHaber = new AsientoContable();
 
-        ingCajaHaber.setIdLibro(c.getIdLibro());
+        ingCajaHaber.setIdLibro(c);
         ingCajaHaber.setGestion(c.getGestion());
         ingCajaHaber.setFechaMovimiento(DateContable.getCurrentDate());
         ingCajaHaber.setEstado(ComprobanteContable.EMITIDO);
-        ingCajaHaber.setIdCargo(cargo.getIdCargo());
+        ingCajaHaber.setIdCargo(cargo);
         ingCajaHaber.setTipo(ndt.getTipo());
         ingCajaHaber.setMoneda(ndt.getMoneda());
-        ingCajaHaber.setIdNotaTransaccion(ndt.getIdNotaDebitoTransaccion());
+        //ingCajaHaber.setIdNotaTransaccion(ndt.getIdNotaDebitoTransaccion());
+        ingCajaHaber.setIdNotaTransaccion(ndt);
 
         if (ndt.getMoneda().equals(Moneda.EXTRANJERA)) {
             ingCajaHaber.setMontoHaberExt(ndt.getMontoUsd());
@@ -1986,7 +2031,7 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
     public void anularAsientosContables(NotaDebitoTransaccion tr, String usuario) throws CRUDException {
 
         Query q = em.createNamedQuery("AsientoContable.findAllByIdNotaDebitoTransaccion");
-        q.setParameter("idNotaTransaccion", tr.getIdNotaDebitoTransaccion());
+        q.setParameter("idNotaTransaccion", tr);
 
         List<AsientoContable> l = q.getResultList();
 
@@ -2010,7 +2055,7 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
     public void anularAsientosContables(IngresoTransaccion tr, String usuario) throws CRUDException {
 
         Query q = em.createNamedQuery("AsientoContable.findAllByIdIngresoTransaccion");
-        q.setParameter("idIngresoCajaTransaccion", tr.getIdTransaccion());
+        q.setParameter("idIngresoCajaTransaccion", tr);
 
         List<AsientoContable> l = q.getResultList();
 
@@ -2034,7 +2079,7 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
     public void anularAsientosContables(NotaCreditoTransaccion tr, String usuario) throws CRUDException {
 
         Query q = em.createNamedQuery("AsientoContable.findAllByNotaCreditoTransaccion");
-        q.setParameter("idNotaCreditoTransaccion", tr.getIdNotaCreditoTransaccion());
+        q.setParameter("idNotaCreditoTransaccion", tr);
 
         List<AsientoContable> l = q.getResultList();
 
@@ -2058,7 +2103,7 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
     public void anularAsientosContables(PagoAnticipadoTransaccion tr, String usuario) throws CRUDException {
 
         Query q = em.createNamedQuery("AsientoContable.findAllByPagoAnticipadoTransaccion");
-        q.setParameter("idPagoAnticipadoTransaccion", tr.getIdPagoAnticipadoTransaccion());
+        q.setParameter("idPagoAnticipadoTransaccion", tr);
 
         List<AsientoContable> l = q.getResultList();
 

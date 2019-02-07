@@ -25,8 +25,8 @@ import java.math.RoundingMode;
 public class BoletoJSON implements Serializable {
 
     //id de la tabla
-    private int idBoleto;
-    private int gestion;
+    private Integer idBoleto;
+    private Integer gestion;
     private ComboSelect idAerolinea;
     private Integer idEmpresa;
     private ComboSelect idPromotor;
@@ -653,11 +653,11 @@ public class BoletoJSON implements Serializable {
         this.comision = comision;
     }
 
-    public int getIdBoleto() {
+    public Integer getIdBoleto() {
         return idBoleto;
     }
 
-    public void setIdBoleto(int idBoleto) {
+    public void setIdBoleto(Integer idBoleto) {
         this.idBoleto = idBoleto;
     }
 

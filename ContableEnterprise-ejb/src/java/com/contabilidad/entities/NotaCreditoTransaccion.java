@@ -18,6 +18,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -43,12 +44,15 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "NotaCreditoTransaccion.findByFechaInsert", query = "SELECT n FROM NotaCreditoTransaccion n WHERE n.fechaInsert = :fechaInsert")
     , @NamedQuery(name = "NotaCreditoTransaccion.findByEstado", query = "SELECT n FROM NotaCreditoTransaccion n WHERE n.estado = :estado")
     , @NamedQuery(name = "NotaCreditoTransaccion.findByNotaCredito", query = "SELECT n FROM NotaCreditoTransaccion n WHERE n.idNotaCredito = :idNotaCredito")
+    , @NamedQuery(name = "NotaCreditoTransaccion.findByNotaDebito", query = "SELECT n FROM NotaCreditoTransaccion n WHERE n.idNotaTransaccion.idNotaDebito = :idNotaDebito")
+    , @NamedQuery(name = "NotaCreditoTransaccion.findByNotadebitoTransaccion", query = "SELECT n FROM NotaCreditoTransaccion n WHERE n.idNotaTransaccion = :idNotaTransaccion")
 })
+
 public class NotaCreditoTransaccion extends Entidad {
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Basic(optional = false)
     @Column(name = "id_nota_credito_transaccion")
     private Integer idNotaCreditoTransaccion;

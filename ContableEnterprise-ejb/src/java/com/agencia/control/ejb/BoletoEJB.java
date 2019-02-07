@@ -29,6 +29,7 @@ import com.contabilidad.remote.ComprobanteRemote;
 import com.contabilidad.remote.IngresoCajaRemote;
 import com.contabilidad.remote.NotaDebitoRemote;
 import com.response.json.boletaje.PlanillaSearchForm;
+import com.response.json.boletaje.VentaBoletosSearchJson;
 import com.seguridad.control.FacadeEJB;
 import com.seguridad.control.entities.Entidad;
 import com.seguridad.control.exception.CRUDException;
@@ -423,23 +424,24 @@ public class BoletoEJB extends FacadeEJB implements BoletoRemote {
                 b.setIdLibro(comprobanteAsiento.getIdLibro());
 
                 //TotalCancelar
-                totalCancelar = ejbComprobante.crearTotalCancelar(b, comprobanteAsiento, cbconf, a, transaccion.getIdNotaDebitoTransaccion());
+                //totalCancelar = ejbComprobante.crearTotalCancelar(b, comprobanteAsiento, cbconf, a, transaccion.getIdNotaDebitoTransaccion());
+                totalCancelar = ejbComprobante.crearTotalCancelar(b, comprobanteAsiento, cbconf, a, transaccion);
                 insert(totalCancelar);
                 //ejbComprobante.insert(totalCancelar);
                 //DiferenciaTotalBoleto
-                montoPagarLinea = ejbComprobante.crearMontoPagarLineaAerea(b, comprobanteAsiento, cbconf, av, null);
+                montoPagarLinea = ejbComprobante.crearMontoPagarLineaAerea(b, comprobanteAsiento, cbconf, av, notaDebito, transaccion);
                 //ejbComprobante.insert(montoPagarLinea);
                 insert(montoPagarLinea);
                 //Comision
-                montoComision = ejbComprobante.crearMontoComision(b, comprobanteAsiento, a, ac, null);
+                montoComision = ejbComprobante.crearMontoComision(b, comprobanteAsiento, a, ac, notaDebito, transaccion);
                 //ejbComprobante.insert(montoComision);
                 insert(montoComision);
                 //Fee
-                montoFee = ejbComprobante.crearMontoFee(b, comprobanteAsiento, cbconf, a, null);
+                montoFee = ejbComprobante.crearMontoFee(b, comprobanteAsiento, cbconf, a, notaDebito, transaccion);
                 //ejbComprobante.insert(montoFee);
                 insert(montoFee);
                 //Descuento
-                montoDescuento = ejbComprobante.crearMontoDescuentos(b, comprobanteAsiento, cbconf, a, null);
+                montoDescuento = ejbComprobante.crearMontoDescuentos(b, comprobanteAsiento, cbconf, a, notaDebito, transaccion);
                 //ejbComprobante.insert(montoDescuento);
                 insert(montoDescuento);
 
@@ -678,28 +680,34 @@ public class BoletoEJB extends FacadeEJB implements BoletoRemote {
             throw new CRUDException("No existe Cuenta asociada a la Aerolinea" + boleto.getIdAerolinea().getNombre() + " para Comisiones");
         }
 
+        NotaDebitoTransaccion ndtrx = em.find(NotaDebitoTransaccion.class, boleto.getIdNotaDebitoTransaccion());
+        if (ndtrx == null) {
+            throw new CRUDException("No existe la transaccion del boleto " + boleto.getNumero().toString() + " Nota debito Transaccion :" + boleto.getIdNotaDebitoTransaccion().toString());
+        }
+
         // 2. Guardamos el Cliente Pasajero
         saveClientePasajero(boleto);
         // se crean los asientos de acuerdo a la configuracion.
 
         //TotalCancelar
-        totalCancelar = ejbComprobante.crearTotalCancelar(boleto, comprobante, conf, boleto.getIdAerolinea(), boleto.getIdNotaDebitoTransaccion());
+        //totalCancelar = ejbComprobante.crearTotalCancelar(boleto, comprobante, conf, boleto.getIdAerolinea(), boleto.getIdNotaDebitoTransaccion());
+        totalCancelar = ejbComprobante.crearTotalCancelar(boleto, comprobante, conf, boleto.getIdAerolinea(), ndtrx);
         insert(totalCancelar);
         //ejbComprobante.insert(totalCancelar);
         //DiferenciaTotalBoleto
-        montoPagarLinea = ejbComprobante.crearMontoPagarLineaAerea(boleto, comprobante, conf, av, nota);
+        montoPagarLinea = ejbComprobante.crearMontoPagarLineaAerea(boleto, comprobante, conf, av, nota, ndtrx);
         //ejbComprobante.insert(montoPagarLinea);
         insert(montoPagarLinea);
         //Comision
-        montoComision = ejbComprobante.crearMontoComision(boleto, comprobante, boleto.getIdAerolinea(), ac, nota);
+        montoComision = ejbComprobante.crearMontoComision(boleto, comprobante, boleto.getIdAerolinea(), ac, nota, ndtrx);
         //ejbComprobante.insert(montoComision);
         insert(montoComision);
         //Fee
-        montoFee = ejbComprobante.crearMontoFee(boleto, comprobante, conf, boleto.getIdAerolinea(), nota);
+        montoFee = ejbComprobante.crearMontoFee(boleto, comprobante, conf, boleto.getIdAerolinea(), nota, ndtrx);
         //ejbComprobante.insert(montoFee);
         insert(montoFee);
         //Descuento
-        montoDescuento = ejbComprobante.crearMontoDescuentos(boleto, comprobante, conf, boleto.getIdAerolinea(), nota);
+        montoDescuento = ejbComprobante.crearMontoDescuentos(boleto, comprobante, conf, boleto.getIdAerolinea(), nota, ndtrx);
         //ejbComprobante.insert(montoDescuento);
         insert(montoDescuento);
 
@@ -714,17 +722,23 @@ public class BoletoEJB extends FacadeEJB implements BoletoRemote {
         AsientoContable clientexCobrar = null, comisionMayorista = null,
                 comisionAgencia = null, comisionCounter = null;
 
+        NotaDebitoTransaccion trx = em.find(NotaDebitoTransaccion.class, cargo.getIdNotaDebitoTransaccion());
+
         // se crean los asientos de acuerdo a la configuracion.
-        clientexCobrar = ejbComprobante.crearClienteXCobrar(cargo, nota, comprobante, conf, cargo.getIdNotaDebitoTransaccion());
+        clientexCobrar = ejbComprobante.crearClienteXCobrar(cargo, nota, comprobante, conf, trx);
+        //clientexCobrar = ejbComprobante.crearClienteXCobrar(cargo, nota, comprobante, conf, cargo.getIdNotaDebitoTransaccion());
         insert(clientexCobrar);
 
-        comisionMayorista = ejbComprobante.crearOperadorMayotistaXPagar(cargo, nota, comprobante, cargo.getIdNotaDebitoTransaccion());
+        //comisionMayorista = ejbComprobante.crearOperadorMayotistaXPagar(cargo, nota, comprobante, cargo.getIdNotaDebitoTransaccion());
+        comisionMayorista = ejbComprobante.crearOperadorMayotistaXPagar(cargo, nota, comprobante, trx);
         insert(comisionMayorista);
 
-        comisionAgencia = ejbComprobante.crearComisionAgenciaHaber(cargo, nota, comprobante, cargo.getIdNotaDebitoTransaccion());
+        //comisionAgencia = ejbComprobante.crearComisionAgenciaHaber(cargo, nota, comprobante, cargo.getIdNotaDebitoTransaccion());
+        comisionAgencia = ejbComprobante.crearComisionAgenciaHaber(cargo, nota, comprobante, trx);
         insert(comisionAgencia);
 
-        comisionCounter = ejbComprobante.crearComisionCounterHaber(cargo, nota, comprobante, cargo.getIdNotaDebitoTransaccion());
+        //comisionCounter = ejbComprobante.crearComisionCounterHaber(cargo, nota, comprobante, cargo.getIdNotaDebitoTransaccion());
+        comisionCounter = ejbComprobante.crearComisionCounterHaber(cargo, nota, comprobante, trx);
         insert(comisionCounter);
 
         return false;
@@ -1146,15 +1160,97 @@ public class BoletoEJB extends FacadeEJB implements BoletoRemote {
     @Override
     public List<BoletoPlanillaBsp> getPlanillaBsp(PlanillaSearchForm search) throws CRUDException {
 
+        if (search.getIdEmpresa() == null) {
+            throw new CRUDException("El parametro Id Empresa es necesario");
+        }
+        if (search.getTipoCupon()== null) {
+            throw new CRUDException("El parametro Tipo es necesario");
+        }
+
+        if (search.getFechaInicio() == null) {
+            throw new CRUDException("El parametro Fecha Inicio es necesario");
+        }
+
+        if (search.getFechaFin() == null) {
+            throw new CRUDException("El parametro Fecha Fin es necesario");
+        }
+
         Query q = em.createNamedQuery("Boleto.getPlanillaBsp");
         q.setParameter("1", DateContable.toLatinAmericaDateFormat(search.getFechaInicio()));
         q.setParameter("2", DateContable.toLatinAmericaDateFormat(search.getFechaFin()));
         q.setParameter("3", search.getIdEmpresa());
+        q.setParameter("4", search.getTipoCupon());
 
         List<BoletoPlanillaBsp> l = q.getResultList();
 
         return l;
 
+    }
+
+    @Override
+    public List<BoletoPlanillaBsp> getReporteVentas(VentaBoletosSearchJson search) throws CRUDException {
+
+        if (search.getTipoCupon()== null) {
+            throw new CRUDException("El parametro Id Empresa es necesario");
+        }
+
+        if (search.getIdEmpresa() == null) {
+            throw new CRUDException("El parametro Id Empresa es necesario");
+        }
+
+        if (search.getFechaInicio() == null) {
+            throw new CRUDException("El parametro Fecha Inicio es necesario");
+        }
+
+        if (search.getFechaFin() == null) {
+            throw new CRUDException("El parametro Fecha Fin es necesarioa");
+        }
+
+        if (search.getIdAerolinea() == null) {
+            throw new CRUDException("El parametro Linea Aerea es necesario.");
+        }
+
+        Query q = em.createNamedQuery("Boleto.getReporteVentas");
+        q.setParameter("1", search.getIdEmpresa());
+        q.setParameter("2", DateContable.toLatinAmericaDateFormat(search.getFechaInicio()));
+        q.setParameter("3", DateContable.toLatinAmericaDateFormat(search.getFechaFin()));
+        q.setParameter("4", search.getIdAerolinea().getId());
+        q.setParameter("5", search.getTipoCupon());
+
+        List<BoletoPlanillaBsp> l = q.getResultList();
+
+        return l;
+
+    }
+
+    @Override
+    public List<BoletoPlanillaBsp> getReporteComisionCliente(VentaBoletosSearchJson search) throws CRUDException {
+        if (search.getIdEmpresa() == null) {
+            throw new CRUDException("El parametro Id Empresa es necesario");
+        }
+
+        if (search.getFechaInicio() == null) {
+            throw new CRUDException("El parametro Fecha Inicio es necesario");
+        }
+
+        if (search.getFechaFin() == null) {
+            throw new CRUDException("El parametro Fecha Fin es necesarioa");
+        }
+
+        if (search.getIdCliente()== null) {
+            throw new CRUDException("El parametro Cliente es necesario.");
+        }
+
+        Query q = em.createNamedQuery("Boleto.getReporteComisionCliente");
+        q.setParameter("1", search.getIdEmpresa());
+        q.setParameter("2", DateContable.toLatinAmericaDateFormat(search.getFechaInicio()));
+        q.setParameter("3", DateContable.toLatinAmericaDateFormat(search.getFechaFin()));
+        q.setParameter("4", search.getIdCliente().getId());
+        q.setParameter("5", search.getTipoCupon());
+
+        List<BoletoPlanillaBsp> l = q.getResultList();
+
+        return l;
     }
 
 }

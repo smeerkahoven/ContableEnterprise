@@ -29,6 +29,8 @@ import com.contabilidad.entities.PagoAnticipadoTransaccion;
 import com.contabilidad.remote.ComprobanteRemote;
 import com.contabilidad.remote.IngresoCajaRemote;
 import com.contabilidad.remote.NotaDebitoRemote;
+import com.contabilidad.remote.NotasCreditoRemote;
+import com.contabilidad.remote.PagoAnticipadoRemote;
 import com.seguridad.control.FacadeEJB;
 import com.seguridad.control.entities.Entidad;
 import com.seguridad.control.exception.CRUDException;
@@ -66,6 +68,12 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
 
     @EJB
     private ComprobanteRemote ejbComprobante;
+    
+    @EJB
+    private NotasCreditoRemote ejbNotaCredito ;
+    
+    @EJB
+    private PagoAnticipadoRemote ejbPagoAnticipado ;
 
     @Override
     public Entidad get(Entidad e) throws CRUDException {
@@ -722,6 +730,8 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
                     debitoIngreso.setIdDebitoIngreso(insert(debitoIngreso));
 
                     fromBD.setEstado(Estado.CANCELADO);
+                    fromBD.setMontoAdeudadoBs(BigDecimal.ZERO);
+                    fromBD.setMontoAdeudadoUsd(BigDecimal.ZERO);
                 } else {
                     fromBD.setEstado(Estado.EMITIDO);
                 }
@@ -757,11 +767,13 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
                                         //Al boleto no le sirve un solo ingreso de caja
                                         //boleto.setIdIngresoCajaTransaccion(ing.getIdTransaccion());
                                         AsientoContable ingTotalCancelarCaja = ejbComprobante.createTotalCancelarIngresoCajaDebe(ingreso, conf, nt, nota, boleto);
-                                        ingTotalCancelarCaja.setIdIngresoCajaTransaccion(ing.getIdTransaccion());
+                                        //ingTotalCancelarCaja.setIdIngresoCajaTransaccion(ing.getIdTransaccion());
+                                        ingTotalCancelarCaja.setIdIngresoCajaTransaccion(ing);
                                         insert(ingTotalCancelarCaja);
 
                                         AsientoContable ingTotalCancelarHaber = ejbComprobante.createTotalCancelarIngresoClienteHaber(ingreso, conf, nt, nota, boleto);
-                                        ingTotalCancelarHaber.setIdIngresoCajaTransaccion(ing.getIdTransaccion());
+                                        //ingTotalCancelarHaber.setIdIngresoCajaTransaccion(ing.getIdTransaccion());
+                                        ingTotalCancelarHaber.setIdIngresoCajaTransaccion(ing);
                                         insert(ingTotalCancelarHaber);
                                     }
                                 }
@@ -797,11 +809,13 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
 
                                     //cargo.setIdIngresoCajaTransaccion(ing.getIdTransaccion());
                                     AsientoContable ingTotalCancelarCaja = ejbComprobante.createTotalCancelarIngresoCajaDebe(ingreso, conf, nt, nota, cargo);
-                                    ingTotalCancelarCaja.setIdIngresoCajaTransaccion(ing.getIdTransaccion());
+                                    //ingTotalCancelarCaja.setIdIngresoCajaTransaccion(ing.getIdTransaccion());
+                                    ingTotalCancelarCaja.setIdIngresoCajaTransaccion(ing);
                                     insert(ingTotalCancelarCaja);
 
                                     AsientoContable ingTotalCancelarHaber = ejbComprobante.createTotalCancelarIngresoClienteHaber(ingreso, conf, nt, nota, cargo);
-                                    ingTotalCancelarHaber.setIdIngresoCajaTransaccion(ing.getIdTransaccion());
+                                    //ingTotalCancelarHaber.setIdIngresoCajaTransaccion(ing.getIdTransaccion());
+                                    ingTotalCancelarHaber.setIdIngresoCajaTransaccion(ing);
                                     insert(ingTotalCancelarHaber);
                                 }
                             } catch (CRUDException ex) {
@@ -882,7 +896,7 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
 
     //TODO falta al anular una nota de debito que anule la Nota de Credito
     @Override
-    public void anularNotaDebito(NotaDebito nota) throws CRUDException {
+    public synchronized void anularNotaDebito(NotaDebito nota , String usuario) throws CRUDException {
 
         Optional op = Optional.ofNullable(nota.getIdNotaDebito());
 
@@ -898,24 +912,49 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
                     List<NotaDebitoTransaccion> l = getAllTransacciones(fromDB.getIdNotaDebito());
                     for (NotaDebitoTransaccion n : l) {
                         try {
-                            anularTransaccionNotaDebito(n);
+                            anularTransaccion(n, usuario);
+                            
+                            /*ejbIngresoCaja.anularTransaccion(n, usuario);
+                            
+                            ejbNotaCredito.anularTransaccion(n, usuario);
+                            
+                            ejbPagoAnticipado.anularTransaccion(n, usuario);*/
+                            
                         } catch (CRUDException ex2) {
                             // aqui no hacemos nada ya que anular transaccion enviara la notificacion
                         }
                     }
                     //Obtenemos los Ingresos a Caja
-                    List<IngresoCaja> lic = ejbIngresoCaja.getIngresoCajaByNotaDebito(fromDB.getIdNotaDebito());
-                    for (IngresoCaja in : lic) {
-                        in.setEstado(Estado.ANULADO);
-                        em.merge(in);
-                    }
+                    
+                    /*List<IngresoTransaccion> lictr = ejbIngresoCaja.getIngresoCajaTrxByIdNotaDebito(fromDB);
+                    for (IngresoTransaccion it : lictr) {
+                        ejbIngresoCaja.anularTransaccion(it, usuario);
+                    }*/
+                    
+                    //TODO
+                    //Anular las transacciones de las Notas de Credito
+                    /*List<NotaCreditoTransaccion> lnctr =ejbNotaCredito.getNotaCreditoTransaccionByNotaDebito(fromDB);
+
+                    for (NotaCreditoTransaccion nctr : lnctr){
+                        ejbNotaCredito.anularTransaccion(nctr, usuario);
+                    }*/
+                    //TODO
+                    //Pago Anticipado 100
+                    // Pago Anticipado Transaccion 100
+                    //DEvolucion
+                    /*List<PagoAnticipadoTransaccion> lpatr = ejbPagoAnticipado.getPagoAnticipadoTransaccionByNotaDebito(fromDB);
+                    for (PagoAnticipadoTransaccion patr : lpatr){
+                        ejbPagoAnticipado.anularTransaccion(patr, usuario);
+                    }*/
+                    
                     //Obtenemos los Comprobantes Contables
                     List<ComprobanteContable> lcc = ejbComprobante.getComprobantesByNotaDebito(fromDB.getIdNotaDebito());
                     for (ComprobanteContable cc : lcc) {
                         cc.setEstado(ComprobanteContable.ANULADO);
                         em.merge(cc);
                     }
-
+                    
+                    
                     fromDB.setEstado(Estado.ANULADO);
 
                     em.flush();
@@ -962,10 +1001,17 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
 
                 //anular Transaccion del Ingreso a Caja
                 try {
-                    ejbIngresoCaja.anularTransaccion(fromDb, true);
+                    ejbIngresoCaja.anularTransaccion(fromDb, usuario);
                 } catch (CRUDException ex) {
 
                 }
+                
+                // Anular Transaccion de las Notas de Credito
+                ejbNotaCredito.anularTransaccion(fromDb, usuario);
+                // Anular TRansaccion de los Pagos Anticiapdos
+                
+                ejbPagoAnticipado.anularTransaccion(tr, usuario);
+                
                 //anular los asientos Contables
                 try {
                     ejbComprobante.anularAsientosContables(fromDb,  usuario);
@@ -973,7 +1019,7 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
 
                 }
 
-                updateMontosNotaDebito(fromDb.getIdNotaDebito().getIdNotaDebito());
+                //updateMontosNotaDebito(fromDb.getIdNotaDebito().getIdNotaDebito());
             } else {
                 throw new CRUDException("La transaccion %s se encuentra ANULADA.".replace("%s", fromDb.getIdNotaDebitoTransaccion().toString()));
             }
@@ -997,10 +1043,10 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
                 }
 
             } else {
-                throw new CRUDException("La transaccion %s se encuentra ANULADA.".replace("%s", tr.getIdNotaDebitoTransaccion().toString()));
+                //throw new CRUDException("La transaccion %s se encuentra ANULADA.".replace("%s", tr.getIdNotaDebitoTransaccion().toString()));
             }
         } else {
-            throw new CRUDException("No se especifico la Transaccion de la Nota de Debito");
+            //throw new CRUDException("No se especifico la Transaccion de la Nota de Debito");
         }
     }
 

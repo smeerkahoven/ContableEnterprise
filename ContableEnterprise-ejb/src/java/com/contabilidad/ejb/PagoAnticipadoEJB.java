@@ -16,6 +16,7 @@ import com.contabilidad.entities.CargoBoleto;
 import com.contabilidad.entities.ComprobanteContable;
 import com.contabilidad.entities.Devolucion;
 import com.contabilidad.entities.Moneda;
+import com.contabilidad.entities.NotaDebito;
 import com.contabilidad.entities.NotaDebitoTransaccion;
 import com.contabilidad.entities.PagoAnticipado;
 import com.contabilidad.entities.PagoAnticipadoTransaccion;
@@ -32,6 +33,7 @@ import com.seguridad.queries.Queries;
 import com.seguridad.utils.DateContable;
 import com.seguridad.utils.Estado;
 import java.math.BigDecimal;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import javax.ejb.EJB;
@@ -136,7 +138,7 @@ public class PagoAnticipadoEJB extends FacadeEJB implements PagoAnticipadoRemote
                 q += " AND p.fecha_emision<=?5";
             }
         }
-        
+
         op = Optional.ofNullable(search.getNroDeposito());
         if (op.isPresent()) {
             if (search.getFechaFin().trim().length() > 1) {
@@ -170,9 +172,9 @@ public class PagoAnticipadoEJB extends FacadeEJB implements PagoAnticipadoRemote
 
         op = Optional.ofNullable(search.getNroDeposito());
         if (op.isPresent()) {
-            query.setParameter("6", search.getNroDeposito() );
+            query.setParameter("6", search.getNroDeposito());
         }
-        
+
         query.setParameter("1", search.getIdEmpresa());
 
         System.out.println("Query:" + q);
@@ -320,6 +322,48 @@ public class PagoAnticipadoEJB extends FacadeEJB implements PagoAnticipadoRemote
 
     }
 
+    @Override
+    public void anularTransaccion(NotaDebitoTransaccion tr, String usuario) throws CRUDException {
+        //anulamos las transacciones de los Ingresos a Caja
+        Optional op = Optional.ofNullable(tr);
+        if (op.isPresent()) {
+            op = Optional.ofNullable(tr.getIdNotaDebitoTransaccion());
+            if (op.isPresent()) {
+
+                Query q = em.createNamedQuery("PagoAnticipadoTransaccion.findByNotadebitoTransaccion", PagoAnticipadoTransaccion.class);
+                q.setParameter("idNotaTransaccion", tr);
+
+                List<PagoAnticipadoTransaccion> lit = q.getResultList();
+
+                if (!lit.isEmpty()) {
+                    for (PagoAnticipadoTransaccion it : lit) {
+                        if (!it.getEstado().equals(Estado.ANULADO)) {
+                            it.setEstado(Estado.ANULADO);
+                            em.merge(it);
+
+                            //actualizamos los montos. Es lo mismo que el finalizar
+                            //ejecuta el procedure stored de las transacciones que estan en 
+                            //estado emitido
+                            updateMontosPagosAnticipados(it.getIdPagoAnticipado().getIdPagoAnticipado());
+                            //anulamos los asientos contables
+                            try {
+                                ejbComprobante.anularAsientosContables(it, usuario);
+                            } catch (CRUDException ex) {
+
+                            }
+
+                        }
+                    }
+                }
+
+            } else {
+                //throw new CRUDException("No se especifico un ID de Transaccion para el Ingreso de Caja");
+            }
+        } else {
+            //throw new CRUDException("No se especifico una Nota de Debito");
+        }
+    }
+
     private void updateMontosPagosAnticipados(Integer idPagoAnticipado) {
         StoredProcedureQuery spq = em.createNamedStoredProcedureQuery("PagoAnticipado.updateMontosPagoAnticipado");
         spq.setParameter("in_id_pago_anticipado", idPagoAnticipado);
@@ -414,7 +458,7 @@ public class PagoAnticipadoEJB extends FacadeEJB implements PagoAnticipadoRemote
 
         debe = ejbComprobante.createAsientoPagoAnticipadoDebe(comprobante, conf, fromDB);
         insert(debe);
-        
+
         AsientoContable haber; // 1500 DEPOSITO
         haber = ejbComprobante.createAsientoPagoAnticipadoHaber(comprobante, conf, fromDB);
         insert(haber);
@@ -466,6 +510,27 @@ public class PagoAnticipadoEJB extends FacadeEJB implements PagoAnticipadoRemote
     }
 
     @Override
+    public PagoAnticipadoTransaccion saveTransaccionDevolucion(PagoAnticipadoTransaccion trx, String usuario) throws CRUDException {
+        Optional op = Optional.ofNullable(trx);
+        if (!op.isPresent()) {
+            throw new CRUDException("Debe especificar una Transacción.");
+        }
+
+        trx.setFechaInsert(DateContable.getCurrentDate());
+        trx.setEstado(Estado.EMITIDO);
+        trx.setIdUsuarioCreador(usuario);
+
+        //ejbNotaDebito.actualizarMontosAdeudadosTransaccion(trx);
+
+        trx.setIdPagoAnticipadoTransaccion(insert(trx));
+
+        updateMontosPagosAnticipados(trx.getIdPagoAnticipado().getIdPagoAnticipado());
+
+        return trx;
+
+    }
+
+    @Override
     public PagoAnticipadoTransaccion saveTransaccion(PagoAnticipadoTransaccion trx, String usuario) throws CRUDException {
         Optional op = Optional.ofNullable(trx);
         if (!op.isPresent()) {
@@ -477,11 +542,11 @@ public class PagoAnticipadoEJB extends FacadeEJB implements PagoAnticipadoRemote
             throw new CRUDException("Debe especificar el Pago Anticipado para la transacción.");
         }
 
+        /*
         op = Optional.ofNullable(trx.getIdNotaTransaccion());
         if (!op.isPresent()) {
             throw new CRUDException("Debe especificar una Nota de Débito para la transacción.");
-        }
-
+        }*/
         op = Optional.ofNullable(trx.getMonto());
         if (!op.isPresent()) {
             throw new CRUDException("Debe al menos ingresar un monto en la Transacción del Pago Anticipado.");
@@ -561,7 +626,7 @@ public class PagoAnticipadoEJB extends FacadeEJB implements PagoAnticipadoRemote
     }
 
     @Override
-    public Devolucion devolver(Devolucion d) throws CRUDException {
+    public Devolucion devolver(Devolucion d, String usuario) throws CRUDException {
 
         Optional op = Optional.ofNullable(d.getIdPagoAnticipado());
         if (!op.isPresent()) {
@@ -611,26 +676,57 @@ public class PagoAnticipadoEJB extends FacadeEJB implements PagoAnticipadoRemote
             throw new CRUDException("No existe el pago Anticipado especificado");
         }
 
-        Double montoDevuelto = d.getMonto().doubleValue();
-        Double montoPagoAnticipado = pFromDb.getMontoAnticipado().doubleValue();
-
-        Double nuevoMontoAnticipado = montoPagoAnticipado - montoDevuelto;
-
-        pFromDb.setMontoAnticipado(new BigDecimal(nuevoMontoAnticipado));
-        
+        //Double montoDevuelto = d.getMonto().doubleValue();
+        //Double montoPagoAnticipado = pFromDb.getMontoAnticipado().doubleValue();
+        //Double nuevoMontoAnticipado = montoPagoAnticipado - montoDevuelto;
+        //pFromDb.setMontoAnticipado(new BigDecimal(nuevoMontoAnticipado));
         d.setFechaEmision(DateContable.getCurrentDate());
 
-        d= ejbDevolucion.saveDevolucionFromPagoAnticipado(d, pFromDb);
-        
+        //Salvamos la devolucion
+        d = ejbDevolucion.saveDevolucionFromPagoAnticipado(d, pFromDb);
+
+        PagoAnticipadoTransaccion trxDev = new PagoAnticipadoTransaccion();
+        trxDev.setDescripcion(d.getConcepto());
+        trxDev.setEstado(Estado.EMITIDO);
+        trxDev.setFechaInsert(DateContable.getCurrentDate());
+        trxDev.setIdPagoAnticipado(d.getIdPagoAnticipado());
+        trxDev.setIdUsuarioCreador(usuario);
+        trxDev.setMonto(d.getMonto());
+        trxDev.setMoneda(d.getMoneda());
+        //Aqui se sabe que la transaccion es una devolucion
+        trxDev.setTipo(PagoAnticipadoTransaccion.Tipo.DEVOLUCION);
+
+        //salvamos la Transaccion del pago
+        saveTransaccionDevolucion(trxDev, usuario);
+
         em.merge(pFromDb);
-        
-        return d ;
+
+        return d;
     }
 
     @Override
     public PagoAnticipadoTransaccion updateTransaccion(PagoAnticipadoTransaccion trx) throws CRUDException {
 
         throw new CRUDException("No es posible realizar la operacion");
+
+    }
+
+    @Override
+    public List<PagoAnticipadoTransaccion> getPagoAnticipadoTransaccionByNotaDebito(NotaDebito idNotaDebito) throws CRUDException {
+
+        // String q = queries.getPropertie(Queries.GET_PAGO_ANTICIPADO_TRX_BY_ID_NOTA_DEBITO);
+        Query query = em.createNamedQuery("PagoAnticipadoTransaccion.findByNotaDebito", PagoAnticipadoTransaccion.class);
+        query.setParameter("idNotaDebito", idNotaDebito);
+
+        List<PagoAnticipadoTransaccion> lreturn = null;
+
+        lreturn = query.getResultList();
+
+        if (lreturn.isEmpty()) {
+            return new LinkedList<>();
+        }
+
+        return lreturn;
 
     }
 

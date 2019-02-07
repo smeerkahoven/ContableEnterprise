@@ -40,12 +40,20 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "PagoAnticipadoTransaccion.findByMonto", query = "SELECT p FROM PagoAnticipadoTransaccion p WHERE p.monto = :monto")
     , @NamedQuery(name = "PagoAnticipadoTransaccion.findByFechaInsert", query = "SELECT p FROM PagoAnticipadoTransaccion p WHERE p.fechaInsert = :fechaInsert")
     , @NamedQuery(name = "PagoAnticipadoTransaccion.findByIdUsuarioCreador", query = "SELECT p FROM PagoAnticipadoTransaccion p WHERE p.idUsuarioCreador = :idUsuarioCreador")
-    , @NamedQuery(name = "PagoAnticipadoTransaccion.findByEstado", query = "SELECT p FROM PagoAnticipadoTransaccion p WHERE p.estado = :estado")})
+    , @NamedQuery(name = "PagoAnticipadoTransaccion.findByEstado", query = "SELECT p FROM PagoAnticipadoTransaccion p WHERE p.estado = :estado")
+    , @NamedQuery(name = "PagoAnticipadoTransaccion.findByNotadebitoTransaccion", query = "SELECT p FROM PagoAnticipadoTransaccion p WHERE p.idNotaTransaccion = :idNotaTransaccion")
+    , @NamedQuery(name = "PagoAnticipadoTransaccion.findByNotaDebito", query = "SELECT p FROM PagoAnticipadoTransaccion p WHERE p.idNotaTransaccion.idNotaDebito = :idNotaDebito")})
 public class PagoAnticipadoTransaccion extends Entidad {
+
+    public static class Tipo {
+
+        public final static String ACREDITACION = "AC";
+        public final static String DEVOLUCION = "DE";
+    }
 
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Basic(optional = false)
     @Column(name = "id_pago_anticipado_transaccion")
     private Integer idPagoAnticipadoTransaccion;
@@ -67,6 +75,8 @@ public class PagoAnticipadoTransaccion extends Entidad {
     @Size(max = 1)
     @Column(name = "moneda")
     private String moneda;
+    @Column(name = "tipo")
+    private String tipo;
     @JoinColumn(name = "id_pago_anticipado", referencedColumnName = "id_pago_anticipado")
     @ManyToOne
     private PagoAnticipado idPagoAnticipado;
@@ -152,6 +162,14 @@ public class PagoAnticipadoTransaccion extends Entidad {
 
     public void setIdNotaTransaccion(NotaDebitoTransaccion idNotaTransaccion) {
         this.idNotaTransaccion = idNotaTransaccion;
+    }
+
+    public String getTipo() {
+        return tipo;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
     }
 
     @Override

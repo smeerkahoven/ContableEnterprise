@@ -5,10 +5,6 @@
  */
 package com.response.json.contabilidad;
 
-import com.agencia.entities.Boleto;
-import com.contabilidad.entities.CargoBoleto;
-import com.contabilidad.entities.IngresoTransaccion;
-import com.contabilidad.entities.NotaDebitoTransaccion;
 import com.response.json.agencia.BoletoJSON;
 
 /**

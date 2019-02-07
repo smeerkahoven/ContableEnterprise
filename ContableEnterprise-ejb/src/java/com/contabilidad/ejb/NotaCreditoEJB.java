@@ -17,6 +17,7 @@ import com.contabilidad.entities.ComprobanteContable;
 import com.contabilidad.entities.Moneda;
 import com.contabilidad.entities.NotaCredito;
 import com.contabilidad.entities.NotaCreditoTransaccion;
+import com.contabilidad.entities.NotaDebito;
 import com.contabilidad.entities.NotaDebitoTransaccion;
 import com.contabilidad.remote.ComprobanteRemote;
 import com.contabilidad.remote.NotaDebitoRemote;
@@ -31,6 +32,7 @@ import com.seguridad.utils.DateContable;
 import com.seguridad.utils.Estado;
 import java.math.BigDecimal;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -260,11 +262,11 @@ public class NotaCreditoEJB extends FacadeEJB implements NotasCreditoRemote {
         NotaCreditoTransaccion fromDb = em.find(NotaCreditoTransaccion.class, trx.getIdNotaCreditoTransaccion());
         Optional op = Optional.ofNullable(fromDb);
         if (!op.isPresent()) {
-            throw new CRUDException("La transaccion que ha ingresado, no se ha encontrado.");
+            throw new CRUDException("La transaccion %s de la Nota de Credito que ha ingresado, no se ha encontrado.".replace("%s", trx.getIdNotaCreditoTransaccion().toString()));
         }
 
         if (fromDb.getEstado().equals(Estado.ANULADO)) {
-            throw new CRUDException("La transaccion que ha ingresado ya se encuentra ANULADA");
+            throw new CRUDException("La transaccion %s de la Nota de Credito que ha ingresado ya se encuentra ANULADA".replace("%s", trx.getIdNotaCreditoTransaccion().toString()));
         }
 
         if (fromDb.getEstado().equals(Estado.PENDIENTE)) {
@@ -544,6 +546,72 @@ public class NotaCreditoEJB extends FacadeEJB implements NotasCreditoRemote {
 
         return fromDb;
 
+    }
+
+    @Override
+    public List<NotaCreditoTransaccion> getNotaCreditoTransaccionByNotaDebito(NotaDebito idNotaDebito) throws CRUDException {
+
+        List<NotaCreditoTransaccion> lreturn = null;
+
+        //String q = queries.getPropertie(Queries.GET_NOTA_CREDITO_TRX_BY_ID_NOTA_DEBITO);
+        Query query = em.createNamedQuery("NotaCreditoTransaccion.findByIdNotaCreditoTransaccion", NotaCreditoTransaccion.class);
+        query.setParameter("idNotaDebito", idNotaDebito);
+
+        lreturn = query.getResultList();
+
+        if (lreturn.isEmpty()) {
+            lreturn = new LinkedList<>();
+        }
+
+        return lreturn;
+    }
+
+    @Override
+    public void anularTransaccion(NotaDebitoTransaccion tr, String usuario) throws CRUDException {
+        //anulamos las transacciones de los Ingresos a Caja
+        Optional op = Optional.ofNullable(tr);
+        if (op.isPresent()) {
+            op = Optional.ofNullable(tr.getIdNotaDebitoTransaccion());
+            if (op.isPresent()) {
+
+                Query q = em.createNamedQuery("NotaCreditoTransaccion.findByNotadebitoTransaccion", NotaCreditoTransaccion.class);
+                q.setParameter("idNotaTransaccion", tr);
+
+                List<NotaCreditoTransaccion> lit = q.getResultList();
+
+                /**
+                 * if (lit.isEmpty()) { throw new CRUDException("No existen
+                 * Transacciones de Nota de Credito para la Transaccion %s de la
+                 * Nota de Debito".replace("%s",
+                 * tr.getIdNotaDebitoTransaccion().toString())); }*
+                 */
+                if (!lit.isEmpty()) {
+                    for (NotaCreditoTransaccion it : lit) {
+                        if (!it.getEstado().equals(Estado.ANULADO)) {
+                            it.setEstado(Estado.ANULADO);
+                            em.merge(it);
+
+                            //actualizamos los montos. Es lo mismo que el finalizar
+                            //ejecuta el procedure stored de las transacciones que estan en 
+                            //estado emitido
+                            updateMontosNotaCredito(it.getIdNotaCredito().getIdNotaCredito());
+                            //anulamos los asientos contables
+                            try {
+                                ejbComprobante.anularAsientosContables(it, usuario);
+                            } catch (CRUDException ex) {
+
+                            }
+
+                        }
+                    }
+                }
+
+            } else {
+                //throw new CRUDException("No se especifico un ID de Transaccion para el Ingreso de Caja");
+            }
+        } else {
+            //throw new CRUDException("No se especifico una Nota de Debito");
+        }
     }
 
 }

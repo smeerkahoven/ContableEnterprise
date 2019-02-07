@@ -10,10 +10,13 @@ import com.seguridad.control.entities.Log;
 import com.seguridad.control.entities.UserLogin;
 import com.seguridad.control.exception.CRUDException;
 import com.seguridad.control.remote.LoggerRemote;
+import com.seguridad.search.LogSearch;
 import com.seguridad.utils.Accion;
 import com.seguridad.utils.DateContable;
+import java.util.LinkedList;
 import java.util.List;
 import javax.ejb.Stateful;
+import javax.persistence.Query;
 
 /**
  *
@@ -21,6 +24,7 @@ import javax.ejb.Stateful;
  */
 @Stateful
 public class LoggerEJB extends FacadeEJB implements LoggerRemote {
+
     static final long serialVersionUID = 42L;
 
     @Override
@@ -57,14 +61,14 @@ public class LoggerEJB extends FacadeEJB implements LoggerRemote {
         l.setNroIntento(intento);
         l.setUserName(user);
 
-        return add(l) ;
+        return add(l);
     }
 
     @Override
     public boolean add(UserLogin u) throws CRUDException {
         em.persist(u);
         em.flush();
-        return true ;
+        return true;
     }
 
     @Override
@@ -79,5 +83,45 @@ public class LoggerEJB extends FacadeEJB implements LoggerRemote {
         return add(l);
     }
 
-    
+    @Override
+    public List<Log> find(LogSearch search) throws CRUDException {
+        String q = "SELECT l FROM Log l WHERE 1=1 ";
+        List<Log> returnList = new LinkedList<>();
+
+        if (search.getFechaFin() != null) {
+            q += " and l.fechaLog <= :fechaFin";
+        }
+
+        if (search.getUsername() != null) {
+            q += " and l.usuario = :usuario ";
+        }
+
+        if (search.getFechaInicio() != null) {
+            q += " and l.fechaLog >= :fechaInicio";
+        }
+
+        if (search.getFechaFin() != null) {
+            q += " and l.fechaLog <= :fechaFin";
+        }
+
+        Query query = em.createQuery(q, Log.class);
+
+        if (search.getUsername() != null) {
+            query.setParameter("usuario", search.getUsername().getId());
+        }
+
+        if (search.getFechaInicio() != null) {
+            query.setParameter("fechaInicio", DateContable.toLatinAmericaDateFormat(search.getFechaInicio()));
+        }
+
+        if (search.getFechaFin() != null) {
+            query.setParameter("fechaFin", DateContable.toLatinAmericaDateFormat(search.getFechaFin()));
+        }
+
+        returnList = query.getResultList();
+
+        return returnList;
+
+    }
+
 }

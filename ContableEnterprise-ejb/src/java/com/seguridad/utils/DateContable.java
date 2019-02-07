@@ -36,7 +36,6 @@ public class DateContable {
             SimpleDateFormat from = new SimpleDateFormat(fromFormat);
 
             Date fromDate = from.parse(date);
-            System.out.println(fromDate);
 
             return new SimpleDateFormat(toFormat).format(fromDate);
             

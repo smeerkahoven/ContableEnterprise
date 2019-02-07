@@ -152,7 +152,7 @@ public class IngresoCajaEJB extends FacadeEJB implements IngresoCajaRemote {
         caja.setEstado(Estado.CREADO);
         caja.setFormaPago(FormasPago.EFECTIVO);
         caja.setFechaEmision(DateContable.getCurrentDate());
-        
+
         String fechaEmision = DateContable.getCurrentDateStr(DateContable.LATIN_AMERICA_FORMAT);
         CambioDolar diario = ejbCambio.get(fechaEmision, "CambioDolar.findFecha");
 
@@ -259,6 +259,21 @@ public class IngresoCajaEJB extends FacadeEJB implements IngresoCajaRemote {
         StoredProcedureQuery spq = em.createNamedStoredProcedureQuery("IngresoCaja.updateMontosIngresoCajaFromFinalizar");
         spq.setParameter("in_id_ingreso", caja.getIdIngresoCaja());
         spq.executeUpdate();
+    }
+
+    @Override
+    public List<IngresoTransaccion> getIngresoCajaTrxByIdNotaDebito(NotaDebito idNotaDebito) throws CRUDException {
+
+        //String q = queries.getPropertie(Queries.GET_NOTA);
+        Query query = em.createNamedQuery("IngresoTransaccion.findByIdNotaDebito", IngresoTransaccion.class);
+        query.setParameter("idNotaDebito", idNotaDebito);
+
+        List lreturn = query.getResultList();
+        if (lreturn.isEmpty()) {
+            return new LinkedList<>();
+        }
+
+        return lreturn;
     }
 
     @Override
@@ -370,8 +385,8 @@ public class IngresoCajaEJB extends FacadeEJB implements IngresoCajaRemote {
 
         return l;
     }
-    
-     @Override
+
+    @Override
     public void pendiente(IngresoCaja caja) throws CRUDException {
 
         IngresoCaja fromDb = em.find(IngresoCaja.class, caja.getIdIngresoCaja());
@@ -433,48 +448,15 @@ public class IngresoCajaEJB extends FacadeEJB implements IngresoCajaRemote {
         q.setParameter("nroTarjeta", caja.getNroTarjeta());
         q.setParameter("nroDeposito", caja.getNroDeposito());
         q.setParameter("idCuentaDeposito", caja.getIdCuentaDeposito());
-        q.setParameter("estado", Estado.PENDIENTE );
+        q.setParameter("estado", Estado.PENDIENTE);
         q.setParameter("idIngresoCaja", caja.getIdIngresoCaja());
 
         q.executeUpdate();
 
     }
 
-
-    public void anularTransaccion(IngresoTransaccion trx, String usuario) throws CRUDException {
-
-        IngresoTransaccion fromDb = em.find(IngresoTransaccion.class, trx.getIdTransaccion());
-        Optional op = Optional.ofNullable(fromDb);
-        if (!op.isPresent()) {
-            throw new CRUDException("La transaccion que ha ingresado, no se ha encontrado.");
-        }
-
-        if (fromDb.getEstado().equals(Estado.ANULADO)) {
-            throw new CRUDException("La transaccion que ha ingresado ya se encuentra ANULADA");
-        }
-
-        if (fromDb.getEstado().equals(Estado.PENDIENTE)) {
-            revertirMontosAnteriors(trx, fromDb);
-
-            fromDb.setEstado(Estado.ANULADO);
-            updateMontosIngresoCaja(trx.getIdIngresoCaja().getIdIngresoCaja());
-        }
-
-        if (fromDb.getEstado().equals(Estado.EMITIDO)) {
-            revertirMontosAnteriors(trx, fromDb);
-
-            fromDb.setEstado(Estado.ANULADO);
-            em.merge(fromDb);
-
-            updateMontosIngresoCaja(trx.getIdIngresoCaja().getIdIngresoCaja());
-            //anulamos los asientos contables
-            ejbComprobante.anularAsientosContables(fromDb, usuario);
-        }
-
-    }
-
     @Override
-    public void anularTransaccion(NotaDebitoTransaccion tr, boolean update) throws CRUDException {
+    public void anularTransaccion(NotaDebitoTransaccion tr, String usuario) throws CRUDException {
         //anulamos las transacciones de los Ingresos a Caja
         Optional op = Optional.ofNullable(tr);
         if (op.isPresent()) {
@@ -482,35 +464,32 @@ public class IngresoCajaEJB extends FacadeEJB implements IngresoCajaRemote {
             if (op.isPresent()) {
 
                 Query q = em.createNamedQuery("IngresoTransaccion.findByIdNotaTransaccion", IngresoTransaccion.class);
-                q.setParameter("idNotaTransaccion", tr.getIdNotaDebitoTransaccion());
+                q.setParameter("idNotaTransaccion", tr);
 
                 List<IngresoTransaccion> lit = q.getResultList();
 
-                if (lit.isEmpty()) {
-                    throw new CRUDException("No existen Transacciones de Ingreso de Caja para la Transaccion %s de la Nota de Debito".replace("%s", tr.getIdNotaDebitoTransaccion().toString()));
-                }
+                if (!lit.isEmpty()) {
+                    for (IngresoTransaccion it : lit) {
+                        if (!it.getEstado().equals(Estado.ANULADO)) {
 
-                for (IngresoTransaccion it : lit) {
-                    if (!it.getEstado().equals(Estado.ANULADO)) {
-                        it.setEstado(Estado.ANULADO);
-                        em.merge(it);
+                            it.setEstado(Estado.ANULADO);
+                            em.merge(it);
 
-                        //actualizamos los montos. Es lo mismo que el finalizar
-                        //ejecuta el procedure stored de las transacciones que estan en 
-                        //estado emitido
-                        actualizarMontosFinalizar(it.getIdIngresoCaja());
+                            updateMontosIngresoCaja(it.getIdIngresoCaja().getIdIngresoCaja());
+                            //anulamos los asientos contables
+                            ejbComprobante.anularAsientosContables(it, usuario);
+                        }
                     }
                 }
 
             } else {
-                throw new CRUDException("No se especifico un ID de Transaccion para el Ingreso de Caja");
+                //throw new CRUDException("No se especifico un ID de Transaccion para el Ingreso de Caja");
             }
         } else {
-            throw new CRUDException("No se especifico una Nota de Debito");
+            //throw new CRUDException("No se especifico una Nota de Debito");
         }
     }
 
-   
     @Override
     public void anularIngresoCaja(Integer idIngresoCaja, String usuario) throws CRUDException {
 
@@ -523,7 +502,7 @@ public class IngresoCajaEJB extends FacadeEJB implements IngresoCajaRemote {
         if (fromDb.getEstado().equals(Estado.ANULADO)) {
             throw new CRUDException("El Ingreso a caja ya se encuentra Anulado.");
         }
-        
+
         User uFromDb = em.find(User.class, usuario);
         op = Optional.ofNullable(uFromDb);
 
@@ -551,54 +530,70 @@ public class IngresoCajaEJB extends FacadeEJB implements IngresoCajaRemote {
     }
 
     @Override
-    public void anularTransaccion(Integer idTransaccion) throws CRUDException {
+    public void anularTransaccion(IngresoTransaccion trx, String usuario) throws CRUDException {
+
+        IngresoTransaccion fromDb = em.find(IngresoTransaccion.class, trx.getIdTransaccion());
+        Optional op = Optional.ofNullable(fromDb);
+        if (!op.isPresent()) {
+            throw new CRUDException("La transaccion del Ingreso de Caja %s, no se ha encontrado.".replace("%s", trx.getIdIngresoCaja().toString()));
+        }
+
+        if (fromDb.getEstado().equals(Estado.ANULADO)) {
+            throw new CRUDException("La transaccion del Ingreso de Caja %s que ha ingresado ya se encuentra ANULADA".replace("%s", trx.getIdIngresoCaja().toString()));
+        }
+
+        if (fromDb.getEstado().equals(Estado.PENDIENTE)) {
+            revertirMontosAnteriors(trx, fromDb);
+
+            fromDb.setEstado(Estado.ANULADO);
+            updateMontosIngresoCaja(trx.getIdIngresoCaja().getIdIngresoCaja());
+        }
+
+        // Si esta emitido, se revierten los montos
+        if (fromDb.getEstado().equals(Estado.EMITIDO)) {
+            revertirMontosAnteriors(trx, fromDb);
+
+            fromDb.setEstado(Estado.ANULADO);
+            em.merge(fromDb);
+
+            updateMontosIngresoCaja(trx.getIdIngresoCaja().getIdIngresoCaja());
+            //anulamos los asientos contables
+            ejbComprobante.anularAsientosContables(fromDb, usuario);
+        }
+
+    }
+
+    @Override
+    public void anularTransaccion(Integer idTransaccion, String usuario) throws CRUDException {
         Optional op = Optional.ofNullable(idTransaccion);
         if (!op.isPresent()) {
             throw new CRUDException("No existe la Transaccion %s de Ingreso de Caja.".replace("%s", idTransaccion.toString()));
         }
 
-        IngresoTransaccion fromDb = em.find(IngresoTransaccion.class, idTransaccion);
-        op = Optional.ofNullable(fromDb);
-        if (!op.isPresent()) {
-            throw new CRUDException("La transaccion %s del Ingreso de Caja, no existe.".replace("%s", idTransaccion.toString()));
-        }
-
-        if (fromDb.getEstado().equals(Estado.ANULADO )) {
-            throw new CRUDException("La transaccion %s se encuentra ANULADA.".replace("%s", idTransaccion.toString()));
-        }
-
-        if (fromDb.getEstado().equals(Estado.EMITIDO )) {
-            throw new CRUDException("La transaccion %s se encuentra EMITIDA. No puede Anularse.".replace("%s", idTransaccion.toString()));
-        }
-
-        fromDb.setEstado(Estado.ANULADO );
-
-        em.merge(fromDb);
-
-        //actualizamos los montos en los ingresos de Caja o pasa a Anulado.
-        updateMontosIngresoCaja(fromDb.getIdIngresoCaja().getIdIngresoCaja());
+        IngresoTransaccion tmp = new IngresoTransaccion(idTransaccion);
+        anularTransaccion(tmp, usuario);
 
     }
 
     @Override
-    public IngresoCaja finalizar(Integer idIngresoCaja) throws CRUDException {
+    public IngresoCaja finalizar(IngresoCaja idIngresoCaja) throws CRUDException {
 
         Optional op = Optional.ofNullable(idIngresoCaja);
         if (!op.isPresent()) {
             throw new CRUDException("Debe especificar un Numero de Ingreso de Caja.".replace("%s", idIngresoCaja.toString()));
         }
 
-        IngresoCaja fromDb = em.find(IngresoCaja.class, idIngresoCaja);
+        IngresoCaja fromDb = em.find(IngresoCaja.class, idIngresoCaja.getIdIngresoCaja());
         op = Optional.ofNullable(fromDb);
         if (!op.isPresent()) {
             throw new CRUDException("No se ha encontrado el Ingreso de Caja %s.".replace("%s", idIngresoCaja.toString()));
         }
 
-        if (fromDb.getEstado().equals(Estado.ANULADO )) {
+        if (fromDb.getEstado().equals(Estado.ANULADO)) {
             throw new CRUDException("El Ingreso de Caja %s se encuentra ANULADA.".replace("%s", idIngresoCaja.toString()));
         }
 
-        if (fromDb.getEstado().equals(Estado.EMITIDO )) {
+        if (fromDb.getEstado().equals(Estado.EMITIDO)) {
             throw new CRUDException("El Ingreso de Caja %s se encuentra EMITIDA.".replace("%s", idIngresoCaja.toString()));
         }
 
@@ -606,7 +601,14 @@ public class IngresoCajaEJB extends FacadeEJB implements IngresoCajaRemote {
             throw new CRUDException("Debe Ingresar al menos una Transaccion para crear los Comprobantes Contables.".replace("%s", idIngresoCaja.toString()));
         }
 
-        fromDb.setEstado(Estado.EMITIDO );
+        fromDb.setEstado(Estado.EMITIDO);
+        fromDb.setFormaPago(idIngresoCaja.getFormaPago());
+        fromDb.setNroCheque(idIngresoCaja.getNroCheque());
+        fromDb.setNroDeposito(idIngresoCaja.getNroDeposito());
+        fromDb.setNroTarjeta(idIngresoCaja.getNroTarjeta());
+        fromDb.setIdBanco(idIngresoCaja.getIdBanco());
+        fromDb.setIdCuentaDeposito(idIngresoCaja.getIdCuentaDeposito());
+        fromDb.setIdTarjetaCredito(idIngresoCaja.getIdTarjetaCredito());
 
         ContabilidadBoletaje conf = ejbNotaDebito.getConfiguracion(fromDb.getIdEmpresa());
 
@@ -653,7 +655,7 @@ public class IngresoCajaEJB extends FacadeEJB implements IngresoCajaRemote {
                 }
                 em.merge(ndt);
 
-                tran.setEstado(Estado.EMITIDO );
+                tran.setEstado(Estado.EMITIDO);
                 em.merge(tran);
             }
         }
@@ -780,11 +782,11 @@ public class IngresoCajaEJB extends FacadeEJB implements IngresoCajaRemote {
             throw new CRUDException("La transaccion especificada NO existe.");
         }
 
-        if (fromDb.getEstado().equals(Estado.EMITIDO )) {
+        if (fromDb.getEstado().equals(Estado.EMITIDO)) {
             throw new CRUDException("La transaccion se encuentra EMITIDA, no puede modificar sus valores");
         }
 
-        if (fromDb.getEstado().equals(Estado.ANULADO )) {
+        if (fromDb.getEstado().equals(Estado.ANULADO)) {
             throw new CRUDException("La transaccion se encuentra ANULADA, no puede modificar sus valores");
         }
 

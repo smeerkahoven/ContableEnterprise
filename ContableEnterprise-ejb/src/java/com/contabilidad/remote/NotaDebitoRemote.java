@@ -209,7 +209,7 @@ public interface NotaDebitoRemote extends DaoRemoteFacade {
      * @param nota
      * @throws CRUDException
      */
-    public void anularNotaDebito(NotaDebito nota) throws CRUDException;
+    public void anularNotaDebito(NotaDebito nota, String usuario) throws CRUDException;
 
     /**
      * Devuelve todas las Notas de Debito que estan con forma de Pago al Credito

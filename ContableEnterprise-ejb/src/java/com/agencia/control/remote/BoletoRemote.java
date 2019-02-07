@@ -18,6 +18,7 @@ import com.contabilidad.entities.IngresoTransaccion;
 import com.contabilidad.entities.NotaDebito;
 import com.contabilidad.entities.NotaDebitoTransaccion;
 import com.response.json.boletaje.PlanillaSearchForm;
+import com.response.json.boletaje.VentaBoletosSearchJson;
 import com.seguridad.control.entities.Entidad;
 import com.seguridad.control.exception.CRUDException;
 import com.seguridad.control.remote.DaoRemoteFacade;
@@ -199,5 +200,11 @@ public interface BoletoRemote extends DaoRemoteFacade {
      * @throws CRUDException 
      */
     public List<BoletoPlanillaBsp> getPlanillaBsp (PlanillaSearchForm search) throws CRUDException;
+    
+    public List<BoletoPlanillaBsp> getReporteVentas(VentaBoletosSearchJson search) throws CRUDException;
+    
+    public List<BoletoPlanillaBsp> getReporteComisionCliente(VentaBoletosSearchJson search) throws CRUDException;
+    
+    
     
 }
