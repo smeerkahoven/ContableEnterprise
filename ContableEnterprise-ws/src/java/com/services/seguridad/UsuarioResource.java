@@ -13,6 +13,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.response.json.UsuarioJSON;
 import com.seguridad.control.LoggerContable;
+import com.seguridad.control.ejb.UsuarioEJB;
 import com.seguridad.control.entities.PasswordRecover;
 import com.seguridad.control.entities.Rol;
 import com.seguridad.control.entities.User;
@@ -35,6 +36,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -285,7 +287,7 @@ public class UsuarioResource extends TemplateResource {
                         String comando = (String) hmap.get("comando");
                         String estado = (String) hmap.get("status");
                         BigDecimal idRol = (BigDecimal) hmap.get("idRol");
-                        
+
                         User u = new User();
                         u.setUserName(username);
                         u.setStatus(estado);
@@ -331,6 +333,7 @@ public class UsuarioResource extends TemplateResource {
 
         Mensajes m = Mensajes.getMensajes().getMensajes();
         RestResponse r = new RestResponse();
+        doValidations(request);
         try {
             /*Verificamos el ID token*/
             if (request.getToken() != null && !request.getToken().isEmpty()) {
@@ -338,9 +341,6 @@ public class UsuarioResource extends TemplateResource {
                 UserToken t = ejbUsuario.get(new UserToken(request.getToken()));
                 if (t != null) {
                     if (t.getStatus().equals(Status.ACTIVO)) {
-
-                        r.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
-                        r.setContent(UsuarioJSON.convertToJSON(ejbUsuario.get()));
 
                         return r;
                     } else {
@@ -355,7 +355,7 @@ public class UsuarioResource extends TemplateResource {
                 r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
                 r.setContent(m.getProperty(RestResponse.RESTFUL_TOKEN_MANDATORY));
             }
-            
+
             ejbLogger.add(Accion.SEARCH, user.getUserName(),
                     com.view.menu.Formulario.USUARIO, user.getIp());
 
@@ -368,6 +368,40 @@ public class UsuarioResource extends TemplateResource {
         r.setContent(m.getProperty(RestResponse.RESTFUL_ERROR));
 
         return r;
+
+    }
+
+    @POST
+    @Path("combo")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public RestResponse getAllCombo(final RestRequest request) {
+        RestResponse response = doValidations(request);
+        try {
+
+            List<User> luser = ejbUsuario.get();
+            List returnList = new LinkedList();
+            if (!luser.isEmpty()) {
+
+                for (User u : luser) {
+                    ComboSelect c = new ComboSelect();
+                    c.setId(u.getUserName());
+                    c.setName(u.getUserName());
+                    returnList.add(c);
+                }
+            }
+
+            response.setContent(returnList);
+            response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
+
+            return response;
+
+        } catch (CRUDException ex) {
+            response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+            response.setContent(ex.getMessage());
+            Logger.getLogger(UsuarioResource.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return response ;
 
     }
 
@@ -413,10 +447,10 @@ public class UsuarioResource extends TemplateResource {
 
             User u = new User();
 
-            HashMap<String,Object> parametros= (HashMap<String, Object>) request.getContent();
-            u.setUserName((String)parametros.get("usr"));
-            u.setPassword((String)parametros.get("pwd"));
-            
+            HashMap<String, Object> parametros = (HashMap<String, Object>) request.getContent();
+            u.setUserName((String) parametros.get("usr"));
+            u.setPassword((String) parametros.get("pwd"));
+
             ejbUsuario.updatePassword(u);
 
             response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
@@ -428,8 +462,8 @@ public class UsuarioResource extends TemplateResource {
             response.setContent(mensajes.getProperty(RestResponse.RESTFUL_ERROR));
             Logger.getLogger(UsuarioResource.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        return response ;
+
+        return response;
     }
 
     private String password_content = "<table style=\"height: 428px; width: 100%;\">\n"

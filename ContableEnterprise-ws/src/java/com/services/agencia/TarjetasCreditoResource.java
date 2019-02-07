@@ -25,6 +25,7 @@ import com.services.seguridad.EmpresaServices;
 import com.services.seguridad.util.RestRequest;
 import com.services.seguridad.util.RestResponse;
 import com.seguridad.utils.ComboSelect;
+import com.services.TemplateResource;
 import com.util.resource.Mensajes;
 import com.view.menu.Formulario;
 import java.math.BigInteger;
@@ -50,7 +51,7 @@ import javax.ws.rs.core.MediaType;
  * @author xeio
  */
 @Path("tarjetas-credito")
-public class TarjetasCreditoResource {
+public class TarjetasCreditoResource extends TemplateResource {
 
     @Context
     private UriInfo context;
@@ -114,6 +115,7 @@ public class TarjetasCreditoResource {
 
         Mensajes m = Mensajes.getMensajes().getMensajes();
         RestResponse r = new RestResponse();
+        doValidations(request);
         try {
             /*Verificamos el ID token*/
             if (request.getToken() != null && !request.getToken().isEmpty()) {
@@ -127,7 +129,7 @@ public class TarjetasCreditoResource {
                         r.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
                         r.setContent(l);
 
-                        ejbLogger.add(Accion.ACCESS, t.getUserName(), Formulario.TARJETA_CREDITO, "");
+                        ejbLogger.add(Accion.ACCESS, t.getUserName(), Formulario.TARJETA_CREDITO, user.getIp());
 
                         return r;
                     } else {
@@ -213,6 +215,8 @@ public class TarjetasCreditoResource {
 
         Mensajes m = Mensajes.getMensajes().getMensajes();
         RestResponse r = new RestResponse();
+        doValidations(request);
+        
         try {
             /*Verificamos el ID token*/
             if (request.getToken() != null && !request.getToken().isEmpty()) {
@@ -233,7 +237,7 @@ public class TarjetasCreditoResource {
                         r.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
                         r.setContent(m.getProperty(RestResponse.RESTFUL_SUCCESS));
 
-                        ejbLogger.add(Accion.INSERT, t.getUserName(), request.getFormName(), "");
+                        ejbLogger.add(Accion.INSERT, t.getUserName(), request.getFormName(), user.getIp());
 
                         return r;
 
@@ -268,6 +272,7 @@ public class TarjetasCreditoResource {
 
         Mensajes m = Mensajes.getMensajes().getMensajes();
         RestResponse r = new RestResponse();
+        doValidations(request);
         try {
             /*Verificamos el ID token*/
             if (request.getToken() != null && !request.getToken().isEmpty()) {
@@ -285,7 +290,7 @@ public class TarjetasCreditoResource {
                         TarjetaCredito pcu = TarjetaCreditoJSON.toTarjetaCredito(json);
                         ejbTarjeta.update(pcu);
 
-                        ejbLogger.add(Accion.UPDATE, t.getUserName(), request.getFormName(), "");
+                        ejbLogger.add(Accion.UPDATE, t.getUserName(), request.getFormName(), user.getIp());
 
                         r.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
                         r.setContent(m.getProperty(RestResponse.RESTFUL_SUCCESS));

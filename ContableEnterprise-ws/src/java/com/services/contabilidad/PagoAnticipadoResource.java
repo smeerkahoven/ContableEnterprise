@@ -31,8 +31,6 @@ import java.util.Optional;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
@@ -250,6 +248,9 @@ public class PagoAnticipadoResource extends TemplateResource {
                 PagoAnticipadoTransaccionJson json = BeanUtils.convertToPagoAnticipadoTransaccionJson(request);
 
                 PagoAnticipadoTransaccion trx = PagoAnticipadoTransaccionJson.toPagoAnticipadoTransaccion(json);
+                
+                // Este metodo viene directo para una transaccion del tipo ACREDITACION
+                trx.setTipo(PagoAnticipadoTransaccion.Tipo.ACREDITACION);
 
                 trx = ejbPagoAnticipado.saveTransaccion(trx, user.getUserName());
 
@@ -263,6 +264,7 @@ public class PagoAnticipadoResource extends TemplateResource {
 
                 String mensaje = Log.PAGO_ANTICIPADO_NUEVA_TRANSACION.replace("trx", trx.getIdPagoAnticipadoTransaccion().toString());
                 mensaje = mensaje.replace("<id>", trx.getIdPagoAnticipado().getIdPagoAnticipado().toString());
+                
                 ejbLogger.add(Accion.INSERT, user.getUserName(), com.view.menu.Formulario.PAGOS_ANTICIPADOS, user.getIp(), mensaje);
 
             } catch (CRUDException ex) {
@@ -299,7 +301,8 @@ public class PagoAnticipadoResource extends TemplateResource {
                 response.setContent(json);
 
                 ejbLogger.add(Accion.INSERT, user.getUserName(),
-                        com.view.menu.Formulario.PAGOS_ANTICIPADOS, user.getIp(), Log.PAGO_ANTICIPADO_NUEVO.replace("<id>", nota.getIdPagoAnticipado().toString()));
+                        com.view.menu.Formulario.PAGOS_ANTICIPADOS, user.getIp(),
+                        Log.PAGO_ANTICIPADO_NUEVO.replace("<id>", nota.getIdPagoAnticipado().toString()));
 
             } catch (CRUDException ex) {
                 Logger.getLogger(NotasCreditoResource.class.getName()).log(Level.SEVERE, null, ex);
@@ -330,7 +333,8 @@ public class PagoAnticipadoResource extends TemplateResource {
                 response.setContent(mensajes.getProperty(RestResponse.RESTFUL_SUCCESS));
 
                 ejbLogger.add(Accion.INSERT, user.getUserName(),
-                        com.view.menu.Formulario.PAGOS_ANTICIPADOS, user.getIp(), Log.PAGO_ANTICIPADO_FINALIZAR.replace("<id>", data.getIdPagoAnticipado().toString()));
+                        com.view.menu.Formulario.PAGOS_ANTICIPADOS, user.getIp(),
+                        Log.PAGO_ANTICIPADO_FINALIZAR.replace("<id>", data.getIdPagoAnticipado().toString()));
 
             } catch (CRUDException ex) {
                 Logger.getLogger(NotasCreditoResource.class.getName()).log(Level.SEVERE, null, ex);
@@ -361,7 +365,8 @@ public class PagoAnticipadoResource extends TemplateResource {
                 response.setContent(mensajes.getProperty(RestResponse.RESTFUL_SUCCESS));
 
                 ejbLogger.add(Accion.UPDATE, user.getUserName(),
-                        com.view.menu.Formulario.PAGOS_ANTICIPADOS, user.getIp(), Log.PAGO_ANTICIPADO_FINALIZAR.replace("<id>", data.getIdPagoAnticipado().toString()));
+                        com.view.menu.Formulario.PAGOS_ANTICIPADOS, user.getIp(),
+                        Log.PAGO_ANTICIPADO_FINALIZAR.replace("<id>", data.getIdPagoAnticipado().toString()));
 
             } catch (CRUDException ex) {
                 Logger.getLogger(NotasCreditoResource.class.getName()).log(Level.SEVERE, null, ex);
@@ -418,6 +423,7 @@ public class PagoAnticipadoResource extends TemplateResource {
                 PagoAnticipadoJson rReturnJson = PagoAnticipadoJson.toPagoAnticipadoJson(pReturn);
 
                 String mensaje = Log.PAGO_ANTICIPADO_ANULAR_TRANSACCION.replace("<id>", json.getIdPagoAnticipadoTransaccion().toString());
+                
                 ejbLogger.add(Accion.ANULAR, user.getUserName(), com.view.menu.Formulario.PAGOS_ANTICIPADOS, user.getIp(), mensaje);
 
                 response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
@@ -492,7 +498,7 @@ public class PagoAnticipadoResource extends TemplateResource {
                 data.setIdEmpresa(user.getIdEmpleado().getIdEmpresa().getIdEmpresa());
 
                 //pasamos a registrar la devolucion
-                data = ejbPagoAnticipado.devolver(data);
+                data = ejbPagoAnticipado.devolver(data, user.getUserName());
 
                 String msg = Log.PAGO_ANTICIPADO_DEVOLUCION;
                 msg = msg.replace("monto", data.getMonto().toString());

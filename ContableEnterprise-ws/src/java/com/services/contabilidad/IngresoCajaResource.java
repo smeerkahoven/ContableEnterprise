@@ -343,7 +343,7 @@ public class IngresoCajaResource extends TemplateResource {
             if (response.getCode() == ResponseCode.RESTFUL_SUCCESS.getCode()) {
                 IngresoTransaccionJson json = BeanUtils.convertoToIngresoCajaTransaccionJson(request);
 
-                ejbIngresoCaja.anularTransaccion(json.getIdTransaccion());
+                ejbIngresoCaja.anularTransaccion(json.getIdTransaccion(), user.getUserName());
 
                 String mensaje = Log.INGRESO_CAJA_ANULAR_TRANSACCION.replace("<id>", json.getIdTransaccion().toString());
                 ejbLogger.add(Accion.ANULAR, user.getUserName(), com.view.menu.Formulario.INGRESO_CAJA, user.getIp(), mensaje);
@@ -370,11 +370,15 @@ public class IngresoCajaResource extends TemplateResource {
         if (response.getCode() == ResponseCode.RESTFUL_SUCCESS.getCode()) {
             try {
                 IngresoCajaJSON json = BeanUtils.convertoToIngresoCajaJson(request);
+                IngresoCaja tmp = IngresoCajaJSON.toIngresoCaja(json);
 
-                ejbIngresoCaja.finalizar(json.getIdIngresoCaja());
+                IngresoCaja tmpFRomDb = ejbIngresoCaja.finalizar(tmp);
 
+                json = IngresoCajaJSON.toJSON(tmpFRomDb);
+                
                 response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
                 response.setContent(mensajes.getProperty(RestResponse.RESTFUL_SUCCESS));
+                response.setEntidad(json);
 
                 ejbLogger.add(Accion.FINALIZAR, user.getUserName(), Formulario.INGRESO_CAJA, user.getIp(), Log.INGRESO_CAJA_FINALIZAR.replace("<id>", json.getIdIngresoCaja().toString()));
 

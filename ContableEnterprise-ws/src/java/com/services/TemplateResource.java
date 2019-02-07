@@ -55,6 +55,8 @@ public class TemplateResource {
                 UserToken t = ejbUsuario.get(new UserToken(request.getToken()));
                 user = ejbUsuario.get(new User(t.getUserName()));
 
+                //deberia validar si el token tiene la fecha actual con la de la BD
+                
                 if (t != null) {
                     if (t.getStatus().equals(Status.ACTIVO)) {
                         r.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());

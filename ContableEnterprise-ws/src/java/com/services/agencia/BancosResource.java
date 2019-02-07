@@ -117,7 +117,7 @@ public class BancosResource extends TemplateResource {
                         r.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
                         r.setContent(l);
 
-                        ejbLogger.add(Accion.ACCESS, t.getUserName(), Formulario.BANCOS, "");
+                        ejbLogger.add(Accion.ACCESS, t.getUserName(), Formulario.BANCOS, user.getIp());
 
                         return r;
                     } else {
@@ -248,6 +248,7 @@ public class BancosResource extends TemplateResource {
 
         Mensajes m = Mensajes.getMensajes().getMensajes();
         RestResponse r = new RestResponse();
+        doValidations(request);
         try {
             /*Verificamos el ID token*/
             if (request.getToken() != null && !request.getToken().isEmpty()) {
@@ -268,7 +269,7 @@ public class BancosResource extends TemplateResource {
                         r.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
                         r.setContent(m.getProperty(RestResponse.RESTFUL_SUCCESS));
 
-                        ejbLogger.add(Accion.INSERT, t.getUserName(), request.getFormName(), "");
+                        ejbLogger.add(Accion.INSERT, t.getUserName(), request.getFormName(), user.getIp());
 
                         return r;
 
@@ -303,6 +304,7 @@ public class BancosResource extends TemplateResource {
 
         Mensajes m = Mensajes.getMensajes().getMensajes();
         RestResponse r = new RestResponse();
+        doValidations(request);
         try {
             /*Verificamos el ID token*/
             if (request.getToken() != null && !request.getToken().isEmpty()) {
@@ -320,7 +322,7 @@ public class BancosResource extends TemplateResource {
                         Bancos pcu = BancoJSON.toBancos(json);
                         ejbBancos.update(pcu);
 
-                        ejbLogger.add(Accion.UPDATE, t.getUserName(), request.getFormName(), "");
+                        ejbLogger.add(Accion.UPDATE, t.getUserName(), request.getFormName(), user.getIp());
 
                         r.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
                         r.setContent(m.getProperty(RestResponse.RESTFUL_SUCCESS));
@@ -360,6 +362,7 @@ public class BancosResource extends TemplateResource {
 
         Mensajes m = Mensajes.getMensajes().getMensajes();
         RestResponse r = new RestResponse();
+        doValidations(request);
         try {
             /*Verificamos el ID token*/
             if (request.getToken() != null && !request.getToken().isEmpty()) {
@@ -383,7 +386,7 @@ public class BancosResource extends TemplateResource {
 
                         ejbBancos.remove(pcu);
 
-                        ejbLogger.add(Accion.DELETE, t.getUserName(), request.getFormName(), "");
+                        ejbLogger.add(Accion.DELETE, t.getUserName(), request.getFormName(), user.getIp());
 
                         r.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
                         r.setContent(m.getProperty(RestResponse.RESTFUL_SUCCESS));
@@ -440,7 +443,7 @@ public class BancosResource extends TemplateResource {
 
                         ejbBancos.remove(Queries.DELETE_CUENTA_BANCO, parameters);
 
-                        ejbLogger.add(Accion.DELETE, t.getUserName(), request.getFormName(), "");
+                        ejbLogger.add(Accion.DELETE, t.getUserName(), request.getFormName(), user.getIp());
 
                         r.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
                         r.setContent(m.getProperty(RestResponse.RESTFUL_SUCCESS));
@@ -499,7 +502,7 @@ public class BancosResource extends TemplateResource {
                         r.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
                         r.setContent(l);
 
-                        ejbLogger.add(Accion.ACCESS, t.getUserName(),Formulario.BANCOS, "");
+                        ejbLogger.add(Accion.ACCESS, t.getUserName(),Formulario.BANCOS, user.getIp());
 
                         return r;
                     } else {
@@ -554,7 +557,7 @@ public class BancosResource extends TemplateResource {
                         r.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
                         r.setContent(m.getProperty(RestResponse.RESTFUL_SUCCESS));
 
-                        ejbLogger.add(Accion.ACCESS, t.getUserName(), Formulario.BANCOS, "");
+                        ejbLogger.add(Accion.ACCESS, t.getUserName(), Formulario.BANCOS, user.getIp());
 
                         return r;
                     } else {

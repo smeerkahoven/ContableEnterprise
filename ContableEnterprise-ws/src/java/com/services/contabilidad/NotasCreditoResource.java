@@ -379,7 +379,8 @@ public class NotasCreditoResource extends TemplateResource {
                 response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
                 response.setContent(mensajes.getProperty(RestResponse.RESTFUL_SUCCESS));
 
-                ejbLogger.add(Accion.FINALIZAR, user.getUserName(), Formulario.NOTA_CREDITO, user.getIp(), Log.NOTA_CREDITO_FINALIZAR.replace("<id>", json.getIdNotaCredito().toString()));
+                ejbLogger.add(Accion.FINALIZAR, user.getUserName(), Formulario.NOTA_CREDITO, 
+                        user.getIp(), Log.NOTA_CREDITO_FINALIZAR.replace("<id>", json.getIdNotaCredito().toString()));
 
             } catch (CRUDException ex) {
                 Logger.getLogger(NotasCreditoResource.class.getName()).log(Level.SEVERE, null, ex);

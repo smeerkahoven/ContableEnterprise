@@ -21,6 +21,7 @@ import com.seguridad.utils.Accion;
 import com.seguridad.utils.DateContable;
 import com.seguridad.utils.ResponseCode;
 import com.seguridad.utils.Status;
+import com.services.TemplateResource;
 import com.services.seguridad.EmpresaServices;
 import com.services.seguridad.util.RestRequest;
 import com.services.seguridad.util.RestResponse;
@@ -54,7 +55,7 @@ import jdk.nashorn.internal.parser.JSONParser;
  * @author xeio
  */
 @Path("factores")
-public class FactoresResource {
+public class FactoresResource extends TemplateResource {
 
     @EJB
     private UsuarioRemote ejbUsuario;
@@ -105,6 +106,7 @@ public class FactoresResource {
 
         Mensajes m = Mensajes.getMensajes().getMensajes();
         RestResponse r = new RestResponse();
+        doValidations(request);
         try {
             /*Verificamos el ID token*/
             if (request.getToken() != null && !request.getToken().isEmpty()) {
@@ -126,7 +128,7 @@ public class FactoresResource {
                         r.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
                         r.setContent(list);
 
-                        ejbLogger.add(Accion.ACCESS, t.getUserName(), Formulario.FACTORES, "");
+                        ejbLogger.add(Accion.ACCESS, t.getUserName(), Formulario.FACTORES, user.getIp());
 
                         return r;
                     } else {
@@ -160,6 +162,7 @@ public class FactoresResource {
 
         Mensajes m = Mensajes.getMensajes().getMensajes();
         RestResponse r = new RestResponse();
+        doValidations(request);
         try {
             /*Verificamos el ID token*/
             if (request.getToken() != null && !request.getToken().isEmpty()) {
@@ -230,6 +233,7 @@ public class FactoresResource {
 
         Mensajes m = Mensajes.getMensajes().getMensajes();
         RestResponse r = new RestResponse();
+        doValidations(request);
         try {
             /*Verificamos el ID token*/
             if (request.getToken() != null && !request.getToken().isEmpty()) {
@@ -252,7 +256,7 @@ public class FactoresResource {
                         r.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
                         r.setContent(m.getProperty(RestResponse.RESTFUL_SUCCESS));
 
-                        ejbLogger.add(Accion.ACCESS, t.getUserName(), Formulario.FACTORES, "");
+                        ejbLogger.add(Accion.ACCESS, t.getUserName(), Formulario.FACTORES, user.getIp());
 
                         return r;
                     } else {
@@ -286,6 +290,7 @@ public class FactoresResource {
 
         Mensajes m = Mensajes.getMensajes().getMensajes();
         RestResponse r = new RestResponse();
+        doValidations(request);
         try {
             /*Verificamos el ID token*/
             if (request.getToken() != null && !request.getToken().isEmpty()) {
@@ -309,7 +314,7 @@ public class FactoresResource {
                         r.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
                         r.setContent(m.getProperty(RestResponse.RESTFUL_SUCCESS));
 
-                        ejbLogger.add(Accion.ACCESS, t.getUserName(), Formulario.FACTORES, "");
+                        ejbLogger.add(Accion.ACCESS, t.getUserName(), Formulario.FACTORES, user.getIp());
 
                         return r;
                     } else {
@@ -343,6 +348,7 @@ public class FactoresResource {
 
         Mensajes m = Mensajes.getMensajes().getMensajes();
         RestResponse r = new RestResponse();
+        doValidations(request);
         try {
             /*Verificamos el ID token*/
             if (request.getToken() != null && !request.getToken().isEmpty()) {
@@ -365,7 +371,7 @@ public class FactoresResource {
                         r.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
                         r.setContent(m.getProperty(RestResponse.RESTFUL_SUCCESS));
 
-                        ejbLogger.add(Accion.ACCESS, t.getUserName(), Formulario.FACTORES, "");
+                        ejbLogger.add(Accion.ACCESS, t.getUserName(), Formulario.FACTORES, user.getIp());
 
                         return r;
                     } else {
@@ -399,6 +405,7 @@ public class FactoresResource {
 
         Mensajes m = Mensajes.getMensajes().getMensajes();
         RestResponse r = new RestResponse();
+        doValidations(request);
         try {
             /*Verificamos el ID token*/
             if (request.getToken() != null && !request.getToken().isEmpty()) {
@@ -420,7 +427,7 @@ public class FactoresResource {
                         r.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
                         r.setContent(list);
 
-                        ejbLogger.add(Accion.ACCESS, t.getUserName(), Formulario.FACTORES, "");
+                        ejbLogger.add(Accion.ACCESS, t.getUserName(), Formulario.FACTORES, user.getIp());
 
                         return r;
                     } else {

@@ -123,6 +123,7 @@ public class AerolineaResource extends TemplateResource {
     public RestResponse getAerolineaCombo(final RestRequest request, @PathParam("moneda") String moneda) {
         Mensajes m = Mensajes.getMensajes();
         RestResponse r = new RestResponse();
+        doValidations(request);
         try {
             /*Verificamos el ID Token*/
             if (request.getToken() != null && !request.getToken().isEmpty()) {
@@ -147,7 +148,7 @@ public class AerolineaResource extends TemplateResource {
                         //r.setCode(u.getIdEmpleado().getIdEmpresa().getIdEmpresa());
                         r.setContent(lcomsion);
 
-                        ejbLogger.add(Accion.ACCESS, t.getUserName(), Formulario.AEROLINEA, "");
+                        ejbLogger.add(Accion.ACCESS, t.getUserName(), Formulario.AEROLINEA, user.getIp());
 
                         return r;
                     } else {
@@ -178,6 +179,7 @@ public class AerolineaResource extends TemplateResource {
     public RestResponse getAerolineaAll(final RestRequest request) {
         Mensajes m = Mensajes.getMensajes();
         RestResponse r = new RestResponse();
+        doValidations(request);
         try {
             /*Verificamos el ID Token*/
             if (request.getToken() != null && !request.getToken().isEmpty()) {
@@ -194,7 +196,7 @@ public class AerolineaResource extends TemplateResource {
                         //r.setCode(u.getIdEmpleado().getIdEmpresa().getIdEmpresa());
                         r.setContent(l);
 
-                        ejbLogger.add(Accion.ACCESS, t.getUserName(), Formulario.AEROLINEA, "");
+                        ejbLogger.add(Accion.ACCESS, t.getUserName(), Formulario.AEROLINEA, user.getIp());
 
                         return r;
                     } else {
@@ -245,6 +247,7 @@ public class AerolineaResource extends TemplateResource {
     public RestResponse getAerolineaImpuetosAll(final RestRequest request) {
         Mensajes m = Mensajes.getMensajes();
         RestResponse r = new RestResponse();
+        doValidations(request);
         try {
             /*Verificamos el ID Token*/
             if (request.getToken() != null && !request.getToken().isEmpty()) {
@@ -269,7 +272,7 @@ public class AerolineaResource extends TemplateResource {
                         //r.setCode(u.getIdEmpleado().getIdEmpresa().getIdEmpresa());
                         r.setContent(l);
 
-                        ejbLogger.add(Accion.ACCESS, t.getUserName(), Formulario.AEROLINEA, "");
+                        ejbLogger.add(Accion.ACCESS, t.getUserName(), Formulario.AEROLINEA, user.getIp());
 
                         return r;
                     } else {
@@ -303,6 +306,7 @@ public class AerolineaResource extends TemplateResource {
             @PathParam("moneda") final String moneda) {
         Mensajes m = Mensajes.getMensajes();
         RestResponse r = new RestResponse();
+        doValidations(request);
         try {
             /*Verificamos el ID Token*/
             if (request.getToken() != null && !request.getToken().isEmpty()) {
@@ -345,7 +349,7 @@ public class AerolineaResource extends TemplateResource {
                         //r.setCode(u.getIdEmpleado().getIdEmpresa().getIdEmpresa());
                         r.setContent(AerolineaCuentaJSON.toAerolinaJSON(l));
 
-                        ejbLogger.add(Accion.ACCESS, t.getUserName(), Formulario.AEROLINEA, "");
+                        ejbLogger.add(Accion.ACCESS, t.getUserName(), Formulario.AEROLINEA, user.getIp());
 
                         return r;
                     } else {

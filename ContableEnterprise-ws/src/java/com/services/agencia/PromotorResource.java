@@ -120,7 +120,7 @@ public class PromotorResource extends TemplateResource {
                         //r.setCode(u.getIdEmpleado().getIdEmpresa().getIdEmpresa());
                         r.setContent(l);
 
-                        ejbLogger.add(Accion.ACCESS, t.getUserName(), Formulario.PROMOTORES, "");
+                        ejbLogger.add(Accion.ACCESS, t.getUserName(), Formulario.PROMOTORES, user.getIp());
 
                         return r;
                     } else {
@@ -360,7 +360,7 @@ public class PromotorResource extends TemplateResource {
                         //r.setCode(u.getIdEmpleado().getIdEmpresa().getIdEmpresa());
                         r.setContent(lreturn);
 
-                        ejbLogger.add(Accion.ACCESS, t.getUserName(), Formulario.PROMOTORES, "");
+                        ejbLogger.add(Accion.ACCESS, t.getUserName(), Formulario.PROMOTORES, user.getIp());
 
                         return r;
                     } else {

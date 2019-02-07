@@ -257,8 +257,6 @@ public class NotadebitoResource extends TemplateResource {
             NotaDebito n = (NotaDebito) ejbNotaDebito.get(new NotaDebito(json.getIdNotaDebito()));
 
             if (json.getEstado().equals(Estado.CREADO)) {
-                System.out.println("Id Cliente:" + json.getIdCliente());
-                System.out.println("Id Promotor:" + json.getIdPromotor());
                 n.setIdCliente(new Cliente(json.getIdCliente()));
                 n.setFactorCambiario(json.getFactor());
                 n.setIdCounter(new Promotor(json.getIdPromotor()));
@@ -459,7 +457,7 @@ public class NotadebitoResource extends TemplateResource {
 
                 NotaDebito nota = NotaDebitoJSON.toNotaDebito(json);
 
-                ejbNotaDebito.anularNotaDebito(nota);
+                ejbNotaDebito.anularNotaDebito(nota, user.getUserName());
 
                 String mensaje = Log.NOTA_DEBITO_ANULAR.replace("<id>", nota.getIdNotaDebito().toString());
                 ejbLogger.add(Accion.ANULAR, user.getUserName(), com.view.menu.Formulario.NOTA_DEBITO, user.getIp(), mensaje);

@@ -49,7 +49,10 @@ public class ApplicationConfig extends Application {
         resources.add(com.services.contabilidad.PagoAnticipadoResource.class);
         resources.add(com.services.contabilidad.PlanCuentasResource.class);
         resources.add(com.services.notadebito.NotadebitoResource.class);
+        resources.add(com.services.reportes.ComisionClienteResource.class);
+        resources.add(com.services.reportes.VentaBoletosResource.class);
         resources.add(com.services.seguridad.EmpresaServices.class);
+        resources.add(com.services.seguridad.LogsResource.class);
         resources.add(com.services.seguridad.PersonalResource.class);
         resources.add(com.services.seguridad.RolesResource.class);
         resources.add(com.services.seguridad.UsuarioResource.class);

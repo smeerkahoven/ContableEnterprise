@@ -453,7 +453,8 @@ public class BoletoResource extends TemplateResource {
                     response.setEntidad(njson);
                 }
 
-                ejbLogger.add(Accion.INSERT, user.getUserName(), Formulario.BOLETOS, user.getIp(), Log.BOLETO_SAVE.replace("<boleto>", boleto.getNumero().toString()));
+                ejbLogger.add(Accion.INSERT, user.getUserName(), Formulario.BOLETOS,
+                        user.getIp(), Log.BOLETO_SAVE.replace("<boleto>", boleto.getNumero().toString()));
             }
 
         } catch (Exception ex) {
@@ -484,7 +485,9 @@ public class BoletoResource extends TemplateResource {
                     ejbBoleto.eliminar(boleto);
                 }
                 
-                ejbLogger.add(Accion.DELETE, user.getUserName(), Formulario.BOLETOS, user.getIp(), Log.BOLETO_ANULAR.replace("<boleto>", boleto.getNumero().toString()));
+                ejbLogger.add(Accion.DELETE, user.getUserName(), Formulario.BOLETOS,
+                        user.getIp(), Log.BOLETO_ANULAR.replace("<boleto>", boleto.getNumero().toString()));
+                
                 response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
                 response.setContent(mensajes.getProperty(RestResponse.RESTFUL_SUCCESS));
             }
@@ -527,7 +530,8 @@ public class BoletoResource extends TemplateResource {
                     response.setEntidad(njson);
                 }
 
-                ejbLogger.add(Accion.UPDATE, user.getUserName(), Formulario.BOLETOS, user.getIp(), Log.BOLETO_SAVE.replace("<boleto>", boleto.getNumero().toString()));
+                ejbLogger.add(Accion.UPDATE, user.getUserName(), Formulario.BOLETOS, 
+                        user.getIp(), Log.BOLETO_SAVE.replace("<boleto>", boleto.getNumero().toString()));
             }
 
         } catch (Exception ex) {
@@ -577,7 +581,8 @@ public class BoletoResource extends TemplateResource {
                         response.setContent(mensajes.getProperty(RestResponse.RESTFUL_BOLETO_VOID_INSERTADO));
                         response.setEntidad(bjson);
 
-                        ejbLogger.add(Accion.INSERT, user.getUserName(), Formulario.BOLETOS, user.getIp(), Log.BOLETO_SAVE.replace("<id>", boleto.getNumero().toString()));
+                        ejbLogger.add(Accion.INSERT, user.getUserName(), Formulario.BOLETOS, 
+                                user.getIp(), Log.BOLETO_SAVE.replace("<id>", boleto.getNumero().toString()));
                     } else {
                         response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
                         response.setContent(mensajes.getProperty(RestResponse.RESTFUL_NO_EXISTE_NOTADEBITO));
