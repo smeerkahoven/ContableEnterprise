@@ -516,8 +516,8 @@
                                                     <th>Descripci&oacute;n</th>
                                                     <th>Fecha Creaci&oacute;n</th>
                                                     <th>Vence</th>
-                                                    <th>Monto Bs.</th>
-                                                    <th>Monto Usd.</th>
+                                                    <th>Monto Adeudado Bs.</th>
+                                                    <th>Monto Adeudado Usd.</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -529,8 +529,8 @@
                                                     <td>{{row.descripcion}} </td>
                                                     <td>{{row.fechaInsert}} </td>
                                                     <td>{{row.fechaVencimiento}} </td>
-                                                    <td align="right">{{row.montoBs|printNumber}} </td>
-                                                    <td align="">{{row.montoUsd|printNumber}} </td>
+                                                    <td align="right" class="table-danger">{{row.montoAdeudadoBs|printNumber}} </td>
+                                                    <td align="right" class="table-danger">{{row.montoAdeudadoUsd|printNumber}} </td>
                                                 </tr>
                                             </tbody>
                                             <tfoot>
@@ -548,7 +548,7 @@
                                         <div class="btn-group" role="group"  >
                                             <!--<div class="form-group row ng-hide" ng-show="formData.idAerolinea.id">-->
                                             <c:if test="#{notasCredito.formulario.crear== notasCredito.formulario.PERMITIR}">
-                                                <button  type="button" class="btn btn-primary" ng-click="seleccionarTransaccion()" ><span class="fa fa-chevron-circle-right"></span> Seleccionar</button>
+                                                <button  type="button" class="btn btn-primary" ng-click="seleccionarTransaccion()" ng-disabled="!itemTrxSelected" ><span class="fa fa-chevron-circle-right"></span> Seleccionar</button>
                                             </c:if>
 
                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>

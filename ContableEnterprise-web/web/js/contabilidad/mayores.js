@@ -21,7 +21,6 @@ var tableToExcel = (function () {
         if (!table.nodeType)
             table = document.getElementById(table)
         var ctx = {worksheet: "hola" || 'Worksheet', table: table.innerHTML}
-        console.log(ctx);
         window.location.href = uri + base64(format(template, ctx))
     }
 })();
@@ -76,7 +75,6 @@ angular.module('jsMayores.controllers', []).controller('frmMayores',
                         $scope.loading = false;
                         if (response.data.code === 201) {
                             $scope.formData = response.data.content;
-                            console.log($scope.formData);
                             $scope.showTable = true;
                         } else {
                             $scope.showRestfulMessage = response.data.content;
@@ -119,6 +117,13 @@ angular.module('jsMayores.controllers', []).controller('frmMayores',
                     }
 
                     return false;
+                }
+                
+                 $scope.errorFunction = function (error) {
+                    $scope.loading = false;
+                    $scope.showRestfulError = true;
+                    $scope.showRestfulMessage = error.statusText;
+                    goScrollTo('#restful-success');
                 }
 
 
@@ -277,7 +282,6 @@ app.filter('printCuenta', function ($filter) {
             return '-';
         else {
             var i = 0;
-            console.log(scope.comboCuentas);
             for (i; i < scope.comboCuentas.length; i++) {
                 if (scope.comboCuentas[i].id === input.id) {
                     return scope.comboCuentas[i].name;

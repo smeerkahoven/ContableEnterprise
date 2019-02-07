@@ -129,7 +129,7 @@
 
                                             <div class="form-group row">
                                                 <label for="txtNombre" class=" col-form-label col-sm-2 text-right">L&iacute;nea A&eacute;rea</label>
-                                                <div class="col-sm-7">
+                                                <div class="col-sm-3">
                                                     <input type="typehead" ng-model="search.idAerolinea" placeholder="Seleccione una Linea Aerea"
                                                            uib-typeahead="cuenta as cuenta.name for cuenta in comboAerolineas | filter:{name:$viewValue}"
                                                            class="form-control" typeahead-show-hint="true" typeahead-min-length="1" typehead-highlight="true"
@@ -139,8 +139,17 @@
                                                         Ingrese una Linea Aerea
                                                     </span> 
                                                 </div>
-
-                                               
+                                                
+                                                <label for="txtStatus" class="col-form-label col-sm-2 text-right">Tipo de Cup&oacute;n</label>
+                                                <div class="col-sm-3">
+                                                    <select name="txtMoneda" class="form-control" ng-model="search.tipoCupon" required="">
+                                                        <option style="display:none" value="">seleccione una opcion</option>
+                                                        <option value="N" selected="selected">NACIONAL</option>
+                                                        <option value="I">INTERNACIONAL</option>
+                                                    </select>
+                                                    <span class="alert-danger" ng-show="!search.tipoCupon">Debe seleccionar una opci&oacute;n.</span>
+                                                </div>
+                                                
                                             </div>
 
                                             <div class="form-group row">
@@ -179,9 +188,8 @@
                                                        class="table  table-hover ">
                                                     <thead >
                                                         <c:if test="#{reporteVentasBoletos.formulario.buscar == reporteVentasBoletos.formulario.PERMITIR}">
-                                                            <tr>
+                                                            <!--<tr>
                                                                 <th colspan="8">
-                                                                    <!-- .input-group -->
                                                                     <div class="input-group has-clearable">
                                                                         <div class="input-group-prepend">
                                                                             <span class="input-group-text">
@@ -190,13 +198,14 @@
                                                                         </div>
                                                                         <input st-search="" id="table-search" class="form-control placeholder-shown" placeholder="Busqueda" type="text" /> 
                                                                     </div>
-                                                                    <!-- /.input-group -->
                                                                 </th>
-                                                            </tr>
+                                                            </tr> -->
                                                         </c:if>
-                                                        <tr class="text-center">
-                                                            <th >Aerolinea</th>
+                                                        <tr >
+                                                            <!--<th>Aerolinea</th>-->
                                                             <th>Nro Boleto</th>
+                                                            <th>Ruta</th>
+                                                            <th>Pasajero</th>
                                                             <th>Fecha Emisi&oacute;n</th>
                                                             <th>Importe Neto</th>
                                                             <th>Impuestos</th>
@@ -204,29 +213,29 @@
                                                             <th>% Comisi&oacute;n</th>
                                                             <th>Monto Comisi&oacute;n + IVA</th>
                                                             <th>Neto a Pagar</th>
-                                                            <th>Estado</th>
-                                                            <th>Id Nota D&eacute;bito</th>
+                                                            <!--<th>Estado</th>-->
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         <tr  st-select-row="row" st-select-mode="multiple" ng-repeat="row in display_records">
-                                                            <td>{{row.iata}} </td>
+                                                            <!--<td>{{row.iata}} </td>-->
                                                             <td>{{row.ticketNumber}} </td>
+                                                            <td>{{row.ruta}} </td>
+                                                            <td>{{row.nombrePasajero}} </td>
                                                             <td>{{row.fechaEmision}} </td>
                                                             <td class="text-right">{{row.importeNeto|printNumber}} </td>
                                                             <td class="text-right">{{row.impuestos|printNumber}} </td>
                                                             <td class="text-right">{{row.totalBoleto|printNumber}} </td>
                                                             <td class="text-right">{{row.comision|printNumber}} </td>
                                                             <td class="text-right">{{row.montoComision|printNumber}} </td>
-                                                            <td class="text-right">{{row.totalMontoCobrar|printNumber}} </td>
-                                                            <td>{{row.estado}} </td>
-                                                            <td>{{row.idNotaDebito}} </td>
+                                                            <td class="text-right">{{row.montoPagarLineaAerea|printNumber}} </td>
+                                                            <!--<td>{{row.estado}} </td>-->
 
                                                         </tr>
                                                     </tbody>
                                                     <tfoot>
                                                         <tr class="table-success" ng-show="mainGrid.length > 0">
-                                                            <td colspan="3"><strong>TOTALES</strong></td>
+                                                            <td colspan="4"><strong>TOTALES</strong></td>
                                                             <td class="text-right"><strong>{{totalImporteNeto}}</strong></td>
                                                             <td class="text-right"><strong>{{totalImpuestos}}</strong></td>
                                                             <td class="text-right"><strong>{{totalBoleto}}</strong></td>
@@ -245,7 +254,7 @@
                                                 </table>
 
                                                 <div class="modal-footer" ng-show="mainGrid.length > 0">
-                                                    <button type="button" class="btn btn-primary" ng-click="exportar()">Exportar</button>
+                                                    <button type="button" class="btn btn-dark" ng-click="exportar()"><span class="fa fa-print"></span>&nbsp; Imprimir</button>
                                                 </div>
                                             </div>
                                         </div>
@@ -259,6 +268,7 @@
                                                     <input type="hidden" id="hdUrl" name="hdUrl" value="#{reporteVentasBoletos.formulario.restful}"/>
                                                     <input type="hidden" id="hdToken" name="hdToken" value="#{sessionView.token}"/>
                                                     <input type="hidden" id="hdFormName" name="hdFormName" value="#{reporteVentasBoletos.formulario.nombre}"/>
+                                                    <input type="hidden" id="hdUrlAerolinea" name="hdUrlAerolinea" value="#{aerolinea.formulario.restful}"/>
                                                     <br />
 
                                                     <script  type="text/ng-template" id="customTemplate.html">
@@ -344,7 +354,7 @@
         <!-- END PLUGINS JS -->
         <!-- BEGIN THEME JS -->
         <script src="../../assets/javascript/main.min.js"></script>
-        <script type="text/javascript" src="../../js/reports/venta-boletos.js" />
+        <script type="text/javascript" src="../../js/reports/ventas-boletos.js" />
 
         <script type="text/javascript" src="../../assets/javascript/pages/flatpickr-demo.js"></script>
         <script type="text/javascript" src="../../assets/javascript/pages/typeahead-demo.js"></script>

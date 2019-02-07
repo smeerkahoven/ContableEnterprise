@@ -1886,11 +1886,11 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                         $scope.boleto.totalMontoCobrarBs = null;
                     }
 
-                    if ($scope.aerolinea.roundComisionBob) {
+                    /*if ($scope.aerolinea.roundComisionBob) {
                         if ($scope.boleto.totalMontoCobrarBs !== null) {
                             $scope.boleto.totalMontoCobrarBs =Math.round ($scope.boleto.totalMontoCobrarBs);
                         }
-                    }
+                    }*/
 
                     $scope.transformarTotalCancelToUsd();
                 }
@@ -1908,11 +1908,11 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                     if (Number.isNaN(Number($scope.boleto.totalMontoCobrarUsd))) {
                         $scope.boleto.totalMontoCobrarUsd = null;
                     }
-                    if ($scope.boleto.totalMontoCobrarUsd !== null) {
+                   /* if ($scope.boleto.totalMontoCobrarUsd !== null) {
                         if ($scope.aerolinea.roundComisionUsd) {
                             $scope.boleto.totalMontoCobrarUsd = Math.round($scope.boleto.totalMontoCobrarUsd);
                         }
-                    }
+                    }*/
 
                     $scope.transformarTotalCancelToBs();
                 }

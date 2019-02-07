@@ -37,8 +37,8 @@ import net.sf.jasperreports.engine.JasperRunManager;
  *
  * @author xeio
  */
-@WebServlet(name = "PlanillaBspReportServlet", urlPatterns = {"/PlanillaBspReportServlet"})
-public class PlanillaBspReportServlet extends HttpServlet {
+@WebServlet(name = "ReportesComisionClienteServlet", urlPatterns = {"/ReportesComisionClienteServlet"})
+public class ReporteComisionClienteServlet extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -112,6 +112,7 @@ public class PlanillaBspReportServlet extends HttpServlet {
             String fechaInicio = request.getParameter("pi");
             String fechaFin = request.getParameter("pf");
             String tipoCupon = request.getParameter("tp");
+            Integer idCliente = Integer.parseInt(request.getParameter("id"));
             HashMap hm = null;
             hm = new HashMap();
 
@@ -123,8 +124,9 @@ public class PlanillaBspReportServlet extends HttpServlet {
 
                 hm.put("FECHA_INICIO", fechaInicio);
                 hm.put("FECHA_FIN", fechaFin);
+                hm.put("ID_CLIENTE", idCliente);
                 hm.put("ID_TIPO_CUPON", tipoCupon);
-                hm.put("PATH_SUBREPORTE", "boletos/planilla_bsp.jasper");
+                hm.put("PATH_SUBREPORTE", "boletos/comision-clientes.jasper");
 
                 bytes = JasperRunManager.runReportToPdf(archivoReporte.getPath(), hm, datasource.getConnection());
 

@@ -11,10 +11,10 @@
             <!-- Modal Salir del Sistema -->
             <!-- Logout Modal-->
             <div class="modal fade" id="logoutModal" tabindex="0" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content ">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">Salir del Sistema?</h5>
+                            <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-exclamation-triangle text-red mr-1"></i>Salir del Sistema</h5>
                             <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">×</span>
                             </button>
@@ -23,7 +23,7 @@
                         <div class="modal-footer">
                             <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>
                             <h:form>
-                                <h:commandLink  class="btn btn-primary" action="#{login.logout}">Salir</h:commandLink>
+                                <h:commandLink  class="btn btn-danger" action="#{login.logout}">Salir</h:commandLink>
                             </h:form>
 
                         </div>

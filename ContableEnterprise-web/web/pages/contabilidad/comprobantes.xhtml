@@ -119,13 +119,14 @@
                                         <span ng-show="loading" class="alert alert-info"><i class="loader loader-sm" ></i>  Cargando...</span>
                                         <!-- /Mensaje Cargando -->
                                         <!--Mensaje Success -->
-                                        <div class="alert alert-success ng-hide" role="alert" ng-show="showRestfulSuccess">
+                                        <div id="restful-success" class="alert alert-success ng-hide" role="alert" ng-show="showRestfulSuccess">
                                             <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">&times;</a>
                                             {{ showRestfulMessage}}
                                         </div>
                                         <!--/Mensaje Success -->
+
                                         <!--Mensaje Error -->
-                                        <div class="alert alert-danger ng-hide" role="alert" ng-show="showRestfulError">
+                                        <div id="restful-error" class="alert alert-danger ng-hide" role="alert" ng-show="showRestfulError">
                                             <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">&times;</a>
                                             {{ showRestfulMessage}}
                                         </div>
@@ -214,7 +215,7 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr st-select-row="row" st-select-mode="multiple" ng-repeat="row in display_records">
+                                                    <tr st-select-row="row" st-select-mode="multiple" ng-repeat="row in display_records" class="{{ row|printDiferencias }}">
                                                         <td> {{row.idNumeroGestionColumna}} </td>   
                                                         <td>{{row.fecha}} </td>
                                                         <td>{{row.idCliente.id !== undefined ? row.idCliente.name : ''}} </td>
@@ -279,17 +280,17 @@
                                                     </div>
                                                     <div class="form-group row">
                                                         <label for="txtSucursal" class="col-form-label col-sm-2 text-right">Tipo de Comprobante</label>
-                                                        <div class="col-sm-4">
+                                                        <div class="col-sm-3">
                                                             <input class="form-control" value="{{formData.tipo|tipoComprobante}}" readonly="" />
                                                         </div>
                                                         <label for="txtFactor" class=" col-form-label col-sm-2 text-right"><strong>Factor USD</strong></label>
                                                         <div class="col-sm-3">
-                                                            <label for="txtFactor" class=" col-form-label col-sm-4 "><strong>{{formData.factorCambiario}}</strong></label>
-                                                            <!--<input type="number" class="form-control col-sm" name="txtFactor" placeholder="0.00 BOB" 
-                                                                   ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01" min="{{formData.factorMin}}" max="{{formData.factorMax}}"
+                                                            <!--<label for="txtFactor" class=" col-form-label col-sm-3 "><strong>{{formData.factorCambiario}}</strong></label>-->
+                                                            <input type="number" class="form-control col-sm" name="txtFactor" placeholder="0.00 BOB" 
+                                                                   ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01" readonly=""
                                                                    ng-model="formData.factorCambiario" value="{{formData.factorCambiario}}" data-toggle="tooltip" 
                                                                    data-placement="top"  />
-                                                            <span class="alert-danger"  ng-show="!myForm.txtFactor.$valid"  >
+                                                            <!--<span class="alert-danger"  ng-show="!myForm.txtFactor.$valid"  >
                                                                 Debe seleccionar un valor entre {{formData.factorMin}} y {{formData.factorMax}}.
                                                             </span>
                                                             <span class="alert-danger"  ng-show="!formData.factorCambiario"  >
@@ -316,15 +317,16 @@
                                                         </div>
                                                         <label for="txtUfv" class=" col-form-label col-sm-2 text-right"><strong>Factor UFV</strong></label>
                                                         <div class="col-sm-3">
-                                                            <label class="col-form-label" for="flatpickr-wrap"><strong>{{formData.factorUfv}}</strong></label>
-                                                            <!--<input type="number" class="form-control col-sm" name="txtUfv" placeholder="0.00 BOB" disabled="true"
+                                                            <!--<label class="col-form-label" for="flatpickr-wrap"><strong>{{formData.factorUfv}}</strong></label>-->
+                                                            <input type="number" class="form-control col-sm" name="txtUfv" placeholder="0.00 BOB" readonly=""
                                                                    ng-pattern="/^[0-9]+(\.[0-9]{1,5})?$/" step="0.01" min="{{formData.factorUfv}}" max="{{formData.factorUfv}}"
-                                                                   ng-model="formData.factorUfv" value="{{formData.factorUfv}}" data-toggle="tooltip" 
-                                                                   data-placement="top"  />-->
+                                                                   ng-model="formData.factorUfv" value="{{formData.factorUfv|printNumber}}" data-toggle="tooltip" 
+                                                                   data-placement="top"  />
                                                         </div>
                                                     </div>
 
-                                                    <div class="form-group row">
+                                                    
+                                                    <div class="form-group row" ng-show="formData.tipo === ASIENTO_DIARIO || formData.tipo === COMPROBANTE_INGRESO">
                                                         <label for="txtNombre" class=" col-form-label col-sm-2 text-right">Cliente</label>
                                                         <div class="col-sm-6">
                                                             <input type="text" ng-model="formData.idCliente" placeholder="Seleccione un Cliente"
@@ -332,6 +334,15 @@
                                                                    class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="1" 
                                                                    typeahead-template-url="customTemplate.html"  typeahead-focus-first="true"/>
                                                             <span class="alert-danger"  ng-show="formData.idCliente.id === undefined">Ingrese un Cliente V&aacute;lido.</span> 
+                                                        </div>
+                                                        <!--<span class=" fa fa-info-circle text-blue" data-toggle="tooltip" data-placement="top" title="La secci&oacute;n de Formas de Pago se habilitar&aacute; al momento de seleccionar una Cuenta de Cliente v&aacute;lida."></span>-->
+                                                    </div>
+                                                    
+                                                    <div class="form-group row" ng-show="formData.tipo === COMPROBANTE_TRASPASO || formData.tipo === ASIENTO_AJUSTE || formData.tipo === COMPROBANTE_EGRESO">
+                                                        <label for="txtNombre" class=" col-form-label col-sm-2 text-right">Nombre</label>
+                                                        <div class="col-sm-6">
+                                                            <input type="text" maxlength="64" class="form-control" ng-model="formData.nombre" onkeyup="this.value = this.value.toUpperCase()" placeholder="Seleccione un Nombre"/>
+                                                            <span class="alert-danger"  ng-show="!formData.nombre">Ingrese un Nombre.</span> 
                                                         </div>
                                                         <!--<span class=" fa fa-info-circle text-blue" data-toggle="tooltip" data-placement="top" title="La secci&oacute;n de Formas de Pago se habilitar&aacute; al momento de seleccionar una Cuenta de Cliente v&aacute;lida."></span>-->
                                                     </div>
@@ -382,7 +393,7 @@
                                                                         <div  ng-show="row.editable" >
                                                                             <input autofocus="autofocus" type="text" ng-model="row.idPlanCuenta" placeholder="Seleccione una Cuenta"
                                                                                    uib-typeahead="cuenta as cuenta.name for cuenta in comboPlanCuentas| filter:{name:$viewValue}"
-                                                                                   class="form-control " typeahead-show-hint="true" typeahead-min-length="0" 
+                                                                                   class="form-control " typeahead-show-hint="true" typeahead-min-length="1" 
                                                                                    typeahead-template-url="customTemplate.html" 
                                                                                    />
                                                                         </div>
@@ -403,7 +414,7 @@
                                                                         <!--<div ng-show="!row.editable">{{row.debeMonNac == '0.00' ? '' : row.debeMonNac}}</div>-->
                                                                         <div ng-show="!row.editable">{{row.debeMonNac| printNumber}}</div>
                                                                         <div ng-show="row.editable">
-                                                                            <input type="number" string-to-number="string-to-number" class="form-control col" placeholder="0.00 Bs" required="required" name="txtDebeMonNac" min="0" value="0" 
+                                                                            <input type="number" string-to-number="string-to-number" class="form-control col input-number" placeholder="0.00 Bs" required="required" name="txtDebeMonNac" min="0" value="0" 
                                                                                    step="0.01" title="Monto Debe Moneda Nacional" pattern="^\d+(?:\.\d{1,2})?$" 
                                                                                    onblur="this.parentNode.parentNode.style.backgroundColor = /^\d+(?:\.\d{1,2})?$/.test(this.value) ? 'inherit' : '#dc3545';"
                                                                                    ng-model="row.debeMonNac" ng-keypress="ngChange($event, 'debe', row, row.debeMonNac)"/>
@@ -417,7 +428,7 @@
                                                                         <!--<div ng-show="!row.editable">{{row.haberMonNac == '0.00' ? '' : row.haberMonNac }}</div> -->
                                                                         <div ng-show="!row.editable">{{row.haberMonNac| printNumber }}</div>
                                                                         <div ng-show="row.editable">
-                                                                            <input type="number" string-to-number="string-to-number" class="form-control col" placeholder="0.00 Bs" required="required" name="txtHaberMonNac" min="0" value="0" 
+                                                                            <input type="number" string-to-number="string-to-number" class="form-control col input-number" placeholder="0.00 Bs" required="required" name="txtHaberMonNac" min="0" value="0" 
                                                                                    step="0.01" title="Monto Haber Moneda Nacional" pattern="^\d+(?:\.\d{1,2})?$" 
                                                                                    onblur="this.parentNode.parentNode.style.backgroundColor = /^\d+(?:\.\d{1,2})?$/.test(this.value) ? 'inherit' : '#dc3545';"
                                                                                    ng-model="row.haberMonNac"  ng-keypress="ngChange($event, 'haber', row)"/>
@@ -428,7 +439,7 @@
                                                                         <!-- <div ng-show="!row.editable">{{row.debeMonExt == '0.00' ? '' : row.debeMonExt }}</div> -->
                                                                         <div ng-show="!row.editable">{{row.debeMonExt| printNumber  }}</div>
                                                                         <div ng-show="row.editable">
-                                                                            <input type="number" string-to-number="string-to-number" class="form-control col" placeholder="0.00 Bs" required="required" name="txtDebeMonExt" min="0" value="0" 
+                                                                            <input type="number" string-to-number="string-to-number" class="form-control col input-number" placeholder="0.00 Bs" required="required" name="txtDebeMonExt" min="0" value="0" 
                                                                                    step="0.01" title="Monto Debe Moneda Extranjera" pattern="^\d+(?:\.\d{1,2})?$" 
                                                                                    onblur="this.parentNode.parentNode.style.backgroundColor = /^\d+(?:\.\d{1,2})?$/.test(this.value) ? 'inherit' : '#dc3545'"
                                                                                    ng-model="row.debeMonExt"  ng-keypress="ngChange($event, 'debe', row)" />
@@ -439,7 +450,7 @@
                                                                         <!--<div ng-show="!row.editable">{{row.haberMonExt== '0.00' ? '' : row.haberMonExt}}</div> -->
                                                                         <div ng-show="!row.editable">{{row.haberMonExt|printNumber}}</div>
                                                                         <div ng-show="row.editable">
-                                                                            <input type="number" string-to-number="string-to-number" class="form-control col" placeholder="0.00 Bs" required="required" name="txtHaberMonExt" min="0" value="0" 
+                                                                            <input type="number" string-to-number="string-to-number" class="form-control col input-number" placeholder="0.00 Bs" required="required" name="txtHaberMonExt" min="0" value="0" 
                                                                                    step="0.01" title="Monto Haber Moneda Extranjera" pattern="^\d+(?:\.\d{1,2})?$" 
                                                                                    onblur="this.parentNode.parentNode.style.backgroundColor = /^\d+(?:\.\d{1,2})?$/.test(this.value) ? 'inherit' : '#dc3545'"
                                                                                    ng-model="row.haberMonExt" ng-keypress="ngChange($event, 'haber', row)"/>
@@ -450,16 +461,16 @@
                                                                         <div class="btn-group" >
                                                                             <button  type="button" title="Ver" class="btn btn-sm btn-warning" ng-click="verTransaccion(row)"><i class="fa fa-search"></i></button>
 
-                                                                            <c:if test="${comprobantes.formulario.crear== comprobantes.formulario.PERMITIR }">
+                                                                            <c:if test="${comprobantes.formulario.editar== comprobantes.formulario.PERMITIR }">
                                                                                 <button ng-show="!row.editable" ng-disabled="disableEditarTransaccion" type="button" title="Editar" class="btn btn-sm btn-info" ng-click="editTransaccion(row)"><i class="fa fa-pencil"></i></button>
                                                                             </c:if>
                                                                             <c:if test="${comprobantes.formulario.crear== comprobantes.formulario.PERMITIR }">
                                                                                 <button ng-show="row.editable" ng-disabled="disableGuardarTransaccion" type="button" title="Guardar" class="btn btn-sm btn-primary" ng-click="saveTransaccion(row)"><i class="fa fa-save"></i></button>
                                                                             </c:if>
-                                                                            <c:if test="${comprobantes.formulario.crear== comprobantes.formulario.PERMITIR }">
-                                                                                <button ng-show="row.editable" type="button" title="Corregir" class="btn btn-sm btn-success" ng-click="corregirTransaccion(row)"><i class="fa fa-save"></i></button>
+                                                                            <c:if test="${comprobantes.formulario.actualizar== comprobantes.formulario.PERMITIR }">
+                                                                                <button ng-show="formData.estado !== INICIAL" type="button" title="Corregir" class="btn btn-sm btn-success" ng-click="corregirTransaccion(row)"><i class="fa fa-save"></i></button>
                                                                             </c:if>
-                                                                            <c:if test="#{comprobantes.formulario.crear== comprobantes.formulario.PERMITIR}">
+                                                                            <c:if test="#{comprobantes.formulario.anular== comprobantes.formulario.PERMITIR}">
                                                                                 <button type="button" title="Eliminar" ng-disabled="disableEliminarTransaccion" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#frmConfirmation" ng-click="modalEliminarAsiento(row)"><i class="fa fa-remove"></i></button>
                                                                             </c:if>
                                                                             <!--<button type="button" title="Ver" class="btn btn-default" ng-click="ver(row.idEmpleado)" data-toggle="modal" data-target="#verForm"><i class="fa fa-search"></i></button>-->

@@ -4,203 +4,89 @@
  * and open the template in the editor.
  */
 var app = angular.module("jsLogs", ['jsLogs.controllers', 'smart-table', 'ui.bootstrap']);
-
 angular.module('jsLogs.controllers', []).controller('frmLogs',
         ['$scope', '$http', '$uibModal', '$window', function ($scope, $http, $window) {
 
                 var token = document.getElementsByName("hdToken")[0];
                 var url = document.getElementsByName("hdUrl")[0];
                 var urlEmpresa = document.getElementsByName("hdUrlEmpresa")[0];
-                var urlAerolinea = document.getElementsByName("hdUrlAerolinea")[0];
-                var formName = document.getElementsByName("hdFormName")[0];
-                var myForm = document.getElementById("myForm");
-
+                var urlUser = document.getElementsByName("hdUser")[0];
                 $scope.showRestfulMessage = '';
                 $scope.showRestfulError = false;
                 $scope.showRestfulSuccess = false;
-
                 $scope.loading = false;
                 $scope.formData = {};
                 $scope.mainGrid = {};
                 $scope.modalConfirmation = {};
-
                 $scope.showForm = false;
                 $scope.showTable = true;
-
                 $scope.itemsByPage = 15;
 
-                $scope.getData = function (urls, method) {
-                    $scope.loading = true;
-                    return $http({
-                        method: 'POST',
-                        url: urls + method,
-                        data: {token: token.value, content: ''},
-                        headers: {'Content-Type': 'application/json'}
-                    }).then(function (response) {
-                        if (response.data.code === 201) {
-                            if (urls === url.value) {
-                                $scope.mainGrid = response.data.content;
-                                $scope.showTable = true;
+                $scope.find = function () {
+                    if ($scope.search) {
+                        if ($scope.search.username) {
+                            if (!$scope.search.username.id) {
+                                showAlert(ERROR_TITLE, 'Ingrese un usuario valido');
+                                return;
                             }
-
-                            if (urls === urlEmpresa.value) {
-                                $scope.comboSucursales = response.data.content;
-                            }
-
-                            if (method === "all-combo/B") {
-                                $scope.gridNacionales = response.data.content;
-                            }
-
-                            if (method === "all-combo/D") {
-                                $scope.gridInternacionales = response.data.content;
-                            }
-
-                            $scope.loading = false;
-                        } else {
-                            $scope.showRestfulMessage = response.data.content;
-                            $scope.showRestfulError = true;
-                            return {};
                         }
-                    }, function (error) {
-                        $scope.showRestfulMessage = error;
-                        $scope.showRestfulError = true;
-                    });
+                    }
+                    $scope.loading = true;
+
+                    $http({method: 'POST',
+                        url: `${url.value}find`,
+                        headers: {'Content-type': 'application/json'},
+                        data: {token: token.value, content: angular.toJson($scope.search)}
+                    }).then(
+                            function (response) {
+                                $scope.loading = false;
+                                if (response.data.code === 201) {
+                                    $scope.mainGrid = response.data.content;
+                                } else {
+                                    $scope.showRestfulError = true;
+                                    $scope.showRestfulMessage = response.data.content;
+                                }
+                            }, $scope.errorFunction);
                 }
 
-                $scope.save = function () {
-                    $scope.clickNuevo = false;
-                    if (!$scope.myForm.$valid) {
-                        //$scope.showAlert('Error de Verificacion', 'Verifique los mensajes de los valores requeridos')
-                        return;
-                    }
-                    if ($scope.formHasError()) {
-                        $scope.showAlert('Error de Verificacion', 'Verifique los mensajes de los valores requeridos')
-                        return;
-                    }
-
-                    $scope.loading = true;
-
-                    $scope.formData.idEmpresa = $scope.formData.idEmpresa.id;
-
-                    $http({
-                        method: 'POST',
-                        url: url.value + 'save',
-                        data: {token: token.value, content: angular.toJson($scope.formData)},
-                        headers: {'Content-Type': 'application/json'}
-                    }).then(function (response) {
-                        if (response.data.code === 201) {
-                            $scope.showRestfulMessage = response.data.content;
-                            $scope.showRestfulSuccess = true;
-                            $scope.showForm = false;
-                            $scope.showTable = true;
-                            $scope.getData(url.value, 'all');
-                        } else {
-                            $scope.showRestfulMessage = response.data.content;
-                            $scope.showRestfulError = true;
-                            $scope.showForm = false;
-                        }
-                        $scope.loading = false;
-
-                    }, function (error) {
-                        $scope.loading = false;
-                        $scope.showRestfulMessage = error.statusText;
-                        $scope.showRestfulError = true;
-                        $scope.showForm = false;
-                    });
-                };
-
-
-
-
                 $scope.formHasError = function () {
-                    if ($scope.formData.idEmpresa == undefined) {
+                    if ($scope.formData.idEmpresa === undefined) {
                         return true;
                     }
                     return (!$scope.formData.idEmpresa.id);
                 }
 
-                $scope.update = function () {
-                    if (!$scope.myForm.$valid) {
-                        $scope.showAlert('Error de Verificacion', 'Verifique los mensajes de los valores requeridos')
-                        return;
-                    }
-                    if ($scope.formHasError()) {
-                        $scope.showAlert('Error de Verificacion', 'Verifique los mensajes de los valores requeridos')
-                        return;
-                    }
-
-                    $scope.loading = true;
-
-                    $scope.formData.idEmpresa = $scope.formData.idEmpresa.id;
-
+                $scope.getUsers = function () {
                     $http({
                         method: 'POST',
-                        url: url.value + 'update',
-                        data: {token: token.value, content: angular.toJson($scope.formData)},
-                        headers: {'Content-Type': 'application/json'}
+                        url: `${urlUser.value}combo`,
+                        headers: {'Content-Type': 'application/json'},
+                        data: {token: token.value}
                     }).then(function (response) {
-                        $scope.loading = false;
                         if (response.data.code === 201) {
-                            $scope.showRestfulMessage = response.data.content;
-                            $scope.showRestfulSuccess = true;
-                            $scope.showForm = false;
-                            $scope.showTable = true;
-                            //$scope.getData();
-                        } else {
-                            $scope.showRestfulMessage = response.data.content;
-                            $scope.showRestfulError = true;
-                            $scope.showForm = false;
+
+                            $scope.comboUsuario = response.data.content;
                         }
-
-                    }, function (error) {
-                        $scope.loading = false;
-                        $scope.showRestfulMessage = error;
-                        $scope.showRestfulError = true;
-                        //$scope.showForm = true;
-                    });
-                };
-
-                $scope.delete = function () {
-
-                    if ($scope.modalConfirmation.method === 'delete-comision') {
-                        $scope.deleteComision();
-                    }
-                };
-
+                    }, $scope.errorFunction);
+                }
 
                 $scope.hideMessagesBox = function () {
                     $scope.showRestfulSuccess = false;
                     $scope.showRestfulError = false;
                 }
 
-                $scope.edit = function (item) {
-                    $scope.showTable = false;
-                    $scope.showForm = true;
-                    $scope.showBtnNuevo = false;
-                    $scope.showBtnEditar = true;
-                    $scope.hideMessagesBox();
-                    $scope.formData = item;
-
-                    $scope.formData.idEmpresa = $scope.findCta(item.idEmpresa, $scope.comboSucursales);
-                }
-
-                $scope.nuevo = function () {
-                    $scope.showForm = true;
-                    $scope.showBtnNuevo = true;
-                    $scope.showBtnEditar = false;
-                    $scope.showTable = false;
-                    $scope.showRestfulSuccess = false;
-                    $scope.showRestfulError = false;
-                    $scope.formData = {};
-                    $scope.clickNuevo = true;
-                    $scope.myForm.$setPristine();
-                    myForm.reset();
-                }
-
                 $scope.cancelar = function () {
                     $scope.showForm = false;
                     $scope.showTable = true;
+                    $scope.search = {};
                     $scope.hideMessagesBox();
+                }
+
+                $scope.errorFunction = function (error) {
+                    $scope.loading = false;
+                    $scope.showRestfulError = true;
+                    $scope.showRestfulMessage = error.statusText;
+                    goScrollTo('#restful-success');
                 }
 
                 $scope.showAlert = function (title, message) {
@@ -212,19 +98,7 @@ angular.module('jsLogs.controllers', []).controller('frmLogs',
                     });
                 }
 
-                $scope.modalEliminar = function (idx, nombrex, methodx) {
-                    $scope.modalConfirmation = {id: idx, nombre: nombrex, method: methodx};
-                }
-
-
-                $scope.findCta = function (cta, input) {
-                    var i = 0;
-                    for (i; i < input.length; i++) {
-                        if (input[i].id == cta) {
-                            return input[i];
-                        }
-                    }
-                }
+                $scope.getUsers();
 
                 // los watch sirven para verificar si el valor cambio
                 $scope.$watch('formData.ctaDevolucionMonExt.id', function (now, old) {
@@ -243,20 +117,17 @@ app.filter('printNumber', function ($filter) {
         return new Number(input).toFixed(2);
     }
 });
-
 app.filter('myStrictFilter', function ($filter) {
     return function (input, predicate) {
         return $filter('filter')(input, predicate, true);
     }
 });
-
 app.controller('frView', ['$scope', '$http', 'record', function ($scope, $http, record) {
         function init() {
             $scope.sucursal = record.content;
         }
         init();
     }]);
-
 app.directive('pageSelect', function () {
     return {
         restrict: 'E',

@@ -238,8 +238,8 @@
                                                     <div class="form-group row">
                                                         <label for="txtCuenta" class=" col-form-label col-sm-3 text-right">Cuenta (Denominaci&oacute;n)</label>
                                                         <div class="col-sm-4" >
-                                                            <input type="text" class="form-control" autofocus="autofocus" name="txtCuenta" required="required" 
-                                                                   maxlength="40" ng-model="frmNewTransaction.nombreCuenta"/>
+                                                            <input type="text" class="form-control" id="nombreCuenta" autofocus="autofocus" name="txtCuenta" required="required" 
+                                                                   maxlength="40" ng-model="frmNewTransaction.nombreCuenta" onKeyUp="document.getElementById(this.id).value = document.getElementById(this.id).value.toUpperCase()"/>
                                                             <span class="alert-danger" ng-show="!myForm.txtCuenta.$valid">
                                                                 Debe ingresar un Nombre a la Cuenta
                                                             </span>
@@ -284,7 +284,7 @@
                                                         <div class="col-sm-4">
                                                             <input type="text" ng-model="frmNewTransaction.itb" placeholder="Cuenta AITB"
                                                                    uib-typeahead="cuenta as cuenta.name for cuenta in comboAitb | filter:{name:$viewValue}"
-                                                                   class="form-control" typeahead-show-hint="true" typeahead-min-length="0" 
+                                                                   class="form-control" typeahead-show-hint="true" typeahead-min-length="1" 
                                                                    typeahead-template-url="customTemplate.html" required="required"
                                                                    />
                                                             <span class="alert-danger" ng-show="!frmNewTransaction.itb.id">

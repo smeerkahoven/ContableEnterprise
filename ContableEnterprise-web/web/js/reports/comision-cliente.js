@@ -7,15 +7,15 @@ let date = new Date();
 let firstDay = new Date(date.getFullYear(), date.getMonth(), 1).toLocaleDateString('en-GB');
 let today = new Date().toLocaleDateString('en-GB');
 
-var app = angular.module("jsVentasBoletos", ['jsVentasBoletos.controllers', 'smart-table', 'ui.bootstrap']);
+var app = angular.module("jsComisionCliente", ['jsComisionCliente.controllers', 'smart-table', 'ui.bootstrap']);
 
-angular.module('jsVentasBoletos.controllers', []).controller('frmVentasBoletos',
+angular.module('jsComisionCliente.controllers', []).controller('frmComisionCliente',
         ['$scope', '$http', '$uibModal', '$window', function ($scope, $http, $window) {
 
                 var token = document.getElementsByName("hdToken")[0];
                 var url = document.getElementsByName("hdUrl")[0];
                 var urlEmpresa = document.getElementsByName("hdUrlEmpresa")[0];
-                var urlAerolinea = document.getElementsByName("hdUrlAerolinea")[0];
+                var urlClientes = document.getElementsByName("hdUrlClientes")[0];
                 var formName = document.getElementsByName("hdFormName")[0];
                 var myForm = document.getElementById("myForm");
 
@@ -36,10 +36,9 @@ angular.module('jsVentasBoletos.controllers', []).controller('frmVentasBoletos',
                 $scope.find = function () {
                     
                     if (!$scope.search.tipoCupon){
-                        showAlert(ERROR_TITLE,'Ingrese un tipo de Cupon.');
+                        showAlert(ERROR_TITLE,'Ingrese un Tipo de Cupon.');
                         return;
                     }
-                    
                     
                     if (!$scope.search.fechaInicio){
                         showAlert(ERROR_TITLE,'Ingrese una fecha de Inicio.');
@@ -51,13 +50,13 @@ angular.module('jsVentasBoletos.controllers', []).controller('frmVentasBoletos',
                         return;
                     }
                     
-                    if (!$scope.search.idAerolinea){
-                        showAlert(ERROR_TITLE,'Ingrese una Línea Aérea.');
+                    if (!$scope.search.idCliente){
+                        showAlert(ERROR_TITLE,'Ingrese un Cliente.');
                         return;
                     }
                     
-                    if (!$scope.search.idAerolinea.id){
-                        showAlert(ERROR_TITLE,'Ingrese una Línea Aérea Válida');
+                    if (!$scope.search.idCliente.id){
+                        showAlert(ERROR_TITLE,'Ingrese un Cliente Válida');
                         return;
                     }
                     
@@ -85,22 +84,18 @@ angular.module('jsVentasBoletos.controllers', []).controller('frmVentasBoletos',
                     $scope.showRestfulError = false;
                 }
 
-                $scope.getLineaAerea = function () {
+                $scope.getClientes = function () {
                     return $http({
-                        url: `${urlAerolinea.value}combo`,
+                        url: `${urlClientes.value}all-cliente-combo`,
                         method: 'POST',
                         data: {token: token.value},
                         headers: {'Content-type': 'application/json'}
                     }).then(function (response) {
                         if (response.data.code === 201) {
-                            $scope.comboAerolineas = response.data.content;
-                        } else {
-                            $scope.showRestfulError = true;
-                            $scope.showRestfulMessage = error.statusText;
+                            $scope.comboCliente = response.data.content;
                         }
                     }, $scope.errorFunction);
                 }
-
 
                 $scope.errorFunction = function (error) {
                     $scope.loading = false;
@@ -113,30 +108,35 @@ angular.module('jsVentasBoletos.controllers', []).controller('frmVentasBoletos',
                     var totalImporteNeto = new Number(0);
                     var totalImpuestos = new Number(0);
                     var totalBoleto = new Number(0);
-                    var totalMontoComision = new Number(0);
-                    var totalNetoAPagar = new Number(0);
+                    var totalFee = new Number(0);
+                    var totalDescuento = new Number(0);
+                    var totalPorCobrar = new Number(0);
 
                     for (var i in $scope.mainGrid) {
                         totalImporteNeto += $scope.mainGrid[i].importeNeto !== undefined ? $scope.mainGrid[i].importeNeto : Number(0);
                         totalImpuestos += $scope.mainGrid[i].impuestos !== undefined ? $scope.mainGrid[i].impuestos : Number(0);
                         totalBoleto += $scope.mainGrid[i].totalBoleto !== undefined ? $scope.mainGrid[i].totalBoleto : Number(0);
-                        totalMontoComision += $scope.mainGrid[i].montoComision !== undefined ? $scope.mainGrid[i].montoComision : Number(0);
-                        totalNetoAPagar += $scope.mainGrid[i].montoPagarLineaAerea !== undefined ? $scope.mainGrid[i].montoPagarLineaAerea : Number(0);
+                        totalFee += $scope.mainGrid[i].fee !== undefined ? $scope.mainGrid[i].fee : Number(0);
+                        totalDescuento += $scope.mainGrid[i].descuento !== undefined ? $scope.mainGrid[i].descuento : Number(0);
 
                     }
 
                     $scope.totalImporteNeto = totalImporteNeto.toFixed(2);
                     $scope.totalImpuestos = totalImpuestos.toFixed(2);
                     $scope.totalBoleto = totalBoleto.toFixed(2);
-                    $scope.totalMontoComision = totalMontoComision.toFixed(2);
-                    $scope.totalNetoAPagar = totalNetoAPagar.toFixed(2);
+                    $scope.totalFee = totalFee.toFixed(2);
+                    $scope.totalDescuento = totalDescuento.toFixed(2);
+                    
+                    totalPorCobrar = (totalBoleto + totalFee - totalDescuento);
+                    
+                    $scope.totalPorCobrar = totalPorCobrar;
 
                 }
                 
-                $scope.getLineaAerea();
+                $scope.getClientes();
 
                 $scope.exportar = function () {
-                    window.open(`../../ReportesVentasBoletosServlet?pi=${$scope.search.fechaInicio}&pf=${$scope.search.fechaFin}&id=${$scope.search.idAerolinea.id}&tp=${$scope.search.tipoCupon}`, '_blank');
+                    window.open(`../../ReportesComisionClienteServlet?pi=${$scope.search.fechaInicio}&pf=${$scope.search.fechaFin}&id=${$scope.search.idCliente.id}&tp=${$scope.search.tipoCupon}`, '_blank');
                 }
 
             }

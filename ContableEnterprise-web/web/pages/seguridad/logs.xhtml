@@ -124,10 +124,10 @@
                                         <!-- Tabla Contenido -->
                                         <div class=" ng-hide" ng-show="showTable">
                                             <div class="form-group row">
-                                                <label for="txtNombre" class=" col-form-label col-sm-2 text-right">Cuenta</label>
+                                                <label for="txtNombre" class=" col-form-label col-sm-2 text-right">Usuario</label>
                                                 <div class="col-sm-4">
-                                                    <input type="text" ng-model="search.idCliente" placeholder="Seleccione un Cliente"
-                                                           uib-typeahead="cuenta as cuenta.name for cuenta in comboCliente | filter:{name:$viewValue}"
+                                                    <input type="text" ng-model="search.username" placeholder="Seleccione un Usuario"
+                                                           uib-typeahead="cuenta as cuenta.name for cuenta in comboUsuario | filter:{name:$viewValue}"
                                                            class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="1" 
                                                            typeahead-template-url="customTemplate.html"  typeahead-focus-first="true"
                                                            />
@@ -195,31 +195,22 @@
                                                         </tr>
                                                     </c:if>
                                                     <tr>
-                                                        <th>Nro. Nota Cr&eacute;dito</th>
-                                                        <th>Cliente</th>
-                                                        <th>Estado</th>
-                                                        <th>Fecha Emision</th>
-                                                        <th>Fecha Creaci&oacute;n</th>
-                                                        <th>Monto Abonado Bs.</th>
-                                                        <th>Monto Abonado Usd.</th>
+                                                        <th>Fecha Log </th>
+                                                        <th>Acci&oacute;n</th>
+                                                        <th>Usuario</th>
+                                                        <th>Formulario</th>
+                                                        <th>IP</th>
+                                                        <th>Comentario</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr st-select-row="row" st-select-mode="multiple" ng-repeat="row in display_records" class="boleto-estado-{{row.estado}}">
-                                                        <td>{{row.idNotaCredito}} </td>
-                                                        <td>{{row.idCliente.name}} </td>
-                                                        <td>{{row.estado| printEstado }} </td>
-                                                        <td>{{row.fechaEmision}} </td>
-                                                        <td>{{row.fechaInsert}} </td>
-                                                        <td align="center" class="text-right">{{row.montoAbonadoBs|printNumber}} </td>
-                                                        <td align="center" class="text-right">{{row.montoAbonadoUsd|printNumber}} </td>
-                                                        <td>
-                                                            <div class="btn-group" >
-                                                                <c:if test="${logs.formulario.acceder == logs.formulario.PERMITIR }">
-                                                                    <button type="button" title="Editar" class="btn btn-sm btn-info" ng-click="edit(row)" ><i class="fa fa-pencil"></i></button>
-                                                                </c:if>
-                                                            </div>
-                                                        </td>
+                                                    <tr st-select-row="row" st-select-mode="multiple" ng-repeat="row in display_records" >
+                                                        <td>{{row.fechaLog}} </td>
+                                                        <td>{{row.accion}} </td>
+                                                        <td>{{row.usuario }} </td>
+                                                        <td>{{row.formulario}} </td>
+                                                        <td>{{row.ip}} </td>
+                                                        <td>{{row.comentario}} </td>
                                                     </tr>
                                                 </tbody>
                                                 <tfoot>
@@ -248,14 +239,7 @@
                                                 <input type="hidden" id="hdUrl" name="hdUrl" value="#{logs.formulario.restful}"/>
                                                 <input type="hidden" id="hdToken" name="hdToken" value="#{sessionView.token}"/>
                                                 <input type="hidden" id="hdFormName" name="hdFormName" value="#{logs.formulario.nombre}"/>
-                                                <input type="hidden" id="hdUrlFactores" name="hdUrlFactores" value="#{factores.formulario.restful}"/>
-                                                <input type="hidden" id="hdUrlClientes" name="hdUrlClientes" value="#{cliente.formulario.restful}"/>
-                                                <input type="hidden" id="hdUrlPromotores" name="hdUrlPromotores" value="#{promotores.formulario.restful}"/>
-                                                <input type="hidden" id="hdUrlBoletos" name="hdUrlBoletos" value="#{boletos.formulario.restful}"/>
-                                                <input type="hidden" id="idEmpresa" name="idEmpresa" value="#{login.empleado.idEmpresa.idEmpresa}"/>
-                                                <input type="hidden" id="hdPorcentaje" name="hdPorcentaje" value="#{boletos.porcentaje.valor}" />
-                                                <input type="hidden" id="hdFactorMaxMin" name="hdFactorMaxMin" value="#{comprobantes.factorCambiarioMaxMin.valor}"/>
-                                                <input type="hidden" id="hdUrlPlanCuentas" name="hdUrlPlanCuentas" value="#{planCuentas.formulario.restful}"/>
+                                                <input type="hidden" id="hdUser" name="hdUser" value="#{usuario.formulario.restful}"/>
                                                 <input type="hidden" id="hdComprobante" name="hdComprobante" value="#{comprobantes.formulario.restful}"/>
 
                                                 <br />

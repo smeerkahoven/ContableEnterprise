@@ -245,7 +245,7 @@ angular.module('jsBancos.controllers', []).controller('frmBancos', ['$scope', '$
         $scope.delete = function (method) {
 
             $scope.linkLoading = true;
-            $scope.loading = true;
+            //$scope.loading = true;
             var data = {};
 
             $http({
@@ -255,8 +255,8 @@ angular.module('jsBancos.controllers', []).controller('frmBancos', ['$scope', '$
                 headers: {'Content-Type': 'application/json'}
             }).then(function (response) {
                 if (response.data.code === 201) {
-                    if (method === 'delete-link') {
-                        $scope.link($scope.frmLink);
+                    $scope.linkLoading = false;
+                    if ($scope.methodEliminar === 'delete-link') {
                         $scope.showLinkRestfulMessage = response.data.content;
                         $scope.showLinkRestfulSuccess = true;
                         $scope.linkLoading = false;
@@ -268,15 +268,17 @@ angular.module('jsBancos.controllers', []).controller('frmBancos', ['$scope', '$
                         $scope.loading = false;
                     }
                 } else {
-                    if (method === 'delete-link') {
+                    if ($scope.methodEliminar === 'delete-link') {
                         $scope.showLinkRestfulMessage = response.data.content;
                         $scope.showLinkRestfulError = true;
                         $scope.linkLoading = true;
+                        $scope.link($scope.frmLink);
                     } else {
                         $scope.showRestfulMessage = response.data.content;
                         $scope.showRestfulError = true;
                         $scope.loading = false;
                     }
+                    
                 }
 
             }, function (error) {

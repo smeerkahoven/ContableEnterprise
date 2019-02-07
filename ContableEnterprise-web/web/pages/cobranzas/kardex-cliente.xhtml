@@ -43,7 +43,7 @@
 
         <script type="text/javascript" src="../../js/date.format.js" />
         <script type="text/javascript" src="../../js/moment.js" />
-        <script type="text/javascript" src="../../js/boletaje/planillabsp.js" />
+
 
         <!--CORRIGE ng-show -->
         <link rel="stylesheet" href="../../css/main.css"  />
@@ -74,7 +74,7 @@
                 <!-- .wrapper -->
                 <div class="wrapper">
                     <!-- .page -->
-                    <div class="page" ng-app="jsPlanillaBsp" ng-controller="frmPlanillaBsp">
+                    <div class="page" ng-app="jsKardexCliente" ng-controller="frmKardexCliente">
                         <!-- .page-inner -->
                         <div class="page-inner">
                             <!-- .page-title-bar -->
@@ -83,15 +83,15 @@
                                     <ol class="breadcrumb">
                                         <li class="breadcrumb-item active">
                                             <a href="#">
-                                                <i class="breadcrumb-icon fa fa-angle-left mr-2"></i>#{planillaBsp.formulario.modulo}
+                                                <i class="breadcrumb-icon fa fa-angle-left mr-2"></i>#{kardexCliente.formulario.modulo}
                                             </a>
                                         </li>
                                     </ol>
                                 </nav>
                                 <div class="d-md-flex">
-                                    <h1 class="page-title mr-sm-auto"> #{planillaBsp.formulario.nombre}</h1>
+                                    <h1 class="page-title mr-sm-auto"> #{kardexCliente.formulario.nombre}</h1>
                                     <div class="dt-button btn-group">
-                                        <c:if test="#{planillaBsp.formulario.crear== planillaBsp.formulario.PERMITIR}">
+                                        <c:if test="#{kardexCliente.formulario.crear== kardexCliente.formulario.PERMITIR}">
                                             <button type="button" class="btn btn-success buttons-html5" tabindex="0" ng-click="nuevo()"><span class="fa fa-plus"></span> Nuevo</button>
                                         </c:if>
                                         <button type="button" class="btn btn-warning buttons-html5" tabindex="0" ng-click="cancelar()"><span class="fa fa-undo"></span> Cancelar</button>
@@ -126,17 +126,62 @@
                                         <!-- .form-group -->
                                         <!-- Tabla Contenido -->
                                         <div class=" ng-hide" ng-show="showTable">
-
-
                                             <div class="form-group row">
-                                                <label for="txtStatus" class="col-form-label col-sm-2 text-right">Tipo de Cup&oacute;n</label>
+                                                <label for="txtStatus" class="col-form-label col-sm-2 text-right">Tipo de B&uacute;squeda</label>
                                                 <div class="col-sm-3">
-                                                    <select name="txtMoneda" class="form-control" ng-model="search.tipoCupon" required="">
+                                                    <select name="txtMoneda" class="form-control" ng-model="search.tipo" required="">
                                                         <option style="display:none" value="">seleccione una opcion</option>
-                                                        <option value="N" selected="selected">NACIONAL</option>
-                                                        <option value="I">INTERNACIONAL</option>
+                                                        <option value="{{CLIENTE}}" selected="selected">Cliente</option>
+                                                        <option value="{{NOTA_DEBITO}}">Nota de D&eacute;bito</option>
+                                                        <option value="{{BOLETO}}">Boleto</option>
+                                                        <option value="{{PASAJERO}}">Pasajero</option>
                                                     </select>
-                                                    <span class="alert-danger" ng-show="!search.tipoCupon">Debe seleccionar una opci&oacute;n.</span>
+                                                    <span class="alert-danger" ng-show="!search.tipo">Debe seleccionar una opci&oacute;n.</span>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="form-group row" ng-show="search.tipo === CLIENTE">
+                                                <label for="txtNombre" class=" col-form-label col-sm-2 text-right">Cuenta</label>
+                                                <div class="col-sm-5">
+                                                    <input type="text" ng-model="search.idCliente" placeholder="Seleccione una Cuenta"
+                                                           uib-typeahead="cuenta as cuenta.name for cuenta in comboCliente | filter:{name:$viewValue}"
+                                                           class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="1" 
+                                                           typeahead-template-url="customTemplate.html"  typeahead-focus-first="true"
+                                                           />
+                                                    <span class="alert-danger"  ng-show="search.idCliente.id === undefined"  >
+                                                        Ingrese un Cliente V&aacute;lido.
+                                                    </span> 
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row" ng-show="search.tipo === BOLETO">
+                                                <label for="txtCodigo" class="col-form-label col-sm-2 text-right">N&uacute;mero del Boleto</label>
+                                                <div class="col-sm-5">
+                                                    <input type="input" class="form-control" name="txtNumero" id="txtNumero" 
+                                                           ng-model="search.nroBoleto" size="10" maxlength="10" 
+                                                           data-toggle="tooltip" data-placement="top"   />                                                          
+                                                    <span class="alert-danger" ng-show="!search.nroBoleto">Debe ingresar un Numero de Boleto</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row" ng-show="search.tipo === NOTA_DEBITO">
+                                                <label for="txtCodigo" class="col-form-label col-sm-2 text-right">N&uacute;mero de Nota</label>
+                                                <div class="col-sm-5">
+                                                    <input type="input" class="form-control" name="txtIdNotaDebito" id="txtIdNotaDebito" 
+                                                           ng-model="search.idNotaDebito" size="10" maxlength="10" 
+                                                           data-toggle="tooltip" data-placement="top"   />                                                          
+                                                    <span class="alert-danger" ng-show="!search.idNotaDebito">Debe ingresar un Numero de Boleto</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group row" ng-show="search.tipo === PASAJERO">
+                                                <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Nombre Pasajero</label>
+                                                <div class="col-sm-5">
+                                                    <input type="text" class="form-control" name="txtNombrePasajero" id="txtNombrePasajero" 
+                                                           ng-model="search.nombrePasajero" size="10" maxlength="10" 
+                                                           data-toggle="tooltip" data-placement="top"   />                                                          
+                                                    <span class="alert-danger" ng-show="!search.nombrePasajero">Debe ingresar un Nombre de Pasajero</span>
                                                 </div>
                                             </div>
 
@@ -176,10 +221,9 @@
                                                 <table st-table="display_records"    st-safe-src="mainGrid" 
                                                        class="table  table-hover ">
                                                     <thead >
-                                                        <c:if test="#{planillaBsp.formulario.buscar == planillaBsp.formulario.PERMITIR}">
-                                                            <tr>
+                                                        <c:if test="#{kardexCliente.formulario.buscar == kardexCliente.formulario.PERMITIR}">
+                                                            <!--<tr>
                                                                 <th colspan="8">
-                                                                    <!-- .input-group -->
                                                                     <div class="input-group has-clearable">
                                                                         <div class="input-group-prepend">
                                                                             <span class="input-group-text">
@@ -188,51 +232,51 @@
                                                                         </div>
                                                                         <input st-search="" id="table-search" class="form-control placeholder-shown" placeholder="Busqueda" type="text" /> 
                                                                     </div>
-                                                                    <!-- /.input-group -->
                                                                 </th>
-                                                            </tr>
+                                                            </tr> -->
                                                         </c:if>
-                                                        <tr class="text-center">
-                                                            <th >Aerolinea</th>
-                                                            <th>Nro Boleto</th>
-                                                            <th>Fecha Emisi&oacute;n</th>
-                                                            <th>Importe Neto</th>
-                                                            <th>Impuestos</th>
-                                                            <th>Total Boleto</th>
-                                                            <th>% Comisi&oacute;n</th>
-                                                            <th>Monto Comisi&oacute;n + IVA</th>
-                                                            <th>Neto a Pagar</th>
-                                                            <th>Estado</th>
-                                                            <th>Id Nota D&eacute;bito</th>
+                                                        <tr >
+                                                            <th>N&uacute;mero</th>
+                                                            <th>Documento</th>
+                                                            <th>Fecha</th>
+                                                            <th>Vencimiento</th>
+                                                            <th class="text-right">Debe M/Nac</th>
+                                                            <th class="text-right">Haber M/Nac</th>
+                                                            <th class="text-right">Saldo M/Nac</th>
+                                                            <th class="text-right">Debe M/Ext</th>
+                                                            <th class="text-right">Haber M/Ext</th>
+                                                            <th class="text-right">Saldo M/Ext</th>
+                                                            <!--<th>Estado</th>-->
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         <tr  st-select-row="row" st-select-mode="multiple" ng-repeat="row in display_records">
-                                                            <td>{{row.iata}} </td>
-                                                            <td>{{row.ticketNumber}} </td>
-                                                            <td>{{row.fechaEmision}} </td>
-                                                            <td class="text-right">{{row.importeNeto|printNumber}} </td>
+                                                            <td>{{row.numero}} </td>
+                                                            <td>{{row.documento}} </td>
+                                                            <td>{{row.fecha}} </td>
+                                                            <td>{{row.vencimiento}} </td>
+                                                            <td class="text-right">{{row.montoDebeNac|printNumber}} </td>
                                                             <td class="text-right">{{row.impuestos|printNumber}} </td>
                                                             <td class="text-right">{{row.totalBoleto|printNumber}} </td>
-                                                            <td class="text-right">{{row.comision|printNumber}} </td>
-                                                            <td class="text-right">{{row.montoComision|printNumber}} </td>
-                                                            <td class="text-right">{{row.totalMontoCobrar|printNumber}} </td>
-                                                            <td>{{row.estado}} </td>
-                                                            <td>{{row.idNotaDebito}} </td>
+                                                            <td class="text-right">{{row.fee|printNumber}} </td>
+                                                            <td class="text-right">{{row.descuento|printNumber}} </td>
+                                                            <!--<td>{{row.estado}} </td>-->
 
                                                         </tr>
                                                     </tbody>
                                                     <tfoot>
                                                         <tr class="table-success" ng-show="mainGrid.length > 0">
-                                                            <td colspan="3"><strong>TOTALES</strong></td>
+                                                            <td colspan="5"><strong>TOTALES</strong></td>
                                                             <td class="text-right"><strong>{{totalImporteNeto}}</strong></td>
                                                             <td class="text-right"><strong>{{totalImpuestos}}</strong></td>
                                                             <td class="text-right"><strong>{{totalBoleto}}</strong></td>
-                                                            <td></td>
-                                                            <td class="text-right"><strong>{{totalMontoComision}}</strong></td>
-                                                            <td class="text-right"><strong>{{totalNetoAPagar}}</strong></td>
-                                                            <td></td>
-                                                            <td></td>
+                                                            <td class="text-right"><strong>{{totalFee}}</strong></td>
+                                                            <td class="text-right"><strong>{{totalDescuento}}</strong></td>
+                                                        </tr>
+                                                        <tr class="table-warning" ng-show="mainGrid.length > 0">
+                                                            <td colspan="5"><strong>TOTAL POR COBRAR</strong></td>
+                                                            <td class="text-right"><strong>{{totalPorCobrar|printNumber}}</strong></td>
+                                                            <td colspan="4"></td>
                                                         </tr>
                                                         <tr>
                                                             <td colspan="10" class="text-center">
@@ -254,9 +298,10 @@
                                             <fieldset>
                                                 <!-- Contenido Formulario-->
                                                 <div id="formData" class="container animated fadeIn ng-hide"   ng-show="showForm" >
-                                                    <input type="hidden" id="hdUrl" name="hdUrl" value="#{planillaBsp.formulario.restful}"/>
+                                                    <input type="hidden" id="hdUrl" name="hdUrl" value="#{kardexCliente.formulario.restful}"/>
                                                     <input type="hidden" id="hdToken" name="hdToken" value="#{sessionView.token}"/>
-                                                    <input type="hidden" id="hdFormName" name="hdFormName" value="#{planillaBsp.formulario.nombre}"/>
+                                                    <input type="hidden" id="hdFormName" name="hdFormName" value="#{kardexCliente.formulario.nombre}"/>
+                                                    <input type="hidden" id="hdUrlClientes" name="hdUrlClientes" value="#{cliente.formulario.restful}"/>
                                                     <br />
 
                                                     <script  type="text/ng-template" id="customTemplate.html">
@@ -342,6 +387,7 @@
         <!-- END PLUGINS JS -->
         <!-- BEGIN THEME JS -->
         <script src="../../assets/javascript/main.min.js"></script>
+        <script type="text/javascript" src="../../js/cobranzas/kardex-cliente.js" />
 
         <script type="text/javascript" src="../../assets/javascript/pages/flatpickr-demo.js"></script>
         <script type="text/javascript" src="../../assets/javascript/pages/typeahead-demo.js"></script>

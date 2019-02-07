@@ -570,8 +570,8 @@
                                                         <th>Descripci&oacute;n</th>
                                                         <th>Fecha Creaci&oacute;n</th>
                                                         <th>Vence</th>
-                                                        <th>Monto Bs.</th>
-                                                        <th>Monto Usd.</th>
+                                                        <th>Monto Adeudado Bs.</th>
+                                                        <th>Monto Adeudado Usd.</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -583,8 +583,8 @@
                                                         <td>{{row.descripcion}} </td>
                                                         <td>{{row.fechaInsert}} </td>
                                                         <td>{{row.fechaVencimiento}} </td>
-                                                        <td align="right">{{row.montoBs}} </td>
-                                                        <td align="">{{row.montoUsd}} </td>
+                                                        <td align="right" class="table-danger">{{row.montoAdeudadoBs|printNumber}} </td>
+                                                        <td align="right" class="table-danger">{{row.montoAdeudadoUsd|printNumber}} </td>
                                                     </tr>
                                                 </tbody>
                                                 <tfoot>
@@ -602,7 +602,7 @@
                                             <div class="btn-group" role="group"  >
                                                 <!--<div class="form-group row ng-hide" ng-show="formData.idAerolinea.id">-->
                                                 <c:if test="#{pagoAnticipado.formulario.crear== pagoAnticipado.formulario.PERMITIR}">
-                                                    <button  type="button" class="btn btn-primary" ng-click="seleccionarTransaccion()" ><span class="fa fa-chevron-circle-right"></span> Seleccionar</button>
+                                                    <button  type="button" class="btn btn-primary" ng-click="seleccionarTransaccion()" ng-disabled="!itemTrxSelected"  ><span class="fa fa-chevron-circle-right"></span> Seleccionar</button>
                                                 </c:if>
 
                                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
@@ -835,12 +835,12 @@
                                                         </div>
 
                                                         <div class="form-group row">
-                                                            <label for="txtConcepto2" class="col-form-label col-sm-2 text-right control-label">Concepto</label>
+                                                            <label for="txtConcepto2" class="col-form-label col-sm-3 text-right control-label">Concepto</label>
                                                             <div class="col-sm-8">
                                                                 <div >
                                                                     <textarea type="text" class="form-control" rows="3" name="txtConcepto2" required="required" 
                                                                               onkeyup="this.value = this.value.toUpperCase()" maxlength="256" ng-model="dev.concepto"/>
-                                                                    <span class="alert-danger"  ng-show="!myForm.txtConcepto.$valid"  >
+                                                                    <span class="alert-danger"  ng-show="!myFormDev.txtConcepto2.$valid"  >
                                                                         Debe insertar un concepto.
                                                                     </span>
                                                                 </div>

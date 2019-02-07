@@ -86,6 +86,7 @@ angular.module('jsIngresoCaja.controllers', []).controller('frmIngresoCaja',
                 $scope.EFECTIVO = "E";
                 $scope.CHEQUE = "H";
                 $scope.DEPOSITO = "D";
+                
                 $scope.MONEDA_NACIONAL = 'B';
                 $scope.MONEDA_EXTRANJERA = 'U';
                 $scope.INGRESO = 'I';
@@ -330,6 +331,7 @@ angular.module('jsIngresoCaja.controllers', []).controller('frmIngresoCaja',
                         $scope.showAlert(ERROR_RESPUESTA_TITLE, ERROR_NOTA_DEBITO_EMITIDA);
                         return;
                     }
+                    
                     showBackground();
                     $http({
                         method: 'POST',
@@ -343,6 +345,7 @@ angular.module('jsIngresoCaja.controllers', []).controller('frmIngresoCaja',
                                     $scope.showForm = false;
                                     $scope.showRestfulSuccess = true;
                                     $scope.showRestfulMessage = response.data.content;
+                                    $scope.formData= response.data.entidad;
                                     goScrollTo('#restful-success');
                                     $scope.imprimir();
                                 } else {
@@ -363,6 +366,7 @@ angular.module('jsIngresoCaja.controllers', []).controller('frmIngresoCaja',
 
 
                 $scope.hasFormaDePagos = function () {
+                    console.log(`formaPago:${$scope.formData}`);
                     switch ($scope.formData.formaPago) {
                         case $scope.EFECTIVO:
                             break;
@@ -451,9 +455,15 @@ angular.module('jsIngresoCaja.controllers', []).controller('frmIngresoCaja',
                         $scope.showAlert('Error de Verificacion', 'Verifique los mensajes de los valores requeridos')
                         return;
                     }
+                    
+                    if (!$scope.hasFormaDePagos()){
+                        $scope.showAlert(ERROR_TITLE, $scope.errorFormaPagoMessage);
+                        return
+                    }
 
                     $scope.loading = true;
                     $scope.formData.idEmpresa = $scope.formData.idEmpresa.id;
+                    console.log($scope.formData);
                     $http({
                         method: 'POST',
                         url: url.value + 'save',
@@ -588,6 +598,8 @@ angular.module('jsIngresoCaja.controllers', []).controller('frmIngresoCaja',
                     $scope.trx.estado = $scope.PENDIENTE;
                     $scope.trx.idNotaDebito = $scope.formData.idNotaDebito;
                     $scope.trx.idIngresoCaja = $scope.formData.idIngresoCaja;
+                    
+                    $scope.itemTrxSelected=false ;
 
                     $scope.showFrmBoletoNuevo = true;
                     $scope.showFrmBoletoEditar = false;
@@ -611,6 +623,8 @@ angular.module('jsIngresoCaja.controllers', []).controller('frmIngresoCaja',
                 }
 
                 $scope.saveTransaccion = function () {
+
+                    showBackground();
 
                     if ($scope.showErrorMontoIngresado) {
                         return;
@@ -686,6 +700,7 @@ angular.module('jsIngresoCaja.controllers', []).controller('frmIngresoCaja',
 
                 $scope.seleccionarItemNotaDebito = function (row) {
                     $scope.trx = row;
+                    $scope.itemTrxSelected = true ;
                 }
 
                 $scope.seleccionarTransaccion = function () {
@@ -726,6 +741,7 @@ angular.module('jsIngresoCaja.controllers', []).controller('frmIngresoCaja',
                 $scope.cancelar = function () {
                     $scope.showForm = false;
                     $scope.showTable = true;
+                    $scope.search = {fechaInicio: firstDay, fechaFin: today};
                     $scope.hideMessagesBox();
                 }
 
@@ -812,6 +828,112 @@ angular.module('jsIngresoCaja.controllers', []).controller('frmIngresoCaja',
                     $scope.showRestfulMessage = error.statusText;
                     goScrollTo('#restful-success');
                 }
+                
+                 /*
+                 *  Eventos Click Pestanhas
+                 */
+                $scope.efectivoClick = function () {
+                    $scope.initEfectivo();
+                }
+
+                $scope.chequeClick = function () {
+                    $scope.initCheque();
+                }
+
+                $scope.depositoClick = function () {
+                    $scope.initDeposito();
+                }
+
+                $scope.creditoClick = function () {
+                    $scope.initCredito();
+                }
+
+                $scope.contadoClick = function () {
+                    $scope.initContado();
+                }
+
+                $scope.tarjetaClick = function () {
+                    $scope.initTarjeta();
+                }
+
+                $scope.combinadoClick = function () {
+                    $scope.initCombinado();
+                }
+                
+                /**
+                 * 
+                 * eventos formas de pago
+                 */
+
+
+                $scope.initEfectivo = function () {
+                    $scope.formData.formaPago = $scope.EFECTIVO;
+                    $scope.resetCheque();
+                    $scope.resetDeposito();
+                    $scope.resetCredito();
+                    $scope.resetTarjeta();
+                }
+
+                $scope.initCheque = function () {
+                    $scope.formData.formaPago = $scope.CHEQUE;
+                    $scope.resetDeposito();
+                    $scope.resetCredito();
+                    $scope.resetTarjeta();
+                }
+
+                $scope.initDeposito = function () {
+                    $scope.formData.formaPago = $scope.DEPOSITO;
+                    $scope.resetCheque();
+                    $scope.resetCredito();
+                    $scope.resetTarjeta();
+                    
+                    console.log($scope.formData);
+                }
+
+                $scope.initCredito = function () {
+                    $scope.formData.formaPago = $scope.CREDITO;
+                    $scope.resetCheque();
+                    $scope.resetDeposito();
+                    $scope.resetCombinado();
+                    $scope.resetTarjeta();
+
+                    $scope.formData.creditoVencimiento = today;
+                    if ($scope.cliente !== undefined) {
+                        $scope.formData.creditoDias = $scope.cliente.plazoMaximo;
+                        $scope.setCreditoVencimiento();
+                    }
+                }
+
+                $scope.initTarjeta = function () {
+                    $scope.formData.formaPago = $scope.TARJETA;
+                    $scope.resetCheque();
+                    $scope.resetDeposito();
+                    $scope.resetCredito();
+                    $scope.resetCombinado();
+                    $scope.resetTarjeta();
+
+                }
+
+                $scope.resetCredito = function () {
+                    $scope.formData.creditoDias = null;
+                    $scope.formData.creditoVencimiento = null;
+                }
+
+                $scope.resetCheque = function () {
+                    $scope.formData.nroCheque = null;
+                    $scope.formData.idBanco = null;
+                }
+
+                $scope.resetDeposito = function () {
+                    $scope.formData.nroDeposito = null;
+                    $scope.formData.idCuentaDeposito = null;
+                }
+
+                $scope.resetTarjeta = function () {
+                    $scope.formData.idTarjetaCredito = null;
+                    $scope.formData.nroTarjeta = null;
+                }
+
 
                 $scope.getFactorCambiario()
                 $scope.getClientes();

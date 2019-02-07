@@ -85,3 +85,10 @@ list-on-top {
 .input-number{
     text-align: right
 }
+
+.nospacecell {
+  white-space: normal !important; 
+}
+.fixedtable {
+  table-layout: fixed;
+}

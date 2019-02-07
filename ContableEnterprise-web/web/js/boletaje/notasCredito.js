@@ -300,6 +300,7 @@ angular.module('jsNotasCredito.controllers', []).controller('frmNotasCredito',
                         return;
                     }
                     showBackground();
+                    
                     $http({
                         method: 'POST',
                         headers: {'Content-type': 'application/json'},
@@ -477,6 +478,8 @@ angular.module('jsNotasCredito.controllers', []).controller('frmNotasCredito',
                     $scope.trx.idNotaDebito = $scope.formData.idNotaDebito;
                     $scope.trx.idNotaCredito = $scope.formData.idNotaCredito;
 
+                    $scope.itemTrxSelected = false ;
+
                     $scope.showFrmBoletoNuevo = true;
                     $scope.showFrmBoletoEditar = false;
                     var idCliente = $scope.formData.idCliente.id;
@@ -531,7 +534,8 @@ angular.module('jsNotasCredito.controllers', []).controller('frmNotasCredito',
                             $scope.loadTransacciones();
 
                             hideModalWindow('#frmNotaCreditoTransaccion');
-
+                        }else {
+                            showAlert(ERROR_TITLE, )
                         }
                     }, $scope.errorFunction);
                 }
@@ -585,6 +589,7 @@ angular.module('jsNotasCredito.controllers', []).controller('frmNotasCredito',
 
                 $scope.seleccionarItemNotaDebito = function (row) {
                     $scope.trx = row;
+                    $scope.itemTrxSelected=true ;
                 }
 
                 $scope.seleccionarTransaccion = function () {
@@ -633,6 +638,7 @@ angular.module('jsNotasCredito.controllers', []).controller('frmNotasCredito',
                 $scope.cancelar = function () {
                     $scope.showForm = false;
                     $scope.showTable = true;
+                    $scope.search = {fechaInicio: firstDay, fechaFin: today};
                     $scope.hideMessagesBox();
                 }
 

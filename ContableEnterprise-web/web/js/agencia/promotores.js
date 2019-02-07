@@ -82,7 +82,7 @@ angular.module('jsPromotores.controllers', []).controller('frmPromotores',
                 $scope.save = function () {
                     $scope.clickNuevo = false;
                     if (!$scope.myForm.$valid) {
-                        //$scope.showAlert('Error de Verificacion', 'Verifique los mensajes de los valores requeridos')
+                        $scope.showAlert('Error de Verificacion', 'Verifique los mensajes de los valores requeridos')
                         return;
                     }
                     if ($scope.formHasError()) {

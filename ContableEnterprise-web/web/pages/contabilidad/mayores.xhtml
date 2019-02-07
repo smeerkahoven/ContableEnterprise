@@ -194,29 +194,32 @@
                                                 </div>
 
                                             </form>
-                                            <div  id="tableData" class="ng-hide table-responsive" ng-show="showTable" >
+                                            
+                                            
+                                            <div  id="tableData" class="ng-hide table-responsive " ng-show="showTable" >
                                                 <table id="dataTable" st-table="display_records"    st-safe-src="formData.mayores" 
-                                                       class="table  table-hover ">
+                                                       class="table table-hover">
                                                     <thead>
                                                         <tr>
-                                                            <td>Consulta Mayores:</td>
-                                                            <td>{{search.idCuenta.name}} </td>
-                                                            <td>Desde:</td>
-                                                            <td>{{search.fechaInicio}}</td>
-                                                            <td>Hasta:</td>
-                                                            <td>{{search.fechaFin}}</td>
-                                                            <td>Moneda :</td>
-                                                            <td>{{search.moneda|printMoneda}}</td>
+                                                            <td colspan="8"><strong>Consulta Mayores:</strong>
+                                                            {{search.idCuenta.name}}
+                                                            <strong>&nbsp;&nbsp; Desde:</strong>
+                                                            {{search.fechaInicio}}
+                                                            <strong>&nbsp;&nbsp;Hasta:</strong>
+                                                            {{search.fechaFin}}
+                                                            <strong>&nbsp;&nbsp;Moneda :</strong>
+                                                            {{search.moneda|printMoneda}}
+                                                            </td>
                                                         </tr>
                                                         <tr>
-                                                            <th>Fecha</th>
-                                                            <th>Tipo</th>
-                                                            <th>N&uacute;mero</th>
-                                                            <th>Concepto</th>
-                                                            <th>Debe</th>
-                                                            <th>Haber</th>
-                                                            <th>Saldo Debe</th>
-                                                            <th>Saldo Haber</th>
+                                                            <th class="align-middle">Fecha</th>
+                                                            <th class="align-middle">Tipo</th>
+                                                            <th class="align-middle">N&uacute;mero &nbsp; &nbsp;</th>
+                                                            <th class="align-middle nospacecell">Concepto</th>
+                                                            <th class="align-middle">Debe</th>
+                                                            <th class="align-middle">Haber</th>
+                                                            <th class="align-middle">Saldo Debe</th>
+                                                            <th class="align-middle">Saldo Haber</th>
                                                         </tr>
                                                         <tr class="alert-success font-weight-bold"  >  
                                                             <td colspan="4">Acumulado y Saldo al {{search.fechaInicio}}</td>
@@ -231,8 +234,8 @@
                                                         <tr st-select-row="row" st-select-mode="multiple" ng-repeat="row in display_records" class="boleto-estado-{{row.estado}}">
                                                             <td>{{row.fechaMovimiento}} </td>
                                                             <td>{{row.tipo}} </td>
-                                                            <td>{{row.gestion}}-{{row.idNumeroGestion}} </td>
-                                                            <td>{{row.concepto| limitTo:64}}{{ row.concepto.length > 64 ?'...':''}}</td>
+                                                            <td style="width:100px;">{{row.gestion}}-{{row.idNumeroGestion}}</td>
+                                                            <td class="nospacecell">{{row.concepto}}</td>
                                                             <td align="right">{{row.montoDebe|printNumero}}  </td>
                                                             <td align="right">{{row.montoHaber|printNumero}} </td>
                                                             <td align="right">{{row.saldoDebe|printNumero}} </td>
@@ -320,7 +323,7 @@
                             <!-- Modal Comprobante-->
                             <form id="myFrmComprobante" name="myFrmComprobante">
                                 <div class="modal fade" id="frmComprobante" tabindex="-1" role="dialog" aria-labelledby="modalComprobante" aria-hidden="true">
-                                    <div class="modal-dialog modal-dialog-centered modal-mlg" role="document">
+                                    <div class="modal-dialog modal-dialog-centered modal-xlg" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <h5 class="modal-title" id="exampleModalLongTitle">Consulta Mayores - COMPROBANTES - {{search.moneda|printMoneda}}</h5>
@@ -374,7 +377,7 @@
 
                                                     <div class="form-group row">
                                                         <label for="txtNombre" class=" col-form-label col-sm-2 text-right">Glosa:</label>
-                                                        <div class="col-sm-6">
+                                                        <div class="col-sm-8">
                                                             <input id="idCliente" name="idCliente" type="text" class="form-control flatpick-input" data-input="" 
                                                                    ng-model="comprobante.idCliente.name" readonly="true"/>
                                                         </div>
@@ -382,7 +385,7 @@
 
                                                     <div class="form-group row">
                                                         <label for="txtNombre" class=" col-form-label col-sm-2 text-right">Concepto:</label>
-                                                        <div class="col-sm-6">
+                                                        <div class="col-sm-8">
                                                             <textarea type="text" class="form-control" rows="3" name="concepto" readonly="readonly" 
                                                                       onkeyup="this.value = this.value.toUpperCase()" maxlength="128" 
                                                                       ng-value="comprobante.concepto" ng-model="comprobante.concepto"/>
@@ -390,22 +393,28 @@
                                                     </div>
 
 
-                                                    <div  id="tableData" class="ng-hide table-responsive" ng-show="showTable" >
+                                                    <div  id="tableData" class="ng-hide table-responsive " ng-show="showTable" >
                                                         <table id="dataTable" st-table="trx"    st-safe-src="comprobante.transacciones" 
                                                                class="table  table-hover ">
                                                             <thead>
                                                                 <tr>
                                                                     <th>Cuenta</th>
-                                                                    <th>Moneda</th>
-                                                                    <th>Debe Mon. Nac.</th>
-                                                                    <th>Haber Mon. Nac.</th>
-                                                                    <th>Debe Mon. Ext.</th>
-                                                                    <th>Haber Mon. Ext.</th>
+                                                                    <th>Tipo</th>
+                                                                    <th>Id</th>
+                                                                    <th>Concepto</th>
+                                                                    <th>Mon</th>
+                                                                    <th>Debe M/Nac</th>
+                                                                    <th>Haber M/Nac</th>
+                                                                    <th>Debe M/Ext</th>
+                                                                    <th>Haber M/Ext</th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
                                                                 <tr st-select-row="row" st-select-mode="multiple" ng-repeat="row in trx" >
-                                                                    <td>{{row.idPlanCuenta|printCuenta:this}} </td>
+                                                                    <td><label>{{row.idPlanCuenta|printCuenta:this}}</label> </td>
+                                                                    <td>{{row.tipoTransaccion}} </td>
+                                                                    <td>{{row.idTransaccion}} </td>
+                                                                    <td>{{row.concepto}} </td>
                                                                     <td>{{row.moneda|printMoneda}} </td>
                                                                     <td align="right">{{row.debeMonNac|printNumero}} </td>
                                                                     <td align="right">{{row.haberMonNac|printNumero}} </td>
@@ -413,7 +422,7 @@
                                                                     <td align="right">{{row.haberMonExt|printNumero}} </td>
                                                                 </tr>
                                                                 <tr class=" font-weight-bold alert-success">
-                                                                    <td colspan="2">TOTALES</td>
+                                                                    <td colspan="5">TOTALES</td>
                                                                     <td align="right">{{comprobante.totalDebeMonNac|printNumero}}</td>
                                                                     <td align="right">{{comprobante.totalHaberMonNac|printNumero}}</td>
                                                                     <td align="right">{{comprobante.totalDebeMonExt|printNumero}}</td>

@@ -34,6 +34,20 @@ angular.module('jsPlanillaBsp.controllers', []).controller('frmPlanillaBsp',
                 $scope.itemsByPage = 99999;
 
                 $scope.find = function () {
+
+                    if (!$scope.search.tipoCupon) {
+                        showAlert(ERROR_TITLE, 'Seleccione un tipo de Cupon');
+                        return;
+                    }
+                    if (!$scope.search.fechaInicio) {
+                        showAlert(ERROR_TITLE, 'Seleccione una Fecha de Inicio');
+                        return;
+                    }
+                    if (!$scope.search.fechaFin) {
+                        showAlert(ERROR_TITLE, 'Seleccione una Fecha Fin');
+                        return;
+                    }
+
                     $scope.loading = true;
                     return $http({
                         method: 'POST',
@@ -48,7 +62,7 @@ angular.module('jsPlanillaBsp.controllers', []).controller('frmPlanillaBsp',
                         } else {
                             $scope.showRestfulMessage = response.data.content;
                             $scope.showRestfulError = true;
-                            $scope.mainGrid = [] ;
+                            $scope.mainGrid = [];
                         }
                     }, function (error) {
                         $scope.showRestfulMessage = error.statusText;
@@ -59,6 +73,13 @@ angular.module('jsPlanillaBsp.controllers', []).controller('frmPlanillaBsp',
                 $scope.hideMessagesBox = function () {
                     $scope.showRestfulSuccess = false;
                     $scope.showRestfulError = false;
+                }
+
+                $scope.cancelar = function () {
+                    $scope.showForm = false;
+                    $scope.showTable = true;
+                    $scope.search = {fechaInicio: firstDay, fechaFin: today};
+                    $scope.hideMessagesBox();
                 }
 
                 $scope.sumarTotales = function () {
@@ -86,7 +107,7 @@ angular.module('jsPlanillaBsp.controllers', []).controller('frmPlanillaBsp',
                 }
 
                 $scope.exportar = function () {
-                    window.open(`../../PlanillaBspReportServlet?pi=${$scope.search.fechaInicio}&pf=${$scope.search.fechaFin}`, '_blank');
+                    window.open(`../../PlanillaBspReportServlet?pi=${$scope.search.fechaInicio}&pf=${$scope.search.fechaFin}&tp=${$scope.search.tipoCupon}`, '_blank');
                 }
 
             }

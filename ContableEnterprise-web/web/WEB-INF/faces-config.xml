@@ -169,7 +169,7 @@
         </navigation-case>
     </navigation-rule>
     
-     <navigation-rule>
+    <navigation-rule>
         <from-view-id>pages/*</from-view-id>
         <navigation-case>
             <from-outcome>mayores</from-outcome>
@@ -215,7 +215,7 @@
     </navigation-rule>
     
     
-     <navigation-rule>
+    <navigation-rule>
         <from-view-id>pages/*</from-view-id>
         <navigation-case>
             <from-outcome>pago-anticipado</from-outcome>
@@ -261,6 +261,16 @@
         </navigation-case>
     </navigation-rule>
     
+    
+    <navigation-rule>
+        <from-view-id>pages/*</from-view-id>
+        <navigation-case>
+            <from-outcome>reportes-comision-cliente</from-outcome>
+            <to-view-id>pages/reports/comision-cliente.xhtml?faces-redirect=true</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
     <!-- configuracion -->
     
     <navigation-rule>
@@ -289,5 +299,16 @@
             <redirect />
         </navigation-case>
     </navigation-rule>
+    
+    <!-- COBRANZAS -->
+    <navigation-rule>
+        <from-view-id>pages/*</from-view-id>
+        <navigation-case>
+            <from-outcome>kardex-cliente</from-outcome>
+            <to-view-id>pages/cobranzas/kardex-cliente.xhtml?faces-redirect=true</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
     
 </faces-config>

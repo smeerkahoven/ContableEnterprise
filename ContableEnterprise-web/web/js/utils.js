@@ -1,5 +1,6 @@
 let ERROR_VERIFICACION_TITLE = 'Error de Verificacion';
 let ERROR_RESPUESTA_TITLE = 'Error en la Respuesta';
+let ERROR_TITLE = 'Error ';
 
 let SUCCESS_TITLE = 'Correcto!'
 let WARNING_TITLE = 'Advertencia!'

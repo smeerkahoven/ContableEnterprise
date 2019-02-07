@@ -476,7 +476,7 @@
 
                         <!-- Modal Nota Debito -->
                         <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="frmNotasDebitos">
-                            <div class="modal-dialog modal-xlg">
+                            <div class="modal-dialog modal-xlg modal-dialog-centered">
                                 <div class="modal-content">
                                     <div class="modal-header">
                                         <h4 class="modal-title" id="myModalLabel">Notas de D&eacute;bito Impagas</h4>
@@ -526,8 +526,8 @@
                                                     <td>{{row.fechaInsert}} </td>
                                                     <td>{{row.fechaVencimiento}} </td>
                                                     <td>{{row.formaPago| printFormaPago }} </td>
-                                                    <td align="right">{{row.montoBs}} </td>
-                                                    <td align="">{{row.montoUsd}} </td>
+                                                    <td align="right" class="table-danger">{{row.montoAdeudadoBs|printNumber}} </td>
+                                                    <td align="right" class="table-danger"> {{row.montoAdeudadoUsd|printNumber}} </td>
                                                 </tr>
                                             </tbody>
                                             <tfoot>
@@ -545,7 +545,7 @@
                                         <div class="btn-group" role="group"  >
                                             <!--<div class="form-group row ng-hide" ng-show="formData.idAerolinea.id">-->
                                             <c:if test="#{ingresoCaja.formulario.crear== ingresoCaja.formulario.PERMITIR}">
-                                                <button  type="button" class="btn btn-primary" ng-click="seleccionarTransaccion()" ><span class="fa fa-chevron-circle-right"></span> Seleccionar</button>
+                                                <button  type="button" class="btn btn-primary" ng-click="seleccionarTransaccion()" ng-disabled="!itemTrxSelected" ><span class="fa fa-chevron-circle-right"></span> Seleccionar</button>
                                             </c:if>
 
                                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>

@@ -285,7 +285,7 @@
 
                             <!-- /Modal Enlazar -->
                             <div class="modal hide fade" id="frmLink" tabindex="-1" role="dialog" aria-labelledby="verForm" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
+                                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                                     <div class="container">
                                         <form id="formLink" name="formLink">
                                             <div class="modal-content">
@@ -316,9 +316,10 @@
                                                 </script>
 
                                                 <div class="form-group row">
-                                                    <label for="txtDescripcion" class=" col-form-label col-sm-4 text-right">Descripcion</label>
-                                                    <div class="col-sm-5">
-                                                        <input type="text" name="txtDescripcion" autofocus="" 
+                                                    <label for="txtDescripcion" class=" col-form-label col-sm-2 text-right">Descripcion</label>
+                                                    <div class="col-sm-7">
+                                                        <input type="text" name="txtDescripcion" id="txtDescripcion" 
+                                                               onKeyUp="document.getElementById(this.id).value = document.getElementById(this.id).value.toUpperCase()" autofocus="" 
                                                                required="required" class="form-control" maxlength="32" 
                                                                ng-model="frmNewLink.descripcion"/>
                                                         <span class="alert-danger" ng-show="!formLink.txtDescripcion.$valid"  >
@@ -329,8 +330,8 @@
                                                 </div>
 
                                                 <div class="form-group row">
-                                                    <label for="txtNombre" class=" col-form-label col-sm-4 text-right">Entidad</label>
-                                                    <div class="col-sm-6 line">
+                                                    <label for="txtNombre" class=" col-form-label col-sm-2 text-right">Entidad</label>
+                                                    <div class="col-sm-7 line">
                                                         <select class="form-control" ng-model="idEmpresa" ng-change="getComboCuentas('combo', idEmpresa)">
                                                             <option ng-repeat="empresa in comboEmpresa" value="{{empresa.id}}"
                                                                     label="{{empresa.name}}" >
@@ -342,8 +343,8 @@
                                                 </div>
 
                                                 <div class="form-group row">
-                                                    <label for="txtNombre" class=" col-form-label col-sm-4 text-right">Cuentas de Bancos</label>
-                                                    <div class="col-sm-6">
+                                                    <label for="txtNombre" class=" col-form-label col-sm-2 text-right">Cuentas de Bancos</label>
+                                                    <div class="col-sm-7">
                                                         <div ng-show="loadingCuentas">
                                                             <i class="fa fa-gear fa-spin animated"   ></i>
                                                         </div>
@@ -359,8 +360,8 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="container-fluid">
-                                                    <table st-table="display_records_cuenta"  st-safe-src="cuentaBancoGrid" class="table table-hover table-sm table-responsive ">
+                                                <div class="container-fluid  table-responsive">
+                                                    <table st-table="display_records_cuenta"  st-safe-src="cuentaBancoGrid" class="table table-hover table-sm ">
                                                         <thead >
                                                             <tr>
                                                                 <th class="text-nowrap">Nro Cuenta</th>
@@ -397,7 +398,7 @@
 
                             <!-- Modal Eliminar -->
                             <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="frmConfirmation">
-                                <div class="modal-dialog modal-md">
+                                <div class="modal-dialog modal-md modal-dialog-centered ">
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <h4 class="modal-title" id="myModalLabel">Confirmar</h4>

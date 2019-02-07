@@ -7,7 +7,7 @@
 		<defaultValueExpression><![CDATA[1]]></defaultValueExpression>
 	</parameter>
 	<parameter name="PATH_SUBREPORTE" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["contabilidad/pago_anticipado_todo.jasper"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["boletos/ventas-boletos.jasper"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="ID_LIBRO" class="java.lang.Integer" isForPrompting="false">
 		<defaultValueExpression><![CDATA[22]]></defaultValueExpression>
@@ -24,6 +24,8 @@
 		<defaultValueExpression><![CDATA[50000001]]></defaultValueExpression>
 	</parameter>
 	<parameter name="ID_DEVOLUCION" class="java.lang.Integer"/>
+	<parameter name="ID_AEROLINEA" class="java.lang.Integer"/>
+	<parameter name="ID_CLIENTE" class="java.lang.Integer"/>
 	<queryString>
 		<![CDATA[SELECT
      tb_empresa.`id_empresa` AS tb_empresa_id_empresa,
@@ -123,6 +125,9 @@ WHERE
 		<band height="100" splitType="Stretch">
 			<subreport>
 				<reportElement x="6" y="0" width="200" height="100" uuid="9e5bdce7-711b-40e0-9b51-f915333152d9"/>
+				<subreportParameter name="ID_AEROLINEA">
+					<subreportParameterExpression><![CDATA[$P{ID_AEROLINEA}]]></subreportParameterExpression>
+				</subreportParameter>
 				<subreportParameter name="ID_DEVOLUCION">
 					<subreportParameterExpression><![CDATA[$P{ID_DEVOLUCION}]]></subreportParameterExpression>
 				</subreportParameter>

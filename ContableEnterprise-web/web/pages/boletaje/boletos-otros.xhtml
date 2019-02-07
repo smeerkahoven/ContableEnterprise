@@ -337,7 +337,7 @@
                                                     <!-- Counter -->
                                                     <div class="form-group row">
                                                         <label for="txtNombre" class=" col-form-label col-sm-2 text-right">Counter</label>
-                                                        <div class="col-sm-6">
+                                                        <div class="col-sm-4">
                                                             <input type="text" ng-model="formData.idPromotor" placeholder="Seleccione un Counter"
                                                                    uib-typeahead="cuenta as cuenta.name for cuenta in comboCounter | filter:{name:$viewValue}"
                                                                    class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="1" 
@@ -772,7 +772,7 @@
                                                                     <label class="custom-control-label" for="rdNacional" >Nacional</label>
                                                                 </div>
                                                             </div>
-                                                            <span class="alert-danger" ng-show="boleto.tipoCupon === undefined">Ingrese una tipo de Cupon</span>
+                                                            <span class="alert-danger" ng-show="boleto.tipoCupon === undefined">Ingrese un tipo de Cupon</span>
                                                         </div>
                                                     </div>
 

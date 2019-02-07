@@ -183,6 +183,11 @@ angular.module('jsPagoAnticipado.controllers', []).controller('frmPagoAnticipado
                         return;
                     }
 
+                    if (!$scope.hasFormaDePagos()) {
+                        $scope.showAlert(ERROR_TITLE, $scope.errorFormaPagoMessage);
+                        return;
+                    }
+
                     $scope.loading = true;
 
                     $http({
@@ -221,6 +226,8 @@ angular.module('jsPagoAnticipado.controllers', []).controller('frmPagoAnticipado
 
                     $scope.trx.idPagoAnticipado = $scope.formData.idPagoAnticipado;
 
+                    showBackground();
+
                     return $http({
                         url: `${url.value}save/transaccion`,
                         method: 'POST',
@@ -257,7 +264,8 @@ angular.module('jsPagoAnticipado.controllers', []).controller('frmPagoAnticipado
 
                         case $scope.TRANSACCION: // Comprobante de Ingreso
                             window.open(`../../PagoAnticipadoTransaccionReport?idTrx=${formData.idPagoAnticipadoTransaccion}`, '_blank');
-                        
+                            break;
+
                         case $scope.DEVOLUCION:
                             window.open(`../../DevolucionReport?idDev=${formData.idDevolucion}`, '_blank');
                             break;
@@ -394,7 +402,7 @@ angular.module('jsPagoAnticipado.controllers', []).controller('frmPagoAnticipado
 
                 $scope.saveDevolucion = function () {
                     if ($scope.hasFormDevolucionErrors()) {
-                        showAlert(ERROR_RESPUESTA_TITLE, VERIFIQUE_VALORES_REQUERIDOS);
+                        showAlert(ERROR_RESPUESTA_TITLE, $scope.showDevolucionErrores);
                         return;
                     }
 
@@ -412,7 +420,7 @@ angular.module('jsPagoAnticipado.controllers', []).controller('frmPagoAnticipado
                             $scope.showTable = true;
                             $scope.showRestfulMessage = response.data.content;
                             $scope.showRestfulSuccess = true;
-                            $scope.mainGrid = {} ;
+                            $scope.mainGrid = {};
                             $scope.imprimir($scope.DEVOLUCION, response.data.entidad);
                         } else {
                             hideModalWindow('#frmDevolucion');
@@ -426,19 +434,100 @@ angular.module('jsPagoAnticipado.controllers', []).controller('frmPagoAnticipado
 
                 $scope.hasFormDevolucionErrors = function () {
                     if ($scope.dev.monto === undefined) {
+                        $scope.showDevolucionErrores = "Debe ingresar un monto.";
                         return true;
                     }
 
                     if ($scope.dev.concepto === undefined) {
+                        $scope.showDevolucionErrores = "Debe ingresar un concepto.";
                         return true;
                     }
 
                     if ($scope.dev.tipoDevolucion === undefined) {
+                        $scope.showDevolucionErrores = "Debe seleccionar un tipo de Devolucion.";
                         return true;
                     }
 
                     return false;
 
+                }
+
+                $scope.hasFormaDePagos = function () {
+                    switch ($scope.formData.formaPago) {
+                        case $scope.EFECTIVO:
+                            break;
+                        case $scope.CHEQUE:
+
+                            if (!$scope.formData.nroCheque) {
+                                $scope.errorFormaPagoMessage = 'No definio un numero de Cheque';
+                                return false;
+                            }
+
+                            if ($scope.formData.nroCheque === undefined) {
+                                $scope.errorFormaPagoMessage = 'No definio un numero de Cheque';
+                                return false;
+                            }
+                            if (!$scope.formData.idBanco) {
+                                $scope.errorFormaPagoMessage = 'Debe seleccionar un Banco';
+                                return false;
+                            }
+
+                            break;
+                        case $scope.DEPOSITO :
+                            if (!$scope.formData.nroDeposito) {
+                                $scope.errorFormaPagoMessage = 'No ha ingresado un numero de deposito';
+                                return false;
+                            }
+                            if ($scope.formData.nroDeposito === null) {
+                                $scope.errorFormaPagoMessage = 'No ha ingresado un numero de deposito';
+                                return false;
+                            }
+
+
+                            if (!$scope.formData.idCuentaDeposito) {
+                                $scope.errorFormaPagoMessage = 'Debe seleccionar una cuenta de deposito';
+                                return false;
+                            }
+
+                            if ($scope.formData.idCuentaDeposito === null) {
+                                $scope.errorFormaPagoMessage = 'Debe seleccionar una cuenta de deposito';
+                                return false;
+                            }
+
+
+                            break;
+
+                        case $scope.TARJETA :
+
+                            if (!$scope.formData.idTarjetaCredito) {
+                                $scope.errorFormaPagoMessage = 'Debe seleccionar una Tarjeta';
+                                return false;
+                            }
+
+                            if ($scope.formData.idTarjetaCredito === null) {
+                                $scope.errorFormaPagoMessage = 'Debe seleccionar una Tarjeta';
+                                return false;
+                            }
+
+                            if (!$scope.formData.nroTarjeta) {
+                                $scope.errorFormaPagoMessage = 'Ingrese un numero de Tarjeta';
+                                return false;
+                            }
+
+                            if ($scope.formData.nroTarjeta === null) {
+                                $scope.errorFormaPagoMessage = 'Ingrese un numero de Tarjeta';
+                                return false;
+                            }
+
+                            if ($scope.formData.nroTarjeta.length > 16) {
+                                $scope.errorFormaPagoMessage = 'El numero ingresado no tiene los 16 digitos de la tarjeta';
+                                return false;
+                            }
+
+                            break;
+                    }
+
+                    return true;
                 }
 
                 $scope.acreditar = function () {
@@ -448,6 +537,8 @@ angular.module('jsPagoAnticipado.controllers', []).controller('frmPagoAnticipado
 
                     $scope.showFrmBoletoNuevo = true;
                     $scope.showFrmBoletoEditar = false;
+                    $scope.itemTrxSelected = false;
+
                     var idCliente = $scope.formData.idCliente.id;
                     return $http({
                         url: `${url.value}get/notadebito/credito/${idCliente}`,
@@ -463,12 +554,12 @@ angular.module('jsPagoAnticipado.controllers', []).controller('frmPagoAnticipado
                             showWarning(WARNING_TITLE, response.data.content);
                         }
 
-
                     }, $scope.errorFunction);
                 }
 
                 $scope.seleccionarItemNotaDebito = function (row) {
                     $scope.trx = row;
+                    $scope.itemTrxSelected = true;
                 }
 
                 $scope.seleccionarTransaccion = function () {
@@ -586,6 +677,7 @@ angular.module('jsPagoAnticipado.controllers', []).controller('frmPagoAnticipado
                 $scope.cancelar = function () {
                     $scope.showForm = false;
                     $scope.showTable = true;
+                    $scope.search = {fechaInicio: firstDay, fechaFin: today};
                     $scope.hideMessagesBox();
                 }
 
@@ -1019,6 +1111,10 @@ app.filter('printTipo', function ($filter) {
                 return 'SEGURO';
             case 'R' :
                 return 'RESERVA';
+            case 'AC':
+                return 'ACREDITACION';
+            case 'DE':
+                return 'DEVOLUCION';
             default :
                 return 'SIN TIPO';
                 break;
