@@ -103,6 +103,7 @@ public class BancosResource extends TemplateResource {
 
         Mensajes m = Mensajes.getMensajes().getMensajes();
         RestResponse r = new RestResponse();
+        doValidations(request);
         try {
             /*Verificamos el ID token*/
             if (request.getToken() != null && !request.getToken().isEmpty()) {

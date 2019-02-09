@@ -6,6 +6,7 @@
 package com.util.resource;
 
 import com.agencia.search.dto.MayoresSearch;
+import com.cobranzas.json.KardexClienteSearchJson;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -46,6 +47,23 @@ public class BeanUtils {
         return pc;
         
     }*/
+    
+        public static KardexClienteSearchJson convertToKardexClienteSearchJson(final RestRequest request) {
+
+        if (request.getContent() == null) {
+            return new KardexClienteSearchJson();
+        }
+
+        KardexClienteSearchJson pc = new KardexClienteSearchJson();
+        Gson gson = new GsonBuilder().create();
+        JsonParser parser = new JsonParser();
+        JsonObject object = parser.parse((String) request.getContent()).getAsJsonObject();
+        pc = gson.fromJson(object.toString(), KardexClienteSearchJson.class);
+
+        return pc;
+
+    }
+    
     public static LogSearch convertToLogSearchJson(final RestRequest request) {
 
         if (request.getContent() == null) {

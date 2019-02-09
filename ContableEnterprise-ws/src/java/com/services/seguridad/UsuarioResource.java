@@ -13,7 +13,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.response.json.UsuarioJSON;
 import com.seguridad.control.LoggerContable;
-import com.seguridad.control.ejb.UsuarioEJB;
 import com.seguridad.control.entities.PasswordRecover;
 import com.seguridad.control.entities.Rol;
 import com.seguridad.control.entities.User;
@@ -342,6 +341,9 @@ public class UsuarioResource extends TemplateResource {
                 if (t != null) {
                     if (t.getStatus().equals(Status.ACTIVO)) {
 
+                        r.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
+                        r.setContent(UsuarioJSON.convertToJSON(ejbUsuario.get()));
+
                         return r;
                     } else {
                         r.setCode(ResponseCode.RESTFUL_ERROR.getCode());
@@ -401,7 +403,7 @@ public class UsuarioResource extends TemplateResource {
             response.setContent(ex.getMessage());
             Logger.getLogger(UsuarioResource.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return response ;
+        return response;
 
     }
 

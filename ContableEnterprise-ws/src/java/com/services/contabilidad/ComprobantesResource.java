@@ -31,6 +31,7 @@ import com.response.json.contabilidad.ComprobanteContableJSON;
 import com.response.json.contabilidad.IngresoTransaccionJson;
 import com.response.json.contabilidad.NotaCreditoTransaccionJson;
 import com.response.json.contabilidad.NotaDebitoTransaccionJson;
+import com.seguridad.control.entities.Log;
 import com.seguridad.control.exception.CRUDException;
 import com.seguridad.queries.Queries;
 import com.seguridad.utils.Accion;
@@ -455,7 +456,9 @@ public class ComprobantesResource extends TemplateResource {
                         break;
                 }
 
-                ejbLogger.add(Accion.INSERT, user.getUserName(), com.view.menu.Formulario.COMPROBANTES, user.getIp());
+                String m = Log.COMPROBANTE_SAVE.replace("id", json.getGestion().toString() + "-" + json.getIdNumeroGestion());
+                
+                ejbLogger.add(Accion.INSERT, user.getUserName(), com.view.menu.Formulario.COMPROBANTES, m );
             }
 
             return response;
@@ -487,8 +490,22 @@ public class ComprobantesResource extends TemplateResource {
             insert.setIdLibro(new ComprobanteContable(pc.getIdLibro()));
             insert.setFechaMovimiento(DateContable.getCurrentDate());
 
+            String m = Log.COMPROBANTE_ADD_TRANSACCION.replace("id", pc.getIdLibro().toString()) ;
+            if (insert.getMontoDebeExt() != null) {
+                m = m.replace("monto", " monto debe ext: " + insert.getMontoDebeExt().toString());
+            }
+            if (insert.getMontoDebeNac()!= null) {
+                m = m.replace("monto", "monto debe nac: " +insert.getMontoDebeNac().toString());
+            }
+            if (insert.getMontoHaberExt()!= null) {
+                m = m.replace("monto", "monto haber ext: " +insert.getMontoHaberExt().toString());
+            }
+            if (insert.getMontoHaberNac()!= null) {
+                m = m.replace("monto", "monto haber nac: " + insert.getMontoHaberNac().toString());
+            }
+            
             insert = ejbComprobante.addTransaccion(insert);
-            ejbLogger.add(Accion.INSERT, user.getUserName(), Formulario.COMPROBANTES, user.getIp());
+            ejbLogger.add(Accion.INSERT, user.getUserName(), Formulario.COMPROBANTES, user.getIp(),m);
 
             response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
             response.setContent(mensajes.getProperty(RestResponse.RESTFUL_SUCCESS));
@@ -523,7 +540,22 @@ public class ComprobantesResource extends TemplateResource {
             insert.setEstado(Estado.EMITIDO);
 
             insert = ejbComprobante.addTransaccion(insert);
-            ejbLogger.add(Accion.INSERT, user.getUserName(), Formulario.COMPROBANTES, user.getIp());
+
+            String m = Log.COMPROBANTE_ADD_CORRECTION.replace("id", pc.getIdLibro().toString());
+            if (insert.getMontoDebeExt() != null) {
+                m = m.replace("monto", " monto debe ext: " + insert.getMontoDebeExt().toString());
+            }
+            if (insert.getMontoDebeNac()!= null) {
+                m = m.replace("monto", "monto debe nac: " +insert.getMontoDebeNac().toString());
+            }
+            if (insert.getMontoHaberExt()!= null) {
+                m = m.replace("monto", "monto haber ext: " +insert.getMontoHaberExt().toString());
+            }
+            if (insert.getMontoHaberNac()!= null) {
+                m = m.replace("monto", "monto haber nac: " + insert.getMontoHaberNac().toString());
+            }
+
+            ejbLogger.add(Accion.CORRECT, user.getUserName(), Formulario.COMPROBANTES, user.getIp(), m);
 
             response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
             response.setContent(mensajes.getProperty(RestResponse.RESTFUL_SUCCESS));
@@ -554,7 +586,7 @@ public class ComprobantesResource extends TemplateResource {
 
             //actualiza
             ejbComprobante.update(insert);
-            ejbLogger.add(Accion.UPDATE, user.getUserName(), Formulario.COMPROBANTES, user.getIp());
+            ejbLogger.add(Accion.UPDATE, user.getUserName(), Formulario.COMPROBANTES, user.getIp(), Log.COMPROBANTE_UPDATE.replace("id", pc.getIdLibro().toString()));
 
             //actualiza montos totales
             pc = actualizarTotales(pc);
@@ -602,6 +634,8 @@ public class ComprobantesResource extends TemplateResource {
             HashMap<String, Object> parameters = new HashMap<>();
             parameters.put("1", id);
 
+            String m = "Elimino la transaccion <id> del Comprobante <s>.".replace("id", id.toString());
+            m = m.replace("s", pc.getIdLibro().toString());
             //elimina
             ejbComprobante.executeNative(Queries.DELETE_COMPROBANTE_TRANSACTION, parameters);
             ejbLogger.add(Accion.DELETE, user.getUserName(), Formulario.COMPROBANTES, user.getIp());
@@ -636,11 +670,11 @@ public class ComprobantesResource extends TemplateResource {
         BigDecimal totalHaberMonExt = new BigDecimal(0);
 
         for (AsientoContableJSON json : c.getTransacciones()) {
-            System.out.println("json.getDebeMonExt():" + json.getDebeMonExt());
+            /* System.out.println("json.getDebeMonExt():" + json.getDebeMonExt());
             System.out.println("json.getDebeMonNac():" + json.getDebeMonNac());
             System.out.println("json.getHaberMonExt():" + json.getHaberMonExt());
             System.out.println("json.getHaberMonNac():" + json.getHaberMonNac());
-            System.out.println("------------------");
+            System.out.println("------------------");*/
 
             totalDebeMonExt = totalDebeMonExt.add(json.getDebeMonExt());
             totalDebeMonNac = totalDebeMonNac.add(json.getDebeMonNac());
@@ -653,11 +687,10 @@ public class ComprobantesResource extends TemplateResource {
         c.setTotalHaberMonExt(totalHaberMonExt);
         c.setTotalHaberMonNac(totalHaberMonNac);
 
-        System.out.println("totalDebeMonExt:" + totalDebeMonExt);
+        /*System.out.println("totalDebeMonExt:" + totalDebeMonExt);
         System.out.println("totalDebeMonNac:" + totalDebeMonNac);
         System.out.println("totalHaberMonExt:" + totalHaberMonExt);
-        System.out.println("totalHaberMonNac:" + totalHaberMonNac);
-
+        System.out.println("totalHaberMonNac:" + totalHaberMonNac);*/
         return c;
     }
 
@@ -687,9 +720,12 @@ public class ComprobantesResource extends TemplateResource {
                     break;
             }
 
+            String m = "ACTUALIZO el comprobante <id>.".replace("id", cc.getIdLibro().toString());
+
             ejbComprobante.update(cc);
 
-            ejbLogger.add(Accion.INSERT, c.getIdUsuarioCreador(), Formulario.COMPROBANTES, user.getIp());
+            ejbLogger.add(Accion.UPDATE, c.getIdUsuarioCreador(), Formulario.COMPROBANTES, user.getIp());
+
             return response;
         } catch (CRUDException ex) {
             Logger.getLogger(ComprobantesResource.class.getName()).log(Level.SEVERE, null, ex);
@@ -720,8 +756,12 @@ public class ComprobantesResource extends TemplateResource {
                 parameters.put("2", user.getUserName());
                 parameters.put("3", pc.getIdLibro());
 
+                String m = Log.COMPROBANTE_ANULAR;
+                m = m.replace("<id>", pc.getIdLibro().toString());
+
                 ejbComprobante.executeNative(Queries.UPDATE_COMPROBANTE_CONTABLE_ESTADO, parameters);
-                ejbLogger.add(Accion.INSERT, user.getUserName(), Formulario.COMPROBANTES, user.getIp());
+                ejbLogger.add(Accion.ANULAR, user.getUserName(), Formulario.COMPROBANTES, user.getIp(),
+                        m);
 
                 response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
                 response.setContent(mensajes.getProperty(RestResponse.RESTFUL_COMPROBANTE_ANULADO_SUCCESS));
@@ -752,7 +792,8 @@ public class ComprobantesResource extends TemplateResource {
 
                 ejbComprobante.pendiente(pc.getIdLibro(), user.getUserName());
 
-                ejbLogger.add(Accion.INSERT, user.getUserName(), Formulario.COMPROBANTES, user.getIp());
+                String m = "Establecio el comprobante <id> como PENDIENTE.".replace("<id>", pc.getIdLibro().toString());
+                ejbLogger.add(Accion.PENDIENTE, user.getUserName(), Formulario.COMPROBANTES, user.getIp(), m);
 
                 response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
                 response.setContent(mensajes.getProperty(RestResponse.RESTFUL_COMPROBANTE_PENDIENTE_SUCCESS));

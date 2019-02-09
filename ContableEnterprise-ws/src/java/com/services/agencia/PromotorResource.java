@@ -71,7 +71,7 @@ public class PromotorResource extends TemplateResource {
             if (!op.isPresent()) {
                 response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
                 response.setContent(mensajes.getProperty(RestResponse.RESTFUL_PARAMETERS_SENT));
-                return response ;
+                return response;
             }
 
             List l = ejbPromotor.get("Promotor.comboAllCounter", Promotor.class);
@@ -88,7 +88,7 @@ public class PromotorResource extends TemplateResource {
 
             response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
             response.setContent(r);
-            
+
         } catch (CRUDException ex) {
             response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
             response.setContent(ex.getMessage());
@@ -104,6 +104,7 @@ public class PromotorResource extends TemplateResource {
     public RestResponse getAll(final RestRequest request) {
         Mensajes m = Mensajes.getMensajes();
         RestResponse r = new RestResponse();
+        doValidations(request);
         try {
             /*Verificamos el ID Token*/
             if (request.getToken() != null && !request.getToken().isEmpty()) {

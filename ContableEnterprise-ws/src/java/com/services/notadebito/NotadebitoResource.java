@@ -266,7 +266,7 @@ public class NotadebitoResource extends TemplateResource {
                 ejbNotaDebito.update(n);
             }
 
-            ejbLogger.add(Accion.TRANSACTION, user.getUserName(), com.view.menu.Formulario.NOTA_DEBITO, user.getIp(), Log.NOTA_DEBITO_NUEVA_TRANSACCION_INICIO);
+            ejbLogger.add(Accion.TRANSACTION, user.getUserName(), com.view.menu.Formulario.NOTA_DEBITO, user.getIp(), Log.NOTA_DEBITO_NUEVA_TRANSACCION_INICIO.replace("<id>", n.getIdNotaDebito().toString()));
 
             if (json.getBoletos().size() > 0) {
                 for (Integer id : json.getBoletos()) {
