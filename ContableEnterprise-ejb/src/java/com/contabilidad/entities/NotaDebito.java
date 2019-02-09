@@ -7,12 +7,15 @@ package com.contabilidad.entities;
 
 import com.agencia.entities.Cliente;
 import com.agencia.entities.Promotor;
+import com.cobranzas.dto.KardexClienteDto;
 import com.seguridad.control.entities.Entidad;
 import com.seguridad.control.exception.CRUDException;
 import java.math.BigDecimal;
 import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.ColumnResult;
+import javax.persistence.ConstructorResult;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -24,6 +27,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.NamedStoredProcedureQuery;
 import javax.persistence.ParameterMode;
+import javax.persistence.SqlResultSetMapping;
 import javax.persistence.StoredProcedureParameter;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -99,9 +103,45 @@ import javax.xml.bind.annotation.XmlRootElement;
         }
 )
 
+@NamedStoredProcedureQuery(
+        name = "NotaDebito.generarKardexCliente",
+         procedureName = "generarKardexCliente",
+         resultSetMappings = "KardexClienteDto",
+         parameters = {
+             @StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_cliente")
+             ,@StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_selected")
+         }
+)
+
+@SqlResultSetMapping(
+        name = "KardexClienteDto",
+         classes = @ConstructorResult(
+                targetClass = KardexClienteDto.class,
+                 columns = {
+                    @ColumnResult(name = "v_id_documento", type = Integer.class)
+                    ,@ColumnResult(name = "v_glosa", type = String.class)
+                    ,@ColumnResult(name = "v_fecha", type = String.class)
+                    ,@ColumnResult(name = "v_vencimiento", type = String.class)
+                    ,@ColumnResult(name = "v_forma_pago", type = String.class)
+                    ,@ColumnResult(name = "v_monto_debe_nac", type = BigDecimal.class)
+                    ,@ColumnResult(name = "v_monto_haber_nac", type = BigDecimal.class)
+                    ,@ColumnResult(name = "v_saldo_nac", type = BigDecimal.class)
+                    ,@ColumnResult(name = "v_monto_debe_ext", type = BigDecimal.class)
+                    ,@ColumnResult(name = "v_monto_haber_ext", type = BigDecimal.class)
+                    ,@ColumnResult(name = "v_saldo_ext", type = BigDecimal.class)
+                    ,@ColumnResult(name = "v_tipo_documento", type = String.class)
+                    ,@ColumnResult(name = "v_estado", type = String.class)
+                    ,@ColumnResult(name = "v_row", type = String.class)
+                    ,@ColumnResult(name = "v_selected", type = String.class)
+                }
+        )
+)
 
 @NamedQueries({
-    @NamedQuery(name = "NotaDebito.findAll", query = "SELECT n FROM NotaDebito n")})
+    @NamedQuery(name = "NotaDebito.findAll", query = "SELECT n FROM NotaDebito n")
+    ,@NamedQuery(name = "NotaDebito.getAllNotaDebitoWhereVencimientoIsYesterday", query = "SELECT n FROM NotaDebito n WHERE n.formaPago='C' AND n.estado='E' AND n.creditoVencimiento<= :yesterday AND (n.montoAdeudadoBs > 0 OR n.montoAdeudadoUsd >0) ")
+    ,@NamedQuery(name = "NotaDebito.getAllNotaDebitoEnMora", query = "SELECT n FROM NotaDebito n WHERE n.estado = 'M'")
+})
 public class NotaDebito extends Entidad {
 
     private static final long serialVersionUID = 1L;
@@ -221,7 +261,6 @@ public class NotaDebito extends Entidad {
         
         return date;
     }*/
-
     public void setFechaEmision(Date fechaEmision) {
         this.fechaEmision = fechaEmision;
     }

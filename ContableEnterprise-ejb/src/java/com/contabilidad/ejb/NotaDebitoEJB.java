@@ -39,6 +39,7 @@ import com.seguridad.utils.DateContable;
 import com.seguridad.utils.Estado;
 import com.seguridad.utils.Operacion;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -1497,4 +1498,30 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
 
     }
 
+    @Override
+    public List<NotaDebito> getNotaDebitoCreditoWhereVencimientoWasYesterday() throws CRUDException {
+        Date yesterday = DateContable.getYesterday();
+        
+        Query query = em.createNamedQuery("NotaDebito.getAllNotaDebitoWhereVencimientoIsYesterday");
+        query.setParameter("yesterday", yesterday);
+        
+        List l = query.getResultList() ;
+        
+        return l ;
+        
+    }
+
+    @Override
+    public List<NotaDebito> getNotaDebitoEnMora() throws CRUDException {
+        
+        Query query = em.createNamedQuery("NotaDebito.getAllNotaDebitoEnMora");
+        
+        List l = query.getResultList() ;
+        
+        return l ;
+        
+    }
+
+    
+    
 }

@@ -59,7 +59,7 @@ public class ComprobanteContableJSON implements Serializable{
         newc.setIdUsuarioCreador(c.getIdUsuarioCreador());
 
         if (c.getIdCliente() != null) {
-            newc.setIdCliente(new Cliente(((BigDecimal) c.getIdCliente().getId()).intValue()));
+            newc.setIdCliente(new Cliente(((Double) c.getIdCliente().getId()).intValue()));
         }
 
         newc.setIdEmpresa(c.getIdEmpresa());

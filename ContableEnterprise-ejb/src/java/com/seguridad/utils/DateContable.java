@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Optional;
 import java.util.logging.Level;
@@ -83,6 +84,18 @@ public class DateContable {
         }
 
         return null;
+    }
+    
+    public static Date getYesterday() {
+        
+        Date today = new Date();
+        Calendar c = Calendar.getInstance();
+        c.setTime(today);
+        c.add(Calendar.DATE, -1);
+        
+        Date yesterday = c.getTime();
+        
+        return yesterday ;
     }
 
     public static String getPartitionDate(String strDate) {

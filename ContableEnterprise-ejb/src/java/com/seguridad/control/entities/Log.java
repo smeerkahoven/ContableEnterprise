@@ -61,6 +61,14 @@ public class Log implements Serializable {
     public static final String BOLETO_ELIMINAR = "Establecio <boleto> como ELIMINADO" ;
     public static final String BOLETO_SAVE = "Creacion del Boleto <boleto>" ;
     
+    public static final String COMPROBANTE_ANULAR = "Anulando comprobante <id>.";
+    public static final String COMPROBANTE_SAVE = "Creando Comprobante <id>.";
+    public static final String COMPROBANTE_EDIT_TRANSACCION = "Editando Transaccion <tr> del comprobante <id>.";
+    public static final String COMPROBANTE_CORRECT_TRANSACCION = "Corrigiendo Transaccion <tr> del comprobante <id>.";
+    public static final String COMPROBANTE_UPDATE = "Actualizacion del comprobante <id>.";
+    public static final String COMPROBANTE_ADD_CORRECTION = "Adicionando correccion para el libro <id> con el monto <monto>.";
+    public static final String COMPROBANTE_ADD_TRANSACCION = "Adicionando transaccion para el libro <id> con el monto <monto>";
+    
     
     public static final String PAGO_ANTICIPADO_NUEVO = "Creacion Pago Anticipado <id> " ;
     public static final String PAGO_ANTICIPADO_PENDIENTE = "Establecio el Pago Anticipado <id> como PENDIENTE" ;

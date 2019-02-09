@@ -20,6 +20,7 @@ public enum Accion implements Serializable {
     TRANSACTION("TRANSACTION"),
     PENDIENTE("PENDIENTE"),
     INSERT("INSERT"),
+    CORRECT("CORRECT"),
     DEVOLUCION("DEVOLUCION"),
     EDIT("EDIT"),
     DELETE("DELETE"),

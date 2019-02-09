@@ -234,5 +234,9 @@ public interface NotaDebitoRemote extends DaoRemoteFacade {
     public void revertirMontosNotaCredito(NotaCreditoTransaccion it, NotaDebitoTransaccion ndtx) throws CRUDException;
 
     public void revertirMontosPagosAnticipados(PagoAnticipadoTransaccion it, NotaDebitoTransaccion ndtx) throws CRUDException;
+    
+    public List<NotaDebito> getNotaDebitoCreditoWhereVencimientoWasYesterday() throws CRUDException ;
+    
+    public List<NotaDebito> getNotaDebitoEnMora() throws CRUDException ;
 
 }

@@ -67,7 +67,7 @@ public class NotaDebitoTransaccion extends Entidad {
     @ManyToOne(fetch = FetchType.EAGER )
     @JoinColumn(name = "id_nota_debito")
     private NotaDebito idNotaDebito;
-    @Size(max = 64)
+    @Size(max = 128)
     @Column(name = "descripcion")
     private String descripcion;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation

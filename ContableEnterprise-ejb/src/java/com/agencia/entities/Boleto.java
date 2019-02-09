@@ -44,6 +44,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     ,@NamedQuery(name = "Boleto.findNroBoletoE", query = "SELECT b FROM Boleto b WHERE b.numero=:numero and b.estado in ('E','P') ")
     ,@NamedQuery(name = "Boleto.getAllAmadeusAutomaticos", query = "SELECT b FROM Boleto b WHERE (b.tipoBoleto='AM' or b.tipoBoleto='AV') and b.estado='C' and b.idEmpresa=:idEmpresa ORDER BY b.idBoleto")
     ,@NamedQuery(name = "Boleto.getAllSabreAutomaticos", query = "SELECT b FROM Boleto b WHERE (b.tipoBoleto='SA' or b.tipoBoleto='SV') and b.estado='C' and b.idEmpresa=:idEmpresa ORDER BY b.idBoleto")
+    ,@NamedQuery(name = "Boleto.findByNombrePasajero", query = "SELECT b FROM Boleto b WHERE b.nombrePasajero LIKE CONCAT('%', :nombrePasajero, '%') and b.estado in ('E','V','P')")
 })
 
 @NamedNativeQuery(
