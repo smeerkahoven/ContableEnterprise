@@ -52,7 +52,7 @@ public class SabreFileScheduler {
     private ParametrosRemote ejbParametros;
 
     //@Schedule(dayOfWeek = "Mon-Fri", month = "*", hour = "7-18", dayOfMonth = "*", year = "*", minute = "*/5", second = "0")
-    @Schedule(dayOfWeek = "*", month = "*", hour = "*", dayOfMonth = "*", year = "*", minute = "*/1")
+    @Schedule(dayOfWeek = "Mon-Sat", month = "*", hour = "*", minute = "*/10", second = "0")
     public void dailyFileChecker() {
         Parametros p;
         try {
@@ -81,7 +81,7 @@ public class SabreFileScheduler {
                         saveFile(f.getName(), content);
                         // movemos el archivo a la zona backup
                         Path from = Paths.get(f.getAbsolutePath());
-                        if (!backupFolder.exists()){
+                        if (!backupFolder.exists()) {
                             backupFolder.mkdir();
                         }
                         Path to = Paths.get(backupFolder.getAbsolutePath() + "/" + f.getName());
