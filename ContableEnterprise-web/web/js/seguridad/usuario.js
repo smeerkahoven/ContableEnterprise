@@ -46,10 +46,11 @@ angular.module('jsUsuario.controllers', []).controller('frmUsuario', ['$scope', 
                 data: {token: token.value, content: ''},
                 headers: {'Content-Type': 'application/json'}
             }).then(function (response) {
+                console.log($scope.data);
                 if (response.data.code === 201) {
                     if (method === 'all') {
                         $scope.data = response.data.content;
-                        console.log($scope.data);
+                        
                     }
                     if (method === 'personal')
                         $scope.empleados = response.data.content;

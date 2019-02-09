@@ -35,7 +35,6 @@ angular.module('jsTarjeta.controllers', []).controller('frmTarjeta', ['$scope', 
         $scope.itemsByPage = 15;
 
         $scope.getData = function (method) {
-            console.log(url.value + method);
             $scope.loading = true;
             return $http({
                 method: 'POST',
@@ -46,7 +45,6 @@ angular.module('jsTarjeta.controllers', []).controller('frmTarjeta', ['$scope', 
                 if (response.data.code === 201) {
                     if (method === 'all') {
                         $scope.mainGrid = response.data.content;
-                        console.log($scope.mainGrid);
                         $scope.showTable = true;
                     }
 

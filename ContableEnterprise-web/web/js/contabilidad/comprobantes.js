@@ -480,7 +480,7 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                     }).then(function (response) {
                         if (response.data.code === 201) {
                             $scope.verForm = response.data.content;
-                            console.log($scope.verForm);
+                            //console.log($scope.verForm);
                         } else {
                             $scope.showRestfulMessage = response.data.content;
                             $scope.showRestfulError = true;
@@ -550,6 +550,8 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                 }
 
                 $scope.save = function (estado) {
+                    $scope.showRestfulError = false;
+                    $scope.showRestfulSuccess = false;
                     $scope.clickNuevo = false;
                     if (!$scope.myForm.$valid) {
                         //$scope.showAlert('Error de Verificacion', 'Verifique los mensajes de los valores requeridos')
@@ -881,7 +883,7 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                     item.action = ACTION_UPDATE;
                     item.isOK = true;
 
-                    console.log(`$scope.existeDiferencias:${$scope.existeDiferencias}`);
+                    //console.log(`$scope.existeDiferencias:${$scope.existeDiferencias}`);
 
                     if ($scope.existenTransaccionesInvalidas()) {
                         $scope.disableGuardarButton = true;
@@ -902,7 +904,7 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                             $scope.formData.transacciones[$scope.formData.transacciones.length - 1].idLibro = item.idLibro;
                             $scope.formData.transacciones[$scope.formData.transacciones.length - 1].gestion = item.gestion;
 
-                            console.log(`$scope.existeDiferencias:${$scope.existeDiferencias}`);
+                            //console.log(`$scope.existeDiferencias:${$scope.existeDiferencias}`);
 
                             if ($scope.existeDiferencias) {
                                 $scope.ngDisabledBtnCorregir = false;
@@ -910,12 +912,12 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                                 $scope.ngDisabledBtnCorregir = true;
                             }
 
-                            console.log(`$scope.showDifDebeExt:${$scope.showDifDebeExt}`);
-                            console.log(`$scope.showDifDebeNac:${$scope.showDifDebeNac}`);
-                            console.log(`$scope.showDifHaberExt:${$scope.showDifHaberExt}`);
-                            console.log(`$scope.showDifHaberNac:${$scope.showDifHaberNac}`);
+                            //console.log(`$scope.showDifDebeExt:${$scope.showDifDebeExt}`);
+                            //console.log(`$scope.showDifDebeNac:${$scope.showDifDebeNac}`);
+                            //console.log(`$scope.showDifHaberExt:${$scope.showDifHaberExt}`);
+                            //console.log(`$scope.showDifHaberNac:${$scope.showDifHaberNac}`);
 
-                            console.log(`$scope.ngDisabledBtnCorregir:${$scope.ngDisabledBtnCorregir}`);
+                            //console.log(`$scope.ngDisabledBtnCorregir:${$scope.ngDisabledBtnCorregir}`);
 
                         }, $scope.errorFunction)
                     } else {
@@ -994,6 +996,9 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                     $scope.showForm = false;
                     $scope.showTable = true;
                     $scope.hideMessagesBox();
+                    $scope.showRestfulError = false;
+                    $scope.showRestfulSuccess = false;
+                    $scope.mainGrid = [];
                 }
 
                 $scope.showAlert = function (title, message) {
@@ -1191,14 +1196,14 @@ app.filter('printDiferencias', function ($filter) {
 
             var difMonNac = Number(0);
             var difMonExt = Number(0);
-            
-            var showDifHaberNac = false ;
-            var showDifDebeNac = false ;
-            var showDifHaberExt = false ;
-            var showDifDebeExt = false ;
-            
-            var existeDiferencias = false ;
-            
+
+            var showDifHaberNac = false;
+            var showDifDebeNac = false;
+            var showDifHaberExt = false;
+            var showDifDebeExt = false;
+
+            var existeDiferencias = false;
+
             difMonNac = parseFloat(Number(input.totalDebeMonNac) - Number(input.totalHaberMonNac)).toFixed(2);
             difMonExt = parseFloat(Number(input.totalDebeMonExt) - Number(input.totalHaberMonExt)).toFixed(2);
 

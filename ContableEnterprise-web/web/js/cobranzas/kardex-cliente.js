@@ -18,10 +18,12 @@ angular.module('jsKardexCliente.controllers', []).controller('frmKardexCliente',
                 var urlClientes = document.getElementsByName("hdUrlClientes")[0];
                 var formName = document.getElementsByName("hdFormName")[0];
                 var myForm = document.getElementById("myForm");
+                var user = document.getElementById("hdUser");
 
                 $scope.showRestfulMessage = '';
                 $scope.showRestfulError = false;
                 $scope.showRestfulSuccess = false;
+                $scope.user = user.value;
 
                 $scope.loading = false;
                 //$scope.search = {fechaInicio: firstDay, fechaFin: today};
@@ -47,7 +49,10 @@ angular.module('jsKardexCliente.controllers', []).controller('frmKardexCliente',
 
                 $scope.find = function () {
 
-                    if (!$scope.search.tipo) {
+                    $scope.showRestfulError = false;
+                    $scope.showRestfulSuccess = false;
+
+                    if (!$scope.search.tipoBusqueda) {
                         showAlert(ERROR_TITLE, 'Debe seleccionar un Tipo de Busqueda');
                         return
                     }
@@ -84,11 +89,10 @@ angular.module('jsKardexCliente.controllers', []).controller('frmKardexCliente',
                             break;
                     }
 
-
                     $scope.loading = true;
                     return $http({
                         method: 'POST',
-                        url: `${url.value}get`,
+                        url: `${url.value}generar`,
                         data: {token: token.value, content: angular.toJson($scope.search)},
                         headers: {'Content-Type': 'application/json'}
                     }).then(function (response) {
@@ -130,31 +134,26 @@ angular.module('jsKardexCliente.controllers', []).controller('frmKardexCliente',
                 }
 
                 $scope.sumarTotales = function () {
-                    var totalImporteNeto = new Number(0);
-                    var totalImpuestos = new Number(0);
-                    var totalBoleto = new Number(0);
-                    var totalFee = new Number(0);
-                    var totalDescuento = new Number(0);
-                    var totalPorCobrar = new Number(0);
+                    var totalSaldoDebitoNac = new Number(0);
+                    var totalSaldoDebitoExt = new Number(0);
+                    var totalSaldoDepositoNac = new Number(0);
+                    var totalSaldoDepositoExt = new Number(0);
 
                     for (var i in $scope.mainGrid) {
-                        totalImporteNeto += $scope.mainGrid[i].importeNeto !== undefined ? $scope.mainGrid[i].importeNeto : Number(0);
-                        totalImpuestos += $scope.mainGrid[i].impuestos !== undefined ? $scope.mainGrid[i].impuestos : Number(0);
-                        totalBoleto += $scope.mainGrid[i].totalBoleto !== undefined ? $scope.mainGrid[i].totalBoleto : Number(0);
-                        totalFee += $scope.mainGrid[i].fee !== undefined ? $scope.mainGrid[i].fee : Number(0);
-                        totalDescuento += $scope.mainGrid[i].descuento !== undefined ? $scope.mainGrid[i].descuento : Number(0);
-
+                        if ($scope.mainGrid[i].row === 'debito') {
+                            totalSaldoDebitoNac += $scope.mainGrid[i].saldoNac !== undefined ? $scope.mainGrid[i].saldoNac : Number(0);
+                            totalSaldoDebitoExt += $scope.mainGrid[i].saldoExt !== undefined ? $scope.mainGrid[i].saldoExt : Number(0);
+                        } else
+                        if ($scope.mainGrid[i].row === 'deposito') {
+                            totalSaldoDepositoNac += $scope.mainGrid[i].saldoNac !== undefined ? $scope.mainGrid[i].saldoNac : Number(0);
+                            totalSaldoDepositoExt += $scope.mainGrid[i].saldoExt !== undefined ? $scope.mainGrid[i].saldoExt : Number(0);
+                        }
                     }
 
-                    $scope.totalImporteNeto = totalImporteNeto.toFixed(2);
-                    $scope.totalImpuestos = totalImpuestos.toFixed(2);
-                    $scope.totalBoleto = totalBoleto.toFixed(2);
-                    $scope.totalFee = totalFee.toFixed(2);
-                    $scope.totalDescuento = totalDescuento.toFixed(2);
-
-                    totalPorCobrar = (totalBoleto + totalFee - totalDescuento);
-
-                    $scope.totalPorCobrar = totalPorCobrar;
+                    $scope.totalSaldoDebitoNac = totalSaldoDebitoNac.toFixed(2);
+                    $scope.totalSaldoDebitoExt = totalSaldoDebitoExt.toFixed(2);
+                    $scope.totalSaldoDepositoNac = totalSaldoDepositoNac.toFixed(2);
+                    $scope.totalSaldoDepositoExt = totalSaldoDepositoExt.toFixed(2);
 
                 }
 
@@ -162,6 +161,10 @@ angular.module('jsKardexCliente.controllers', []).controller('frmKardexCliente',
 
                 $scope.exportar = function () {
                     window.open(`../../ReportesComisionClienteServlet?pi=${$scope.search.fechaInicio}&pf=${$scope.search.fechaFin}&id=${$scope.search.idCliente.id}&tp=${$scope.search.tipoCupon}`, '_blank');
+                }
+
+                $scope.cartaCobranza = function () {
+                    window.open(`../../CartaCobranzaServlet?pi=${$scope.search.fechaInicio}&pf=${$scope.search.fechaFin}&pc=${$scope.search.idCliente.id}&pu=${$scope.user}`, '_blank');
                 }
 
             }
@@ -172,6 +175,26 @@ app.filter('myStrictFilter', function ($filter) {
         return $filter('filter')(input, predicate, true);
     }
 });
+app.filter('printCancelado', function ($filter) {
+    return function (input, predicate) {
+        if (input === undefined || input === null || input === 0 || input === 0.00)
+            return '-';
+        else {
+            if (input.row === 'debito') {
+                if (input.estado === 'D') {
+                    return 'CANCELADO'
+                } else {
+                    return input.vencimiento;
+                }
+            }else if (input.row === 'deposito') {
+                if (input.estado ==='S'){
+                    return 'CANCELADO';
+                }
+            }
+        }
+    }
+});
+
 app.filter('printNumber', function ($filter) {
     return function (input, predicate) {
         if (input === undefined || input === null || input === 0 || input === 0.00)
@@ -182,6 +205,8 @@ app.filter('printNumber', function ($filter) {
         }
     }
 });
+
+
 app.controller('frView', ['$scope', '$http', 'record', function ($scope, $http, record) {
         function init() {
             $scope.sucursal = record.content;

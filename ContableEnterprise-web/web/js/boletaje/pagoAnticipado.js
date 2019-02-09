@@ -283,9 +283,19 @@ angular.module('jsPagoAnticipado.controllers', []).controller('frmPagoAnticipado
                         headers: {'Content-Type': 'application/json'}
                     }).then(function (response) {
                         if (response.data.code === 201) {
+
                             $scope.trx = response.data.content;
+
+                            if ($scope.trx.montoTransaccionBs) {
+                                $scope.trx.montoBs = $scope.trx.montoTransaccionBs;
+                            }
+
+                            if ($scope.trx.montoTransaccionUsd) {
+                                $scope.trx.montoUsd = $scope.trx.montoTransaccionUsd;
+                            }
+
+                            console.log($scope.trx);
                             showModalWindow('#frmPagoAnticipadoTransaccion');
-                            $scope.getCuentas();
                         } else {
                             showAlert(ERROR_RESPUESTA_TITLE, response.data.content);
                         }

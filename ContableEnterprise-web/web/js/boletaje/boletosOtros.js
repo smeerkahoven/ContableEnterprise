@@ -272,6 +272,7 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                 $scope.EMITIDO = 'E';
                 $scope.ANULADO = 'A';
                 $scope.CREADO = 'C';
+                $scope.EN_MORA = 'M';
 
                 $scope.MONEDA_NACIONAL = 'B';
                 $scope.MONEDA_EXTRANJERA = 'U';
@@ -1391,7 +1392,15 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                                 data.push($scope.amadeusGrid[i].idBoleto);
                             } else {
                                 $scope.showAlert(ERROR_RESPUESTA_TITLE, `La fecha de Emision del Boleto <b>${$scope.amadeusGrid[i].numero}</b> es ${$scope.amadeusGrid[i].fechaEmision}, la cual difiere de la fecha de Emision de la Nota de Debito ${$scope.formData.fechaEmision}. Solo se deben seleccionar Boletos con la misma Fecha de Emision.`);
+                                return ;
                             }
+                        }
+                        
+                        console.log(data);
+                        
+                        if (data.length == 0) {
+                            showWarning(WARNING_TITLE, 'Debe elegir al menos un Boleto.');
+                            return ;
                         }
                     }
                     if (data.length > 0) {
@@ -2445,6 +2454,7 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                     $scope.showTable = true;
                     $scope.search = {fechaInicio: firstDay, fechaFin: today};
                     $scope.hideMessagesBox();
+                    $scope.mainGrid = [] ;
                 }
 
                 $scope.showAlert = function (title, message) {

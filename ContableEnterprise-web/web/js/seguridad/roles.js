@@ -77,6 +77,7 @@ angular.module('jsRoles.controllers', []).controller('frmRoles', ['$scope', '$ht
         //$scope.getData('roles', $scope.roles);
 
         $scope.guardar = function () {
+            showBackground();
             if (!$scope.formNew.$valid)
                 return;
             $scope.loading = true;
@@ -114,6 +115,9 @@ angular.module('jsRoles.controllers', []).controller('frmRoles', ['$scope', '$ht
         };
 
         $scope.update = function () {
+            
+            showBackground();
+            
             if (!$scope.formEdit.$valid)
                 return;
             $scope.loading = true;
@@ -190,6 +194,8 @@ angular.module('jsRoles.controllers', []).controller('frmRoles', ['$scope', '$ht
             $scope.showError = false;
             $scope.showFormEdit = false;
             $scope.showFormNew = false;
+            $scope.showRestfulError = false ;
+            $scope.showRestfulSuccess = false ;
             if (id > 0) {
                 $http({
                     method: 'POST',
@@ -228,6 +234,8 @@ angular.module('jsRoles.controllers', []).controller('frmRoles', ['$scope', '$ht
             $scope.showFormNew = false;
             $scope.showFormEdit = false;
             $scope.showTable = true;
+            $scope.showRestfulError = false ;
+            $scope.showRestfulSuccess = false ;
         }
 
         $scope.modalEliminar = function (idRol, nombreRol) {

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="612" pageHeight="792" columnWidth="572" leftMargin="5" rightMargin="35" topMargin="20" bottomMargin="20" uuid="1b7078e6-ceb5-4087-92f3-21ab3eca1288">
 	<property name="ireport.zoom" value="2.8531167061100033"/>
-	<property name="ireport.x" value="158"/>
-	<property name="ireport.y" value="96"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="ID_PAGO" class="java.lang.Integer"/>
 	<parameter name="ID_DEVOLUCION" class="java.lang.Integer">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
@@ -67,8 +67,7 @@ WHERE de.id_devolucion = $P{ID_DEVOLUCION}]]>
 	<field name="monto_devolucion" class="java.math.BigDecimal"/>
 	<field name="tipo_devolucion" class="java.lang.String">
 		<fieldDescription><![CDATA[EFECTIVO
-CHEQUE
-]]></fieldDescription>
+CHEQUE]]></fieldDescription>
 	</field>
 	<field name="forma_pago_literal" class="java.lang.String"/>
 	<field name="fecha_insert" class="java.sql.Timestamp">
@@ -101,7 +100,7 @@ CHEQUE
 		<band splitType="Stretch"/>
 	</pageHeader>
 	<columnHeader>
-		<band height="42" splitType="Stretch">
+		<band height="66" splitType="Stretch">
 			<staticText>
 				<reportElement x="2" y="11" width="77" height="14" uuid="91211e5a-700a-442e-9e9a-67d3115dfca0"/>
 				<textElement textAlignment="Right"/>
@@ -144,46 +143,46 @@ CHEQUE
 				</textElement>
 				<textFieldExpression><![CDATA[$F{estado}]]></textFieldExpression>
 			</textField>
-		</band>
-	</columnHeader>
-	<detail>
-		<band height="65" splitType="Stretch">
 			<staticText>
-				<reportElement x="369" y="7" width="100" height="14" uuid="33b2b612-3881-444a-abe3-1d2844441aad"/>
+				<reportElement x="371" y="52" width="100" height="14" uuid="33b2b612-3881-444a-abe3-1d2844441aad"/>
 				<textElement textAlignment="Center">
 					<font fontName="SansSerif" isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[MONEDA]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="2" y="7" width="367" height="14" uuid="e4199d13-a92a-4363-9ab5-39a871af2c62"/>
+				<reportElement x="4" y="52" width="367" height="14" uuid="e4199d13-a92a-4363-9ab5-39a871af2c62"/>
 				<textElement>
 					<font fontName="SansSerif" isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[DESCRIPCION]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="469" y="7" width="93" height="14" uuid="b9973bd9-ac0b-4157-a451-93c5a0552fd5"/>
+				<reportElement x="471" y="52" width="93" height="14" uuid="b9973bd9-ac0b-4157-a451-93c5a0552fd5"/>
 				<textElement textAlignment="Right">
 					<font fontName="SansSerif" isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[MONTO]]></text>
 			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="26" splitType="Stretch">
 			<line>
-				<reportElement x="2" y="22" width="560" height="1" uuid="5e069e82-97cf-420e-bf7f-111a57b8aabf"/>
+				<reportElement x="4" y="1" width="560" height="1" uuid="5e069e82-97cf-420e-bf7f-111a57b8aabf"/>
 			</line>
 			<textField>
-				<reportElement x="369" y="23" width="100" height="20" uuid="1c603167-c19e-468d-825e-12f3c5235eb2"/>
+				<reportElement x="371" y="1" width="100" height="20" uuid="1c603167-c19e-468d-825e-12f3c5235eb2"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{moneda}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00">
-				<reportElement x="469" y="23" width="93" height="20" uuid="3f0064f6-0b23-4b7d-9c5d-f8994da6ce46"/>
+				<reportElement x="470" y="2" width="93" height="20" uuid="3f0064f6-0b23-4b7d-9c5d-f8994da6ce46"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[$F{monto_devolucion}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="2" y="23" width="367" height="42" uuid="40928b92-7ec9-46d4-8733-37acad64bf38"/>
+				<reportElement x="4" y="2" width="367" height="19" uuid="40928b92-7ec9-46d4-8733-37acad64bf38"/>
 				<textElement>
 					<font size="10"/>
 				</textElement>

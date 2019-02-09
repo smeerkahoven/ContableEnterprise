@@ -35,22 +35,19 @@ list-on-top {
 }
 
 
-.boleto-estado-E {
-
-}
-
-.boleto-estado-V {
-
-}
-
 .boleto-estado-A {
-    background-color:#ebd6e5;
+    background-color:#f5c6cb;
 }
+
 
 .boleto-estado-P {
-    background-color:#fdeed6;
+    background-color:#ffeeba;
 }
 
+
+.boleto-estado-M {
+    background-color:#b8daff;
+}
 
 
 .bd-example-modal-lg .modal-dialog{
@@ -91,4 +88,12 @@ list-on-top {
 }
 .fixedtable {
   table-layout: fixed;
+}
+
+.deposito {
+    background-color: #b8daff;
+}
+
+.debito {
+    background-color: #b8d9e7;
 }

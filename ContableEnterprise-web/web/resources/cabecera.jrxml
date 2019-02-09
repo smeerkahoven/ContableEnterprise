@@ -7,7 +7,7 @@
 		<defaultValueExpression><![CDATA[1]]></defaultValueExpression>
 	</parameter>
 	<parameter name="PATH_SUBREPORTE" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["boletos/ventas-boletos.jasper"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["cobranza/carta_cobranza.jasper"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="ID_LIBRO" class="java.lang.Integer" isForPrompting="false">
 		<defaultValueExpression><![CDATA[22]]></defaultValueExpression>
@@ -26,6 +26,7 @@
 	<parameter name="ID_DEVOLUCION" class="java.lang.Integer"/>
 	<parameter name="ID_AEROLINEA" class="java.lang.Integer"/>
 	<parameter name="ID_CLIENTE" class="java.lang.Integer"/>
+	<parameter name="ID_USER" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[SELECT
      tb_empresa.`id_empresa` AS tb_empresa_id_empresa,
@@ -125,26 +126,13 @@ WHERE
 		<band height="100" splitType="Stretch">
 			<subreport>
 				<reportElement x="6" y="0" width="200" height="100" uuid="9e5bdce7-711b-40e0-9b51-f915333152d9"/>
-				<subreportParameter name="ID_AEROLINEA">
-					<subreportParameterExpression><![CDATA[$P{ID_AEROLINEA}]]></subreportParameterExpression>
-				</subreportParameter>
 				<subreportParameter name="ID_DEVOLUCION">
 					<subreportParameterExpression><![CDATA[$P{ID_DEVOLUCION}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="ID_INGRESO">
-					<subreportParameterExpression><![CDATA[$P{ID_INGRESO}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="ID_LIBRO">
-					<subreportParameterExpression><![CDATA[$P{ID_LIBRO}]]></subreportParameterExpression>
 				</subreportParameter>
 				<subreportParameter name="ID_NOTA_DEBITO">
 					<subreportParameterExpression><![CDATA[$P{ID_NOTA_DEBITO}]]></subreportParameterExpression>
 				</subreportParameter>
 				<subreportParameter name="SUBREPORT_DIR"/>
-				<subreportParameter name="ID_CREDITO">
-					<subreportParameterExpression><![CDATA[$P{ID_CREDITO}]]></subreportParameterExpression>
-				</subreportParameter>
-				<subreportParameter name="EMPRESA_ID"/>
 				<subreportParameter name="FECHA_INICIO">
 					<subreportParameterExpression><![CDATA[$P{FECHA_INICIO}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -157,6 +145,25 @@ WHERE
 				<subreportParameter name="FECHA_FIN">
 					<subreportParameterExpression><![CDATA[$P{FECHA_FIN}]]></subreportParameterExpression>
 				</subreportParameter>
+				<subreportParameter name="ID_AEROLINEA">
+					<subreportParameterExpression><![CDATA[$P{ID_AEROLINEA}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ID_INGRESO">
+					<subreportParameterExpression><![CDATA[$P{ID_INGRESO}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ID_CLIENTE">
+					<subreportParameterExpression><![CDATA[$P{ID_CLIENTE}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ID_LIBRO">
+					<subreportParameterExpression><![CDATA[$P{ID_LIBRO}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ID_CREDITO">
+					<subreportParameterExpression><![CDATA[$P{ID_CREDITO}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="ID_USER">
+					<subreportParameterExpression><![CDATA[$P{ID_USER}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="EMPRESA_ID"/>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
 				<subreportExpression><![CDATA[$P{PATH_SUBREPORTE}]]></subreportExpression>
 			</subreport>

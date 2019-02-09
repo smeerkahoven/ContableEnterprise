@@ -216,7 +216,7 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr st-select-row="row" st-select-mode="multiple" ng-repeat="row in display_records" class="boleto-estado-{{row.estado}}">
+                                                        <tr st-select-row="row" st-select-mode="multiple" ng-repeat="row in display_records" ng-class="row.estado == EN_MORA ? 'table-primary' : ( row.estado == PENDIENTE || row.estado == CREADO ? 'table-warning' : (row.estado == ANULADO ? 'table-danger' : '') )  ">
                                                             <td>{{row.idNotaDebito}} </td>
                                                             <td>{{row.idCliente.name}} </td>
                                                             <td>{{row.idPromotor.name}} </td>

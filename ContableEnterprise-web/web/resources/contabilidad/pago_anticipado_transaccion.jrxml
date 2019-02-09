@@ -139,7 +139,7 @@ where pat.id_pago_anticipado_transaccion = $P{ID_TRANSACCION}]]>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="65" splitType="Stretch">
+		<band height="45" splitType="Stretch">
 			<staticText>
 				<reportElement x="367" y="7" width="100" height="14" uuid="33b2b612-3881-444a-abe3-1d2844441aad"/>
 				<textElement textAlignment="Center">
@@ -165,17 +165,17 @@ where pat.id_pago_anticipado_transaccion = $P{ID_TRANSACCION}]]>
 				<reportElement x="0" y="22" width="560" height="1" uuid="5e069e82-97cf-420e-bf7f-111a57b8aabf"/>
 			</line>
 			<textField>
-				<reportElement x="367" y="23" width="100" height="20" uuid="1c603167-c19e-468d-825e-12f3c5235eb2"/>
+				<reportElement x="367" y="23" width="100" height="16" uuid="1c603167-c19e-468d-825e-12f3c5235eb2"/>
 				<textElement textAlignment="Center"/>
 				<textFieldExpression><![CDATA[$F{moneda}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00">
-				<reportElement x="467" y="23" width="93" height="20" uuid="3f0064f6-0b23-4b7d-9c5d-f8994da6ce46"/>
+				<reportElement x="467" y="23" width="93" height="16" uuid="3f0064f6-0b23-4b7d-9c5d-f8994da6ce46"/>
 				<textElement textAlignment="Right"/>
 				<textFieldExpression><![CDATA[$F{monto}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="0" y="23" width="367" height="42" uuid="40928b92-7ec9-46d4-8733-37acad64bf38"/>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="0" y="23" width="367" height="16" uuid="40928b92-7ec9-46d4-8733-37acad64bf38"/>
 				<textElement>
 					<font size="10"/>
 				</textElement>
