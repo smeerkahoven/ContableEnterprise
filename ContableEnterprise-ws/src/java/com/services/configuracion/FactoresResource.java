@@ -47,7 +47,6 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
 import javax.ws.rs.core.MediaType;
-import jdk.nashorn.internal.parser.JSONParser;
 
 /**
  * REST Web Service
@@ -309,7 +308,8 @@ public class FactoresResource extends TemplateResource {
                         CambioDolar c = CambioJSON.toCambioDolar(json);
                         c.setFecha(new Date());
 
-                        ejbCambio.insert(c);
+                        //ejbCambio.insert(c);
+                        ejbCambio.saveCambio(c);
 
                         r.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
                         r.setContent(m.getProperty(RestResponse.RESTFUL_SUCCESS));
