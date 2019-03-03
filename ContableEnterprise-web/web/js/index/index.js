@@ -80,7 +80,7 @@ angular.module('jsIndex.controllers', []).controller('frmIndex', ['$scope', '$ht
             $scope.showBtnGuardarDolarFactor = false;
             return $http({
                 method: 'POST',
-                url: urlFactores.value + 'dollar/save',
+                url: `${urlFactores.value}dollar/save`,
                 data: {token: token.value, content: angular.toJson(data), formName: formName},
                 headers: {'Content-Type': 'application/json'}
             }).then(function (response) {
