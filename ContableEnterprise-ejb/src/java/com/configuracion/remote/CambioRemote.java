@@ -22,5 +22,7 @@ public interface CambioRemote extends DaoRemote {
 
     @Override
     public List get() throws CRUDException;
+    
+    public CambioDolar saveCambio (CambioDolar cambio) throws CRUDException ;
 
 }

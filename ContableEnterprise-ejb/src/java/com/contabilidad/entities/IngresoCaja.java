@@ -23,6 +23,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.NamedStoredProcedureQueries;
 import javax.persistence.NamedStoredProcedureQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.ParameterMode;
@@ -46,39 +47,44 @@ import javax.validation.constraints.Size;
             @StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_boleto")
         }
 )
-@NamedStoredProcedureQuery(
-        name = "IngresoCaja.updateMontosIngresoCajaFromFinalizar",
-        procedureName = "updateMontosIngresoCajaFromFinalizar",
-        parameters = {
-            @StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_ingreso")
-        }
-)
-@NamedStoredProcedureQuery(
-        name = "IngresoCaja.updateMontosIngresoCaja",
-        procedureName = "updateMontosIngresoCaja",
-        parameters = {
-            @StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_ingreso_caja")
-        }
-)
+
+@NamedStoredProcedureQueries({
+    @NamedStoredProcedureQuery(
+            name = "IngresoCaja.updateMontosIngresoCajaFromFinalizar",
+            procedureName = "updateMontosIngresoCajaFromFinalizar",
+            parameters = {
+                @StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_ingreso")
+            }
+    )
+    ,
+    @NamedStoredProcedureQuery(
+            name = "IngresoCaja.updateMontosIngresoCaja",
+            procedureName = "updateMontosIngresoCaja",
+            parameters = {
+                @StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_ingreso_caja")
+            }
+    )
+
+})
+
 @NamedQueries({
     @NamedQuery(name = "IngresoCaja.findAll", query = "SELECT i FROM IngresoCaja i WHERE i.idEmpresa=:idEmpresa ORDER By i.idIngresoCaja ")
     ,@NamedQuery(name = "IngresoCaja.findByIdCliente", query = "SELECT i FROM IngresoCaja i WHERE i.idCliente=:idCliente and i.idEmpresa=:idEmpresa ORDER by i.idIngresoCaja")
-    ,@NamedQuery(name="IngresoCaja.updateToPendiente", 
-            query="UPDATE IngresoCaja i SET i.idCliente=:idCliente, "
-                    + "i.fechaEmision=:fechaEmision,"
-                    + "i.formaPago=:formaPago,"
-                    + "i.idBanco=:idBanco,"
-                    + "i.nroCheque=:nroCheque,"
-                    + "i.idTarjetaCredito=:idTarjetaCredito,"
-                    + "i.nroTarjeta=:nroTarjeta,"
-                    + "i.nroDeposito=:nroDeposito,"
-                    + "i.idCuentaDeposito=:idCuentaDeposito,"
-                    + "i.estado=:estado "
-                    + "WHERE i.idIngresoCaja=:idIngresoCaja")
+    ,@NamedQuery(name = "IngresoCaja.updateToPendiente",
+            query = "UPDATE IngresoCaja i SET i.idCliente=:idCliente, "
+            + "i.fechaEmision=:fechaEmision,"
+            + "i.formaPago=:formaPago,"
+            + "i.idBanco=:idBanco,"
+            + "i.nroCheque=:nroCheque,"
+            + "i.idTarjetaCredito=:idTarjetaCredito,"
+            + "i.nroTarjeta=:nroTarjeta,"
+            + "i.nroDeposito=:nroDeposito,"
+            + "i.idCuentaDeposito=:idCuentaDeposito,"
+            + "i.estado=:estado "
+            + "WHERE i.idIngresoCaja=:idIngresoCaja")
 
 })
 public class IngresoCaja extends Entidad {
-
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -86,7 +92,7 @@ public class IngresoCaja extends Entidad {
     @Basic(optional = false)
     @Column(name = "id_ingreso_caja")
     private Integer idIngresoCaja;
-    
+
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 16)
@@ -143,7 +149,7 @@ public class IngresoCaja extends Entidad {
     @Column(name = "id_cuenta_deposito")
     private Integer idCuentaDeposito;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idIngresoCaja",fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idIngresoCaja", fetch = FetchType.EAGER)
     private Collection<IngresoTransaccion> ingresoTransaccionCollection;
 
     @Column(name = "estado")
@@ -203,7 +209,6 @@ public class IngresoCaja extends Entidad {
         this.idIngresoCaja = idIngresoCaja;
     }
 
-
     public String getIdUsuario() {
         return idUsuario;
     }
@@ -259,7 +264,6 @@ public class IngresoCaja extends Entidad {
     public void setFormaPago(String formaPago) {
         this.formaPago = formaPago;
     }
-
 
     public Integer getIdBanco() {
         return idBanco;

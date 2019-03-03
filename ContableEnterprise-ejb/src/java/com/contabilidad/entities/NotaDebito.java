@@ -25,6 +25,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.NamedStoredProcedureQueries;
 import javax.persistence.NamedStoredProcedureQuery;
 import javax.persistence.ParameterMode;
 import javax.persistence.SqlResultSetMapping;
@@ -55,69 +56,83 @@ import javax.xml.bind.annotation.XmlRootElement;
             ,@StoredProcedureParameter(mode = ParameterMode.OUT, type = Integer.class, name = "out_id_transacion")
         }
 )
+
+@NamedStoredProcedureQueries({
+    @NamedStoredProcedureQuery(
+            name = "NotaDebito.updateBoletoNotaDebito",
+            procedureName = "updateBoletoNotaDebito",
+            parameters = {
+                @StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_boleto")
+                ,@StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_nota_transaccion")
+            }
+    )
+    ,
+    @NamedStoredProcedureQuery(
+            name = "NotaDebito.updateMontosNotaDebitoEnPendiente",
+            procedureName = "updateMontosNotaDebitoEnPendiente",
+            parameters = {
+                @StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_nota_debito")
+            }
+    )
+
+    ,
+    
+    @NamedStoredProcedureQuery(
+            name = "NotaDebito.updateMontosNotaDebitoEmitidos",
+            procedureName = "updateMontosNotaDebitoEmitidos",
+            parameters = {
+                @StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_nota_debito")
+            }
+    )
+    ,
+    
+    
 @NamedStoredProcedureQuery(
-        name = "NotaDebito.updateBoletoNotaDebito",
-        procedureName = "updateBoletoNotaDebito",
-        parameters = {
-            @StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_boleto")
-            ,@StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_nota_transaccion")
-        }
-)
-@NamedStoredProcedureQuery(
-        name = "NotaDebito.updateMontosNotaDebitoEnPendiente",
-        procedureName = "updateMontosNotaDebitoEnPendiente",
-        parameters = {
-            @StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_nota_debito")
-        }
-)
+            name = "NotaDebito.updateNotaDebito",
+            procedureName = "updateNotaDebito",
+            parameters = {
+                @StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_boleto")
+            }
+    )
+
+    ,
 
 @NamedStoredProcedureQuery(
-        name = "NotaDebito.updateMontosNotaDebitoEmitidos",
-        procedureName = "updateMontosNotaDebitoEmitidos",
-        parameters = {
-            @StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_nota_debito")
-        }
-)
+            name = "NotaDebito.updateMontosAdeudadosNotaDebito",
+            procedureName = "updateMontosAdeudadosNotaDebito",
+            parameters = {
+                @StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_nota_debito")
+            }
+    )
+    ,
+
 
 @NamedStoredProcedureQuery(
-        name = "NotaDebito.updateNotaDebito",
-        procedureName = "updateNotaDebito",
-        parameters = {
-            @StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_boleto")
-        }
-)
+            name = "NotaDebito.updateNotaDebitoAnularTransaccion",
+            procedureName = "updateNotaDebitoAnularTransaccion",
+            parameters = {
+                @StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_nota_debito")
+            }
+    )
+    ,
 
 @NamedStoredProcedureQuery(
-        name = "NotaDebito.updateMontosAdeudadosNotaDebito",
-        procedureName = "updateMontosAdeudadosNotaDebito",
-        parameters = {
-            @StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_nota_debito")
-        }
-)
+            name = "NotaDebito.generarKardexCliente",
+            procedureName = "generarKardexCliente",
+            resultSetMappings = "KardexClienteDto",
+            parameters = {
+                @StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_cliente")
+                ,@StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_selected")
+            }
+    )
 
-@NamedStoredProcedureQuery(
-        name = "NotaDebito.updateNotaDebitoAnularTransaccion",
-        procedureName = "updateNotaDebitoAnularTransaccion",
-        parameters = {
-            @StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_nota_debito")
-        }
-)
-
-@NamedStoredProcedureQuery(
-        name = "NotaDebito.generarKardexCliente",
-         procedureName = "generarKardexCliente",
-         resultSetMappings = "KardexClienteDto",
-         parameters = {
-             @StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_cliente")
-             ,@StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_selected")
-         }
-)
+})
 
 @SqlResultSetMapping(
         name = "KardexClienteDto",
-         classes = @ConstructorResult(
+        classes = @ConstructorResult(
                 targetClass = KardexClienteDto.class,
-                 columns = {
+                columns = {
                     @ColumnResult(name = "v_id_documento", type = Integer.class)
                     ,@ColumnResult(name = "v_glosa", type = String.class)
                     ,@ColumnResult(name = "v_fecha", type = String.class)

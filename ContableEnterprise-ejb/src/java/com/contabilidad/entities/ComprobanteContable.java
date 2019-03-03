@@ -23,12 +23,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedNativeQueries;
 import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.NamedStoredProcedureQueries;
 import javax.persistence.NamedStoredProcedureQuery;
 import javax.persistence.ParameterMode;
 import javax.persistence.SqlResultSetMapping;
+import javax.persistence.SqlResultSetMappings;
 import javax.persistence.StoredProcedureParameter;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
@@ -54,20 +57,25 @@ import javax.xml.bind.annotation.XmlRootElement;
             @StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_boleto")
         }
 )
-@NamedStoredProcedureQuery(
-        name = "ComprobanteContable.updateMontosComprobanteContableFromAsientos",
-        procedureName = "updateMontosComprobanteContableFromAsientos",
-        parameters = {
-            @StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_libro")
-        }
-)
-@NamedStoredProcedureQuery(
-        name = "ComprobanteContable.updateComprobanteContableAnularTransaccion",
-        procedureName = "updateComprobanteContableAnularTransaccion",
-        parameters = {
-            @StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_libro")
-        }
-)
+
+@NamedStoredProcedureQueries({
+    @NamedStoredProcedureQuery(
+            name = "ComprobanteContable.updateMontosComprobanteContableFromAsientos",
+            procedureName = "updateMontosComprobanteContableFromAsientos",
+            parameters = {
+                @StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_libro")
+            }
+    )
+    ,
+    
+    @NamedStoredProcedureQuery(
+            name = "ComprobanteContable.updateComprobanteContableAnularTransaccion",
+            procedureName = "updateComprobanteContableAnularTransaccion",
+            parameters = {
+                @StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_libro")
+            }
+    )
+})
 
 @NamedQueries({
     @NamedQuery(name = "ComprobanteContable.findAll", query = "SELECT c FROM ComprobanteContable c")
@@ -79,110 +87,117 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 })
 
-@NamedNativeQuery(
-        name = "Comprobante.getMayoresNac",
-        query = "select ac.id_asiento idAsiento, ac.id_libro idLibro ,cc.fecha, ac.gestion, ac.fecha_movimiento fechaMovimiento ,ac. id_plan_cuenta idPlanCuenta,\n"
-        + "coalesce(ac.monto_debe_nac,0)  montoDebe, coalesce(ac.monto_haber_nac,0)  montoHaber,\n"
-        + "ac.id_boleto idBoleto, ac.id_cargo idCargo, ac.id_nota_transaccion idNotaTransaccion, ac.id_ingreso_caja_transaccion idIngresoCajaTransaccion,\n"
-        + "ac.id_nota_credito_transaccion idNotaCreditoTransaccion, ac.id_pago_anticipado idPagoAnticipado,\n"
-        + "ac.id_pago_anticipado_transaccion idPagoAnticipadoTransaccion, ac.id_devolucion idDevolucion, cc.id_cliente idCliente,\n"
-        + "cc.id_numero_gestion idNumeroGestion, cc.gestion, cc.concepto, cc.factor_cambiario factorCambiario, cc.tipo\n"
-        + ",(select descripcion from cnt_nota_debito_transaccion where id_nota_debito_transaccion = ac.id_nota_transaccion) ndtrxDescripcion \n"
-        + ",(select descripcion from cnt_nota_credito_transaccion where id_nota_credito_transaccion = ac.id_nota_credito_transaccion) nctrxDescripcion \n"
-        + ",(select descripcion from cnt_ingreso_transaccion where id_transaccion = ac.id_ingreso_caja_transaccion)ictrxDescripcion \n"
-        + ",(select concepto from cnt_pago_anticipado where id_pago_anticipado = ac.id_pago_anticipado) paDescripcion \n"
-        + ",(select descripcion from cnt_pago_anticipado_transaccion where id_pago_anticipado_transaccion=ac.id_pago_anticipado_transaccion)patrxDescripcion \n"
-        + ",(select concepto from cnt_devolucion where id_devolucion = ac.id_devolucion) deDescripcion \n"
-        + "from cnt_asiento_contable ac\n"
-        + "inner join cnt_comprobante_contable cc on cc.id_libro = ac.id_libro\n"
-        + "where cc.id_empresa=?1 and cc.fecha>=?2 and cc.fecha<=?3 and ac.id_plan_cuenta = ?4 and cc.estado='E'",
-        resultSetMapping = "Mayores"
-)
+@NamedNativeQueries({
+    @NamedNativeQuery(
+            name = "Comprobante.getMayoresNac",
+            query = "select ac.id_asiento idAsiento, ac.id_libro idLibro ,cc.fecha, ac.gestion, ac.fecha_movimiento fechaMovimiento ,ac. id_plan_cuenta idPlanCuenta,\n"
+            + "coalesce(ac.monto_debe_nac,0)  montoDebe, coalesce(ac.monto_haber_nac,0)  montoHaber,\n"
+            + "ac.id_boleto idBoleto, ac.id_cargo idCargo, ac.id_nota_transaccion idNotaTransaccion, ac.id_ingreso_caja_transaccion idIngresoCajaTransaccion,\n"
+            + "ac.id_nota_credito_transaccion idNotaCreditoTransaccion, ac.id_pago_anticipado idPagoAnticipado,\n"
+            + "ac.id_pago_anticipado_transaccion idPagoAnticipadoTransaccion, ac.id_devolucion idDevolucion, cc.id_cliente idCliente,\n"
+            + "cc.id_numero_gestion idNumeroGestion, cc.gestion, cc.concepto, cc.factor_cambiario factorCambiario, cc.tipo\n"
+            + ",(select descripcion from cnt_nota_debito_transaccion where id_nota_debito_transaccion = ac.id_nota_transaccion) ndtrxDescripcion \n"
+            + ",(select descripcion from cnt_nota_credito_transaccion where id_nota_credito_transaccion = ac.id_nota_credito_transaccion) nctrxDescripcion \n"
+            + ",(select descripcion from cnt_ingreso_transaccion where id_transaccion = ac.id_ingreso_caja_transaccion)ictrxDescripcion \n"
+            + ",(select concepto from cnt_pago_anticipado where id_pago_anticipado = ac.id_pago_anticipado) paDescripcion \n"
+            + ",(select descripcion from cnt_pago_anticipado_transaccion where id_pago_anticipado_transaccion=ac.id_pago_anticipado_transaccion)patrxDescripcion \n"
+            + ",(select concepto from cnt_devolucion where id_devolucion = ac.id_devolucion) deDescripcion \n"
+            + "from cnt_asiento_contable ac\n"
+            + "inner join cnt_comprobante_contable cc on cc.id_libro = ac.id_libro\n"
+            + "where cc.id_empresa=?1 and cc.fecha>=?2 and cc.fecha<=?3 and ac.id_plan_cuenta = ?4 and cc.estado='E'",
+            resultSetMapping = "Mayores"
+    )
+    ,
+    
+    @NamedNativeQuery(
+            name = "Comprobante.getMayoresExt",
+            query = "select ac.id_asiento idAsiento, ac.id_libro idLibro ,cc.fecha, ac.gestion, ac.fecha_movimiento fechaMovimiento ,ac. id_plan_cuenta idPlanCuenta,\n"
+            + "coalesce(ac.monto_debe_ext,0)  montoDebe, coalesce(ac.monto_haber_ext)  montoHaber,\n"
+            + "ac.id_boleto idBoleto, ac.id_cargo idCargo, ac.id_nota_transaccion idNotaTransaccion, ac.id_ingreso_caja_transaccion idIngresoTransaccion,\n"
+            + "ac.id_nota_credito_transaccion idNotaCreditoTransaccion, ac.id_pago_anticipado idPagoAnticipado, \n"
+            + "ac.id_pago_anticipado_transaccion idPagoAnticipadoTransaccion, ac.id_devolucion idDevolucion, cc.id_cliente idCliente,\n"
+            + "cc.id_numero_gestion idNumeroGestion, cc.gestion, cc.concepto, cc.factor_cambiario factorCambiario, cc.tipo\n"
+            + ",(select descripcion from cnt_nota_debito_transaccion where id_nota_debito_transaccion = ac.id_nota_transaccion) ndtrxDescripcion \n"
+            + ",(select descripcion from cnt_nota_credito_transaccion where id_nota_credito_transaccion = ac.id_nota_credito_transaccion) nctrxDescripcion \n"
+            + ",(select descripcion from cnt_ingreso_transaccion where id_transaccion = ac.id_ingreso_caja_transaccion)ictrxDescripcion \n"
+            + ",(select concepto from cnt_pago_anticipado where id_pago_anticipado = ac.id_pago_anticipado) paDescripcion \n"
+            + ",(select descripcion from cnt_pago_anticipado_transaccion where id_pago_anticipado_transaccion=ac.id_pago_anticipado_transaccion)patrxDescripcion \n"
+            + ",(select concepto from cnt_devolucion where id_devolucion = ac.id_devolucion) deDescripcion \n"
+            + "from cnt_asiento_contable ac\n"
+            + "inner join cnt_comprobante_contable cc on cc.id_libro = ac.id_libro\n"
+            + "where cc.id_empresa=?1 and cc.fecha>=?2 and cc.fecha<=?3 and ac.id_plan_cuenta = ?4 and cc.estado='E'",
+            resultSetMapping = "Mayores"
+    )
+    ,
+    @NamedNativeQuery(
+            name = "Comprobante.getAcumuladosNac",
+            query = "select sum(ac.monto_debe_nac)montoAcumuladoDebe, sum(ac.monto_haber_nac)montoAcumuladoHaber\n"
+            + "from cnt_asiento_contable ac\n"
+            + "inner join cnt_comprobante_contable cc on cc.id_libro = ac.id_libro\n"
+            + "where cc.id_empresa=?1 and cc.fecha<?2  and ac.id_plan_cuenta = ?3 and cc.estado='E'",
+            resultSetMapping = "MayoresAcumulados"
+    )
+    ,
+    @NamedNativeQuery(
+            name = "Comprobante.getAcumuladosExt",
+            query = "select sum(ac.monto_debe_ext)montoAcumuladoDebe, sum(ac.monto_haber_ext)montoAcumuladoHaber\n"
+            + "from cnt_asiento_contable ac\n"
+            + "inner join cnt_comprobante_contable cc on cc.id_libro = ac.id_libro\n"
+            + "where cc.id_empresa=?1 and cc.fecha<?2  and ac.id_plan_cuenta = ?3 and cc.estado='E'",
+            resultSetMapping = "MayoresAcumulados"
+    )
 
-@NamedNativeQuery(
-        name = "Comprobante.getMayoresExt",
-        query = "select ac.id_asiento idAsiento, ac.id_libro idLibro ,cc.fecha, ac.gestion, ac.fecha_movimiento fechaMovimiento ,ac. id_plan_cuenta idPlanCuenta,\n"
-        + "coalesce(ac.monto_debe_ext,0)  montoDebe, coalesce(ac.monto_haber_ext)  montoHaber,\n"
-        + "ac.id_boleto idBoleto, ac.id_cargo idCargo, ac.id_nota_transaccion idNotaTransaccion, ac.id_ingreso_caja_transaccion idIngresoTransaccion,\n"
-        + "ac.id_nota_credito_transaccion idNotaCreditoTransaccion, ac.id_pago_anticipado idPagoAnticipado, \n"
-        + "ac.id_pago_anticipado_transaccion idPagoAnticipadoTransaccion, ac.id_devolucion idDevolucion, cc.id_cliente idCliente,\n"
-        + "cc.id_numero_gestion idNumeroGestion, cc.gestion, cc.concepto, cc.factor_cambiario factorCambiario, cc.tipo\n"
-        + ",(select descripcion from cnt_nota_debito_transaccion where id_nota_debito_transaccion = ac.id_nota_transaccion) ndtrxDescripcion \n"
-        + ",(select descripcion from cnt_nota_credito_transaccion where id_nota_credito_transaccion = ac.id_nota_credito_transaccion) nctrxDescripcion \n"
-        + ",(select descripcion from cnt_ingreso_transaccion where id_transaccion = ac.id_ingreso_caja_transaccion)ictrxDescripcion \n"
-        + ",(select concepto from cnt_pago_anticipado where id_pago_anticipado = ac.id_pago_anticipado) paDescripcion \n"
-        + ",(select descripcion from cnt_pago_anticipado_transaccion where id_pago_anticipado_transaccion=ac.id_pago_anticipado_transaccion)patrxDescripcion \n"
-        + ",(select concepto from cnt_devolucion where id_devolucion = ac.id_devolucion) deDescripcion \n"
-        + "from cnt_asiento_contable ac\n"
-        + "inner join cnt_comprobante_contable cc on cc.id_libro = ac.id_libro\n"
-        + "where cc.id_empresa=?1 and cc.fecha>=?2 and cc.fecha<=?3 and ac.id_plan_cuenta = ?4 and cc.estado='E'",
-        resultSetMapping = "Mayores"
-)
+})
 
-@NamedNativeQuery(
-        name = "Comprobante.getAcumuladosNac",
-        query = "select sum(ac.monto_debe_nac)montoAcumuladoDebe, sum(ac.monto_haber_nac)montoAcumuladoHaber\n"
-        + "from cnt_asiento_contable ac\n"
-        + "inner join cnt_comprobante_contable cc on cc.id_libro = ac.id_libro\n"
-        + "where cc.id_empresa=?1 and cc.fecha<?2  and ac.id_plan_cuenta = ?3 and cc.estado='E'",
-        resultSetMapping = "MayoresAcumulados"
-)
+@SqlResultSetMappings({
+    @SqlResultSetMapping(
+            name = "MayoresAcumulados",
+            classes = @ConstructorResult(
+                    targetClass = MayoresAcumulados.class,
+                    columns = {
+                        @ColumnResult(name = "montoAcumuladoDebe", type = BigDecimal.class)
+                        ,@ColumnResult(name = "montoAcumuladoHaber", type = BigDecimal.class)
+                    }
+            )
+    )
+    ,
+    @SqlResultSetMapping(
+            name = "Mayores",
+            classes = @ConstructorResult(
+                    targetClass = Mayores.class,
+                    columns = {
+                        @ColumnResult(name = "idAsiento", type = Integer.class)
+                        ,@ColumnResult(name = "idLibro", type = Integer.class)
+                        ,@ColumnResult(name = "fecha", type = Date.class)
+                        ,@ColumnResult(name = "fechaMovimiento", type = Date.class)
+                        ,@ColumnResult(name = "idPlanCuenta", type = Integer.class)
+                        ,@ColumnResult(name = "montoDebe", type = BigDecimal.class)
+                        ,@ColumnResult(name = "montoHaber", type = BigDecimal.class)
+                        ,@ColumnResult(name = "idBoleto", type = Integer.class)
+                        ,@ColumnResult(name = "idCargo", type = Integer.class)
+                        ,@ColumnResult(name = "idNotaTransaccion", type = Integer.class)
+                        ,@ColumnResult(name = "idIngresoCajaTransaccion", type = Integer.class)
+                        ,@ColumnResult(name = "idNotaCreditoTransaccion", type = Integer.class)
+                        ,@ColumnResult(name = "idPagoAnticipado", type = Integer.class)
+                        ,@ColumnResult(name = "idPagoAnticipadoTransaccion", type = Integer.class)
+                        ,@ColumnResult(name = "idDevolucion", type = Integer.class)
+                        ,@ColumnResult(name = "idCliente", type = Integer.class)
+                        ,@ColumnResult(name = "idNumeroGestion", type = Integer.class)
+                        ,@ColumnResult(name = "gestion", type = Integer.class)
+                        ,@ColumnResult(name = "concepto", type = String.class)
+                        ,@ColumnResult(name = "factorCambiario", type = BigDecimal.class)
+                        ,@ColumnResult(name = "tipo", type = String.class)
+                        ,@ColumnResult(name = "ndtrxDescripcion", type = String.class)
+                        ,@ColumnResult(name = "nctrxDescripcion", type = String.class)
+                        ,@ColumnResult(name = "ictrxDescripcion", type = String.class)
+                        ,@ColumnResult(name = "paDescripcion", type = String.class)
+                        ,@ColumnResult(name = "patrxDescripcion", type = String.class)
+                        ,@ColumnResult(name = "deDescripcion", type = String.class)
+                    }
+            )
+    )
 
-@NamedNativeQuery(
-        name = "Comprobante.getAcumuladosExt",
-        query = "select sum(ac.monto_debe_ext)montoAcumuladoDebe, sum(ac.monto_haber_ext)montoAcumuladoHaber\n"
-        + "from cnt_asiento_contable ac\n"
-        + "inner join cnt_comprobante_contable cc on cc.id_libro = ac.id_libro\n"
-        + "where cc.id_empresa=?1 and cc.fecha<?2  and ac.id_plan_cuenta = ?3 and cc.estado='E'",
-        resultSetMapping = "MayoresAcumulados"
-)
-
-@SqlResultSetMapping(
-        name = "MayoresAcumulados",
-        classes = @ConstructorResult(
-                targetClass = MayoresAcumulados.class,
-                columns = {
-                    @ColumnResult(name = "montoAcumuladoDebe", type = BigDecimal.class)
-                    ,@ColumnResult(name = "montoAcumuladoHaber", type = BigDecimal.class)
-                }
-        )
-)
-
-@SqlResultSetMapping(
-        name = "Mayores",
-        classes = @ConstructorResult(
-                targetClass = Mayores.class,
-                columns = {
-                    @ColumnResult(name = "idAsiento", type = Integer.class)
-                    ,@ColumnResult(name = "idLibro", type = Integer.class)
-                    ,@ColumnResult(name = "fecha", type = Date.class)
-                    ,@ColumnResult(name = "fechaMovimiento", type = Date.class)
-                    ,@ColumnResult(name = "idPlanCuenta", type = Integer.class)
-                    ,@ColumnResult(name = "montoDebe", type = BigDecimal.class)
-                    ,@ColumnResult(name = "montoHaber", type = BigDecimal.class)
-                    ,@ColumnResult(name = "idBoleto", type = Integer.class)
-                    ,@ColumnResult(name = "idCargo", type = Integer.class)
-                    ,@ColumnResult(name = "idNotaTransaccion", type = Integer.class)
-                    ,@ColumnResult(name = "idIngresoCajaTransaccion", type = Integer.class)
-                    ,@ColumnResult(name = "idNotaCreditoTransaccion", type = Integer.class)
-                    ,@ColumnResult(name = "idPagoAnticipado", type = Integer.class)
-                    ,@ColumnResult(name = "idPagoAnticipadoTransaccion", type = Integer.class)
-                    ,@ColumnResult(name = "idDevolucion", type = Integer.class)
-                    ,@ColumnResult(name = "idCliente", type = Integer.class)
-                    ,@ColumnResult(name = "idNumeroGestion", type = Integer.class)
-                    ,@ColumnResult(name = "gestion", type = Integer.class)
-                    ,@ColumnResult(name = "concepto", type = String.class)
-                    ,@ColumnResult(name = "factorCambiario", type = BigDecimal.class)
-                    ,@ColumnResult(name = "tipo", type = String.class)
-                    ,@ColumnResult(name = "ndtrxDescripcion", type = String.class)
-                    ,@ColumnResult(name = "nctrxDescripcion", type = String.class)
-                    ,@ColumnResult(name = "ictrxDescripcion", type = String.class)
-                    ,@ColumnResult(name = "paDescripcion", type = String.class)
-                    ,@ColumnResult(name = "patrxDescripcion", type = String.class)
-                    ,@ColumnResult(name = "deDescripcion", type = String.class)
-                }
-        )
-)
+})
 
 public class ComprobanteContable extends Entidad {
 
@@ -272,14 +287,14 @@ public class ComprobanteContable extends Entidad {
 
     @Column(name = "nombre", length = 64)
     private String nombre;
-    
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_cliente")
     private Cliente idCliente;
 
     public static String getEstadoNombre(String estado) {
-        if (estado == null){
-            return "-" ;
+        if (estado == null) {
+            return "-";
         }
         switch (estado) {
             case ComprobanteContable.ANULADO:
@@ -298,10 +313,10 @@ public class ComprobanteContable extends Entidad {
     @Transient
     private List<AsientoContable> transacciones = new LinkedList<AsientoContable>();
 
-    public ComprobanteContable(Integer idLibro){
-        this.idLibro = idLibro ;
+    public ComprobanteContable(Integer idLibro) {
+        this.idLibro = idLibro;
     }
-    
+
     public ComprobanteContable() {
     }
 
@@ -313,7 +328,6 @@ public class ComprobanteContable extends Entidad {
         this.nombre = nombre;
     }
 
-    
     public Integer getIdPagoAnticipado() {
         return idPagoAnticipado;
     }

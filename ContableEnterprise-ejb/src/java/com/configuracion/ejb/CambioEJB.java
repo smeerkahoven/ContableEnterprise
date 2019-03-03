@@ -38,6 +38,25 @@ public class CambioEJB extends FacadeEJB implements CambioRemote {
     }
 
     @Override
+    public synchronized CambioDolar saveCambio(CambioDolar cambio) throws CRUDException {
+        
+        CambioDolar fromDb = (CambioDolar) get(cambio);
+        
+        if (fromDb != null){
+            if (fromDb.getValor().floatValue() == 0){
+                fromDb.setValor(cambio.getValor());
+                em.merge(fromDb);
+            }
+        }else {
+            em.persist(cambio);
+        }
+        
+        return cambio ;
+    }
+
+    
+    
+    @Override
     public int insert(Entidad e) throws CRUDException {
 
         boolean merge = false;
