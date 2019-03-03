@@ -11,7 +11,7 @@ import javax.ejb.Local;
  *
  * @author xeio
  */
-@Local
+//@Local
 public interface UFVSchedulerLocal {
     
     public void checkUFVFactor();

@@ -46,7 +46,7 @@ public class UFVScheduler implements UFVSchedulerLocal {
     @EJB
     private CambioRemote ejbCambio;
 
-    @Schedule(dayOfWeek = "*", month = "*", hour = "*", dayOfMonth = "*", year = "*", minute = "*/5")
+    //@Schedule(dayOfWeek = "*", month = "*", hour = "*", dayOfMonth = "*", year = "*", minute = "*/5")
     @Override
     public void checkUFVFactor() {
                 Date today = new Date();
