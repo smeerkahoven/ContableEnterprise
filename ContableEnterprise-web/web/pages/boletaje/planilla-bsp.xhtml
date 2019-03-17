@@ -221,8 +221,7 @@
                                                             <td>{{row.idNotaDebito}} </td>
 
                                                         </tr>
-                                                    </tbody>
-                                                    <tfoot>
+                                                        <!--TOTALES -->
                                                         <tr class="table-success" ng-show="mainGrid.length > 0">
                                                             <td colspan="3"><strong>TOTALES</strong></td>
                                                             <td class="text-right"><strong>{{totalImporteNeto}}</strong></td>
@@ -234,6 +233,9 @@
                                                             <td></td>
                                                             <td></td>
                                                         </tr>
+                                                    </tbody>
+                                                    <tfoot>
+                                                        
                                                         <tr>
                                                             <td colspan="10" class="text-center">
                                                                 <div class="container" st-items-by-page="itemsByPage" st-pagination="" st-template="../index/pagination.custom.html"></div>
