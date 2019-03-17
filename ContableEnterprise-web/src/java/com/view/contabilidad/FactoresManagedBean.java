@@ -6,13 +6,8 @@
 package com.view.contabilidad;
 
 import com.security.SessionUtils;
-import com.seguridad.control.exception.CRUDException;
-import com.seguridad.utils.Accion;
 import com.view.ViewManagedBean;
-import com.view.administracion.PersonalManagedBean;
 import com.view.menu.Formulario;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.annotation.PostConstruct;
 import javax.inject.Named;
 import javax.enterprise.context.RequestScoped;
