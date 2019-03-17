@@ -23,17 +23,17 @@ var hoy = function () {
 
 var app = angular.module("jsIndex", ['jsIndex.controllers']);
 
-app.directive('myEnter', function(){
-   return function(scope, element, attrs){
-       element.bind("keydown keypress", function(event){
-           if (event.which ===13){
-               scope.$apply(function(){
-                   scope.$eval(attrs.myEnter);
-               });
-               event.preventDefault();
-           }
-       })
-   } 
+app.directive('myEnter', function () {
+    return function (scope, element, attrs) {
+        element.bind("keydown keypress", function (event) {
+            if (event.which === 13) {
+                scope.$apply(function () {
+                    scope.$eval(attrs.myEnter);
+                });
+                event.preventDefault();
+            }
+        })
+    }
 });
 
 angular.module('jsIndex.controllers', []).controller('frmIndex', ['$scope', '$http',
@@ -52,7 +52,7 @@ angular.module('jsIndex.controllers', []).controller('frmIndex', ['$scope', '$ht
         $scope.getDataFactor = function (method) {
             return $http({
                 method: 'POST',
-                url: urlFactores.value + method + '/today',
+                url: `${urlFactores.value}${method}/today`,
                 data: {token: token.value, content: '', formName: formName},
                 headers: {'Content-Type': 'application/json'},
                 contentType: "application/x-www-form-urlencoded"
@@ -60,10 +60,10 @@ angular.module('jsIndex.controllers', []).controller('frmIndex', ['$scope', '$ht
                 if (response.data.code === 201) {
                     if (method === 'dollar') {
                         $scope.dollar = response.data.content;
-
                     } else if (method === 'ufv') {
                         $scope.ufv = response.data.content;
                     }
+                    console.log(response);
                     $scope.showFactores = true;
                 } else if (response.data.code === 301) {
                     $scope.showBtnGuardarDolarFactor = true;
@@ -87,6 +87,7 @@ angular.module('jsIndex.controllers', []).controller('frmIndex', ['$scope', '$ht
                 if (response.data.code === 201) {
                     $scope.dollarModalMessage = response.data.content;
                     $scope.dollarModalSuccess = true;
+                    $scope.getDataFactor('dollar');
                 }
             }, function (error) {
                 $scope.dollarModalMessage = error.statusText;
@@ -97,7 +98,7 @@ angular.module('jsIndex.controllers', []).controller('frmIndex', ['$scope', '$ht
         }
 
         $scope.getDataFactor('dollar');
-         $scope.getDataFactor('ufv');
+        $scope.getDataFactor('ufv');
 
     }
 ]);

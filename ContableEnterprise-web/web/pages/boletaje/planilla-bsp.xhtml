@@ -173,7 +173,7 @@
                                             </div>
 
                                             <div  id="tableData" class="ng-hide table-responsive" ng-show="showTable" >
-                                                <table st-table="display_records"    st-safe-src="mainGrid" 
+                                                <table id="dataTable" st-table="display_records"    st-safe-src="mainGrid" 
                                                        class="table  table-hover ">
                                                     <thead >
                                                         <c:if test="#{planillaBsp.formulario.buscar == planillaBsp.formulario.PERMITIR}">
@@ -243,6 +243,7 @@
                                                 </table>
 
                                                 <div class="modal-footer" ng-show="mainGrid.length > 0">
+                                                    <button id="btn-export-excel"  class="btn btn-success" onclick="tableToExcel('dataTable', 'W3C Example Table')"  value="Exportar Excel" title="Exportar a Excel"  ><span class="fa fa-file-excel"></span> Exportar</button>
                                                     <button type="button" class="btn btn-dark" ng-click="exportar()"><span class="fa  fa-print"></span>&nbsp; Imprimir</button>
                                                 </div>
                                             </div>

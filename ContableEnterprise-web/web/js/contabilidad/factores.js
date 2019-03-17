@@ -40,7 +40,7 @@ angular.module('jsFactores.controllers', []).controller('frmFactores', ['$scope'
             //console.log(formName);
             return $http({
                 method: 'POST',
-                url: url.value + method + "/all",
+                url: `${url.value}${method}/all`,
                 data: {token: token.value, content: ''},
                 headers: {'Content-Type': 'application/json'}
             }).then(function (response) {
@@ -64,13 +64,11 @@ angular.module('jsFactores.controllers', []).controller('frmFactores', ['$scope'
         }
 
         $scope.update = function (method) {
-            console.log(method);
-            console.log($scope.myForm);
             if (!$scope.myForm.$valid)
                 return;
             $http({
                 method: 'POST',
-                url: url.value + method + '/update',
+                url: `${url.value}${method}/update`,
                 data: {token: token.value, formName: formName, content: angular.toJson($scope.formData)},
                 headers: {'Content-Type': 'application/json'}
             }).then(function (response) {
