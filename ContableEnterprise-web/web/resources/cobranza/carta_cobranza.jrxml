@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="612" pageHeight="792" columnWidth="572" leftMargin="5" rightMargin="35" topMargin="20" bottomMargin="20" uuid="1b7078e6-ceb5-4087-92f3-21ab3eca1288">
-	<property name="ireport.zoom" value="3.4522712143931047"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="377"/>
+	<property name="ireport.zoom" value="1.948717100000002"/>
+	<property name="ireport.x" value="11"/>
+	<property name="ireport.y" value="394"/>
 	<parameter name="ID_CLIENTE" class="java.lang.Integer"/>
-	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["/home/xeio/proyectos/netbeans/repository/ContableEnterprise-web/web/resources/cobranza/"]]></defaultValueExpression>
-	</parameter>
 	<parameter name="ID_USER" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[select 
@@ -128,15 +125,15 @@ inner join cnt_cliente cl on cl.id_cliente = nd.id_cliente
 	</columnHeader>
 	<detail>
 		<band height="15" splitType="Stretch">
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="2" y="0" width="77" height="14" uuid="5e46fabb-353f-4f15-958a-73518fd8fcc3"/>
 				<textFieldExpression><![CDATA[$F{id_nota_debito}]]></textFieldExpression>
 			</textField>
-			<textField isStretchWithOverflow="true">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
 				<reportElement x="79" y="0" width="277" height="14" uuid="d57ae108-705a-413f-ab3e-1847dad06ddb"/>
 				<textFieldExpression><![CDATA[$F{descripcion}]]></textFieldExpression>
 			</textField>
-			<textField pattern="dd/MM/yyyy">
+			<textField pattern="dd/MM/yyyy" isBlankWhenNull="true">
 				<reportElement x="355" y="0" width="63" height="14" uuid="08951416-6461-4f90-a0ee-10efe99ed880"/>
 				<textFieldExpression><![CDATA[$F{fecha_emision}]]></textFieldExpression>
 			</textField>
@@ -181,7 +178,7 @@ inner join cnt_cliente cl on cl.id_cliente = nd.id_cliente
 					<subreportParameterExpression><![CDATA[$P{ID_USER}]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "firma_empleado.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA["./firma_empleado.jasper"]]></subreportExpression>
 			</subreport>
 			<textField pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement x="418" y="3" width="66" height="20" uuid="61f54fb0-7435-4eda-9cfc-534b1802dc9f"/>
