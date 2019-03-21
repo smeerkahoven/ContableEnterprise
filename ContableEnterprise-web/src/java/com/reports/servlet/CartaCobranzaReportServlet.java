@@ -127,6 +127,7 @@ public class CartaCobranzaReportServlet extends HttpServlet {
                 hm.put("ID_CLIENTE", idCliente);
                 hm.put("ID_USER", idUser);
                 hm.put("PATH_SUBREPORTE", "cobranza/carta_cobranza.jasper");
+                hm.put("PATH_FIRMA", "cobranza/firma_empleado.jasper");
 
                 bytes = JasperRunManager.runReportToPdf(archivoReporte.getPath(), hm, datasource.getConnection());
 

@@ -27,6 +27,7 @@
 	<parameter name="ID_AEROLINEA" class="java.lang.Integer"/>
 	<parameter name="ID_CLIENTE" class="java.lang.Integer"/>
 	<parameter name="ID_USER" class="java.lang.String"/>
+	<parameter name="PATH_FIRMA" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[SELECT
      tb_empresa.`id_empresa` AS tb_empresa_id_empresa,
@@ -156,6 +157,9 @@ WHERE
 				</subreportParameter>
 				<subreportParameter name="ID_LIBRO">
 					<subreportParameterExpression><![CDATA[$P{ID_LIBRO}]]></subreportParameterExpression>
+				</subreportParameter>
+				<subreportParameter name="PATH_FIRMA">
+					<subreportParameterExpression><![CDATA[$P{PATH_FIRMA}]]></subreportParameterExpression>
 				</subreportParameter>
 				<subreportParameter name="ID_CREDITO">
 					<subreportParameterExpression><![CDATA[$P{ID_CREDITO}]]></subreportParameterExpression>

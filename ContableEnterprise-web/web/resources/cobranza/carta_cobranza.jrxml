@@ -2,9 +2,12 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="612" pageHeight="792" columnWidth="572" leftMargin="5" rightMargin="35" topMargin="20" bottomMargin="20" uuid="1b7078e6-ceb5-4087-92f3-21ab3eca1288">
 	<property name="ireport.zoom" value="1.948717100000002"/>
 	<property name="ireport.x" value="11"/>
-	<property name="ireport.y" value="394"/>
+	<property name="ireport.y" value="387"/>
 	<parameter name="ID_CLIENTE" class="java.lang.Integer"/>
 	<parameter name="ID_USER" class="java.lang.String"/>
+	<parameter name="PATH_FIRMA" class="java.lang.String">
+		<defaultValueExpression><![CDATA["firma_empleado.jasper"]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[select 
       nd.id_nota_debito
@@ -178,7 +181,7 @@ inner join cnt_cliente cl on cl.id_cliente = nd.id_cliente
 					<subreportParameterExpression><![CDATA[$P{ID_USER}]]></subreportParameterExpression>
 				</subreportParameter>
 				<connectionExpression><![CDATA[$P{REPORT_CONNECTION}]]></connectionExpression>
-				<subreportExpression><![CDATA["./firma_empleado.jasper"]]></subreportExpression>
+				<subreportExpression><![CDATA[$P{PATH_FIRMA}]]></subreportExpression>
 			</subreport>
 			<textField pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement x="418" y="3" width="66" height="20" uuid="61f54fb0-7435-4eda-9cfc-534b1802dc9f"/>
