@@ -661,11 +661,11 @@ public class BoletoJSON implements Serializable {
         this.idBoleto = idBoleto;
     }
 
-    public int getGestion() {
+    public Integer getGestion() {
         return gestion;
     }
 
-    public void setGestion(int gestion) {
+    public void setGestion(Integer gestion) {
         this.gestion = gestion;
     }
 

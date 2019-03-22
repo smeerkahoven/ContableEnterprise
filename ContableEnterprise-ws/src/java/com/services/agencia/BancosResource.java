@@ -191,7 +191,7 @@ public class BancosResource extends TemplateResource {
             @PathParam("idEmpresa") final Integer idEmpresa) {
 
         Mensajes m = Mensajes.getMensajes().getMensajes();
-        RestResponse r = new RestResponse();
+        RestResponse r = doValidations(request);
         try {
             /*Verificamos el ID token*/
             if (request.getToken() != null && !request.getToken().isEmpty()) {
@@ -424,7 +424,7 @@ public class BancosResource extends TemplateResource {
             @PathParam("idCuentaBanco") final Integer idCuentaBanco) {
 
         Mensajes m = Mensajes.getMensajes().getMensajes();
-        RestResponse r = new RestResponse();
+        RestResponse r = doValidations(request);
         try {
             /*Verificamos el ID token*/
             if (request.getToken() != null && !request.getToken().isEmpty()) {
@@ -478,6 +478,8 @@ public class BancosResource extends TemplateResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public RestResponse getLinkGrid(final RestRequest request) {
+        
+        doValidations(request);
 
         Mensajes m = Mensajes.getMensajes().getMensajes();
         RestResponse r = new RestResponse();
@@ -535,7 +537,7 @@ public class BancosResource extends TemplateResource {
     public RestResponse addLink(final RestRequest request) {
 
         Mensajes m = Mensajes.getMensajes().getMensajes();
-        RestResponse r = new RestResponse();
+        RestResponse r = doValidations(request);
         try {
             /*Verificamos el ID token*/
             if (request.getToken() != null && !request.getToken().isEmpty()) {

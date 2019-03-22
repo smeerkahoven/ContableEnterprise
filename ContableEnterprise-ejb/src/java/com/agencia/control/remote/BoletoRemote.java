@@ -8,13 +8,11 @@ package com.agencia.control.remote;
 import com.agencia.entities.AerolineaCuenta;
 import com.agencia.entities.Boleto;
 import com.agencia.entities.BoletoPlanillaBsp;
-import com.agencia.entities.Promotor;
 import com.agencia.search.dto.BoletoSearchForm;
 import com.configuracion.entities.ContabilidadBoletaje;
 import com.contabilidad.entities.CargoBoleto;
 import com.contabilidad.entities.ComprobanteContable;
 import com.contabilidad.entities.IngresoCaja;
-import com.contabilidad.entities.IngresoTransaccion;
 import com.contabilidad.entities.NotaDebito;
 import com.contabilidad.entities.NotaDebitoTransaccion;
 import com.response.json.boletaje.PlanillaSearchForm;
@@ -22,7 +20,6 @@ import com.response.json.boletaje.VentaBoletosSearchJson;
 import com.seguridad.control.entities.Entidad;
 import com.seguridad.control.exception.CRUDException;
 import com.seguridad.control.remote.DaoRemoteFacade;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import javax.ejb.Remote;
@@ -158,6 +155,7 @@ public interface BoletoRemote extends DaoRemoteFacade {
      * @throws CRUDException 
      */
     public int updateBoleto(Boleto boleto) throws CRUDException;
+    public int updateBoletoVoid(Boleto boleto) throws CRUDException ;
 
     /**
      * Procesa un boleto y lo pasa a Contabilidad de acuerdo a la nota de Debito

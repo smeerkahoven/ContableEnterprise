@@ -859,15 +859,17 @@ public class BoletoEJB extends FacadeEJB implements BoletoRemote {
             b.setMoneda(Moneda.NACIONAL);
         }
 
+        b.setIdNotaDebito(null);
         b.setEstado(Boleto.Estado.PENDIENTE);
 
-        ejbNotaDebito.asociarBoletoNotaDebito(n, b.getIdBoleto(), usuario);
+        b.setIdBoleto(insert(b));
 
-        insert(b);
+        ejbNotaDebito.asociarBoletoNotaDebito(n, b.getIdBoleto(), usuario);
 
         return b;
     }
 
+    @Deprecated
     @Override
     public Boleto saveBoletoMultiple(Boleto b) throws CRUDException {
 
@@ -916,6 +918,7 @@ public class BoletoEJB extends FacadeEJB implements BoletoRemote {
 
     }
 
+    @Deprecated
     @Override
     public List getBoletosMultiples(Integer idBoleto, Integer idBoletoPadre) throws CRUDException {
 
@@ -1158,12 +1161,38 @@ public class BoletoEJB extends FacadeEJB implements BoletoRemote {
     }
 
     @Override
+    public int updateBoletoVoid(Boleto boleto) throws CRUDException {
+
+        Boleto boletoBd = getBoletoRegistrado(boleto);
+
+        if (boletoBd.getIdBoleto() != null) {
+            if (!Objects.equals(boletoBd.getIdBoleto(), boleto.getIdBoleto())) {
+                throw new CRUDException("El Numero de Boleto ya ha sido registrado");
+            }
+        }
+
+        em.merge(boleto);
+
+        NotaDebito n = (NotaDebito) ejbNotaDebito.get(new NotaDebito(boleto.getIdNotaDebito()));
+        // Se guarda el Boleto
+
+        //saveClientePasajero(boleto);
+        //se asocia el Boleto con la Transaccion
+        ejbNotaDebito.updateBoletoNotaDebito(boleto, n);
+
+        //actualizamos los montos de la Nota de debito
+        //ejbNotaDebito.actualizarMontosNotaDebito(n.getIdNotaDebito());
+        return Operacion.REALIZADA;
+
+    }
+
+    @Override
     public List<BoletoPlanillaBsp> getPlanillaBsp(PlanillaSearchForm search) throws CRUDException {
 
         if (search.getIdEmpresa() == null) {
             throw new CRUDException("El parametro Id Empresa es necesario");
         }
-        if (search.getTipoCupon()== null) {
+        if (search.getTipoCupon() == null) {
             throw new CRUDException("El parametro Tipo es necesario");
         }
 
@@ -1190,7 +1219,7 @@ public class BoletoEJB extends FacadeEJB implements BoletoRemote {
     @Override
     public List<BoletoPlanillaBsp> getReporteVentas(VentaBoletosSearchJson search) throws CRUDException {
 
-        if (search.getTipoCupon()== null) {
+        if (search.getTipoCupon() == null) {
             throw new CRUDException("El parametro Id Empresa es necesario");
         }
 
@@ -1237,7 +1266,7 @@ public class BoletoEJB extends FacadeEJB implements BoletoRemote {
             throw new CRUDException("El parametro Fecha Fin es necesarioa");
         }
 
-        if (search.getIdCliente()== null) {
+        if (search.getIdCliente() == null) {
             throw new CRUDException("El parametro Cliente es necesario.");
         }
 
