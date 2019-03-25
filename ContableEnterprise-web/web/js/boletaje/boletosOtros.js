@@ -1062,6 +1062,13 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                             $scope.showFrmBoletoManual = true;
                         }
                     }
+                    
+                    if ($scope.formData.estado === $scope.CANCELADO ||
+                            $scope.formData.estado === $scope.EN_MORA) {
+                        $scope.showFrmBoletoEditar = false ;
+                    } else {
+                        $scope.showFrmBoletoEditar = true ;
+                    }
 
                 }
 

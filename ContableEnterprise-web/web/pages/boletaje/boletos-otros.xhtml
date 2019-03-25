@@ -447,10 +447,13 @@
                                                                     <td>
                                                                         <div class="btn-group" >
                                                                             <c:if test="${boletajeOtros.formulario.crear== boletajeOtros.formulario.PERMITIR }">
-                                                                                <button ng-show="!row.editable" ng-disabled="disableEditarTransaccion" type="button" title="Editar" class="btn btn-sm btn-info" ng-click="editTransaccion(row)"><i class="fa fa-pencil"></i></button>
+                                                                                <button ng-show="!row.editable" ng-disabled="disableEditarTransaccion" type="button" 
+                                                                                        title="Editar" class="btn btn-sm btn-info" ng-click="editTransaccion(row)">
+                                                                                    <i class="fa fa-pencil"></i></button>
                                                                             </c:if>
                                                                             <c:if test="#{boletajeOtros.formulario.anular== boletajeOtros.formulario.PERMITIR}">
-                                                                                <button type="button" title="Anular" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#frmAnular" ng-click="modalAnular(row.idNotaDebitoTransaccion, 'la Transaccion', TRANSACCION, row)"><i class="fa fa-trash"></i></button>
+                                                                                <button type="button" title="Anular" class="btn btn-sm btn-danger" data-toggle="modal" 
+                                                                                        data-target="#frmAnular" ng-click="modalAnular(row.idNotaDebitoTransaccion, 'la Transaccion', TRANSACCION, row)"><i class="fa fa-trash"></i></button>
                                                                             </c:if>
                                                                             <!--<button type="button" title="Ver" class="btn btn-default" ng-click="ver(row.idEmpleado)" data-toggle="modal" data-target="#verForm"><i class="fa fa-search"></i></button>-->
                                                                         </div>

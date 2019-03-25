@@ -489,6 +489,7 @@ angular.module('jsIngresoCaja.controllers', []).controller('frmIngresoCaja',
                         $scope.showForm = false;
                     });
                 };
+                
                 $scope.editTransaccion = function (row) {
                     $scope.showFrmEditarTrx = true;
                     return $http({
@@ -499,6 +500,9 @@ angular.module('jsIngresoCaja.controllers', []).controller('frmIngresoCaja',
                     }).then(function (response) {
                         if (response.data.code === 201) {
                             $scope.trx = response.data.content;
+                            if ($scope.formData.estado === $scope.EMITIDO){
+                                $scope.showFrmEditarTrx = false ;
+                            }
                             showModalWindow('#frmIngresoTransaccion');
                         } else {
                             showAlert(ERROR_RESPUESTA_TITLE, response.data.content);
@@ -506,6 +510,7 @@ angular.module('jsIngresoCaja.controllers', []).controller('frmIngresoCaja',
 
                     }, $scope.errorFunction);
                 }
+                
                 $scope.formHasError = function () {
                     if ($scope.formData.idEmpresa === undefined) {
                         return true;
