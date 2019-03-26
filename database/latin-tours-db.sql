@@ -1,13 +1,13 @@
 -- MySQL dump 10.13  Distrib 5.7.25, for Linux (x86_64)
 --
--- Host: 127.0.0.1    Database: db_travel
+-- Host: 127.0.0.1    Database: db_travel_bolivia_tur
 -- ------------------------------------------------------
 -- Server version	5.7.25-0ubuntu0.18.04.2
-drop schema if exists db_travel ;
+drop schema if exists db_travel_bolivia_tur ;
 
-create schema db_travel ;
+create schema db_travel_bolivia_tur ;
 
-use db_travel ;
+use db_travel_bolivia_tur ;
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -811,7 +811,7 @@ UNLOCK TABLES;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`web_contabilidad`@`localhost`*/ /*!50003 TRIGGER `db_travel`.`cnt_comprobante_contable_BEFORE_UPDATE` BEFORE UPDATE ON `cnt_comprobante_contable` FOR EACH ROW
+/*!50003 CREATE*/ /*!50017 DEFINER=`web_contabilidad`@`localhost`*/ /*!50003 TRIGGER `db_travel_bolivia_tur`.`cnt_comprobante_contable_BEFORE_UPDATE` BEFORE UPDATE ON `cnt_comprobante_contable` FOR EACH ROW
 BEGIN
 	IF new.estado = 'A' THEN
 		UPDATE cnt_asiento_contable
@@ -1033,7 +1033,7 @@ UNLOCK TABLES;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`web_contabilidad`@`localhost`*/ /*!50003 TRIGGER `db_travel`.`cnt_ingreso_caja_BEFORE_UPDATE` 
+/*!50003 CREATE*/ /*!50017 DEFINER=`web_contabilidad`@`localhost`*/ /*!50003 TRIGGER `db_travel_bolivia_tur`.`cnt_ingreso_caja_BEFORE_UPDATE` 
 BEFORE UPDATE ON `cnt_ingreso_caja` FOR EACH ROW
 BEGIN
 
@@ -1186,7 +1186,7 @@ UNLOCK TABLES;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`web_contabilidad`@`localhost`*/ /*!50003 TRIGGER `db_travel`.`cnt_nota_credito_BEFORE_UPDATE` BEFORE UPDATE ON `cnt_nota_credito` FOR EACH ROW
+/*!50003 CREATE*/ /*!50017 DEFINER=`web_contabilidad`@`localhost`*/ /*!50003 TRIGGER `db_travel_bolivia_tur`.`cnt_nota_credito_BEFORE_UPDATE` BEFORE UPDATE ON `cnt_nota_credito` FOR EACH ROW
 BEGIN
 	IF new.estado = 'A' THEN
 		UPDATE cnt_nota_credito_transaccion
@@ -1310,7 +1310,7 @@ UNLOCK TABLES;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`web_contabilidad`@`localhost`*/ /*!50003 TRIGGER `db_travel`.`cnt_nota_debito_BEFORE_UPDATE` BEFORE UPDATE ON `cnt_nota_debito` FOR EACH ROW
+/*!50003 CREATE*/ /*!50017 DEFINER=`web_contabilidad`@`localhost`*/ /*!50003 TRIGGER `db_travel_bolivia_tur`.`cnt_nota_debito_BEFORE_UPDATE` BEFORE UPDATE ON `cnt_nota_debito` FOR EACH ROW
 BEGIN
 	IF new.estado = 'A' THEN
 		UPDATE cnt_nota_debito_transaccion
@@ -2216,11 +2216,11 @@ INSERT INTO `tpm_plan` VALUES (1581,2020301001),(1629,3020201001),(1630,30202010
 UNLOCK TABLES;
 
 --
--- Dumping events for database 'db_travel'
+-- Dumping events for database 'db_travel_bolivia_tur'
 --
 
 --
--- Dumping routines for database 'db_travel'
+-- Dumping routines for database 'db_travel_bolivia_tur'
 --
 
 SET GLOBAL log_bin_trust_function_creators = 1 ;
