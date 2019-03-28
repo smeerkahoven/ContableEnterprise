@@ -57,15 +57,17 @@ import javax.xml.bind.annotation.XmlRootElement;
             + "      bo.id_nota_debito idNotaDebito, bo.tipo_boleto tipoBoleto, bo.tipo_cupon tipoCupon, bo.numero ticketNumber,\n"
             + "      date_format(bo.fecha_emision,'%d/%m/%y') fechaEmision,\n"
             + "      coalesce(date_format(bo.fecha_viaje,'%d/%m/%y'),'') fechaViaje ,"
-            + "      coalesce (bo.importe_neto ,0)importeNeto,\n"
-            + "      (coalesce(bo.impuesto_bob,0) + coalesce(bo.impuesto_qm,0) \n"
+            + "      case bo.estado when 'A' then 0.00 else coalesce (bo.importe_neto ,0) end importeNeto,\n"
+            + "      case bo.estado when 'A' then 0.00 else (coalesce(bo.impuesto_bob,0) + coalesce(bo.impuesto_qm,0) \n"
             + "		+ coalesce(bo.impuesto_1,0) + coalesce(bo.impuesto_2,0)\n"
             + "             + coalesce(bo.impuesto_3,0) + coalesce(bo.impuesto_4,0) \n"
-            + "             + coalesce(bo.impuesto_5,0)) impuestos,\n"
-            + "      coalesce(bo.total_boleto,0) totalBoleto, coalesce(bo.comision,0) comision,\n"
-            + "      coalesce(bo.monto_comision,0) montoComision ,\n"
-            + "      bo.monto_pagar_linea_aerea totalMontoCobrar ,\n"
-            + "      case bo.tipo_boleto when 'MV' then 'VOID' when 'SV' then 'VOID' when 'AV' then 'VOID' else '' end estado\n"
+            + "             + coalesce(bo.impuesto_5,0)) end impuestos, \n"
+            + "      case bo.estado when 'A' then 0.00 else coalesce(bo.total_boleto,0) end totalBoleto, "
+            + "      case bo.estado when 'A' then 0.00 else coalesce(bo.comision,0) end comision, \n"
+            + "      case bo.estado when 'A' then 0.00 else coalesce(bo.monto_comision,0) end montoComision ,\n"
+            + "      case bo.estado when 'A' then 0.00 else bo.monto_pagar_linea_aerea end totalMontoCobrar ,\n"
+            + "      case bo.tipo_boleto when 'MV' then 'VOID' when 'SV' then 'VOID' when 'AV' then 'VOID' else '' end estado, \n"
+            + "      bo.estado boletoEstado \n"
             + " from cnt_boleto bo\n"
             + " inner join cnt_aerolinea ae on ae.id_aerolinea = bo.id_aerolinea\n"
             + " where bo.id_nota_debito is not null and fecha_emision >= ?1 and fecha_emision <=?2 \n"
@@ -78,20 +80,25 @@ import javax.xml.bind.annotation.XmlRootElement;
             name = "Boleto.getReporteVentas",
             query = "select \n"
             + "	 bo.id_boleto idBoleto, bo.id_aerolinea idAerolinea, ae.iata, ae.numero, ae.iva_it_comision ivaItComision,\n"
-            + "      bo.id_nota_debito idNotaDebito, bo.tipo_boleto tipoBoleto, bo.tipo_cupon tipoCupon, bo.numero ticketNumber,\n"
-            + "      date_format(bo.fecha_emision,'%d/%m/%y') fechaEmision,\n"
-            + "      coalesce(date_format(bo.fecha_viaje,'%d/%m/%y'),'') fechaViaje , \n"
-            + "      coalesce (bo.importe_neto ,0)importeNeto,\n"
-            + "      (coalesce(bo.impuesto_bob,0) + coalesce(bo.impuesto_qm,0) \n"
+            + "      bo.id_nota_debito idNotaDebito \n"
+            + "      , bo.tipo_boleto tipoBoleto \n"
+            + "      , bo.tipo_cupon tipoCupon \n"
+            + "      , bo.numero ticketNumber \n"
+            + "      , date_format(bo.fecha_emision,'%d/%m/%y') fechaEmision \n "                    
+            + "      , coalesce(date_format(bo.fecha_viaje,'%d/%m/%y'),'') fechaViaje \n"
+            + "      , case bo.estado when 'A' then 0.00 else coalesce (bo.importe_neto ,0) end importeNeto \n"
+            + "      , case bo.estado when 'A' then 0.00 else (coalesce(bo.impuesto_bob,0) + coalesce(bo.impuesto_qm,0) \n"
             + "		+ coalesce(bo.impuesto_1,0) + coalesce(bo.impuesto_2,0)\n"
             + "             + coalesce(bo.impuesto_3,0) + coalesce(bo.impuesto_4,0) \n"
-            + "             + coalesce(bo.impuesto_5,0)) impuestos,\n"
-            + "      coalesce(bo.total_boleto,0) totalBoleto, coalesce(bo.comision,0) comision,\n"
-            + "      coalesce(bo.monto_comision,0) montoComision ,\n"
-            + "      bo.monto_pagar_linea_aerea montoPagarLineaAerea ,\n"
-            + "      case bo.tipo_boleto when 'MV' then 'VOID' when 'SV' then 'VOID' when 'AV' then 'VOID' else '' end estado,\n"
-            + "      concat (coalesce(bo.id_ruta_1,''),'/', coalesce(bo.id_ruta_2,''),'/',coalesce(bo.id_ruta_3,''),'/',coalesce(bo.id_ruta_4,''),'/',coalesce(bo.id_ruta_5,'')) ruta, \n"
-            + "      coalesce(bo.nombre_pasajero,'') nombrePasajero \n"
+            + "             + coalesce(bo.impuesto_5,0)) end impuestos \n"
+            + "      , case bo.estado when 'A' then 0.00 else coalesce(bo.total_boleto,0) end totalBoleto \n"
+            + "      , case bo.estado when 'A' then 0.00 else coalesce(bo.comision,0) end comision \n"
+            + "      , case bo.estado when 'A' then 0.00 else coalesce(bo.monto_comision,0)end montoComision \n"
+            + "      , case bo.estado when 'A' then 0.00 else bo.monto_pagar_linea_aerea end montoPagarLineaAerea \n"
+            + "      , case bo.tipo_boleto when 'MV' then 'VOID' when 'SV' then 'VOID' when 'AV' then 'VOID' else '' end estado \n"
+            + "      , concat (coalesce(bo.id_ruta_1,''),'/', coalesce(bo.id_ruta_2,''),'/',coalesce(bo.id_ruta_3,''),'/',coalesce(bo.id_ruta_4,''),'/',coalesce(bo.id_ruta_5,'')) ruta \n"
+            + "      , coalesce(bo.nombre_pasajero,'') nombrePasajero \n"
+            + "      , bo.estado boletoEstado \n"                
             + " from cnt_boleto bo\n"
             + " inner join cnt_aerolinea ae on ae.id_aerolinea = bo.id_aerolinea\n"
             + " where bo.id_nota_debito is not null and bo.fecha_emision >= ?2 and bo.fecha_emision <=?3  and bo.id_aerolinea =?4 \n"
@@ -156,6 +163,7 @@ import javax.xml.bind.annotation.XmlRootElement;
                         ,@ColumnResult(name = "montoComision", type = BigDecimal.class)
                         ,@ColumnResult(name = "totalMontoCobrar", type = BigDecimal.class)
                         ,@ColumnResult(name = "estado", type = String.class)
+                        ,@ColumnResult(name = "boletoEstado", type = String.class)
                     }
             )
     )
@@ -187,6 +195,7 @@ import javax.xml.bind.annotation.XmlRootElement;
                         ,@ColumnResult(name = "estado", type = String.class)
                         ,@ColumnResult(name = "ruta", type = String.class)
                         ,@ColumnResult(name = "nombrePasajero", type = String.class)
+                        ,@ColumnResult(name = "boletoEstado", type = String.class)
                     }
             )
     )

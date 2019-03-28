@@ -5,14 +5,12 @@
  */
 package com.services.reportes;
 
-import com.services.agencia.boletaje.*;
 import com.agencia.control.remote.BoletoRemote;
 import com.agencia.entities.BoletoPlanillaBsp;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.response.json.boletaje.PlanillaSearchForm;
 import com.response.json.boletaje.VentaBoletosSearchJson;
 import com.seguridad.control.exception.CRUDException;
 import com.seguridad.utils.ResponseCode;
@@ -92,7 +90,7 @@ public class VentaBoletosResource extends TemplateResource {
 
         } catch (CRUDException ex) {
             Logger.getLogger(VentaBoletosResource.class.getName()).log(Level.SEVERE, null, ex);
-            response.setContent(ex);
+            response.setContent(ex.getCause());
             response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
         }
         return response;

@@ -194,21 +194,21 @@
                                                 </div>
 
                                             </form>
-                                            
-                                            
+
+
                                             <div  id="tableData" class="ng-hide table-responsive " ng-show="showTable" >
                                                 <table id="dataTable" st-table="display_records"    st-safe-src="formData.mayores" 
                                                        class="table table-hover">
                                                     <thead>
                                                         <tr>
                                                             <td colspan="8"><strong>Consulta Mayores:</strong>
-                                                            {{search.idCuenta.name}}
-                                                            <strong>&nbsp;&nbsp; Desde:</strong>
-                                                            {{search.fechaInicio}}
-                                                            <strong>&nbsp;&nbsp;Hasta:</strong>
-                                                            {{search.fechaFin}}
-                                                            <strong>&nbsp;&nbsp;Moneda :</strong>
-                                                            {{search.moneda|printMoneda}}
+                                                                {{search.idCuenta.name}}
+                                                                <strong>&nbsp;&nbsp; Desde:</strong>
+                                                                {{search.fechaInicio}}
+                                                                <strong>&nbsp;&nbsp;Hasta:</strong>
+                                                                {{search.fechaFin}}
+                                                                <strong>&nbsp;&nbsp;Moneda :</strong>
+                                                                {{search.moneda|printMoneda}}
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -327,6 +327,9 @@
                                         <div class="modal-content">
                                             <div class="modal-header">
                                                 <h5 class="modal-title" id="exampleModalLongTitle">Consulta Mayores - COMPROBANTES - {{search.moneda|printMoneda}}</h5>
+                                                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">×</span>
+                                                </button>
                                             </div>
                                             <div class="modal-body table-responsive-md">
                                                 <span ng-show="loadingFrmComprobante" class="alert alert-info"><i class="loader loader-sm" ></i>  Cargando...</span>

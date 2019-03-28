@@ -39,12 +39,38 @@ public class BoletoPlanillaBsp implements Serializable {
     // reporte comision cliente
     private BigDecimal fee;
     private BigDecimal descuento;
+    private String boletoEstado ;
 
+    
+    /**
+     * BoletoPlanillaBsp2 
+     * 
+     * @param idBoleto
+     * @param idAerolinea
+     * @param iata
+     * @param numero
+     * @param ivaItComision
+     * @param idNotaDebito
+     * @param tipoBoleto
+     * @param tipoCupon
+     * @param ticketNumber
+     * @param fechaEmision
+     * @param fechaViaje
+     * @param importeNeto
+     * @param impuestos
+     * @param totalBoleto
+     * @param comision
+     * @param montoComision
+     * @param totalMontoCobrar
+     * @param estado 
+     * @param boletoEstado 
+     */
     public BoletoPlanillaBsp(Integer idBoleto, Integer idAerolinea, String iata,
             String numero, Boolean ivaItComision, Integer idNotaDebito, String tipoBoleto,
             String tipoCupon, Long ticketNumber, String fechaEmision, String fechaViaje,
             BigDecimal importeNeto, BigDecimal impuestos, BigDecimal totalBoleto, BigDecimal comision,
-            BigDecimal montoComision, BigDecimal totalMontoCobrar, String estado) {
+            BigDecimal montoComision, BigDecimal totalMontoCobrar, String estado,
+            String boletoEstado) {
         this.idBoleto = idBoleto;
         this.idAerolinea = idAerolinea;
         this.iata = iata;
@@ -63,15 +89,41 @@ public class BoletoPlanillaBsp implements Serializable {
         this.montoComision = montoComision;
         this.totalMontoCobrar = totalMontoCobrar;
         this.estado = estado;
+        this.boletoEstado = boletoEstado ;
 
     }
 
+    /**
+     * BoletoPlanillaBsp3
+     * 
+     * @param idBoleto
+     * @param idAerolinea
+     * @param iata
+     * @param numero
+     * @param ivaItComision
+     * @param idNotaDebito
+     * @param tipoBoleto
+     * @param tipoCupon
+     * @param ticketNumber
+     * @param fechaEmision
+     * @param fechaViaje
+     * @param importeNeto
+     * @param impuestos
+     * @param totalBoleto
+     * @param comision
+     * @param montoComision
+     * @param montoPagarLineaAerea
+     * @param estado
+     * @param ruta
+     * @param nombrePasajero 
+     * @param boletoEstado 
+     */
     public BoletoPlanillaBsp(Integer idBoleto, Integer idAerolinea, String iata, String numero,
             Boolean ivaItComision, Integer idNotaDebito, String tipoBoleto, String tipoCupon, 
             Long ticketNumber, String fechaEmision, String fechaViaje, BigDecimal importeNeto,
             BigDecimal impuestos, BigDecimal totalBoleto, BigDecimal comision, 
             BigDecimal montoComision, BigDecimal montoPagarLineaAerea, String estado, 
-            String ruta, String nombrePasajero) {
+            String ruta, String nombrePasajero, String boletoEstado) {
         this.idBoleto = idBoleto;
         this.idAerolinea = idAerolinea;
         this.iata = iata;
@@ -92,8 +144,30 @@ public class BoletoPlanillaBsp implements Serializable {
         this.estado = estado;
         this.ruta = ruta;
         this.nombrePasajero = nombrePasajero;
+        this.boletoEstado= boletoEstado ;
     }
 
+    /**
+     * BoletoPlanillaBsp
+     * 
+     * @param idBoleto
+     * @param idAerolinea
+     * @param iata
+     * @param numero
+     * @param idNotaDebito
+     * @param tipoBoleto
+     * @param tipoCupon
+     * @param ticketNumber
+     * @param fechaEmision
+     * @param fechaViaje
+     * @param importeNeto
+     * @param impuestos
+     * @param totalBoleto
+     * @param ruta
+     * @param nombrePasajero
+     * @param fee
+     * @param descuento 
+     */
     public BoletoPlanillaBsp(Integer idBoleto, Integer idAerolinea, String iata, String numero,
             Integer idNotaDebito, String tipoBoleto, String tipoCupon,
             Long ticketNumber, String fechaEmision, String fechaViaje, 
@@ -119,6 +193,16 @@ public class BoletoPlanillaBsp implements Serializable {
         this.descuento = descuento;
     }
 
+    public String getBoletoEstado() {
+        return boletoEstado;
+    }
+
+    public void setBoletoEstado(String boletoEstado) {
+        this.boletoEstado = boletoEstado;
+    }
+
+    
+    
     public BigDecimal getMontoPagarLineaAerea() {
         return montoPagarLineaAerea;
     }

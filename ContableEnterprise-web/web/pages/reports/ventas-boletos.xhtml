@@ -217,7 +217,7 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr  st-select-row="row" st-select-mode="multiple" ng-repeat="row in display_records">
+                                                        <tr  st-select-row="row" st-select-mode="multiple" ng-repeat="row in display_records" ng-class="row.boletoEstado==='A'?'table-danger':''">
                                                             <!--<td>{{row.iata}} </td>-->
                                                             <td>{{row.ticketNumber}} </td>
                                                             <td>{{row.ruta}} </td>
@@ -241,8 +241,6 @@
                                                             <td></td>
                                                             <td class="text-right"><strong>{{totalMontoComision}}</strong></td>
                                                             <td class="text-right"><strong>{{totalNetoAPagar}}</strong></td>
-                                                            <td></td>
-                                                            <td></td>
                                                         </tr>
                                                         
                                                     </tbody>

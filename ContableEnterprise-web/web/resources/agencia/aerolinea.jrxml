@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="aerolinea" language="groovy" pageWidth="612" pageHeight="792" columnWidth="582" leftMargin="10" rightMargin="20" topMargin="10" bottomMargin="10" uuid="d6094d85-5dc7-4592-ad7e-f88b14052532">
-	<property name="ireport.zoom" value="5.054470284992956"/>
+	<property name="ireport.zoom" value="1.4641000000000048"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
@@ -31,12 +31,7 @@
      cnt_aerolinea.`round_comision_bob` AS cnt_aerolinea_round_comision_bob,
      cnt_aerolinea.`round_comision_usd` AS cnt_aerolinea_round_comision_usd,
      cnt_aerolinea.`iva_it_comision` AS cnt_aerolinea_iva_it_comision,
-     cnt_aerolinea.`cta_ventas_mon_nac` AS cnt_aerolinea_cta_ventas_mon_nac,
-     cnt_aerolinea.`cta_ventas_mon_ext` AS cnt_aerolinea_cta_ventas_mon_ext,
-     cnt_aerolinea.`cta_comision_mon_nac` AS cnt_aerolinea_cta_comision_mon_nac,
-     cnt_aerolinea.`cta_comision_mon_ext` AS cnt_aerolinea_cta_comision_mon_ext,
-     cnt_aerolinea.`cta_devolucion_mon_nac` AS cnt_aerolinea_cta_devolucion_mon_nac,
-     cnt_aerolinea.`cta_devolucion_mon_ext` AS cnt_aerolinea_cta_devolucion_mon_ext,
+
      cnt_aerolinea.`boletos_mon_nac` AS cnt_aerolinea_boletos_mon_nac,
      cnt_aerolinea.`boletos_mon_ext` AS cnt_aerolinea_boletos_mon_ext,
      cnt_aerolinea.`moneda` AS cnt_aerolinea_moneda,
@@ -70,12 +65,6 @@ FROM
 	<field name="cnt_aerolinea_round_comision_bob" class="java.lang.Boolean"/>
 	<field name="cnt_aerolinea_round_comision_usd" class="java.lang.Boolean"/>
 	<field name="cnt_aerolinea_iva_it_comision" class="java.lang.Boolean"/>
-	<field name="cnt_aerolinea_cta_ventas_mon_nac" class="java.lang.Long"/>
-	<field name="cnt_aerolinea_cta_ventas_mon_ext" class="java.lang.Long"/>
-	<field name="cnt_aerolinea_cta_comision_mon_nac" class="java.lang.Long"/>
-	<field name="cnt_aerolinea_cta_comision_mon_ext" class="java.lang.Long"/>
-	<field name="cnt_aerolinea_cta_devolucion_mon_nac" class="java.lang.Long"/>
-	<field name="cnt_aerolinea_cta_devolucion_mon_ext" class="java.lang.Long"/>
 	<field name="cnt_aerolinea_boletos_mon_nac" class="java.lang.Boolean"/>
 	<field name="cnt_aerolinea_boletos_mon_ext" class="java.lang.Boolean"/>
 	<field name="cnt_aerolinea_moneda" class="java.lang.String"/>
