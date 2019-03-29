@@ -237,7 +237,7 @@
 
                                             <div  id="tableData" class="ng-hide table-responsive" ng-show="showTable" >
                                                 <table st-table="display_records"    st-safe-src="mainGrid" 
-                                                       class="table  table-hover ">
+                                                       class="table table-hover table-responsive ">
                                                     <thead >
                                                         <c:if test="#{kardexCliente.formulario.buscar == kardexCliente.formulario.PERMITIR}">
                                                             <!--<tr>
@@ -257,6 +257,7 @@
                                                             <th>N&uacute;mero</th>
                                                             <th>Dcto.</th>
                                                             <th>Glosa</th>
+                                                            <th>F.Emision</th>
                                                             <th>Vcto.</th>
                                                             <th class="text-right">Debe M/Nac</th>
                                                             <th class="text-right">Haber M/Nac</th>
@@ -272,6 +273,7 @@
                                                             <td>{{row.idDocumento}} </td>
                                                             <td>{{row.tipoDocumento}} </td>
                                                             <td>{{row.glosa}} </td>
+                                                            <td>{{row.fecha}} </td>
                                                             <td>{{row|printCancelado}} </td>
                                                             <td class="text-right">{{row.montoDebeNac|printNumber}} </td>
                                                             <td class="text-right">{{row.montoHaberNac|printNumber}} </td>
@@ -284,13 +286,13 @@
                                                     <tfoot>
                                                         <tr><td colspan="10"></td></tr>
                                                         <tr class="debito" ng-show="mainGrid.length > 0" >
-                                                            <td colspan="6"><strong>TOTALES NOTA DEBITO</strong></td>
+                                                            <td colspan="7"><strong>TOTALES NOTA DEBITO</strong></td>
                                                             <td class="text-right"><strong>{{totalSaldoDebitoNac|printNumber}}</strong></td>
                                                             <td colspan="2"></td>
                                                             <td class="text-right"><strong>{{totalSaldoDebitoExt|printNumber}}</strong></td>
                                                         </tr>
                                                         <tr class="deposito" ng-show="mainGrid.length > 0">
-                                                            <td colspan="6"><strong>TOTALES DEPOSITOS</strong></td>
+                                                            <td colspan="7"><strong>TOTALES DEPOSITOS</strong></td>
                                                             <td class="text-right"><strong>{{totalSaldoDepositoNac|printNumber}}</strong></td>
                                                             <td colspan="2"></td>
                                                             <td class="text-right"><strong>{{totalSaldoDepositoExt|printNumber}}</strong></td>
