@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="612" pageHeight="792" columnWidth="572" leftMargin="10" rightMargin="30" topMargin="20" bottomMargin="20" uuid="1b7078e6-ceb5-4087-92f3-21ab3eca1288">
-	<property name="ireport.zoom" value="2.593742460100007"/>
+	<property name="ireport.zoom" value="1.7715610000000044"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="ID_PAGO" class="java.lang.Integer">
@@ -9,6 +9,8 @@
 	<queryString>
 		<![CDATA[select 
   pa.id_pago_anticipado
+, cc.id_numero_gestion
+, cc.gestion
 , pa.factor_cambiario
 , pa.id_cliente, upper(cl.nombre) cliente, cl.telefono_fijo
 , case pa.moneda when 'B' then 'BOLIVIANOS' when 'U' then 'DOLARES' end moneda
@@ -42,9 +44,16 @@
  left join cnt_bancos ba on ba.id_banco = pa.id_banco
  left join cnt_plan_cuentas pc on pc.id_plan_cuentas = pa.id_cuenta_deposito
  left join cnt_tarjetas_credito tc on tc.id_tarjeta_credito = pa.id_tarjeta_credito
+ left join cnt_comprobante_contable cc on cc.id_pago_anticipado = pa.id_pago_anticipado and cc.tipo='CI'
 WHERE pa.id_pago_anticipado=$P{ID_PAGO}]]>
 	</queryString>
 	<field name="id_pago_anticipado" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="id_numero_gestion" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="gestion" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="factor_cambiario" class="java.math.BigDecimal">
@@ -109,12 +118,28 @@ WHERE pa.id_pago_anticipado=$P{ID_PAGO}]]>
 				<reportElement x="10" y="32" width="550" height="1" uuid="3bc058aa-e879-4659-b64b-16760e44442f"/>
 			</line>
 			<textField>
-				<reportElement x="10" y="10" width="550" height="22" uuid="ce333745-016b-4ba7-9da3-95d039bf3d32"/>
+				<reportElement x="159" y="10" width="401" height="22" uuid="ce333745-016b-4ba7-9da3-95d039bf3d32"/>
 				<textElement textAlignment="Right">
 					<font fontName="SansSerif" size="18" isBold="true" isItalic="false" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Pago Anticipado #"+$F{id_pago_anticipado}]]></textFieldExpression>
 			</textField>
+			<textField>
+				<reportElement x="57" y="18" width="88" height="14" uuid="ca94cafc-2689-4783-b095-d2e97d8258be"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{gestion}+ "-"+ 
+    ($F{id_numero_gestion}<10 
+    ? "0"+ $F{id_numero_gestion}
+    : $F{id_numero_gestion}
+)]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="12" y="18" width="45" height="14" uuid="4988aad0-c660-4106-893c-0bef541491bb"/>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[Asiento:]]></text>
+			</staticText>
 		</band>
 	</title>
 	<pageHeader>

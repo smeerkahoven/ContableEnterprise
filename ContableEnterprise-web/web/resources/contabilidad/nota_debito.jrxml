@@ -7,7 +7,9 @@
 		<defaultValueExpression><![CDATA[337]]></defaultValueExpression>
 	</parameter>
 	<queryString>
-		<![CDATA[select nd.id_nota_debito,  em.tipo,
+		<![CDATA[select nd.id_nota_debito,
+	cc.gestion,cc.id_numero_gestion,
+    em.tipo,
 	nd.id_cliente, upper(cl.nombre) cliente, cl.telefono_fijo,
 	nd.id_counter, concat( upper(pr.nombre),' ', upper(pr.apellido)) counter,
 	nd.id_usuario_creador,
@@ -36,7 +38,6 @@
 			coalesce(case nd.combinado_tarjeta when '1' then concat(' TARJETA CREDITO/DEBITO con Numero de Tarjeta: ', nd.nro_tarjeta ) end, '')
 		)
 	end forma_pago_literal,
-
 	nd.id_tarjeta_credito, tc.denominacion,
 	tr.id_nota_debito_transaccion, tr.descripcion, tr.monto_bs monto_bs_tr,
 	 tr.monto_usd monto_usd_tr
@@ -46,8 +47,9 @@
 	inner join cnt_promotor pr on pr.id_promotor = nd.id_counter
 	inner join cnt_nota_debito_transaccion tr on tr.id_nota_debito = nd.id_nota_debito
 	left join cnt_bancos ba on ba.id_banco = nd.id_banco
-    	left join cnt_plan_cuentas pc on pc.id_plan_cuentas = nd.id_cuenta_deposito
+	left join cnt_plan_cuentas pc on pc.id_plan_cuentas = nd.id_cuenta_deposito
 	left join cnt_tarjetas_credito tc on tc.id_tarjeta_credito = nd.id_tarjeta_credito
+    	left join cnt_comprobante_contable cc on cc.id_nota_debito = nd.id_nota_debito and cc.tipo='AD'
 	WHERE nd.id_nota_debito=$P{ID_NOTA_DEBITO}  and tr.estado in ('E','D','M')]]>
 	</queryString>
 	<field name="id_nota_debito" class="java.lang.Integer">
@@ -56,6 +58,12 @@
 	<field name="tipo" class="java.lang.String">
 		<fieldDescription><![CDATA[principal solo deberia permitir una
 sucursal]]></fieldDescription>
+	</field>
+	<field name="id_numero_gestion" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="gestion" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="id_cliente" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -144,11 +152,27 @@ sucursal]]></fieldDescription>
 				<reportElement x="-14" y="22" width="560" height="1" uuid="9c51999d-f0bb-405e-babf-88fbc39b10c9"/>
 			</line>
 			<textField>
-				<reportElement x="-14" y="0" width="555" height="22" uuid="9f59eab4-76f6-4b43-bb83-67343da07814"/>
+				<reportElement x="121" y="0" width="420" height="22" uuid="9f59eab4-76f6-4b43-bb83-67343da07814"/>
 				<textElement textAlignment="Right">
 					<font fontName="SansSerif" size="18" isBold="true" isItalic="false" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Nota de Debito #"+$F{id_nota_debito}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="-12" y="8" width="45" height="14" uuid="1173e75e-de4a-40f3-ac13-4c65e0087764"/>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[Asiento:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="33" y="8" width="88" height="14" uuid="9b34cacc-65a1-43be-8567-e7b53d7c5dbf"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{gestion}+ "-"+ 
+    ($F{id_numero_gestion}<10 
+    ? "0"+ $F{id_numero_gestion}
+    : $F{id_numero_gestion}
+)]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>

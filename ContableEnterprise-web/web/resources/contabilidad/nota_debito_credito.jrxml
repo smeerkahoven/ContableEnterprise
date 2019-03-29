@@ -7,7 +7,8 @@
 		<defaultValueExpression><![CDATA[337]]></defaultValueExpression>
 	</parameter>
 	<queryString>
-		<![CDATA[select nd.id_nota_debito,  em.tipo,
+		<![CDATA[select nd.id_nota_debito,  
+	cc.gestion,cc.id_numero_gestion,em.tipo,
 	nd.id_cliente, upper(cl.nombre) cliente, cl.telefono_fijo,
 	nd.id_counter, concat( upper(pr.nombre),' ', upper(pr.apellido)) counter,
 	nd.id_usuario_creador,
@@ -52,6 +53,7 @@
 	left join cnt_bancos ba on ba.id_banco = nd.id_banco
     	left join cnt_plan_cuentas pc on pc.id_plan_cuentas = nd.id_cuenta_deposito
 	left join cnt_tarjetas_credito tc on tc.id_tarjeta_credito = nd.id_tarjeta_credito
+	left join cnt_comprobante_contable cc on cc.id_nota_debito = nd.id_nota_debito and cc.tipo='AD'
 	WHERE nd.id_nota_debito=$P{ID_NOTA_DEBITO}]]>
 	</queryString>
 	<field name="id_nota_debito" class="java.lang.Integer">
@@ -62,6 +64,12 @@
 sucursal]]></fieldDescription>
 	</field>
 	<field name="id_cliente" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="id_numero_gestion" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="gestion" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="cliente" class="java.lang.String"/>

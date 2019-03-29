@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="05708238-32c6-4b2d-94c3-a78b24b631fb">
-	<property name="ireport.zoom" value="3.300000000000002"/>
-	<property name="ireport.x" value="398"/>
+	<property name="ireport.zoom" value="2.2539444027047346"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="ID_INGRESO" class="java.lang.String">
 		<defaultValueExpression><![CDATA[6]]></defaultValueExpression>
@@ -9,6 +9,8 @@
 	<queryString>
 		<![CDATA[select 
 	ic.id_ingreso_caja, 
+	cc.gestion,
+	cc.id_numero_gestion,
 	ndtr.id_nota_debito,
 	ndtr.descripcion nota_debito_descripcion,
     	ndtr.monto_adeudado_bs,
@@ -53,9 +55,16 @@ inner join cnt_nota_debito_transaccion ndtr on ndtr.id_nota_debito_transaccion =
 left join cnt_bancos ba on ba.id_banco = ic.id_banco
 left join cnt_plan_cuentas pc on pc.id_plan_cuentas = ic.id_cuenta_deposito
 left join cnt_tarjetas_credito tc on tc.id_tarjeta_credito = ic.id_tarjeta_credito
+left join cnt_comprobante_contable cc on cc.id_ingreso_caja = ic.id_ingreso_caja and cc.tipo='CI'
 WHERE ic.id_ingreso_caja=$P{ID_INGRESO} and tr.estado in ('E','D','M')]]>
 	</queryString>
 	<field name="id_ingreso_caja" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="id_numero_gestion" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="gestion" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="id_nota_debito" class="java.lang.Integer">
@@ -119,7 +128,7 @@ sucursal]]></fieldDescription>
 	<pageHeader>
 		<band height="35" splitType="Stretch">
 			<textField>
-				<reportElement x="-10" y="-1" width="555" height="25" uuid="cd6fad28-c39b-4c89-a744-a59a3fc15091"/>
+				<reportElement x="128" y="-1" width="417" height="25" uuid="cd6fad28-c39b-4c89-a744-a59a3fc15091"/>
 				<textElement textAlignment="Right">
 					<font fontName="SansSerif" size="18" isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
 				</textElement>
@@ -128,6 +137,22 @@ sucursal]]></fieldDescription>
 			<line>
 				<reportElement x="-17" y="24" width="562" height="3" uuid="222a71a6-8039-492a-8577-0288016e208c"/>
 			</line>
+			<staticText>
+				<reportElement x="-5" y="10" width="45" height="14" uuid="7d5a4dfa-c483-43a3-b99b-69fbd133594b"/>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[Asiento:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="40" y="10" width="88" height="14" uuid="e81943b9-4308-4f45-85e0-24cd6389c9c1"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{gestion}+ "-"+ 
+    ($F{id_numero_gestion}<10 
+    ? "0"+ $F{id_numero_gestion}
+    : $F{id_numero_gestion}
+)]]></textFieldExpression>
+			</textField>
 		</band>
 	</pageHeader>
 	<columnHeader>
@@ -220,7 +245,7 @@ sucursal]]></fieldDescription>
 				<textElement>
 					<font size="9" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{descripcion} +  " Ref. Nota Débito :" + $F{id_nota_debito} ]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{descripcion} +  " Ref. Nota Débito :" + $F{id_nota_debito}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement x="420" y="2" width="62" height="14" uuid="335d3751-78ee-4576-b673-2bc65539e8df"/>

@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="05708238-32c6-4b2d-94c3-a78b24b631fb">
-	<property name="ireport.zoom" value="3.6300000000000012"/>
-	<property name="ireport.x" value="607"/>
-	<property name="ireport.y" value="149"/>
+	<property name="ireport.zoom" value="2.0490403660952126"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="14"/>
 	<parameter name="ID_CREDITO" class="java.lang.String">
 		<defaultValueExpression><![CDATA[6]]></defaultValueExpression>
 	</parameter>
 	<queryString>
 		<![CDATA[select 
 	nc.id_nota_credito, 
+	cc.gestion,
+	cc.id_numero_gestion,
 	ndtr.id_nota_debito,
 	ndtr.monto_adeudado_bs,
 	ndtr.monto_adeudado_usd,
@@ -32,9 +34,16 @@ inner join cnt_cliente cl on cl.id_cliente = nc.id_cliente
 inner join cnt_nota_credito_transaccion tr on tr.id_nota_credito = nc.id_nota_credito
 inner join cnt_nota_debito_transaccion ndtr on ndtr.id_nota_debito_transaccion = tr.id_nota_transaccion
 left join cnt_plan_cuentas pc on pc.id_plan_cuentas = tr.id_plan_cuenta
+left join cnt_comprobante_contable cc on cc.id_nota_credito = nc.id_nota_credito and cc.tipo='AD'
 WHERE nc.id_nota_credito=$P{ID_CREDITO} and tr.estado in ('E','D','M')]]>
 	</queryString>
 	<field name="id_nota_credito" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="gestion" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="id_numero_gestion" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="id_nota_debito" class="java.lang.Integer">
@@ -100,15 +109,31 @@ sucursal]]></fieldDescription>
 	<pageHeader>
 		<band height="35" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="0" width="555" height="25" uuid="cd6fad28-c39b-4c89-a744-a59a3fc15091"/>
+				<reportElement x="127" y="0" width="428" height="25" uuid="cd6fad28-c39b-4c89-a744-a59a3fc15091"/>
 				<textElement textAlignment="Right">
 					<font fontName="SansSerif" size="18" isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Nota de Crédito #"+$F{id_nota_credito}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="8" y="25" width="547" height="3" uuid="222a71a6-8039-492a-8577-0288016e208c"/>
+				<reportElement x="-15" y="25" width="570" height="3" uuid="222a71a6-8039-492a-8577-0288016e208c"/>
 			</line>
+			<textField>
+				<reportElement x="39" y="11" width="88" height="14" uuid="cf152777-bdc5-4033-aabf-14d8ae714d20"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{gestion}+ "-"+ 
+    ($F{id_numero_gestion}<10 
+    ? "0"+ $F{id_numero_gestion}
+    : $F{id_numero_gestion}
+)]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="-6" y="11" width="45" height="14" uuid="2254cf5c-ca79-4ee0-b72d-d568f5bfff96"/>
+				<textElement textAlignment="Right"/>
+				<text><![CDATA[Asiento:]]></text>
+			</staticText>
 		</band>
 	</pageHeader>
 	<columnHeader>
