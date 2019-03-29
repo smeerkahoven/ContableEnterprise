@@ -723,7 +723,7 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
                     caja.setIdIngresoCaja(insert(caja));
 
                     ingreso = ejbComprobante.createComprobante(ComprobanteContable.Tipo.COMPROBANTE_INGRESO,
-                            glosa.toString(), nota);
+                            glosa.toString(), caja);
                     ingreso.setIdLibro(insert(ingreso));
 
                     // COn esto solucionamos el problema de la nota de debito y los ingresos de Caja
