@@ -745,6 +745,7 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                             item.haberMonExt = parseFloat(item.haberMonNac / $scope.formData.factorCambiario).toFixed(2);
                             //}
                         }
+                        
 
                     } else if (item.moneda === MONEDA_EXTRANJERA) {
                         item.debeMonExt = parseFloat(Math.round(item.debeMonExt * 100) / 100).toFixed(2);
@@ -759,8 +760,8 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                             item.haberMonNac = parseFloat(item.haberMonExt * $scope.formData.factorCambiario).toFixed(2);
                             //}
                         }
+                        
                     }
-
                     $scope.sumarTotales();
                     $scope.sumarDiferencias();
                     item.editable = false;
@@ -963,7 +964,7 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
 
                 $scope.ngChange = function (key, method, row) {
                     // TAB
-                    if (key.keyCode != 9) {
+                    if (key.keyCode !== 9) {
                         row.haberMonNac = (method == 'debe') ? 0 : row.haberMonNac;
                         row.haberMonExt = (method == 'debe') ? 0 : row.haberMonExt;
 
@@ -998,7 +999,7 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                     $scope.hideMessagesBox();
                     $scope.showRestfulError = false;
                     $scope.showRestfulSuccess = false;
-                    $scope.mainGrid = [];
+                    //$scope.mainGrid = [];
                 }
 
                 $scope.showAlert = function (title, message) {

@@ -247,6 +247,8 @@ angular.module('jsPagoAnticipado.controllers', []).controller('frmPagoAnticipado
 
                             hideModalWindow('#frmPagoAnticipadoTransaccion');
 
+                        }else if (response.data.code === 200) {
+                            showAlert(ERROR_RESPUESTA_TITLE, response.data.content);
                         }
                     }, $scope.errorFunction);
                 }
@@ -294,7 +296,6 @@ angular.module('jsPagoAnticipado.controllers', []).controller('frmPagoAnticipado
                                 $scope.trx.montoUsd = $scope.trx.montoTransaccionUsd;
                             }
 
-                            console.log($scope.trx);
                             showModalWindow('#frmPagoAnticipadoTransaccion');
                         } else {
                             showAlert(ERROR_RESPUESTA_TITLE, response.data.content);
@@ -968,6 +969,7 @@ angular.module('jsPagoAnticipado.controllers', []).controller('frmPagoAnticipado
                 }
 
                 $scope.errorFunction = function (error) {
+                    console.log(error);
                     $scope.loading = false;
                     $scope.showRestfulError = true;
                     $scope.showRestfulMessage = error.statusText;

@@ -30,6 +30,7 @@ public class PlanCuentasJSON {
     private String mantenimientoValor;
     private String moneda;
     private Integer ctaItb;
+    private String comodin ;
 
     //
     /*private int aplica;
@@ -92,6 +93,7 @@ public class PlanCuentasJSON {
         json.setAplicaMovimientoNombre(getAplicaMovimientoNombreValor(p.getAplicaMovimiento()));
         json.setMantenimientoValor(p.getMantenimientoValor());
         json.setCtaItb(p.getCtaItb());
+        json.setComodin(p.getComodin());
         return json;
     }
 
@@ -108,7 +110,8 @@ public class PlanCuentasJSON {
         pc.setMantenimientoValor(json.getMantenimientoValor());
         pc.setCtaItb(json.getCtaItb());
         pc.setAplicaMovimiento(json.getAplicaMovimiento());
-
+        pc.setComodin(json.getComodin());
+        
         return pc;
     }
 
@@ -120,6 +123,16 @@ public class PlanCuentasJSON {
 
         return json;
     }
+
+    public String getComodin() {
+        return comodin;
+    }
+
+    public void setComodin(String comodin) {
+        this.comodin = comodin;
+    }
+    
+    
 
     public String getAplicaMovimientoNombre() {
         return aplicaMovimientoNombre;

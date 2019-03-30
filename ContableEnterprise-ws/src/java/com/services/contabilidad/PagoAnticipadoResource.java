@@ -462,7 +462,7 @@ public class PagoAnticipadoResource extends TemplateResource {
 
                 if (list.isEmpty()) {
                     response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
-                    response.setContent(mensajes.getProperty(RestResponse.RESTFUL_LISTA_VACIA));
+                    response.setContent(mensajes.getProperty(RestResponse.RESTFUL_SIN_DEUDAS_PENDIENTES));
                     return response;
                 }
 

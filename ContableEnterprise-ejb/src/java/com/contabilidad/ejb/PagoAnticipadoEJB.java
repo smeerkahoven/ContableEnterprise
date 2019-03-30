@@ -33,6 +33,7 @@ import com.seguridad.queries.Queries;
 import com.seguridad.utils.DateContable;
 import com.seguridad.utils.Estado;
 import java.math.BigDecimal;
+import java.math.MathContext;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
@@ -561,7 +562,22 @@ public class PagoAnticipadoEJB extends FacadeEJB implements PagoAnticipadoRemote
         PagoAnticipado paFromDb = em.find(PagoAnticipado.class, trx.getIdPagoAnticipado().getIdPagoAnticipado());
         op = Optional.ofNullable(paFromDb);
         if (!op.isPresent()) {
-            throw new CRUDException("No se ha especificado un Pago Anticipado Válida.");
+            throw new CRUDException("No se ha especificado un Pago Anticipado Válido.");
+        }
+        
+       
+        System.out.println("PagoAnticipado:" + paFromDb.getIdPagoAnticipado());
+        System.out.println("MontoAnticipado:" + paFromDb.getMontoAnticipado());
+        Double montoTotalAcreditado = paFromDb.getMontoTotalAcreditado() == null ? new Double(0) :
+                paFromDb.getMontoTotalAcreditado().doubleValue() ;
+        System.out.println("getMontoTotalAcreditado:" + montoTotalAcreditado);
+        
+        BigDecimal decAcreditado = new BigDecimal(montoTotalAcreditado) ;
+        
+        Double montoDisponible = paFromDb.getMontoAnticipado().subtract(decAcreditado).setScale(2) .doubleValue() ;
+        
+        if (montoDisponible < trx.getMonto().doubleValue()){
+            throw new CRUDException(String.format( "El monto introducido es mayor al total disponible: Total Disponible %.2f ", montoDisponible));
         }
 
         trx.setIdNotaTransaccion(trNDFromDB);

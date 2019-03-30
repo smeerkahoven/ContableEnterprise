@@ -274,6 +274,7 @@ angular.module('jsPlanCuentas.controllers', []).controller('frmPlanCuentas', ['$
             $scope.frmNewTransaction.moneda = 'B';
             $scope.frmNewTransaction.mantenimientoValor = 'MON';
             $scope.frmNewTransaction.itb = '';
+            $scope.frmNewTransaction.comodin = 'N' ;
 
             if (item.nivel < 4) {
                 $scope.frmNewTransaction.aplicaMovimiento = 'M';

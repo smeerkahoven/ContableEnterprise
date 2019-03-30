@@ -8,7 +8,6 @@ package com.view.login;
 import com.security.SessionUtils;
 import com.seguridad.control.entities.User;
 import javax.inject.Named;
-import javax.enterprise.context.SessionScoped;
 import java.io.Serializable;
 import javax.enterprise.context.RequestScoped;
 
