@@ -214,7 +214,7 @@
                                                         <tr>
                                                             <th class="align-middle">Fecha</th>
                                                             <th class="align-middle">Tipo</th>
-                                                            <th class="align-middle">N&uacute;mero &nbsp; &nbsp;</th>
+                                                            <th class="align-middle">N&uacute;mero Comprobante</th>
                                                             <th class="align-middle nospacecell">Concepto</th>
                                                             <th class="align-middle">Debe</th>
                                                             <th class="align-middle">Haber</th>
@@ -232,7 +232,7 @@
                                                     </thead>
                                                     <tbody>
                                                         <tr st-select-row="row" st-select-mode="multiple" ng-repeat="row in display_records" class="boleto-estado-{{row.estado}}">
-                                                            <td>{{row.fechaMovimiento}} </td>
+                                                            <td>{{row.fecha}} </td>
                                                             <td>{{row.tipo}} </td>
                                                             <td style="width:100px;">{{row.gestion}}-{{row.idNumeroGestion}}</td>
                                                             <td class="nospacecell">{{row.concepto}}</td>

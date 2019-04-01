@@ -117,8 +117,6 @@ public class MayoresEJB extends FacadeEJB implements MayoresRemote {
 
         }
         
-        
-        
         totales.setSaldoDebe(new BigDecimal(totalDebe));
         totales.setSaldoHaber(new BigDecimal(totalHaber));
         
