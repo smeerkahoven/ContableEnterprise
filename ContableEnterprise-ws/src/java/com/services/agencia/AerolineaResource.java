@@ -418,6 +418,8 @@ public class AerolineaResource extends TemplateResource {
                 ejbLogger.add(Accion.INSERT, user.getUserName(), request.getFormName(), user.getIp());
             } catch (CRUDException ex) {
                 Logger.getLogger(AerolineaResource.class.getName()).log(Level.SEVERE, null, ex);
+                response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+                response.setContent(ex.getCause());
             }
 
         }

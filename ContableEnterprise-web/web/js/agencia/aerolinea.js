@@ -161,7 +161,6 @@ angular.module('jsAerolinea.controllers', []).controller('frmAerolinea',
 
                 $scope.save = function () {
                     if (!$scope.myForm.$valid) {
-                        console.log($scope.myForm);
                         $scope.showAlert('Error de Verificacion', 'Verifique los mensajes de los valores requeridos')
                         return;
                     }
@@ -171,12 +170,12 @@ angular.module('jsAerolinea.controllers', []).controller('frmAerolinea',
                     }
 
                     $scope.loading = true;
-                    $scope.formData.ctaVentasMonExt = $scope.formData.ctaVentasMonExt.id;
+                    /*$scope.formData.ctaVentasMonExt = $scope.formData.ctaVentasMonExt.id;
                     $scope.formData.ctaVentasMonNac = $scope.formData.ctaVentasMonNac.id;
                     $scope.formData.ctaComisionMonExt = $scope.formData.ctaComisionMonExt.id;
                     $scope.formData.ctaComisionMonNac = $scope.formData.ctaComisionMonNac.id;
                     $scope.formData.ctaDevolucionMonExt = $scope.formData.ctaDevolucionMonExt.id;
-                    $scope.formData.ctaDevolucionMonNac = $scope.formData.ctaDevolucionMonNac.id;
+                    $scope.formData.ctaDevolucionMonNac = $scope.formData.ctaDevolucionMonNac.id;*/
 
                     $http({
                         method: 'POST',

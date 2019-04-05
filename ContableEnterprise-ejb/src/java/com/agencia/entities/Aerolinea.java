@@ -22,6 +22,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -55,9 +56,11 @@ public class Aerolinea extends Entidad {
     @Column(name = "id_aerolinea")
     private Integer idAerolinea;
 
+    @NotNull
     @Column(name = "numero", length = 2)
     private String numero;
 
+    @NotNull
     @Column(name = "iata", length = 4)
     private String iata;
 

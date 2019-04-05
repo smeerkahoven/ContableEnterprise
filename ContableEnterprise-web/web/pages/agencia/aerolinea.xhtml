@@ -452,7 +452,7 @@
                                                             <div class="custom-control custom-control-inline custom-checkbox">
                                                                 <input type="checkbox" class="custom-control-input" id="chkBoletosMonNac"  
                                                                        ng-checked="formData.boletosMonNac" ng-model="formData.boletosMonNac" 
-                                                                       ng-click="formData.moneda = 'N';" />
+                                                                       ng-click="formData.moneda = 'B';" />
                                                                 <label class="custom-control-label" for="chkBoletosMonNac"></label>
                                                             </div>    
                                                         </div>
@@ -496,7 +496,7 @@
                                                         <div class="col-sm-5">
                                                             <input type="text" ng-model="formData.ctaVentasMonNac" placeholder="Cuenta Ventas Moneda Nacional"
                                                                    uib-typeahead="cuenta as cuenta.name for cuenta in comboVentas | filter:{name:$viewValue}"
-                                                                   class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="0" 
+                                                                   class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="1" 
                                                                    typeahead-template-url="customTemplate.html" 
                                                                    />
                                                         </div>
@@ -530,7 +530,7 @@
                                                         <div class="col-sm-5">
                                                             <input type="text" ng-model="formData.ctaVentasMonExt" placeholder="Cuenta Aerea Moneda Extranjera"
                                                                    uib-typeahead="cuenta as cuenta.name for cuenta in comboVentas | filter:{name:$viewValue}"
-                                                                   class="form-control" typeahead-show-hint="true" typeahead-min-length="0" 
+                                                                   class="form-control" typeahead-show-hint="true" typeahead-min-length="1" 
                                                                    typeahead-template-url="customTemplate.html" 
                                                                    />
                                                         </div>
@@ -563,7 +563,7 @@
                                                         <div class="col-sm-5">
                                                             <input type="text" ng-model="formData.ctaComisionMonNac" placeholder="Cuenta Comision Moneda Nacional"
                                                                    uib-typeahead="cuenta as cuenta.name for cuenta in comboComisiones | filter:{name:$viewValue}"
-                                                                   class="form-control" typeahead-show-hint="true" typeahead-min-length="0" 
+                                                                   class="form-control" typeahead-show-hint="true" typeahead-min-length="1" 
                                                                    typeahead-template-url="customTemplate.html" 
                                                                    />                                                             
                                                         </div>
@@ -595,7 +595,7 @@
                                                         <div class="col-sm-5">
                                                             <input type="text" ng-model="formData.ctaComisionMonExt" placeholder="Cuenta Comision Moneda Extranjera"
                                                                    uib-typeahead="cuenta as cuenta.name for cuenta in comboComisiones | filter:{name:$viewValue}"
-                                                                   class="form-control" typeahead-show-hint="true" typeahead-min-length="0" 
+                                                                   class="form-control" typeahead-show-hint="true" typeahead-min-length="1" 
                                                                    typeahead-template-url="customTemplate.html" 
                                                                    />
                                                         </div>
@@ -626,7 +626,7 @@
                                                         <div class="col-sm-5">
                                                             <input type="text" ng-model="formData.ctaDevolucionMonNac" placeholder="Cuenta Devoluciones Moneda Nacional"
                                                                    uib-typeahead="cuenta as cuenta.name for cuenta in comboDevoluciones | filter:{name:$viewValue}"
-                                                                   class="form-control" typeahead-show-hint="true" typeahead-min-length="0" 
+                                                                   class="form-control" typeahead-show-hint="true" typeahead-min-length="1" 
                                                                    typeahead-template-url="customTemplate.html" 
                                                                    />                                                            
                                                         </div>
@@ -658,7 +658,7 @@
                                                         <div class="col-sm-5">
                                                             <input type="text" ng-model="formData.ctaDevolucionMonExt" placeholder="Cuenta Devoluciones Moneda Extranjera"
                                                                    uib-typeahead="cuenta as cuenta.name for cuenta in comboDevoluciones | filter:{name:$viewValue}"
-                                                                   class="form-control" typeahead-show-hint="true" typeahead-min-length="0" 
+                                                                   class="form-control" typeahead-show-hint="true" typeahead-min-length="1" 
                                                                    typeahead-template-url="customTemplate.html" 
                                                                    />                                                            
                                                         </div>

@@ -13,11 +13,9 @@ import com.seguridad.control.LoggerContable;
 import com.seguridad.control.entities.Entidad;
 import com.seguridad.control.exception.CRUDException;
 import com.seguridad.utils.ComboSelect;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
-import javafx.scene.control.ComboBox;
 import javax.ejb.Stateless;
 import javax.persistence.Query;
 
