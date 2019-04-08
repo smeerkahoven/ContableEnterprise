@@ -1,8 +1,4 @@
-select * from PLANCTAS ;
-select * from PLANCTAS where nivel = 6;
-select count(*) from cnt_plan_cuentas ; -- 275 + 397
-
-INSERT into cnt_plan_cuentas (
+/*INSERT into cnt_plan_cuentas (
 id_empresa
 ,nro_plan_cuenta
 ,cuenta
@@ -21,8 +17,12 @@ select
 -- , CTAITB cta_itb
  , NIVEL nivel
  , case NIVEL  when '5' then 'T' else 'M' end aplica_movimiento
-FROM PLANCTAS; 
-
+FROM planctas; 
+*/
+UPDATE cnt_plan_cuentas SET nro_plan_cuenta_padre = substr(nro_plan_cuenta ,1,1) where nivel = 2 ;
+UPDATE cnt_plan_cuentas SET nro_plan_cuenta_padre = substr(nro_plan_cuenta ,1,3) where nivel = 3 ;
+UPDATE cnt_plan_cuentas SET nro_plan_cuenta_padre = substr(nro_plan_cuenta ,1,5) where nivel = 4 ;
+UPDATE cnt_plan_cuentas SET nro_plan_cuenta_padre = substr(nro_plan_cuenta ,1,7) where nivel = 5 ;
 select * from cnt_plan_cuentas ;
 
-select
+select * from cnt_parametros ;
