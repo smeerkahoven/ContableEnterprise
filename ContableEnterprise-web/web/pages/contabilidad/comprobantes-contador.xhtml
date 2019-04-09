@@ -1,0 +1,954 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html  xmlns="http://www.w3.org/1999/xhtml"
+       xmlns:h="http://xmlns.jcp.org/jsf/html"
+       xmlns:ui="http://xmlns.jcp.org/jsf/facelets" ng-app="jsComprobantesContador"
+       xmlns:c="http://java.sun.com/jsp/jstl/core"
+       lang="en"
+
+       xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+
+        <meta http-equiv="Expires" content="0"/>
+        <meta http-equiv="Last-Modified" content="0"/>
+        <meta http-equiv="Cache-Control" content="no-cache, mustrevalidate"/>
+        <meta http-equiv="Pragma" content="no-cache"/>
+        <!-- End Required meta tags -->
+        <title>#{login.systemName.valor} - #{login.razonSocial}</title>
+        <!-- FAVICONS -->
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/apple-touch-icon.png" />
+        <link rel="shortcut icon" href="../../assets/favicon.ico" />
+        <meta name="theme-color" content="#3063A0" />
+        <!-- End FAVICONS -->
+        <script src="../../assets/vendor/pace/pace.min.js"></script>
+        <!-- BEGIN BASE STYLES -->
+        <link rel="stylesheet" href="../../assets/vendor/pace/pace.min.css" />
+        <link rel="stylesheet" href="../../assets/vendor/bootstrap/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="../../assets/vendor/open-iconic/css/open-iconic-bootstrap.min.css"/>
+        <link rel="stylesheet" href="../../assets/vendor/fontawesome/css/fontawesome.all.css"/>
+        <link rel="stylesheet" href="../../assets/vendor/font-awesome/css/font-awesome.min.css"  />
+        <link rel="stylesheet" href="../../assets/vendor/flatpickr/flatpickr.min.css" />
+        <!-- END BASE STYLES -->
+        <!-- BEGIN PLUGINS STYLES -->
+        <!-- END PLUGINS STYLES -->
+        <!-- BEGIN THEME STYLES -->
+
+        <link rel="stylesheet" href="../../assets/vendor/sweetalert/css/sweetalert.css"/>
+
+        <link rel="stylesheet" href="../../assets/stylesheets/main.min.css"/>
+
+        <script type="text/javascript" src="../../js/angular.min.js" />
+        <script type="text/javascript" src="../../js/ui-bootstrap-tpls.js" />
+        <script type="text/javascript" src="../../js/smart-table.min.js" />
+
+        <script type="text/javascript" src="../../assets/vendor/sweetalert/js/sweetalert.min.js"/>
+        <script type="text/javascript" src="../../js/contabilidad/comprobantes-contador.js" />
+        <!--CORRIGE ng-show -->
+        <link rel="stylesheet" href="../../css/main.css"  />
+    </head>
+    <h:body>
+        <!-- .app -->
+        <div class="app">
+            <!-- .app-header -->
+            <header class="app-header">
+                <!-- .top-bar -->
+                <ui:include src="../index/top-bar.xhtml" />
+                <!-- /.top-bar -->
+            </header>
+            <!-- /.app-header -->
+            <!-- .app-aside -->
+            <aside class="app-aside">
+                <!-- .aside-content -->
+                <div class="aside-content">
+                    <!-- .aside-menu -->
+                    <ui:include src="../index/menu.xhtml" />
+                    <!-- /.aside-menu -->
+                </div>
+                <!-- /.aside-content -->
+            </aside>
+            <!-- /.app-aside -->
+            <!-- .app-main -->
+            <main class="app-main" ng-controller="frmComprobantes">
+                <!-- .wrapper -->
+                <div class="wrapper">
+                    <!-- .page -->
+                    <div class="page">
+                        <!-- .page-inner -->
+                        <div class="page-inner">
+                            <!-- .page-title-bar -->
+                            <header class="page-title-bar">
+                                <nav aria-label="breadcrumb">
+                                    <ol class="breadcrumb">
+                                        <li class="breadcrumb-item active">
+                                            <a href="#">
+                                                <i class="breadcrumb-icon fa fa-angle-left mr-2"></i>#{comprobantes.formulario.modulo}
+                                            </a>
+                                        </li>
+                                    </ol>
+                                </nav>
+                                <div class="d-md-flex">
+                                    <h1 class="page-title mr-sm-auto"> #{comprobantes.formulario.nombre}</h1>
+                                    <div class="dt-button btn-group">
+                                        <c:if test="#{comprobantes.formulario.crear== comprobantes.formulario.PERMITIR}">
+                                            <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                <span class="fa fa-plus"></span> Nuevo
+                                            </button>
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                <a class="dropdown-item" ng-repeat="row in comboTiposComprobantes" ng-click="newComprobante(row.id)">{{row.name}}</a>
+                                            </div>
+                                        </c:if>
+                                        <button type="button" class="btn btn-warning " tabindex="0" ng-click="cancelar()"><span class="fa fa-undo"></span> Cancelar</button>
+
+                                    </div>
+                                </div>
+                            </header>
+                            <!-- /.page-title-bar -->
+                            <!-- .page-section -->
+                            <div class="page-section">
+                                <!-- .card -->
+                                <section id="base-style" class="card">
+                                    <!-- .card-body -->
+                                    <div class="card-body">
+                                        <!--Mensaje Cargando -->
+                                        <span ng-show="loading" class="alert alert-info"><i class="loader loader-sm" ></i>  Cargando...</span>
+                                        <!-- /Mensaje Cargando -->
+                                        <!--Mensaje Success -->
+                                        <div id="restful-success" class="alert alert-success ng-hide" role="alert" ng-show="showRestfulSuccess">
+                                            <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">&times;</a>
+                                            {{ showRestfulMessage}}
+                                        </div>
+                                        <!--/Mensaje Success -->
+
+                                        <!--Mensaje Error -->
+                                        <div id="restful-error" class="alert alert-danger ng-hide" role="alert" ng-show="showRestfulError">
+                                            <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">&times;</a>
+                                            {{ showRestfulMessage}}
+                                        </div>
+                                        <!-- /Mensaje Error -->
+                                        <!-- .form-group -->
+                                        <!-- Tabla Contenido -->
+                                        <!-- Search Options -->
+                                        <div class=" ng-hide" ng-show="showTable">
+                                            <div class="form-group row">
+                                                <label for="txtSucursal" class="col-form-label col-sm-2 text-right">Tipo de Comprobante</label>
+                                                <div class="col-sm-3">
+                                                    <select class="form-control" id="txtSucursal" ng-model="search.tipo" required="required"
+                                                            ng-options="option.id as option.name for option in comboTiposComprobantes">
+                                                        <option style="display:none" value="">seleccione un tipo</option>
+                                                    </select>
+                                                </div>
+                                                <label for="txtSucursal" class="col-form-label col-sm-2 text-right">Estado</label>
+                                                <div class="col-sm-3">
+                                                    <select class="form-control" id="txtEstado" ng-model="search.estado" required="required">
+                                                        <option style="display:none" value="">seleccione un tipo</option>
+                                                        <option value="E">EMITIDO</option>
+                                                        <option value="A">ANULADO</option>
+                                                        <option value="P">PENDIENTE</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label class="col-form-label col-sm-2 text-right" for="flatpickr-wrap">Fecha Inicio</label>
+                                                <div class="col-sm-3 input-group input-group-alt flatpickr" id="flatpickr9">
+                                                    <input id="txtFechaInicio" type="text" class="form-control flatpick-input" data-input="" 
+                                                           ng-model="search.fechaInicio"/>
+                                                    <div class="input-group-append">
+                                                        <button type="button" class="btn btn-secondary" data-toggle="">
+                                                            <i class="far fa-calendar"></i>
+                                                        </button>
+                                                        <button type="button" class="btn btn-secondary" data-clear="">
+                                                            <i class="fa fa-times"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <label class="col-form-label col-sm-2 text-right" for="flatpickr-wrap">Fecha Fin</label>
+                                                <div class="col-sm-3 input-group input-group-alt flatpickr" id="flatpickr9">
+                                                    <input id="txtFechaFin" type="text" class="form-control flatpick-input" data-input="" ng-model="search.fechaFin"/>
+                                                    <div class="input-group-append">
+                                                        <button type="button" class="btn btn-secondary" data-toggle="">
+                                                            <i class="far fa-calendar"></i>
+                                                        </button>
+                                                        <button type="button" class="btn btn-secondary" data-clear="">
+                                                            <i class="fa fa-times"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <button type="button" class="btn btn-primary col-1"  ng-click="find()"><span class="fa fa-search"></span> Buscar</button>
+                                            </div>
+                                        </div>
+
+                                        <!-- /Search Options -->
+                                        <!-- Tabla Contenido -->
+                                        <div  id="tableData" class="ng-hide table-responsive" ng-show="showTable" >
+                                            <table st-table="display_records"    st-safe-src="mainGrid" 
+                                                   class="table  table-hover ">
+                                                <thead >
+                                                    <c:if test="#{comprobantes.formulario.buscar == comprobantes.formulario.PERMITIR}">
+                                                        <tr>
+                                                            <th colspan="5">
+                                                                <!-- .input-group -->
+                                                                <div class="input-group has-clearable">
+                                                                    <div class="input-group-prepend">
+                                                                        <span class="input-group-text">
+                                                                            <span class="oi oi-magnifying-glass"></span>
+                                                                        </span>
+                                                                    </div>
+                                                                    <input st-search="" id="table-search" class="form-control placeholder-shown" placeholder="Busqueda" type="text" /> 
+                                                                </div>
+                                                                <!-- /.input-group -->
+                                                            </th>
+                                                        </tr>
+                                                    </c:if>
+                                                    <tr>
+                                                        <th>N&uacute;mero</th>
+                                                        <th>Fecha Emisi&oacute;n</th>
+                                                        <th>Cliente</th>
+                                                        <th>Concepto</th>
+                                                        <th>Usuario Creador</th>
+                                                        <th>Fecha Creaci&oacute;n</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr st-select-row="row" st-select-mode="multiple" ng-repeat="row in display_records" class="{{ row|printDiferencias }}">
+                                                        <td> {{row.idNumeroGestionColumna}} </td>   
+                                                        <td>{{row.fecha}} </td>
+                                                        <td>{{row.idCliente.id !== undefined ? row.idCliente.name : ''}} </td>
+                                                        <td>{{row.concepto}} </td>
+                                                        <td>{{row.idUsuarioCreador}} </td>
+                                                        <td>{{row.fechaInsert}} </td>
+                                                        <td>
+                                                            <div class="btn-group" >
+                                                                <c:if test="${comprobantes.formulario.acceder== comprobantes.formulario.PERMITIR }">
+                                                                    <button type="button" title="Editar" class="btn btn-sm btn-info" ng-click="edit(row)" ><i class="fa fa-pencil"></i></button>
+                                                                </c:if>
+                                                                <c:if test="#{comprobantes.formulario.eliminar== comprobantes.formulario.PERMITIR}">
+                                                                    <button type="button" title="Anular" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#frmAnular" ng-click="modalAnular(row)"><i class="fa fa-trash"></i></button>
+                                                                </c:if>
+                                                                <!--<button type="button" title="Ver" class="btn btn-default" ng-click="ver(row.idEmpleado)" data-toggle="modal" data-target="#verForm"><i class="fa fa-search"></i></button>-->
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                                <tfoot>
+                                                    <tr>
+                                                        <td colspan="10" class="text-center">
+                                                            <div class="container" st-items-by-page="itemsByPage" st-pagination="" st-template="../index/pagination.custom.html"></div>
+                                                        </td>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                        <!-- /Tabla Contenido -->
+                                        <form id="myForm" name="myForm">
+                                            <!-- .form -->
+                                            <!-- .fieldset -->
+                                            <fieldset>
+                                                <!-- Contenido Formulario-->
+                                                <div id="formData" class="container  ng-hide table-responsive"   ng-show="showForm" >
+                                                    <input type="hidden" id="hdUrl" name="hdUrl" value="#{comprobantes.formulario.restful}"/>
+                                                    <input type="hidden" id="hdUrlFactores" name="hdUrlFactores" value="#{factores.formulario.restful}"/>
+                                                    <input type="hidden" id="hdFactorMaxMin" name="hdFactorMaxMin" value="#{comprobantes.factorCambiarioMaxMin.valor}"/>
+                                                    <input type="hidden" id="hdUrlPlanCuentas" name="hdUrlPlanCuentas" value="#{planCuentas.formulario.restful}"/>
+                                                    <input type="hidden" id="hdUrlNotaDebito" name="hdUrlNotaDebito" value="#{boletajeOtros.formulario.restful}"/>
+                                                    <input type="hidden" id="hdToken" name="hdToken" value="#{sessionView.token}"/>
+                                                    <input type="hidden" id="idEmpresa" name="idEmpresa" value="#{login.empleado.idEmpresa.idEmpresa}"/>
+                                                    <input type="hidden" id="hdToken" name="hdFormName" value="#{comprobantes.formulario.nombre}"/>
+                                                    <input type="hidden" id="hdUrlClientes" name="hdUrlClientes" value="#{cliente.formulario.restful}"/>
+                                                    <input type="hidden" id="hdUserName" name="hdUserName" value="#{sessionView.user.userName}" />
+                                                    <input type="hidden" id="hdDiferenciaIngresos" name="hdUserName" value="#{sessionView.user.userName}" />
+                                                    <input type="hidden" id="hdDiferenciaEgresos" name="hdUserName" value="#{sessionView.user.userName}" />
+                                                    <input type="hidden" id="hdidLibro" name="hdIdLibro" value="{{formData.idLibro}}" />
+                                                    <!--<input type="hidden" id="txtFechaAlta" name="txtFechaAlta" ng-model="formData.fechaAlta"/>-->
+                                                    <!--<input type="hidden" id="txtFechaBaja" name="txtFechaBaja" ng-model="formData.fechaBaja"/>-->
+                                                    <br />
+                                                    <div class="form-group row">
+                                                        <label for="txtIdLibro" class=" col-form-label col-sm-2 text-right"><strong>N&uacute;mero </strong></label>
+                                                        <div class="col-sm-3">
+                                                            <label for="txtIdLibro" class="col-form-label"  ><strong><h4> {{formData.idLibro == 0 ? '-' : formData.gestion + "-" + formData.idNumeroGestion}}</h4></strong></label>
+                                                        </div>
+                                                        <span class=" fa fa-info-circle text-blue" data-toggle="tooltip" data-placement="top" title="El numero de comprobante se asignar&aacute; al guardar los datos."></span>
+                                                        <label for="txtSucursal" class="col-form-label col-sm-2 text-right">Estado</label>
+                                                        <div class="col-sm-4">
+                                                            <label for="txtSucursal" class="col-form-label"><strong><h5>{{ formData.estado | checkStatus  }}</h5></strong></label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label for="txtSucursal" class="col-form-label col-sm-2 text-right">Tipo de Comprobante</label>
+                                                        <div class="col-sm-3">
+                                                            <input class="form-control" value="{{formData.tipo|tipoComprobante}}" readonly="" />
+                                                        </div>
+                                                        <label for="txtFactor" class=" col-form-label col-sm-2 text-right"><strong>Factor USD</strong></label>
+                                                        <div class="col-sm-3">
+                                                            <!--<label for="txtFactor" class=" col-form-label col-sm-3 "><strong>{{formData.factorCambiario}}</strong></label>-->
+                                                            <input type="number" class="form-control col-sm" name="txtFactor" placeholder="0.00 BOB" 
+                                                                   ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01" readonly=""
+                                                                   ng-model="formData.factorCambiario" value="{{formData.factorCambiario}}" data-toggle="tooltip" 
+                                                                   data-placement="top"  />
+                                                            <!--<span class="alert-danger"  ng-show="!myForm.txtFactor.$valid"  >
+                                                                Debe seleccionar un valor entre {{formData.factorMin}} y {{formData.factorMax}}.
+                                                            </span>
+                                                            <span class="alert-danger"  ng-show="!formData.factorCambiario"  >
+                                                                Debe seleccionar un valor entre {{formData.factorMin}} y {{formData.factorMax}}.
+                                                            </span>-->
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label class="col-form-label col-sm-2 text-right" for="flatpickr-wrap">Fecha Comprobante</label>
+                                                        <div class="col-sm-3 input-group input-group-alt flatpickr" id="flatpickr9">
+                                                            <input id="txtFecha" type="text" class="form-control flatpick-input" value="{{formData.fecha}}"
+                                                                   data-input="" ng-model="formData.fecha"/>
+                                                            <div class="input-group-append">
+                                                                <button type="button" class="btn btn-secondary" data-toggle="">
+                                                                    <i class="far fa-calendar"></i>
+                                                                </button>
+                                                                <button type="button" class="btn btn-secondary" data-clear="">
+                                                                    <i class="fa fa-times"></i>
+                                                                </button>
+                                                            </div>
+                                                            <span class="alert-danger"  ng-show="!formData.fecha"  >
+                                                                Debe seleccionar una fecha.
+                                                            </span>
+                                                        </div>
+                                                        <label for="txtUfv" class=" col-form-label col-sm-2 text-right"><strong>Factor UFV</strong></label>
+                                                        <div class="col-sm-3">
+                                                            <!--<label class="col-form-label" for="flatpickr-wrap"><strong>{{formData.factorUfv}}</strong></label>-->
+                                                            <input type="number" class="form-control col-sm" name="txtUfv" placeholder="0.00 BOB" readonly=""
+                                                                   ng-pattern="/^[0-9]+(\.[0-9]{1,5})?$/" step="0.01" min="{{formData.factorUfv}}" max="{{formData.factorUfv}}"
+                                                                   ng-model="formData.factorUfv" value="{{formData.factorUfv|printNumber}}" data-toggle="tooltip" 
+                                                                   data-placement="top"  />
+                                                        </div>
+                                                    </div>
+
+                                                    
+                                                    <div class="form-group row" ng-show="formData.tipo === ASIENTO_DIARIO || formData.tipo === COMPROBANTE_INGRESO">
+                                                        <label for="txtNombre" class=" col-form-label col-sm-2 text-right">Cliente</label>
+                                                        <div class="col-sm-6">
+                                                            <input type="text" ng-model="formData.idCliente" placeholder="Seleccione un Cliente"
+                                                                   uib-typeahead="cuenta as cuenta.name for cuenta in comboCliente | filter:{name:$viewValue}"
+                                                                   class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="1" 
+                                                                   typeahead-template-url="customTemplate.html"  typeahead-focus-first="true"/>
+                                                            <span class="alert-danger"  ng-show="formData.idCliente.id === undefined">Ingrese un Cliente V&aacute;lido.</span> 
+                                                        </div>
+                                                        <!--<span class=" fa fa-info-circle text-blue" data-toggle="tooltip" data-placement="top" title="La secci&oacute;n de Formas de Pago se habilitar&aacute; al momento de seleccionar una Cuenta de Cliente v&aacute;lida."></span>-->
+                                                    </div>
+                                                    
+                                                    <div class="form-group row" ng-show="formData.tipo === COMPROBANTE_TRASPASO || formData.tipo === ASIENTO_AJUSTE || formData.tipo === COMPROBANTE_EGRESO">
+                                                        <label for="txtNombre" class=" col-form-label col-sm-2 text-right">Nombre</label>
+                                                        <div class="col-sm-6">
+                                                            <input type="text" maxlength="64" class="form-control" ng-model="formData.nombre" onkeyup="this.value = this.value.toUpperCase()" placeholder="Seleccione un Nombre"/>
+                                                            <span class="alert-danger"  ng-show="!formData.nombre">Ingrese un Nombre.</span> 
+                                                        </div>
+                                                        <!--<span class=" fa fa-info-circle text-blue" data-toggle="tooltip" data-placement="top" title="La secci&oacute;n de Formas de Pago se habilitar&aacute; al momento de seleccionar una Cuenta de Cliente v&aacute;lida."></span>-->
+                                                    </div>
+
+                                                    <div class="form-group row">
+                                                        <label for="txtConcepto" class=" col-form-label col-sm-2 text-right">Concepto</label>
+                                                        <div class="col-sm-8">
+                                                            <textarea type="text" class="form-control" rows="3" name="txtConcepto" required="required" onkeyup="this.value = this.value.toUpperCase()" maxlength="128" ng-model="formData.concepto"/>
+                                                            <span class="alert-danger"  ng-show="!myForm.txtConcepto.$valid"  >
+                                                                Debe insertar un concepto.
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <!--
+                                                    <div class="form-group">
+                                                        <label class="control-label" for="the-basics">The Basics</label>
+                                                        <input id="the-basics" type="text" class="form-control" placeholder="States of USA" /> </div> -->
+                                                    <header class="card-header">
+                                                        <div class="d-flex align-items-center">
+                                                            <div class="alert alert-danger" ng-show="showRowError">
+                                                                <span class="alert-danger"    >
+                                                                    {{ showRowMessage}}
+                                                                </span>
+                                                            </div>
+                                                            <span class="mr-auto"></span>
+                                                            <button type="button" class="btn btn-sm btn-success" ng-click="addTransaccion()" ng-disabled="disableAddButton"><span class="fa fa-plus"></span> A&ntilde;adir</button>
+                                                        </div>
+                                                    </header>
+                                                    <!-- Tabla Transacciones -->
+                                                    <div class="form-group ">
+                                                        <table st-table="transacciones" st-safe-src="formData.transacciones" class="table table-sm table-hover" >
+                                                            <thead>
+                                                                <tr class="d-flex" >
+                                                                    <th style="width: 30%">Cuenta</th>
+                                                                    <th style="width: 9%">Moneda.</th>
+                                                                    <th style="width: 13%">Debe M/N</th>
+                                                                    <th style="width: 13%">Haber M/N</th>
+                                                                    <th style="width: 13%">Debe M/E</th>
+                                                                    <th style="width: 13%">Haber M/E</th>
+                                                                    <th style="width: 9%"></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr st-select-row="row" st-select-mode="multiple" ng-repeat="row in transacciones" class="d-flex" >
+                                                                    <td style="width: 30%">
+                                                                        <!--<td class="col-2">-->
+                                                                        <div ng-show="!row.editable">{{row.idPlanCuenta.name}}</div>
+                                                                        <div  ng-show="row.editable" >
+                                                                            <input autofocus="autofocus" type="text" ng-model="row.idPlanCuenta" placeholder="Seleccione una Cuenta"
+                                                                                   uib-typeahead="cuenta as cuenta.name for cuenta in comboPlanCuentas| filter:{name:$viewValue}"
+                                                                                   class="form-control " typeahead-show-hint="true" typeahead-min-length="1" 
+                                                                                   typeahead-template-url="customTemplate.html" 
+                                                                                   />
+                                                                        </div>
+                                                                    </td>
+                                                                    <td style="width: 9%">
+                                                                        <!--<td class="col-1">-->
+                                                                        <div ng-show="!row.editable">{{row.moneda=='B' ? 'BOB' : 'USD'}}</div>
+                                                                        <div ng-show="row.editable">
+                                                                            <select name="txtMoneda" class="form-control" ng-model="row.moneda" required="required" ng-change="onChangeMoneda(row)">
+                                                                                <option style="display:none" value="">seleccione una opcion</option>
+                                                                                <option value="#{comprobantes.bolivianos.codigo}"  selected="selected">#{comprobantes.bolivianos.abreviado}</option>
+                                                                                <option value="#{comprobantes.dolar.codigo}" >#{comprobantes.dolar.abreviado}</option>
+                                                                            </select>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td style="width: 13%">
+                                                                        <!--<td class="col-2">-->
+                                                                        <!--<div ng-show="!row.editable">{{row.debeMonNac == '0.00' ? '' : row.debeMonNac}}</div>-->
+                                                                        <div ng-show="!row.editable">{{row.debeMonNac| printNumber}}</div>
+                                                                        <div ng-show="row.editable">
+                                                                            <input type="number" string-to-number="string-to-number" class="form-control col input-number" placeholder="0.00 Bs" required="required" name="txtDebeMonNac" min="0" value="0" 
+                                                                                   step="0.01" title="Monto Debe Moneda Nacional" pattern="^\d+(?:\.\d{1,2})?$" 
+                                                                                   onblur="this.parentNode.parentNode.style.backgroundColor = /^\d+(?:\.\d{1,2})?$/.test(this.value) ? 'inherit' : '#dc3545';"
+                                                                                   ng-model="row.debeMonNac" ng-keypress="ngChange($event, 'debe', row, row.debeMonNac)"/>
+                                                                            <!--<input type="number" class="form-control col" name="txtDebeMonNac" placeholder="0.00 BOB" 
+                                                                                   ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01"
+                                                                                   ng-model="row.debeMonNac" data-toggle="tooltip" 
+                                                                                   data-placement="top"  /> --></div>
+                                                                    </td>
+                                                                    <td style="width: 13%">
+                                                                        <!--<td class="col-2">-->
+                                                                        <!--<div ng-show="!row.editable">{{row.haberMonNac == '0.00' ? '' : row.haberMonNac }}</div> -->
+                                                                        <div ng-show="!row.editable">{{row.haberMonNac| printNumber }}</div>
+                                                                        <div ng-show="row.editable">
+                                                                            <input type="number" string-to-number="string-to-number" class="form-control col input-number" placeholder="0.00 Bs" required="required" name="txtHaberMonNac" min="0" value="0" 
+                                                                                   step="0.01" title="Monto Haber Moneda Nacional" pattern="^\d+(?:\.\d{1,2})?$" 
+                                                                                   onblur="this.parentNode.parentNode.style.backgroundColor = /^\d+(?:\.\d{1,2})?$/.test(this.value) ? 'inherit' : '#dc3545';"
+                                                                                   ng-model="row.haberMonNac"  ng-keypress="ngChange($event, 'haber', row)"/>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td style="width: 13%">
+                                                                        <!--<td class="col-2">-->
+                                                                        <!-- <div ng-show="!row.editable">{{row.debeMonExt == '0.00' ? '' : row.debeMonExt }}</div> -->
+                                                                        <div ng-show="!row.editable">{{row.debeMonExt| printNumber  }}</div>
+                                                                        <div ng-show="row.editable">
+                                                                            <input type="number" string-to-number="string-to-number" class="form-control col input-number" placeholder="0.00 Bs" required="required" name="txtDebeMonExt" min="0" value="0" 
+                                                                                   step="0.01" title="Monto Debe Moneda Extranjera" pattern="^\d+(?:\.\d{1,2})?$" 
+                                                                                   onblur="this.parentNode.parentNode.style.backgroundColor = /^\d+(?:\.\d{1,2})?$/.test(this.value) ? 'inherit' : '#dc3545'"
+                                                                                   ng-model="row.debeMonExt"  ng-keypress="ngChange($event, 'debe', row)" />
+                                                                        </div>
+                                                                    </td>
+                                                                    <td style="width: 13%">
+                                                                        <!--<td class="col-2">-->
+                                                                        <!--<div ng-show="!row.editable">{{row.haberMonExt== '0.00' ? '' : row.haberMonExt}}</div> -->
+                                                                        <div ng-show="!row.editable">{{row.haberMonExt|printNumber}}</div>
+                                                                        <div ng-show="row.editable">
+                                                                            <input type="number" string-to-number="string-to-number" class="form-control col input-number" placeholder="0.00 Bs" required="required" name="txtHaberMonExt" min="0" value="0" 
+                                                                                   step="0.01" title="Monto Haber Moneda Extranjera" pattern="^\d+(?:\.\d{1,2})?$" 
+                                                                                   onblur="this.parentNode.parentNode.style.backgroundColor = /^\d+(?:\.\d{1,2})?$/.test(this.value) ? 'inherit' : '#dc3545'"
+                                                                                   ng-model="row.haberMonExt" ng-keypress="ngChange($event, 'haber', row)"/>
+                                                                        </div>
+                                                                    </td>
+                                                                    <td style="width: 9%">
+                                                                        <!--<td class="col-1">-->
+                                                                        <div class="btn-group" >
+                                                                            <button  type="button" title="Ver" class="btn btn-sm btn-warning" ng-click="verTransaccion(row)"><i class="fa fa-search"></i></button>
+
+                                                                            <c:if test="${comprobantes.formulario.editar== comprobantes.formulario.PERMITIR }">
+                                                                                <button ng-show="!row.editable" ng-disabled="disableEditarTransaccion" type="button" title="Editar" class="btn btn-sm btn-info" ng-click="editTransaccion(row)"><i class="fa fa-pencil"></i></button>
+                                                                            </c:if>
+                                                                            <c:if test="${comprobantes.formulario.crear== comprobantes.formulario.PERMITIR }">
+                                                                                <button ng-show="row.editable" ng-disabled="disableGuardarTransaccion" type="button" title="Guardar" class="btn btn-sm btn-primary" ng-click="saveTransaccion(row)"><i class="fa fa-save"></i></button>
+                                                                            </c:if>
+                                                                            <!--
+                                                                            <c:if test="${comprobantes.formulario.actualizar== comprobantes.formulario.PERMITIR }">
+                                                                                <button ng-show="formData.estado !== INICIAL" type="button" title="Corregir" class="btn btn-sm btn-success" ng-click="corregirTransaccion(row)"><i class="fa fa-save"></i></button>
+                                                                            </c:if>-->
+                                                                            <c:if test="#{comprobantes.formulario.anular== comprobantes.formulario.PERMITIR}">
+                                                                                <button type="button" title="Eliminar" ng-disabled="disableEliminarTransaccion" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#frmConfirmation" ng-click="modalEliminarAsiento(row)"><i class="fa fa-remove"></i></button>
+                                                                            </c:if>
+                                                                            <!--<button type="button" title="Ver" class="btn btn-default" ng-click="ver(row.idEmpleado)" data-toggle="modal" data-target="#verForm"><i class="fa fa-search"></i></button>-->
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+
+                                                    <!-- Tabla Transacciones -->
+                                                    <div class=" table-responsive">
+                                                        <table  class="table table-sm table-hover " >
+                                                            <tbody>
+                                                                <tr class="table-success"  >
+                                                                    <td style="width: 30%">
+                                                                        <strong class="table-success">TOTALES</strong>
+                                                                    </td>
+                                                                    <td style="width: 9%">
+                                                                        <div></div>
+                                                                    </td>
+                                                                    <td style="width: 13%">
+                                                                        <div><strong>{{formData.totalDebeMonNac|printNumber}} </strong></div>
+                                                                    </td>
+                                                                    <td style="width: 13%">
+                                                                        <div><strong>{{formData.totalHaberMonNac|printNumber }}</strong></div>
+                                                                    </td>
+                                                                    <td style="width: 13%">
+                                                                        <div><strong>{{formData.totalDebeMonExt|printNumber}}</strong></div>
+                                                                    </td>
+                                                                    <td style="width: 13%">
+                                                                        <div><strong>{{formData.totalHaberMonExt|printNumber}}</strong></div>
+                                                                    </td>
+                                                                    <td style="width: 9%">
+                                                                    </td>
+                                                                </tr>
+                                                                <tr class="table-danger" >
+                                                                    <td style="width: 30%">
+                                                                        <strong class="table-danger">DIFERENCIA</strong>
+                                                                    </td>
+                                                                    <td style="width: 9%">
+                                                                        <div></div>
+                                                                    </td>
+                                                                    <td style="width: 13%">
+                                                                        <div ng-show="showDifDebeNac"><strong>{{formData.difMonNac| makePositive}}</strong></div>
+                                                                    </td>
+                                                                    <td style="width: 13%">
+                                                                        <div ng-show="showDifHaberNac"><strong>{{formData.difMonNac| makePositive}}</strong></div>
+                                                                    </td>
+                                                                    <td style="width: 13%">
+                                                                        <div ng-show="showDifDebeExt"><strong>{{formData.difMonExt| makePositive}}</strong></div>
+                                                                    </td>
+                                                                    <td style="width: 13%">
+                                                                        <div ng-show="showDifHaberExt"><strong>{{formData.difMonExt| makePositive}}</strong></div>
+                                                                    </td>
+                                                                    <td style="width: 9%">
+                                                                        <button type="button" class="btn btn-sm btn-success" ng-click="clickCorregir()" ng-disabled="ngDisabledBtnCorregir" ng-show="existeDiferencias"><span class="fa fa-book"></span> Corregir</button>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                    <!-- /Tabla Totales -->
+                                                    <div class="form-group row">
+                                                        <div class="col-1">&nbsp;</div>
+                                                        <c:if test="#{comprobantes.formulario.crear== comprobantes.formulario.PERMITIR}">
+                                                            <div class="row" >
+                                                                <label for="txtNombre" class="col-form-label col-sm-3 text-right" ></label>
+                                                                <button  class="btn btn-primary" ng-click="save(EMITIDO)"  value="Guardar" ng-disabled="disableGuardarButton" ><span class="fa fa-save"></span> Guardar</button>
+                                                            </div>
+                                                        </c:if>
+                                                        <c:if test="#{comprobantes.formulario.crear== comprobantes.formulario.PERMITIR}">
+                                                            <div class="row" >
+                                                                <label for="txtNombre" class="col-form-label col-sm-3 text-right" ></label>
+                                                                <button  class="btn btn-warning"  value="Pendiente" ng-disabled="disablePendienteButton" ng-click="pendiente()" ><span class="fa fa-hourglass-half"></span> Pendiente</button>
+                                                            </div>
+                                                        </c:if> 
+                                                        <c:if test="#{comprobantes.formulario.eliminar== comprobantes.formulario.PERMITIR}">
+                                                            <div class="row" >
+                                                                <label for="txtNombre" class="col-form-label col-sm-3 text-right" ></label>
+                                                                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#frmAnular" ng-click="modalAnular(formData)" value="Anular" ng-disabled="disableAnularButton"> <span class="fa fa-trash"></span> Anular</button>
+                                                            </div>
+                                                        </c:if>
+                                                        <c:if test="#{comprobantes.formulario.acceder== comprobantes.formulario.PERMITIR}">
+                                                            <div class="row" >
+                                                                <label for="txtNombre" class="col-form-label col-sm-3 text-right" ></label>
+                                                                <button type="button" class="btn btn-dark"  ng-click="imprimir(formData)" value="Imprimir" ng-disabled="disableImprimirButton"> <span class="fa fa-trash"></span> Imprimir</button>                                                            </div>
+                                                        </c:if>
+                                                    </div>
+                                                </div>
+                                                <!-- /.form-group -->
+                                            </fieldset>
+                                            <!-- /.fieldset -->
+                                        </form>
+                                        <!-- /.form -->
+                                    </div>
+                                    <!-- /.card-body -->
+                                </section>
+                                <!-- /.card -->
+                            </div>
+                            <!-- /.page-section -->
+                            <!-- Modal Eliminar -->
+                            <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="frmConfirmation">
+                                <div class="modal-dialog modal-md">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title" id="myModalLabel">Confirmar</h4>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        </div>
+                                        <div class="modal-body"> 
+                                            <dl class="dl-horizontal">
+                                                Desea elimnar el registro <strong> {{modalConfirmation.nombre}}</strong>  ?
+                                            </dl>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" id="modal-btn-si" ng-click="delete()"  data-dismiss="modal">Si</button>
+                                            <button type="button" class="btn btn-primary" id="modal-btn-no"  data-dismiss="modal">No</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /Modal Eliminar-->
+                            <!-- Modal Anular -->
+                            <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="frmAnular">
+                                <div class="modal-dialog modal-md">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title" id="myModalLabel">Confirmar</h4>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        </div>
+                                        <div class="modal-body"> 
+                                            <dl class="dl-horizontal">
+                                                Desea anular el registro <strong> {{modalAnularData.row.gestion + '-' + modalAnularData.row.idNumeroGestion}}</strong>  ?
+                                            </dl>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" id="modal-btn-si" ng-click="anular()"  data-dismiss="modal">Si</button>
+                                            <button type="button" class="btn btn-primary" id="modal-btn-no"  data-dismiss="modal">No</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /Modal Anular-->
+                            <!-- Modal Pendiente -->
+                            <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="frmPendiente">
+                                <div class="modal-dialog modal-md">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h4 class="modal-title" id="myModalLabel">Confirmar</h4>
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        </div>
+                                        <div class="modal-body"> 
+                                            <dl class="dl-horizontal">
+                                                <label class="form-label-group" ng-show="formData.estado === INICIAL">
+                                                    El siguiente Comprobante pasara a estado PENDIENTE. Si no ha sido registrado, podr&aacute; modificarse mas adelante. 
+                                                    Desea colocarlo en estado PENDIENTE ?<br/>
+                                                </label>
+                                                <label ng-show="formData.estado === EMITIDO">
+                                                    El siguiente Comprobante se encuentra en estado EMITIDO, al colocarlo en PENDIENTE podr&aacute; modificarse mas adelante. 
+                                                    Desea colocarlo en estado PENDIENTE ?<br/>
+                                                </label>
+                                            </dl>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" id="modal-btn-si" ng-click="colocarPendiente()"  data-dismiss="modal">Si</button>
+                                            <button type="button" class="btn btn-primary" id="modal-btn-no"  data-dismiss="modal">No</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /Modal Anular-->
+
+
+                            <!-- ./Modal VER-->
+                            <form id="myFormTransaccion" name="myFormTransaccion">
+                                <div class="modal fade" id="frmTransaccion" tabindex="-1" role="dialog" aria-labelledby="modalAmadeus" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered modal-mlg" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLongTitle">Datos Transacci&oacute;n</h5>
+                                                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">×</span>
+                                                    </button>
+                                            </div>
+                                            <div class="modal-body table-responsive-md">
+                                                <span ng-show="loadingFrmTransaccion" class="alert alert-info"><i class="loader loader-sm" ></i>  Cargando...</span>
+
+                                                <!--Mensaje Success -->
+                                                <div class="alert alert-success ng-hide" role="alert" ng-show="showFrmTransaccionRestfulSuccess">
+                                                    <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">&times;</a>
+                                                    {{ showFrmTransaccionRestfulMessage}}
+                                                </div>
+                                                <!--/Mensaje Success -->
+
+                                                <!--Mensaje Error -->
+                                                <div class="alert alert-danger ng-hide" role="alert" ng-show="showFrmVoidRestfulError">
+                                                    <a href="#" class="close" data-dismiss="alert" aria-label="close" title="close">&times;</a>
+                                                    {{ showFrmTransaccionRestfulMessage}}
+                                                </div>
+                                                <!-- /Mensaje Error -->
+                                                <!-- TRANSACCION -->
+                                                <div id="formData" class="container " ng-show="verForm.transaccion"  >
+                                                    <legend>Nota de D&eacute;bito</legend>
+                                                    <div class="form-group row">
+                                                        <label for="txtCodigo" class="col-form-label col-sm-3 text-right">Id. Transaccion</label>
+                                                        <div class="col-sm-6">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verForm.transaccion.idNotaDebito"></input>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group row">
+                                                        <label for="txtCodigo" class="col-form-label col-sm-3 text-right">Nota de D&eacute;bito</label>
+                                                        <div class="col-sm-6">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verForm.transaccion.idNotaDebito"></input>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group row">
+                                                        <label for="txtCodigo" class="col-form-label col-sm-3 text-right">Descripci&oacute;n</label>
+                                                        <div class="col-sm-6">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verForm.transaccion.descripcion"></input>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group row">
+                                                        <label for="txtCodigo" class="col-form-label col-sm-3 text-right">Moneda</label>
+                                                        <div class="col-sm-6">
+                                                            <input class="form-control" ng-disabled="true" value="{{verForm.transaccion.moneda|printMoneda}}"></input>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group row">
+                                                        <label for="txtCodigo" class="col-form-label col-sm-3 text-right">Fecha Insert:</label>
+                                                        <div class="col-sm-6">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verForm.transaccion.fechaInsert"></input>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group row">
+                                                        <label for="txtCodigo" class="col-form-label col-sm-3 text-right">Usuario </label>
+                                                        <div class="col-sm-6">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verForm.transaccion.idUsuario"></input>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- TRANSACCION -->
+
+                                                <!-- BOLETO -->
+                                                <div id="formData" class="container " ng-show="verForm.boleto"  >
+                                                    <legend>Boleto</legend>
+                                                    <div class="form-group row">
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Id.</label>
+                                                        <div class="col-sm-4">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verForm.boleto.idBoleto"></input>
+                                                        </div>
+
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Nro. Boleto</label>
+                                                        <div class="col-sm-4">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verForm.boleto.numero"></input>
+                                                        </div>
+
+                                                    </div>
+
+                                                    <div class="form-group row">
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Tipo</label>
+                                                        <div class="col-sm-4">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verForm.boleto.tipoBoleto|printTipoBoleto"></input>
+                                                        </div>
+
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Aerolinea</label>
+                                                        <div class="col-sm-4">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verForm.boleto.idAerolinea.name"></input>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group row">
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Pasajero</label>
+                                                        <div class="col-sm-10">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verForm.boleto.nombrePasajero"></input>
+                                                        </div>
+
+                                                    </div>
+
+
+                                                </div>
+                                                <!-- BOLETO -->
+
+                                                <!-- INGRESO DE CAJA -->
+                                                <div id="formData" class="container " ng-show="verForm.ingreso"  >
+                                                    <legend>Ingreso de Caja</legend>
+                                                    <div class="form-group row">
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Nro.</label>
+                                                        <div class="col-sm-4">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verForm.ingreso.idIngresoCaja"></input>
+                                                        </div>
+
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Transacci&oacute;n</label>
+                                                        <div class="col-sm-4">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verForm.ingreso.idIngresoTransaccion"></input>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- INGRESO DE CAJA -->
+
+                                                <!-- CARGO -->
+                                                <div id="formData" class="container " ng-show="verForm.cargo"  >
+                                                    <legend>Datos de {{verForm.tipo|printTipo}}</legend>
+
+                                                    <div class="form-group row">
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Id Cargo</label>
+                                                        <div class="col-sm-4">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verForm.cargo.idCargo"></input>
+                                                        </div>
+
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Fecha Insert:</label>
+                                                        <div class="col-sm-3">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verForm.cargo.fechaInsert"></input>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group row">
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Concepto</label>
+                                                        <div class="col-sm-6">
+                                                            <textarea class="form-control" ng-disabled="true" ng-value="verForm.cargo.concepto" rows="3"></textarea>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group row">
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Nro. Nota de D&eacute;bito</label>
+                                                        <div class="col-sm-4">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verForm.cargo.idNotaDebito"></input>
+                                                        </div>
+                                                        
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Moneda</label>
+                                                        <div class="col-sm-2">
+                                                            <input class="form-control" ng-disabled="true" value="{{verForm.cargo.moneda|printMoneda}}"></input>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group row">
+                                                        
+                                                    </div>
+
+
+
+                                                    <div class="form-group row">
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Cuenta Agencia:</label>
+                                                        <div class="col-sm-6">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verForm.cargo.idCuentaAgencia.name"></input>
+                                                        </div>
+                                                        <label for="txtCodigo" class="col-form-label col-sm-1 text-right">Monto:</label>
+                                                        <div class="col-sm-2">
+                                                            <input class="form-control" ng-disabled="true" align="right" value="{{verForm.cargo.comisionAgencia|printNumber}}" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Cuenta Mayorista</label>
+                                                        <div class="col-sm-6">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verForm.cargo.idCuentaMayorista.name"></input>
+                                                        </div>
+                                                        <label for="txtCodigo" class="col-form-label col-sm-1 text-right">Monto:</label>
+                                                        <div class="col-sm-2">
+                                                            <input class="form-control" ng-disabled="true" align="right" value="{{verForm.cargo.comisionMayorista|printNumber}}" />
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Cuenta Promotor:</label>
+                                                        <div class="col-sm-6">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verForm.cargo.idCuentaPromotor.name"></input>
+                                                        </div>
+                                                        <label for="txtCodigo" class="col-form-label col-sm-1 text-right">Monto:</label>
+                                                        <div class="col-sm-2">
+                                                            <input class="form-control" ng-disabled="true" align="right" value="{{verForm.cargo.comisionPromotor|printNumber}}" />
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group row">
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Usuario Creador</label>
+                                                        <div class="col-sm-6">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verForm.cargo.usuarioCreador"></input>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!-- ./CARGO -->
+
+                                                <!-- NOTA CREDITO -->
+                                                <div id="formData" class="container " ng-show="verForm.notaCredito"  >
+                                                    <legend>Nota de Cr&eacute;dito</legend>
+                                                    <div class="form-group row">
+
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Nro.</label>
+                                                        <div class="col-sm-4">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verForm.notaCredito.idNotaCredito"></input>
+                                                        </div>
+
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Transaccion</label>
+                                                        <div class="col-sm-4">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verForm.notaCredito.idNotaCreditoTransaccion"></input>
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div class="form-group row">
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Descripci&oacute;n</label>
+                                                        <div class="col-sm-10">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verForm.notaCredito.descripcion"></input>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group row">
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Plan Cuenta</label>
+                                                        <div class="col-sm-10">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verForm.notaCredito.idPlanCuenta.name"></input>
+                                                        </div>
+
+                                                    </div>
+
+
+                                                </div>
+
+                                                <!-- ./NOTA CREDITO -->
+                                            </div>
+                                            <div class="modal-footer">
+                                                <div class="btn-group" role="group"  >
+                                                    <!--<div class="form-group row ng-hide" ng-show="formData.idAerolinea.id">-->
+
+
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <!-- ./Modal VER-->
+
+                        </div>
+                        <!-- /.page-inner -->
+                    </div>
+                    <!-- /.page -->
+                </div>
+                <script  type="text/ng-template" id="customTemplate.html">
+                    <div class="list-on-top tt-suggestion tt-selectable  ">
+                    <span class="list-on-top"  ng-bind-html="match.label | uibTypeaheadHighlight:query"></span>
+                    </div>
+                </script>
+                <!-- .app-footer -->
+                <ui:include src="../index/footer.xhtml" />
+                <!-- /.app-footer -->
+                <!-- /.wrapper -->
+                <!-- Logout Form -->
+                <ui:include src="../index/logout.xhtml" />
+                <!-- /Logout Form -->
+            </main>
+            <!-- /.app-main -->
+        </div>
+        <!-- /.app -->
+        <!-- BEGIN BASE JS -->
+        <script src="../../assets/vendor/jquery/jquery.min.js"></script>
+        <script src="../../assets/vendor/bootstrap/js/popper.min.js"></script>
+        <script src="../../assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+        <!-- END BASE JS -->
+        <!-- BEGIN PLUGINS JS -->
+        <script src="../../assets/vendor/stacked-menu/stacked-menu.min.js"></script>
+        <script src="../../assets/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+        <script src="../../assets/vendor/handlebars/handlebars.min.js"></script>
+        <script src="../../assets/vendor/flatpickr/flatpickr.min.js"></script>
+        <script src="../../assets/vendor/typeahead.js/typeahead.bundle.min.js"></script>
+        <!-- END PLUGINS JS -->
+        <!-- BEGIN THEME JS -->
+        <script src="../../assets/javascript/main.min.js"></script>
+        <script type="text/javascript" src="../../js/utils.js" />
+        <!-- END THEME JS -->
+        <!-- BEGIN PAGE LEVEL JS -->
+        <script type="text/javascript" src="../../assets/javascript/pages/flatpickr-demo.js"></script>
+        <script type="text/javascript" src="../../assets/javascript/pages/typeahead-demo.js"></script>
+        <!-- END PAGE LEVEL JS -->
+        <!-- Global site tag (gtag.js) - Google Analytics -->
+    </h:body>
+</html>

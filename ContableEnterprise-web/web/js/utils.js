@@ -8,6 +8,10 @@ let WARNING_TITLE = 'Advertencia!'
 let VERIFIQUE_VALORES_REQUERIDOS = 'Verifique los mensajes de los valores requeridos';
 let ERROR_NOTA_DEBITO_EMITIDA = 'La nota de debito se encuentra como Emitida, no puede finalizarla.';
 
+let ZERO = "0";
+let SI = "S";
+let NO = "N";
+
 function showBackground() {
     $('#frmBackground').modal('show');
 

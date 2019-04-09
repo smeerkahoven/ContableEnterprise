@@ -569,6 +569,10 @@ public class ComprobantesResource extends TemplateResource {
         return response;
     }
 
+    
+    //TODO aqui debe preguntarse si tiene un id boleto o una nota de debito o cualquier elemento
+    // como id, si lo tiene debe actualizar el original y debe verificarse que los montos del total no se exedan
+    // del monto actual
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
