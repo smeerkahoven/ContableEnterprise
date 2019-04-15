@@ -63,8 +63,16 @@ public class SabreFileScheduler {
             ClassLoader loader = this.getClass().getClassLoader();
 
             File mainFolder = new File(loader.getResource(p.getValor()).getPath());
+            if (!mainFolder.exists()){
+                mainFolder.mkdir();
+            }
+            
             File backupFolder = new File(loader.getResource(p.getValor() + "/backup").getPath());
-
+            
+            if (!backupFolder.exists()){
+                backupFolder.mkdir();
+            }
+            
             for (final File f : mainFolder.listFiles()) {
                 System.out.println(f.getName());
                 if (f.isFile()) {

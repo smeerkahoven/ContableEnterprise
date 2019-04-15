@@ -54,6 +54,78 @@ import javax.persistence.StoredProcedureQuery;
 public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
 
     @Override
+    public void updateTransaccion(AsientoContable asiento) throws CRUDException {
+
+        AsientoContable fromDb = em.find(AsientoContable.class, asiento.getIdAsiento());
+        Optional op = Optional.ofNullable(fromDb);
+        if (!op.isPresent()) {
+            throw new CRUDException("No existe el asiento contable. No se pudo actualizar");
+        }
+
+        //preguntamos por los ID.
+        if (fromDb.getIdBoleto() != null) {
+            if (fromDb.getMoneda().equals(Moneda.NACIONAL)) {
+
+            }
+        }
+
+        fromDb.setMontoDebeExt(asiento.getMontoDebeExt());
+        fromDb.setMontoDebeNac(asiento.getMontoDebeNac());
+        fromDb.setMontoHaberExt(asiento.getMontoHaberExt());
+        fromDb.setMontoHaberNac(asiento.getMontoHaberNac());
+        fromDb.setMoneda(asiento.getMoneda());
+        fromDb.setIdPlanCuenta(asiento.getIdPlanCuenta());
+
+        em.merge(fromDb);
+
+        // actualizamos los montos
+        actualizarMontosFinalizar(fromDb.getIdLibro());
+        //actualizamos la nota o lo q es
+
+        Boleto b = fromDb.getIdBoleto();
+
+        System.out.println("updateTransaccion:" + b);
+        if (b != null) {
+            System.out.println("updateTransaccion:idBoleto:" + b.getIdBoleto() + ", tipoMontoBoleto:" + fromDb.getTipoMontoBoleto());
+            if (fromDb.getTipoMontoBoleto().equals(AsientoContable.MontoBoleto.COMISION)) {
+                //haber
+                if (fromDb.getMoneda().equals(Moneda.NACIONAL)) {
+                    b.setMontoComision( fromDb.getMontoHaberNac());
+                } else {
+                    b.setMontoComision(fromDb.getMontoHaberExt() );
+                }
+            } else if (fromDb.getTipoMontoBoleto().equals(AsientoContable.MontoBoleto.DESCUENTO)) {
+                //debe
+                 if (fromDb.getMoneda().equals(Moneda.NACIONAL)) {
+                    b.setMontoDescuento(fromDb.getMontoDebeNac());
+
+                } else {
+                    b.setMontoDescuento(fromDb.getMontoDebeExt());
+                }
+                
+            } else if (fromDb.getTipoMontoBoleto().equals(AsientoContable.MontoBoleto.FEE)) {
+                //haber
+                 if (fromDb.getMoneda().equals(Moneda.NACIONAL)) {
+                    b.setMontoFee(fromDb.getMontoHaberNac());
+
+                } else {
+                    b.setMontoFee(fromDb.getMontoHaberExt() );
+                }
+                
+            } else if (fromDb.getTipoMontoBoleto().equals(AsientoContable.MontoBoleto.PAGO_LINEA)) {
+                //haber
+                if (fromDb.getMoneda().equals(Moneda.NACIONAL)) {
+                    b.setMontoPagarLineaAerea(fromDb.getMontoHaberNac());
+                } else {
+                    b.setMontoPagarLineaAerea(fromDb.getMontoHaberExt() );
+                }
+            }
+            em.merge(b);
+        }
+
+    }
+
+    @Override
     public void pendiente(Integer idLibro, String usuario) throws CRUDException {
 
         ComprobanteContable fromDb = em.find(ComprobanteContable.class, idLibro);
@@ -754,6 +826,7 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
             montoPagar.setFechaMovimiento(DateContable.getCurrentDate());
             montoPagar.setEstado(ComprobanteContable.EMITIDO);
             montoPagar.setIdBoleto(b);
+            montoPagar.setTipoMontoBoleto(AsientoContable.MontoBoleto.PAGO_LINEA);
             //montoPagar.setIdBoleto(b.getIdBoleto());
             montoPagar.setIdNotaTransaccion(idTransaccion);
             montoPagar.setTipo(AsientoContable.Tipo.BOLETO);
@@ -823,6 +896,7 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
         //montoComision.setIdNotaTransaccion(b.getIdNotaDebitoTransaccion());
         montoComision.setIdNotaTransaccion(idTransaccion);
         montoComision.setTipo(AsientoContable.Tipo.BOLETO);
+        montoComision.setTipoMontoBoleto(AsientoContable.MontoBoleto.COMISION);
 
         System.out.println("Monto Comision: " + b.getMontoComision());
 
@@ -887,6 +961,7 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
         //montoFee.setIdNotaTransaccion(b.getIdNotaDebitoTransaccion());
         montoFee.setIdNotaTransaccion(idTransaccion);
         montoFee.setTipo(AsientoContable.Tipo.BOLETO);
+        montoFee.setTipoMontoBoleto(AsientoContable.MontoBoleto.FEE);
 
         if (b.getTipoCupon().equals(Boleto.Cupon.INTERNACIONAL)) {
             montoFee.setIdPlanCuenta(conf.getIdCuentaFee());
@@ -939,6 +1014,7 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
         //montoDescuentos.setIdNotaTransaccion(b.getIdNotaDebitoTransaccion());
         montoDescuentos.setIdNotaTransaccion(idTransaccion);
         montoDescuentos.setTipo(AsientoContable.Tipo.BOLETO);
+        montoDescuentos.setTipoMontoBoleto(AsientoContable.MontoBoleto.DESCUENTO);
 
         if (b.getTipoCupon().equals(Boleto.Cupon.INTERNACIONAL)) {
             montoDescuentos.setIdPlanCuenta(conf.getIdDescuentos());

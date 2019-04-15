@@ -11,8 +11,8 @@ id_modulo
 )values 
 (
 (select id_modulo from tb_modulos where nombre = 'Contabilidad')
-, 'Contabilidad-Contador'
-, 'contabilidad-contador'
+, 'Comprobantes-Contador'
+, 'comprobantes-contador'
 , 'http://192.168.1.211:8080/ContableEnterprise-ws/ws-api/comprobantes-contador/'
 , 'ACTIVO'
 , curdate()
@@ -24,7 +24,7 @@ select * from tb_rol_formulario ;
 insert into tb_rol_formulario (id_rol,id_formularios, crear, actualizar, eliminar, acceder, buscar, editar, anular, ver)
 values (
  (select id_rol from tb_rol where nombre = 'ADMINISTRADOR')
-, (select id_formulario from tb_formularios where url_acceso = 'contabilidad-contador')
+, (select id_formulario from tb_formularios where url_acceso = 'comprobantes-contador')
 , 1,1,1,1,1,1,1,1
 )
 ;

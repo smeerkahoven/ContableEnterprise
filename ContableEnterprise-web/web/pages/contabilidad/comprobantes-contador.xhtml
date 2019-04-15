@@ -87,22 +87,15 @@
                                     <ol class="breadcrumb">
                                         <li class="breadcrumb-item active">
                                             <a href="#">
-                                                <i class="breadcrumb-icon fa fa-angle-left mr-2"></i>#{comprobantes.formulario.modulo}
+                                                <i class="breadcrumb-icon fa fa-angle-left mr-2"></i>#{comprobantesContador.formulario.modulo}
                                             </a>
                                         </li>
                                     </ol>
                                 </nav>
                                 <div class="d-md-flex">
-                                    <h1 class="page-title mr-sm-auto"> #{comprobantes.formulario.nombre}</h1>
+                                    <h1 class="page-title mr-sm-auto"> #{comprobantesContador.formulario.nombre}</h1>
                                     <div class="dt-button btn-group">
-                                        <c:if test="#{comprobantes.formulario.crear== comprobantes.formulario.PERMITIR}">
-                                            <button class="btn btn-success dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                                <span class="fa fa-plus"></span> Nuevo
-                                            </button>
-                                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                <a class="dropdown-item" ng-repeat="row in comboTiposComprobantes" ng-click="newComprobante(row.id)">{{row.name}}</a>
-                                            </div>
-                                        </c:if>
+                                        
                                         <button type="button" class="btn btn-warning " tabindex="0" ng-click="cancelar()"><span class="fa fa-undo"></span> Cancelar</button>
 
                                     </div>
@@ -189,7 +182,7 @@
                                             <table st-table="display_records"    st-safe-src="mainGrid" 
                                                    class="table  table-hover ">
                                                 <thead >
-                                                    <c:if test="#{comprobantes.formulario.buscar == comprobantes.formulario.PERMITIR}">
+                                                    <c:if test="#{comprobantesContador.formulario.buscar == comprobantes.formulario.PERMITIR}">
                                                         <tr>
                                                             <th colspan="5">
                                                                 <!-- .input-group -->
@@ -206,7 +199,7 @@
                                                         </tr>
                                                     </c:if>
                                                     <tr>
-                                                        <th>N&uacute;mero</th>
+                                                        <th>Nro. Comprobante</th>
                                                         <th>Fecha Emisi&oacute;n</th>
                                                         <th>Cliente</th>
                                                         <th>Concepto</th>
@@ -227,7 +220,7 @@
                                                                 <c:if test="${comprobantes.formulario.acceder== comprobantes.formulario.PERMITIR }">
                                                                     <button type="button" title="Editar" class="btn btn-sm btn-info" ng-click="edit(row)" ><i class="fa fa-pencil"></i></button>
                                                                 </c:if>
-                                                                <c:if test="#{comprobantes.formulario.eliminar== comprobantes.formulario.PERMITIR}">
+                                                                <c:if test="#{comprobantesContador.formulario.eliminar== comprobantes.formulario.PERMITIR}">
                                                                     <button type="button" title="Anular" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#frmAnular" ng-click="modalAnular(row)"><i class="fa fa-trash"></i></button>
                                                                 </c:if>
                                                                 <!--<button type="button" title="Ver" class="btn btn-default" ng-click="ver(row.idEmpleado)" data-toggle="modal" data-target="#verForm"><i class="fa fa-search"></i></button>-->
@@ -251,14 +244,14 @@
                                             <fieldset>
                                                 <!-- Contenido Formulario-->
                                                 <div id="formData" class="container  ng-hide table-responsive"   ng-show="showForm" >
-                                                    <input type="hidden" id="hdUrl" name="hdUrl" value="#{comprobantes.formulario.restful}"/>
+                                                    <input type="hidden" id="hdUrl" name="hdUrl" value="#{comprobantesContador.formulario.restful}"/>
                                                     <input type="hidden" id="hdUrlFactores" name="hdUrlFactores" value="#{factores.formulario.restful}"/>
-                                                    <input type="hidden" id="hdFactorMaxMin" name="hdFactorMaxMin" value="#{comprobantes.factorCambiarioMaxMin.valor}"/>
+                                                    <input type="hidden" id="hdFactorMaxMin" name="hdFactorMaxMin" value="#{comprobantesContador.factorCambiarioMaxMin.valor}"/>
                                                     <input type="hidden" id="hdUrlPlanCuentas" name="hdUrlPlanCuentas" value="#{planCuentas.formulario.restful}"/>
                                                     <input type="hidden" id="hdUrlNotaDebito" name="hdUrlNotaDebito" value="#{boletajeOtros.formulario.restful}"/>
                                                     <input type="hidden" id="hdToken" name="hdToken" value="#{sessionView.token}"/>
                                                     <input type="hidden" id="idEmpresa" name="idEmpresa" value="#{login.empleado.idEmpresa.idEmpresa}"/>
-                                                    <input type="hidden" id="hdToken" name="hdFormName" value="#{comprobantes.formulario.nombre}"/>
+                                                    <input type="hidden" id="hdToken" name="hdFormName" value="#{comprobantesContador.formulario.nombre}"/>
                                                     <input type="hidden" id="hdUrlClientes" name="hdUrlClientes" value="#{cliente.formulario.restful}"/>
                                                     <input type="hidden" id="hdUserName" name="hdUserName" value="#{sessionView.user.userName}" />
                                                     <input type="hidden" id="hdDiferenciaIngresos" name="hdUserName" value="#{sessionView.user.userName}" />
@@ -368,7 +361,6 @@
                                                                 </span>
                                                             </div>
                                                             <span class="mr-auto"></span>
-                                                            <button type="button" class="btn btn-sm btn-success" ng-click="addTransaccion()" ng-disabled="disableAddButton"><span class="fa fa-plus"></span> A&ntilde;adir</button>
                                                         </div>
                                                     </header>
                                                     <!-- Tabla Transacciones -->
@@ -404,8 +396,8 @@
                                                                         <div ng-show="row.editable">
                                                                             <select name="txtMoneda" class="form-control" ng-model="row.moneda" required="required" ng-change="onChangeMoneda(row)">
                                                                                 <option style="display:none" value="">seleccione una opcion</option>
-                                                                                <option value="#{comprobantes.bolivianos.codigo}"  selected="selected">#{comprobantes.bolivianos.abreviado}</option>
-                                                                                <option value="#{comprobantes.dolar.codigo}" >#{comprobantes.dolar.abreviado}</option>
+                                                                                <option value="#{comprobantesContador.bolivianos.codigo}"  selected="selected">#{comprobantesContador.bolivianos.abreviado}</option>
+                                                                                <option value="#{comprobantesContador.dolar.codigo}" >#{comprobantesContador.dolar.abreviado}</option>
                                                                             </select>
                                                                         </div>
                                                                     </td>
@@ -461,18 +453,22 @@
                                                                         <div class="btn-group" >
                                                                             <button  type="button" title="Ver" class="btn btn-sm btn-warning" ng-click="verTransaccion(row)"><i class="fa fa-search"></i></button>
 
-                                                                            <c:if test="${comprobantes.formulario.editar== comprobantes.formulario.PERMITIR }">
-                                                                                <button ng-show="!row.editable" ng-disabled="disableEditarTransaccion" type="button" title="Editar" class="btn btn-sm btn-info" ng-click="editTransaccion(row)"><i class="fa fa-pencil"></i></button>
+                                                                            <c:if test="${comprobantesContador.formulario.editar== comprobantesContador.formulario.PERMITIR }">
+                                                                                <button ng-show="!row.editable" type="button" 
+                                                                                        title="Editar" class="btn btn-sm btn-info" ng-click="editTransaccion(row)"><i class="fa fa-pencil"></i></button>
                                                                             </c:if>
-                                                                            <c:if test="${comprobantes.formulario.crear== comprobantes.formulario.PERMITIR }">
-                                                                                <button ng-show="row.editable" ng-disabled="disableGuardarTransaccion" type="button" title="Guardar" class="btn btn-sm btn-primary" ng-click="saveTransaccion(row)"><i class="fa fa-save"></i></button>
+                                                                            <c:if test="${comprobantesContador.formulario.crear== comprobantesContador.formulario.PERMITIR }">
+                                                                                <button ng-show="row.editable"  type="button" 
+                                                                                        title="Guardar" class="btn btn-sm btn-primary" ng-click="saveTransaccion(row)"><i class="fa fa-save"></i></button>
                                                                             </c:if>
                                                                             <!--
-                                                                            <c:if test="${comprobantes.formulario.actualizar== comprobantes.formulario.PERMITIR }">
+                                                                            <c:if test="${comprobantesContador.formulario.actualizar== comprobantesContador.formulario.PERMITIR }">
                                                                                 <button ng-show="formData.estado !== INICIAL" type="button" title="Corregir" class="btn btn-sm btn-success" ng-click="corregirTransaccion(row)"><i class="fa fa-save"></i></button>
                                                                             </c:if>-->
-                                                                            <c:if test="#{comprobantes.formulario.anular== comprobantes.formulario.PERMITIR}">
-                                                                                <button type="button" title="Eliminar" ng-disabled="disableEliminarTransaccion" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#frmConfirmation" ng-click="modalEliminarAsiento(row)"><i class="fa fa-remove"></i></button>
+                                                                            <c:if test="#{comprobantesContador.formulario.anular== comprobantesContador.formulario.PERMITIR}">
+                                                                                <button type="button" title="Eliminar"  
+                                                                                        class="btn btn-sm btn-danger" data-toggle="modal" data-target="#frmConfirmation"
+                                                                                        ng-click="modalEliminarAsiento(row)"><i class="fa fa-remove"></i></button>
                                                                             </c:if>
                                                                             <!--<button type="button" title="Ver" class="btn btn-default" ng-click="ver(row.idEmpleado)" data-toggle="modal" data-target="#verForm"><i class="fa fa-search"></i></button>-->
                                                                         </div>
@@ -537,25 +533,25 @@
                                                     <!-- /Tabla Totales -->
                                                     <div class="form-group row">
                                                         <div class="col-1">&nbsp;</div>
-                                                        <c:if test="#{comprobantes.formulario.crear== comprobantes.formulario.PERMITIR}">
+                                                        <c:if test="#{comprobantesContador.formulario.crear== comprobantes.formulario.PERMITIR}">
                                                             <div class="row" >
                                                                 <label for="txtNombre" class="col-form-label col-sm-3 text-right" ></label>
                                                                 <button  class="btn btn-primary" ng-click="save(EMITIDO)"  value="Guardar" ng-disabled="disableGuardarButton" ><span class="fa fa-save"></span> Guardar</button>
                                                             </div>
                                                         </c:if>
-                                                        <c:if test="#{comprobantes.formulario.crear== comprobantes.formulario.PERMITIR}">
+                                                        <c:if test="#{comprobantesContador.formulario.crear== comprobantesContador.formulario.PERMITIR}">
                                                             <div class="row" >
                                                                 <label for="txtNombre" class="col-form-label col-sm-3 text-right" ></label>
                                                                 <button  class="btn btn-warning"  value="Pendiente" ng-disabled="disablePendienteButton" ng-click="pendiente()" ><span class="fa fa-hourglass-half"></span> Pendiente</button>
                                                             </div>
                                                         </c:if> 
-                                                        <c:if test="#{comprobantes.formulario.eliminar== comprobantes.formulario.PERMITIR}">
+                                                        <c:if test="#{comprobantesContador.formulario.eliminar== comprobantesContador.formulario.PERMITIR}">
                                                             <div class="row" >
                                                                 <label for="txtNombre" class="col-form-label col-sm-3 text-right" ></label>
                                                                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#frmAnular" ng-click="modalAnular(formData)" value="Anular" ng-disabled="disableAnularButton"> <span class="fa fa-trash"></span> Anular</button>
                                                             </div>
                                                         </c:if>
-                                                        <c:if test="#{comprobantes.formulario.acceder== comprobantes.formulario.PERMITIR}">
+                                                        <c:if test="#{comprobantesContador.formulario.acceder== comprobantesContador.formulario.PERMITIR}">
                                                             <div class="row" >
                                                                 <label for="txtNombre" class="col-form-label col-sm-3 text-right" ></label>
                                                                 <button type="button" class="btn btn-dark"  ng-click="imprimir(formData)" value="Imprimir" ng-disabled="disableImprimirButton"> <span class="fa fa-trash"></span> Imprimir</button>                                                            </div>

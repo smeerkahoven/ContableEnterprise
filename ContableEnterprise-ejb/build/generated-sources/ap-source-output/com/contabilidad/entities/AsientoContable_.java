@@ -15,7 +15,7 @@ import javax.annotation.Generated;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2019-04-08T19:29:25")
+@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2019-04-12T21:22:04")
 @StaticMetamodel(AsientoContable.class)
 public class AsientoContable_ { 
 
@@ -25,6 +25,7 @@ public class AsientoContable_ {
     public static volatile SingularAttribute<AsientoContable, PagoAnticipadoTransaccion> idPagoAnticipadoTransaccion;
     public static volatile SingularAttribute<AsientoContable, Boleto> idBoleto;
     public static volatile SingularAttribute<AsientoContable, IngresoTransaccion> idIngresoCajaTransaccion;
+    public static volatile SingularAttribute<AsientoContable, String> tipoMontoBoleto;
     public static volatile SingularAttribute<AsientoContable, PagoAnticipado> idPagoAnticipado;
     public static volatile SingularAttribute<AsientoContable, String> idUsuarioAnular;
     public static volatile SingularAttribute<AsientoContable, BigDecimal> montoHaberExt;

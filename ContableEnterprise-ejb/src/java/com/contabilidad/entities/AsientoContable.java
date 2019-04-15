@@ -66,6 +66,13 @@ public class AsientoContable extends Entidad {
         public static final String PAGO_ANTICIPADO_TRANSACCION = "O";
         public static final String DEVOLUCION = "D";
     }
+    
+    public static class MontoBoleto {
+        public static final String PAGO_LINEA = "P" ;
+        public static final String COMISION = "C" ;
+        public static final String DESCUENTO = "D" ;
+        public static final String FEE = "F" ;
+    }
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -141,9 +148,21 @@ public class AsientoContable extends Entidad {
     @Column(name = "id_usuario_anular")
     private String idUsuarioAnular;
 
+    @Column(name = "tipo_monto_boleto")
+    private String tipoMontoBoleto ;
+    
     public AsientoContable() {
     }
 
+    public String getTipoMontoBoleto() {
+        return tipoMontoBoleto;
+    }
+
+    public void setTipoMontoBoleto(String tipoMontoBoleto) {
+        this.tipoMontoBoleto = tipoMontoBoleto;
+    }
+
+    
     public String getIdUsuarioAnular() {
         return idUsuarioAnular;
     }

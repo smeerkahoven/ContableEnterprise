@@ -580,29 +580,17 @@ public class ComprobantesResource extends TemplateResource {
     public RestResponse updateTransaction(final RestRequest request) {
         RestResponse response = doValidations(request);
         try {
-            ComprobanteContableJSON pc = new ComprobanteContableJSON();
+            AsientoContableJSON pc = new AsientoContableJSON();
             Gson gson = new GsonBuilder().create();
             JsonParser parser = new JsonParser();
             JsonObject object = parser.parse((String) request.getContent()).getAsJsonObject();
-            pc = gson.fromJson(object.toString(), ComprobanteContableJSON.class);
+            pc = gson.fromJson(object.toString(), AsientoContableJSON.class);
 
-            AsientoContable insert = AsientoContableJSON.toAsientoContable(pc.getTransacciones().get(pc.getTransacciones().size() - 1));
+            AsientoContable insert = AsientoContableJSON.toAsientoContable(pc);
 
             //actualiza
-            ejbComprobante.update(insert);
+            ejbComprobante.updateTransaccion(insert);
             ejbLogger.add(Accion.UPDATE, user.getUserName(), Formulario.COMPROBANTES, user.getIp(), Log.COMPROBANTE_UPDATE.replace("id", pc.getIdLibro().toString()));
-
-            //actualiza montos totales
-            pc = actualizarTotales(pc);
-
-            HashMap<String, Object> parameters = new HashMap<>();
-            parameters.put("1", pc.getTotalDebeMonNac());
-            parameters.put("2", pc.getTotalHaberMonNac());
-            parameters.put("3", pc.getTotalDebeMonExt());
-            parameters.put("4", pc.getTotalHaberMonNac());
-            parameters.put("5", pc.getIdLibro());
-
-            ejbComprobante.executeNative(Queries.UPDATE_COMPROBANTE_CONTABLE_TOTALES, parameters);
 
             response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
             response.setContent(mensajes.getProperty(RestResponse.RESTFUL_SUCCESS));

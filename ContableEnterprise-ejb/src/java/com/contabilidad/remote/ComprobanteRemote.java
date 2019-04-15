@@ -42,9 +42,15 @@ public interface ComprobanteRemote extends DaoRemoteFacade {
 
     @Override
     public void update(Entidad e) throws CRUDException;
+    
+    public void updateTransaccion(AsientoContable asiento) throws CRUDException;
+    
 
     @Override
     public List get(String namedQuery, Class<?> typeClass) throws CRUDException;
+
+    @Override
+    public Entidad get(Integer id, Class<?> typeClass) throws CRUDException;
 
     @Override
     public List get(String namedQuery, Class<?> typeClass, HashMap parameters) throws CRUDException;

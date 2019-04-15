@@ -5,8 +5,6 @@
  */
 
 
-
-
 function AsientoContable() {
     this.position = 0;
     this.idAsiento = '0';
@@ -134,6 +132,11 @@ angular.module('jsComprobantesContador.controllers', []).controller('frmComproba
 
                 $scope.itemsByPage = 15;
                 $scope.dollarToday = 0;
+
+                $scope.PAGO_LINEA = 'P';
+                $scope.COMISION = 'C';
+                $scope.DESCUENTO = 'D';
+                $scope.FEE = 'F';
 
                 $scope.search = {tipo: 'AD', estado: $scope.EMITIDO, fechaInicio: firstDay, fechaFin: today};
 
@@ -665,15 +668,44 @@ angular.module('jsComprobantesContador.controllers', []).controller('frmComproba
                 }
 
                 $scope.editTransaccion = function (item) {
+                    console.log(item);
+                    console.log($scope.formData);
+
+                    if ($scope.formData.tipo !== $scope.COMPROBANTE_TRASPASO
+                            || $scope.formData.tipo !== $scope.COMPROBANTE_EGRESO
+                            || $scope.formData.tipo !== $scope.ASIENTO_AJUSTE) {
+
+                        if (item.idAsiento !== ZERO) {
+                            if (item.tipoMontoBoleto !== undefined) {
+                                if (item.tipoMontoBoleto === $scope.PAGO_LINEA
+                                        || item.tipoMontoBoleto === $scope.COMISION
+                                        || item.tipoMontoBoleto === $scope.DESCUENTO
+                                        || item.tipoMontoBoleto === $scope.FEE) {
+                                    $scope.showTable = false;
+                                    $scope.showForm = true;
+                                    $scope.hideMessagesBox();
+                                    item.editable = true;
+                                    item.superDisabled = true;
+                                    $scope.disableAddButton = true;
+                                }
+                            } else {
+                                showAlert(ERROR_TITLE, 'Solo se pueden actualizar los Pagos de Linea, Comisiones, Descuentos y Fee');
+                                return;
+                            }
+                        }
+                    }
+
                     $scope.showTable = false;
                     $scope.showForm = true;
                     $scope.hideMessagesBox();
                     item.editable = true;
                     item.superDisabled = true;
                     $scope.disableAddButton = true;
+
                 }
 
                 $scope.saveTransaccion = function (item) {
+                    console.log(item);
                     $scope.showRowError = false;
                     if (item.idPlanCuenta.id === undefined) {
                         $scope.showRowError = true;
@@ -688,7 +720,7 @@ angular.module('jsComprobantesContador.controllers', []).controller('frmComproba
                     }
 
                     if (item.moneda === MONEDA_NACIONAL) {
-                        if (item.debeMonNac === undefined || item.haberMonNac === undefined) {
+                        if (item.debeMonNac === undefined && item.haberMonNac === undefined) {
                             $scope.showRowError = true;
                             $scope.showRowMessage = "Ingrese valores a los montos de Moneda nacional";
                             return false;
@@ -702,7 +734,7 @@ angular.module('jsComprobantesContador.controllers', []).controller('frmComproba
                     }
 
                     if (item.moneda === MONEDA_EXTRANJERA) {
-                        if (item.debeMonExt === undefined || item.haberMonExt === undefined) {
+                        if (item.debeMonExt === undefined && item.haberMonExt === undefined) {
                             $scope.showRowError = true;
                             $scope.showRowMessage = "Ingrese valores a los montos de Moneda Extranjera";
                             return false;
@@ -727,7 +759,7 @@ angular.module('jsComprobantesContador.controllers', []).controller('frmComproba
                             item.haberMonExt = parseFloat(item.haberMonNac / $scope.formData.factorCambiario).toFixed(2);
                             //}
                         }
-                        
+
 
                     } else if (item.moneda === MONEDA_EXTRANJERA) {
                         item.debeMonExt = parseFloat(Math.round(item.debeMonExt * 100) / 100).toFixed(2);
@@ -742,25 +774,30 @@ angular.module('jsComprobantesContador.controllers', []).controller('frmComproba
                             item.haberMonNac = parseFloat(item.haberMonExt * $scope.formData.factorCambiario).toFixed(2);
                             //}
                         }
-                        
+
                     }
+                    console.log("sumarTotales");
                     $scope.sumarTotales();
+                    console.log("sumarDiferencias");
                     $scope.sumarDiferencias();
                     item.editable = false;
                     item.action = ACTION_UPDATE;
                     item.isOK = true;
                     $scope.disableAddButton = false;
 
+                    console.log("transacciones invalidas");
                     if ($scope.existenTransaccionesInvalidas()) {
                         $scope.disableGuardarButton = true;
                     } else {
                         $scope.disableGuardarButton = false;
                     }
+                    console.log("diferencias");
 
                     if ($scope.existeDiferencias) {
                         $scope.existeDiferencias = false;
                     }
 
+                    console.log("estadp");
                     if ($scope.formData.estado === $scope.PENDIENTE) {
                         if (item.idAsiento === ZERO) {
                             $http({
@@ -776,15 +813,27 @@ angular.module('jsComprobantesContador.controllers', []).controller('frmComproba
                             }, $scope.errorFunction
                                     )
                         } else {
+                            console.log('update-transaccion');
+
                             $http({
                                 method: 'POST',
                                 url: `${url.value}update-transaction`,
-                                data: {token: token.value, content: angular.toJson($scope.formData)},
+                                data: {token: token.value, content: angular.toJson(item)},
                                 headers: {'Content-Type': 'application/json'}
                             }).then(function (response) {
 
                             }, $scope.errorFunction)
                         }
+                    } else {
+                        console.log('update-transaccion');
+                        $http({
+                            method: 'POST',
+                            url: `${url.value}update-transaction`,
+                            data: {token: token.value, content: angular.toJson(item)},
+                            headers: {'Content-Type': 'application/json'}
+                        }).then(function (response) {
+
+                        }, $scope.errorFunction)
                     }
                 }
 
@@ -958,15 +1007,6 @@ angular.module('jsComprobantesContador.controllers', []).controller('frmComproba
                 $scope.clickCorregir = function () {
                     $scope.ngDisabledBtnCorregir = true;
                     $scope.addTransaccion();
-                }
-
-                $scope.addTransaccion = function () {
-                    var newAsiento = new AsientoContable;
-                    newAsiento.action = ACTION_CREATE;
-                    newAsiento.position = $scope.formData.transacciones.length;
-                    $scope.formData.transacciones.push(newAsiento);
-                    $scope.disableAddButton = true;
-                    $scope.disableGuardarButton = true;
                 }
 
                 $scope.onChangeMoneda = function (row) {
@@ -1199,15 +1239,14 @@ app.filter('printDiferencias', function ($filter) {
             existeDiferencias = showDifDebeExt || showDifDebeNac || showDifHaberExt || showDifHaberNac;
 
             return existeDiferencias ? 'table-danger' : '-'
-
-
-
         }
     }
 });
 
 app.filter('printNumber', function ($filter) {
     return function (input, predicate) {
+        console.log('printNumber');
+        console.log(input);
         if (input === undefined || input === null || input === 0 || input === 0.00)
             return '-';
         else {

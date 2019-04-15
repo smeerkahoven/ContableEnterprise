@@ -48,6 +48,7 @@ public class AsientoContableJSON implements Serializable {
     private String concepto;
     private Integer idTransaccion;
     private String tipoTransaccion;
+    private String tipoMontoBoleto ;
 
     public static AsientoContable toAsientoContable(AsientoContableJSON a) {
         System.out.println(a.getIdPlanCuenta().getId());
@@ -70,6 +71,12 @@ public class AsientoContableJSON implements Serializable {
         anew.setMontoDebeNac(a.getDebeMonNac());
         anew.setMontoHaberExt(a.getHaberMonExt());
         anew.setMontoHaberNac(a.getHaberMonNac());
+        anew.setTipoMontoBoleto(a.getTipoMontoBoleto());
+        
+
+        
+        
+        
 
         return anew;
     }
@@ -99,6 +106,7 @@ public class AsientoContableJSON implements Serializable {
         s.setId(a.getIdPlanCuenta());
         json.setIdPlanCuenta(s);
         json.setMoneda(a.getMoneda());
+        json.setTipoMontoBoleto(a.getTipoMontoBoleto());
 
         json.setTipo(a.getTipo());
 
@@ -167,6 +175,15 @@ public class AsientoContableJSON implements Serializable {
         return json;
     }
 
+    public String getTipoMontoBoleto() {
+        return tipoMontoBoleto;
+    }
+
+    public void setTipoMontoBoleto(String tipoMontoBoleto) {
+        this.tipoMontoBoleto = tipoMontoBoleto;
+    }
+
+    
     public String getConcepto() {
         return concepto;
     }
