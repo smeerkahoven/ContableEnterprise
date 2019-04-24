@@ -1800,7 +1800,6 @@ angular.module('jsBoletos.controllers', []).controller('frmBoletos',
                 }
 
                 $scope.newBoleto = function (tipo) {
-                    console.log(tipo);
                     $scope.showBtnNuevo = true;
                     $scope.showBtnEditar = false;
                     $scope.showTable = false;

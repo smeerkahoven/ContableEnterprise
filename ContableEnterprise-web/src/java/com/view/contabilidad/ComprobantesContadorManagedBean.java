@@ -73,7 +73,7 @@ public class ComprobantesContadorManagedBean extends ViewManagedBean {
     @PostConstruct
     public void init() {
         try {
-            this.formulario = SessionUtils.getFormulario(Formulario.COMPROBANTES);
+            this.formulario = SessionUtils.getFormulario(Formulario.COMPROBANTES_CONTADOR);
             this.factorCambiarioMaxMin = (Parametros) ejbParametros.get(new Parametros(Parametros.FACTOR_CAMBIARO_MAX_MIN));
             this.diferenciaEgresos = (Parametros) ejbParametros.get(new Parametros(Parametros.DIFERENCIA_CAMBIO_EGRESOS));
             this.diferenciaIngresos = (Parametros) ejbParametros.get(new Parametros(Parametros.DIFERENCIA_CAMBIO_INGRESOS));

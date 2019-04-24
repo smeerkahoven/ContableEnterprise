@@ -160,11 +160,20 @@
         </navigation-case>
     </navigation-rule>
     
-        <navigation-rule>
+    <navigation-rule>
         <from-view-id>pages/*</from-view-id>
         <navigation-case>
             <from-outcome>comprobantes-contador</from-outcome>
             <to-view-id>pages/contabilidad/comprobantes-contador.xhtml?faces-redirect=true</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>pages/*</from-view-id>
+        <navigation-case>
+            <from-outcome>sumas-saldos</from-outcome>
+            <to-view-id>pages/contabilidad/sumas-saldos.xhtml?faces-redirect=true</to-view-id>
             <redirect />
         </navigation-case>
     </navigation-rule>

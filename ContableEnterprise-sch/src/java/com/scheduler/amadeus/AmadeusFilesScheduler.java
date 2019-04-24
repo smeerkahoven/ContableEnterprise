@@ -52,21 +52,25 @@ public class AmadeusFilesScheduler {
 
     // MODIFICAR ESTO EN PRODUCCION
     //@Schedule(dayOfWeek = "Mon-Fri", month = "*", hour = "7-18", dayOfMonth = "*", year = "*", minute = "*/5", second = "0")
-    @Schedule(dayOfWeek = "*", month = "*", hour = "*", dayOfMonth = "*", year = "*", minute = "*/10", second="0")
+    @Schedule(dayOfWeek = "*", month = "*", hour = "*", dayOfMonth = "*", year = "*", minute = "*/1", second="0")
     public void dailyFileChecker() {
         Parametros p;
         try {
 
             p = (Parametros) ejbParametros.get(new Parametros(Parametros.FOLDER_FILES_AMADEUS));
 
-            System.out.println("Timer event Files Amadeus: " + new Date());
+            System.out.println("files:");
+            System.out.println("files:Timer event Files Amadeus: " + new Date());
             ClassLoader loader = this.getClass().getClassLoader();
 
+            System.out.println("files:"+  p.getValor());
             File mainFolder = new File(loader.getResource(p.getValor()).getPath());
             if (!mainFolder.exists()){
                 mainFolder.mkdir();
             }
             
+            System.out.println("files: exists:" + mainFolder.getAbsolutePath());
+            System.out.println("files:"+ p.getValor() + "/backup");
             File backupFolder = new File(loader.getResource(p.getValor() + "/backup").getPath());
             if (!backupFolder.exists()){
                 backupFolder.mkdir();

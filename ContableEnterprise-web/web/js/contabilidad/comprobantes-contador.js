@@ -672,8 +672,8 @@ angular.module('jsComprobantesContador.controllers', []).controller('frmComproba
                     console.log($scope.formData);
 
                     if ($scope.formData.tipo !== $scope.COMPROBANTE_TRASPASO
-                            || $scope.formData.tipo !== $scope.COMPROBANTE_EGRESO
-                            || $scope.formData.tipo !== $scope.ASIENTO_AJUSTE) {
+                            && $scope.formData.tipo !== $scope.COMPROBANTE_EGRESO
+                            && $scope.formData.tipo !== $scope.ASIENTO_AJUSTE) {
 
                         if (item.idAsiento !== ZERO) {
                             if (item.tipoMontoBoleto !== undefined) {
@@ -705,7 +705,6 @@ angular.module('jsComprobantesContador.controllers', []).controller('frmComproba
                 }
 
                 $scope.saveTransaccion = function (item) {
-                    console.log(item);
                     $scope.showRowError = false;
                     if (item.idPlanCuenta.id === undefined) {
                         $scope.showRowError = true;
@@ -776,28 +775,23 @@ angular.module('jsComprobantesContador.controllers', []).controller('frmComproba
                         }
 
                     }
-                    console.log("sumarTotales");
                     $scope.sumarTotales();
-                    console.log("sumarDiferencias");
                     $scope.sumarDiferencias();
                     item.editable = false;
                     item.action = ACTION_UPDATE;
                     item.isOK = true;
                     $scope.disableAddButton = false;
 
-                    console.log("transacciones invalidas");
                     if ($scope.existenTransaccionesInvalidas()) {
                         $scope.disableGuardarButton = true;
                     } else {
                         $scope.disableGuardarButton = false;
                     }
-                    console.log("diferencias");
 
                     if ($scope.existeDiferencias) {
                         $scope.existeDiferencias = false;
                     }
 
-                    console.log("estadp");
                     if ($scope.formData.estado === $scope.PENDIENTE) {
                         if (item.idAsiento === ZERO) {
                             $http({
@@ -813,7 +807,6 @@ angular.module('jsComprobantesContador.controllers', []).controller('frmComproba
                             }, $scope.errorFunction
                                     )
                         } else {
-                            console.log('update-transaccion');
 
                             $http({
                                 method: 'POST',
@@ -825,7 +818,6 @@ angular.module('jsComprobantesContador.controllers', []).controller('frmComproba
                             }, $scope.errorFunction)
                         }
                     } else {
-                        console.log('update-transaccion');
                         $http({
                             method: 'POST',
                             url: `${url.value}update-transaction`,

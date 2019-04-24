@@ -4,6 +4,10 @@
  * and open the template in the editor.
  */
 
+function goScrollTo(element) {
+    $(element).goTo();
+}
+
 
 function isNumberKey(evt)
 {

@@ -154,7 +154,6 @@ public class AmadeusFileEJB extends FacadeEJB implements AmadeusFileRemote {
                         //aerolinea.setNumero(lineColumn[1].substring(0, 3).trim());
                         //aerolinea.setIata(lineColumn[1].substring(3, 6).trim());
                         
-
                         //aerolinea = lineColumn[1].substring(3, 6).trim();
                     } else */
                     if (tag.equals(C)) {
@@ -481,7 +480,6 @@ public class AmadeusFileEJB extends FacadeEJB implements AmadeusFileRemote {
                         b.setImpuesto5nombre(imp.getKey());
                         b.setImpuesto2(imp.getValue());
                     }
-
                 }
 
                 b.setTotalBoleto(totalBoleto);
