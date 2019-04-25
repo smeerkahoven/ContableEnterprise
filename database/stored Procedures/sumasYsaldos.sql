@@ -1,5 +1,10 @@
-CREATE DEFINER=`web_contabilidad`@`%` PROCEDURE `sumasYsaldos`(in in_start_date date , in in_end_date date , 
-in in_moneda varchar(1), in in_id_empresa int)
+CREATE DEFINER=`web_contabilidad`@`%` PROCEDURE `sumasYsaldosNivel`(
+ in in_start_date date 
+ , in in_end_date date 
+ , in in_moneda varchar(1)
+ , in in_id_empresa int
+ , in in_nivel int
+ )
 BEGIN
 
 DECLARE finished 			INTEGER DEFAULT 0 ;
@@ -14,7 +19,7 @@ DECLARE v_saldo_debe			DECIMAL(16,2) ;
 DECLARE v_saldo_haber			DECIMAL(16,2) ;
 DECLARE v_nivel					INT ;
      
-declare cur_sumas_saldos_nivel_1 cursor for
+declare cur_sumas_saldos cursor for
 	select 
       pc.id_plan_cuentas
 	, pc.cuenta
@@ -27,9 +32,9 @@ declare cur_sumas_saldos_nivel_1 cursor for
     , pc.nivel
     from cnt_plan_cuentas pc 
     where pc.id_empresa = in_id_empresa 
-    and pc.nivel = 1 ;
+    and pc.nivel = 1;
     
-declare continue handler for not found set finished = 1 ;
+ declare continue handler for not found set finished = 1 ;
 
 drop temporary table if exists tmp_sumas_saldos ;
 create temporary table tmp_sumas_saldos (
@@ -42,14 +47,13 @@ create temporary table tmp_sumas_saldos (
 	 v_saldo_debe				decimal(16,2) ,
 	 v_saldo_haber				decimal(16,2) ,
 	 v_nivel					int
-
 ) ;
 
 
-open cur_sumas_saldos_nivel_1 ;
+open cur_sumas_saldos ;
 
-	loop_cur_sumas_saldos_nivel_1 : loop 
-		fetch cur_sumas_saldos_nivel_1 into 
+	loop_cur_sumas_saldos : loop 
+		fetch cur_sumas_saldos into 
 			v_id_plan_cuenta
             , v_cuenta
             , v_nro_plan_cuenta
@@ -60,11 +64,11 @@ open cur_sumas_saldos_nivel_1 ;
             , v_saldo_haber
             , v_nivel ;
             
-            if finished = 1 then 
-            leave loop_cur_sumas_saldos_nivel_1 ;
-            end if ;
+             if finished = 1 then 
+             leave loop_cur_sumas_saldos ;
+             end if ;
 
-			insert into tmp_sumas_saldos (
+				insert into tmp_sumas_saldos (
 					   v_id_plan_cuenta
 					 , v_cuenta
 					 , v_nro_plan_cuenta
@@ -92,28 +96,18 @@ open cur_sumas_saldos_nivel_1 ;
 									 , in_moneda
 									 , in_id_empresa
 									 , v_nro_plan_cuenta
-									 , v_nivel + 1) ;
+									 , v_nivel+1) ;
 									 
 				-- hay q llamar a actualizar la tabka tmp
 				call updateSumasYsaldosNivelActual ( v_id_plan_cuenta, v_nro_plan_cuenta );
 
-	end loop loop_cur_sumas_saldos_nivel_1 ;
+	end loop loop_cur_sumas_saldos ;
 	
-close cur_sumas_saldos_nivel_1 ;
+close cur_sumas_saldos ;
 
-select 
-	 v_id_plan_cuenta,
-     v_cuenta,
-     v_nro_plan_cuenta,
-	 v_nro_plan_cuenta_padre,
-	 v_suma_debe,
-	 v_suma_haber,
-	 v_saldo_debe,
-	 v_saldo_haber,
-	 v_nivel
-from tmp_sumas_saldos 
-order by v_nro_plan_cuenta
+
+select * from tmp_sumas_saldos 
+where v_nivel <= in_nivel
 ;
-
 
 END

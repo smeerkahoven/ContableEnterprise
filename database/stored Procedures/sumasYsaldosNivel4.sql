@@ -95,7 +95,7 @@ open cur_sumas_saldos ;
 									 , v_nivel+1) ;
 									 
 				-- hay q llamar a actualizar la tabka tmp
-				call updateSumasYsaldosNivelActual ( v_nro_plan_cuenta );
+				call sumasYsaldosNivelActualUpdate ( v_id_plan_cuenta, v_nro_plan_cuenta );
             /*end ;*/
 			-- end if ;	
 	end loop loop_cur_sumas_saldos ;

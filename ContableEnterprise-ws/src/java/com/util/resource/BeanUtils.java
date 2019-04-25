@@ -7,6 +7,7 @@ package com.util.resource;
 
 import com.agencia.search.dto.MayoresSearch;
 import com.cobranzas.json.KardexClienteSearchJson;
+import com.contabilidad.entities.SumasSaldosDto;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -26,6 +27,7 @@ import com.response.json.contabilidad.NotaDebitoJSON;
 import com.response.json.contabilidad.NotaDebitoTransaccionJson;
 import com.response.json.contabilidad.PagoAnticipadoJson;
 import com.response.json.contabilidad.PagoAnticipadoTransaccionJson;
+import com.response.json.contabilidad.SumasSaldosSearchJson;
 import com.response.json.seguridad.UserPersonalJSON;
 import com.seguridad.search.LogSearch;
 import com.services.seguridad.util.RestRequest;
@@ -183,7 +185,6 @@ public class BeanUtils {
             return new NotaCreditoSearchJson();
         }
         JsonObject object = parser.parse((String) request.getContent()).getAsJsonObject();
-        System.out.println((String) request.getContent());
         bjson = gson.fromJson(object.toString(), NotaCreditoSearchJson.class);
 
         return bjson;
@@ -201,7 +202,6 @@ public class BeanUtils {
             return new IngresoCajaSearchJson();
         }
         JsonObject object = parser.parse((String) request.getContent()).getAsJsonObject();
-        System.out.println((String) request.getContent());
         bjson = gson.fromJson(object.toString(), IngresoCajaSearchJson.class);
 
         return bjson;
@@ -216,7 +216,6 @@ public class BeanUtils {
         Gson gson = new GsonBuilder().create();
         JsonParser parser = new JsonParser();
         JsonObject object = parser.parse((String) request.getContent()).getAsJsonObject();
-        System.out.println((String) request.getContent());
         bjson = gson.fromJson(object.toString(), IngresoTransaccionJson.class);
 
         return bjson;
@@ -231,7 +230,6 @@ public class BeanUtils {
         Gson gson = new GsonBuilder().create();
         JsonParser parser = new JsonParser();
         JsonObject object = parser.parse((String) request.getContent()).getAsJsonObject();
-        System.out.println((String) request.getContent());
         bjson = gson.fromJson(object.toString(), IngresoCajaJSON.class);
 
         return bjson;
@@ -246,7 +244,6 @@ public class BeanUtils {
         Gson gson = new GsonBuilder().create();
         JsonParser parser = new JsonParser();
         JsonObject object = parser.parse((String) request.getContent()).getAsJsonObject();
-        System.out.println((String) request.getContent());
         bjson = gson.fromJson(object.toString(), UserPersonalJSON.class);
 
         return bjson;
@@ -262,7 +259,6 @@ public class BeanUtils {
         Gson gson = new GsonBuilder().create();
         JsonParser parser = new JsonParser();
         JsonObject object = parser.parse((String) request.getContent()).getAsJsonObject();
-        System.out.println((String) request.getContent());
         bjson = gson.fromJson(object.toString(), NotaDebitoTransaccionJson.class);
 
         return bjson;
@@ -278,7 +274,6 @@ public class BeanUtils {
         Gson gson = new GsonBuilder().create();
         JsonParser parser = new JsonParser();
         JsonObject object = parser.parse((String) request.getContent()).getAsJsonObject();
-        System.out.println((String) request.getContent());
         bjson = gson.fromJson(object.toString(), NotaDebitoJSON.class);
 
         return bjson;
@@ -293,7 +288,6 @@ public class BeanUtils {
         Gson gson = new GsonBuilder().create();
         JsonParser parser = new JsonParser();
         JsonObject object = parser.parse((String) request.getContent()).getAsJsonObject();
-        System.out.println((String) request.getContent());
         bjson = gson.fromJson(object.toString(), CargoBoletoJSON.class);
 
         return bjson;
@@ -309,7 +303,6 @@ public class BeanUtils {
         Gson gson = new GsonBuilder().create();
         JsonParser parser = new JsonParser();
         JsonObject object = parser.parse((String) request.getContent()).getAsJsonObject();
-        System.out.println((String) request.getContent());
         bjson = gson.fromJson(object.toString(), AsientoContableJSON.class);
 
         return bjson;
@@ -325,8 +318,22 @@ public class BeanUtils {
         Gson gson = new GsonBuilder().create();
         JsonParser parser = new JsonParser();
         JsonObject object = parser.parse((String) request.getContent()).getAsJsonObject();
-        System.out.println((String) request.getContent());
         bjson = gson.fromJson(object.toString(), NotaCreditoTransaccionJson.class);
+
+        return bjson;
+    }
+    
+        public static SumasSaldosSearchJson convertToSumasySaldos(RestRequest request) {
+
+        if (request.getContent() == null) {
+            return new SumasSaldosSearchJson();
+        }
+
+        SumasSaldosSearchJson bjson;
+        Gson gson = new GsonBuilder().create();
+        JsonParser parser = new JsonParser();
+        JsonObject object = parser.parse((String) request.getContent()).getAsJsonObject();
+        bjson = gson.fromJson(object.toString(), SumasSaldosSearchJson.class);
 
         return bjson;
     }
@@ -341,7 +348,6 @@ public class BeanUtils {
         Gson gson = new GsonBuilder().create();
         JsonParser parser = new JsonParser();
         JsonObject object = parser.parse((String) request.getContent()).getAsJsonObject();
-        System.out.println((String) request.getContent());
         bjson = gson.fromJson(object.toString(), NotaCreditoJson.class);
 
         return bjson;

@@ -126,11 +126,11 @@
                                         <!-- Tabla Contenido -->
                                         <div >
                                             <form>
-                                                
+
 
                                                 <div class="form-group row">
                                                     <label for="txtStatus" class="col-form-label col-sm-2 text-right">Moneda </label>
-                                                    <div class="col-sm-4">
+                                                    <div class="col-sm-3">
                                                         <select name="txtMoneda" class="form-control" ng-model="search.moneda" required="">
                                                             <option style="display:none" value="">seleccione una opcion</option>
                                                             <option value="B" selected="selected">Bolivianos</option>
@@ -138,14 +138,11 @@
                                                         </select>
                                                         <span class="alert-danger" ng-show="!search.moneda">Debe seleccionar una opcion.</span>
                                                     </div>
-                                                </div>
 
-
-                                                <div class="form-group row">
                                                     <label class="col-form-label col-sm-2 text-right" for="flatpickr-wrap">Hasta la fecha</label>
-                                                    <div class="col-sm-4 input-group input-group-alt flatpickr " id="flatpickr9">
+                                                    <div class="col-sm-3 input-group input-group-alt flatpickr " id="flatpickr9">
                                                         <input id="txtFechaInicio" type="text" class="form-control flatpick-input" data-input="" 
-                                                               ng-model="search.fechaInicio"/>
+                                                               ng-model="search.fecha"/>
                                                         <div class="input-group-append">
                                                             <button type="button" class="btn btn-secondary" data-toggle="">
                                                                 <i class="far fa-calendar"></i>
@@ -154,21 +151,39 @@
                                                                 <i class="fa fa-times"></i>
                                                             </button>
                                                         </div>
-                                                        <span class="alert-danger" ng-show="!search.fechaInicio">Debe seleccionar una fecha.</span>
                                                     </div>
-
-
-                                                    <c:if test="#{sumasSaldos.formulario.buscar == sumasSaldos.formulario.PERMITIR}">
-                                                        <button type="button" class="btn btn-primary col-sm-2"  ng-click="find()"><span class="fa fa-search"></span> Generar</button>
-                                                    </c:if>
+                                                    <span class="alert-danger" ng-show="!search.fecha">Debe seleccionar una fecha.</span>
                                                 </div>
+
+
+                                                <div class="form-group row">
+                                                    <label for="txtStatus" class="col-form-label col-sm-2 text-right">Nivel </label>
+                                                    <div class="col-sm-3">
+                                                        <select name="txtMoneda" class="form-control" ng-model="search.nivel" required="">
+                                                            <option style="display:none" value="">seleccione una opcion</option>
+                                                            <option value="1" selected="selected">Nivel 1</option>
+                                                            <option value="2" selected="selected">Nivel 2</option>
+                                                            <option value="3" selected="selected">Nivel 3</option>
+                                                            <option value="4" selected="selected">Nivel 4</option>
+                                                            <option value="5" selected="selected">Nivel 5</option>
+                                                        </select>
+                                                        <span class="alert-danger" ng-show="!search.nivel">Debe seleccionar una opcion.</span>
+                                                    </div>
+                                                    
+                                                    <div class="col-sm-4"></div>
+                                                    <c:if test="#{sumasSaldos.formulario.buscar == sumasSaldos.formulario.PERMITIR}">
+                                                    <button type="button" class="btn btn-primary col-sm-2"  ng-click="find()"><span class="fa fa-search"></span> Generar</button>
+                                                </c:if>
+                                                </div>
+
+                                                
 
                                             </form>
 
 
-                                            <div  id="tableData" class="ng-hide table-responsive "  >
-                                                <table id="dataTable" st-table="display_records"    st-safe-src="formData.sumasSaldos" 
-                                                       class="table table-hover" ng-show="showTable">
+                                            <div  id="tableData" class="ng-hide table-responsive "  ng-show="showTable">
+                                                <table id="dataTable" st-table="display_records"    st-safe-src="gridMain" 
+                                                       class="table table-hover" >
                                                     <thead>
                                                         <tr>
                                                             <td colspan="8"><strong>Consulta Sumas y Saldos:</strong>
@@ -189,45 +204,25 @@
                                                         <tr>
                                                             <th class="align-middle">Nro. Cuenta</th>
                                                             <th class="align-middle">Cuenta</th>
-                                                            <th class="align-middle">Debe</th>
-                                                            <th class="align-middle">Haber</th>
-                                                            <th class="align-middle">Debe</th>
-                                                            <th class="align-middle">Haber</th>
+                                                            <th align="right" class="align-middle">Debe</th>
+                                                            <th align="right" class="align-middle">Haber</th>
+                                                            <th align="right" class="align-middle">Debe</th>
+                                                            <th align="right" class="align-middle">Haber</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr st-select-row="row" st-select-mode="multiple" ng-repeat="row in display_records" class="boleto-estado-{{row.estado}}">
-                                                            <td>{{row.fecha}} </td>
-                                                            <td>{{row.tipo}} </td>
-                                                            <td style="width:100px;">{{row.gestion}}-{{row.idNumeroGestion}}</td>
-                                                            <td class="nospacecell">{{row.concepto}}</td>
-                                                            <td align="right">{{row.montoDebe}}  </td>
-                                                            <td align="right">{{row.montoHaber}} </td>
-                                                            <td align="right">{{row.saldoDebe}} </td>
-                                                            <td align="right">{{row.saldoHaber}} </td>
-                                                            <td>
-                                                                <div class="btn-group" >
-                                                                    <c:if test="${sumasSaldos.formulario.acceder == sumasSaldos.formulario.PERMITIR }">
-                                                                        <button type="button" title="Editar" class="btn btn-sm btn-info" ng-click="show(row)" ><i class="fa fa-search"></i></button>
-                                                                    </c:if>
-                                                                </div>
-                                                            </td>
+                                                        <tr st-select-row="row" st-select-mode="multiple" ng-repeat="row in display_records" class="lvl-{{row.nivel}}">
+                                                            <td>{{row.nroPlanCuenta}} </td>
+                                                            <td>{{row.cuenta}} </td>
+                                                            <td align="right">{{row.sumaDebe|printNumero}}  </td>
+                                                            <td align="right">{{row.sumaHaber|printNumero}} </td>
+                                                            <td align="right">{{row.saldoDebe|printNumero}} </td>
+                                                            <td align="right">{{row.saldoHaber|printNumero}} </td>
                                                         </tr>
                                                         <tr class="alert-warning font-weight-bold">
                                                             <td colspan="4">TOTALES</td>
                                                             <td align="right">{{formData.totales.saldoDebe}}</td>
                                                             <td align="right">{{formData.totales.saldoHaber}}</td>
-                                                            <td></td>
-                                                            <td></td>
-                                                            <td></td>
-                                                        </tr>
-                                                        <tr class="alert-success font-weight-bold">
-                                                            <td colspan="4">ACUMULADO</td>
-                                                            <td align="right">{{formData.totalesAcumulado.montoAcumuladoDebe}}</td>
-                                                            <td align="right">{{formData.totalesAcumulado.montoAcumuladoHaber}}</td>
-                                                            <td align="right">{{formData.totalesAcumulado.saldoDebe}}</td>
-                                                            <td align="right">{{formData.totalesAcumulado.saldoHaber}}</td>
-                                                            <td></td>
                                                         </tr>
 
                                                     </tbody>

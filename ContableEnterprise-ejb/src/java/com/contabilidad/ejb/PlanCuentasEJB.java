@@ -6,16 +6,22 @@
 package com.contabilidad.ejb;
 
 import com.contabilidad.entities.PlanCuentas;
+import com.contabilidad.entities.SumasSaldosDto;
 import com.contabilidad.remote.PlanCuentasRemote;
+import com.response.json.contabilidad.SumasSaldosSearchJson;
 import com.seguridad.control.FacadeEJB;
 import com.seguridad.control.LoggerContable;
 import com.seguridad.control.entities.Empresa;
 import com.seguridad.control.entities.Entidad;
 import com.seguridad.control.exception.CRUDException;
+import com.seguridad.utils.DateContable;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import javax.ejb.Stateless;
 import javax.persistence.Query;
+import javax.persistence.StoredProcedureQuery;
 
 /**
  *
@@ -144,6 +150,45 @@ public class PlanCuentasEJB extends FacadeEJB implements PlanCuentasRemote {
 
         return l;
     }
+
+    @Override
+    public List<SumasSaldosDto> generarSumasYSaldos(SumasSaldosSearchJson search) throws CRUDException {
+    
+        if (search.getFecha() == null) {
+            throw new CRUDException("Debe ingresar una fecha.");
+        }
+        
+        if (search.getNivel() == null) {
+            throw new CRUDException("Debe ingresar un nivel.");
+        }
+        
+        if (search.getMoneda() == null) {
+            throw new CRUDException("Debe ingresar una moneda");
+        }
+        
+        if (search.getIdEmpresa() == null) {
+            throw new CRUDException("Debe ingresar una empresa.");
+        }
+        
+        int year = Calendar.YEAR ;
+        
+        Date startDate = DateContable.toLatinAmericaDateFormat("01/01/"+ year);
+        Date endDate = DateContable.toLatinAmericaDateFormat(search.fecha);
+        
+        StoredProcedureQuery stp = em.createNamedStoredProcedureQuery("PlanCuenta.sumasYsaldos");
+        stp.setParameter("in_start_date", startDate);
+        stp.setParameter("in_end_date", endDate);
+        stp.setParameter("in_moneda", search.moneda);
+        stp.setParameter("in_id_empresa", search.idEmpresa);
+        stp.setParameter("in_nivel", search.nivel);
+        
+        List l = stp.getResultList();
+        
+        return l ;
+        
+    }
+    
+    
     
     
 

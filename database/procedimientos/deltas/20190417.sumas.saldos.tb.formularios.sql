@@ -12,7 +12,7 @@ id_modulo
 (select id_modulo from tb_modulos where nombre = 'Contabilidad')
 , 'Comprobantes-Contador'
 , 'comprobantes-contador'
-, 'http://192.168.1.211:8080/ContableEnterprise-ws/ws-api/comprobantes-contador/'
+, 'http://172.31.32.112:8080/ContableEnterprise-ws/ws-api/comprobantes-contador/'
 , 'ACTIVO'
 , curdate()
 , '/pages/contabilidad/comprobantes-contador.xhtml'
@@ -42,8 +42,8 @@ id_modulo
 (
 (select id_modulo from tb_modulos where nombre = 'Contabilidad')
 , 'Sumas y Saldos'
-, 'comprobantes-contador'
-, 'http://192.168.1.211:8080/ContableEnterprise-ws/ws-api/sumas-saldos/'
+, 'sumas-saldos'
+, 'http://172.31.32.112:8080/ContableEnterprise-ws/ws-api/sumas-saldos/'
 , 'ACTIVO'
 , curdate()
 , '/pages/contabilidad/sumas-saldos.xhtml'

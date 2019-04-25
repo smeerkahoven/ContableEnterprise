@@ -8,14 +8,21 @@ package com.contabilidad.entities;
 import com.seguridad.control.entities.Entidad;
 import com.seguridad.control.exception.CRUDException;
 import java.math.BigDecimal;
+import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
+import javax.persistence.ColumnResult;
+import javax.persistence.ConstructorResult;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.NamedStoredProcedureQuery;
+import javax.persistence.ParameterMode;
+import javax.persistence.SqlResultSetMapping;
+import javax.persistence.StoredProcedureParameter;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -37,6 +44,37 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "PlanCuentas.nivel4Central", query = "SELECT p FROM PlanCuentas p WHERE p.nivel < 5 and p.idEmpresa=1 Order by p.cuenta")
     
 })
+
+@NamedStoredProcedureQuery(
+            name = "PlanCuenta.sumasYsaldos",
+            procedureName = "sumasYsaldosNivel",
+            resultSetMappings = "SumasSaldosDto",
+            parameters = {
+                @StoredProcedureParameter(mode = ParameterMode.IN, type = Date.class, name = "in_start_date")
+                ,@StoredProcedureParameter(mode = ParameterMode.IN, type = Date.class, name = "in_end_date")
+                ,@StoredProcedureParameter(mode = ParameterMode.IN, type = String.class, name = "in_moneda")
+                ,@StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_empresa")
+                ,@StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_nivel")
+            }
+    )
+
+@SqlResultSetMapping(
+        name = "SumasSaldosDto",
+        classes = @ConstructorResult(
+                targetClass = SumasSaldosDto.class,
+                columns = {
+                    @ColumnResult(name = "v_id_plan_cuenta", type = Integer.class)
+                    ,@ColumnResult(name = "v_cuenta", type = String.class)
+                    ,@ColumnResult(name = "v_nro_plan_cuenta", type = Long.class)
+                    ,@ColumnResult(name = "v_nro_plan_cuenta_padre", type = Long.class)
+                    ,@ColumnResult(name = "v_suma_debe", type = BigDecimal.class)
+                    ,@ColumnResult(name = "v_suma_haber", type = BigDecimal.class)
+                    ,@ColumnResult(name = "v_saldo_debe", type = BigDecimal.class)
+                    ,@ColumnResult(name = "v_saldo_haber", type = BigDecimal.class)
+                    ,@ColumnResult(name = "v_nivel", type = Integer.class)
+                }
+        )
+)
 public class PlanCuentas extends Entidad {
 
     private static final long serialVersionUID = 1L;

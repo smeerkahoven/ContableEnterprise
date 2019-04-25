@@ -3,6 +3,7 @@ CREATE DEFINER=`web_contabilidad`@`%` PROCEDURE `sumasYsaldosNivel`(
  , in in_end_date date 
  , in in_moneda varchar(1)
  , in in_id_empresa int
+ , in in_nivel int
  )
 BEGIN
 
@@ -98,25 +99,15 @@ open cur_sumas_saldos ;
 									 , v_nivel+1) ;
 									 
 				-- hay q llamar a actualizar la tabka tmp
-				call updateSumasYsaldosNivelActual ( v_id_plan_cuenta, v_nro_plan_cuenta );
+				call sumasYsaldosNivelActualUpdate ( v_id_plan_cuenta, v_nro_plan_cuenta );
 
 	end loop loop_cur_sumas_saldos ;
 	
 close cur_sumas_saldos ;
 
 
-select 
-	 v_id_plan_cuenta,
-     v_cuenta,
-     v_nro_plan_cuenta,
-	 v_nro_plan_cuenta_padre,
-	 v_suma_debe,
-	 v_suma_haber,
-	 v_saldo_debe,
-	 v_saldo_haber,
-	 v_nivel
-from tmp_sumas_saldos 
-order by v_nro_plan_cuenta
+select * from tmp_sumas_saldos 
+where v_nivel <= in_nivel
 ;
 
 END

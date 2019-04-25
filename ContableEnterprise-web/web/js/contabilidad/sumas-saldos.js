@@ -55,7 +55,6 @@ angular.module('jsSumasSaldos.controllers', []).controller('frmSumasSaldos',
                 $scope.itemsByPage = 15;
 
                 $scope.find = function () {
-                    $scope.showClienteRequieredSearch = false;
 
                     $scope.showRestfulError = false;
                     $scope.showRestfulSuccess = false;
@@ -68,32 +67,23 @@ angular.module('jsSumasSaldos.controllers', []).controller('frmSumasSaldos',
 
                     return $http({
                         method: 'POST',
-                        url: `${url.value}find`,
+                        url: `${url.value}`,
                         data: {token: token.value, content: angular.toJson($scope.search)},
                         headers: {'Content-Type': 'application/json'}
                     }).then(function (response) {
                         $scope.loading = false;
-                        if (response.data.code === 201) {
-                            $scope.formData = response.data.content;
+                        if (response.data.code === 201) {   
+                            $scope.gridMain = response.data.content;
                             $scope.showTable = true;
                         } else {
                             $scope.showRestfulMessage = response.data.content;
                             $scope.showRestfulError = true;
-                            $scope.formData = [];
+                            $scope.gridMain = [];
                         }
                     }, $scope.errorFunction);
                 }
 
                 $scope.searchFormHasError = function () {
-
-                    if ($scope.search.idCuenta !== undefined) {
-                        if ($scope.search.idCuenta.id === undefined) {
-                            $scope.showCuentaRequired = true;
-                            return true;
-                        } else {
-                            $scope.showCuentaRequired = false;
-                        }
-                    }
 
                     if ($scope.search.moneda === undefined) {
                         $scope.showMonedaRequired = true;
@@ -102,14 +92,14 @@ angular.module('jsSumasSaldos.controllers', []).controller('frmSumasSaldos',
                         $scope.showMonedaRequired = false;
                     }
 
-                    if ($scope.search.fechaInicio === undefined) {
+                    if ($scope.search.fecha === undefined) {
                         $scope.showFechaInicioRequired = true;
                         return true;
                     } else {
                         $scope.showFechaInicioRequired = false;
                     }
 
-                    if ($scope.search.fechaFin === undefined) {
+                    if ($scope.search.nivel === undefined) {
                         $scope.showFechaFinRequired = true;
                         return true;
                     } else {
@@ -127,72 +117,13 @@ angular.module('jsSumasSaldos.controllers', []).controller('frmSumasSaldos',
                 }
 
 
-                $scope.getCuentas = function () {
-                    $scope.loading = true;
-                    $scope.showBtnNuevo = false;
-                    return $http({
-                        method: 'POST',
-                        url: `${urlPlanCuentas.value}combo/${$scope.idEmpresa}`,
-                        data: {token: token.value, content: ''},
-                        headers: {'Content-Type': 'application/json'}
-                    }).then(function (response) {
-                        if (response.data.code === 201) {
-                            $scope.comboCuentas = response.data.content;
-                            $scope.loading = false;
-                            $scope.showBtnNuevo = true;
-                        } else {
-                            $scope.showRestfulMessage = response.data.content;
-                            $scope.showRestfulError = true;
-                            return {};
-                        }
-                    }, function (error) {
-                        $scope.showRestfulMessage = error;
-                        $scope.showRestfulError = true;
-                    });
-                }
 
                 $scope.hideMessagesBox = function () {
                     $scope.showRestfulSuccess = false;
                     $scope.showRestfulError = false;
                 }
 
-                $scope.show = function (row) {
-                    $scope.loading = true;
-                    return $http.get(`${urlComprobantes.value}${row.idLibro}`).then(function (response) {
-                        if (response.data.code === 201) {
-                            console.log(response.data.content);
-                            $scope.comprobante = response.data.content;
-                            showModalWindow('#frmComprobante');
-                            //$scope.sumarTotales();
-                            //$scope.sumarDiferencias()
-                            //$scope.habilitarBotones();
-                            
-                        } else {
-                            $scope.showRestfulMessage = response.data.content;
-                            $scope.showRestfulError = true;
-                            return {};
-                            
-                        }
-                        $scope.loading = false ;
-                    }, function (error) {
-                        $scope.showRestfulMessage = error.statusText;
-                        $scope.showRestfulError = true;
-                        $scope.loading = false ;
-                    });
-                }
 
-                $scope.sumarTotales = function () {
-                    $scope.comprobante.totalDebeMonNac = 0;
-                    $scope.comprobante.totalHaberMonNac = 0;
-                    $scope.comprobante.totalHaberMonExt = 0;
-                    $scope.comprobante.totalDebeMonExt = 0;
-                    for (var i in $scope.comprobante.transacciones) {
-                        $scope.comprobante.totalDebeMonNac = parseFloat((Number($scope.comprobante.totalDebeMonNac)) + (Number($scope.comprobante.transacciones[i].debeMonNac === undefined ? Number(null) : $scope.comprobante.transacciones[i].debeMonNac))).toFixed(2);
-                        $scope.comprobante.totalHaberMonNac = parseFloat((Number($scope.comprobante.totalHaberMonNac)) + (Number($scope.comprobante.transacciones[i].haberMonNac === undefined ? Number(null) : $scope.comprobante.transacciones[i].haberMonNac))).toFixed(2);
-                        $scope.comprobante.totalDebeMonExt = parseFloat((Number($scope.comprobante.totalDebeMonExt)) + (Number($scope.comprobante.transacciones[i].debeMonExt === undefined ? Number(null) : $scope.comprobante.transacciones[i].debeMonExt))).toFixed(2);
-                        $scope.comprobante.totalHaberMonExt = parseFloat((Number($scope.comprobante.totalHaberMonExt)) + (Number($scope.comprobante.transacciones[i].haberMonExt === undefined ? Number(null) : $scope.comprobante.transacciones[i].haberMonExt))).toFixed(2);
-                    }
-                }
 
                 $scope.findCta = function (cta, input) {
                     var i = 0;
@@ -205,34 +136,6 @@ angular.module('jsSumasSaldos.controllers', []).controller('frmSumasSaldos',
                 
                 $scope.imprimirComprobante = function (data) {
                     window.open(`../../ComprobanteReporteServlet?idLibro=${data.idLibro}`, '_target');
-                }
-
-
-                $scope.sumarDiferencias = function () {
-                    $scope.comprobante.difMonNac = parseFloat(Number($scope.comprobante.totalDebeMonNac) - Number($scope.comprobante.totalHaberMonNac)).toFixed(2);
-                    $scope.comprobante.difMonExt = parseFloat(Number($scope.comprobante.totalDebeMonExt) - Number($scope.comprobante.totalHaberMonExt)).toFixed(2);
-
-                    $scope.showDifHaberNac = ($scope.formData.difMonNac > 0);
-                    $scope.showDifDebeNac = ($scope.formData.difMonNac < 0);
-
-                    $scope.showDifHaberExt = ($scope.formData.difMonExt > 0);
-                    $scope.showDifDebeExt = ($scope.formData.difMonExt < 0);
-
-                    $scope.existeDiferencias = $scope.showDifDebeExt || $scope.showDifDebeNac || $scope.showDifHaberExt || $scope.showDifHaberNac;
-
-                }
-
-                $scope.nuevo = function () {
-                    $scope.showForm = true;
-                    $scope.showBtnNuevo = true;
-                    $scope.showBtnEditar = false;
-                    $scope.showTable = false;
-                    $scope.showRestfulSuccess = false;
-                    $scope.showRestfulError = false;
-                    $scope.formData = {};
-                    $scope.clickNuevo = true;
-                    $scope.myForm.$setPristine();
-                    myForm.reset();
                 }
 
                 $scope.cancelar = function () {
@@ -250,9 +153,6 @@ angular.module('jsSumasSaldos.controllers', []).controller('frmSumasSaldos',
                     });
                 }
 
-                $scope.modalEliminar = function (idx, nombrex, methodx) {
-                    $scope.modalConfirmation = {id: idx, nombre: nombrex, method: methodx};
-                }
 
 
                 $scope.findCta = function (cta, input) {
@@ -263,8 +163,6 @@ angular.module('jsSumasSaldos.controllers', []).controller('frmSumasSaldos',
                         }
                     }
                 }
-
-                $scope.getCuentas();
 
                 // los watch sirven para verificar si el valor cambio
                 $scope.$watch('formData.ctaDevolucionMonExt.id', function (now, old) {

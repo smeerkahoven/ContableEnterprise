@@ -55,28 +55,28 @@ list-on-top {
     position: relative;
     margin: 0 auto;
     top: calc(50% - 24px);
-  }
+}
 
-  .bd-example-modal-lg .modal-dialog .modal-content{
+.bd-example-modal-lg .modal-dialog .modal-content{
     background-color: transparent;
     border: none;
-  }
-  
+}
+
 .tip {
-	display: inline-block;
-	cursor: pointer;
+    display: inline-block;
+    cursor: pointer;
 }
 
 .bg-selected {
-        background-color:#d6d6db;   
+    background-color:#d6d6db;   
 }
 
 .bg-cancelado {
-        background-color:#ccffcc;   
+    background-color:#ccffcc;   
 }
 
 .bg-adeudado {
-        background-color:#ffbb99;   
+    background-color:#ffbb99;   
 }
 
 .input-number{
@@ -84,10 +84,10 @@ list-on-top {
 }
 
 .nospacecell {
-  white-space: normal !important; 
+    white-space: normal !important; 
 }
 .fixedtable {
-  table-layout: fixed;
+    table-layout: fixed;
 }
 
 .deposito {
@@ -96,4 +96,29 @@ list-on-top {
 
 .debito {
     background-color: #b8d9c7;
+}
+
+.lvl-1 {
+    font-weight: 700;
+    font-size: 20px;
+}
+
+.lvl-2 {
+    font-weight: 600;
+    font-size: 19px;
+}
+
+.lvl-3 {
+    font-weight: 500;
+    font-size: 18px;
+}
+
+.lvl-4 {
+    font-weight: 400;
+    font-size: 16px;
+}
+
+.lvl-5 {
+    font-weight: 300;
+    font-size: 14px;
 }
