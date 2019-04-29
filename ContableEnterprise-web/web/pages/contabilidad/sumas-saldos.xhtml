@@ -211,7 +211,9 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr st-select-row="row" st-select-mode="multiple" ng-repeat="row in display_records" class="lvl-{{row.nivel}}">
+                                                        <tr st-select-row="row" st-select-mode="multiple" 
+                                                            ng-repeat="row in display_records" class="lvl-{{row.nivel}}">
+                                                            
                                                             <td>{{row.nroPlanCuenta}} </td>
                                                             <td>{{row.cuenta}} </td>
                                                             <td align="right">{{row.sumaDebe|printNumero}}  </td>
@@ -219,12 +221,6 @@
                                                             <td align="right">{{row.saldoDebe|printNumero}} </td>
                                                             <td align="right">{{row.saldoHaber|printNumero}} </td>
                                                         </tr>
-                                                        <tr class="alert-warning font-weight-bold">
-                                                            <td colspan="4">TOTALES</td>
-                                                            <td align="right">{{formData.totales.saldoDebe}}</td>
-                                                            <td align="right">{{formData.totales.saldoHaber}}</td>
-                                                        </tr>
-
                                                     </tbody>
                                                     <!--<tfoot>
                                                         <tr>

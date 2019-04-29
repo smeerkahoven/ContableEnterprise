@@ -98,24 +98,32 @@ list-on-top {
     background-color: #b8d9c7;
 }
 
+
+.lvl-0 {
+    font-weight: 500;
+    font-size: 20px;
+    background-color: #fffdf9;
+    color:#d3a961;
+}
+
 .lvl-1 {
-    font-weight: 700;
+    font-weight: 500;
     font-size: 20px;
 }
 
 .lvl-2 {
-    font-weight: 600;
-    font-size: 19px;
+    font-weight: 500;
+    font-size: 18px;
 }
 
 .lvl-3 {
-    font-weight: 500;
+    font-weight: 400;
     font-size: 18px;
 }
 
 .lvl-4 {
     font-weight: 400;
-    font-size: 16px;
+    font-size: 14px;
 }
 
 .lvl-5 {

@@ -18,6 +18,12 @@ DECLARE v_suma_haber			DECIMAL(16,2) ;
 DECLARE v_saldo_debe			DECIMAL(16,2) ;
 DECLARE v_saldo_haber			DECIMAL(16,2) ;
 DECLARE v_nivel					INT ;
+
+DECLARE v_suma_debe_total DECIMAL (16,2) ;
+DECLARE v_suma_haber_total DECIMAL (16,2) ;
+
+DECLARE v_saldo_debe_total DECIMAL (16,2) ;
+DECLARE v_saldo_haber_total DECIMAL (16,2) ;
      
 declare cur_sumas_saldos cursor for
 	select 
@@ -106,8 +112,64 @@ open cur_sumas_saldos ;
 close cur_sumas_saldos ;
 
 
-select * from tmp_sumas_saldos 
-where v_nivel <= in_nivel
-;
+select 
+	 sum(coalesce(t.v_suma_debe,0)) v_suma_debe
+     ,sum(coalesce(t.v_saldo_debe,0)) v_saldo_debe
+into 
+	v_suma_debe_total
+    ,v_saldo_debe_total
+from tmp_sumas_saldos t
+where t.v_nro_plan_cuenta = 1 or t.v_nro_plan_cuenta = 4;
+
+
+select 
+	 sum(coalesce(t.v_suma_haber,0)) v_suma_haber
+     ,sum(coalesce(t.v_saldo_haber,0)) v_saldo_haber
+into 
+	v_suma_haber_total
+    ,v_saldo_haber_total
+from tmp_sumas_saldos t
+where t.v_nro_plan_cuenta = 2 or t.v_nro_plan_cuenta =3 ;
+
+-- ---
+insert into tmp_sumas_saldos (
+	 v_id_plan_cuenta,
+     v_cuenta,
+     v_nro_plan_cuenta,
+	 v_nro_plan_cuenta_padre,
+	 v_suma_debe,
+	 v_suma_haber,
+	 v_saldo_debe,
+	 v_saldo_haber,
+	 v_nivel)
+	values(
+	 null ,
+     'TOTALES' ,
+     null ,
+	 null,
+	 v_suma_debe_total,
+	 v_suma_haber_total,
+	 -- if (v_suma_debe_total > v_suma_haber_total, v_suma_debe_total- v_suma_haber_total, 0),
+	 -- if (v_suma_debe_total < v_suma_haber_total, v_suma_debe_total- v_suma_haber_total, 0),
+     v_saldo_debe_total,
+     v_saldo_haber_total,
+	 0
+     );
+
+-- ---
+
+select 
+	 t.v_id_plan_cuenta,
+     t.v_cuenta,
+     t.v_nro_plan_cuenta,
+	 t.v_nro_plan_cuenta_padre,
+	 t.v_suma_debe,
+	 t.v_suma_haber,
+	 t.v_saldo_debe,
+	 t.v_saldo_haber,
+	 t.v_nivel
+from tmp_sumas_saldos t
+where t.v_nivel <= in_nivel;
+
 
 END
