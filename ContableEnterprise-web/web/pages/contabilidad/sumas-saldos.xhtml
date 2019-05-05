@@ -169,31 +169,22 @@
                                                         </select>
                                                         <span class="alert-danger" ng-show="!search.nivel">Debe seleccionar una opcion.</span>
                                                     </div>
-                                                    
                                                     <div class="col-sm-4"></div>
-                                                    <c:if test="#{sumasSaldos.formulario.buscar == sumasSaldos.formulario.PERMITIR}">
+                                                </div>
+                                                <c:if test="#{sumasSaldos.formulario.buscar == sumasSaldos.formulario.PERMITIR}">
                                                     <button type="button" class="btn btn-primary col-sm-2"  ng-click="find()"><span class="fa fa-search"></span> Generar</button>
                                                 </c:if>
-                                                </div>
-
-                                                
-
                                             </form>
-
-
-                                            <div  id="tableData" class="ng-hide table-responsive "  ng-show="showTable">
-                                                <table id="dataTable" st-table="display_records"    st-safe-src="gridMain" 
+                                            <div  id="tableData" class="ng-hide table-responsive" ng-show="showTable">
+                                                <table id="dataTable" st-table="display_records" st-safe-src="gridMain" 
                                                        class="table table-hover" >
                                                     <thead>
                                                         <tr>
                                                             <td colspan="8"><strong>Consulta Sumas y Saldos:</strong>
-                                                                {{search.idCuenta.name}}
-                                                                <strong>&nbsp;&nbsp; Desde:</strong>
-                                                                {{search.fechaInicio}}
                                                                 <strong>&nbsp;&nbsp;Hasta:</strong>
-                                                                {{search.fechaFin}}
+                                                                {{search.fecha}}
                                                                 <strong>&nbsp;&nbsp;Moneda :</strong>
-                                                                {{search.moneda}}
+                                                                {{search.moneda|printMoneda}}
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -213,7 +204,7 @@
                                                     <tbody>
                                                         <tr st-select-row="row" st-select-mode="multiple" 
                                                             ng-repeat="row in display_records" class="lvl-{{row.nivel}}">
-                                                            
+
                                                             <td>{{row.nroPlanCuenta}} </td>
                                                             <td>{{row.cuenta}} </td>
                                                             <td align="right">{{row.sumaDebe|printNumero}}  </td>

@@ -177,6 +177,25 @@
             <redirect />
         </navigation-case>
     </navigation-rule>
+
+    <navigation-rule>
+        <from-view-id>pages/*</from-view-id>
+        <navigation-case>
+            <from-outcome>estados-resultados</from-outcome>
+            <to-view-id>pages/contabilidad/estados-resultados.xhtml?faces-redirect=true</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    
+    <navigation-rule>
+        <from-view-id>pages/*</from-view-id>
+        <navigation-case>
+            <from-outcome>reportes-ventas-boletos</from-outcome>
+            <to-view-id>/pages/reports/ventas-boletos.xhtml?faces-redirect=true</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
     
     <navigation-rule>
         <from-view-id>pages/*</from-view-id>
@@ -204,6 +223,34 @@
             <redirect />
         </navigation-case>
     </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>pages/*</from-view-id>
+        <navigation-case>
+            <from-outcome>kardex-cliente</from-outcome>
+            <to-view-id>/pages/cobranzas/kardex-cliente.xhtml?faces-redirect=true</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+        <navigation-rule>
+        <from-view-id>pages/*</from-view-id>
+        <navigation-case>
+            <from-outcome>kardex-cliente</from-outcome>
+            <to-view-id>/pages/cobranzas/kardex-cliente.xhtml?faces-redirect=true</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule> 
+    
+    
+            <navigation-rule>
+        <from-view-id>pages/*</from-view-id>
+        <navigation-case>
+            <from-outcome>reportes-comision-cliente</from-outcome>
+            <to-view-id>/pages/reports/comision-cliente.xhtml?faces-redirect=true</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule> 
     
     <navigation-rule>
         <from-view-id>pages/*</from-view-id>

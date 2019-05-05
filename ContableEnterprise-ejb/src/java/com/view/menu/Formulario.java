@@ -40,6 +40,7 @@ public class Formulario implements Serializable {
     public static final String CONFIGURACION_USER = "user-personal";
     public static final String MAYORES = "mayores";
     public static final String SUMAS_SALDOS = "sumas-saldos";
+    public static final String ESTADOS_RESULTADOS = "estados-resultados";
     public static final String SISTEMA = "sistema";
     public static final String LOGS = "logs";
     //---REPORTES

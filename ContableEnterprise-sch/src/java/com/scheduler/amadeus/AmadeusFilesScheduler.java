@@ -42,9 +42,6 @@ public class AmadeusFilesScheduler {
     private LoggerRemote ejbLogger;
     
     @EJB
-    private CambioRemote ejbCambio ;
-
-    @EJB
     private AmadeusFileRemote ejbAmadeus;
 
     @EJB
@@ -78,7 +75,7 @@ public class AmadeusFilesScheduler {
 
             for (final File f : mainFolder.listFiles()) {
                 System.out.println(f.getName());
-                if (f.isFile()) {
+                if (f.isFile() && !f.getName().contains(".jar") ) {
                     HashMap<String, String> parameters = new HashMap<>();
                     parameters.put("nombreArchivo", f.getName());
                     List l=  ejbAmadeus.get("ArchivoBoleto.findByNombreArchivo", ArchivoBoleto.class, parameters);

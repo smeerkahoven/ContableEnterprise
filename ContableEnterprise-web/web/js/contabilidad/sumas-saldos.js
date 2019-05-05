@@ -53,6 +53,11 @@ angular.module('jsSumasSaldos.controllers', []).controller('frmSumasSaldos',
                 $scope.showForm = false;
 
                 $scope.itemsByPage = 15;
+                
+                $scope.cancelar = function () {
+                    $scope.gridMain = {} ;
+                    $scope.search = {} ;
+                }
 
                 $scope.find = function () {
 
@@ -123,16 +128,6 @@ angular.module('jsSumasSaldos.controllers', []).controller('frmSumasSaldos',
                     $scope.showRestfulError = false;
                 }
 
-
-
-                $scope.findCta = function (cta, input) {
-                    var i = 0;
-                    for (i; i < input.length; i++) {
-                        if (input[i].id === cta) {
-                            return input[i];
-                        }
-                    }
-                }
                 
                 $scope.imprimirComprobante = function (data) {
                     window.open(`../../ComprobanteReporteServlet?idLibro=${data.idLibro}`, '_target');
