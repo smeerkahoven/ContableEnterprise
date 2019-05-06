@@ -46,11 +46,6 @@ public class CargoBoletoJSON implements Serializable {
 
         cargo.setConcepto(json.getConcepto());
         cargo.setEstado(json.getEstado());
-        if (json.getIdCuentaAgencia() != null) {
-            cargo.setIdCuentaAgencia(new PlanCuentas(((Double) json.getIdCuentaAgencia().getId()).intValue()));
-        } else {
-            throw new CRUDException("No se ha enviado la cuenta de la comision de la Agencia");
-        }
 
         if (json.getIdCuentaMayorista() != null) {
             cargo.setIdCuentaMayorista(new PlanCuentas(((Double) json.getIdCuentaMayorista().getId()).intValue()));
@@ -58,12 +53,19 @@ public class CargoBoletoJSON implements Serializable {
             throw new CRUDException("No se ha enviado la cuenta de la comision de Mayorista");
         }
 
+        /*
+        if (json.getIdCuentaAgencia() != null) {
+            cargo.setIdCuentaAgencia(new PlanCuentas(((Double) json.getIdCuentaAgencia().getId()).intValue()));
+        } else {
+            throw new CRUDException("No se ha enviado la cuenta de la comision de la Agencia");
+        }
+
         if (json.getIdCuentaPromotor() != null) {
             cargo.setIdCuentaPromotor(new PlanCuentas(((Double) json.getIdCuentaPromotor().getId()).intValue()));
         } else {
             throw new CRUDException("No se ha enviado la cuenta de la comision de Promotor");
         }
-
+         */
         cargo.setIdEmpresa(json.getIdEmpresa());
         cargo.setMoneda(json.getMoneda());
         cargo.setTipo(json.getTipo());
@@ -83,9 +85,17 @@ public class CargoBoletoJSON implements Serializable {
         json.setConcepto(cargo.getConcepto());
         json.setEstado(cargo.getEstado());
         json.setFechaInsert(DateContable.getDateFormat(cargo.getFechaInsert(), DateContable.LATIN_AMERICA_TIME_FORMAT));
-        json.setIdCuentaAgencia(new ComboSelect(cargo.getIdCuentaAgencia().getIdPlanCuentas(), cargo.getIdCuentaAgencia().getCuenta()));
+        
         json.setIdCuentaMayorista(new ComboSelect(cargo.getIdCuentaMayorista().getIdPlanCuentas(), cargo.getIdCuentaAgencia().getCuenta()));
-        json.setIdCuentaPromotor(new ComboSelect(cargo.getIdCuentaPromotor().getIdPlanCuentas(), cargo.getIdCuentaAgencia().getCuenta()));
+
+        if (cargo.getIdCuentaAgencia() != null) {
+            json.setIdCuentaAgencia(new ComboSelect(cargo.getIdCuentaAgencia().getIdPlanCuentas(), cargo.getIdCuentaAgencia().getCuenta()));
+        }
+
+        if (cargo.getIdCuentaPromotor() != null) {
+            json.setIdCuentaPromotor(new ComboSelect(cargo.getIdCuentaPromotor().getIdPlanCuentas(), cargo.getIdCuentaAgencia().getCuenta()));
+        }
+        
         json.setIdEmpresa(cargo.getIdEmpresa());
         json.setIdCargo(cargo.getIdCargo());
         json.setMoneda(cargo.getMoneda());

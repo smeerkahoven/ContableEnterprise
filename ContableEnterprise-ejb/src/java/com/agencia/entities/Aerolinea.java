@@ -42,11 +42,12 @@ import javax.xml.bind.annotation.XmlRootElement;
     ,@NamedQuery(name = "Aerolinea.allCombo", query = "SELECT a.idAerolinea, a.numero, a.nombre FROM Aerolinea a  ORDER by a.numero")
 })
 public class Aerolinea extends Entidad {
-    
+
     public static final class Comision {
-        public static final String TOTAL = "T" ;
-        public static final String NETO = "N" ;
-        
+
+        public static final String TOTAL = "T";
+        public static final String NETO = "N";
+
     }
 
     private static final long serialVersionUID = 1L;
@@ -145,10 +146,15 @@ public class Aerolinea extends Entidad {
     private Boolean modalidadBoleto;
     @Column(name = "registra_pnr")
     private Boolean registraPnr;
-    @OneToMany(orphanRemoval = true, fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_aerolinea", updatable = false)
-    private List<AerolineaImpuesto> aerolineaImpuestoList;
 
+    /*@OneToMany( fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_aerolinea_impuesto")
+    private List<AerolineaImpuesto> aerolineaImpuestoList;*/
+    
+    @OneToMany(orphanRemoval = true, cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_aerolinea_impuesto")
+    private List<AerolineaImpuesto> aerolineaImpuestoList;
+    
     @OneToMany(orphanRemoval = true, cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
     @JoinColumn(name = "id_comision_promotor")
     private List<ComisionPromotorAerolinea> comisionPromotorList;
@@ -448,6 +454,7 @@ public class Aerolinea extends Entidad {
         this.aerolineaImpuestoList = aerolineaImpuestoList;
     }
 
+    
     public List<ComisionPromotorAerolinea> getComisionPromotorList() {
         return comisionPromotorList;
     }

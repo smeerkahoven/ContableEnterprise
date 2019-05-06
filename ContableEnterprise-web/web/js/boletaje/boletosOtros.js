@@ -36,7 +36,6 @@ function Impuesto() {
     this.valorImpuestoUsd = null;
 }
 
-
 function Boleto() {
     this.idBoleto = null;
     this.gestion = null;
@@ -196,6 +195,7 @@ function OtroCargo() {
     this.usuarioCreador = null;
     this.fechaInsert = null;
 }
+
 Impuesto.prototype = Object.create(Impuesto.prototype);
 Impuesto.prototype.constructor = Impuesto;
 
@@ -262,6 +262,7 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                 $scope.SEGURO = 'S';
                 $scope.RESERVA = 'R';
                 $scope.CARGO = 'C';
+                $scope.DEBITO = 'D';
 
                 $scope.NOTA_DEBITO = 'N';
                 $scope.TRANSACCION = 'T';
@@ -559,7 +560,6 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                     } else if ($scope.boleto.tipoCupon === $scope.NACIONAL) {
                         $scope.boleto.moneda = $scope.MONEDA_NACIONAL;
                     }
-                    console.log($scope.boleto);
                 }
 
                 $scope.imprimir = function (option) {
@@ -638,14 +638,13 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                 $scope.imprimirItemComprobante = function (item) {
                     window.open(`../../ComprobanteReporteServlet?idLibro=${item.idLibro}`, '_blank');
                 }
-                
-                
+
+
                 /**
                  * Falta realizar las validaciones de los valores que son requeridos
                  * @returns {Boolean}
                  */
                 $scope.formHasErrorBoleto = function () {
-                    console.log($scope.boleto);
                     //numero del boleto
                     //console.log(`showCheckNumeroBoletoExists:${$scope.showCheckNumeroBoletoExists}`);
                     if ($scope.showCheckNumeroBoletoExists) {
@@ -741,31 +740,42 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                 }
 
                 $scope.formHasErrorCargos = function () {
+                    if ($scope.showCargo) {
 
-                    if (!$scope.cargos.idCuentaMayorista) {
-                        return true;
+                        if (!$scope.cargos.idCuentaMayorista) {
+                            return true;
+                        }
+
+                        if (!$scope.cargos.idCuentaMayorista.id) {
+                            return true;
+                        }
+
+                        if (!$scope.cargos.idCuentaAgencia) {
+                            return true;
+                        }
+
+                        if (!$scope.cargos.idCuentaAgencia.id) {
+                            return true;
+                        }
+
+
+                        if (!$scope.cargos.idCuentaPromotor) {
+                            return true;
+                        }
+
+                        if (!$scope.cargos.idCuentaPromotor.id) {
+                            return true;
+                        }
+                    } else if ($scope.showDebito) {
+                        if (!$scope.cargos.idCuentaMayorista) {
+                            return true;
+                        }
+
+                        if (!$scope.cargos.idCuentaMayorista.id) {
+                            return true;
+                        }
                     }
 
-                    if (!$scope.cargos.idCuentaMayorista.id) {
-                        return true;
-                    }
-
-                    if (!$scope.cargos.idCuentaAgencia) {
-                        return true;
-                    }
-
-                    if (!$scope.cargos.idCuentaAgencia.id) {
-                        return true;
-                    }
-
-
-                    if (!$scope.cargos.idCuentaPromotor) {
-                        return true;
-                    }
-
-                    if (!$scope.cargos.idCuentaPromotor.id) {
-                        return true;
-                    }
                     return false;
                 }
 
@@ -1062,12 +1072,12 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                             $scope.showFrmBoletoManual = true;
                         }
                     }
-                    
+
                     if ($scope.formData.estado === $scope.CANCELADO ||
                             $scope.formData.estado === $scope.EN_MORA) {
-                        $scope.showFrmBoletoEditar = false ;
+                        $scope.showFrmBoletoEditar = false;
                     } else {
-                        $scope.showFrmBoletoEditar = true ;
+                        $scope.showFrmBoletoEditar = true;
                     }
 
                 }
@@ -1332,18 +1342,29 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                     $scope.cargos.tipo = tipo;
                     $scope.cargos.idNotaDebito = $scope.formData.idNotaDebito;
 
+                    $scope.showCargo = false;
+                    $scope.showDebito = false;
+
                     $scope.showFrmBoletoNuevo = true;
                     $scope.showFrmBoletoEditar = false;
 
                     switch (tipo) {
                         case $scope.PAQUETE :
                             $scope.showFormCargoTitle = 'Datos del Paquete';
+                            $scope.showCargo = true;
                             break;
                         case $scope.SEGURO :
                             $scope.showFormCargoTitle = 'Datos del Seguro';
+                            $scope.showCargo = true;
                             break;
                         case $scope.ALQUILER :
                             $scope.showFormCargoTitle = 'Datos del Alquiler';
+                            $scope.showCargo = true;
+                            break;
+                        case $scope.DEBITO :
+                            $scope.showFormCargoTitle = 'Datos del Debito';
+                            $scope.showDebito = true;
+                            $scope.getPlanCuentasAll();
                             break;
                     }
                     $scope.showFrmBoletoNuevo = true;
@@ -1451,8 +1472,6 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                                 return;
                             }
                         }
-
-                        console.log(data);
 
                         if (data.length == 0) {
                             showWarning(WARNING_TITLE, 'Debe elegir al menos un Boleto.');
@@ -1649,6 +1668,9 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                             $scope.formData.montoTotalBs = nota.montoTotalBs;
                             $scope.formData.montoTotalUsd = nota.montoTotalUsd;
 
+                            $scope.formData.montoAdeudadoBs = nota.montoAdeudadoBs;
+                            $scope.formData.montoAdeudadoUsd = nota.montoAdeudadoUsd;
+                            
                             $scope.loadTransacciones();
                         } else {
                             $scope.showAlert("Error", response.data.content);
@@ -1703,7 +1725,6 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
 
                 $scope.saveBoleto = function () {
                     if (!$scope.myFormBoleto.$valid) {
-                        console.log($scope.myFormBoleto);
                         $scope.showAlert(ERROR_VERIFICACION_TITLE, VERIFIQUE_VALORES_REQUERIDOS);
                         return;
                     }
@@ -2651,6 +2672,24 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                                 $scope.comboPasivoMayorista = response.data.content;
                             }
 
+                        } else {
+                            $scope.showRestfulMessage = response.data.content;
+                            $scope.showRestfulError = true;
+                            return {};
+                        }
+                    }, $scope.errorFunction);
+                }
+
+
+                $scope.getPlanCuentasAll = function () {
+                    return $http({
+                        method: 'POST',
+                        url: `${urlPlan.value}combo/${idEmpresa}`,
+                        data: {token: token.value, content: ''},
+                        headers: {'Content-Type': 'application/json'}
+                    }).then(function (response) {
+                        if (response.data.code === 201) {
+                            $scope.comboCuentaContable = response.data.content;
                         } else {
                             $scope.showRestfulMessage = response.data.content;
                             $scope.showRestfulError = true;

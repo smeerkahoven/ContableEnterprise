@@ -10,9 +10,12 @@ import com.seguridad.control.exception.CRUDException;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -27,7 +30,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "cnt_aerolinea_impuesto")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "AerolineaImpuesto.findAll", query = "SELECT a FROM AerolineaImpuesto a WHERE a.idAerolinea=:idAerolinea")})
+    @NamedQuery(name = "AerolineaImpuesto.findAll", query = "SELECT a FROM AerolineaImpuesto a WHERE a.idAerolinea.idAerolinea=:idAerolinea")})
 public class AerolineaImpuesto extends Entidad {
 
     private static final long serialVersionUID = 1L;
@@ -41,21 +44,22 @@ public class AerolineaImpuesto extends Entidad {
     @Column(name = "nombre")
     private String nombre;
 
-    /*Column(name = "id_aerolinea")
-    private int idAerolinea;*/
- /*@JoinColumn(name = "id_aerolinea", referencedColumnName = "idAerolinea")
-    @ManyToOne (optional = false, fetch = FetchType.LAZY)
-    private Aerolinea idAerolinea;*/
-    @Column (name = "id_aerolinea")
-    private Integer idAerolinea;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_aerolinea", updatable = false)
+    private Aerolinea idAerolinea;
+    
+    /*@Column (name = "id_aerolinea")
+    private Integer idAerolinea;*/
 
-    public Integer getIdAerolinea() {
+    public Aerolinea getIdAerolinea() {
         return idAerolinea;
     }
 
-    public void setIdAerolinea(Integer idAerolinea) {
+    public void setIdAerolinea(Aerolinea idAerolinea) {
         this.idAerolinea = idAerolinea;
     }
+
+    
 
     public AerolineaImpuesto() {
     }

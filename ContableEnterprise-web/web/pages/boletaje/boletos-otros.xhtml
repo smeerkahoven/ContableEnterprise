@@ -412,6 +412,7 @@
                                                                     <a class="dropdown-item" ng-click="newOtroCargo(PAQUETE)">Paquete</a>
                                                                     <a class="dropdown-item" ng-click="newOtroCargo(SEGURO)">Seguro</a>
                                                                     <a class="dropdown-item" ng-click="newOtroCargo(ALQUILER)">Alquiler</a>
+                                                                    <a class="dropdown-item" ng-click="newOtroCargo(DEBITO)">Debito</a>
                                                                 </div>
                                                             </div>
 
@@ -923,8 +924,7 @@
                                                         </div>
                                                     </div>
 
-
-                                                    <div class="form-group row">
+                                                    <div class="form-group row" ng-show="showCargo">
                                                         <label for="txtNombre" class=" col-form-label col-sm-2 text-right">Cuenta Operador Mayorista</label>
                                                         <div class="col-sm-6">
                                                             <input type="text" ng-model="cargos.idCuentaMayorista" placeholder="Seleccione una cuenta"
@@ -945,7 +945,7 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="form-group row">
+                                                    <div class="form-group row" ng-show="showCargo">
                                                         <label for="txtNombre" class=" col-form-label col-sm-2 text-right">Comisi&oacute;n Agencia</label>
                                                         <div class="col-sm-6">
                                                             <input type="text" ng-model="cargos.idCuentaAgencia" placeholder="Seleccione una cuenta"
@@ -967,7 +967,7 @@
                                                     </div>
 
 
-                                                    <div class="form-group row">
+                                                    <div class="form-group row" ng-show="showCargo">
                                                         <label for="txtNombre" class=" col-form-label col-sm-2 text-right">Comisi&oacute;n Promotor</label>
                                                         <div class="col-sm-6">
                                                             <input type="text" ng-model="cargos.idCuentaPromotor" placeholder="Seleccione una cuenta"
@@ -975,9 +975,9 @@
                                                                    class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="1" 
                                                                    typeahead-template-url="customTemplate.html" 
                                                                    />
-                                                            <span class="alert-danger"  ng-show="cargos.idCuentaPromotor.id === undefined"  >
-                                                                Ingrese una cuenta de Comisi&oacute;n Promotor
-                                                            </span> 
+                                                            <!--<span class="alert-danger"  ng-show="cargos.idCuentaPromotor.id === undefined"  >
+                                                                Ingrese una Cuenta de Comisi&oacute;n Promotor
+                                                            </span>--> 
                                                         </div>
                                                         <label for="txtNombre" class=" col-form-label text-right">Monto</label>
                                                         <div class="col-sm-2">
@@ -987,6 +987,30 @@
                                                                    data-toggle="tooltip" data-placement="top"  />
                                                         </div>
                                                     </div>
+                                                    
+                                                    <!-- Debito -->
+                                                    
+                                                    <div class="form-group row" ng-show="showDebito">
+                                                        <label for="txtNombre" class=" col-form-label col-sm-2 text-right">Cuenta Contable</label>
+                                                        <div class="col-sm-6">
+                                                            <input type="text" ng-model="cargos.idCuentaMayorista" placeholder="Seleccione una cuenta"
+                                                                   uib-typeahead="cuenta as cuenta.name for cuenta in comboCuentaContable | filter:{name:$viewValue}"
+                                                                   class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="1" 
+                                                                   typeahead-template-url="customTemplate.html" 
+                                                                   />
+                                                            <span class="alert-danger"  ng-show="cargos.idCuentaMayorista.id === undefined"  >
+                                                                Ingrese una Cuenta Contable
+                                                            </span> 
+                                                        </div>
+                                                        <label for="txtNombre" class=" col-form-label text-right">Monto</label>
+                                                        <div class="col-sm-2">
+                                                            <input type="number" class="form-control input-number" name="txtImporteTotal" placeholder="0.00" 
+                                                                   ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01" min="0" 
+                                                                   ng-model="cargos.comisionMayorista" 
+                                                                   data-toggle="tooltip" data-placement="top"  />
+                                                        </div>
+                                                    </div>
+                                                    <!-- /Debito -->
 
                                                     <div class="form-group row">
                                                         <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Concepto</label>

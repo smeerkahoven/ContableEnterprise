@@ -734,12 +734,16 @@ public class BoletoEJB extends FacadeEJB implements BoletoRemote {
         insert(comisionMayorista);
 
         //comisionAgencia = ejbComprobante.crearComisionAgenciaHaber(cargo, nota, comprobante, cargo.getIdNotaDebitoTransaccion());
-        comisionAgencia = ejbComprobante.crearComisionAgenciaHaber(cargo, nota, comprobante, trx);
-        insert(comisionAgencia);
+        if (cargo.getIdCuentaAgencia() != null) {
+            comisionAgencia = ejbComprobante.crearComisionAgenciaHaber(cargo, nota, comprobante, trx);
+            insert(comisionAgencia);
+        }
 
         //comisionCounter = ejbComprobante.crearComisionCounterHaber(cargo, nota, comprobante, cargo.getIdNotaDebitoTransaccion());
-        comisionCounter = ejbComprobante.crearComisionCounterHaber(cargo, nota, comprobante, trx);
-        insert(comisionCounter);
+        if (cargo.getIdCuentaPromotor() != null) {
+            comisionCounter = ejbComprobante.crearComisionCounterHaber(cargo, nota, comprobante, trx);
+            insert(comisionCounter);
+        }
 
         return false;
 

@@ -67,13 +67,13 @@ public class CargoBoleto extends Entidad {
     @Column(name = "comision_mayorista")
     private BigDecimal comisionMayorista;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_cuenta_agencia")
     private PlanCuentas idCuentaAgencia;
     @Column(name = "comision_agencia")
     private BigDecimal comisionAgencia;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_cuenta_promotor")
     private PlanCuentas idCuentaPromotor;
     @Column(name = "comision_promotor")

@@ -5,6 +5,7 @@
  */
 package com.response.json.agencia;
 
+import com.agencia.entities.Aerolinea;
 import com.agencia.entities.AerolineaImpuesto;
 import java.util.LinkedList;
 import java.util.List;
@@ -25,7 +26,7 @@ public class AerolineaImpuestoJSON {
 
     public static AerolineaImpuesto toAerolineaImpuesto(AerolineaImpuestoJSON json) {
         AerolineaImpuesto aim = new AerolineaImpuesto();
-        aim.setIdAerolinea(json.getIdAerolinea());
+        //aim.setIdAerolinea((json.getIdAerolinea()));
         aim.setIdAerolineaImpuesto(json.getIdAerolineaImpuesto());
         aim.setNombre(json.getNombre());
         

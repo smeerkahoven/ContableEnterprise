@@ -11,35 +11,35 @@ function isNumberKey(evt)
     return true;
 }
 ;
-let  NETO ='N';
-let TOTAL = 'T' ;
-function Aerolinea(){
+let  NETO = 'N';
+let TOTAL = 'T';
+function Aerolinea() {
     this.idAerolinea = null;
-    this.numero =null ;
-    this.iata=null;
-    this.nit = null ;
-    this.emitirFacturaA= null;
-    this.nombre = null ;
-    this.representante=null;
-    this.direccion= null ;
-    this.telefono=null;
-    this.celular=null;
-    this.email=null;
-    this.personaContacto=null;
-    this.bsp=null ;
-    this.comisionPromInt=0;
-    this.comisionPromIntTipo=NETO;
-    this.comisionPromNac=0;
-    this.comisionPromNacTipo=NETO;
-    this.roundComisionBob=false ;
-    this.roundComisionUsd=false;
-    this.boletosMonNac=false;
-    this.boletosMonExt=false;
-    this.moneda=null;
-    this.impuestoValorNeto=true;
-    this.impuestoQm=true;
-    this.registraPnr=true;
-    this.bsp=true;
+    this.numero = null;
+    this.iata = null;
+    this.nit = null;
+    this.emitirFacturaA = null;
+    this.nombre = null;
+    this.representante = null;
+    this.direccion = null;
+    this.telefono = null;
+    this.celular = null;
+    this.email = null;
+    this.personaContacto = null;
+    this.bsp = null;
+    this.comisionPromInt = 0;
+    this.comisionPromIntTipo = NETO;
+    this.comisionPromNac = 0;
+    this.comisionPromNacTipo = NETO;
+    this.roundComisionBob = false;
+    this.roundComisionUsd = false;
+    this.boletosMonNac = false;
+    this.boletosMonExt = false;
+    this.moneda = null;
+    this.impuestoValorNeto = true;
+    this.impuestoQm = true;
+    this.registraPnr = true;
+    this.bsp = true;
 }
 
 Aerolinea.prototype = Object.create(Aerolinea.prototype);
@@ -171,16 +171,16 @@ angular.module('jsAerolinea.controllers', []).controller('frmAerolinea',
 
                     $scope.loading = true;
                     /*$scope.formData.ctaVentasMonExt = $scope.formData.ctaVentasMonExt.id;
-                    $scope.formData.ctaVentasMonNac = $scope.formData.ctaVentasMonNac.id;
-                    $scope.formData.ctaComisionMonExt = $scope.formData.ctaComisionMonExt.id;
-                    $scope.formData.ctaComisionMonNac = $scope.formData.ctaComisionMonNac.id;
-                    $scope.formData.ctaDevolucionMonExt = $scope.formData.ctaDevolucionMonExt.id;
-                    $scope.formData.ctaDevolucionMonNac = $scope.formData.ctaDevolucionMonNac.id;*/
+                     $scope.formData.ctaVentasMonNac = $scope.formData.ctaVentasMonNac.id;
+                     $scope.formData.ctaComisionMonExt = $scope.formData.ctaComisionMonExt.id;
+                     $scope.formData.ctaComisionMonNac = $scope.formData.ctaComisionMonNac.id;
+                     $scope.formData.ctaDevolucionMonExt = $scope.formData.ctaDevolucionMonExt.id;
+                     $scope.formData.ctaDevolucionMonNac = $scope.formData.ctaDevolucionMonNac.id;*/
 
                     $http({
                         method: 'POST',
                         url: url.value + 'save',
-                        data: {token: token.value, content: angular.toJson($scope.formData) , formName : formName.value},
+                        data: {token: token.value, content: angular.toJson($scope.formData), formName: formName.value},
                         headers: {'Content-Type': 'application/json'}
                     }).then(function (response) {
 
@@ -217,20 +217,23 @@ angular.module('jsAerolinea.controllers', []).controller('frmAerolinea',
                         $scope.showErrorOtrosImpuestos = true;
                         return;
                     }
-                    
-                    if ($scope.formData.aerolineaImpuestoList.length >= 5){
+
+                    if ($scope.formData.aerolineaImpuestoList === undefined) {
+                        $scope.formData.aerolineaImpuestoList = [];
+                    }
+
+                    if ($scope.formData.aerolineaImpuestoList.length >= 5) {
                         $scope.showErrorMaximoImpuetos = true;
-                        return ;
+                        return;
                     }
 
                     $scope.showErrorOtrosImpuestos = false;
-
 
                     var data = {idAerolinea: $scope.formData.idAerolinea, nombre: $scope.formData.otrosImpuestos}
                     $http({
                         method: 'POST',
                         url: url.value + 'update-impuestos-insert',
-                        data: {token: token.value, content: angular.toJson(data) , formName : formName.value},
+                        data: {token: token.value, content: angular.toJson(data), formName: formName.value},
                         headers: {'Content-Type': 'application/json'}
                     }).then(function (response) {
                         if (response.data.code === 201) {
@@ -245,6 +248,7 @@ angular.module('jsAerolinea.controllers', []).controller('frmAerolinea',
                     }, function (error) {
                         $scope.showRestfulMessage = error.statusText;
                         $scope.showRestfulError = true;
+                        goScrollTo('restful-error');
                     });
                 };
 
@@ -300,7 +304,7 @@ angular.module('jsAerolinea.controllers', []).controller('frmAerolinea',
                     $http({
                         method: 'POST',
                         url: url.value + 'update',
-                        data: {token: token.value, content: angular.toJson($scope.formData) , formName : formName.value},
+                        data: {token: token.value, content: angular.toJson($scope.formData), formName: formName.value},
                         headers: {'Content-Type': 'application/json'}
                     }).then(function (response) {
                         $scope.loading = false;
@@ -320,6 +324,7 @@ angular.module('jsAerolinea.controllers', []).controller('frmAerolinea',
                         $scope.loading = false;
                         $scope.showRestfulMessage = error.statusText;
                         $scope.showRestfulError = true;
+                        goScrollTo('restful-error');
                         //$scope.showForm = true;
                     });
                 };
@@ -487,7 +492,7 @@ angular.module('jsAerolinea.controllers', []).controller('frmAerolinea',
                     return $http({
                         method: 'POST',
                         url: url.value + 'save-cuenta',
-                        data: {token: token.value, content: angular.toJson(data) , formName : formName.value},
+                        data: {token: token.value, content: angular.toJson(data), formName: formName.value},
                         headers: {'Content-Type': 'application/json'}
                     }).then(function (response) {
                         if (response.data.code === 201) {
@@ -499,6 +504,7 @@ angular.module('jsAerolinea.controllers', []).controller('frmAerolinea',
                     }, function (error) {
                         $scope.showRestfulMessage = error;
                         $scope.showRestfulError = true;
+                        goScrollTo('restful-error');
                     });
                 }
 
@@ -513,7 +519,7 @@ angular.module('jsAerolinea.controllers', []).controller('frmAerolinea',
                     return $http({
                         method: 'POST',
                         url: url.value + 'save-cuenta',
-                        data: {token: token.value, content: angular.toJson(data), formName : formName.value},
+                        data: {token: token.value, content: angular.toJson(data), formName: formName.value},
                         headers: {'Content-Type': 'application/json'}
                     }).then(function (response) {
                         if (response.data.code === 201) {
@@ -525,10 +531,11 @@ angular.module('jsAerolinea.controllers', []).controller('frmAerolinea',
                     }, function (error) {
                         $scope.showRestfulMessage = error;
                         $scope.showRestfulError = true;
+                        goScrollTo('restful-error');
                     });
                 }
 
-                $scope.updateAddCuentaComisionNac = function (p_planCuentas,p_tipo, p_moneda) {
+                $scope.updateAddCuentaComisionNac = function (p_planCuentas, p_tipo, p_moneda) {
                     $scope.loadingAddCuentaComisionNac = true;
                     var data = {
                         idAerolinea: $scope.formData.idAerolinea,
@@ -536,11 +543,11 @@ angular.module('jsAerolinea.controllers', []).controller('frmAerolinea',
                         moneda: p_moneda,
                         idPlanCuentas: p_planCuentas.id
                     }
-                    
+
                     return $http({
                         method: 'POST',
                         url: url.value + 'save-cuenta',
-                        data: {token: token.value, content: angular.toJson(data) ,formName : formName.value},
+                        data: {token: token.value, content: angular.toJson(data), formName: formName.value},
                         headers: {'Content-Type': 'application/json'}
                     }).then(function (response) {
                         if (response.data.code === 201) {
@@ -552,6 +559,7 @@ angular.module('jsAerolinea.controllers', []).controller('frmAerolinea',
                     }, function (error) {
                         $scope.showRestfulMessage = error;
                         $scope.showRestfulError = true;
+                        goScrollTo('restful-error');
                     });
                 }
 
@@ -563,11 +571,11 @@ angular.module('jsAerolinea.controllers', []).controller('frmAerolinea',
                         moneda: p_moneda,
                         idPlanCuentas: p_planCuentas.id
                     }
-                                        
+
                     return $http({
                         method: 'POST',
                         url: url.value + 'save-cuenta',
-                        data: {token: token.value, content: angular.toJson(data) ,formName : formName.value},
+                        data: {token: token.value, content: angular.toJson(data), formName: formName.value},
                         headers: {'Content-Type': 'application/json'}
                     }).then(function (response) {
                         if (response.data.code === 201) {
@@ -579,10 +587,11 @@ angular.module('jsAerolinea.controllers', []).controller('frmAerolinea',
                     }, function (error) {
                         $scope.showRestfulMessage = error;
                         $scope.showRestfulError = true;
+                        goScrollTo('restful-error');
                     });
                 }
 
-                $scope.updateAddCuentaDevolucionNac = function (p_planCuentas,p_tipo, p_moneda) {
+                $scope.updateAddCuentaDevolucionNac = function (p_planCuentas, p_tipo, p_moneda) {
                     $scope.loadingAddCuentaDevolucionNac = true;
                     var data = {
                         idAerolinea: $scope.formData.idAerolinea,
@@ -593,7 +602,7 @@ angular.module('jsAerolinea.controllers', []).controller('frmAerolinea',
                     return $http({
                         method: 'POST',
                         url: url.value + 'save-cuenta',
-                        data: {token: token.value, content: angular.toJson(data) ,formName : formName.value},
+                        data: {token: token.value, content: angular.toJson(data), formName: formName.value},
                         headers: {'Content-Type': 'application/json'}
                     }).then(function (response) {
                         if (response.data.code === 201) {
@@ -605,6 +614,7 @@ angular.module('jsAerolinea.controllers', []).controller('frmAerolinea',
                     }, function (error) {
                         $scope.showRestfulMessage = error;
                         $scope.showRestfulError = true;
+                        goScrollTo('restful-error');
                     });
                 }
 
@@ -619,7 +629,7 @@ angular.module('jsAerolinea.controllers', []).controller('frmAerolinea',
                     return $http({
                         method: 'POST',
                         url: url.value + 'save-cuenta',
-                        data: {token: token.value, content: angular.toJson(data) ,formName : formName.value},
+                        data: {token: token.value, content: angular.toJson(data), formName: formName.value},
                         headers: {'Content-Type': 'application/json'}
                     }).then(function (response) {
                         if (response.data.code === 201) {
@@ -631,6 +641,7 @@ angular.module('jsAerolinea.controllers', []).controller('frmAerolinea',
                     }, function (error) {
                         $scope.showRestfulMessage = error;
                         $scope.showRestfulError = true;
+                        goScrollTo('restful-error');
                     });
                 }
 
@@ -665,6 +676,7 @@ angular.module('jsAerolinea.controllers', []).controller('frmAerolinea',
                     }, function (error) {
                         $scope.showLinkRestfulMessage = error;
                         $scope.showLinkRestfulSuccess = true;
+                        goScrollTo('restful-error');
                     });
                 }
 
@@ -682,7 +694,7 @@ angular.module('jsAerolinea.controllers', []).controller('frmAerolinea',
                     $http({
                         method: 'POST',
                         url: url.value + method,
-                        data: {token: token.value, content: angular.toJson(data),formName : formName.value},
+                        data: {token: token.value, content: angular.toJson(data), formName: formName.value},
                         headers: {'Content-Type': 'application/json'}
                     }).then(function (response) {
                         $scope.loading = false;
@@ -699,6 +711,8 @@ angular.module('jsAerolinea.controllers', []).controller('frmAerolinea',
                             } else {
                                 $scope.getData('all', $scope.data);
                             }
+                            
+                            goScrollToSuccess();
 
                         } else {
                             $scope.showRestfulMessage = response.data.content;
@@ -709,6 +723,7 @@ angular.module('jsAerolinea.controllers', []).controller('frmAerolinea',
                         $scope.loading = false;
                         $scope.showRestfulMessage = error.statusText;
                         $scope.showRestfulError = true;
+                        goScrollTo('restful-error');
                         //$scope.showForm = true;
                     });
                 };
@@ -723,12 +738,12 @@ angular.module('jsAerolinea.controllers', []).controller('frmAerolinea',
 
                     $scope.formData = item;
                     /*$scope.formData.ctaVentasMonNac = $scope.findCta(item.ctaVentasMonNac, $scope.comboVentas);
-                    $scope.formData.ctaVentasMonExt = $scope.findCta(item.ctaVentasMonExt, $scope.comboVentas);
-                    $scope.formData.ctaComisionMonNac = $scope.findCta(item.ctaComisionMonNac, $scope.comboComisiones);
-                    $scope.formData.ctaComisionMonExt = $scope.findCta(item.ctaComisionMonExt, $scope.comboComisiones);
-                    $scope.formData.ctaDevolucionMonExt = $scope.findCta(item.ctaDevolucionMonExt, $scope.comboDevoluciones);
-                    $scope.formData.ctaDevolucionMonNac = $scope.findCta(item.ctaDevolucionMonNac, $scope.comboDevoluciones);
-*/
+                     $scope.formData.ctaVentasMonExt = $scope.findCta(item.ctaVentasMonExt, $scope.comboVentas);
+                     $scope.formData.ctaComisionMonNac = $scope.findCta(item.ctaComisionMonNac, $scope.comboComisiones);
+                     $scope.formData.ctaComisionMonExt = $scope.findCta(item.ctaComisionMonExt, $scope.comboComisiones);
+                     $scope.formData.ctaDevolucionMonExt = $scope.findCta(item.ctaDevolucionMonExt, $scope.comboDevoluciones);
+                     $scope.formData.ctaDevolucionMonNac = $scope.findCta(item.ctaDevolucionMonNac, $scope.comboDevoluciones);
+                     */
                 }
 
                 $scope.nuevo = function () {
@@ -738,8 +753,8 @@ angular.module('jsAerolinea.controllers', []).controller('frmAerolinea',
                     $scope.showTable = false;
                     $scope.hideMessagesBox();
                     $scope.formData = new Aerolinea();
-                    $scope.showErrorMaximoImpuetos = false ;
-                    $scope.showErrorOtrosImpuestos = false ;
+                    $scope.showErrorMaximoImpuetos = false;
+                    $scope.showErrorOtrosImpuestos = false;
                 }
 
                 $scope.hideMessagesBox = function () {

@@ -22,6 +22,10 @@ import javax.ejb.Remote;
 
 @Remote
 public interface AerolineaRemote extends DaoRemoteFacade {
+
+    @Override
+    public Entidad get(Integer id, Class<?> typeClass) throws CRUDException;
+    
     
     public Aerolinea getAerolinea(Aerolinea a) throws CRUDException;
 

@@ -390,16 +390,23 @@ public class AerolineaResource extends TemplateResource {
                 ajson = gson.fromJson(object.toString(), AerolineaJSON.class);
 
                 Aerolinea pcu = AerolineaJSON.toAerolinea(ajson);
+                System.out.println("saveAerolinea:");
                 pcu.setIdAerolinea(ejbAerolinea.insert(pcu));
 
                 //se debe insertar los impuestos nuevos
                 if (!ajson.getAerolineaImpuestoList().isEmpty()) {
                     Iterator i = ajson.getAerolineaImpuestoList().iterator();
                     while (i.hasNext()) {
+                         System.out.println("insertandos impuestos");
                         AerolineaImpuestoJSON aijson = (AerolineaImpuestoJSON) i.next();
                         AerolineaImpuesto aim = AerolineaImpuestoJSON.toAerolineaImpuesto(aijson);
-                        aim.setIdAerolinea(pcu.getIdAerolinea());
-
+                        
+                        Aerolinea fromDb = (Aerolinea)ejbAerolinea.get(pcu.getIdAerolinea(), Aerolinea.class);
+                        
+                        aim.setIdAerolinea(fromDb);
+                        //System.out.println ("ID:"+aim.getId());
+                        System.out.println ("insertandos idAerolinea:"+aim.getIdAerolinea());
+                        System.out.println ("idAerolineaImpuesto:"+aim.getIdAerolineaImpuesto());
                         ejbAerolinea.insert(aim);
                     }
                 }
@@ -538,6 +545,11 @@ public class AerolineaResource extends TemplateResource {
                 ajson = gson.fromJson(object.toString(), AerolineaImpuestoJSON.class);
 
                 AerolineaImpuesto pcu = AerolineaImpuestoJSON.toAerolineaImpuesto(ajson);
+                
+                Aerolinea afromDb =(Aerolinea) ejbAerolinea.get(ajson.getIdAerolinea(), Aerolinea.class);
+                
+                pcu.setIdAerolinea(afromDb);
+                
                 Integer id = ejbAerolinea.insert(pcu);
                 
                 pcu.setIdAerolineaImpuesto(id);
