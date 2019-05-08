@@ -1,3 +1,36 @@
+
+
+ALTER TABLE `db_travel`.`cnt_asiento_contable` 
+ADD COLUMN `tipo_monto_boleto` VARCHAR(1) NULL AFTER `id_devolucion`;
+
+
+ALTER TABLE `db_travel`.`cnt_cargo_boleto` 
+DROP FOREIGN KEY `FK_cnt_cargo_boleto_id_cuenta_agencia`,
+DROP FOREIGN KEY `FK_cnt_cargo_boleto_id_cuenta_promotor`,
+DROP FOREIGN KEY `fk_cnt_cargo_boleto_2`,
+DROP FOREIGN KEY `fk_cnt_cargo_boleto_3`;
+ALTER TABLE `db_travel`.`cnt_cargo_boleto` 
+CHANGE COLUMN `id_cuenta_agencia` `id_cuenta_agencia` INT(11) NULL ,
+CHANGE COLUMN `id_cuenta_promotor` `id_cuenta_promotor` INT(11) NULL ;
+ALTER TABLE `db_travel`.`cnt_cargo_boleto` 
+ADD CONSTRAINT `FK_cnt_cargo_boleto_id_cuenta_agencia`
+  FOREIGN KEY (`id_cuenta_agencia`)
+  REFERENCES `db_travel`.`cnt_plan_cuentas` (`id_plan_cuentas`),
+ADD CONSTRAINT `FK_cnt_cargo_boleto_id_cuenta_promotor`
+  FOREIGN KEY (`id_cuenta_promotor`)
+  REFERENCES `db_travel`.`cnt_plan_cuentas` (`id_plan_cuentas`),
+ADD CONSTRAINT `fk_cnt_cargo_boleto_2`
+  FOREIGN KEY (`id_cuenta_agencia`)
+  REFERENCES `db_travel`.`cnt_plan_cuentas` (`id_plan_cuentas`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION,
+ADD CONSTRAINT `fk_cnt_cargo_boleto_3`
+  FOREIGN KEY (`id_cuenta_promotor`)
+  REFERENCES `db_travel`.`cnt_plan_cuentas` (`id_plan_cuentas`)
+  ON DELETE NO ACTION
+  ON UPDATE NO ACTION;
+
+
 -- formulario comprobante-contador
 insert into tb_formularios (
 id_modulo
@@ -93,28 +126,3 @@ values (
 
 
 
-ALTER TABLE `db_travel`.`cnt_cargo_boleto` 
-DROP FOREIGN KEY `FK_cnt_cargo_boleto_id_cuenta_agencia`,
-DROP FOREIGN KEY `FK_cnt_cargo_boleto_id_cuenta_promotor`,
-DROP FOREIGN KEY `fk_cnt_cargo_boleto_2`,
-DROP FOREIGN KEY `fk_cnt_cargo_boleto_3`;
-ALTER TABLE `db_travel`.`cnt_cargo_boleto` 
-CHANGE COLUMN `id_cuenta_agencia` `id_cuenta_agencia` INT(11) NULL ,
-CHANGE COLUMN `id_cuenta_promotor` `id_cuenta_promotor` INT(11) NULL ;
-ALTER TABLE `db_travel`.`cnt_cargo_boleto` 
-ADD CONSTRAINT `FK_cnt_cargo_boleto_id_cuenta_agencia`
-  FOREIGN KEY (`id_cuenta_agencia`)
-  REFERENCES `db_travel`.`cnt_plan_cuentas` (`id_plan_cuentas`),
-ADD CONSTRAINT `FK_cnt_cargo_boleto_id_cuenta_promotor`
-  FOREIGN KEY (`id_cuenta_promotor`)
-  REFERENCES `db_travel`.`cnt_plan_cuentas` (`id_plan_cuentas`),
-ADD CONSTRAINT `fk_cnt_cargo_boleto_2`
-  FOREIGN KEY (`id_cuenta_agencia`)
-  REFERENCES `db_travel`.`cnt_plan_cuentas` (`id_plan_cuentas`)
-  ON DELETE NO ACTION
-  ON UPDATE NO ACTION,
-ADD CONSTRAINT `fk_cnt_cargo_boleto_3`
-  FOREIGN KEY (`id_cuenta_promotor`)
-  REFERENCES `db_travel`.`cnt_plan_cuentas` (`id_plan_cuentas`)
-  ON DELETE NO ACTION
-  ON UPDATE NO ACTION;
