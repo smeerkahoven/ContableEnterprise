@@ -107,7 +107,7 @@ public class DevolucionReportServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            String jrxmlFileName = "/resources/cabecera.jasper";
+            String jrxmlFileName = "/resources/cabecera_420.jasper";
             File archivoReporte = new File(request.getSession().getServletContext().getRealPath(jrxmlFileName));
             Integer idNotaDebito = Integer.parseInt(request.getParameter("idDev"));
             HashMap hm = null;

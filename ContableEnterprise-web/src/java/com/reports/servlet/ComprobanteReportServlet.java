@@ -110,7 +110,7 @@ public class ComprobanteReportServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
         try {
-            String jrxmlFileName = "/resources/cabecera.jasper";
+            String jrxmlFileName = "/resources/cabecera_240.jasper";
             File archivoReporte = new File(request.getSession().getServletContext().getRealPath(jrxmlFileName));
             Integer idLibro = Integer.parseInt(request.getParameter("idLibro"));
             HashMap hm = null;

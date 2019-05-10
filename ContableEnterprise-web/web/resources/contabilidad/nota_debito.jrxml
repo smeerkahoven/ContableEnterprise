@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="907" pageHeight="391" orientation="Landscape" columnWidth="905" leftMargin="1" rightMargin="1" topMargin="1" bottomMargin="1" uuid="608f1086-8f90-4924-b9fd-503584db866d">
-	<property name="ireport.zoom" value="1.0000000000000024"/>
-	<property name="ireport.x" value="0"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="907" pageHeight="521" orientation="Landscape" columnWidth="905" leftMargin="1" rightMargin="1" topMargin="1" bottomMargin="1" uuid="608f1086-8f90-4924-b9fd-503584db866d">
+	<property name="ireport.zoom" value="1.6105100000000045"/>
+	<property name="ireport.x" value="604"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="ID_NOTA_DEBITO" class="java.lang.String">
 		<defaultValueExpression><![CDATA[337]]></defaultValueExpression>
@@ -294,7 +294,7 @@ sucursal]]></fieldDescription>
 		<band splitType="Stretch"/>
 	</pageFooter>
 	<summary>
-		<band height="129" splitType="Stretch">
+		<band height="129" splitType="Immediate">
 			<textField>
 				<reportElement x="5" y="16" width="830" height="14" isPrintWhenDetailOverflows="true" uuid="c82859b7-4935-4efa-91d3-e5bf3ccb0c6b"/>
 				<textElement>
@@ -345,7 +345,7 @@ sucursal]]></fieldDescription>
 				<textFieldExpression><![CDATA[$F{monto_total_bs}==0?"":( "Son:"+$F{literal_bs} + " " + $F{decimal_part_bs} + "/100 BOLIVIANOS.")]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="5" y="113" width="342" height="14" uuid="83dfc52a-30a8-4e49-b459-08cb1f53f8af"/>
+				<reportElement x="5" y="110" width="342" height="14" uuid="83dfc52a-30a8-4e49-b459-08cb1f53f8af"/>
 				<textElement>
 					<font fontName="DejaVu Sans Mono" size="12" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
