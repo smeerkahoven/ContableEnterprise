@@ -349,6 +349,7 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                     $scope.loading = true;
 
                     $scope.formData.idEmpresa = $scope.formData.idEmpresa.id;
+                    
 
                     $http({
                         method: 'POST',
@@ -1740,6 +1741,13 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                     if ($scope.boleto.estado === $scope.CREADO) {
                         $scope.boleto.estado = $scope.PENDIENTE;
                     }
+                    
+                    if ($scope.boleto.nombrePasajero !== undefined){
+                        if ($scope.boleto.nombrePasajero.name !== undefined){
+                            $scope.boleto.nombrePasajero = $scope.boleto.nombrePasajero.name ;
+                        }
+                    }
+                    
                     showBackground();
                     $scope.loading = true;
                     $scope.assignImpuestosToBoleto();

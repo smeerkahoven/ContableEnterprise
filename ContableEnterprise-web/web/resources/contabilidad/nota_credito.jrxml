@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="907" pageHeight="521" columnWidth="867" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="1" uuid="05708238-32c6-4b2d-94c3-a78b24b631fb">
-	<property name="ireport.zoom" value="3.3000000000000105"/>
-	<property name="ireport.x" value="1956"/>
-	<property name="ireport.y" value="58"/>
+	<property name="ireport.zoom" value="1.0514816984441806"/>
+	<property name="ireport.x" value="148"/>
+	<property name="ireport.y" value="0"/>
 	<parameter name="ID_CREDITO" class="java.lang.String">
 		<defaultValueExpression><![CDATA[6]]></defaultValueExpression>
 	</parameter>
@@ -109,7 +109,7 @@ sucursal]]></fieldDescription>
 	<pageHeader>
 		<band height="26" splitType="Stretch">
 			<textField>
-				<reportElement x="397" y="0" width="418" height="25" uuid="cd6fad28-c39b-4c89-a744-a59a3fc15091"/>
+				<reportElement x="397" y="0" width="418" height="22" uuid="cd6fad28-c39b-4c89-a744-a59a3fc15091"/>
 				<textElement textAlignment="Right">
 					<font fontName="DejaVu Sans Mono" size="18" isBold="true" pdfFontName="Courier-Bold" isPdfEmbedded="true"/>
 				</textElement>
@@ -119,9 +119,9 @@ sucursal]]></fieldDescription>
 				<reportElement x="1" y="25" width="813" height="1" uuid="222a71a6-8039-492a-8577-0288016e208c"/>
 			</line>
 			<textField>
-				<reportElement x="75" y="11" width="121" height="14" uuid="cf152777-bdc5-4033-aabf-14d8ae714d20"/>
+				<reportElement x="75" y="4" width="121" height="18" uuid="cf152777-bdc5-4033-aabf-14d8ae714d20"/>
 				<textElement>
-					<font fontName="DejaVu Sans Mono" size="12" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="DejaVu Sans Mono" size="14" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{gestion}+ "-"+ 
     ($F{id_numero_gestion}<10 
@@ -130,9 +130,9 @@ sucursal]]></fieldDescription>
 )]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="11" width="75" height="14" uuid="2254cf5c-ca79-4ee0-b72d-d568f5bfff96"/>
+				<reportElement x="0" y="4" width="75" height="18" uuid="2254cf5c-ca79-4ee0-b72d-d568f5bfff96"/>
 				<textElement textAlignment="Right">
-					<font fontName="DejaVu Sans Mono" size="12" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="DejaVu Sans Mono" size="14" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[Asiento:]]></text>
 			</staticText>
@@ -141,65 +141,65 @@ sucursal]]></fieldDescription>
 	<columnHeader>
 		<band height="80" splitType="Stretch">
 			<textField isStretchWithOverflow="true">
-				<reportElement x="77" y="2" width="447" height="14" uuid="a9d5ff25-277e-42b1-9f89-9ae1d471e9a9"/>
+				<reportElement x="77" y="2" width="474" height="18" uuid="a9d5ff25-277e-42b1-9f89-9ae1d471e9a9"/>
 				<textElement>
-					<font fontName="DejaVu Sans Mono" size="12" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="DejaVu Sans Mono" size="14" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{cliente}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="1" y="2" width="74" height="14" uuid="69cb3b93-8979-496c-a203-73ea1a815c03"/>
+				<reportElement x="1" y="2" width="74" height="18" uuid="69cb3b93-8979-496c-a203-73ea1a815c03"/>
 				<textElement textAlignment="Right">
-					<font fontName="DejaVu Sans Mono" size="12" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="DejaVu Sans Mono" size="14" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[Señores:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="714" y="1" width="100" height="14" uuid="0a5f2962-fe77-45a2-9edc-3e9ce5e12258"/>
+				<reportElement x="714" y="1" width="100" height="18" uuid="0a5f2962-fe77-45a2-9edc-3e9ce5e12258"/>
 				<textElement>
-					<font fontName="DejaVu Sans Mono" size="12" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="DejaVu Sans Mono" size="14" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{factor_cambiario}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="714" y="16" width="100" height="14" uuid="a9d48ee5-0099-44bc-8274-1bd1eea5a0dd"/>
+				<reportElement x="714" y="18" width="100" height="18" uuid="a9d48ee5-0099-44bc-8274-1bd1eea5a0dd"/>
 				<textElement>
-					<font fontName="DejaVu Sans Mono" size="12" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="DejaVu Sans Mono" size="14" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{fecha_emision}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="636" y="1" width="77" height="14" uuid="4087cc5b-a49f-42b4-b22c-6c98879f99ca"/>
+				<reportElement x="636" y="1" width="77" height="18" uuid="4087cc5b-a49f-42b4-b22c-6c98879f99ca"/>
 				<textElement textAlignment="Right">
-					<font fontName="DejaVu Sans Mono" size="12" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="DejaVu Sans Mono" size="14" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[Factor:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="596" y="16" width="117" height="14" uuid="90987dfa-23ff-41b1-9536-c4501233f704"/>
+				<reportElement x="570" y="18" width="143" height="18" uuid="90987dfa-23ff-41b1-9536-c4501233f704"/>
 				<textElement textAlignment="Right">
-					<font fontName="DejaVu Sans Mono" size="12" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="DejaVu Sans Mono" size="14" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[Fecha Emision:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="63" width="300" height="14" uuid="34cfe6bc-8811-4eb3-a1c7-fb5846edf163"/>
+				<reportElement x="0" y="59" width="300" height="18" uuid="34cfe6bc-8811-4eb3-a1c7-fb5846edf163"/>
 				<textElement>
-					<font fontName="DejaVu Sans Mono" size="12" isBold="true" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="DejaVu Sans Mono" size="14" isBold="true" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[DESCRIPCION]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="665" y="63" width="68" height="14" uuid="341dd98e-a90a-49ab-8ec4-c3564b9f3f03"/>
+				<reportElement x="665" y="59" width="68" height="18" uuid="341dd98e-a90a-49ab-8ec4-c3564b9f3f03"/>
 				<textElement textAlignment="Right">
-					<font fontName="DejaVu Sans Mono" size="12" isBold="true" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="DejaVu Sans Mono" size="14" isBold="true" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[BS.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="746" y="63" width="68" height="14" uuid="b5987175-7def-4392-a9c6-7ec6e2889325"/>
+				<reportElement x="746" y="59" width="68" height="18" uuid="b5987175-7def-4392-a9c6-7ec6e2889325"/>
 				<textElement textAlignment="Right">
-					<font fontName="DejaVu Sans Mono" size="12" isBold="true" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="DejaVu Sans Mono" size="14" isBold="true" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[USD.]]></text>
 			</staticText>
@@ -207,83 +207,83 @@ sucursal]]></fieldDescription>
 				<reportElement x="1" y="77" width="813" height="1" uuid="6a810a7b-e6e7-4831-96ab-c79550c504c3"/>
 			</line>
 			<staticText>
-				<reportElement x="0" y="18" width="75" height="14" uuid="7ee88a32-77b5-455a-976e-f4f2e6542ae4"/>
+				<reportElement x="0" y="23" width="75" height="18" uuid="7ee88a32-77b5-455a-976e-f4f2e6542ae4"/>
 				<textElement textAlignment="Right">
-					<font fontName="DejaVu Sans Mono" size="12" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="DejaVu Sans Mono" size="14" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[Concepto:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="77" y="18" width="450" height="34" uuid="360a2f9c-e1bf-4252-a179-8d50c3f778dd"/>
+				<reportElement x="77" y="23" width="450" height="18" uuid="360a2f9c-e1bf-4252-a179-8d50c3f778dd"/>
 				<textElement>
-					<font fontName="DejaVu Sans Mono" size="12" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="DejaVu Sans Mono" size="14" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{concepto}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="585" y="63" width="68" height="14" uuid="bb479792-665e-4356-a10d-a863aec9a835"/>
+				<reportElement x="585" y="59" width="68" height="18" uuid="bb479792-665e-4356-a10d-a863aec9a835"/>
 				<textElement textAlignment="Right">
-					<font fontName="DejaVu Sans Mono" size="12" isBold="true" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="DejaVu Sans Mono" size="14" isBold="true" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[USD.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="506" y="63" width="68" height="14" uuid="6783511d-7149-4a8c-a9d2-39cf9b659e98"/>
+				<reportElement x="506" y="59" width="68" height="18" uuid="6783511d-7149-4a8c-a9d2-39cf9b659e98"/>
 				<textElement textAlignment="Right">
-					<font fontName="DejaVu Sans Mono" size="12" isBold="true" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="DejaVu Sans Mono" size="14" isBold="true" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[BS.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="517" y="50" width="134" height="14" uuid="42cbc717-a71a-4251-9e54-97e64f680b6d"/>
+				<reportElement x="517" y="39" width="134" height="18" uuid="42cbc717-a71a-4251-9e54-97e64f680b6d"/>
 				<textElement textAlignment="Right">
-					<font fontName="DejaVu Sans Mono" size="12" isBold="true" isUnderline="true" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="DejaVu Sans Mono" size="14" isBold="true" isUnderline="true" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[Monto Adeudado]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="680" y="49" width="134" height="14" uuid="68faa86c-680a-4e0d-9b6b-84afc3a23249"/>
+				<reportElement x="680" y="40" width="134" height="18" uuid="68faa86c-680a-4e0d-9b6b-84afc3a23249"/>
 				<textElement textAlignment="Right">
-					<font fontName="DejaVu Sans Mono" size="12" isBold="true" isUnderline="true" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="DejaVu Sans Mono" size="14" isBold="true" isUnderline="true" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[Monto Acreditado]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="15" splitType="Stretch">
+		<band height="20" splitType="Stretch">
 			<textField isStretchWithOverflow="true">
-				<reportElement x="0" y="0" width="489" height="14" uuid="36e191bc-a6a8-49df-9aa2-efa6f75bbf99"/>
+				<reportElement x="0" y="0" width="489" height="18" uuid="36e191bc-a6a8-49df-9aa2-efa6f75bbf99"/>
 				<textElement>
-					<font fontName="DejaVu Sans Mono" size="12" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="DejaVu Sans Mono" size="14" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{tr_descripcion} + " Ref. Nota Debito:" + $F{id_nota_debito}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
-				<reportElement x="654" y="1" width="80" height="14" uuid="335d3751-78ee-4576-b673-2bc65539e8df"/>
+				<reportElement x="654" y="1" width="80" height="18" uuid="335d3751-78ee-4576-b673-2bc65539e8df"/>
 				<textElement textAlignment="Right">
-					<font fontName="DejaVu Sans Mono" size="12" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="DejaVu Sans Mono" size="14" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{monto_bs_tr}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="false">
-				<reportElement x="734" y="1" width="80" height="14" uuid="b92f8830-1c43-4b73-b1c9-e44e8b399e07"/>
+				<reportElement x="734" y="1" width="80" height="18" uuid="b92f8830-1c43-4b73-b1c9-e44e8b399e07"/>
 				<textElement textAlignment="Right">
-					<font fontName="DejaVu Sans Mono" size="12" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="DejaVu Sans Mono" size="14" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{monto_usd_tr}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
-				<reportElement x="574" y="1" width="80" height="14" uuid="3d17d1d9-69da-4a0d-8353-7b99515692c6"/>
+				<reportElement x="574" y="1" width="80" height="18" uuid="3d17d1d9-69da-4a0d-8353-7b99515692c6"/>
 				<textElement textAlignment="Right">
-					<font fontName="DejaVu Sans Mono" size="12" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="DejaVu Sans Mono" size="14" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{monto_adeudado_usd}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
-				<reportElement x="493" y="1" width="80" height="14" uuid="ddbde28f-37e1-4118-98cb-0deaec6b8626"/>
+				<reportElement x="493" y="1" width="80" height="18" uuid="ddbde28f-37e1-4118-98cb-0deaec6b8626"/>
 				<textElement textAlignment="Right">
-					<font fontName="DejaVu Sans Mono" size="12" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="DejaVu Sans Mono" size="14" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{monto_adeudado_bs}]]></textFieldExpression>
 			</textField>
@@ -296,73 +296,73 @@ sucursal]]></fieldDescription>
 		<band splitType="Stretch"/>
 	</pageFooter>
 	<summary>
-		<band height="116" splitType="Immediate">
+		<band height="150" splitType="Immediate">
 			<line>
 				<reportElement x="1" y="0" width="813" height="4" uuid="e9970861-1e3f-4d2a-899e-4e74cb8c5538"/>
 			</line>
 			<staticText>
-				<reportElement x="0" y="3" width="435" height="14" uuid="cdb77b20-454f-489c-9798-b3afc384ce24"/>
+				<reportElement x="0" y="3" width="435" height="18" uuid="cdb77b20-454f-489c-9798-b3afc384ce24"/>
 				<textElement>
-					<font fontName="DejaVu Sans Mono" size="12" isBold="true" pdfFontName="Courier-Bold" isPdfEmbedded="true"/>
+					<font fontName="DejaVu Sans Mono" size="14" isBold="true" pdfFontName="Courier-Bold" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[TOTAL]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
-				<reportElement x="654" y="5" width="80" height="14" uuid="7a01dcb6-ec36-4051-a7a7-28e9b3e309a3"/>
+				<reportElement x="654" y="5" width="80" height="18" uuid="7a01dcb6-ec36-4051-a7a7-28e9b3e309a3"/>
 				<textElement textAlignment="Right">
-					<font fontName="DejaVu Sans Mono" size="12" isBold="true" pdfFontName="Courier-Bold" isPdfEmbedded="true"/>
+					<font fontName="DejaVu Sans Mono" size="14" isBold="true" pdfFontName="Courier-Bold" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{monto_abonado_bs}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
-				<reportElement x="734" y="5" width="80" height="14" uuid="9e4e95d1-c2a4-40d8-a922-d62d34cb0dce"/>
+				<reportElement x="734" y="5" width="80" height="18" uuid="9e4e95d1-c2a4-40d8-a922-d62d34cb0dce"/>
 				<textElement textAlignment="Right">
-					<font fontName="DejaVu Sans Mono" size="12" isBold="true" pdfFontName="Courier-Bold" isPdfEmbedded="true"/>
+					<font fontName="DejaVu Sans Mono" size="14" isBold="true" pdfFontName="Courier-Bold" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{monto_abonado_usd}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="1" y="32" width="570" height="14" uuid="f52fb10b-7a39-4f0d-a655-c78aef103c54">
+				<reportElement x="1" y="40" width="814" height="18" uuid="f52fb10b-7a39-4f0d-a655-c78aef103c54">
 					<printWhenExpression><![CDATA[$F{monto_abonado_bs}!= null]]></printWhenExpression>
 				</reportElement>
 				<textElement>
-					<font fontName="DejaVu Sans Mono" size="12" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="DejaVu Sans Mono" size="14" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{literal_bs}!=null && $F{decimal_part_bs}!=null?"Son:"+$F{literal_bs} + " " + ($F{decimal_part_bs}<10?"0"+$F{decimal_part_bs}:$F{decimal_part_bs}) + "/100 BOLIVIANOS.":""]]></textFieldExpression>
 			</textField>
-			<textField isBlankWhenNull="false">
-				<reportElement x="0" y="17" width="570" height="14" isRemoveLineWhenBlank="true" uuid="5882ede2-7af1-4d0e-9b13-f5f1f6d2df40">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
+				<reportElement x="0" y="22" width="815" height="18" isRemoveLineWhenBlank="true" uuid="5882ede2-7af1-4d0e-9b13-f5f1f6d2df40">
 					<printWhenExpression><![CDATA[$F{monto_abonado_usd}!= null]]></printWhenExpression>
 				</reportElement>
 				<textElement>
-					<font fontName="DejaVu Sans Mono" size="12" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="DejaVu Sans Mono" size="14" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{literal_usd}!= null && $F{decimal_part_usd}!=null?"Son:" + $F{literal_usd} + " " + ($F{decimal_part_usd}<10?"0"+$F{decimal_part_usd}:$F{decimal_part_usd})+"/100 DOLARES.": ""]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="534" y="83" width="251" height="14" uuid="31565672-d2e2-41a4-8684-c68ee15de330"/>
+				<reportElement x="534" y="109" width="251" height="18" uuid="31565672-d2e2-41a4-8684-c68ee15de330"/>
 				<textElement textAlignment="Center">
-					<font fontName="DejaVu Sans Mono" size="12" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="DejaVu Sans Mono" size="14" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[FIRMA DEL CLIENTE]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="223" y="83" width="254" height="14" uuid="9ee79ed2-1388-497c-985c-7eaf1e38896c"/>
+				<reportElement x="223" y="109" width="254" height="18" uuid="9ee79ed2-1388-497c-985c-7eaf1e38896c"/>
 				<textElement textAlignment="Center">
-					<font fontName="DejaVu Sans Mono" size="12" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="DejaVu Sans Mono" size="14" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["AUTORIZADO POR :" + $F{id_usuario}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="223" y="80" width="251" height="1" uuid="94f94940-c41c-4b26-8521-7c9099507993"/>
+				<reportElement x="223" y="106" width="251" height="1" uuid="94f94940-c41c-4b26-8521-7c9099507993"/>
 			</line>
 			<line>
-				<reportElement x="534" y="80" width="251" height="1" uuid="b87bcb6f-4dc8-4d2c-9542-727a6dbe32e9"/>
+				<reportElement x="534" y="106" width="251" height="1" uuid="b87bcb6f-4dc8-4d2c-9542-727a6dbe32e9"/>
 			</line>
 			<textField>
-				<reportElement x="1" y="97" width="342" height="19" uuid="a711826e-311c-4a90-af3d-900ac056c2af"/>
+				<reportElement x="1" y="129" width="488" height="18" uuid="a711826e-311c-4a90-af3d-900ac056c2af"/>
 				<textElement>
-					<font fontName="DejaVu Sans Mono" size="12" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="DejaVu Sans Mono" size="14" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Creado por: " + $F{id_usuario} + " fecha: " + $F{fecha_insert}]]></textFieldExpression>
 			</textField>
