@@ -381,7 +381,7 @@
                                                             <div class="col-sm-5">
                                                                 <input type="text" ng-model="formData.idClienteCorporativo" placeholder="Escriba un Cliente"
                                                                        uib-typeahead="corporativo as corporativo.name for corporativo in comboCorporativo| filter:{name:$viewValue}"
-                                                                       class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="0" 
+                                                                       class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="1" 
                                                                        typeahead-template-url="customTemplate.html" 
                                                                        />
                                                             </div>
@@ -391,8 +391,8 @@
                                                             <label for="txtPromotor" class="col-form-label col-sm-3 text-right">Promotor</label>
                                                             <div class="col-sm-5">
                                                                 <input type="text" ng-model="formData.idPromotor" placeholder="Escriba un Promotor"
-                                                                       uib-typeahead="promotor as grupo.name for grupo in comboPromotor | filter:{name:$viewValue}"
-                                                                       class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="0" 
+                                                                       uib-typeahead="promotor as promotor.name for promotor in comboPromotor | filter:{name:$viewValue}"
+                                                                       class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="1" 
                                                                        typeahead-template-url="customTemplate.html" 
                                                                        />
                                                             </div>

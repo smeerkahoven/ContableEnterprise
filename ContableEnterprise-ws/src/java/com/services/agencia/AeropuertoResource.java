@@ -11,6 +11,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.response.json.agencia.AeropuertoJson;
 import com.seguridad.control.entities.UserToken;
 import com.seguridad.control.exception.CRUDException;
 import com.seguridad.control.remote.UsuarioRemote;
@@ -197,12 +198,17 @@ public class AeropuertoResource {
                 UserToken t = ejbUsuario.get(new UserToken(request.getToken()));
                 if (t != null) {
                     if (t.getStatus().equals(Status.ACTIVO)) {
+                        System.out.println("Aeropuerto:Content:" +request.getContent());
 
-                        HashMap<String, Object> hmap = (HashMap<String, Object>) request.getContent();
+                        AeropuertoJson ajson = new AeropuertoJson();
+                        Gson gson = new GsonBuilder().create();
+                        JsonParser parser = new JsonParser();
+                        JsonObject object = parser.parse((String) request.getContent()).getAsJsonObject();
+                        ajson = gson.fromJson(object.toString(), AeropuertoJson.class);
 
                         Aeropuerto a = new Aeropuerto();
-                        a.setIdAeropuerto((String) hmap.get("idAeropuerto"));
-                        a.setNombre((String) hmap.get("nombre"));
+                        a.setIdAeropuerto(ajson.getIdAeropuerto());
+                        a.setNombre(ajson.getNombre());
 
                         ejbAeropuerto.insert(a);
 

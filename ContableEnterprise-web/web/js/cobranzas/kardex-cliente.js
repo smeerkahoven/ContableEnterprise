@@ -45,6 +45,7 @@ angular.module('jsKardexCliente.controllers', []).controller('frmKardexCliente',
                     $scope.showTable = true;
                     $scope.search = {fechaInicio: firstDay, fechaFin: today};
                     $scope.hideMessagesBox();
+                    $scope.mainGrid = {} ;
                 }
 
                 $scope.find = function () {
