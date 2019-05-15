@@ -2440,7 +2440,7 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                     $scope.resetCombinado();
                     $scope.resetTarjeta();
 
-                    $scope.formData.creditoVencimiento = today;
+                    $scope.formData.creditoVencimiento = $scope.formData.fechaEmision !== undefined ? $scope.formData.fechaEmision: today;
                     if ($scope.cliente !== undefined) {
                         $scope.formData.creditoDias = $scope.cliente.plazoMaximo;
                         $scope.setCreditoVencimiento();
@@ -2513,7 +2513,14 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                  */
                 $scope.setCreditoVencimiento = function () {
                     if ($scope.formData.creditoDias !== null) {
-                        var date = new Date(todayDate);
+                        console.log(todayDate);
+                        var tmpDate = $scope.formData.fechaEmision ;
+                        var parts ;
+                        if (tmpDate !== undefined){
+                            parts = tmpDate.split('/');
+                        }
+                        
+                        var date = new Date($scope.formData.fechaEmision !== undefined ? $scope.formData.fechaEmision :todayDate);
                         var newdate = new Date(date);
                         newdate.setDate(newdate.getDate() + $scope.formData.creditoDias);
                         var dd = newdate.getDate();
@@ -2812,6 +2819,18 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                         if (now !== old) {
                             $scope.showMensajeBoletoOrigenNoExiste = false;
                             $scope.showBoletoOrigenExiste = false;
+                        }
+                    }
+                });
+                
+                $scope.$watch('formData.fechaEmision', function (now, old) {
+                    if (now === undefined) {
+                    } else {
+                        if (now !== old) {
+                            
+                            if ($scope.formData.formaPago=== $scope.CREDITO){
+                                $scope.setCreditoVencimiento();
+                            }
                         }
                     }
                 });
