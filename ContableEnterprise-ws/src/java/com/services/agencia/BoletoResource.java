@@ -20,11 +20,14 @@ import com.response.json.contabilidad.NotaDebitoJSON;
 import com.seguridad.control.entities.Log;
 import com.seguridad.control.exception.CRUDException;
 import com.seguridad.utils.Accion;
+import com.seguridad.utils.DateContable;
 import com.seguridad.utils.ResponseCode;
 import com.services.TemplateResource;
 import com.services.seguridad.util.RestRequest;
 import com.services.seguridad.util.RestResponse;
 import com.view.menu.Formulario;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -641,6 +644,39 @@ public class BoletoResource extends TemplateResource {
 
         }
 
+        return response;
+    }
+    
+    @GET
+    @Path("sumar-fecha/{dia}/{mes}/{anho}/{dias}")
+    @Produces (MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public RestResponse sumarFecha (@PathParam("dia")String dia, @PathParam("mes")String mes
+            ,@PathParam("anho")String anho, @PathParam("dias") Integer dias){
+        RestResponse response  = new RestResponse();
+        
+        Date fechaEmision = null ;
+        
+        Calendar c = Calendar.getInstance() ;
+        
+        String fecha = dia + "/" + mes + "/"+ anho ;
+        
+        if (fecha == null) {
+            fechaEmision = DateContable.getCurrentDate() ;
+        }else {
+            fechaEmision = DateContable.toLatinAmericaDateFormat(fecha);
+        }
+        
+        c.setTime(fechaEmision);
+        // no se suma, se devuelve la fecha de emision
+        if (dias != null) {
+            c.add(Calendar.DAY_OF_YEAR, dias);
+        }
+        
+        response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
+        
+        response.setContent(DateContable.getDateFormat(c.getTime(), DateContable.LATIN_AMERICA_FORMAT) );
+        
         return response;
     }
 

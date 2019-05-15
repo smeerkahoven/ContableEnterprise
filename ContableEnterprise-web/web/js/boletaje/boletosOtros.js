@@ -349,7 +349,7 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                     $scope.loading = true;
 
                     $scope.formData.idEmpresa = $scope.formData.idEmpresa.id;
-                    
+
 
                     $http({
                         method: 'POST',
@@ -790,7 +790,7 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                         return;
                     }
                     if ($scope.formHasErrorBoleto()) {
-                        $scope.showAlert(ERROR_VERIFICACION_TITLE, VERIFIQUE_VALORES_REQUERIDOS);
+                        $scope.showAlert(ERROR_VERIFICACION_TITLE, $scope.showErrorAlertMessage);
                         return;
                     }
 
@@ -1671,7 +1671,7 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
 
                             $scope.formData.montoAdeudadoBs = nota.montoAdeudadoBs;
                             $scope.formData.montoAdeudadoUsd = nota.montoAdeudadoUsd;
-                            
+
                             $scope.loadTransacciones();
                         } else {
                             $scope.showAlert("Error", response.data.content);
@@ -1726,6 +1726,8 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
 
                 $scope.saveBoleto = function () {
                     if (!$scope.myFormBoleto.$valid) {
+                        console.log($scope.myFormBoleto);
+                        console.log($scope.myFormBoleto.$valid);
                         $scope.showAlert(ERROR_VERIFICACION_TITLE, VERIFIQUE_VALORES_REQUERIDOS);
                         return;
                     }
@@ -1741,13 +1743,13 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                     if ($scope.boleto.estado === $scope.CREADO) {
                         $scope.boleto.estado = $scope.PENDIENTE;
                     }
-                    
-                    if ($scope.boleto.nombrePasajero !== undefined){
-                        if ($scope.boleto.nombrePasajero.name !== undefined){
-                            $scope.boleto.nombrePasajero = $scope.boleto.nombrePasajero.name ;
+
+                    if ($scope.boleto.nombrePasajero !== undefined) {
+                        if ($scope.boleto.nombrePasajero.name !== undefined) {
+                            $scope.boleto.nombrePasajero = $scope.boleto.nombrePasajero.name;
                         }
                     }
-                    
+
                     showBackground();
                     $scope.loading = true;
                     $scope.assignImpuestosToBoleto();
@@ -2291,8 +2293,9 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
 
                 $scope.transformarMontoFeeToBs = function () {
                     if ($scope.boleto.montoFeeUsd !== null && $scope.boleto.montoFeeUsd !== undefined) {
+
                         var feeMontoBs = Number(parseFloat($scope.boleto.montoFeeUsd).toFixed(2) * parseFloat($scope.boleto.factorCambiario).toFixed(2)).toFixed(2);
-                        $scope.boleto.montoFeeBs = feeMontoBs.toFixed(2);
+                        $scope.boleto.montoFeeBs = Number(feeMontoBs);
                     }
                 }
 
@@ -2440,7 +2443,7 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                     $scope.resetCombinado();
                     $scope.resetTarjeta();
 
-                    $scope.formData.creditoVencimiento = $scope.formData.fechaEmision !== undefined ? $scope.formData.fechaEmision: today;
+                    $scope.formData.creditoVencimiento = $scope.formData.fechaEmision !== undefined ? $scope.formData.fechaEmision : today;
                     if ($scope.cliente !== undefined) {
                         $scope.formData.creditoDias = $scope.cliente.plazoMaximo;
                         $scope.setCreditoVencimiento();
@@ -2513,24 +2516,20 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                  */
                 $scope.setCreditoVencimiento = function () {
                     if ($scope.formData.creditoDias !== null) {
-                        console.log(todayDate);
-                        var tmpDate = $scope.formData.fechaEmision ;
-                        var parts ;
-                        if (tmpDate !== undefined){
-                            parts = tmpDate.split('/');
-                        }
-                        
-                        var date = new Date($scope.formData.fechaEmision !== undefined ? $scope.formData.fechaEmision :todayDate);
-                        var newdate = new Date(date);
-                        newdate.setDate(newdate.getDate() + $scope.formData.creditoDias);
-                        var dd = newdate.getDate();
-                        var mm = newdate.getMonth() + 1;
-                        var y = newdate.getFullYear();
-                        var someFormattedDate = dd + '/' + mm + '/' + y;
-                        if (newdate !== 'Invalid date')
-                            $scope.formData.creditoVencimiento = someFormattedDate;
-                        //$scope.formData.combinadoCreditoVencimiento = someFormattedDate;
-                        //$scope.formData.creditoVencimiento = creditToday.format("dd/mm/yyyy");
+
+                        var fechaEmision = $scope.formData.fechaEmision !== undefined ? $scope.formData.fechaEmision : today ;
+                        var dias = $scope.formData.creditoDias !== undefined ? $scope.formData.creditoDias : 0 ;
+
+                        return $http.get(`${urlBoletos.value}sumar-fecha/${fechaEmision}/${dias}`).then(function (response) {
+                            if (response.data.code === 201) {
+                                $scope.formData.creditoVencimiento = response.data.content;
+                            }
+                        }, function (error) {
+                            $scope.showRestfulError = true;
+                            $scope.showRestfulMessage = error.statusText;
+                            ;
+                        });
+
                     } else {
                         $scope.formData.creditoVencimiento = today;
                     }
@@ -2822,13 +2821,13 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                         }
                     }
                 });
-                
+
                 $scope.$watch('formData.fechaEmision', function (now, old) {
                     if (now === undefined) {
                     } else {
                         if (now !== old) {
-                            
-                            if ($scope.formData.formaPago=== $scope.CREDITO){
+
+                            if ($scope.formData.formaPago === $scope.CREDITO) {
                                 $scope.setCreditoVencimiento();
                             }
                         }

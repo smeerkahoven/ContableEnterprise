@@ -36,7 +36,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "ComisionPromotorAerolinea.findAll", query = "SELECT c FROM ComisionPromotorAerolinea c")
     ,
-@NamedQuery(name = "ComisionPromotorAerolinea.findComisiones", query = "SELECT c FROM ComisionPromotorAerolinea c WHERE c.idPromotor=:idPromotor and c.tipoAerolinea=:tipoAerolinea"),
+@NamedQuery(name = "ComisionPromotorAerolinea.findComisiones", query = "SELECT c FROM ComisionPromotorAerolinea c WHERE c.idPromotor=:idPromotor and c.tipoAerolinea=:tipoAerolinea")
+    ,
 @NamedQuery(name = "ComisionPromotorAerolinea.existComision", query = "SELECT c FROM ComisionPromotorAerolinea c WHERE c.idPromotor=:idPromotor and c.idAerolinea=:idAerolinea")
 }
 )
@@ -52,9 +53,11 @@ public class ComisionPromotorAerolinea extends Entidad {
     @Column(name = "id_promotor", updatable = false)
     private Integer idPromotor;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    /*@ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_aerolinea", updatable = false)
-    private Aerolinea idAerolinea;
+    private Aerolinea idAerolinea;*/
+    @Column(name = "id_aerolinea")
+    private Integer idAerolinea;
 
     @Basic(optional = false)
     @NotNull
@@ -78,11 +81,11 @@ public class ComisionPromotorAerolinea extends Entidad {
         this.idPromotor = idPromotor;
     }
 
-    public Aerolinea getIdAerolinea() {
+    public Integer getIdAerolinea() {
         return idAerolinea;
     }
 
-    public void setIdAerolinea(Aerolinea idAerolinea) {
+    public void setIdAerolinea(Integer idAerolinea) {
         this.idAerolinea = idAerolinea;
     }
 

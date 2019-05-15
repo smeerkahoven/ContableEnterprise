@@ -403,7 +403,7 @@ public class AerolineaResource extends TemplateResource {
                         
                         Aerolinea fromDb = (Aerolinea)ejbAerolinea.get(pcu.getIdAerolinea(), Aerolinea.class);
                         
-                        aim.setIdAerolinea(fromDb);
+                        aim.setIdAerolinea(fromDb.getIdAerolinea());
                         //System.out.println ("ID:"+aim.getId());
                         System.out.println ("insertandos idAerolinea:"+aim.getIdAerolinea());
                         System.out.println ("idAerolineaImpuesto:"+aim.getIdAerolineaImpuesto());
@@ -548,7 +548,7 @@ public class AerolineaResource extends TemplateResource {
                 
                 Aerolinea afromDb =(Aerolinea) ejbAerolinea.get(ajson.getIdAerolinea(), Aerolinea.class);
                 
-                pcu.setIdAerolinea(afromDb);
+                pcu.setIdAerolinea(afromDb.getIdAerolinea());
                 
                 Integer id = ejbAerolinea.insert(pcu);
                 

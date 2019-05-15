@@ -30,7 +30,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "cnt_aerolinea_impuesto")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "AerolineaImpuesto.findAll", query = "SELECT a FROM AerolineaImpuesto a WHERE a.idAerolinea.idAerolinea=:idAerolinea")})
+    @NamedQuery(name = "AerolineaImpuesto.findAll", query = "SELECT a FROM AerolineaImpuesto a WHERE a.idAerolinea=:idAerolinea")})
 public class AerolineaImpuesto extends Entidad {
 
     private static final long serialVersionUID = 1L;
@@ -44,18 +44,18 @@ public class AerolineaImpuesto extends Entidad {
     @Column(name = "nombre")
     private String nombre;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+   /* @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_aerolinea", updatable = false)
-    private Aerolinea idAerolinea;
+    private Aerolinea idAerolinea;*/
     
-    /*@Column (name = "id_aerolinea")
-    private Integer idAerolinea;*/
+    @Column (name = "id_aerolinea")
+    private Integer idAerolinea;
 
-    public Aerolinea getIdAerolinea() {
+    public Integer getIdAerolinea() {
         return idAerolinea;
     }
 
-    public void setIdAerolinea(Aerolinea idAerolinea) {
+    public void setIdAerolinea(Integer idAerolinea) {
         this.idAerolinea = idAerolinea;
     }
 
