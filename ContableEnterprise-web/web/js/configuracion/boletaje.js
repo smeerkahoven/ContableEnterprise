@@ -60,8 +60,9 @@ angular.module('jsBoletaje.controllers', []).controller('frmBoletaje',
                             return {};
                         }
                     }, function (error) {
-                        $scope.showRestfulMessage = error;
+                        $scope.showRestfulMessage = error.statusText;
                         $scope.showRestfulError = true;
+                        goScrollToSuccess();
                     });
                 }
 
@@ -102,6 +103,7 @@ angular.module('jsBoletaje.controllers', []).controller('frmBoletaje',
                         $scope.showRestfulMessage = error.statusText;
                         $scope.showRestfulError = true;
                         $scope.showForm = false;
+                        goScrollToSuccess();
                     });
                 };
 
@@ -483,7 +485,7 @@ angular.module('jsBoletaje.controllers', []).controller('frmBoletaje',
 
                     }, function (error) {
                         $scope.loading = false;
-                        $scope.showRestfulMessage = error;
+                        $scope.showRestfulMessage = error.statusText;
                         $scope.showRestfulError = true;
                         goScrollToSuccess();
                         //$scope.showForm = true;

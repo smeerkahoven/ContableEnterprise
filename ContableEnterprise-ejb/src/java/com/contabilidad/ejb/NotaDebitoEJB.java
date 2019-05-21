@@ -567,11 +567,17 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
             trxFromDb.setMontoBs(trxFromDb.getMontoBs().add(cargo.getComisionMayorista()));
             trxFromDb.setMontoBs(trxFromDb.getMontoBs().add(cargo.getComisionPromotor()));
             trxFromDb.setMontoAdeudadoBs(trxFromDb.getMontoBs());
+            
+            trxFromDb.setMontoUsd(null);
+            trxFromDb.setMontoAdeudadoUsd(null);
         } else {
             trxFromDb.setMontoUsd(cargo.getComisionAgencia());
             trxFromDb.setMontoUsd(trxFromDb.getMontoUsd().add(cargo.getComisionMayorista()));
             trxFromDb.setMontoUsd(trxFromDb.getMontoUsd().add(cargo.getComisionPromotor()));
             trxFromDb.setMontoAdeudadoUsd(trxFromDb.getMontoUsd());
+            
+            trxFromDb.setMontoAdeudadoBs(null);
+            trxFromDb.setMontoBs(null);
         }
         trxFromDb.setTipo(cargo.getTipo());
 
