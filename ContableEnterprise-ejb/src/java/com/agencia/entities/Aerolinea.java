@@ -22,8 +22,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -57,12 +55,10 @@ public class Aerolinea extends Entidad {
     @Column(name = "id_aerolinea")
     private Integer idAerolinea;
 
-    @NotNull
-    @Column(name = "numero", length = 2)
+    @Column(name = "numero", length = 2, nullable = false)
     private String numero;
 
-    @NotNull
-    @Column(name = "iata", length = 4)
+    @Column(name = "iata", length = 4, nullable = false)
     private String iata;
 
     @Column(name = "nit", length = 15)
@@ -98,13 +94,11 @@ public class Aerolinea extends Entidad {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "comision_prom_int")
     private BigDecimal comisionPromInt;
-    @Size(max = 1)
-    @Column(name = "comision_prom_int_tipo")
+    @Column(name = "comision_prom_int_tipo", length = 1)
     private String comisionPromIntTipo;
     @Column(name = "comision_prom_nac")
     private BigDecimal comisionPromNac;
-    @Size(max = 1)
-    @Column(name = "comision_prom_nac_tipo")
+    @Column(name = "comision_prom_nac_tipo", length = 1)
     private String comisionPromNacTipo;
 
     @Column(name = "round_comision_bob")
@@ -133,8 +127,7 @@ public class Aerolinea extends Entidad {
     private Boolean boletosMonNac;
     @Column(name = "boletos_mon_ext")
     private Boolean boletosMonExt;
-    @Size(max = 1)
-    @Column(name = "moneda")
+    @Column(name = "moneda", length = 1)
     private String moneda;
     @Column(name = "impuesto_valor_neto")
     private Boolean impuestoValorNeto;

@@ -7,7 +7,6 @@ package com.contabilidad.entities;
 
 import com.seguridad.control.entities.Entidad;
 import com.seguridad.control.exception.CRUDException;
-import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,8 +14,6 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -33,12 +30,12 @@ public class TipoComprobante extends Entidad {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 2)
-    @Column(name = "id_tipo_comprobante")
+//    @NotNull
+//    @Size(min = 1, max = 2)
+    @Column(name = "id_tipo_comprobante", nullable = false, length = 2)
     private String idTipoComprobante;
-    @Size(max = 32)
-    @Column(name = "valor")
+//    @Size(max = 32)
+    @Column(name = "valor", length = 32)
     private String valor;
 
     public TipoComprobante() {

@@ -51,8 +51,8 @@ public class SabreFileScheduler {
     @EJB
     private ParametrosRemote ejbParametros;
 
-    //@Schedule(dayOfWeek = "Mon-Fri", month = "*", hour = "7-18", dayOfMonth = "*", year = "*", minute = "*/5", second = "0")
-    @Schedule(dayOfWeek = "*", month = "*", hour = "*", minute = "*/10", second = "0")
+    @Schedule(dayOfWeek = "Mon-Fri", month = "*", hour = "7-18", dayOfMonth = "*", year = "*", minute = "5", second = "0")
+    //@Schedule(dayOfWeek = "*", month = "*", hour = "*", minute = "*/1", second = "0")
     public void dailyFileChecker() {
         Parametros p;
         try {
@@ -75,7 +75,7 @@ public class SabreFileScheduler {
             
             for (final File f : mainFolder.listFiles()) {
                 System.out.println(f.getName());
-                if (f.isFile()) {
+                if (f.isFile() && !f.getName().contains(".jar") && !f.getName().contains(".sh") ) {
                     HashMap<String, String> parameters = new HashMap<>();
                     parameters.put("nombreArchivo", f.getName());
                     List l = ejbSabre.get("ArchivoBoleto.findByNombreArchivo", ArchivoBoleto.class, parameters);
@@ -86,6 +86,7 @@ public class SabreFileScheduler {
                     } else {
                         //Si no se registra en la BD
                         String content = readFileContent(f);
+                        System.out.println("Content:"+ content);
                         saveFile(f.getName(), content);
                         // movemos el archivo a la zona backup
                         Path from = Paths.get(f.getAbsolutePath());
@@ -113,6 +114,7 @@ public class SabreFileScheduler {
 
             String currentLine;
             while ((currentLine = br.readLine()) != null) {
+                System.out.println("Reading line:" + currentLine);
                 builder.append(currentLine).append("\n");
             }
 

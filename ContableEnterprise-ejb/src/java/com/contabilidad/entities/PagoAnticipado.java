@@ -29,8 +29,6 @@ import javax.persistence.StoredProcedureParameter;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -62,8 +60,8 @@ public class PagoAnticipado extends Entidad {
     @Column(name = "id_pago_anticipado")
     private Integer idPagoAnticipado;
     @Basic(optional = false)
-    @NotNull
-    @Column(name = "id_empresa")
+//    @NotNull
+    @Column(name = "id_empresa", nullable = false)
     private Integer idEmpresa;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
 
@@ -77,21 +75,21 @@ public class PagoAnticipado extends Entidad {
 
     @Column(name = "factor_cambiario")
     private BigDecimal factorCambiario;
-    @Size(max = 1)
-    @Column(name = "moneda")
+//    @Size(max = 1)
+    @Column(name = "moneda", length = 1)
     private String moneda;
     @Column(name = "monto_anticipado")
     private BigDecimal montoAnticipado;
     @Column(name = "monto_total_acreditado")
     private BigDecimal montoTotalAcreditado;
-    @Size(max = 256)
-    @Column(name = "concepto")
+//    @Size(max = 256)
+    @Column(name = "concepto", length = 256)
     private String concepto;
-    @Size(max = 45)
-    @Column(name = "forma_pago")
+//    @Size(max = 45)
+    @Column(name = "forma_pago", length = 45)
     private String formaPago;
-    @Size(max = 45)
-    @Column(name = "nro_cheque")
+//    @Size(max = 45)
+    @Column(name = "nro_cheque", length = 45)
     private String nroCheque;
     @Column(name = "id_banco")
     private Integer idBanco;
@@ -102,17 +100,17 @@ public class PagoAnticipado extends Entidad {
     private String nroDeposito;
     @Column(name = "id_tarjeta_credito")
     private Integer idTarjetaCredito;
-    @Size(max = 16)
-    @Column(name = "nro_tarjeta")
+//    @Size(max = 16)
+    @Column(name = "nro_tarjeta", length = 16)
     private String nroTarjeta;
-    @Size(max = 16)
-    @Column(name = "id_usuario_creador")
+//    @Size(max = 16)
+    @Column(name = "id_usuario_creador", length = 16)
     private String idUsuarioCreador;
     @Column(name = "fecha_insert")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaInsert;
-    @Size(max = 1)
-    @Column(name = "estado")
+//    @Size(max = 1)
+    @Column(name = "estado", length = 1)
     private String estado;
     @OneToMany(mappedBy = "idPagoAnticipado")
     private Collection<PagoAnticipadoTransaccion> pagoAnticipadoTransaccionCollection;

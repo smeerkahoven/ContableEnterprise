@@ -20,8 +20,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -58,22 +56,22 @@ public class LogArchivos extends Entidad {
     @Temporal(TemporalType.TIMESTAMP)
     private Date fecha;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 45)
-    @Column(name = "nombre_archivo")
+//    @NotNull
+//    @Size(min = 1, max = 45)
+    @Column(name = "nombre_archivo", length = 45 , nullable = false)
     private String nombreArchivo;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 2)
-    @Column(name = "tipo_archivo")
+//    @NotNull
+//    @Size(min = 1, max = 2)
+    @Column(name = "tipo_archivo", nullable = false, length = 2)
     private String tipoArchivo;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 256)
-    @Column(name = "mensaje")
+//    @NotNull
+//    @Size(min = 1, max = 256)
+    @Column(name = "mensaje", length = 256, nullable = false)
     private String mensaje;
-    @Size(max = 16)
-    @Column(name = "usuario")
+//    @Size(max = 16)
+    @Column(name = "usuario", length = 16)
     private String usuario;
     @Column(name = "tipo")
     private String tipo;

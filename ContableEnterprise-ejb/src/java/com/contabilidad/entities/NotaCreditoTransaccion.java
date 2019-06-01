@@ -18,13 +18,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedNativeQuery;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -56,22 +54,22 @@ public class NotaCreditoTransaccion extends Entidad {
     @Basic(optional = false)
     @Column(name = "id_nota_credito_transaccion")
     private Integer idNotaCreditoTransaccion;
-    @Size(max = 128)
-    @Column(name = "descripcion")
+//    @Size(max = 128)
+    @Column(name = "descripcion", length = 128)
     private String descripcion;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "monto_bs")
     private BigDecimal montoBs;
     @Column(name = "monto_usd")
     private BigDecimal montoUsd;
-    @Size(max = 1)
-    @Column(name = "moneda")
+//    @Size(max = 1)
+    @Column(name = "moneda", length = 1)
     private String moneda;
     @Column(name = "fecha_insert")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaInsert;
-    @Size(max = 1)
-    @Column(name = "estado")
+//    @Size(max = 1)
+    @Column(name = "estado", length = 1)
     private String estado;
     @JoinColumn(name = "id_nota_credito", referencedColumnName = "id_nota_credito")
     @ManyToOne
@@ -85,8 +83,8 @@ public class NotaCreditoTransaccion extends Entidad {
     @JoinColumn(name = "id_plan_cuenta")
     private PlanCuentas idPlanCuenta;
 
-    @Size(max = 16)
-    @Column(name = "id_usuario_creador")
+//    @Size(max = 16)
+    @Column(name = "id_usuario_creador", length = 16)
     private String idUsuarioCreador;
 
     public NotaCreditoTransaccion() {

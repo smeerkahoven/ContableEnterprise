@@ -20,8 +20,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 /**
  *
@@ -57,28 +55,28 @@ public class ArchivoBoleto extends Entidad {
     @Column(name = "id_archivo_boleto")
     private Integer idArchivoBoleto;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 45)
-    @Column(name = "nombre_archivo")
+//    @NotNull
+//    @Size(min = 1, max = 45)
+    @Column(name = "nombre_archivo", length = 46, nullable = false)
     private String nombreArchivo;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 1)
-    @Column(name = "tipo_archivo")
+//    @NotNull
+//    @Size(min = 1, max = 1)
+    @Column(name = "tipo_archivo", length = 1, nullable = false)
     private String tipoArchivo;
     @Basic(optional = false)
-    @NotNull
+//    @NotNull
     @Lob
-    @Size(min = 1, max = 65535)
-    @Column(name = "contenido")
+//    @Size(min = 1, max = 65535)
+    @Column(name = "contenido" , length = 65535)
     private String contenido;
     @Basic(optional = false)
     @Column(name = "fecha_insert")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaInsert;
     @Basic(optional = false)
-    @Size(min = 1, max = 1)
-    @Column(name = "estado")
+//    @Size(min = 1, max = 1)
+    @Column(name = "estado", length = 1)
     private String estado;
 
     public ArchivoBoleto() {
@@ -149,8 +147,9 @@ public class ArchivoBoleto extends Entidad {
 
     @Override
     public String toString() {
-        return "com.configuracion.entities.ArchivoBoleto[ id=" + idArchivoBoleto + " ]";
+        return "ArchivoBoleto{" + "idArchivoBoleto=" + idArchivoBoleto + ", nombreArchivo=" + nombreArchivo + ", tipoArchivo=" + tipoArchivo + ", contenido=" + contenido + ", fechaInsert=" + fechaInsert + ", estado=" + estado + '}';
     }
+
 
     @Override
     public int getId() throws CRUDException {

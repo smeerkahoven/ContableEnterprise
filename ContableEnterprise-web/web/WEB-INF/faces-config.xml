@@ -80,17 +80,17 @@
     <navigation-rule>
         <from-view-id>pages/*</from-view-id>
         <navigation-case>
-            <from-outcome>aeropuerto</from-outcome>
-            <to-view-id>pages/agencia/aeropuerto.xhtml?faces-redirect=true</to-view-id>
+            <from-outcome>aerolinea</from-outcome>
+            <to-view-id>pages/agencia/aerolinea.xhtml?faces-redirect=true</to-view-id>
             <redirect />
         </navigation-case>
     </navigation-rule>
-    
+
     <navigation-rule>
         <from-view-id>pages/*</from-view-id>
         <navigation-case>
-            <from-outcome>tarjeta-credito</from-outcome>
-            <to-view-id>pages/agencia/tarjeta.xhtml?faces-redirect=true</to-view-id>
+            <from-outcome>aeropuerto</from-outcome>
+            <to-view-id>pages/agencia/aeropuerto.xhtml?faces-redirect=true</to-view-id>
             <redirect />
         </navigation-case>
     </navigation-rule>
@@ -107,21 +107,11 @@
     <navigation-rule>
         <from-view-id>pages/*</from-view-id>
         <navigation-case>
-            <from-outcome>aerolinea</from-outcome>
-            <to-view-id>pages/agencia/aerolinea.xhtml?faces-redirect=true</to-view-id>
+            <from-outcome>boletos</from-outcome>
+            <to-view-id>pages/agencia/boletos.xhtml?faces-redirect=true</to-view-id>
             <redirect />
         </navigation-case>
     </navigation-rule>
-    
-    <navigation-rule>
-        <from-view-id>pages/*</from-view-id>
-        <navigation-case>
-            <from-outcome>promotores</from-outcome>
-            <to-view-id>pages/agencia/promotores.xhtml?faces-redirect=true</to-view-id>
-            <redirect />
-        </navigation-case>
-    </navigation-rule>
-    
     
     <navigation-rule>
         <from-view-id>pages/*</from-view-id>
@@ -132,85 +122,32 @@
         </navigation-case>
     </navigation-rule>
     
-    <navigation-rule>
-        <from-view-id>pages/*</from-view-id>
-        <navigation-case>
-            <from-outcome>boletos</from-outcome>
-            <to-view-id>pages/agencia/boletos.xhtml?faces-redirect=true</to-view-id>
-            <redirect />
-        </navigation-case>
-    </navigation-rule>
-    
     
     <navigation-rule>
         <from-view-id>pages/*</from-view-id>
         <navigation-case>
-            <from-outcome>plan-cuentas</from-outcome>
-            <to-view-id>pages/contabilidad/plan-cuentas.xhtml?faces-redirect=true</to-view-id>
-            <redirect />
-        </navigation-case>
-    </navigation-rule>
-    
-    <navigation-rule>
-        <from-view-id>pages/*</from-view-id>
-        <navigation-case>
-            <from-outcome>comprobantes</from-outcome>
-            <to-view-id>pages/contabilidad/comprobantes.xhtml?faces-redirect=true</to-view-id>
-            <redirect />
-        </navigation-case>
-    </navigation-rule>
-    
-    <navigation-rule>
-        <from-view-id>pages/*</from-view-id>
-        <navigation-case>
-            <from-outcome>comprobantes-contador</from-outcome>
-            <to-view-id>pages/contabilidad/comprobantes-contador.xhtml?faces-redirect=true</to-view-id>
-            <redirect />
-        </navigation-case>
-    </navigation-rule>
-    
-    <navigation-rule>
-        <from-view-id>pages/*</from-view-id>
-        <navigation-case>
-            <from-outcome>sumas-saldos</from-outcome>
-            <to-view-id>pages/contabilidad/sumas-saldos.xhtml?faces-redirect=true</to-view-id>
+            <from-outcome>tarjeta-credito</from-outcome>
+            <to-view-id>pages/agencia/tarjeta.xhtml?faces-redirect=true</to-view-id>
             <redirect />
         </navigation-case>
     </navigation-rule>
 
+        
     <navigation-rule>
         <from-view-id>pages/*</from-view-id>
         <navigation-case>
-            <from-outcome>estados-resultados</from-outcome>
-            <to-view-id>pages/contabilidad/estados-resultados.xhtml?faces-redirect=true</to-view-id>
+            <from-outcome>promotores</from-outcome>
+            <to-view-id>pages/agencia/promotores.xhtml?faces-redirect=true</to-view-id>
             <redirect />
         </navigation-case>
     </navigation-rule>
     
-    
-    <navigation-rule>
-        <from-view-id>pages/*</from-view-id>
-        <navigation-case>
-            <from-outcome>reportes-ventas-boletos</from-outcome>
-            <to-view-id>/pages/reports/ventas-boletos.xhtml?faces-redirect=true</to-view-id>
-            <redirect />
-        </navigation-case>
-    </navigation-rule>
-    
+    <!--BOLETAJE -->
     <navigation-rule>
         <from-view-id>pages/*</from-view-id>
         <navigation-case>
             <from-outcome>boletaje-otros</from-outcome>
             <to-view-id>pages/boletaje/boletos-otros.xhtml?faces-redirect=true</to-view-id>
-            <redirect />
-        </navigation-case>
-    </navigation-rule>
-    
-    <navigation-rule>
-        <from-view-id>pages/*</from-view-id>
-        <navigation-case>
-            <from-outcome>planilla-bsp</from-outcome>
-            <to-view-id>pages/boletaje/planilla-bsp.xhtml?faces-redirect=true</to-view-id>
             <redirect />
         </navigation-case>
     </navigation-rule>
@@ -227,58 +164,44 @@
     <navigation-rule>
         <from-view-id>pages/*</from-view-id>
         <navigation-case>
+            <from-outcome>notas-credito</from-outcome>
+            <to-view-id>pages/boletaje/notas-credito.xhtml?faces-redirect=true</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    
+    <navigation-rule>
+        <from-view-id>pages/*</from-view-id>
+        <navigation-case>
+            <from-outcome>pago-anticipado</from-outcome>
+            <to-view-id>pages/boletaje/pago-anticipado.xhtml?faces-redirect=true</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+  
+    
+    <navigation-rule>
+        <from-view-id>pages/*</from-view-id>
+        <navigation-case>
+            <from-outcome>planilla-bsp</from-outcome>
+            <to-view-id>pages/boletaje/planilla-bsp.xhtml?faces-redirect=true</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    <!-- cobranzas -->
+    <navigation-rule>
+        <from-view-id>pages/*</from-view-id>
+        <navigation-case>
             <from-outcome>kardex-cliente</from-outcome>
             <to-view-id>/pages/cobranzas/kardex-cliente.xhtml?faces-redirect=true</to-view-id>
             <redirect />
         </navigation-case>
     </navigation-rule>
     
-        <navigation-rule>
-        <from-view-id>pages/*</from-view-id>
-        <navigation-case>
-            <from-outcome>kardex-cliente</from-outcome>
-            <to-view-id>/pages/cobranzas/kardex-cliente.xhtml?faces-redirect=true</to-view-id>
-            <redirect />
-        </navigation-case>
-    </navigation-rule> 
-    
-    
-            <navigation-rule>
-        <from-view-id>pages/*</from-view-id>
-        <navigation-case>
-            <from-outcome>reportes-comision-cliente</from-outcome>
-            <to-view-id>/pages/reports/comision-cliente.xhtml?faces-redirect=true</to-view-id>
-            <redirect />
-        </navigation-case>
-    </navigation-rule> 
-    
-    <navigation-rule>
-        <from-view-id>pages/*</from-view-id>
-        <navigation-case>
-            <from-outcome>factores</from-outcome>
-            <to-view-id>pages/contabilidad/factores.xhtml?faces-redirect=true</to-view-id>
-            <redirect />
-        </navigation-case>
-    </navigation-rule>
-    
-    <!-- reportes -->
-    <navigation-rule>
-        <from-view-id>pages/*</from-view-id>
-        <navigation-case>
-            <from-outcome>reportes-agencia</from-outcome>
-            <to-view-id>pages/reports/agencia.xhtml?faces-redirect=true</to-view-id>
-            <redirect />
-        </navigation-case>
-    </navigation-rule>
-    
-    <navigation-rule>
-        <from-view-id>pages/*</from-view-id>
-        <navigation-case>
-            <from-outcome>reportes-contabilidad</from-outcome>
-            <to-view-id>pages/reports/contabilidad.xhtml?faces-redirect=true</to-view-id>
-            <redirect />
-        </navigation-case>
-    </navigation-rule>
+    <!-- configuracion -->
     
     <navigation-rule>
         <from-view-id>pages/*</from-view-id>
@@ -306,5 +229,156 @@
             <redirect />
         </navigation-case>
     </navigation-rule>
+    
+    <!-- contabilidad-->
+    
+    <navigation-rule>
+        <from-view-id>pages/*</from-view-id>
+        <navigation-case>
+            <from-outcome>comprobantes-contador</from-outcome>
+            <to-view-id>pages/contabilidad/comprobantes-contador.xhtml?faces-redirect=true</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>pages/*</from-view-id>
+        <navigation-case>
+            <from-outcome>comprobantes</from-outcome>
+            <to-view-id>pages/contabilidad/comprobantes.xhtml?faces-redirect=true</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>pages/*</from-view-id>
+        <navigation-case>
+            <from-outcome>estados-resultados</from-outcome>
+            <to-view-id>pages/contabilidad/estados-resultados.xhtml?faces-redirect=true</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>pages/*</from-view-id>
+        <navigation-case>
+            <from-outcome>factores</from-outcome>
+            <to-view-id>pages/contabilidad/factores.xhtml?faces-redirect=true</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>pages/*</from-view-id>
+        <navigation-case>
+            <from-outcome>estados-resultados</from-outcome>
+            <to-view-id>pages/contabilidad/estados-resultados.xhtml?faces-redirect=true</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>pages/*</from-view-id>
+        <navigation-case>
+            <from-outcome>mayores</from-outcome>
+            <to-view-id>pages/contabilidad/mayores.xhtml?faces-redirect=true</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>pages/*</from-view-id>
+        <navigation-case>
+            <from-outcome>plan-cuentas</from-outcome>
+            <to-view-id>pages/contabilidad/plan-cuentas.xhtml?faces-redirect=true</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>pages/*</from-view-id>
+        <navigation-case>
+            <from-outcome>sumas-saldos</from-outcome>
+            <to-view-id>pages/contabilidad/sumas-saldos.xhtml?faces-redirect=true</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+
+    <!-- reports -->
+
+    <navigation-rule>
+        <from-view-id>pages/*</from-view-id>
+        <navigation-case>
+            <from-outcome>reportes-agencia</from-outcome>
+            <to-view-id>pages/reports/agencia.xhtml?faces-redirect=true</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>pages/*</from-view-id>
+        <navigation-case>
+            <from-outcome>reportes-comision-cliente</from-outcome>
+            <to-view-id>/pages/reports/comision-cliente.xhtml?faces-redirect=true</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule> 
+    
+    <navigation-rule>
+        <from-view-id>pages/*</from-view-id>
+        <navigation-case>
+            <from-outcome>reportes-ventas-boletos</from-outcome>
+            <to-view-id>/pages/reports/ventas-boletos.xhtml?faces-redirect=true</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+
+    
+    <navigation-rule>
+        <from-view-id>pages/*</from-view-id>
+        <navigation-case>
+            <from-outcome>reportes-contabilidad</from-outcome>
+            <to-view-id>pages/reports/contabilidad.xhtml?faces-redirect=true</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    <!-- seguridad -->
+    <navigation-rule>
+        <from-view-id>pages/*</from-view-id>
+        <navigation-case>
+            <from-outcome>empresa</from-outcome>
+            <to-view-id>pages/seguridad/empresa.xhtml?faces-redirect=true</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+
+    <navigation-rule>
+        <from-view-id>pages/*</from-view-id>
+        <navigation-case>
+            <from-outcome>logs</from-outcome>
+            <to-view-id>pages/seguridad/logs.xhtml?faces-redirect=true</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+
+    <navigation-rule>
+        <from-view-id>pages/*</from-view-id>
+        <navigation-case>
+            <from-outcome>personal</from-outcome>
+            <to-view-id>pages/seguridad/personal.xhtml?faces-redirect=true</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>pages/*</from-view-id>
+        <navigation-case>
+            <from-outcome>roles</from-outcome>
+            <to-view-id>pages/seguridad/roles.xhtml?faces-redirect=true</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
     
 </faces-config>

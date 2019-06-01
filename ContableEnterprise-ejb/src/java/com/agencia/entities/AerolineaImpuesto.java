@@ -19,7 +19,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -40,8 +39,7 @@ public class AerolineaImpuesto extends Entidad {
     @Column(name = "id_aerolinea_impuesto")
     private Integer idAerolineaImpuesto;
     
-    @Size(max = 45)
-    @Column(name = "nombre")
+    @Column(name = "nombre", length = 45)
     private String nombre;
 
    /* @ManyToOne(fetch = FetchType.EAGER)

@@ -17,8 +17,6 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -43,53 +41,53 @@ public class Promotor extends Entidad  {
     @Column(name = "id_empresa")
     private Integer idEmpresa ;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 64)
-    @Column(name = "nombre")
+//    @NotNull
+//    @Size(min = 1, max = 64)
+    @Column(name = "nombre", length = 64, nullable = false)
     private String nombre;
     @Basic(optional = false)
-    @Size(min = 1, max = 64)
-    @Column(name = "apellido")
+//    @Size(min = 1, max = 64)
+    @Column(name = "apellido", length = 64, nullable = false)
     private String apellido;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 12)
-    @Column(name = "ci")
+//    @NotNull
+//    @Size(min = 1, max = 12)
+    @Column(name = "ci", length = 12, nullable = false)
     private String ci;
-    @Size(max = 128)
-    @Column(name = "direccion")
+//    @Size(max = 128)
+    @Column(name = "direccion", length = 128)
     private String direccion;
-    @Size(max = 16)
-    @Column(name = "telefono")
+//    @Size(max = 16)
+    @Column(name = "telefono", length = 16)
     private String telefono;
-    @Size(max = 16)
-    @Column(name = "celular")
+//    @Size(max = 16)
+    @Column(name = "celular", length = 16)
     private String celular;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "comision_nac")
     private BigDecimal comisionNac;
     @Column(name = "comision_int")
     private BigDecimal comisionInt;
-    @Size(max = 1)
-    @Column(name = "comision_nac_tipo")
+//    @Size(max = 1)
+    @Column(name = "comision_nac_tipo", length = 1)
     private String comisionNacTipo;
-    @Size(max = 1)
-    @Column(name = "comision_int_tipo")
+//    @Size(max = 1)
+    @Column(name = "comision_int_tipo", length = 1)
     private String comisionIntTipo;
     @Column(name = "reporta_total_ventas")
     private Boolean reportaTotalVentas;
-    @Size(max = 45)
-    @Column(name = "observaciones")
+//    @Size(max = 45)
+    @Column(name = "observaciones", length = 45)
     private String observaciones;
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
-    @Size(max = 128)
-    @Column(name = "email")
+//    @Size(max = 128)
+    @Column(name = "email", length = 128)
     private String email;
-    @Size(max = 1)
-    @Column(name = "tipo")
+//    @Size(max = 1)
+    @Column(name = "tipo", length = 1)
     private String tipo;
-    @Size(max = 1)
-    @Column(name = "estado")
+//    @Size(max = 1)
+    @Column(name = "estado", length = 1)
     private String estado;
 
     public Promotor() {

@@ -23,8 +23,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -61,14 +59,14 @@ public class NotaDebitoTransaccion extends Entidad {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer idNotaDebitoTransaccion;
     @Basic(optional = false)
-    @NotNull
-    @Column(name = "gestion")
+//    @NotNull
+    @Column(name = "gestion", nullable = false)
     private Integer gestion;
     @ManyToOne(fetch = FetchType.EAGER )
     @JoinColumn(name = "id_nota_debito")
     private NotaDebito idNotaDebito;
-    @Size(max = 128)
-    @Column(name = "descripcion")
+//    @Size(max = 128)
+    @Column(name = "descripcion", length = 128)
     private String descripcion;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "monto_bs")

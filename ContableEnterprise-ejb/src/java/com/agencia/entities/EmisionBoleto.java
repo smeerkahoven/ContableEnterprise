@@ -15,8 +15,6 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -42,12 +40,12 @@ public class EmisionBoleto extends Entidad {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 4)
-    @Column(name = "id_emision")
+//    @NotNull
+//    @Size(min = 1, max = 4)
+    @Column(name = "id_emision", nullable = false, length = 4)
     private String idEmision;
-    @Size(max = 45)
-    @Column(name = "nombre")
+//    @Size(max = 45)
+    @Column(name = "nombre", length = 45)
     private String nombre;
     @Column(name = "orden")
     private Integer orden ;

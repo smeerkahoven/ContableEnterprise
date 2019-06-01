@@ -23,7 +23,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -57,8 +56,8 @@ public class PagoAnticipadoTransaccion extends Entidad {
     @Basic(optional = false)
     @Column(name = "id_pago_anticipado_transaccion")
     private Integer idPagoAnticipadoTransaccion;
-    @Size(max = 128)
-    @Column(name = "descripcion")
+//    @Size(max = 128)
+    @Column(name = "descripcion", length = 128)
     private String descripcion;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "monto")
@@ -66,14 +65,14 @@ public class PagoAnticipadoTransaccion extends Entidad {
     @Column(name = "fecha_insert")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaInsert;
-    @Size(max = 16)
-    @Column(name = "id_usuario_creador")
+//    @Size(max = 16)
+    @Column(name = "id_usuario_creador", length = 16)
     private String idUsuarioCreador;
-    @Size(max = 1)
-    @Column(name = "estado")
+//    @Size(max = 1)
+    @Column(name = "estado", length = 1)
     private String estado;
-    @Size(max = 1)
-    @Column(name = "moneda")
+//    @Size(max = 1)
+    @Column(name = "moneda", length = 1)
     private String moneda;
     @Column(name = "tipo")
     private String tipo;

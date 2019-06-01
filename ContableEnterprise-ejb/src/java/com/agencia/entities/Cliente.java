@@ -20,7 +20,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -50,37 +49,37 @@ public class Cliente extends Entidad {
     @Column(name = "id_cliente_corporativo")
     private Integer idClienteCorporativo;
 
-    @Size(max = 128)
-    @Column(name = "nombre")
+//    @Size(max = 128)
+    @Column(name = "nombre", length = 128)
     private String nombre;
 
-    @Size(max = 12)
-    @Column(name = "ci")
+//    @Size(max = 12)
+    @Column(name = "ci", length = 12)
     private String ci;
 
-    @Size(max = 12)
-    @Column(name = "nit")
+//    @Size(max = 12)
+    @Column(name = "nit", length = 12)
     private String nit;
 
-    @Size(max = 128)
-    @Column(name = "direccion")
+//    @Size(max = 128)
+    @Column(name = "direccion", length = 128)
     private String direccion;
 
-    @Size(max = 32)
-    @Column(name = "telefono_fijo")
+//    @Size(max = 32)
+    @Column(name = "telefono_fijo", length = 32)
     private String telefonoFijo;
 
-    @Size(max = 32)
-    @Column(name = "telefono_celular")
+//    @Size(max = 32)
+    @Column(name = "telefono_celular", length = 32)
     private String telefonoCelular;
 
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
-    @Size(max = 128)
-    @Column(name = "email")
+//    @Size(max = 128)
+    @Column(name = "email", length = 128)
     private String email;
 
-    @Size(max = 1)
-    @Column(name = "estado")
+//    @Size(max = 1)
+    @Column(name = "estado", length = 1)
     private String estado;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "limite_credito")
@@ -96,23 +95,23 @@ public class Cliente extends Entidad {
     private BigDecimal interesMora;
     @Column(name = "calc_automatico_interes")
     private Boolean calcAutomaticoInteres;
-    @Size(max = 1)
-    @Column(name = "interes_desde")
+//    @Size(max = 1)
+    @Column(name = "interes_desde", length = 1)
     private String interesDesde;
-    @Size(max = 64)
-    @Column(name = "representante")
+//    @Size(max = 64)
+    @Column(name = "representante", length = 64)
     private String representante;
-    @Size(max = 64)
-    @Column(name = "representante_direccion")
+//    @Size(max = 64)
+    @Column(name = "representante_direccion", length = 64)
     private String representanteDireccion;
-    @Size(max = 32)
-    @Column(name = "representante_telefono")
+//    @Size(max = 32)
+    @Column(name = "representante_telefono", length = 32)
     private String representanteTelefono;
-    @Size(max = 32)
-    @Column(name = "representante_celular")
+//    @Size(max = 32)
+    @Column(name = "representante_celular", length = 32)
     private String representanteCelular;
-    @Size(max = 12)
-    @Column(name = "representante_ci")
+//    @Size(max = 12)
+    @Column(name = "representante_ci", length = 12)
     private String representanteCi;
     @Column(name = "fecha_alta", updatable = false)
     @Temporal(TemporalType.DATE)

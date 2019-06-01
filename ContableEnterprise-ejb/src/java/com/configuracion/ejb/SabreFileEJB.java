@@ -105,7 +105,9 @@ public class SabreFileEJB extends FacadeEJB implements SabreFileRemote {
         boolean invalid_ticket = false;
 
         while (i < line.length - 1) {
-            //El primer parametro debe SER AADDMMMHHMMM01
+            //El primer parametro debe SER AADDMMMHH MM M01
+            //                             AA10MAY0452M0117
+            
             String lineColumn = line[i];
 
             //FIN DE ARCHIVO

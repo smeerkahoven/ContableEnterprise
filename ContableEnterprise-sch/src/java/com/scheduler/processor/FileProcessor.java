@@ -32,9 +32,10 @@ public class FileProcessor {
     @EJB
     private AmadeusFileRemote ejbAmadeus ;
     //EN PRODUCCION DEBE FUNCIONAR CADA 10 MINUTOS
-    @Schedule(dayOfWeek = "Mon-Fri", month = "*", hour = "9-17", dayOfMonth = "*", year = "*", minute = "*/10", second = "0")
-    //@Schedule(dayOfWeek = "*", month = "*", hour = "*", dayOfMonth = "*", year = "*", minute = "*/1")
+//    @Schedule(dayOfWeek = "Mon-Fri", month = "*", hour = "9-17", dayOfMonth = "*", year = "*", minute = "*/10", second = "0")
+    @Schedule(dayOfWeek = "*", month = "*", hour = "*", dayOfMonth = "*", year = "*", minute = "0", second = "0")
     public void processArchivosBoletos() {
+        
         
         try {
             HashMap<String, String> parameters = new HashMap<>();
@@ -42,8 +43,11 @@ public class FileProcessor {
             
             List<ArchivoBoleto> l = ejbAmadeus.get("ArchivoBoleto.findByEstadoCreado", ArchivoBoleto.class, parameters);
             
+            System.out.println("FileProcessor:list:" + l);
+            System.out.println("FileProcessor:list:" + l.size());
+            
             for(ArchivoBoleto b : l){
-                
+                System.out.println("FileProcessor:" + b) ;
                 if (b.getTipoArchivo().equals(ArchivoBoleto.TipoArchivo.AMADEUS)){
                     if (ejbAmadeus.procesarArchivo(b)){
                         b.setEstado(ArchivoBoleto.Estado.PROCESADO);

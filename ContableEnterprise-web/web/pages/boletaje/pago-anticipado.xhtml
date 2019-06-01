@@ -722,7 +722,7 @@
                                                                 <div class="form-group row">
                                                                     <label for="txtStatus" class="col-form-label col-sm-3 text-right"> Moneda</label>
                                                                     <div class="col-sm-5">
-                                                                        <select name="txtMoneda" class="form-control" ng-model="trx.moneda" required="">
+                                                                        <select name="txtMoneda" class="form-control" ng-model="trx.moneda" ng-change="checkMontoIngresado()" required="">
                                                                             <option style="display:none" value="">seleccione una opcion</option>
                                                                             <option value="B" selected="selected">Bolivianos</option>
                                                                             <option value="U">Dolares</option>

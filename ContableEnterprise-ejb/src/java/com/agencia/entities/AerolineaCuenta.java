@@ -16,7 +16,6 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -46,11 +45,9 @@ public class AerolineaCuenta extends Entidad {
     @Column(name="id_plan_cuentas")
     private Integer idPlanCuentas;
     
-    @Size(max = 1)
-    @Column(name = "tipo")
+    @Column(name = "tipo", length = 1)
     private String tipo;
-    @Size(max = 1)
-    @Column(name = "moneda")
+    @Column(name = "moneda", length = 1)
     private String moneda;
 
     public AerolineaCuenta() {

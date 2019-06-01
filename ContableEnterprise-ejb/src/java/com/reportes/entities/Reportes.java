@@ -18,10 +18,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -49,26 +46,26 @@ public class Reportes implements Serializable {
     private Formulario idFormulario;
 
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 32)
-    @Column(name = "nombre")
+//    @NotNull
+//    @Size(min = 1, max = 32)
+    @Column(name = "nombre", nullable = false, length = 32)
     private String nombre;
     @Basic(optional = false)
-    @NotNull
-    @Column(name = "estado")
+//    @NotNull
+    @Column(name = "estado", nullable = false)
     private boolean estado;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 32)
-    @Column(name = "icon")
+//    @NotNull
+//    @Size(min = 1, max = 32)
+    @Column(name = "icon", nullable = false, length = 32)
     private String icon;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 64)
-    @Column(name = "path")
+//    @NotNull
+//    @Size(min = 1, max = 64)
+    @Column(name = "path", length = 64, nullable = false)
     private String path;
-    @Size(max = 512)
-    @Column(name = "parametros")
+//    @Size(max = 512)
+    @Column(name = "parametros", length = 512)
     private String parametros;
     
     

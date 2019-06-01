@@ -11,7 +11,7 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-import javax.validation.constraints.NotNull;
+//import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -21,13 +21,13 @@ import javax.validation.constraints.NotNull;
 public class AsientoContablePK implements Serializable {
 
     @Basic(optional = false)
-    @NotNull
-    @Column(name = "id_asiento", updatable = false)
+//    @NotNull
+    @Column(name = "id_asiento", updatable = false , nullable = false)
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private int idAsiento;
     @Basic(optional = false)
-    @NotNull
-    @Column(name = "gestion",  updatable = false)
+//    @NotNull
+    @Column(name = "gestion",  updatable = false, nullable = false)
     private int gestion;
 
     public AsientoContablePK() {

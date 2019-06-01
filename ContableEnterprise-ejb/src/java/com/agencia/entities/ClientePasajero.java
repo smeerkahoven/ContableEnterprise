@@ -16,7 +16,6 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -39,8 +38,8 @@ public class ClientePasajero extends Entidad {
     @Basic(optional = false)
     @Column(name = "id_cliente_pasajero")
     private Integer idClientePasajero;
-    @Size(max = 64)
-    @Column(name = "nombre_pasajero")
+//    @Size(max = 64)
+    @Column(name = "nombre_pasajero", length = 64)
     private String nombrePasajero;
     @Column (name="id_cliente")
     private Integer idCliente ;

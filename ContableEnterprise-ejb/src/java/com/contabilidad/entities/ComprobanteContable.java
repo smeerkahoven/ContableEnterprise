@@ -38,8 +38,6 @@ import javax.persistence.TableGenerator;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -228,36 +226,35 @@ public class ComprobanteContable extends Entidad {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer idLibro;
     @Basic(optional = false)
-    @NotNull
-    @Column(name = "gestion")
+//    @NotNull
+    @Column(name = "gestion", nullable = false)
     private Integer gestion;
-
     @Basic(optional = false)
     @Column(name = "id_numero_gestion")
     private int idNumeroGestion;
     @Basic(optional = false)
-    @Size(min = 1, max = 16)
-    @Column(name = "id_usuario_creador")
+//    @Size(min = 1, max = 16)
+    @Column(name = "id_usuario_creador", length = 16)
     private String idUsuarioCreador;
-    @Size(max = 16)
-    @Column(name = "id_usuario_anulado")
+//    @Size(max = 16)
+    @Column(name = "id_usuario_anulado", length = 16)
     private String idUsuarioAnulado;
     @Basic(optional = false)
     @Column(name = "fecha")
     @Temporal(TemporalType.DATE)
     private Date fecha;
 
-    @Size(max = 128)
-    @Column(name = "concepto")
+//    @Size(max = 128, )
+    @Column(name = "concepto", length = 128)
     private String concepto;
-    @Size(max = 2)
-    @Column(name = "estado")
+//    @Size(max = 2)
+    @Column(name = "estado", length = 2)
     private String estado;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "factor_cambiario")
     private BigDecimal factorCambiario;
-    @Size(max = 2)
-    @Column(name = "tipo")
+//    @Size(max = 2)
+    @Column(name = "tipo", length = 2)
     private String tipo;
     @Column(name = "id_empresa")
     private Integer idEmpresa;

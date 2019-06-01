@@ -17,8 +17,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -41,8 +39,8 @@ public class PasswordRecover extends Entidad {
     @Basic(optional = false)
     @Column(name = "id_password_recover", length = 256, updatable = false)
     private String idPasswordRecover;
-    @Size(max = 1)
-    @Column(name = "estado")
+//    @Size(max = 1)
+    @Column(name = "estado", length = 1)
     private String estado;
 
     @Column(name = "fecha", updatable = false)

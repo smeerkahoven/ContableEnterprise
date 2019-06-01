@@ -33,7 +33,7 @@ import javax.persistence.StoredProcedureParameter;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
+//import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -166,12 +166,12 @@ public class NotaDebito extends Entidad {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer idNotaDebito;
     @Basic(optional = false)
-    @NotNull
-    @Column(name = "gestion")
+//    @NotNull
+    @Column(name = "gestion", nullable = false)
     private Integer gestion;
     @Basic(optional = false)
-    @NotNull
-    @Column(name = "id_empresa")
+//    @NotNull
+    @Column(name = "id_empresa", nullable = false)
     private Integer idEmpresa;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_cliente")
@@ -182,8 +182,8 @@ public class NotaDebito extends Entidad {
     @Column(name = "fecha_emision")
     @Temporal(TemporalType.DATE)
     private Date fechaEmision;
-    @NotNull
-    @Column(name = "fecha_insert")
+//    @NotNull
+    @Column(name = "fecha_insert", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaInsert;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation

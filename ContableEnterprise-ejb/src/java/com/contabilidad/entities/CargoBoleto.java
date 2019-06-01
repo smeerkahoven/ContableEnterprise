@@ -23,8 +23,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -54,11 +52,11 @@ public class CargoBoleto extends Entidad {
     @Column(name = "id_cargo")
     private Integer idCargo;
     @Basic(optional = false)
-    @NotNull
-    @Column(name = "id_empresa")
+//    @NotNull
+    @Column(name = "id_empresa", nullable = false)
     private Integer idEmpresa;
-    @Size(max = 1)
-    @Column(name = "moneda")
+//    @Size(max = 1)
+    @Column(name = "moneda" , length = 1)
     private String moneda;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @ManyToOne(fetch = FetchType.EAGER)
@@ -79,24 +77,24 @@ public class CargoBoleto extends Entidad {
     @Column(name = "comision_promotor")
     private BigDecimal comisionPromotor;
 
-    @Size(max = 256)
-    @Column(name = "concepto")
+//    @Size(max = 256)
+    @Column(name = "concepto", length = 256)
     private String concepto;
-    @Size(max = 1)
-    @Column(name = "tipo")
+//    @Size(max = 1)
+    @Column(name = "tipo", length = 1)
     private String tipo;
-    @Size(max = 1)
-    @Column(name = "estado")
+//    @Size(max = 1)
+    @Column(name = "estado", length = 1)
     private String estado;
     @Basic(optional = false)
-    @NotNull
-    @Column(name = "fecha_insert")
+//    @NotNull
+    @Column(name = "fecha_insert" , nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaInsert;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 6)
-    @Column(name = "usuario_creador")
+//    @NotNull
+//    @Size(min = 1, max = 6)
+    @Column(name = "usuario_creador", length = 6, nullable = false)
     private String usuarioCreador;
 
     @Column(name = "id_nota_debito")

@@ -30,7 +30,6 @@ import javax.persistence.SqlResultSetMappings;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -306,15 +305,15 @@ public class Boleto extends Entidad {
     @Column(name = "id_empresa")
     private Integer idEmpresa;
     @Basic(optional = false)
-    @Size(min = 1, max = 4)
-    @Column(name = "emision")
+    //@Size(min = 1, max = 4)
+    @Column(name = "emision", length = 44)
     private String emision;
     @Basic(optional = false)
-    @Size(min = 2, max = 2)
-    @Column(name = "tipo_boleto")
+    //@Size(min = 2, max = 2)
+    @Column(name = "tipo_boleto" , length = 2)
     private String tipoBoleto;
-    @Size(max = 1)
-    @Column(name = "tipo_cupon")
+    //@Size(max = 1)
+    @Column(name = "tipo_cupon", length = 1)
     private String tipoCupon;
     @Basic(optional = false)
     @Column(name = "numero")
@@ -323,21 +322,21 @@ public class Boleto extends Entidad {
     @Column(name = "numero_origen")
     private Long numeroOrigen;
     @Basic(optional = false)
-    @Size(min = 1, max = 4)
-    @Column(name = "id_ruta_1")
+//    @Size(min = 1, max = 4)
+    @Column(name = "id_ruta_1", length = 4)
     private String idRuta1;
     @Basic(optional = false)
-    @Size(min = 1, max = 4)
-    @Column(name = "id_ruta_2")
+    //@Size(min = 1, max = 4)
+    @Column(name = "id_ruta_2", length = 4)
     private String idRuta2;
-    @Size(max = 4)
-    @Column(name = "id_ruta_3")
+    //@Size(max = 4)
+    @Column(name = "id_ruta_3", length = 4)
     private String idRuta3;
-    @Size(max = 4)
-    @Column(name = "id_ruta_4")
+    //@Size(max = 4)
+    @Column(name = "id_ruta_4", length = 4)
     private String idRuta4;
-    @Size(max = 4)
-    @Column(name = "id_ruta_5")
+    //@Size(max = 4)
+    @Column(name = "id_ruta_5", length = 4)
     private String idRuta5;
     /*@Basic(optional = false)
     @NotNull
@@ -349,8 +348,8 @@ public class Boleto extends Entidad {
     private Cliente idCliente;
 
     @Basic(optional = false)
-    @Size(min = 1, max = 64)
-    @Column(name = "nombre_pasajero")
+    //@Size(min = 1, max = 64)
+    @Column(name = "nombre_pasajero", length = 64)
     private String nombrePasajero;
     @Basic(optional = false)
     @Column(name = "fecha_emision")
@@ -365,12 +364,12 @@ public class Boleto extends Entidad {
     @Column(name = "factor_cambiario")
     private BigDecimal factorCambiario;
     @Basic(optional = false)
-    @Size(min = 1, max = 1)
-    @Column(name = "forma_pago")
+    //@Size(min = 1, max = 1)
+    @Column(name = "forma_pago", length = 1)
     private String formaPago;
     @Basic(optional = false)
-    @Size(min = 1, max = 1)
-    @Column(name = "estado")
+    //@Size(min = 1, max = 1)
+    @Column(name = "estado", length = 1)
     private String estado;
     @Basic(optional = false)
     @Column(name = "id_nota_debito")
@@ -382,16 +381,16 @@ public class Boleto extends Entidad {
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaInsert;
     @Basic(optional = false)
-    @Size(min = 1, max = 16)
-    @Column(name = "id_usuario_creador")
+    //@Size(min = 1, max = 16)
+    @Column(name = "id_usuario_creador", length = 16)
     private String idUsuarioCreador;
     @Column(name = "credito_dias")
     private Integer creditoDias;
     @Column(name = "credito_vencimiento")
     @Temporal(TemporalType.DATE)
     private Date creditoVencimiento;
-    @Size(max = 1)
-    @Column(name = "moneda")
+    //@Size(max = 1)
+    @Column(name = "moneda" , length = 1)
     private String moneda;
     @Column(name = "importe_neto")
     private BigDecimal importeNeto;
@@ -440,26 +439,26 @@ public class Boleto extends Entidad {
     @Column(name = "monto_pagar_linea_aerea")
     private BigDecimal montoPagarLineaAerea;
 
-    @Size(max = 1)
-    @Column(name = "contado_tipo")
+    //@Size(max = 1)
+    @Column(name = "contado_tipo", length = 1)
     private String contadoTipo;
-    @Size(max = 45)
-    @Column(name = "contado_nro_cheque")
+    //@Size(max = 45)
+    @Column(name = "contado_nro_cheque", length = 45)
     private String contadoNroCheque;
     @Column(name = "contado_id_banco")
     private Integer contadoIdBanco;
     @Column(name = "contado_id_cuenta")
     private Integer contadoIdCuenta;
-    @Size(max = 45)
-    @Column(name = "contado_nro_deposito")
+//    @Size(max = 45)
+    @Column(name = "contado_nro_deposito", length = 45)
     private String contadoNroDeposito;
-    @Size(max = 16)
-    @Column(name = "tarjeta_numero")
+//    @Size(max = 16)
+    @Column(name = "tarjeta_numero", length = 16)
     private String tarjetaNumero;
     @Column(name = "tarjeta_id")
     private Integer tarjetaId;
-    @Size(max = 1)
-    @Column(name = "combinado_tipo")
+//    @Size(max = 1)
+    @Column(name = "combinado_tipo", length = 1)
     private String combinadoTipo;
     @Column(name = "combinado_credito")
     private Short combinadoCredito;
@@ -472,27 +471,27 @@ public class Boleto extends Entidad {
     private BigDecimal combinadoCreditoMonto;
     @Column(name = "combinado_contado")
     private Short combinadoContado;
-    @Size(max = 1)
-    @Column(name = "combinado_contado_tipo")
+//    @Size(max = 1)
+    @Column(name = "combinado_contado_tipo", length = 1)
     private String combinadoContadoTipo;
     @Column(name = "combinado_contado_monto")
     private BigDecimal combinadoContadoMonto;
-    @Size(max = 20)
-    @Column(name = "combinado_contado_nro_cheque")
+//    @Size(max = 20)
+    @Column(name = "combinado_contado_nro_cheque", length = 20)
     private String combinadoContadoNroCheque;
     @Column(name = "combinado_contado_id_banco")
     private Integer combinadoContadoIdBanco;
     @Column(name = "combinado_contado_id_cuenta")
     private Integer combinadoContadoIdCuenta;
-    @Size(max = 20)
-    @Column(name = "combinado_contado_nro_deposito")
+//    @Size(max = 20)
+    @Column(name = "combinado_contado_nro_deposito", length = 20)
     private String combinadoContadoNroDeposito;
     @Column(name = "combinado_tarjeta")
     private Short combinadoTarjeta;
     @Column(name = "combinado_tarjeta_id")
     private Integer combinadoTarjetaId;
-    @Size(max = 16)
-    @Column(name = "combinado_tarjeta_numero")
+//    @Size(max = 16)
+    @Column(name = "combinado_tarjeta_numero", length = 16)
     private String combinadoTarjetaNumero;
     @Column(name = "combinado_tarjeta_monto")
     private BigDecimal combinadoTarjetaMonto;

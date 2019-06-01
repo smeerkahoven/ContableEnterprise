@@ -12,8 +12,6 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-import javax.persistence.TableGenerator;
-import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -27,8 +25,8 @@ public class NotaDebitoTransaccionPK extends Entidad {
     @GeneratedValue (strategy = GenerationType.SEQUENCE)
     private int idNotaDebitoTransaccion;
     @Basic(optional = false)
-    @NotNull
-    @Column(name = "gestion")
+//    @NotNull
+    @Column(name = "gestion", nullable = false)
     private int gestion;
 
     public NotaDebitoTransaccionPK() {

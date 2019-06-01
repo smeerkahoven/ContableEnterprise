@@ -31,8 +31,6 @@ import javax.persistence.StoredProcedureParameter;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 
 /**
  *
@@ -94,13 +92,13 @@ public class IngresoCaja extends Entidad {
     private Integer idIngresoCaja;
 
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 16)
-    @Column(name = "id_usuario")
+//    @NotNull
+//    @Size(min = 1, max = 16)
+    @Column(name = "id_usuario", length = 16, nullable = false)
     private String idUsuario;
     @Basic(optional = false)
-    @NotNull
-    @Column(name = "id_empresa")
+//    @NotNull
+    @Column(name = "id_empresa", nullable = false)
     private Integer idEmpresa;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -112,8 +110,8 @@ public class IngresoCaja extends Entidad {
     @Temporal(TemporalType.DATE)
     private Date fechaEmision;
     @Basic(optional = false)
-    @NotNull
-    @Column(name = "fecha_insert")
+//    @NotNull
+    @Column(name = "fecha_insert", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaInsert;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
@@ -123,21 +121,21 @@ public class IngresoCaja extends Entidad {
     private BigDecimal montoAbonadoUsd;
     @Column(name = "factor_cambiario")
     private BigDecimal factorCambiario;
-    @Size(max = 1)
-    @Column(name = "forma_pago")
+//    @Size(max = 1)
+    @Column(name = "forma_pago", length = 1)
     private String formaPago;
     @Column(name = "id_banco")
     private Integer idBanco;
-    @Size(max = 45)
-    @Column(name = "nro_cheque")
+//    @Size(max = 45)
+    @Column(name = "nro_cheque", length = 45)
     private String nroCheque;
     @Column(name = "id_tarjeta_credito")
     private Integer idTarjetaCredito;
-    @Size(max = 45)
-    @Column(name = "nro_tarjeta")
+//    @Size(max = 45)
+    @Column(name = "nro_tarjeta", length = 45)
     private String nroTarjeta;
-    @Size(max = 45)
-    @Column(name = "nro_deposito")
+//    @Size(max = 45)
+    @Column(name = "nro_deposito", length = 45)
     private String nroDeposito;
 
     @Column(name = "combinado_contado")

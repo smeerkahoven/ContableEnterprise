@@ -24,8 +24,8 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+//import javax.validation.constraints.NotNull;
+//import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -80,12 +80,11 @@ public class AsientoContable extends Entidad {
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer idAsiento;
     @Basic(optional = false)
-    @NotNull
-    
-    @Column(name = "gestion", updatable = false)
+//    @NotNull
+    @Column(name = "gestion", updatable = false, nullable = false)
     private Integer gestion;
-    @Size(max = 2)
-    @Column(name = "estado")
+//    @Size(max = 2)
+    @Column(name = "estado", length = 2)
     private String estado;
     @Column(name = "fecha_movimiento", updatable = false)
     @Temporal(TemporalType.DATE)
@@ -97,8 +96,8 @@ public class AsientoContable extends Entidad {
 
     @Column(name = "id_plan_cuenta")
     private Integer idPlanCuenta;
-    @Size(max = 1)
-    @Column(name = "moneda")
+//    @Size(max = 1)
+    @Column(name = "moneda", length = 1)
     private String moneda;
     @Column(name = "monto_debe_ext")
     private BigDecimal montoDebeExt;

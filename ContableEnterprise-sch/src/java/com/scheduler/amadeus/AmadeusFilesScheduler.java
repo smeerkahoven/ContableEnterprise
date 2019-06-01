@@ -40,7 +40,7 @@ public class AmadeusFilesScheduler {
 
     @EJB
     private LoggerRemote ejbLogger;
-    
+
     @EJB
     private AmadeusFileRemote ejbAmadeus;
 
@@ -48,8 +48,8 @@ public class AmadeusFilesScheduler {
     private ParametrosRemote ejbParametros;
 
     // MODIFICAR ESTO EN PRODUCCION
-    //@Schedule(dayOfWeek = "Mon-Fri", month = "*", hour = "7-18", dayOfMonth = "*", year = "*", minute = "*/5", second = "0")
-    @Schedule(dayOfWeek = "*", month = "*", hour = "*", dayOfMonth = "*", year = "*", minute = "*/1", second="0")
+    @Schedule(dayOfWeek = "Mon-Fri", month = "*", hour = "7-18", dayOfMonth = "*", year = "*", minute = "5", second = "0")
+    //@Schedule(dayOfWeek = "*", month = "*", hour = "*", dayOfMonth = "*", year = "*", minute = "*/1", second = "0")
     public void dailyFileChecker() {
         Parametros p;
         try {
@@ -60,25 +60,25 @@ public class AmadeusFilesScheduler {
             System.out.println("files:Timer event Files Amadeus: " + new Date());
             ClassLoader loader = this.getClass().getClassLoader();
 
-            System.out.println("files:"+  p.getValor());
+            System.out.println("files:" + p.getValor());
             File mainFolder = new File(loader.getResource(p.getValor()).getPath());
-            if (!mainFolder.exists()){
+            if (!mainFolder.exists()) {
                 mainFolder.mkdir();
             }
-            
+
             System.out.println("files: exists:" + mainFolder.getAbsolutePath());
-            System.out.println("files:"+ p.getValor() + "/backup");
+            System.out.println("files:" + p.getValor() + "/backup");
             File backupFolder = new File(loader.getResource(p.getValor() + "/backup").getPath());
-            if (!backupFolder.exists()){
+            if (!backupFolder.exists()) {
                 backupFolder.mkdir();
             }
 
             for (final File f : mainFolder.listFiles()) {
                 System.out.println(f.getName());
-                if (f.isFile() && !f.getName().contains(".jar") ) {
+                if (f.isFile() && !f.getName().contains(".jar") && !f.getName().contains(".sh")) {
                     HashMap<String, String> parameters = new HashMap<>();
                     parameters.put("nombreArchivo", f.getName());
-                    List l=  ejbAmadeus.get("ArchivoBoleto.findByNombreArchivo", ArchivoBoleto.class, parameters);
+                    List l = ejbAmadeus.get("ArchivoBoleto.findByNombreArchivo", ArchivoBoleto.class, parameters);
 
                     //Si existe ya en BD, se elimina
                     if (!l.isEmpty()) {
@@ -86,9 +86,10 @@ public class AmadeusFilesScheduler {
                     } else {
                         //Si no se registra en la BD
                         String content = readFileContent(f);
+                        System.out.println("Content:" + content);
                         saveFile(f.getName(), content);
                         // movemos el archivo a la zona backup
-                        if (!backupFolder.exists()){
+                        if (!backupFolder.exists()) {
                             backupFolder.mkdir();
                         }
                         Path from = Paths.get(f.getAbsolutePath());
@@ -109,29 +110,32 @@ public class AmadeusFilesScheduler {
     private String readFileContent(File f) {
 
         StringBuilder builder = new StringBuilder();
-        try( BufferedReader br = new BufferedReader(new FileReader(f))) {
+        try (BufferedReader br = new BufferedReader(new FileReader(f))) {
 
             String currentLine;
-            while ((currentLine = br.readLine()) != null){
+
+            while ((currentLine = br.readLine()) != null) {
+                System.out.println("Reading line:" + currentLine);
                 builder.append(currentLine).append("\n");
             }
-            
-        }catch (IOException e){
+
+        } catch (IOException e) {
             e.printStackTrace();
         }
-        
-        
+
         return builder.toString();
     }
-    
-    private void saveFile (String fileName , String content) throws CRUDException{
+
+    private void saveFile(String fileName, String content) throws CRUDException {
         ArchivoBoleto b = new ArchivoBoleto();
         b.setNombreArchivo(fileName);
         b.setTipoArchivo(ArchivoBoleto.TipoArchivo.AMADEUS);
         b.setContenido(content);
         b.setFechaInsert(DateContable.getCurrentDate());
         b.setEstado(ArchivoBoleto.Estado.CREADO);
-        
+
+        System.out.println(b);
+
         ejbAmadeus.insert(b);
     }
 

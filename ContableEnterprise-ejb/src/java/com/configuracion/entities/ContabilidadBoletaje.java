@@ -14,8 +14,6 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -39,8 +37,7 @@ public class ContabilidadBoletaje extends Entidad {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
-    @NotNull
-    @Column(name = "id_empresa", updatable = false)
+    @Column(name = "id_empresa", updatable = false , nullable = false)
     private Integer idEmpresa;
     @Column(name = "id_total_boleto_bs")
     private Integer idTotalBoletoBs;
@@ -50,11 +47,11 @@ public class ContabilidadBoletaje extends Entidad {
     private Integer idCuentaFee;
     @Column(name = "id_descuentos")
     private Integer idDescuentos;
-    @Size(max = 1)
-    @Column(name = "emision_bolivianos")
+//    @Size(max = 1)
+    @Column(name = "emision_bolivianos", length = 1)
     private String emisionBolivianos;
-    @Size(max = 1)
-    @Column(name = "emision_dolares")
+//    @Size(max = 1)
+    @Column(name = "emision_dolares", length = 1)
     private String emisionDolares;
 
     @Column(name = "cuenta_efectivo_debe_bs")

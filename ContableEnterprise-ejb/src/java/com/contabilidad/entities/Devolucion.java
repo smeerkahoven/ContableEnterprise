@@ -24,7 +24,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.Size;
 
 /**
  *
@@ -61,36 +60,36 @@ public class Devolucion extends Entidad {
     @Column(name = "fecha_emision")
     @Temporal(TemporalType.DATE)
     private Date fechaEmision;
-    @Size(max = 1)
-    @Column(name = "moneda")
+//    @Size(max = 1)
+    @Column(name = "moneda", length = 1)
     private String moneda;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "factor_cambiario")
     private BigDecimal factorCambiario;
     @Column(name = "monto")
     private BigDecimal monto;
-    @Size(max = 256)
-    @Column(name = "concepto")
+//    @Size(max = 256)
+    @Column(name = "concepto", length = 256)
     private String concepto;
-    @Size(max = 1)
-    @Column(name = "tipo_devolucion")
+//    @Size(max = 1)
+    @Column(name = "tipo_devolucion", length = 1)
     private String tipoDevolucion;
-    @Size(max = 20)
-    @Column(name = "nro_cheque")
+//    @Size(max = 20)
+    @Column(name = "nro_cheque", length = 20)
     private String nroCheque;
-    @Size(max = 20)
-    @Column(name = "nro_deposito")
+//    @Size(max = 20)
+    @Column(name = "nro_deposito", length = 20)
     private String nroDeposito;
     @Column(name = "id_cuenta_deposito")
     private Integer idCuentaDeposito;
     @Column(name = "fecha_insert")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaInsert;
-    @Size(max = 16)
-    @Column(name = "id_usuario_creador")
+//    @Size(max = 16)
+    @Column(name = "id_usuario_creador", length = 16)
     private String idUsuarioCreador;
-    @Size(max = 1)
-    @Column(name = "estado")
+//    @Size(max = 1)
+    @Column(name = "estado", length = 1)
     private String estado;
 
     public Devolucion() {

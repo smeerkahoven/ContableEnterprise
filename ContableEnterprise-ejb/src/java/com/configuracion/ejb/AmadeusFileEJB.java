@@ -97,7 +97,7 @@ public class AmadeusFileEJB extends FacadeEJB implements AmadeusFileRemote {
 
     @Override
     public boolean procesarArchivo(final ArchivoBoleto archivoBoleto) throws CRUDException {
-        System.out.println("Procesando Archivo:" + archivoBoleto.getNombreArchivo());
+        System.out.println("Procesando Archivo AMADEUS:" + archivoBoleto.getNombreArchivo());
 
         impuestos.clear();
         pasajeros.clear();
@@ -122,14 +122,16 @@ public class AmadeusFileEJB extends FacadeEJB implements AmadeusFileRemote {
         while (i < line.length) {
             //El primer parametro debe SER AIR-BLK207
             String[] lineColumn = line[i].split(PUNTO_COMA);
-
+            System.out.println(" Amadeus position:" + i);
             //FIN DE ARCHIVO
             if (lineColumn[0].equals(ENDX)) {
                 break;
             }
 
             if (header) {
+                System.out.println("header Amadeus");
                 //analizamos la cabecera del archivo
+                System.out.println("header:" + lineColumn[0]);
                 if (lineColumn[0].equals(AIR_BLK207)) {
                     if (lineColumn[1].equals(_7A)) {
                         //BOLETO VALIDO
@@ -140,10 +142,11 @@ public class AmadeusFileEJB extends FacadeEJB implements AmadeusFileRemote {
                         void_ticket = true;
                     } else {
                         //Boleto IMR
+                        header = false;
                         break;
                     }
-                    header = false;
                 }
+                header = false;
             } else if (valid_ticket) {
                 // solo buscamos informacion del ticket VALIDO (7A)
                 Optional op = Optional.ofNullable(lineColumn[0]);
@@ -340,10 +343,11 @@ public class AmadeusFileEJB extends FacadeEJB implements AmadeusFileRemote {
                     pasajeros.put(code, p);
 
                     indexPassenger = code;
-
                 }
 
                 i++;
+            }else {
+                i = line.length + 1  ;
             }
 
             //System.out.println(archivoBoleto.getNombreArchivo() + ":" + line[i]);
@@ -507,7 +511,7 @@ public class AmadeusFileEJB extends FacadeEJB implements AmadeusFileRemote {
                                     Double porcentaje = Double.parseDouble(porcentajeComision.getValor());
                                     Double totalComisonIva = (total * porcentaje) / 100 + total;
                                     if (aerolinea.getRoundComisionUsd()) {
-                                        b.setMontoComision(new BigDecimal(Math.round( totalComisonIva)).setScale(Contabilidad.VALOR_DECIMAL_0, RoundingMode.HALF_DOWN));
+                                        b.setMontoComision(new BigDecimal(Math.round(totalComisonIva)).setScale(Contabilidad.VALOR_DECIMAL_0, RoundingMode.HALF_DOWN));
                                     } else {
                                         b.setMontoComision(new BigDecimal(totalComisonIva).setScale(Contabilidad.VALOR_DECIMAL_2, RoundingMode.HALF_DOWN));
                                     }

@@ -247,7 +247,7 @@ angular.module('jsPagoAnticipado.controllers', []).controller('frmPagoAnticipado
 
                             hideModalWindow('#frmPagoAnticipadoTransaccion');
 
-                        }else if (response.data.code === 200) {
+                        } else if (response.data.code === 200) {
                             showAlert(ERROR_RESPUESTA_TITLE, response.data.content);
                         }
                     }, $scope.errorFunction);
@@ -577,12 +577,41 @@ angular.module('jsPagoAnticipado.controllers', []).controller('frmPagoAnticipado
                     $scope.showRestfulError = false;
                     $scope.showRestfulSuccess = false;
 
+                    if ($scope.formData.moneda === $scope.MONEDA_EXTRANJERA) {
+                        $scope.trx.montoDisponibleUsd = Number($scope.formData.montoTotalDisponible);
+                        $scope.trx.montoDisponibleBs = Number(parseFloat($scope.trx.montoDisponibleUsd) * parseFloat($scope.formData.factorCambiario)).toFixed(2);
+                    } else {
+                        $scope.trx.montoDisponibleBs = Number($scope.formData.montoTotalDisponible);
+                        $scope.trx.montoDisponibleUsd = Number(parseFloat($scope.trx.montoDisponibleBs) / parseFloat($scope.formData.factorCambiario)).toFixed(2);
+                    }
+
+
                     $scope.trx.monedaTransaccion = $scope.trx.moneda;
                     if ($scope.trx.moneda === $scope.MONEDA_EXTRANJERA) {
-                        $scope.trx.monto = $scope.trx.montoAdeudadoUsd;
+                        if ($scope.trx.montoAdeudadoUsd < $scope.trx.montoDisponibleUsd) {
+                            $scope.trx.monto = $scope.trx.montoAdeudadoUsd;
+                        } else {
+                            $scope.trx.monto = Number($scope.trx.montoDisponibleUsd);
+                        }
+
+                        $scope.trx.maxMontoUsd = $scope.trx.monto;
+                        $scope.trx.maxMontoBs = Number(parseFloat($scope.trx.maxMontoUsd) * parseFloat($scope.formData.factorCambiario)).toFixed(2);
                     } else {
-                        $scope.trx.monto = $scope.trx.montoAdeudadoBs;
+                        if ($scope.trx.montoAdeudadoBs < $scope.trx.montoDisponibleBs) {
+                            $scope.trx.monto = $scope.trx.montoAdeudadoBs;
+                        }else {
+                            $scope.trx.monto = Number($scope.trx.montoDisponibleBs) ;
+                        }
+
+                        $scope.trx.maxMontoBs = $scope.trx.monto;
+                        $scope.trx.maxMontoUsd = Number(parseFloat($scope.trx.maxMontoBs) / parseFloat($scope.formData.factorCambiario)).toFixed(2);
                     }
+
+
+
+                    console.log($scope.trx);
+                    console.log($scope.formData);
+
                     hideModalWindow('#frmNotasDebitos');
                     $scope.showFrmNuevaTrx = true;
                     $scope.showFrmEditarTrx = false;
@@ -665,21 +694,22 @@ angular.module('jsPagoAnticipado.controllers', []).controller('frmPagoAnticipado
 
                 $scope.checkMontoIngresado = function () {
                     if ($scope.trx.moneda === $scope.MONEDA_NACIONAL) {
-                        if ($scope.trx.monto > $scope.trx.montoAdeudadoBs) {
+                        if ($scope.trx.monto > $scope.trx.montoDisponibleBs) {
                             $scope.showErrorMontoIngresado = true;
-                            $scope.montoQueDebeIngresar = $scope.trx.montoAdeudadoBs;
+                            $scope.montoQueDebeIngresar = $scope.trx.montoDisponibleBs;
                         } else {
                             $scope.showErrorMontoIngresado = false;
                         }
                     } else {
-                        if ($scope.trx.monto > $scope.trx.montoAdeudadoUsd) {
+                        if ($scope.trx.monto > $scope.trx.montoDisponibleUsd) {
                             $scope.showErrorMontoIngresado = true;
-                            $scope.montoQueDebeIngresar = $scope.trx.montoAdeudadoUsd;
+                            $scope.montoQueDebeIngresar = $scope.trx.montoDisponibleUsd;
                         } else {
                             $scope.showErrorMontoIngresado = false;
                         }
                     }
                 }
+                
 
                 $scope.checkMontoIngresadoDevolver = function () {
                     $scope.showErrorImporteIngresado = $scope.dev.monto > $scope.dev.montoMaximoDevolucion;

@@ -11,7 +11,6 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
-import javax.validation.constraints.NotNull;
 
 /**
  *
@@ -26,8 +25,8 @@ public class ComprobanteContablePK implements Serializable {
     @GeneratedValue (strategy = GenerationType.SEQUENCE)
     private int idLibro;
     @Basic(optional = false)
-    @NotNull
-    @Column(name = "gestion")
+//    @NotNull
+    @Column(name = "gestion", nullable = false)
     private int gestion;
 
     public ComprobanteContablePK() {

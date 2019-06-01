@@ -29,8 +29,6 @@ import javax.persistence.StoredProcedureParameter;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
@@ -76,13 +74,13 @@ public class NotaCredito extends Entidad {
     @Column(name = "id_nota_credito")
     private Integer idNotaCredito;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 16)
-    @Column(name = "id_usuario")
+//    @NotNull
+//    @Size(min = 1, max = 16)
+    @Column(name = "id_usuario", nullable = false, length = 16)
     private String idUsuario;
     @Basic(optional = false)
-    @NotNull
-    @Column(name = "id_empresa")
+//    @NotNull
+    @Column(name = "id_empresa", nullable = false)
     private Integer idEmpresa;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -93,8 +91,8 @@ public class NotaCredito extends Entidad {
     @Temporal(TemporalType.DATE)
     private Date fechaEmision;
     @Basic(optional = false)
-    @NotNull
-    @Column(name = "fecha_insert")
+//    @NotNull
+    @Column(name = "fecha_insert", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaInsert;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
@@ -104,11 +102,11 @@ public class NotaCredito extends Entidad {
     private BigDecimal montoAbonadoUsd;
     @Column(name = "factor_cambiario")
     private BigDecimal factorCambiario;
-    @Size(max = 128)
-    @Column(name = "concepto")
+//    @Size(max = 128)
+    @Column(name = "concepto", length = 128)
     private String concepto;
-    @Size(max = 45)
-    @Column(name = "estado")
+//    @Size(max = 45)
+    @Column(name = "estado", length = 45)
     private String estado;
     
     @OneToMany(mappedBy = "idNotaCredito")

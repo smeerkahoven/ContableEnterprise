@@ -23,7 +23,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.Size;
 
 /**
  *
@@ -45,11 +44,11 @@ public class IngresoTransaccion extends Entidad {
     @Basic(optional = false)
     @Column(name = "id_transaccion")
     private Integer idTransaccion;
-    @Size(max = 64)
-    @Column(name = "descripcion")
+//    @Size(max = 64)
+    @Column(name = "descripcion", length = 64)
     private String descripcion;
-    @Size(max = 45)
-    @Column(name = "moneda")
+//    @Size(max = 45)
+    @Column(name = "moneda", length = 45)
     private String moneda;
     @Column(name = "monto_bs")
     private BigDecimal montoBs;
