@@ -107,7 +107,7 @@ public class NotaCreditoReportServlet extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            String jrxmlFileName = "/resources/cabecera_420.jasper";
+            String jrxmlFileName = "/resources/cabecera_240.jasper";
             File archivoReporte = new File(request.getSession().getServletContext().getRealPath(jrxmlFileName));
             Integer idNotaCredito = Integer.parseInt(request.getParameter("idNotaCredito"));
             HashMap hm = null;

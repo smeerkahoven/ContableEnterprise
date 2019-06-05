@@ -65,13 +65,13 @@ public class CargoBoleto extends Entidad {
     @Column(name = "comision_mayorista")
     private BigDecimal comisionMayorista;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_cuenta_agencia")
     private PlanCuentas idCuentaAgencia;
     @Column(name = "comision_agencia")
     private BigDecimal comisionAgencia;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_cuenta_promotor")
     private PlanCuentas idCuentaPromotor;
     @Column(name = "comision_promotor")
@@ -305,7 +305,9 @@ public class CargoBoleto extends Entidad {
 
     @Override
     public String toString() {
-        return "com.contabilidad.entities.CargoBoleto[ idCargo=" + idCargo + " ]";
+        return "CargoBoleto{" + "idCargo=" + idCargo + ", idEmpresa=" + idEmpresa + ", moneda=" + moneda + ", idCuentaMayorista=" + idCuentaMayorista + ", comisionMayorista=" + comisionMayorista + ", idCuentaAgencia=" + idCuentaAgencia + ", comisionAgencia=" + comisionAgencia + ", idCuentaPromotor=" + idCuentaPromotor + ", comisionPromotor=" + comisionPromotor + ", concepto=" + concepto + ", tipo=" + tipo + ", estado=" + estado + ", fechaInsert=" + fechaInsert + ", usuarioCreador=" + usuarioCreador + ", idNotaDebito=" + idNotaDebito + ", idNotaDebitoTransaccion=" + idNotaDebitoTransaccion + ", idLibro=" + idLibro + ", idIngresoCaja=" + idIngresoCaja + ", idIngresoCajaTransaccion=" + idIngresoCajaTransaccion + '}';
     }
+
+
 
 }

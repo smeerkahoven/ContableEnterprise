@@ -69,12 +69,12 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
 
     @EJB
     private ComprobanteRemote ejbComprobante;
-    
+
     @EJB
-    private NotasCreditoRemote ejbNotaCredito ;
-    
+    private NotasCreditoRemote ejbNotaCredito;
+
     @EJB
-    private PagoAnticipadoRemote ejbPagoAnticipado ;
+    private PagoAnticipadoRemote ejbPagoAnticipado;
 
     @Override
     public Entidad get(Entidad e) throws CRUDException {
@@ -379,20 +379,20 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
         return Operacion.REALIZADA;
 
     }
-    
+
     @Override
-    public Boleto asociarBoletoNotaDebito( NotaDebito n, Integer idBoleto, String user) throws CRUDException {
-        
+    public Boleto asociarBoletoNotaDebito(NotaDebito n, Integer idBoleto, String user) throws CRUDException {
+
         Boleto bFromDb = em.find(Boleto.class, idBoleto);
-        
-        if (bFromDb == null){
+
+        if (bFromDb == null) {
             throw new CRUDException("No existe el boleto %s".replace("%s", idBoleto.toString()));
         }
-        
+
         if (bFromDb.getIdNotaDebito() != null) {
             throw new CRUDException("El Boleto ya se encuentra asociado a la nota de Debito %s.".replace("%s", bFromDb.getIdNotaDebito().toString()));
         }
-        
+
         Integer idTransaccion = -1;
 
         // En la BD crea la transaccion de la nota de debito asociandola con los montos del Boleto
@@ -414,8 +414,8 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
     }
 
     @Override
-    public Boleto asociarBoletoNotaDebitoManual( NotaDebito n, Boleto b) throws CRUDException {
-        
+    public Boleto asociarBoletoNotaDebitoManual(NotaDebito n, Boleto b) throws CRUDException {
+
         Integer idTransaccion = -1;
         // En la BD crea la transaccion de la nota de debito asociandola con los montos del Boleto
         // Asocia el Boleto con la Transaccion
@@ -536,30 +536,29 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
 
         return cargo;
     }
-    
-    
+
     @Override
-       public CargoBoleto updateCargo(CargoBoleto cargo) throws CRUDException {
-           CargoBoleto fromDb = em.find(CargoBoleto.class, cargo.getIdCargo());
-          Optional op = Optional.ofNullable(fromDb);
-          
-           if (!op.isPresent()){
-               throw new CRUDException("No se encontra el Cargo del Boleto para actualizar.");
-           }
+    public CargoBoleto updateCargo(CargoBoleto cargo) throws CRUDException {
+        System.out.println("NotaDebitoEJB:cargo:"+ cargo) ;
+        CargoBoleto fromDb = em.find(CargoBoleto.class, cargo.getIdCargo());
+        Optional op = Optional.ofNullable(fromDb);
+
+        if (!op.isPresent()) {
+            throw new CRUDException("No se encontra el Cargo del Boleto para actualizar.");
+        }
         // 1. Insertamo el cargo
         cargo.setIdCargo(insert(cargo));
 
         NotaDebitoTransaccion trxFromDb = em.find(NotaDebitoTransaccion.class, fromDb.getIdNotaDebitoTransaccion());
         op = Optional.ofNullable(trxFromDb);
-        if (!op.isPresent()){
+        if (!op.isPresent()) {
             throw new CRUDException("No se encuentra la transaccion de la Nota de Debito para actualizar.");
         }
-        
+
         trxFromDb.setDescripcion(cargo.getConcepto());
         trxFromDb.setGestion(DateContable.getPartitionDateInt(DateContable.getCurrentDateStr(DateContable.LATIN_AMERICA_FORMAT)));
         trxFromDb.setEstado(Estado.PENDIENTE);
         trxFromDb.setIdCargo(cargo.getIdCargo());
-
 
         trxFromDb.setMoneda(cargo.getMoneda());
         if (cargo.getMoneda().equals(Moneda.NACIONAL)) {
@@ -567,7 +566,7 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
             trxFromDb.setMontoBs(trxFromDb.getMontoBs().add(cargo.getComisionMayorista()));
             trxFromDb.setMontoBs(trxFromDb.getMontoBs().add(cargo.getComisionPromotor()));
             trxFromDb.setMontoAdeudadoBs(trxFromDb.getMontoBs());
-            
+
             trxFromDb.setMontoUsd(null);
             trxFromDb.setMontoAdeudadoUsd(null);
         } else {
@@ -575,7 +574,7 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
             trxFromDb.setMontoUsd(trxFromDb.getMontoUsd().add(cargo.getComisionMayorista()));
             trxFromDb.setMontoUsd(trxFromDb.getMontoUsd().add(cargo.getComisionPromotor()));
             trxFromDb.setMontoAdeudadoUsd(trxFromDb.getMontoUsd());
-            
+
             trxFromDb.setMontoAdeudadoBs(null);
             trxFromDb.setMontoBs(null);
         }
@@ -592,7 +591,6 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
 
         return cargo;
     }
-
 
     @Override
     public CargoBoleto getCargo(CargoBoleto cargo) throws CRUDException {
@@ -903,7 +901,7 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
 
     //TODO falta al anular una nota de debito que anule la Nota de Credito
     @Override
-    public synchronized void anularNotaDebito(NotaDebito nota , String usuario) throws CRUDException {
+    public synchronized void anularNotaDebito(NotaDebito nota, String usuario) throws CRUDException {
 
         Optional op = Optional.ofNullable(nota.getIdNotaDebito());
 
@@ -920,24 +918,22 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
                     for (NotaDebitoTransaccion n : l) {
                         try {
                             anularTransaccion(n, usuario);
-                            
+
                             /*ejbIngresoCaja.anularTransaccion(n, usuario);
                             
                             ejbNotaCredito.anularTransaccion(n, usuario);
                             
                             ejbPagoAnticipado.anularTransaccion(n, usuario);*/
-                            
                         } catch (CRUDException ex2) {
                             // aqui no hacemos nada ya que anular transaccion enviara la notificacion
                         }
                     }
                     //Obtenemos los Ingresos a Caja
-                    
+
                     /*List<IngresoTransaccion> lictr = ejbIngresoCaja.getIngresoCajaTrxByIdNotaDebito(fromDB);
                     for (IngresoTransaccion it : lictr) {
                         ejbIngresoCaja.anularTransaccion(it, usuario);
                     }*/
-                    
                     //TODO
                     //Anular las transacciones de las Notas de Credito
                     /*List<NotaCreditoTransaccion> lnctr =ejbNotaCredito.getNotaCreditoTransaccionByNotaDebito(fromDB);
@@ -953,15 +949,13 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
                     for (PagoAnticipadoTransaccion patr : lpatr){
                         ejbPagoAnticipado.anularTransaccion(patr, usuario);
                     }*/
-                    
                     //Obtenemos los Comprobantes Contables
                     List<ComprobanteContable> lcc = ejbComprobante.getComprobantesByNotaDebito(fromDB.getIdNotaDebito());
                     for (ComprobanteContable cc : lcc) {
                         cc.setEstado(ComprobanteContable.ANULADO);
                         em.merge(cc);
                     }
-                    
-                    
+
                     fromDB.setEstado(Estado.ANULADO);
 
                     em.flush();
@@ -1012,16 +1006,16 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
                 } catch (CRUDException ex) {
 
                 }
-                
+
                 // Anular Transaccion de las Notas de Credito
                 ejbNotaCredito.anularTransaccion(fromDb, usuario);
                 // Anular TRansaccion de los Pagos Anticiapdos
-                
+
                 ejbPagoAnticipado.anularTransaccion(tr, usuario);
-                
+
                 //anular los asientos Contables
                 try {
-                    ejbComprobante.anularAsientosContables(fromDb,  usuario);
+                    ejbComprobante.anularAsientosContables(fromDb, usuario);
                 } catch (CRUDException ex) {
 
                 }
@@ -1257,9 +1251,8 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
         //actualizamos notas debitos
         actualizarMontosNotaDebitoEmitida(notaFromDb.getIdNotaDebito().getIdNotaDebito());
     }
-    
-    
-        @Override
+
+    @Override
     public void actualizarMontosAdeudadosTransaccion(PagoAnticipadoTransaccion trx) throws CRUDException {
         /*BEGIN  */
         // Calculo de la reduccion del monto adeudado sea cual sea la moneda del pago
@@ -1294,7 +1287,7 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
         Double montoIngresado = 0d;
         //Si las monedas son iguales
         if (trx.getMoneda().equals(notaFromDb.getMoneda())) {
-                montoIngresado = trx.getMonto().doubleValue();
+            montoIngresado = trx.getMonto().doubleValue();
         } else {
             if (trx.getMoneda().equals(Moneda.EXTRANJERA)
                     && notaFromDb.getMoneda().equals(Moneda.NACIONAL)) {
@@ -1315,7 +1308,7 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
 
         //El monto adeudado se suma al monto que se anulo
         Double montoTotal = montoAdeudado - montoIngresado;
-        
+
         if (notaFromDb.getMoneda().equals(Moneda.NACIONAL)) {
             notaFromDb.setMontoAdeudadoBs(new BigDecimal(montoTotal));
 
@@ -1507,27 +1500,25 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
     @Override
     public List<NotaDebito> getNotaDebitoCreditoWhereVencimientoWasYesterday() throws CRUDException {
         Date yesterday = DateContable.getYesterday();
-        
+
         Query query = em.createNamedQuery("NotaDebito.getAllNotaDebitoWhereVencimientoIsYesterday");
         query.setParameter("yesterday", yesterday);
-        
-        List l = query.getResultList() ;
-        
-        return l ;
-        
+
+        List l = query.getResultList();
+
+        return l;
+
     }
 
     @Override
     public List<NotaDebito> getNotaDebitoEnMora() throws CRUDException {
-        
+
         Query query = em.createNamedQuery("NotaDebito.getAllNotaDebitoEnMora");
-        
-        List l = query.getResultList() ;
-        
-        return l ;
-        
+
+        List l = query.getResultList();
+
+        return l;
+
     }
 
-    
-    
 }

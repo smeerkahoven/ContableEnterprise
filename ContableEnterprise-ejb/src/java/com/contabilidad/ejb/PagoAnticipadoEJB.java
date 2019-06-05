@@ -522,7 +522,6 @@ public class PagoAnticipadoEJB extends FacadeEJB implements PagoAnticipadoRemote
         trx.setIdUsuarioCreador(usuario);
 
         //ejbNotaDebito.actualizarMontosAdeudadosTransaccion(trx);
-
         trx.setIdPagoAnticipadoTransaccion(insert(trx));
 
         updateMontosPagosAnticipados(trx.getIdPagoAnticipado().getIdPagoAnticipado());
@@ -564,20 +563,42 @@ public class PagoAnticipadoEJB extends FacadeEJB implements PagoAnticipadoRemote
         if (!op.isPresent()) {
             throw new CRUDException("No se ha especificado un Pago Anticipado Válido.");
         }
-        
-       
+
         System.out.println("PagoAnticipado:" + paFromDb.getIdPagoAnticipado());
         System.out.println("MontoAnticipado:" + paFromDb.getMontoAnticipado());
-        Double montoTotalAcreditado = paFromDb.getMontoTotalAcreditado() == null ? new Double(0) :
-                paFromDb.getMontoTotalAcreditado().doubleValue() ;
+        Double montoTotalAcreditado = paFromDb.getMontoTotalAcreditado() == null ? new Double(0)
+                : paFromDb.getMontoTotalAcreditado().doubleValue();
         System.out.println("getMontoTotalAcreditado:" + montoTotalAcreditado);
-        
-        BigDecimal decAcreditado = new BigDecimal(montoTotalAcreditado) ;
-        
-        Double montoDisponible = paFromDb.getMontoAnticipado().subtract(decAcreditado).setScale(2) .doubleValue() ;
-        
-        if (montoDisponible < trx.getMonto().doubleValue()){
-            throw new CRUDException(String.format( "El monto introducido es mayor al total disponible: Total Disponible %.2f ", montoDisponible));
+
+        //Pregunbtar por el cambio de moneda
+        if (trNDFromDB.getMoneda().equals(trNDFromDB.getMoneda())) {
+
+        }
+
+        BigDecimal decAcreditado = new BigDecimal(montoTotalAcreditado);
+
+        Double montoDisponible = paFromDb.getMontoAnticipado().subtract(decAcreditado).setScale(2).doubleValue();
+
+        if (trx.getMoneda().equals(Moneda.NACIONAL)) {
+            if (paFromDb.getMoneda().equals(Moneda.NACIONAL)) {
+                if (montoDisponible < trx.getMonto().doubleValue()) {
+                    throw new CRUDException(String.format("El monto introducido es mayor al total disponible: Total Disponible %.2f ", montoDisponible));
+                }
+            } else {
+                if (montoDisponible < trx.getMontoCambioBs().doubleValue()) {
+                    throw new CRUDException(String.format("El monto introducido es mayor al total disponible: Total Disponible %.2f ", montoDisponible));
+                }
+            }
+        } else {
+            if (paFromDb.getMoneda().equals(Moneda.EXTRANJERA)) {
+                if (montoDisponible < trx.getMonto().doubleValue()) {
+                    throw new CRUDException(String.format("El monto introducido es mayor al total disponible: Total Disponible %.2f ", montoDisponible));
+                }
+            } else {
+                if (montoDisponible < trx.getMontoCambioUsd().doubleValue()) {
+                    throw new CRUDException(String.format("El monto introducido es mayor al total disponible: Total Disponible %.2f ", montoDisponible));
+                }
+            }
         }
 
         trx.setIdNotaTransaccion(trNDFromDB);
@@ -588,6 +609,19 @@ public class PagoAnticipadoEJB extends FacadeEJB implements PagoAnticipadoRemote
         trx.setIdUsuarioCreador(usuario);
 
         ejbNotaDebito.actualizarMontosAdeudadosTransaccion(trx);
+
+        if (paFromDb.getMoneda().equals(Moneda.NACIONAL)) {
+            if (trx.getMoneda().equals(Moneda.EXTRANJERA)) {
+                trx.setMonto(trx.getMontoCambioBs());
+                trx.setMoneda(Moneda.NACIONAL);
+            }
+
+        } else {
+            if (trx.getMoneda().equals(Moneda.NACIONAL)) {
+                trx.setMonto(trx.getMontoCambioUsd());
+                trx.setMoneda(Moneda.EXTRANJERA);
+            }
+        }
 
         trx.setIdPagoAnticipadoTransaccion(insert(trx));
 

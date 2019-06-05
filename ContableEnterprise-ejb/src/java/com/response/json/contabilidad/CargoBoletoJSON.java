@@ -37,8 +37,17 @@ public class CargoBoletoJSON implements Serializable {
     private Integer idNotaDebito;
     private Integer idNotaDebitoTransaccion;
 
+    @Override
+    public String toString() {
+        return "CargoBoletoJSON{" + "idCargo=" + idCargo + ", idEmpresa=" + idEmpresa + ", moneda=" + moneda + ", idCuentaMayorista=" + idCuentaMayorista + ", comisionMayorista=" + comisionMayorista + ", idCuentaAgencia=" + idCuentaAgencia + ", comisionAgencia=" + comisionAgencia + ", idCuentaPromotor=" + idCuentaPromotor + ", comisionPromotor=" + comisionPromotor + ", concepto=" + concepto + ", tipo=" + tipo + ", estado=" + estado + ", fechaInsert=" + fechaInsert + ", usuarioCreador=" + usuarioCreador + ", idNotaDebito=" + idNotaDebito + ", idNotaDebitoTransaccion=" + idNotaDebitoTransaccion + '}';
+    }
+    
+    
+
     public static CargoBoleto toCargoBoleto(CargoBoletoJSON json) throws CRUDException {
         CargoBoleto cargo = new CargoBoleto();
+        
+        cargo.setIdCargo(json.getIdCargo());
 
         cargo.setComisionAgencia(json.getComisionAgencia() == null ? BigDecimal.ZERO : json.getComisionAgencia());
         cargo.setComisionMayorista(json.getComisionMayorista() == null ? BigDecimal.ZERO : json.getComisionMayorista());
@@ -53,7 +62,6 @@ public class CargoBoletoJSON implements Serializable {
             throw new CRUDException("No se ha enviado la cuenta de la comision de Mayorista");
         }
 
-        /*
         if (json.getIdCuentaAgencia() != null) {
             cargo.setIdCuentaAgencia(new PlanCuentas(((Double) json.getIdCuentaAgencia().getId()).intValue()));
         } else {
@@ -65,7 +73,7 @@ public class CargoBoletoJSON implements Serializable {
         } else {
             throw new CRUDException("No se ha enviado la cuenta de la comision de Promotor");
         }
-         */
+
         cargo.setIdEmpresa(json.getIdEmpresa());
         cargo.setMoneda(json.getMoneda());
         cargo.setTipo(json.getTipo());
@@ -73,6 +81,8 @@ public class CargoBoletoJSON implements Serializable {
         cargo.setIdNotaDebito(json.getIdNotaDebito());
         cargo.setIdNotaDebitoTransaccion(json.getIdNotaDebitoTransaccion());
 
+        System.out.println("CargoBoletoJSON:cargo:"+ cargo);
+        
         return cargo;
     }
 
@@ -85,8 +95,10 @@ public class CargoBoletoJSON implements Serializable {
         json.setConcepto(cargo.getConcepto());
         json.setEstado(cargo.getEstado());
         json.setFechaInsert(DateContable.getDateFormat(cargo.getFechaInsert(), DateContable.LATIN_AMERICA_TIME_FORMAT));
-        
-        json.setIdCuentaMayorista(new ComboSelect(cargo.getIdCuentaMayorista().getIdPlanCuentas(), cargo.getIdCuentaAgencia().getCuenta()));
+
+        if (cargo.getIdCuentaMayorista() != null) {
+            json.setIdCuentaMayorista(new ComboSelect(cargo.getIdCuentaMayorista().getIdPlanCuentas(), cargo.getIdCuentaAgencia().getCuenta()));
+        }
 
         if (cargo.getIdCuentaAgencia() != null) {
             json.setIdCuentaAgencia(new ComboSelect(cargo.getIdCuentaAgencia().getIdPlanCuentas(), cargo.getIdCuentaAgencia().getCuenta()));
@@ -95,7 +107,7 @@ public class CargoBoletoJSON implements Serializable {
         if (cargo.getIdCuentaPromotor() != null) {
             json.setIdCuentaPromotor(new ComboSelect(cargo.getIdCuentaPromotor().getIdPlanCuentas(), cargo.getIdCuentaAgencia().getCuenta()));
         }
-        
+
         json.setIdEmpresa(cargo.getIdEmpresa());
         json.setIdCargo(cargo.getIdCargo());
         json.setMoneda(cargo.getMoneda());

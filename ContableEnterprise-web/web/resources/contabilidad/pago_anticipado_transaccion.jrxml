@@ -102,10 +102,7 @@ where pat.id_pago_anticipado_transaccion = $P{ID_TRANSACCION}]]>
 					<font fontName="DejaVu Sans Mono" size="15" pdfFontName="Courier"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{gestion}+ "-"+ 
-    ($F{id_numero_gestion}<10 
-    ? "0"+ $F{id_numero_gestion}
-    : $F{id_numero_gestion}
-)]]></textFieldExpression>
+    $F{id_numero_gestion}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="2" y="0" width="83" height="18" uuid="1784c7c7-6fd6-4770-a515-72183dd782cc"/>

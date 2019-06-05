@@ -621,8 +621,8 @@
                                             <div class="modal-header">
                                                 <h5 class="modal-title" id="exampleModalLongTitle">Datos de la Nota de D&eacute;bito</h5>
                                                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                                                        <span aria-hidden="true">×</span>
-                                                    </button>
+                                                    <span aria-hidden="true">×</span>
+                                                </button>
                                             </div>
                                             <div class="modal-body table-responsive-md">
                                                 <span ng-show="loadingFrmBoleto" class="alert alert-info"><i class="loader loader-sm" ></i>  Cargando...</span>
@@ -682,7 +682,7 @@
                                                         </div>
 
                                                         <div class="form-group row bg-adeudado">
-                                                            <label for="txtCodigo" class="col-form-label col-sm-4 text-right">Saldo Deuda</label>
+                                                            <label for="txtCodigo" class="col-form-label col-sm-4 text-right"><strong>Saldo Deuda</strong> </label>
                                                             <div class="col-sm-8 row">
                                                                 <label class="col-form-label col-sm-1 ">BOB.</label>
                                                                 <label class="col-form-label col-sm-5 text-right"><strong> {{trx.montoAdeudadoBs| printNumber}}</strong> </label>
@@ -694,7 +694,7 @@
                                                         </div>
 
                                                         <div class="form-group row bg-cancelado">
-                                                            <label for="txtCodigo" class="col-form-label col-sm-4 text-right">Monto Total</label>
+                                                            <label for="txtCodigo" class="col-form-label col-sm-4 text-right"><strong>Monto Total</strong></label>
                                                             <div class="col-sm-8 row">
                                                                 <label class="col-form-label col-sm-1 ">BOB.</label>
                                                                 <label class="col-form-label col-sm-5 text-right"><strong> {{trx.montoBs| printNumber}}</strong> </label>
@@ -734,15 +734,18 @@
                                                                 <!-- Monto -->
                                                                 <div class="form-group row">
                                                                     <label for="txtNombre" class=" col-form-label text-right col-sm-3"><strong>Monto</strong></label>
-                                                                    <div class="col-sm-5">
-                                                                        <input type="number" class="form-control col-sm" name="txtMonto" placeholder="0.00" 
+                                                                    <div class="col-sm">
+                                                                        <input type="number" class="form-control col-sm-6" name="txtMonto" placeholder="0.00" 
                                                                                ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01" min="0" max="{{trx.montoAdeudadoBs}}"
-                                                                               ng-model="trx.monto" required="" ng-change="checkMontoIngresado()"
+                                                                               ng-model="trx.monto" ng-change="checkMontoIngresado()"
                                                                                data-toggle="tooltip" data-placement="top" />
-                                                                        <span class="alert-danger bg-light" ng-show="!myFormTrx.txtMonto.$valid">Debe ingresar un monto v&aacute;lido.</span>
-                                                                        <span class="alert-danger bg-light" ng-show="showErrorMontoIngresado">Debe ingresar un monto igual o menor a {{montoQueDebeIngresar}}</span>
+                                                                        <span class="row col" ng-show="showMontoBs"><strong>Bs. {{trx.montoCambioBs}}</strong></span>
+                                                                        <span  class="row col" ng-show="showMontoUsd"><strong>Usd. {{trx.montoCambioUsd}}</strong></span>
 
+                                                                        <span class="alert-danger bg-light row col" ng-show="trx.monto === undefined">Debe ingresar un monto v&aacute;lido.</span>
+                                                                        <span  class="alert-danger bg-light row col" ng-show="showErrorMontoIngresado">Debe ingresar un monto igual o menor a {{montoQueDebeIngresar}}</span>
                                                                     </div>
+
                                                                 </div>
                                                             </div>
                                                             <div class="modal-footer">
@@ -778,8 +781,8 @@
                                             <div class="modal-header">
                                                 <h5 class="modal-title" id="exampleModalLongTitle">Devoluci&oacute;n</h5>
                                                 <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                                                        <span aria-hidden="true">×</span>
-                                                    </button>
+                                                    <span aria-hidden="true">×</span>
+                                                </button>
                                             </div>
                                             <div class="modal-body table-responsive-md">
                                                 <span ng-show="loadingFrmBoleto" class="alert alert-info"><i class="loader loader-sm" ></i>  Cargando...</span>

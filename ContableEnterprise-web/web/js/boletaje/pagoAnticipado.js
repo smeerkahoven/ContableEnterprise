@@ -574,8 +574,11 @@ angular.module('jsPagoAnticipado.controllers', []).controller('frmPagoAnticipado
                 }
 
                 $scope.seleccionarTransaccion = function () {
+                    console.log($scope.trx);
                     $scope.showRestfulError = false;
                     $scope.showRestfulSuccess = false;
+                    $scope.showMontoBs = false;
+                    $scope.showMontoUsd = false;
 
                     if ($scope.formData.moneda === $scope.MONEDA_EXTRANJERA) {
                         $scope.trx.montoDisponibleUsd = Number($scope.formData.montoTotalDisponible);
@@ -599,8 +602,8 @@ angular.module('jsPagoAnticipado.controllers', []).controller('frmPagoAnticipado
                     } else {
                         if ($scope.trx.montoAdeudadoBs < $scope.trx.montoDisponibleBs) {
                             $scope.trx.monto = $scope.trx.montoAdeudadoBs;
-                        }else {
-                            $scope.trx.monto = Number($scope.trx.montoDisponibleBs) ;
+                        } else {
+                            $scope.trx.monto = Number($scope.trx.montoDisponibleBs);
                         }
 
                         $scope.trx.maxMontoBs = $scope.trx.monto;
@@ -609,13 +612,12 @@ angular.module('jsPagoAnticipado.controllers', []).controller('frmPagoAnticipado
 
 
 
-                    console.log($scope.trx);
-                    console.log($scope.formData);
-
                     hideModalWindow('#frmNotasDebitos');
                     $scope.showFrmNuevaTrx = true;
                     $scope.showFrmEditarTrx = false;
                     showModalWindow('#frmPagoAnticipadoTransaccion');
+
+                    $scope.checkMontoIngresado();
 
                 }
 
@@ -625,7 +627,6 @@ angular.module('jsPagoAnticipado.controllers', []).controller('frmPagoAnticipado
                         $scope.deleteComision();
                     }
                 };
-
 
                 $scope.hideMessagesBox = function () {
                     $scope.showRestfulSuccess = false;
@@ -658,7 +659,6 @@ angular.module('jsPagoAnticipado.controllers', []).controller('frmPagoAnticipado
                             $scope.errorFunction
                             );
                 }
-
 
                 $scope.nuevo = function () {
                     $scope.showLoading = true;
@@ -693,7 +693,23 @@ angular.module('jsPagoAnticipado.controllers', []).controller('frmPagoAnticipado
                 }
 
                 $scope.checkMontoIngresado = function () {
+                    $scope.showMontoUsd = false;
+                    $scope.showMontoBs = false;
+
                     if ($scope.trx.moneda === $scope.MONEDA_NACIONAL) {
+                        if ($scope.trx.monto !== undefined) {
+                            $scope.trx.montoCambioUsd = Number($scope.trx.monto / $scope.formData.factorCambiario).toFixed(2);
+                        }
+
+                        if ($scope.formData.moneda === $scope.MONEDA_EXTRANJERA) {
+                            $scope.showMontoBs = false;
+                            $scope.showMontoUsd = true;
+
+                        } else {
+                            $scope.showMontoUsd = true;
+                            $scope.showMontoBs = false;
+                        }
+
                         if ($scope.trx.monto > $scope.trx.montoDisponibleBs) {
                             $scope.showErrorMontoIngresado = true;
                             $scope.montoQueDebeIngresar = $scope.trx.montoDisponibleBs;
@@ -701,6 +717,21 @@ angular.module('jsPagoAnticipado.controllers', []).controller('frmPagoAnticipado
                             $scope.showErrorMontoIngresado = false;
                         }
                     } else {
+
+                        if ($scope.trx.monto !== undefined) {
+                            $scope.trx.montoCambioBs = Number($scope.trx.monto * $scope.formData.factorCambiario).toFixed(2);
+                        }
+
+
+                        if ($scope.formData.moneda === $scope.MONEDA_NACIONAL) {
+                            $scope.showMontoBs = true;
+                            $scope.showMontoUsd = false;
+
+                        } else {
+                            $scope.showMontoBs = true;
+                            $scope.showMontoUsd = false;
+                        }
+
                         if ($scope.trx.monto > $scope.trx.montoDisponibleUsd) {
                             $scope.showErrorMontoIngresado = true;
                             $scope.montoQueDebeIngresar = $scope.trx.montoDisponibleUsd;
@@ -709,7 +740,7 @@ angular.module('jsPagoAnticipado.controllers', []).controller('frmPagoAnticipado
                         }
                     }
                 }
-                
+
 
                 $scope.checkMontoIngresadoDevolver = function () {
                     $scope.showErrorImporteIngresado = $scope.dev.monto > $scope.dev.montoMaximoDevolucion;

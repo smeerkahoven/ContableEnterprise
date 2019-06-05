@@ -167,7 +167,7 @@ public class NotadebitoResource extends TemplateResource {
             }
         } catch (Exception ex) {
             response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
-            response.setContent(ex.getMessage());
+            response.setContent(ex.getCause());
             Logger.getLogger(BoletoResource.class.getName()).log(Level.SEVERE, null, ex);
         }
         return response;

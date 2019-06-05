@@ -960,6 +960,7 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                 }
 
                 $scope.editTransaccion = function (row) {
+                    console.log(row);
                     if (row.tipo === $scope.BOLETO) {
                         $scope.editBoleto(row.idBoleto);
                     } else {
@@ -968,6 +969,8 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                 }
 
                 $scope.editCargo = function (idCargo) {
+                    $scope.showDebito = false ;
+                    $scope.showCargo = false ;
                     //showBackground();
                     return $http({
                         method: 'POST',
@@ -983,13 +986,21 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                             switch ($scope.cargos.tipo) {
                                 case $scope.PAQUETE :
                                     $scope.showFormCargoTitle = 'Datos del Paquete';
+                                    $scope.showCargo = true ;
                                     break;
                                 case $scope.SEGURO :
                                     $scope.showFormCargoTitle = 'Datos del Seguro';
+                                    $scope.showCargo = true ;
                                     break;
                                 case $scope.ALQUILER :
                                     $scope.showFormCargoTitle = 'Datos del Alquiler';
+                                    $scope.showCargo = true ;
                                     break;
+                                case  $scope.DEBITO :
+                                    $scope.showFormCargoTitle = 'Datos del Alquiler';
+                                    $scope.showDebito = true ;
+                                    break ;
+                                    
                             }
 
                             if ($scope.cargos.estado === $scope.PENDIENTE) {
@@ -1673,6 +1684,9 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                             $scope.formData.montoAdeudadoUsd = nota.montoAdeudadoUsd;
 
                             $scope.loadTransacciones();
+                            
+                            $scope.showDebito = false ;
+                            $scope.showCargo = false ;
                         } else {
                             $scope.showAlert("Error", response.data.content);
                             $scope.showRestfulMessage = response.data.content;

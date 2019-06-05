@@ -24,6 +24,8 @@ public class PagoAnticipadoTransaccionJson implements Serializable {
     private Integer idPagoAnticipadoTransaccion;
     private String descripcion;
     private BigDecimal monto;
+    private BigDecimal montoCambioBs;
+    private BigDecimal montoCambioUsd;
     private String fechaInsert;
     private String idUsuarioCreador;
     private String estado;
@@ -89,6 +91,8 @@ public class PagoAnticipadoTransaccionJson implements Serializable {
         data.setIdUsuarioCreador(json.getIdUsuarioCreador());
         data.setMoneda(json.getMoneda());
         data.setMonto(json.getMonto());
+        data.setMontoCambioBs(json.getMontoCambioBs());
+        data.setMontoCambioUsd(json.getMontoCambioUsd());
         
         return data;
     }
@@ -114,6 +118,24 @@ public class PagoAnticipadoTransaccionJson implements Serializable {
         return r;
         
     }
+
+    public BigDecimal getMontoCambioBs() {
+        return montoCambioBs;
+    }
+
+    public void setMontoCambioBs(BigDecimal montoCambioBs) {
+        this.montoCambioBs = montoCambioBs;
+    }
+
+    public BigDecimal getMontoCambioUsd() {
+        return montoCambioUsd;
+    }
+
+    public void setMontoCambioUsd(BigDecimal montoCambioUsd) {
+        this.montoCambioUsd = montoCambioUsd;
+    }
+    
+    
     
     public String getMoneda() {
         return moneda;

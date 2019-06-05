@@ -123,11 +123,9 @@ sucursal]]></fieldDescription>
 				<textElement>
 					<font fontName="Monospaced" size="15" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{gestion}+ "-"+ 
-    ($F{id_numero_gestion}<10 
-    ? "0"+ $F{id_numero_gestion}
-    : $F{id_numero_gestion}
-)]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{gestion}+ "-"+
+    $F{id_numero_gestion}
+]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="0" y="4" width="87" height="18" uuid="2254cf5c-ca79-4ee0-b72d-d568f5bfff96"/>

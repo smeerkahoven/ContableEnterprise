@@ -109,10 +109,7 @@ CHEQUE]]></fieldDescription>
 					<font fontName="DejaVu Sans Mono" size="15" pdfFontName="Courier"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{gestion}+ "-"+ 
-    ($F{id_numero_gestion}<10 
-    ? "0"+ $F{id_numero_gestion}
-    : $F{id_numero_gestion}
-)]]></textFieldExpression>
+    $F{id_numero_gestion}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="22" y="12" width="99" height="18" uuid="f12ac47f-7c49-40ac-bcc7-680a0997066d"/>

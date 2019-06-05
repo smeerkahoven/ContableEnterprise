@@ -23,6 +23,7 @@ import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -84,6 +85,12 @@ public class PagoAnticipadoTransaccion extends Entidad {
     @JoinColumn(name = "id_nota_debito_transaccion")
     private NotaDebitoTransaccion idNotaTransaccion;
 
+    @Transient
+    private BigDecimal montoCambioUsd;
+
+    @Transient
+    private BigDecimal montoCambioBs;
+
     public PagoAnticipadoTransaccion() {
     }
 
@@ -113,6 +120,22 @@ public class PagoAnticipadoTransaccion extends Entidad {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    public BigDecimal getMontoCambioUsd() {
+        return montoCambioUsd;
+    }
+
+    public void setMontoCambioUsd(BigDecimal montoCambioUsd) {
+        this.montoCambioUsd = montoCambioUsd;
+    }
+
+    public BigDecimal getMontoCambioBs() {
+        return montoCambioBs;
+    }
+
+    public void setMontoCambioBs(BigDecimal montoCambioBs) {
+        this.montoCambioBs = montoCambioBs;
     }
 
     public BigDecimal getMonto() {
