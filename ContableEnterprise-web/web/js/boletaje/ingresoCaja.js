@@ -86,6 +86,7 @@ angular.module('jsIngresoCaja.controllers', []).controller('frmIngresoCaja',
                 $scope.EFECTIVO = "E";
                 $scope.CHEQUE = "H";
                 $scope.DEPOSITO = "D";
+                $scope.TARJETA = "T";
                 
                 $scope.MONEDA_NACIONAL = 'B';
                 $scope.MONEDA_EXTRANJERA = 'U';
@@ -709,8 +710,10 @@ angular.module('jsIngresoCaja.controllers', []).controller('frmIngresoCaja',
                 }
 
                 $scope.seleccionarTransaccion = function () {
+                    console.log($scope.trx);
                     $scope.showRestfulError = false;
                     $scope.showRestfulSuccess = false;
+                    
 
                     $scope.trx.monedaTransaccion = $scope.trx.moneda;
                     if ($scope.trx.moneda === $scope.MONEDA_EXTRANJERA) {
@@ -891,15 +894,12 @@ angular.module('jsIngresoCaja.controllers', []).controller('frmIngresoCaja',
                     $scope.resetCheque();
                     $scope.resetCredito();
                     $scope.resetTarjeta();
-                    
-                    console.log($scope.formData);
                 }
 
                 $scope.initCredito = function () {
                     $scope.formData.formaPago = $scope.CREDITO;
                     $scope.resetCheque();
                     $scope.resetDeposito();
-                    $scope.resetCombinado();
                     $scope.resetTarjeta();
 
                     $scope.formData.creditoVencimiento = today;
@@ -914,9 +914,6 @@ angular.module('jsIngresoCaja.controllers', []).controller('frmIngresoCaja',
                     $scope.resetCheque();
                     $scope.resetDeposito();
                     $scope.resetCredito();
-                    $scope.resetCombinado();
-                    $scope.resetTarjeta();
-
                 }
 
                 $scope.resetCredito = function () {

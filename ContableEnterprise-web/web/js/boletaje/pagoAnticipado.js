@@ -840,8 +840,6 @@ angular.module('jsPagoAnticipado.controllers', []).controller('frmPagoAnticipado
                     $scope.resetCheque();
                     $scope.resetDeposito();
                     $scope.resetCredito();
-                    $scope.resetTarjeta();
-
                 }
 
                 $scope.resetCredito = function () {

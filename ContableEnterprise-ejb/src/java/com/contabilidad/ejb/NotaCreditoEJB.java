@@ -526,7 +526,7 @@ public class NotaCreditoEJB extends FacadeEJB implements NotasCreditoRemote {
                     insert(haber);
 
                     AsientoContable debe = ejbComprobante.createTotalCancelarIngresoCajaDebe(comprobanteIngreso, conf, ndt, fromDb, c, tran);
-                    insert(haber);
+                    insert(debe);
 
                 }
                 em.merge(ndt);

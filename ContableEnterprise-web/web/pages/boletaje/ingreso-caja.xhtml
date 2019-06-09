@@ -426,9 +426,11 @@
                                                     <c:if test="#{ingresoCaja.formulario.crear== ingresoCaja.formulario.PERMITIR}">
                                                         <button  type="button" class="btn btn-primary" ng-click="finalizar()"><span class="fa fa-save"></span> Finalizar</button>
                                                     </c:if>
+                                                    <!--
                                                     <c:if test="#{ingresoCaja.formulario.crear== ingresoCaja.formulario.PERMITIR}">
                                                         <button  type="button" class="btn btn-warning" ng-click="pendiente()" ><span class="fa fa-clock"></span> Pendiente</button>
                                                     </c:if>
+                                                    -->
                                                     <c:if test="#{ingresoCaja.formulario.anular== ingresoCaja.formulario.PERMITIR}">
                                                         <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#frmAnular" ng-click="modalAnular(formData.idIngresoCaja, 'el Ingreso a Caja', INGRESO, formData)" value="Anular" > <span class="fa fa-trash"></span> Anular</button>
                                                     </c:if>
@@ -627,7 +629,7 @@
                                                     </div>
 
                                                     <div class="form-group row bg-adeudado">
-                                                        <label for="txtCodigo" class="col-form-label col-sm-4 text-right">Monto Adeudado</label>
+                                                        <label for="txtCodigo" class="col-form-label col-sm-4 text-right"><strong>Monto Adeudado</strong></label>
                                                         <div class="col-sm-8 row">
                                                             <label class="col-form-label col-sm-1 ">BOB.</label>
                                                             <label class="col-form-label col-sm-5 text-right"><strong> {{trx.montoAdeudadoBs| printNumber}}</strong> </label>
@@ -639,7 +641,7 @@
                                                     </div>
 
                                                     <div class="form-group row bg-cancelado">
-                                                        <label for="txtCodigo" class="col-form-label col-sm-4 text-right">Monto Cancelado</label>
+                                                        <label for="txtCodigo" class="col-form-label col-sm-4 text-right"><strong>Monto Cancelado</strong></label>
                                                         <div class="col-sm-8 row">
                                                             <label class="col-form-label col-sm-1 ">BOB.</label>
                                                             <label class="col-form-label col-sm-5 text-right"><strong> {{trx.montoBs| printNumber}}</strong> </label>
@@ -660,7 +662,7 @@
                                                                 <!-- Moneda Transaccion -->
                                                                 <label for="txtStatus" class="col-form-label col-sm-4 text-right">Moneda </label>
                                                                 <div class="col-sm-6">
-                                                                    <select name="txtMoneda" class="form-control" ng-model="trx.moneda" required="">
+                                                                    <select name="txtMoneda" class="form-control" ng-model="trx.moneda" disabled="true" required="">
                                                                         <option style="display:none" value="">seleccione una opcion</option>
                                                                         <option value="B" selected="selected">Bolivianos</option>
                                                                         <option value="U">Dolares</option>
@@ -678,7 +680,7 @@
                                                                            ng-model="trx.monto" required="" ng-change="checkMontoIngresado()"
                                                                            data-toggle="tooltip" data-placement="top" />
                                                                     <span class="alert-danger bg-light" ng-show="!myFormTrx.txtMonto.$valid">Debe ingresar un monto v&aacute;lido.</span>
-                                                                    <span class="alert-danger bg-light" ng-show="showErrorMontoIngresado">Debe ingresar un monto igual o menor a {{montoQueDebeIngresar}}</span>
+                                                                    <span class="alert-danger bg-light" ng-show="showErrorMontoIngresado">Debe ingresar un monto igual o menor a {{montoQueDebeIngresar|printNumber}}</span>
 
                                                                 </div>
                                                             </div>

@@ -523,13 +523,6 @@ public class ComprobanteContable extends Entidad {
         this.idDevolucion = idDevolucion;
     }
 
-    @Override
-    public int hashCode() {
-        int hash = 7;
-        hash = 11 * hash + this.idLibro;
-        hash = 11 * hash + this.gestion;
-        return hash;
-    }
 
     @Override
     public boolean equals(Object obj) {

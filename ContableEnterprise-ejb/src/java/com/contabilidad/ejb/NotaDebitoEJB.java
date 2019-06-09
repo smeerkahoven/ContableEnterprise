@@ -539,7 +539,7 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
 
     @Override
     public CargoBoleto updateCargo(CargoBoleto cargo) throws CRUDException {
-        System.out.println("NotaDebitoEJB:cargo:"+ cargo) ;
+        System.out.println("NotaDebitoEJB:cargo:" + cargo);
         CargoBoleto fromDb = em.find(CargoBoleto.class, cargo.getIdCargo());
         Optional op = Optional.ofNullable(fromDb);
 
@@ -1519,6 +1519,27 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
 
         return l;
 
+    }
+
+    @Override
+    public List<NotaDebito> getNotaDebitoEnMora(Integer idEmpresa) throws CRUDException {
+
+        Query query = em.createNamedQuery("NotaDebito.getNotaDebitoEnMora");
+        query.setParameter("idEmpresa", idEmpresa);
+
+        List l = query.getResultList();
+
+        return l;
+
+    }
+
+    @Override
+    public List<NotaDebito> getNotaDebitoEnPendiente(Integer idEmpresa) throws CRUDException {
+        Query query = em.createNamedQuery("NotaDebito.getNotaDebitoEnPendiente");
+        query.setParameter("idEmpresa", idEmpresa);
+        List l = query.getResultList();
+
+        return l;
     }
 
 }

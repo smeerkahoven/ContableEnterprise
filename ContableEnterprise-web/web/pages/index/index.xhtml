@@ -12,36 +12,40 @@
         <meta name="author" content="" />
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <!-- End Required meta tags -->
-
+        <title>#{login.systemName.valor} - #{login.razonSocial}</title>
         <!-- FAVICONS -->
         <link rel="apple-touch-icon-precomposed" sizes="144x144" href="../../assets/apple-touch-icon.png" />
         <link rel="shortcut icon" href="../../assets/favicon.ico" />
         <meta name="theme-color" content="#3063A0" />
         <!-- End FAVICONS -->
         <script src="../../assets/vendor/pace/pace.min.js"></script>
-        <!-- BEGIN THEME STYLES -->
-        <link rel="stylesheet" href="../../assets/stylesheets/main.min.css"/>
-        <link rel="stylesheet" href="../../assets/stylesheets/custom.css"/>
-        <script type="text/javascript" src="../../js/angular.min.js" />
-        <script type="text/javascript" src="../../js/ui-bootstrap-tpls.js" />
-        <script type="text/javascript" src="../../js/smart-table.min.js" />
-        <script type="text/javascript" src="../../js/jquery.min.js" />
-        <script type="text/javascript" src="../../js/index/index.js" />
-        <!-- END THEME STYLES -->
         <!-- BEGIN BASE STYLES -->
         <link rel="stylesheet" href="../../assets/vendor/pace/pace.min.css" />
         <link rel="stylesheet" href="../../assets/vendor/bootstrap/css/bootstrap.min.css" />
         <link rel="stylesheet" href="../../assets/vendor/open-iconic/css/open-iconic-bootstrap.min.css"/>
         <link rel="stylesheet" href="../../assets/vendor/fontawesome/css/fontawesome.all.css"/>
         <link rel="stylesheet" href="../../assets/vendor/font-awesome/css/font-awesome.min.css"  />
-        <link rel="stylesheet" href="../../css/main.css"  />
-
+        <link rel="stylesheet" href="../../assets/vendor/flatpickr/flatpickr.min.css" />
         <!-- END BASE STYLES -->
         <!-- BEGIN PLUGINS STYLES -->
         <link rel="stylesheet" href="../../assets/vendor/flatpickr/flatpickr.min.css"/>
         <!-- END PLUGINS STYLES -->
+        <!-- BEGIN THEME STYLES -->
+        <link rel="stylesheet" href="../../assets/stylesheets/main.min.css"/>
+        <link rel="stylesheet" href="../../assets/vendor/sweetalert/css/sweetalert.css"/>
 
-        <title>#{login.systemName.valor} - #{login.razonSocial}</title>
+        <script type="text/javascript" src="../../js/angular.min.js" />
+
+        <script type="text/javascript" src="../../js/ui-bootstrap-tpls.js" />
+        <script type="text/javascript" src="../../js/smart-table.min.js" />
+        <script type="text/javascript" src="../../assets/vendor/sweetalert/js/sweetalert.min.js"/>
+
+        <script type="text/javascript" src="../../js/date.format.js" />
+        <script type="text/javascript" src="../../js/moment.js" />
+
+
+        <!--CORRIGE ng-show -->
+        <link rel="stylesheet" href="../../css/main.css"  />
     </h:head>
     <h:body>
         <!-- .app -->
@@ -87,15 +91,17 @@
                                 <div class="section-block">
                                     <!-- metric row -->
                                     <div class="metric-row">
-                                        <div class="col-lg-9">
+                                        <div class="col-lg-6">
                                             <h:form id="frmUfv">
                                                 <input type="hidden" id="hdToken" name="hdToken" value="#{sessionView.token}"/>
                                                 <input type="hidden" id="hdUrlFactores" name="hdUrlFactores" value="#{factores.formulario.restful}"/>
+                                                <input type="hidden" id="hdUrlIngreso" name="hdUrlIngresoCaja" value="#{ingresoCaja.formulario.restful}"/>
+                                                <input type="hidden" id="hdUrlNotaDebito" name="hdUrlNotaDebito" value="#{boletajeOtros.formulario.restful}"/>
                                                 <input type="hidden" id="hdToken" name="hdFormName" value="index"/>
                                                 <div class="metric-row metric-flush ng-hide" ng-show="showFactores" >
 
                                                     <!-- metric column -->
-                                                    <div class="col">
+                                                    <div class="col bg-white">
                                                         <!-- .metric -->
                                                         <h:commandLink action="factores" class="metric metric-bordered align-items-center">
                                                             <h2 class="metric-label"> Valor UFV </h2>
@@ -111,7 +117,7 @@
                                                     </div>
                                                     <!-- /metric column -->
                                                     <!-- metric column -->
-                                                    <div class="col">
+                                                    <div class="col bg-white">
                                                         <!-- .metric -->
                                                         <h:commandLink action="factores" class="metric metric-bordered align-items-center">
                                                             <h2 class="metric-label"> Valor Dolar </h2>
@@ -132,6 +138,142 @@
                                         </div>
                                     </div>
                                     <!-- /metric row -->
+                                    <div class="row">
+                                        <div class="col-12 col-lg-6 col-xl-6 ng-hide" ng-show="showTableIngresosIndex"> 
+                                            <div class="card card-fluid" >
+                                                <div class="card-header">Ingresos de Caja PENDIENTE  Total : {{gridIngresos.length}} </div>
+                                                <div class="card-body">
+                                                    <div class="text-center pt-3">
+                                                        <div class="table-responsive" >
+                                                            <table  st-table="display_records_ingreso"  st-safe-src="ingresosGrid" class="table table-hover table-sm"  >
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>N&uacute;mero</th>
+                                                                        <th>Usuario</th>
+                                                                        <th>Bs.</th>
+                                                                        <th>Usd.</th>
+                                                                        <th>Fecha</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr st-select-row="row" st-select-mode="multiple" ng-repeat="row in display_records_ingreso">
+                                                                        <td>{{row.idIngresoCaja}}</td>
+                                                                        <td>{{row.idUsuario}}</td>
+                                                                        <td>{{row.montoAbonadoBs|printNumber}}</td>
+                                                                        <td>{{row.montoAbonadoUsd|printNumber}}</td>
+                                                                        <td>{{row.fechaEmision}}</td>
+                                                                    </tr>
+                                                                </tbody>
+                                                                <tfoot>
+                                                                    <tr>
+                                                                        <td colspan="10" class="text-center">
+                                                                            <div class="container" st-items-by-page="itemsByPage" st-pagination="" st-template="pagination.custom_index.html"></div>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tfoot>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="alert alert-primary has-icon ng-hide" role="alert" ng-show="showMessageIngresoCajaCero">
+                                                <div class="alert-icon">
+                                                    <span class="oi oi-info"></span>
+                                                </div>No existen Ingresos de Caja en estado <strong>PENDIENTE</strong>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12 col-lg-6 col-xl-6 ng-hide" ng-show="showTableNotaDebitoPendiente">
+                                            <div class="card card-fluid" >
+                                                <div class="card-header"> Notas de D&eacute;bito PENDIENTE Total : {{debitoPendienteGrid.length}}</div><!-- easy-pie-chart -->
+                                                <div class="card-body">
+                                                    <div class="text-center pt-3">
+                                                        <div  id="tableData" class="table-responsive" >
+                                                            <table  st-table="display_records"  st-safe-src="debitoPendienteGrid" class="table table-hover table-sm"  >
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>N&uacute;mero</th>
+                                                                        <th>Usuario</th>
+                                                                        <th>Bs.</th>
+                                                                        <th>Usd.</th>
+                                                                        <th>Fecha</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr st-select-row="row" st-select-mode="multiple" ng-repeat="row in display_records">
+                                                                        <td>{{row.idNotaDebito}}</td>
+                                                                        <td>{{row.idUsuarioCreador}}</td>
+                                                                        <td>{{row.montoAdeudadoBs|printNumber}}</td>
+                                                                        <td>{{row.montoAdeudadoUsd|printNumber}}</td>
+                                                                        <td>{{row.fechaEmision}}</td>
+                                                                    </tr>
+                                                                </tbody>
+                                                                <tfoot>
+                                                                    <tr>
+                                                                        <td colspan="10" class="text-center">
+                                                                            <div class="container" st-items-by-page="itemsByPage" st-pagination="" st-template="pagination.custom_index.html"></div>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tfoot>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="alert alert-primary has-icon ng-hide" role="alert" ng-show="showMessageNotaDebitoPendienteCero">
+                                                <div class="alert-icon">
+                                                    <span class="oi oi-info"></span>
+                                                </div>No existen Notas de D&eacute;bito en estado: <strong>PENDIENTE</strong>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-12 col-lg-6 col-xl-6 ng-hide" ng-show="showTableNotaDebitoMora">
+                                            <div class="card card-fluid">
+                                                <div class="card-header"> Notas de D&eacute;bito EN MORA : Total {{debitoMoraGrid.length}}</div><!-- easy-pie-chart -->
+                                                <div class="card-body">
+                                                    <div class="container text-center pt-3">
+                                                        <div class="table-responsive" >
+                                                            <table  class="table table-hover table-sm" st-table="display_records_mora" st-safe-src="debitoMoraGrid">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>N&uacute;mero</th>
+                                                                        <th>Usuario</th>
+                                                                        <th>Bs.</th>
+                                                                        <th>Usd.</th>
+                                                                        <th>Fecha</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr st-select-row="row" st-select-mode="multiple" ng-repeat="row in display_records_mora">
+                                                                        <td>{{row.idNotaDebito}}</td>
+                                                                        <td>{{row.idUsuarioCreador}}</td>
+                                                                        <td>{{row.montoAdeudadoBs|printNumber}}</td>
+                                                                        <td>{{row.montoAdeudadoUsd|printNumber}}</td>
+                                                                        <td>{{row.fechaEmision}}</td>
+                                                                    </tr>
+                                                                </tbody>
+                                                                 <tfoot>
+                                                                    <tr>
+                                                                        <td colspan="10" class="text-center">
+                                                                            <div class="container" st-items-by-page="itemsByPage" st-pagination="" st-template="pagination.custom_index.html"></div>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tfoot>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="alert alert-primary has-icon ng-hide" role="alert" ng-show="showMessageNotaDebitoMora">
+                                                <div class="alert-icon">
+                                                    <span class="oi oi-info"></span>
+                                                </div>No existen Notas de D&eacute;bito en estado: <strong>EN MORA</strong>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                 </div>
                                 <!-- /.section-block -->
                                 <button id="openModalButton" hidden="true" data-toggle="modal" data-target="#dollarModalDangerAlert">Open Modal</button>
@@ -202,39 +344,9 @@
                                     </div>
                                     <!-- /.modal-dialog -->
                                 </div>
-                                <!-- /.modal -->
 
-                                <!-- grid row -->
-                                
-<!--                                <div class="row">
-                                     grid column 
-                                     /grid column 
-                                     grid column 
-                                    <div class="col-12 col-lg-6 col-xl-4">
-                                         .card 
-                                        <section class="card card-fluid">
-                                             .card-footer 
-                                            <div class="card-footer">
-                                                <div class="card-footer-item">
-                                                    <i class="fa fa-fw fa-circle text-indigo"></i> 100%
-                                                    <div class="text-muted small"> Assigned </div>
-                                                </div>
-                                                <div class="card-footer-item">
-                                                    <i class="fa fa-fw fa-circle text-purple"></i> 75%
-                                                    <div class="text-muted small"> Completed </div>
-                                                </div>
-                                                <div class="card-footer-item">
-                                                    <i class="fa fa-fw fa-circle text-teal"></i> 60%
-                                                    <div class="text-muted small"> Active </div>
-                                                </div>
-                                            </div>
-                                             /.card-footer 
-                                        </section>
-                                         /.card 
-                                    </div>
-                                     /grid column 
-                                </div>-->
-                                <!-- /grid row -->
+
+
                             </div>
                             <!-- /.page-section -->
                         </div>
@@ -252,25 +364,31 @@
             </main>
             <!-- /.app-main -->
         </div>
-        <!-- /.app -->
-        <!-- BEGIN BASE JS -->
         <script src="../../assets/vendor/jquery/jquery.min.js"></script>
         <script src="../../assets/vendor/bootstrap/js/popper.min.js"></script>
         <script src="../../assets/vendor/bootstrap/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="../../js/utils.js" />
         <!-- END BASE JS -->
         <!-- BEGIN PLUGINS JS -->
         <script src="../../assets/vendor/stacked-menu/stacked-menu.min.js"></script>
         <script src="../../assets/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+
+        <script src="../../assets/vendor/flatpickr/flatpickr.min.js"></script>
+        <script src="../../assets/vendor/typeahead.js/typeahead.bundle.min.js"></script>
         <!-- END PLUGINS JS -->
         <!-- BEGIN THEME JS -->
         <script src="../../assets/javascript/main.min.js"></script>
+        <script type="text/javascript" src="../../js/index/index.js" />
+
+        <script type="text/javascript" src="../../assets/javascript/pages/flatpickr-demo.js"></script>
+        <script type="text/javascript" src="../../assets/javascript/pages/typeahead-demo.js"></script>
+
         <!-- END THEME JS -->
         <!-- BEGIN PAGE LEVEL JS -->
         <!-- END PAGE LEVEL JS -->
         <!-- Global site tag (gtag.js) - Google Analytics -->
         <script>
                                                         window.dataLayer = window.dataLayer || [];
-
                                                         function gtag()
                                                         {
                                                             dataLayer.push(arguments);

@@ -509,7 +509,7 @@ angular.module('jsComprobantesContador.controllers', []).controller('frmComproba
 
                 $scope.existenDiferencias = function () {
 
-                    if ($scope.formData.difMonNac != (0.00) && $scope.formData.difMonExt != (0.00)) {
+                    if ($scope.formData.difMonNac !== (0.00) && $scope.formData.difMonExt !== (0.00)) {
                         $scope.formData.conErrores = true;
                         return true;
                     }
@@ -668,8 +668,6 @@ angular.module('jsComprobantesContador.controllers', []).controller('frmComproba
                 }
 
                 $scope.editTransaccion = function (item) {
-                    console.log(item);
-                    console.log($scope.formData);
 
                     if ($scope.formData.tipo !== $scope.COMPROBANTE_TRASPASO
                             && $scope.formData.tipo !== $scope.COMPROBANTE_EGRESO

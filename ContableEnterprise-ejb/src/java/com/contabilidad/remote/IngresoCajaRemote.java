@@ -146,6 +146,14 @@ public interface IngresoCajaRemote extends DaoRemoteFacade {
      * @throws CRUDException 
      */
     public List<IngresoTransaccion> getIngresoCajaTrxByIdNotaDebito(NotaDebito idNotaDebito) throws CRUDException ;
+    
+    /**
+     * 
+     * @param idEmpresa
+     * @return
+     * @throws CRUDException 
+     */
+    public List<IngresoCaja> getIngresoPendiente(Integer idEmpresa) throws CRUDException ;
 
 }
 

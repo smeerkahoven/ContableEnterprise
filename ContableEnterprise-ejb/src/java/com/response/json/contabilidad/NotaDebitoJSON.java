@@ -11,6 +11,8 @@ import com.contabilidad.entities.NotaDebito;
 import com.seguridad.utils.ComboSelect;
 import com.seguridad.utils.DateContable;
 import java.math.BigDecimal;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
@@ -137,6 +139,17 @@ public class NotaDebitoJSON {
         return ndj;
     }
 
+    public static List<NotaDebitoJSON> toListNotaDebito(List<NotaDebito> from){
+        List<NotaDebitoJSON> list = new LinkedList<>();
+        
+        for (NotaDebito d : from){
+            NotaDebitoJSON json = NotaDebitoJSON.toNotaDebitoJSON(d);
+            list.add(json);
+        }
+        
+        return list ;
+    }
+    
     public String getEstado() {
         return estado;
     }

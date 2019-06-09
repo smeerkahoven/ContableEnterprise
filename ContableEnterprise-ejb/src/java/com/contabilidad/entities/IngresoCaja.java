@@ -68,6 +68,7 @@ import javax.persistence.TemporalType;
 @NamedQueries({
     @NamedQuery(name = "IngresoCaja.findAll", query = "SELECT i FROM IngresoCaja i WHERE i.idEmpresa=:idEmpresa ORDER By i.idIngresoCaja ")
     ,@NamedQuery(name = "IngresoCaja.findByIdCliente", query = "SELECT i FROM IngresoCaja i WHERE i.idCliente=:idCliente and i.idEmpresa=:idEmpresa ORDER by i.idIngresoCaja")
+    ,@NamedQuery(name = "IngresoCaja.findByPendiente", query = "SELECT i FROM IngresoCaja i WHERE i.estado='P' and i.idEmpresa=:idEmpresa ORDER by i.idIngresoCaja")
     ,@NamedQuery(name = "IngresoCaja.updateToPendiente",
             query = "UPDATE IngresoCaja i SET i.idCliente=:idCliente, "
             + "i.fechaEmision=:fechaEmision,"

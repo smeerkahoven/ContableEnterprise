@@ -62,14 +62,12 @@ cc.fecha_insert
  left join cnt_cliente cl on cl.id_cliente = cc.id_cliente
  inner join tb_user u on u.user_name = cc.id_usuario_creador
  inner join tb_empleado emp on emp.id_empleado = u.id_empleado
-where cc.id_libro=$P{ID_LIBRO} order by id_asiento, nro_plan_cuenta asc]]>
+where cc.id_libro=$P{ID_LIBRO} order by nro_plan_cuenta , id_asiento asc]]>
 	</queryString>
 	<field name="id_numero_gestion" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="ambito" class="java.lang.Integer">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
+	<field name="ambito" class="java.lang.Integer"/>
 	<field name="denominacion" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>

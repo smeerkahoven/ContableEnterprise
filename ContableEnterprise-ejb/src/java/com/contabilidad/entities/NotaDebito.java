@@ -156,6 +156,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "NotaDebito.findAll", query = "SELECT n FROM NotaDebito n")
     ,@NamedQuery(name = "NotaDebito.getAllNotaDebitoWhereVencimientoIsYesterday", query = "SELECT n FROM NotaDebito n WHERE n.formaPago='C' AND n.estado='E' AND n.creditoVencimiento<= :yesterday AND (n.montoAdeudadoBs > 0 OR n.montoAdeudadoUsd >0) ")
     ,@NamedQuery(name = "NotaDebito.getAllNotaDebitoEnMora", query = "SELECT n FROM NotaDebito n WHERE n.estado = 'M'")
+    ,@NamedQuery(name = "NotaDebito.getNotaDebitoEnMora", query = "SELECT n FROM NotaDebito n WHERE n.estado = 'M' and n.idEmpresa=:idEmpresa")
+    ,@NamedQuery(name = "NotaDebito.getNotaDebitoEnPendiente", query = "SELECT n FROM NotaDebito n WHERE n.estado = 'P' and n.idEmpresa=:idEmpresa")
 })
 public class NotaDebito extends Entidad {
 

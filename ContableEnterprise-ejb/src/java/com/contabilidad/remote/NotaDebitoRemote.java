@@ -238,5 +238,9 @@ public interface NotaDebitoRemote extends DaoRemoteFacade {
     public List<NotaDebito> getNotaDebitoCreditoWhereVencimientoWasYesterday() throws CRUDException ;
     
     public List<NotaDebito> getNotaDebitoEnMora() throws CRUDException ;
+    public List<NotaDebito> getNotaDebitoEnMora(Integer idEmpresa) throws CRUDException ;
+    
+    public List<NotaDebito> getNotaDebitoEnPendiente (Integer idEmpresa) throws CRUDException ;
+    
 
 }

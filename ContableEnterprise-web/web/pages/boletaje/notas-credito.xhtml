@@ -663,7 +663,7 @@
                                                                 <!-- Moneda Transaccion -->
                                                                 <label for="txtStatus" class="col-form-label col-sm-2 text-right">Moneda </label>
                                                                 <div class="col-sm-10">
-                                                                    <select name="txtMoneda" class="form-control" ng-model="trx.moneda" required="">
+                                                                    <select name="txtMoneda" class="form-control" ng-model="trx.moneda" disabled="true" required="">
                                                                         <option style="display:none" value="">seleccione una opcion</option>
                                                                         <option value="B" selected="selected">Bolivianos</option>
                                                                         <option value="U">Dolares</option>
@@ -698,7 +698,7 @@
                                                                            ng-model="trx.monto" required="" ng-change="checkMontoIngresado()"
                                                                            data-toggle="tooltip" data-placement="top" />
                                                                     <span class="alert-danger bg-light" ng-show="!myFormTrx.txtMonto.$valid">Debe ingresar un monto v&aacute;lido.</span>
-                                                                    <span class="alert-danger bg-light" ng-show="showErrorMontoIngresado">Debe ingresar un monto igual o menor a {{montoQueDebeIngresar}}</span>
+                                                                    <span class="alert-danger bg-light" ng-show="showErrorMontoIngresado">Debe ingresar un monto igual o menor a {{montoQueDebeIngresar|printNumber}}</span>
 
                                                                 </div>
                                                             </div>

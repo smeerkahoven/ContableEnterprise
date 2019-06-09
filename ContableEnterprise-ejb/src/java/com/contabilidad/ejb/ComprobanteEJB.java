@@ -1060,21 +1060,21 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
                     : null);
             ingDebe.setMontoDebeExt(dev.getMonto());
 
-            if (dev.getTipoDevolucion().equals(FormasPago.CHEQUE)) {
-                ingDebe.setIdPlanCuenta(dev.getIdCuentaDeposito());
-            } else {
+            //if (dev.getTipoDevolucion().equals(FormasPago.CHEQUE)) {
+            //    ingDebe.setIdPlanCuenta(dev.getIdCuentaDeposito());
+            //} else {
                 ingDebe.setIdPlanCuenta(conf.getDevolucionDepositoAnticipadoDebeUsd());
-            }
+            //}
 
         } else if (dev.getMoneda().equals(Moneda.NACIONAL)) {
             Double montoHaber = dev.getMonto() != null ? dev.getMonto().doubleValue() / dev.getFactorCambiario().doubleValue() : 0.0f;
             ingDebe.setMontoDebeNac(dev.getMonto());
             ingDebe.setMontoDebeExt(new BigDecimal(montoHaber).setScale(Contabilidad.VALOR_DECIMAL_2, BigDecimal.ROUND_DOWN));
-            if (dev.getTipoDevolucion().equals(FormasPago.CHEQUE)) {
-                ingDebe.setIdPlanCuenta(dev.getIdCuentaDeposito());
-            } else {
+            //if (dev.getTipoDevolucion().equals(FormasPago.CHEQUE)) {
+             //   ingDebe.setIdPlanCuenta(dev.getIdCuentaDeposito());
+            //} else {
                 ingDebe.setIdPlanCuenta(conf.getDevolucionDepositoAnticipadoDebeBs());
-            }
+            //}
 
         }
 
@@ -1419,6 +1419,39 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
 
         return ingCajaHaber;
     }
+    
+    
+        @Override
+    public AsientoContable createTotalCancelarIngresoClienteHaberPagoAnticipado(ComprobanteContable c,
+            ContabilidadBoletaje conf, PagoAnticipadoTransaccion ndt, PagoAnticipado nota, Boleto b) {
+        AsientoContable ingCajaHaber = new AsientoContable();
+
+        ingCajaHaber.setIdLibro(c);
+        ingCajaHaber.setGestion(c.getGestion());
+        ingCajaHaber.setFechaMovimiento(DateContable.getCurrentDate());
+        ingCajaHaber.setEstado(Estado.EMITIDO);
+        //ingCajaHaber.setIdBoleto(b.getIdBoleto());
+        ingCajaHaber.setIdBoleto(b);
+        ingCajaHaber.setTipo(AsientoContable.Tipo.PAGO_ANTICIPADO);
+        ingCajaHaber.setIdPagoAnticipadoTransaccion(ndt);
+        ingCajaHaber.setMoneda(ndt.getMoneda());
+
+        if (ndt.getMoneda().equals(Moneda.EXTRANJERA)) {
+            ingCajaHaber.setMontoHaberNac(ndt.getMonto() != null
+                    ? ndt.getMonto().multiply(nota.getFactorCambiario()).setScale(Contabilidad.VALOR_DECIMAL_2, BigDecimal.ROUND_DOWN)
+                    : null);
+            ingCajaHaber.setMontoHaberExt(ndt.getMonto());
+            ingCajaHaber.setIdPlanCuenta(conf.getAcreditacionDepositoAnticipadoHaberUsd());
+
+        } else if (ndt.getMoneda().equals(Moneda.NACIONAL)) {
+            Double montoHaber = ndt.getMonto() != null ? ndt.getMonto().doubleValue() / nota.getFactorCambiario().doubleValue() : 0.0f;
+            ingCajaHaber.setMontoHaberNac(ndt.getMonto());
+            ingCajaHaber.setMontoHaberExt(new BigDecimal(montoHaber).setScale(Contabilidad.VALOR_DECIMAL_2, BigDecimal.ROUND_DOWN));
+            ingCajaHaber.setIdPlanCuenta(conf.getAcreditacionDepositoAnticipadoHaberBs());
+        }
+
+        return ingCajaHaber;
+    }
 
     @Override
     public AsientoContable createTotalCancelarIngresoCajaDebe(ComprobanteContable c,
@@ -1451,6 +1484,42 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
             ingCajaDebe.setMontoDebeExt(new BigDecimal(montoHaber).setScale(Contabilidad.VALOR_DECIMAL_2, BigDecimal.ROUND_DOWN));
             //Si es BSP
             ingCajaDebe.setIdPlanCuenta(conf.getDepositoClienteAnticipadoBs());
+        }
+
+        return ingCajaDebe;
+
+    }
+    @Override
+    public AsientoContable createTotalCancelarIngresoCajaDebePagoAnticipado(ComprobanteContable c,
+            ContabilidadBoletaje conf, NotaDebitoTransaccion ndt, PagoAnticipado pago,
+            Boleto boleto, PagoAnticipadoTransaccion trx) throws CRUDException {
+
+        AsientoContable ingCajaDebe = new AsientoContable();
+
+        ingCajaDebe.setIdLibro(c);
+        ingCajaDebe.setGestion(c.getGestion());
+        ingCajaDebe.setFechaMovimiento(DateContable.getCurrentDate());
+        ingCajaDebe.setEstado(Estado.EMITIDO);
+        //ingCajaDebe.setIdBoleto(boleto.getIdBoleto());
+        ingCajaDebe.setIdBoleto(boleto);
+        ingCajaDebe.setTipo(AsientoContable.Tipo.PAGO_ANTICIPADO_TRANSACCION);
+        ingCajaDebe.setIdPagoAnticipadoTransaccion(trx);
+        ingCajaDebe.setMoneda(trx.getMoneda());
+
+        if (trx.getMoneda().equals(Moneda.EXTRANJERA)) {
+            ingCajaDebe.setMontoDebeExt(trx.getMonto());
+            ingCajaDebe.setMontoDebeNac(trx.getMonto() != null
+                    ? trx.getMonto().multiply(pago.getFactorCambiario()).setScale(Contabilidad.VALOR_DECIMAL_2, BigDecimal.ROUND_DOWN)
+                    : null);
+            //Si es BSP
+            ingCajaDebe.setIdPlanCuenta(conf.getAcreditacionDepositoAnticipadoDebeUsd());
+
+        } else if (trx.getMoneda().equals(Moneda.NACIONAL)) {
+            Double montoHaber = trx.getMonto() != null ? trx.getMonto().doubleValue() / pago.getFactorCambiario().doubleValue() : 0.0f;
+            ingCajaDebe.setMontoDebeNac(trx.getMonto());
+            ingCajaDebe.setMontoDebeExt(new BigDecimal(montoHaber).setScale(Contabilidad.VALOR_DECIMAL_2, BigDecimal.ROUND_DOWN));
+            //Si es BSP
+            ingCajaDebe.setIdPlanCuenta(conf.getAcreditacionDepositoAnticipadoDebeUsd());
         }
 
         return ingCajaDebe;

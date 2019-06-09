@@ -298,6 +298,14 @@ public interface ComprobanteRemote extends DaoRemoteFacade {
     public AsientoContable createTotalCancelarIngresoClienteHaber(ComprobanteContable c,
             ContabilidadBoletaje conf, NotaDebitoTransaccion ndt, PagoAnticipado nota,
             CargoBoleto cargo, PagoAnticipadoTransaccion ing) throws CRUDException;
+    
+    
+    public AsientoContable createTotalCancelarIngresoClienteHaberPagoAnticipado(ComprobanteContable c,
+            ContabilidadBoletaje conf, PagoAnticipadoTransaccion ndt, PagoAnticipado nota, Boleto b) ;
+    
+    public AsientoContable createTotalCancelarIngresoCajaDebePagoAnticipado(ComprobanteContable c,
+            ContabilidadBoletaje conf, NotaDebitoTransaccion ndt, PagoAnticipado pago,
+            Boleto boleto, PagoAnticipadoTransaccion trx) throws CRUDException ;
 
     public int anularAsientosContables(final Boleto boleto) throws CRUDException;
 

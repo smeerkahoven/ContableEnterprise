@@ -1,0 +1,9 @@
+<nav ng-if="pages.length >= 2">
+    <ul  class="pagination justify-content-center mt-4">
+        <li class="page-item"><a class="page-link" ng-click="selectPage(1)">Primero</a></li>
+        <li class="page-item"><a class="page-link" ng-click="selectPage(currentPage - 1)"><i class="fa fa-lg fa-angle-left"></i></a></li>
+        <li class="page-item"><a class="page-link" >{{currentPage}} de {{numPages}}</a></li>
+        <li class="page-item"><a class="page-link" ng-click="selectPage(currentPage + 1)"><i class="fa fa-lg fa-angle-right"></i></a></li>
+        <li class="page-item"><a class="page-link" ng-click="selectPage(numPages)">Ultimo</a></li>
+    </ul>
+</nav>

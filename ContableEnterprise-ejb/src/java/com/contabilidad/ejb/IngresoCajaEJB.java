@@ -303,6 +303,19 @@ public class IngresoCajaEJB extends FacadeEJB implements IngresoCajaRemote {
 
         return r;
     }
+    
+    
+        @Override
+    public List getIngresoPendiente(Integer idEmpresa) throws CRUDException {
+
+        
+        Query q = em.createNamedQuery("IngresoCaja.findByPendiente", IngresoCaja.class);
+        q.setParameter("idEmpresa", idEmpresa);
+
+        List<IngresoCaja> l = q.getResultList();
+
+        return l;
+    }
 
     @Override
     public List<IngresoCaja> findAllIngresoCaja(IngresoCajaSearchJson search) throws CRUDException {
@@ -650,7 +663,7 @@ public class IngresoCajaEJB extends FacadeEJB implements IngresoCajaRemote {
                     insert(haber);
 
                     AsientoContable debe = ejbComprobante.createTotalCancelarIngresoCajaDebe(comprobanteIngreso, conf, ndt, fromDb, c, tran);
-                    insert(haber);
+                    insert(debe);
 
                 }
                 em.merge(ndt);

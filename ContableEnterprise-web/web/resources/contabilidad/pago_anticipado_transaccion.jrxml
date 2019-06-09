@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="887" pageHeight="521" columnWidth="847" leftMargin="10" rightMargin="30" topMargin="20" bottomMargin="1" uuid="1b7078e6-ceb5-4087-92f3-21ab3eca1288">
-	<property name="ireport.zoom" value="1.3310000000000055"/>
+	<property name="ireport.zoom" value="2.14358881000001"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="ID_TRANSACCION" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[select 
+ distinct
  pat.id_pago_anticipado_transaccion
  , cc.id_numero_gestion 
  , cc.gestion
@@ -27,7 +28,8 @@
  inner join cnt_pago_anticipado pa on pa.id_pago_anticipado = pat.id_pago_anticipado
  inner join cnt_cliente cl on cl.id_cliente = pa.id_cliente
  inner join cnt_nota_debito_transaccion ndt on ndt.id_nota_debito_transaccion = pat.id_nota_debito_transaccion
- left join cnt_comprobante_contable cc on cc.id_pago_anticipado = pa.id_pago_anticipado and cc.tipo='CI'
+ left join cnt_asiento_contable ac on ac.id_pago_anticipado_transaccion = pat.id_pago_anticipado_transaccion
+ left join cnt_comprobante_contable cc on cc.id_libro = ac.id_libro and cc.tipo='AD'
 where pat.id_pago_anticipado_transaccion = $P{ID_TRANSACCION}]]>
 	</queryString>
 	<field name="id_pago_anticipado_transaccion" class="java.lang.Integer">
@@ -90,22 +92,22 @@ where pat.id_pago_anticipado_transaccion = $P{ID_TRANSACCION}]]>
 				<reportElement x="0" y="24" width="814" height="1" uuid="3bc058aa-e879-4659-b64b-16760e44442f"/>
 			</line>
 			<textField>
-				<reportElement x="319" y="1" width="492" height="22" uuid="ce333745-016b-4ba7-9da3-95d039bf3d32"/>
+				<reportElement x="319" y="1" width="492" height="19" uuid="ce333745-016b-4ba7-9da3-95d039bf3d32"/>
 				<textElement textAlignment="Right">
 					<font fontName="DejaVu Sans Mono" size="15" isBold="true" isItalic="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Acreditación Depósito #"+$F{id_pago_anticipado_transaccion}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="85" y="0" width="180" height="18" uuid="83c8dc82-c156-486c-86ac-c12706ee2eab"/>
+				<reportElement x="85" y="0" width="180" height="19" uuid="83c8dc82-c156-486c-86ac-c12706ee2eab"/>
 				<textElement>
 					<font fontName="DejaVu Sans Mono" size="15" pdfFontName="Courier"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{gestion}+ "-"+ 
-    $F{id_numero_gestion}]]></textFieldExpression>
+    $F{id_numero_gestion} + " AD"]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="2" y="0" width="83" height="18" uuid="1784c7c7-6fd6-4770-a515-72183dd782cc"/>
+				<reportElement x="2" y="0" width="83" height="19" uuid="1784c7c7-6fd6-4770-a515-72183dd782cc"/>
 				<textElement textAlignment="Right">
 					<font fontName="DejaVu Sans Mono" size="15" pdfFontName="Courier"/>
 				</textElement>
@@ -119,56 +121,56 @@ where pat.id_pago_anticipado_transaccion = $P{ID_TRANSACCION}]]>
 	<columnHeader>
 		<band height="40" splitType="Stretch">
 			<staticText>
-				<reportElement x="2" y="3" width="79" height="18" uuid="91211e5a-700a-442e-9e9a-67d3115dfca0"/>
+				<reportElement x="2" y="2" width="79" height="19" uuid="91211e5a-700a-442e-9e9a-67d3115dfca0"/>
 				<textElement textAlignment="Right">
 					<font fontName="DejaVu Sans Mono" size="15" pdfFontName="Courier"/>
 				</textElement>
 				<text><![CDATA[Señores:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="714" y="20" width="100" height="18" uuid="f012d6dc-7a1f-4385-a4df-4e3d93e299a6"/>
+				<reportElement x="714" y="20" width="100" height="19" uuid="f012d6dc-7a1f-4385-a4df-4e3d93e299a6"/>
 				<textElement>
 					<font fontName="DejaVu Sans Mono" size="15" pdfFontName="Courier"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{fecha_emision}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="637" y="2" width="77" height="18" uuid="69d122cc-524f-409e-8377-3ab5e99f0540"/>
+				<reportElement x="637" y="1" width="77" height="19" uuid="69d122cc-524f-409e-8377-3ab5e99f0540"/>
 				<textElement textAlignment="Right">
 					<font fontName="DejaVu Sans Mono" size="15" pdfFontName="Courier"/>
 				</textElement>
 				<text><![CDATA[Factor:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="577" y="20" width="137" height="18" uuid="d97a1993-c0bc-4d22-9304-bab80c31ac7d"/>
+				<reportElement x="577" y="20" width="137" height="19" uuid="d97a1993-c0bc-4d22-9304-bab80c31ac7d"/>
 				<textElement textAlignment="Right">
 					<font fontName="DejaVu Sans Mono" size="15" pdfFontName="Courier"/>
 				</textElement>
 				<text><![CDATA[Fecha Emision:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="81" y="3" width="428" height="18" uuid="aa446270-d579-48a9-b474-0968ef915e27"/>
+				<reportElement x="81" y="2" width="428" height="19" uuid="aa446270-d579-48a9-b474-0968ef915e27"/>
 				<textElement>
 					<font fontName="DejaVu Sans Mono" size="15" pdfFontName="Courier"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{cliente}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="714" y="2" width="100" height="18" uuid="9cf860d9-5b99-4ce4-863b-17ebf7c1b111"/>
+				<reportElement x="714" y="1" width="100" height="19" uuid="9cf860d9-5b99-4ce4-863b-17ebf7c1b111"/>
 				<textElement>
 					<font fontName="DejaVu Sans Mono" size="15" pdfFontName="Courier"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{factor_cambiario}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="2" y="21" width="79" height="18" uuid="0e1315bc-fefc-4f72-8735-0fb7704ba0b7"/>
+				<reportElement x="2" y="21" width="79" height="19" uuid="0e1315bc-fefc-4f72-8735-0fb7704ba0b7"/>
 				<textElement textAlignment="Right">
 					<font fontName="DejaVu Sans Mono" size="15" pdfFontName="Courier"/>
 				</textElement>
 				<text><![CDATA[Estado:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="81" y="21" width="428" height="18" uuid="93b9c2f5-5688-4ac1-b903-07a7a3b430e4"/>
+				<reportElement x="81" y="21" width="428" height="19" uuid="93b9c2f5-5688-4ac1-b903-07a7a3b430e4"/>
 				<textElement>
 					<font fontName="DejaVu Sans Mono" size="15" isBold="true" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
@@ -179,21 +181,21 @@ where pat.id_pago_anticipado_transaccion = $P{ID_TRANSACCION}]]>
 	<detail>
 		<band height="43" splitType="Stretch">
 			<staticText>
-				<reportElement x="621" y="3" width="100" height="18" uuid="33b2b612-3881-444a-abe3-1d2844441aad"/>
+				<reportElement x="621" y="3" width="100" height="19" uuid="33b2b612-3881-444a-abe3-1d2844441aad"/>
 				<textElement textAlignment="Center">
 					<font fontName="DejaVu Sans Mono" size="15" isBold="true" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[MONEDA]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="2" y="3" width="614" height="18" uuid="e4199d13-a92a-4363-9ab5-39a871af2c62"/>
+				<reportElement x="2" y="3" width="614" height="19" uuid="e4199d13-a92a-4363-9ab5-39a871af2c62"/>
 				<textElement>
 					<font fontName="DejaVu Sans Mono" size="15" isBold="true" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[DESCRIPCION]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="721" y="3" width="93" height="18" uuid="b9973bd9-ac0b-4157-a451-93c5a0552fd5"/>
+				<reportElement x="721" y="3" width="93" height="19" uuid="b9973bd9-ac0b-4157-a451-93c5a0552fd5"/>
 				<textElement textAlignment="Right">
 					<font fontName="DejaVu Sans Mono" size="15" isBold="true" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
@@ -203,21 +205,21 @@ where pat.id_pago_anticipado_transaccion = $P{ID_TRANSACCION}]]>
 				<reportElement x="2" y="21" width="807" height="2" uuid="5e069e82-97cf-420e-bf7f-111a57b8aabf"/>
 			</line>
 			<textField>
-				<reportElement x="621" y="23" width="100" height="18" uuid="1c603167-c19e-468d-825e-12f3c5235eb2"/>
+				<reportElement x="621" y="23" width="100" height="19" uuid="1c603167-c19e-468d-825e-12f3c5235eb2"/>
 				<textElement textAlignment="Center">
 					<font fontName="DejaVu Sans Mono" size="15" pdfFontName="Courier"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{moneda}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00">
-				<reportElement x="721" y="23" width="93" height="18" uuid="3f0064f6-0b23-4b7d-9c5d-f8994da6ce46"/>
+				<reportElement x="721" y="23" width="93" height="19" uuid="3f0064f6-0b23-4b7d-9c5d-f8994da6ce46"/>
 				<textElement textAlignment="Right">
 					<font fontName="DejaVu Sans Mono" size="15" pdfFontName="Courier"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{monto}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement x="2" y="23" width="614" height="18" uuid="40928b92-7ec9-46d4-8733-37acad64bf38"/>
+				<reportElement x="2" y="23" width="614" height="19" uuid="40928b92-7ec9-46d4-8733-37acad64bf38"/>
 				<textElement>
 					<font fontName="DejaVu Sans Mono" size="15" pdfFontName="Courier"/>
 				</textElement>
@@ -232,23 +234,23 @@ where pat.id_pago_anticipado_transaccion = $P{ID_TRANSACCION}]]>
 		<band splitType="Stretch"/>
 	</pageFooter>
 	<summary>
-		<band height="120" splitType="Immediate">
+		<band height="127" splitType="Immediate">
 			<staticText>
-				<reportElement x="2" y="2" width="714" height="18" uuid="ec5e034f-fe5a-4596-b3b5-fba92a343bae"/>
+				<reportElement x="2" y="2" width="714" height="19" uuid="ec5e034f-fe5a-4596-b3b5-fba92a343bae"/>
 				<textElement>
 					<font fontName="DejaVu Sans Mono" size="15" isBold="true" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[TOTAL]]></text>
 			</staticText>
 			<textField pattern="#,##0.00">
-				<reportElement x="721" y="2" width="93" height="18" uuid="53003912-bffe-4b37-9185-01e38041bfc6"/>
+				<reportElement x="721" y="2" width="93" height="19" uuid="53003912-bffe-4b37-9185-01e38041bfc6"/>
 				<textElement textAlignment="Right">
 					<font fontName="DejaVu Sans Mono" size="15" isBold="true" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{monto}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="0" y="22" width="809" height="18" uuid="f0579487-6e2c-4581-856d-545a9722a1ee"/>
+				<reportElement x="0" y="22" width="809" height="19" uuid="f0579487-6e2c-4581-856d-545a9722a1ee"/>
 				<textElement>
 					<font fontName="DejaVu Sans Mono" size="15" pdfFontName="Courier"/>
 				</textElement>
@@ -258,14 +260,14 @@ where pat.id_pago_anticipado_transaccion = $P{ID_TRANSACCION}]]>
 				<reportElement x="2" y="0" width="809" height="1" uuid="aa9fb224-9a40-496d-bf69-8d1655ffa819"/>
 			</line>
 			<staticText>
-				<reportElement x="560" y="80" width="245" height="18" uuid="2da1d7a4-23ba-46c0-b77c-c97acfc64208"/>
+				<reportElement x="560" y="80" width="245" height="19" uuid="2da1d7a4-23ba-46c0-b77c-c97acfc64208"/>
 				<textElement textAlignment="Center">
 					<font fontName="DejaVu Sans Mono" size="15" pdfFontName="Courier"/>
 				</textElement>
 				<text><![CDATA[FIRMA DEL CLIENTE]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="255" y="80" width="254" height="18" uuid="72313c7b-c225-410f-8ea8-17bcadb4c591"/>
+				<reportElement x="255" y="80" width="254" height="19" uuid="72313c7b-c225-410f-8ea8-17bcadb4c591"/>
 				<textElement textAlignment="Center">
 					<font fontName="DejaVu Sans Mono" size="15" pdfFontName="Courier"/>
 				</textElement>
@@ -278,7 +280,7 @@ where pat.id_pago_anticipado_transaccion = $P{ID_TRANSACCION}]]>
 				<reportElement x="560" y="79" width="248" height="1" uuid="3d325509-9800-4fef-9da6-9376c61ff5d8"/>
 			</line>
 			<textField>
-				<reportElement x="2" y="101" width="507" height="18" uuid="1a165738-5c3d-404d-8dbb-dd241f33b51e"/>
+				<reportElement x="2" y="106" width="507" height="19" uuid="1a165738-5c3d-404d-8dbb-dd241f33b51e"/>
 				<textElement>
 					<font fontName="DejaVu Sans Mono" size="15" pdfFontName="Courier"/>
 				</textElement>

@@ -962,7 +962,10 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                     $scope.showDifDebeExt = ($scope.formData.difMonExt < 0);
 
                     $scope.existeDiferencias = $scope.showDifDebeExt || $scope.showDifDebeNac || $scope.showDifHaberExt || $scope.showDifHaberNac;
-
+                    
+                    if ($scope.existeDiferencias){
+                        $scope.ngDisabledBtnCorregir = false;
+                    }
 
                 }
 

@@ -11,6 +11,8 @@ import com.seguridad.utils.ComboSelect;
 import com.seguridad.utils.DateContable;
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
@@ -37,6 +39,18 @@ public class IngresoCajaJSON implements Serializable {
     private String nroDeposito;
     private Integer idCuentaDeposito;
     private String estado;
+    
+    public static List<IngresoCajaJSON> toIngresoCajaList(List<IngresoCaja> list){
+        LinkedList<IngresoCajaJSON> returnList = new LinkedList<>();
+        
+        for (IngresoCaja c : list){
+            IngresoCajaJSON json = IngresoCajaJSON.toJSON(c);
+            
+            returnList.add(json);
+        }
+        
+        return returnList ;
+    }
     
     public static IngresoCaja toIngresoCaja(IngresoCajaJSON json) {
         IngresoCaja caja = new IngresoCaja();

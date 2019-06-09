@@ -37,7 +37,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "AsientoContable.findAll", query = "SELECT a FROM AsientoContable a")
-    ,@NamedQuery(name = "AsientoContable.find", query = "SELECT a FROM AsientoContable a WHERE a.idLibro=:idLibro")
+    ,@NamedQuery(name = "AsientoContable.find", query = "SELECT a FROM AsientoContable a WHERE a.idLibro=:idLibro ORDER by a.idAsiento")
     ,@NamedQuery(name = "AsientoContable.findAllByIdNotaDebitoTransaccion", query = "SELECT a FROM AsientoContable a WHERE a.idNotaTransaccion = :idNotaTransaccion")
     ,@NamedQuery(name = "AsientoContable.findAllByIdIngresoTransaccion", query = "SELECT a FROM AsientoContable a WHERE a.idIngresoCajaTransaccion= :idIngresoCajaTransaccion")
     ,@NamedQuery(name = "AsientoContable.findAllByNotaCreditoTransaccion", query = "SELECT a FROM AsientoContable a WHERE a.idNotaCreditoTransaccion= :idNotaCreditoTransaccion")
@@ -366,7 +366,7 @@ public class AsientoContable extends Entidad {
 
     @Override
     public String toString() {
-        return "com.contabilidad.entities.AsientoContable[ asientoContablePK=" + idAsiento + " ]";
+        return "AsientoContable{" + "idAsiento=" + idAsiento + ", gestion=" + gestion + ", estado=" + estado + ", fechaMovimiento=" + fechaMovimiento + ", idLibro=" + idLibro + ", idPlanCuenta=" + idPlanCuenta + ", moneda=" + moneda + ", montoDebeExt=" + montoDebeExt + ", montoDebeNac=" + montoDebeNac + ", montoHaberExt=" + montoHaberExt + ", montoHaberNac=" + montoHaberNac + ", idBoleto=" + idBoleto + ", idNotaTransaccion=" + idNotaTransaccion + ", idNotaCreditoTransaccion=" + idNotaCreditoTransaccion + ", idIngresoCajaTransaccion=" + idIngresoCajaTransaccion + ", idPagoAnticipado=" + idPagoAnticipado + ", idPagoAnticipadoTransaccion=" + idPagoAnticipadoTransaccion + ", idDevolucion=" + idDevolucion + ", idCargo=" + idCargo + ", tipo=" + tipo + ", idUsuarioAnular=" + idUsuarioAnular + ", tipoMontoBoleto=" + tipoMontoBoleto + '}';
     }
 
 }

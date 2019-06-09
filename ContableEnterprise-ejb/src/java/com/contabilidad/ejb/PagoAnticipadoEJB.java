@@ -645,10 +645,10 @@ public class PagoAnticipadoEJB extends FacadeEJB implements PagoAnticipadoRemote
             }
             //Asientos Contables
 
-            AsientoContable debe = ejbComprobante.createTotalCancelarIngresoCajaDebe(comprobanteIngreso, conf, trNDFromDB, paFromDb, b, trx);
+            AsientoContable debe = ejbComprobante.createTotalCancelarIngresoCajaDebePagoAnticipado(comprobanteIngreso, conf, trNDFromDB, paFromDb, b, trx);
             insert(debe);
 
-            AsientoContable haber = ejbComprobante.createTotalCancelarIngresoClienteHaber(comprobanteIngreso, conf, trx, paFromDb, b);
+            AsientoContable haber = ejbComprobante.createTotalCancelarIngresoClienteHaberPagoAnticipado(comprobanteIngreso, conf, trx, paFromDb, b);
             insert(haber);
 
         } else {
