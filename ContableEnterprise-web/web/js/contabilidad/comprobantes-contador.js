@@ -563,6 +563,7 @@ angular.module('jsComprobantesContador.controllers', []).controller('frmComproba
                             headers: {'Content-Type': 'application/json'}
                         }).then(function (response) {
                             if (response.data.code === 201) {
+                                $scope.loading = false;
                                 $scope.showRestfulMessage = response.data.content;
                                 $scope.showRestfulSuccess = true;
                                 $scope.formData = response.data.entidad;
@@ -573,16 +574,12 @@ angular.module('jsComprobantesContador.controllers', []).controller('frmComproba
                                 if (estado === $scope.APROBADO) {
                                     $scope.imprimir($scope.formData);
                                 }
-                                goScrollTo('#restful-success');
-                                //$scope.showForm = false;
-                                //$scope.showTable = true;
-                                //$scope.getData(url.value, 'all');
+                                goScrollToSuccess()
                             } else {
                                 $scope.showRestfulMessage = response.data.content;
                                 $scope.showRestfulError = true;
-                                //$scope.showForm = false;
                             }
-                            $scope.loading = false;
+                            
 
                         }, $scope.errorFunction);
                     } else {

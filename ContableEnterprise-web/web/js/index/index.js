@@ -42,6 +42,8 @@ angular.module('jsIndex.controllers', []).controller('frmIndex',
         var urlFactores = document.getElementsByName("hdUrlFactores")[0];
         var urlNotaDebito = document.getElementsByName("hdUrlNotaDebito")[0];
         var urlIngresoCaja = document.getElementsByName("hdUrlIngresoCaja")[0];
+        var urlNotaCredito = document.getElementsByName("hdUrlNotaCredito")[0];
+        var urlComprobante = document.getElementsByName("hdUrlComprobante")[0];
         var token = document.getElementsByName("hdToken")[0];
         var formName = document.getElementsByName("hfFormName")[0];
         //modal dolar
@@ -164,13 +166,60 @@ angular.module('jsIndex.controllers', []).controller('frmIndex',
                     }, function (error) {}
             );
         }
+        
+        $scope.showNotaCreditoPendiente = function () {
+            $scope.showTableNotaCredito = false;
+            $scope.showMessageNotaCredito = false;
+            return $http({
+                method: 'POST',
+                url: `${urlNotaCredito.value}index/pendiente`,
+                data: {token: token.value},
+                headers: {'Content-type': 'application/json'}
+            }).then(
+                    function (response) {
+                        if (response.data.code === 201) {
+                            if (response.data.content.length > 0) {
+                                $scope.showTableNotaCredito = true;
+                                $scope.notaCreditoGrid = response.data.content;
+                            } else {
+                                $scope.showMessageNotaCredito = true;
+                            }
+                        }
+                    }, function (error) {}
+            );
+        }
+        
+        
+        $scope.showComprobante = function () {
+            $scope.showTableNshowTableComprobanteotaCredito = false;
+            $scope.showMessageComprobante = false;
+            return $http({
+                method: 'POST',
+                url: `${urlComprobante.value}index/pendiente`,
+                data: {token: token.value},
+                headers: {'Content-type': 'application/json'}
+            }).then(
+                    function (response) {
+                        if (response.data.code === 201) {
+                            if (response.data.content.length > 0) {
+                                $scope.showTableComprobante = true;
+                                $scope.comprobanteGrid = response.data.content;
+                            } else {
+                                $scope.showMessageComprobante = true;
+                            }
+                        }
+                    }, function (error) {}
+            );
+        }
 
 
         $scope.getDataFactor('dollar');
         $scope.getDataFactor('ufv');
         $scope.showNotaDebitoMora();
         $scope.showNotaDebitoPendiente();
-        $scope.showIngresoCajaPendiente()
+        $scope.showIngresoCajaPendiente();
+        $scope.showNotaCreditoPendiente();
+        $scope.showComprobante();
     }
 ]);
 

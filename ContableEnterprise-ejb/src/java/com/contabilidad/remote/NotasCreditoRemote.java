@@ -140,5 +140,14 @@ public interface NotasCreditoRemote extends DaoRemoteFacade {
      * @throws CRUDException
      */
     public List<NotaCreditoTransaccion> getNotaCreditoTransaccionByNotaDebito(NotaDebito idNotaDebito) throws CRUDException;
+    
+    
+    /**
+     * 
+     * @param idEmpresa
+     * @return
+     * @throws CRUDException 
+     */
+    public List<NotaCredito> getNotaCreditoPendiente(Integer idEmpresa) throws CRUDException ;
 
 }

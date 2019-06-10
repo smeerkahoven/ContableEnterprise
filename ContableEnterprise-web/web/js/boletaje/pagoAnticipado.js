@@ -116,8 +116,8 @@ angular.module('jsPagoAnticipado.controllers', []).controller('frmPagoAnticipado
                 $scope.TARJETA = "T";
 
                 $scope.CABECERA = "C";
-                $scope.TRANSACCION = "T";
-                $scope.DEVOLUCION = "E";
+                $scope.TRANSACCION = "AC";
+                $scope.DEVOLUCION = "DE";
                 $scope.TODO = "D";
 
 
@@ -125,7 +125,6 @@ angular.module('jsPagoAnticipado.controllers', []).controller('frmPagoAnticipado
                 $scope.MONEDA_EXTRANJERA = 'U';
 
                 $scope.PAGO_ANTICIPADO = 'P';
-                $scope.TRANSACCION = 'T';
 
                 $scope.loading = false;
                 $scope.formData = {};
@@ -255,6 +254,7 @@ angular.module('jsPagoAnticipado.controllers', []).controller('frmPagoAnticipado
 
 
                 $scope.imprimir = function (option, formData) {
+                    console.log(formData);
                     switch (option) {
                         case $scope.CABECERA://Nota Debito
                             window.open(`../../PagoAnticipadoCabeceraReport?idPago=${formData.idPagoAnticipado}`, '_blank');
@@ -574,7 +574,6 @@ angular.module('jsPagoAnticipado.controllers', []).controller('frmPagoAnticipado
                 }
 
                 $scope.seleccionarTransaccion = function () {
-                    console.log($scope.trx);
                     $scope.showRestfulError = false;
                     $scope.showRestfulSuccess = false;
                     $scope.showMontoBs = false;
@@ -1028,7 +1027,6 @@ angular.module('jsPagoAnticipado.controllers', []).controller('frmPagoAnticipado
                 }
 
                 $scope.errorFunction = function (error) {
-                    console.log(error);
                     $scope.loading = false;
                     $scope.showRestfulError = true;
                     $scope.showRestfulMessage = error.statusText;

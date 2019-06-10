@@ -85,6 +85,10 @@ public class PagoAnticipadoTransaccion extends Entidad {
     @JoinColumn(name = "id_nota_debito_transaccion")
     private NotaDebitoTransaccion idNotaTransaccion;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_devolucion")
+    private Devolucion idDevolucion;
+
     @Transient
     private BigDecimal montoCambioUsd;
 
@@ -192,6 +196,14 @@ public class PagoAnticipadoTransaccion extends Entidad {
 
     public void setTipo(String tipo) {
         this.tipo = tipo;
+    }
+
+    public Devolucion getIdDevolucion() {
+        return idDevolucion;
+    }
+
+    public void setIdDevolucion(Devolucion idDevolucion) {
+        this.idDevolucion = idDevolucion;
     }
 
     @Override

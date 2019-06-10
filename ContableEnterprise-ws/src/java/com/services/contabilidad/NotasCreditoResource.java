@@ -467,4 +467,26 @@ public class NotasCreditoResource extends TemplateResource {
         return response;
     }
 
+    @POST
+    @Path("index/pendiente")
+    @Produces(MediaType.APPLICATION_JSON)
+    public RestResponse getIndexPendiente(final RestRequest request){
+        RestResponse response = doValidations(request);
+        if (response.getCode() == ResponseCode.RESTFUL_SUCCESS.getCode()) {
+            try {
+                List<NotaCredito> list = ejbNotaCredito.getNotaCreditoPendiente(user.getIdEmpleado().getIdEmpresa().getIdEmpresa());
+
+                List<NotaCreditoJson> returnList = NotaCreditoJson.toNotaCredito(list);
+
+                response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
+                response.setContent(returnList);
+
+            } catch (CRUDException ex) {
+                response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+                response.setContent(ex.getCause());
+                Logger.getLogger(NotasCreditoResource.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return response ;
+    }
 }

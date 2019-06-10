@@ -97,6 +97,8 @@
                                                 <input type="hidden" id="hdUrlFactores" name="hdUrlFactores" value="#{factores.formulario.restful}"/>
                                                 <input type="hidden" id="hdUrlIngreso" name="hdUrlIngresoCaja" value="#{ingresoCaja.formulario.restful}"/>
                                                 <input type="hidden" id="hdUrlNotaDebito" name="hdUrlNotaDebito" value="#{boletajeOtros.formulario.restful}"/>
+                                                <input type="hidden" id="hdUrlNotaCredito" name="hdUrlNotaCredito" value="#{notasCredito.formulario.restful}"/>
+                                                <input type="hidden" id="hdUrlComprobante" name="hdUrlComprobante" value="#{comprobantes.formulario.restful}"/>
                                                 <input type="hidden" id="hdToken" name="hdFormName" value="index"/>
                                                 <div class="metric-row metric-flush ng-hide" ng-show="showFactores" >
 
@@ -139,9 +141,10 @@
                                     </div>
                                     <!-- /metric row -->
                                     <div class="row">
+                                        <!-- Ingresos de Caja Pendiente-->
                                         <div class="col-12 col-lg-6 col-xl-6 ng-hide" ng-show="showTableIngresosIndex"> 
                                             <div class="card card-fluid" >
-                                                <div class="card-header">Ingresos de Caja PENDIENTE  Total : {{gridIngresos.length}} </div>
+                                                <div class="card-header">Ingresos de Caja PENDIENTE  Total : {{ingresosGrid.length}} </div>
                                                 <div class="card-body">
                                                     <div class="text-center pt-3">
                                                         <div class="table-responsive" >
@@ -182,7 +185,9 @@
                                                 </div>No existen Ingresos de Caja en estado <strong>PENDIENTE</strong>
                                             </div>
                                         </div>
+                                        <!-- ./Ingresos de Caja Pendiente-->
 
+                                        <!-- Notas de Debito Pendiente-->
                                         <div class="col-12 col-lg-6 col-xl-6 ng-hide" ng-show="showTableNotaDebitoPendiente">
                                             <div class="card card-fluid" >
                                                 <div class="card-header"> Notas de D&eacute;bito PENDIENTE Total : {{debitoPendienteGrid.length}}</div><!-- easy-pie-chart -->
@@ -227,7 +232,9 @@
                                                 </div>No existen Notas de D&eacute;bito en estado: <strong>PENDIENTE</strong>
                                             </div>
                                         </div>
+                                        <!-- ./Notas de Debito Pendiente-->
 
+                                        <!-- Notas de Debito Mora -->
                                         <div class="col-12 col-lg-6 col-xl-6 ng-hide" ng-show="showTableNotaDebitoMora">
                                             <div class="card card-fluid">
                                                 <div class="card-header"> Notas de D&eacute;bito EN MORA : Total {{debitoMoraGrid.length}}</div><!-- easy-pie-chart -->
@@ -253,7 +260,7 @@
                                                                         <td>{{row.fechaEmision}}</td>
                                                                     </tr>
                                                                 </tbody>
-                                                                 <tfoot>
+                                                                <tfoot>
                                                                     <tr>
                                                                         <td colspan="10" class="text-center">
                                                                             <div class="container" st-items-by-page="itemsByPage" st-pagination="" st-template="pagination.custom_index.html"></div>
@@ -272,6 +279,88 @@
                                                 </div>No existen Notas de D&eacute;bito en estado: <strong>EN MORA</strong>
                                             </div>
                                         </div>
+                                        <!-- ./Notas de Debito Mora -->
+
+                                        <!-- Notas de Credito Pendiente-->
+                                        <div class="col-12 col-lg-6 col-xl-6 ng-hide" ng-show="showTableNotaCredito">
+                                            <div class="card card-fluid">
+                                                <div class="card-header"> Notas de Cr&eacute;dito PENDIENTE : Total {{notaCreditoGrid.length}}</div><!-- easy-pie-chart -->
+                                                <div class="card-body">
+                                                    <div class="container text-center pt-3">
+                                                        <div class="table-responsive" >
+                                                            <table  class="table table-hover table-sm" st-table="display_records_credito" st-safe-src="notaCreditoGrid">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>N&uacute;mero</th>
+                                                                        <th>Usuario</th>
+                                                                        <th>Bs.</th>
+                                                                        <th>Usd.</th>
+                                                                        <th>Fecha</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr st-select-row="row" st-select-mode="multiple" ng-repeat="row in display_records_credito">
+                                                                        <td>{{row.idNotaCredito}}</td>
+                                                                        <td>{{row.idUsuario}}</td>
+                                                                        <td>{{row.montoAbonadoBs|printNumber}}</td>
+                                                                        <td>{{row.montoAbonadoUsd|printNumber}}</td>
+                                                                        <td>{{row.fechaEmision}}</td>
+                                                                    </tr>
+                                                                </tbody>
+                                                                <tfoot>
+                                                                    <tr>
+                                                                        <td colspan="10" class="text-center">
+                                                                            <div class="container" st-items-by-page="itemsByPage" st-pagination="" st-template="pagination.custom_index.html"></div>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tfoot>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- ./Notas de Credito Pendiente-->
+                                        
+                                        <!-- Comprobantes Contables Pendientes -->
+                                        <div class="col-12 col-lg-6 col-xl-6 ng-hide" ng-show="showTableComprobante">
+                                            <div class="card card-fluid">
+                                                <div class="card-header"> Comprobantes Contables PENDIENTE : Total {{comprobanteGrid.length}}</div><!-- easy-pie-chart -->
+                                                <div class="card-body">
+                                                    <div class="container text-center pt-3">
+                                                        <div class="table-responsive" >
+                                                            <table  class="table table-hover table-sm" st-table="display_records_comprobante" st-safe-src="comprobanteGrid">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>N&uacute;mero</th>
+                                                                        <th>Tipo</th>
+                                                                        <th>Usuario</th>
+                                                                        <th>Fecha</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr st-select-row="row" st-select-mode="multiple" ng-repeat="row in display_records_comprobante">
+                                                                        <td>{{row.gestion}}-{{row.idNumeroGestion}}</td>
+                                                                        <td>{{row.tipo}}</td>
+                                                                        <td>{{row.idUsuarioCreador}}</td>
+                                                                        <td>{{row.fecha}}</td>
+                                                                    </tr>
+                                                                </tbody>
+                                                                <tfoot>
+                                                                    <tr>
+                                                                        <td colspan="10" class="text-center">
+                                                                            <div class="container" st-items-by-page="itemsByPage" st-pagination="" st-template="pagination.custom_index.html"></div>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tfoot>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- ./Comprobantes Contables Pendiente-->
+                                        
                                     </div>
 
                                 </div>

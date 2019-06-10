@@ -661,11 +661,12 @@ public class PagoAnticipadoEJB extends FacadeEJB implements PagoAnticipadoRemote
                 throw new CRUDException(msg);
             }
 
+            AsientoContable debe = ejbComprobante.createTotalCancelarIngresoCajaDebe(comprobanteIngreso, conf, trNDFromDB, paFromDb, c, trx);
+            insert(debe);
+
             AsientoContable haber = ejbComprobante.createTotalCancelarIngresoClienteHaber(comprobanteIngreso, conf, trNDFromDB, paFromDb, c, trx);
             insert(haber);
 
-            AsientoContable debe = ejbComprobante.createTotalCancelarIngresoCajaDebe(comprobanteIngreso, conf, trNDFromDB, paFromDb, c, trx);
-            insert(debe);
         }
 
         //Actualizamos los comprobantes Contables
@@ -745,6 +746,7 @@ public class PagoAnticipadoEJB extends FacadeEJB implements PagoAnticipadoRemote
         trxDev.setMoneda(d.getMoneda());
         //Aqui se sabe que la transaccion es una devolucion
         trxDev.setTipo(PagoAnticipadoTransaccion.Tipo.DEVOLUCION);
+        trxDev.setIdDevolucion(d);
 
         //salvamos la Transaccion del pago
         saveTransaccionDevolucion(trxDev, usuario);

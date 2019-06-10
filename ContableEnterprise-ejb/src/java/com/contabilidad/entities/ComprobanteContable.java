@@ -78,6 +78,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "ComprobanteContable.findAll", query = "SELECT c FROM ComprobanteContable c")
     , @NamedQuery(name = "ComprobanteContable.find", query = "SELECT c FROM ComprobanteContable c WHERE c.idLibro=:idLibro")
+    , @NamedQuery(name = "ComprobanteContable.findByEstado", query = "SELECT c FROM ComprobanteContable c WHERE c.estado=:estado")
     , @NamedQuery(name = "ComprobanteContable.findAllComprobanteByNotaDebito", query = "SELECT c FROM ComprobanteContable c WHERE c.idNotaDebito=:idNotaDebito")
     , @NamedQuery(name = "ComprobanteContable.findAllComprobanteByNotaCredito", query = "SELECT c FROM ComprobanteContable c WHERE c.idNotaCredito=:idNotaCredito")
     , @NamedQuery(name = "ComprobanteContable.findAllComprobanteByIngresoCaja", query = "SELECT c FROM ComprobanteContable c WHERE c.idIngresoCaja=:idIngresoCaja")

@@ -455,7 +455,7 @@
                                                                                 <button ng-show="!row.editable" ng-disabled="disableEditarTransaccion" type="button" title="Ver" class="btn btn-sm btn-info" ng-click="editTransaccion(row)"><i class="fa fa-search"></i></button>
                                                                             </c:if>
                                                                             <c:if test="${pagoAnticipado.formulario.crear== pagoAnticipado.formulario.PERMITIR }">
-                                                                                <button ng-show="!row.editable" ng-disabled="disableEditarTransaccion" type="button" title="Imprimir" class="btn btn-sm btn-dark" ng-click="imprimir(TRANSACCION, row)"><i class="fa fa-print"></i></button>
+                                                                                <button ng-show="!row.editable" ng-disabled="disableEditarTransaccion" type="button" title="Imprimir" class="btn btn-sm btn-dark" ng-click="imprimir(row.tipo, row)"><i class="fa fa-print"></i></button>
                                                                             </c:if>
                                                                             <c:if test="#{pagoAnticipado.formulario.anular== pagoAnticipado.formulario.PERMITIR}">
                                                                                 <button type="button" title="Anular" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#frmAnular" ng-click="modalAnular(row.idPagoAnticipadoTransaccion, 'la Transaccion', TRANSACCION, row)"><i class="fa fa-trash"></i></button>

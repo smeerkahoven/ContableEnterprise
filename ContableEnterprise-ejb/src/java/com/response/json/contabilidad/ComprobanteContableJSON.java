@@ -44,6 +44,16 @@ public class ComprobanteContableJSON implements Serializable{
     private ComboSelect idCliente;
 
     private List<AsientoContableJSON> transacciones = new LinkedList<AsientoContableJSON>();
+    
+    public static List<ComprobanteContableJSON> toComprobanteContableJSON(List<ComprobanteContable> list){
+        List<ComprobanteContableJSON> returnList = new LinkedList<>();
+        
+        for(ComprobanteContable c : list){
+            returnList.add(ComprobanteContableJSON.toComprobanteContableJSON(c));
+        }
+        
+        return returnList;
+    }
 
     public static ComprobanteContable toComprobanteContable(ComprobanteContableJSON c) {
         ComprobanteContable newc = new ComprobanteContable();

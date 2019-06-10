@@ -3066,6 +3066,8 @@ app.filter('printFormaPago', function ($filter) {
                 return 'CHEQUE';
             case 'T' :
                 return 'TARJETA';
+            case 'D' :
+                return 'DEPOSITO BANCARIO';
             default :
                 return '-';
                 break;

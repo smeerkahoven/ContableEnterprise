@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="887" pageHeight="521" columnWidth="847" leftMargin="10" rightMargin="30" topMargin="20" bottomMargin="1" uuid="1b7078e6-ceb5-4087-92f3-21ab3eca1288">
-	<property name="ireport.zoom" value="2.14358881000001"/>
+	<property name="ireport.zoom" value="1.4641000000000066"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="ID_TRANSACCION" class="java.lang.String"/>
@@ -29,7 +29,7 @@
  inner join cnt_cliente cl on cl.id_cliente = pa.id_cliente
  inner join cnt_nota_debito_transaccion ndt on ndt.id_nota_debito_transaccion = pat.id_nota_debito_transaccion
  left join cnt_asiento_contable ac on ac.id_pago_anticipado_transaccion = pat.id_pago_anticipado_transaccion
- left join cnt_comprobante_contable cc on cc.id_libro = ac.id_libro and cc.tipo='AD'
+ left join cnt_comprobante_contable cc on cc.id_libro = ac.id_libro and cc.tipo in ('AD')
 where pat.id_pago_anticipado_transaccion = $P{ID_TRANSACCION}]]>
 	</queryString>
 	<field name="id_pago_anticipado_transaccion" class="java.lang.Integer">

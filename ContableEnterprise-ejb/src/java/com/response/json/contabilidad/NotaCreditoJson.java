@@ -12,6 +12,7 @@ import com.seguridad.utils.ComboSelect;
 import com.seguridad.utils.DateContable;
 import java.math.BigDecimal;
 import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
@@ -35,6 +36,17 @@ public class NotaCreditoJson {
     private String estado;
     private LinkedList<NotaCreditoTransaccionJson> transacciones;
 
+    
+    public static List<NotaCreditoJson> toNotaCredito(List<NotaCredito> list){
+        List<NotaCreditoJson> lreturn = new LinkedList<>();
+        
+        for(NotaCredito c : list) {
+            lreturn.add(NotaCreditoJson.toNotaCreditoJson(c));
+        }
+        
+        return lreturn ;
+    }
+    
     public static NotaCredito toNotaCredito(NotaCreditoJson json) {
         NotaCredito data = new NotaCredito();
 

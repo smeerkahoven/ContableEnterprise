@@ -81,6 +81,31 @@ public class PagoAnticipadoResource extends TemplateResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public void putJson(String content) {
     }
+    
+    @GET
+    @Path("{id}")
+    @Produces( MediaType.APPLICATION_JSON)
+    public RestResponse getPagoAnticipado(@PathParam("id") final Integer idPagoAnticipado ){
+        RestResponse response = new RestResponse();
+        
+        PagoAnticipado p;
+        try {
+            p = (PagoAnticipado) ejbPagoAnticipado.get(idPagoAnticipado, PagoAnticipado.class);
+            
+            PagoAnticipadoJson toJson = PagoAnticipadoJson.toPagoAnticipadoJson(p);
+            
+            response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
+            response.setContent(toJson);
+        } catch (CRUDException ex) {
+            response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+            response.setContent(ex.getMessage());
+            Logger.getLogger(PagoAnticipadoResource.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
+        
+        return response ;
+    }
 
     @POST
     @Path("all")

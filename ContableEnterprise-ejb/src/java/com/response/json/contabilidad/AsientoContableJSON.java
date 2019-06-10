@@ -72,11 +72,6 @@ public class AsientoContableJSON implements Serializable {
         anew.setMontoHaberExt(a.getHaberMonExt());
         anew.setMontoHaberNac(a.getHaberMonNac());
         anew.setTipoMontoBoleto(a.getTipoMontoBoleto());
-        
-
-        
-        
-        
 
         return anew;
     }

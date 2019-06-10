@@ -37,6 +37,7 @@ import java.math.BigInteger;
 import java.math.RoundingMode;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import javax.ejb.Stateless;
@@ -1251,7 +1252,8 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
         ingCajaDebe.setFechaMovimiento(DateContable.getCurrentDate());
         ingCajaDebe.setEstado(ComprobanteContable.EMITIDO);
         ingCajaDebe.setIdCargo(cargo);
-        ingCajaDebe.setTipo(AsientoContable.Tipo.INGRESO_CAJA_TRANSACCION);
+        //ingCajaDebe.setTipo(AsientoContable.Tipo.INGRESO_CAJA_TRANSACCION);
+        ingCajaDebe.setTipo(ndt.getTipo());
         ingCajaDebe.setIdIngresoCajaTransaccion(ing);
         ingCajaDebe.setMoneda(ing.getMoneda());
 
@@ -1885,6 +1887,7 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
         ingCajaDebe.setEstado(ComprobanteContable.EMITIDO);
         ingCajaDebe.setIdPagoAnticipado(pago);
         ingCajaDebe.setMoneda(pago.getMoneda());
+        ingCajaDebe.setTipo(AsientoContable.Tipo.PAGO_ANTICIPADO);
 
         if (pago.getMoneda().equals(Moneda.EXTRANJERA)) {
             ingCajaDebe.setMontoDebeExt(pago.getMontoAnticipado());
@@ -1928,31 +1931,20 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
         ingCajaHaber.setEstado(ComprobanteContable.EMITIDO);
         ingCajaHaber.setIdPagoAnticipado(pago);
         ingCajaHaber.setMoneda(pago.getMoneda());
+        ingCajaHaber.setTipo(AsientoContable.Tipo.PAGO_ANTICIPADO);
 
         if (pago.getMoneda().equals(Moneda.EXTRANJERA)) {
             ingCajaHaber.setMontoHaberExt(pago.getMontoAnticipado());
             ingCajaHaber.setMontoHaberNac(pago.getMontoAnticipado() != null
                     ? pago.getMontoAnticipado().multiply(pago.getFactorCambiario()).setScale(Contabilidad.VALOR_DECIMAL_2, BigDecimal.ROUND_DOWN)
                     : null);
-            /*if (pago.getFormaPago().equals(FormasPago.EFECTIVO)
-                    || pago.getFormaPago().equals(FormasPago.CHEQUE)
-                    || pago.getFormaPago().equals(FormasPago.TARJETA)) {*/
             ingCajaHaber.setIdPlanCuenta(conf.getDepositoClienteAnticipadoUsd());
-            /* } else if (pago.getFormaPago().equals(FormasPago.DEPOSITO)) {
-                ingCajaHaber.setIdPlanCuenta(pago.getIdCuentaDeposito());
-            }*/
 
         } else if (pago.getMoneda().equals(Moneda.NACIONAL)) {
             Double montoHaber = pago.getMontoAnticipado() != null ? pago.getMontoAnticipado().doubleValue() / pago.getFactorCambiario().doubleValue() : 0.0f;
             ingCajaHaber.setMontoHaberNac(pago.getMontoAnticipado());
             ingCajaHaber.setMontoHaberExt(new BigDecimal(montoHaber).setScale(Contabilidad.VALOR_DECIMAL_2, BigDecimal.ROUND_DOWN));
-            /*if (pago.getFormaPago().equals(FormasPago.EFECTIVO)
-                    || pago.getFormaPago().equals(FormasPago.CHEQUE)
-                    || pago.getFormaPago().equals(FormasPago.TARJETA)) {*/
             ingCajaHaber.setIdPlanCuenta(conf.getDepositoClienteAnticipadoBs());
-            /*} else if (pago.getFormaPago().equals(FormasPago.DEPOSITO)) {
-                ingCajaHaber.setIdPlanCuenta(pago.getIdCuentaDeposito());
-            }*/
         }
 
         return ingCajaHaber;
@@ -2266,6 +2258,25 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
 
         //actualizamos los montos de los Comprobantes Contables
         actualizarMontosAnularAsientosContables(tr.getIdPagoAnticipado());
+    }
+    
+    @Override
+    public List<ComprobanteContable> getComprobantesPendientes(Integer idEmpresa) throws CRUDException {
+
+        List<ComprobanteContable> lreturn = null;
+
+        //String q = queries.getPropertie(Queries.GET_NOTA_CREDITO_TRX_BY_ID_NOTA_DEBITO);
+        Query query = em.createNamedQuery("ComprobanteContable.findByEstado", ComprobanteContable.class);
+        //query.setParameter("idEmpresa", idEmpresa);
+        query.setParameter("estado", "P");
+
+        lreturn = query.getResultList();
+
+        if (lreturn.isEmpty()) {
+            lreturn = new LinkedList<>();
+        }
+
+        return lreturn;
     }
 
     private void actualizarMontosAnularAsientosContables(Integer idNotaDebito) throws CRUDException {

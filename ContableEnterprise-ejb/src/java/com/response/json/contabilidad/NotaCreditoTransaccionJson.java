@@ -42,6 +42,7 @@ public class NotaCreditoTransaccionJson implements Serializable {
     private BigDecimal montoTransaccionUsd;
     private String monedaTransaccion;
     private String descripcionTransaccion;
+    private String idUsuario ;
 
     private ComboSelect idPlanCuenta;
 
@@ -64,6 +65,7 @@ public class NotaCreditoTransaccionJson implements Serializable {
     public static NotaCreditoTransaccionJson toNotaCreditoTransaccionJsOn(NotaCreditoTransaccion data) {
         NotaCreditoTransaccionJson json = new NotaCreditoTransaccionJson();
 
+        json.setIdUsuario(data.getIdUsuarioCreador());
         json.setDescripcion(data.getDescripcion());
         json.setDescripcionTransaccion(data.getIdNotaCredito().getConcepto());
         json.setEstado(data.getEstado());
@@ -115,6 +117,16 @@ public class NotaCreditoTransaccionJson implements Serializable {
 
         return data;
     }
+
+    public String getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(String idUsuario) {
+        this.idUsuario = idUsuario;
+    }
+    
+    
 
     public BigDecimal getMonto() {
         return monto;

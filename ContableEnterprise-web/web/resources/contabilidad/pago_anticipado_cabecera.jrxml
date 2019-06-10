@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="887" pageHeight="521" columnWidth="852" leftMargin="5" rightMargin="30" topMargin="1" bottomMargin="1" uuid="1b7078e6-ceb5-4087-92f3-21ab3eca1288">
-	<property name="ireport.zoom" value="1.6105100000000032"/>
+	<property name="ireport.zoom" value="2.5937424601000068"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="ID_PAGO" class="java.lang.Integer"/>
@@ -106,7 +106,7 @@ WHERE pa.id_pago_anticipado=$P{ID_PAGO}]]>
     $F{id_numero_gestion} + " CI"]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="10" y="10" width="77" height="19" uuid="fd5fa4dd-3657-4819-9101-73ea5f0ca022"/>
+				<reportElement x="6" y="10" width="77" height="19" uuid="fd5fa4dd-3657-4819-9101-73ea5f0ca022"/>
 				<textElement textAlignment="Right">
 					<font fontName="Monospaced" size="15" pdfFontName="Courier"/>
 				</textElement>
@@ -118,44 +118,44 @@ WHERE pa.id_pago_anticipado=$P{ID_PAGO}]]>
 		<band splitType="Stretch"/>
 	</pageHeader>
 	<columnHeader>
-		<band height="42" splitType="Stretch">
+		<band height="39" splitType="Stretch">
 			<staticText>
-				<reportElement x="6" y="3" width="77" height="19" uuid="91211e5a-700a-442e-9e9a-67d3115dfca0"/>
+				<reportElement x="6" y="0" width="77" height="19" uuid="91211e5a-700a-442e-9e9a-67d3115dfca0"/>
 				<textElement textAlignment="Right">
 					<font fontName="Monospaced" size="15" pdfFontName="Courier"/>
 				</textElement>
 				<text><![CDATA[Señores:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="723" y="17" width="95" height="19" uuid="f012d6dc-7a1f-4385-a4df-4e3d93e299a6"/>
+				<reportElement x="723" y="19" width="95" height="19" uuid="f012d6dc-7a1f-4385-a4df-4e3d93e299a6"/>
 				<textElement>
 					<font fontName="Monospaced" size="15" pdfFontName="Courier"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{fecha_emision}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="646" y="17" width="77" height="19" uuid="d97a1993-c0bc-4d22-9304-bab80c31ac7d"/>
+				<reportElement x="646" y="19" width="77" height="19" uuid="d97a1993-c0bc-4d22-9304-bab80c31ac7d"/>
 				<textElement textAlignment="Right">
 					<font fontName="Monospaced" size="15" pdfFontName="Courier"/>
 				</textElement>
 				<text><![CDATA[Fecha Emision:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="88" y="3" width="427" height="19" uuid="aa446270-d579-48a9-b474-0968ef915e27"/>
+				<reportElement x="88" y="0" width="558" height="19" uuid="aa446270-d579-48a9-b474-0968ef915e27"/>
 				<textElement>
 					<font fontName="Monospaced" size="15" pdfFontName="Courier"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{cliente}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="6" y="20" width="77" height="19" uuid="a3e1565e-59a7-43a2-8b85-0a6f5e2afc8e"/>
+				<reportElement x="6" y="19" width="77" height="19" uuid="a3e1565e-59a7-43a2-8b85-0a6f5e2afc8e"/>
 				<textElement textAlignment="Right">
 					<font fontName="Monospaced" size="15" pdfFontName="Courier"/>
 				</textElement>
 				<text><![CDATA[Estado:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="88" y="21" width="306" height="19" uuid="cc6dcc58-a6d5-4787-9a6f-8be8093af3d0"/>
+				<reportElement x="88" y="20" width="306" height="19" uuid="cc6dcc58-a6d5-4787-9a6f-8be8093af3d0"/>
 				<textElement>
 					<font fontName="Monospaced" size="15" isBold="true" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
@@ -180,28 +180,28 @@ WHERE pa.id_pago_anticipado=$P{ID_PAGO}]]>
 	<detail>
 		<band height="44" splitType="Stretch">
 			<staticText>
-				<reportElement x="623" y="6" width="100" height="18" uuid="33b2b612-3881-444a-abe3-1d2844441aad"/>
+				<reportElement x="623" y="2" width="100" height="18" uuid="33b2b612-3881-444a-abe3-1d2844441aad"/>
 				<textElement textAlignment="Center">
 					<font fontName="Monospaced" size="15" isBold="true" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[MONEDA]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="3" y="5" width="367" height="18" uuid="e4199d13-a92a-4363-9ab5-39a871af2c62"/>
+				<reportElement x="3" y="2" width="620" height="18" uuid="e4199d13-a92a-4363-9ab5-39a871af2c62"/>
 				<textElement>
 					<font fontName="Monospaced" size="15" isBold="true" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[DESCRIPCION]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="723" y="6" width="93" height="18" uuid="b9973bd9-ac0b-4157-a451-93c5a0552fd5"/>
+				<reportElement x="725" y="2" width="93" height="18" uuid="b9973bd9-ac0b-4157-a451-93c5a0552fd5"/>
 				<textElement textAlignment="Right">
 					<font fontName="Monospaced" size="15" isBold="true" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[MONTO]]></text>
 			</staticText>
 			<line>
-				<reportElement x="3" y="21" width="813" height="2" uuid="5e069e82-97cf-420e-bf7f-111a57b8aabf"/>
+				<reportElement x="3" y="20" width="815" height="2" uuid="5e069e82-97cf-420e-bf7f-111a57b8aabf"/>
 			</line>
 			<textField>
 				<reportElement x="623" y="23" width="100" height="19" uuid="1c603167-c19e-468d-825e-12f3c5235eb2"/>
@@ -211,14 +211,14 @@ WHERE pa.id_pago_anticipado=$P{ID_PAGO}]]>
 				<textFieldExpression><![CDATA[$F{moneda}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="723" y="23" width="93" height="19" uuid="3f0064f6-0b23-4b7d-9c5d-f8994da6ce46"/>
+				<reportElement x="725" y="23" width="93" height="19" uuid="3f0064f6-0b23-4b7d-9c5d-f8994da6ce46"/>
 				<textElement textAlignment="Right">
 					<font fontName="Monospaced" size="15" pdfFontName="Courier"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{monto_anticipado}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="3" y="23" width="609" height="19" uuid="40928b92-7ec9-46d4-8733-37acad64bf38"/>
+				<reportElement x="3" y="23" width="620" height="19" uuid="40928b92-7ec9-46d4-8733-37acad64bf38"/>
 				<textElement>
 					<font fontName="Monospaced" size="15" pdfFontName="Courier"/>
 				</textElement>
@@ -242,14 +242,14 @@ WHERE pa.id_pago_anticipado=$P{ID_PAGO}]]>
 				<text><![CDATA[TOTAL]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="723" y="3" width="93" height="18" uuid="53003912-bffe-4b37-9185-01e38041bfc6"/>
+				<reportElement x="725" y="3" width="93" height="18" uuid="53003912-bffe-4b37-9185-01e38041bfc6"/>
 				<textElement textAlignment="Right">
 					<font fontName="Monospaced" size="15" isBold="true" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{monto_anticipado}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement x="4" y="44" width="688" height="19" uuid="f0579487-6e2c-4581-856d-545a9722a1ee"/>
+				<reportElement x="4" y="44" width="814" height="19" uuid="f0579487-6e2c-4581-856d-545a9722a1ee"/>
 				<textElement>
 					<font fontName="Monospaced" size="15" pdfFontName="Courier"/>
 				</textElement>
@@ -286,7 +286,7 @@ WHERE pa.id_pago_anticipado=$P{ID_PAGO}]]>
 				<reportElement x="566" y="102" width="248" height="1" uuid="3d325509-9800-4fef-9da6-9376c61ff5d8"/>
 			</line>
 			<textField>
-				<reportElement x="0" y="119" width="515" height="18" uuid="1a165738-5c3d-404d-8dbb-dd241f33b51e"/>
+				<reportElement x="0" y="120" width="515" height="18" uuid="1a165738-5c3d-404d-8dbb-dd241f33b51e"/>
 				<textElement>
 					<font fontName="Monospaced" size="15" pdfFontName="Courier"/>
 				</textElement>

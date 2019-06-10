@@ -3,12 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
-function goScrollTo(element) {
-    $(element).goTo();
-}
-
-
 function isNumberKey(evt)
 {
     var charCode = (evt.which) ? evt.which : event.keyCode
@@ -17,17 +11,10 @@ function isNumberKey(evt)
 
     return true;
 }
-;
 
 function showModal(idModal) {
     $(`#${idModal}`).modal();
 }
-
-
-
-let ZERO = "0";
-let SI = "S";
-let NO = "N";
 
 function AsientoContable() {
     this.position = 0;
@@ -122,6 +109,7 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                 var urlFactores = document.getElementsByName("hdUrlFactores")[0];
                 var urlPlanCuentas = document.getElementsByName("hdUrlPlanCuentas")[0];
                 var urlNotaDebito = document.getElementsByName("hdUrlNotaDebito")[0];
+                var urlPagoAnticipado = document.getElementsByName("hdUrlPagoAnticipado")[0];
                 var formName = document.getElementsByName("hdFormName")[0];
                 var myForm = document.getElementById("myForm");
                 var idEmpresa = document.getElementById("idEmpresa");
@@ -425,6 +413,7 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                 }
 
                 $scope.verTransaccion = function (row) {
+                    console.log(row);
                     if (row.tipo === 'B') {
                         //BOLETO
                         $scope.loadTransaccionBoleto(row);
@@ -437,8 +426,25 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                         //PAQUETE
                         $scope.loadTransaccionPaquete(row);
                         showModalWindow('#frmTransaccion');
+                    } else if (row.tipo === 'D') {
+                        // DEVOLUCION
+                        $scope.loadDevolucion(row);
+                        showModalWindow('#frmDevolucion');
+                    } else if (row.tipo === 'E') {
+                        // NOTA CREDITO TRANSACCION
+                        $scope.loadNotaCredito(row);
+                        showModalWindow('#frmNotaCredito');
+                    } else if (row.tipo === 'I') {
+                        // INGRESO CAJA TRANSACCION
+                    } else if (row.tipo === 'G') {
+                        // PAGO ANTICIPADO 
+                        $scope.loadPagoAnticipado(row);
+                        showModalWindow('#frmPagoAnticipado');
+                    } else if (row.tipo === 'O') {
+                        // PAGO ANTICIPADO TRANSACcion
+                        $scope.loadPagoAnticipadoTransaccion(row);
+                        showModalWindow('#frmPagoAnticipado');
                     }
-
                 }
 
                 $scope.loadTransaccionBoleto = function (row) {
@@ -492,6 +498,52 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                         }
                     }, $scope.errorFunction
                             );
+                }
+
+                $scope.loadPagoAnticipado = function (row) {
+                    return $http({
+                        method: 'POST',
+                        url: `${url.value}pago-anticipado/get`,
+                        data: {token: token.value, content: angular.toJson(row)},
+                        headers: {'Content-Type': 'application/json'}
+                    }).then(function (response) {
+                        if (response.data.code === 201) {
+                            $scope.verFormPago = response.data.content;
+                            //console.log($scope.verForm);
+                        } else {
+                            $scope.showRestfulMessage = response.data.content;
+                            $scope.showRestfulError = true;
+                            return {};
+                        }
+                    }, $scope.errorFunction
+                            );
+                }
+
+                $scope.loadPagoAnticipadoTransaccion = function (row) {
+                    return $http({
+                        method: 'POST',
+                        url: `${url.value}pago-anticipado/get`,
+                        data: {token: token.value, content: angular.toJson(row)},
+                        headers: {'Content-Type': 'application/json'}
+                    }).then(function (response) {
+                        if (response.data.code === 201) {
+                            $scope.verFormPago = response.data.content;
+                            $scope.verFormPago.trx = row.idPagoAnticipadoTransaccion;
+                            console.log($scope.verFormPago);
+                        } else {
+                            $scope.showRestfulMessage = response.data.content;
+                            $scope.showRestfulError = true;
+                            return {};
+                        }
+                    }, $scope.errorFunction
+                            );
+                }
+                
+                $scope.loadDevolucion = function(row){
+                    $scope.verFormDevolucion = row.idDevolucion ;
+                }
+                $scope.loadNotaCredito = function(row){
+                    $scope.verFormCredito = row.idNotaCreditoTransaccion ;
                 }
 
                 $scope.existenTransaccionesInvalidas = function () {
@@ -581,6 +633,7 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                             data: {token: token.value, content: angular.toJson($scope.formData)},
                             headers: {'Content-Type': 'application/json'}
                         }).then(function (response) {
+                            $scope.loading = false;
                             if (response.data.code === 201) {
                                 $scope.showRestfulMessage = response.data.content;
                                 $scope.showRestfulSuccess = true;
@@ -592,7 +645,7 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                                 if (estado === $scope.APROBADO) {
                                     $scope.imprimir($scope.formData);
                                 }
-                                goScrollTo('#restful-success');
+                                goScrollToSuccess();
                                 //$scope.showForm = false;
                                 //$scope.showTable = true;
                                 //$scope.getData(url.value, 'all');
@@ -601,7 +654,7 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                                 $scope.showRestfulError = true;
                                 //$scope.showForm = false;
                             }
-                            $scope.loading = false;
+
 
                         }, $scope.errorFunction);
                     } else {
@@ -749,7 +802,7 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                             item.haberMonExt = parseFloat(item.haberMonNac / $scope.formData.factorCambiario).toFixed(2);
                             //}
                         }
-                        
+
 
                     } else if (item.moneda === MONEDA_EXTRANJERA) {
                         item.debeMonExt = parseFloat(Math.round(item.debeMonExt * 100) / 100).toFixed(2);
@@ -764,7 +817,7 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                             item.haberMonNac = parseFloat(item.haberMonExt * $scope.formData.factorCambiario).toFixed(2);
                             //}
                         }
-                        
+
                     }
                     $scope.sumarTotales();
                     $scope.sumarDiferencias();
@@ -962,8 +1015,8 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                     $scope.showDifDebeExt = ($scope.formData.difMonExt < 0);
 
                     $scope.existeDiferencias = $scope.showDifDebeExt || $scope.showDifDebeNac || $scope.showDifHaberExt || $scope.showDifHaberNac;
-                    
-                    if ($scope.existeDiferencias){
+
+                    if ($scope.existeDiferencias) {
                         $scope.ngDisabledBtnCorregir = false;
                     }
 
@@ -1171,6 +1224,17 @@ app.filter('printMoneda', function ($filter) {
                 return 'BOB.';
             case 'U' :
                 return 'USD.';
+        }
+    }
+});
+
+app.filter('printTipoPagoAnticipado', function ($filter) {
+    return function (input, predicate) {
+        switch (input) {
+            case 'AC':
+                return 'ACREDITACION';
+            case 'DE' :
+                return 'DEVOLUCION';
         }
     }
 });

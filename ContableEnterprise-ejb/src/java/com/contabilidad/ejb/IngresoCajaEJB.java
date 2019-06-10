@@ -643,12 +643,14 @@ public class IngresoCajaEJB extends FacadeEJB implements IngresoCajaRemote {
                         msg = msg.replace("%n", ndt.getIdNotaDebito().toString());
                         throw new CRUDException(msg);
                     }
+                    
+                    AsientoContable debe = ejbComprobante.createTotalCancelarIngresoCajaDebe(comprobanteIngreso, conf, ndt, fromDb, b, tran);
+                    insert(debe);
 
                     AsientoContable haber = ejbComprobante.createTotalCancelarIngresoClienteHaber(comprobanteIngreso, conf, ndt, fromDb, b, tran);
                     insert(haber);
 
-                    AsientoContable debe = ejbComprobante.createTotalCancelarIngresoCajaDebe(comprobanteIngreso, conf, ndt, fromDb, b, tran);
-                    insert(debe);
+                    
                 } else {
                     CargoBoleto c = em.find(CargoBoleto.class, ndt.getIdCargo());
                     if (c == null) {
@@ -658,12 +660,12 @@ public class IngresoCajaEJB extends FacadeEJB implements IngresoCajaRemote {
                         msg = msg.replace("%n", ndt.getIdNotaDebito().toString());
                         throw new CRUDException(msg);
                     }
+                    
+                    AsientoContable debe = ejbComprobante.createTotalCancelarIngresoCajaDebe(comprobanteIngreso, conf, ndt, fromDb, c, tran);
+                    insert(debe);
 
                     AsientoContable haber = ejbComprobante.createTotalCancelarIngresoClienteHaber(comprobanteIngreso, conf, ndt, fromDb, c, tran);
                     insert(haber);
-
-                    AsientoContable debe = ejbComprobante.createTotalCancelarIngresoCajaDebe(comprobanteIngreso, conf, ndt, fromDb, c, tran);
-                    insert(debe);
 
                 }
                 em.merge(ndt);

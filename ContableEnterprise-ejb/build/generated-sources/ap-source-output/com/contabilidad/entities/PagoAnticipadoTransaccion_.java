@@ -1,5 +1,6 @@
 package com.contabilidad.entities;
 
+import com.contabilidad.entities.Devolucion;
 import com.contabilidad.entities.NotaDebitoTransaccion;
 import com.contabilidad.entities.PagoAnticipado;
 import java.math.BigDecimal;
@@ -8,7 +9,7 @@ import javax.annotation.Generated;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2019-06-08T19:22:29")
+@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2019-06-10T01:04:07")
 @StaticMetamodel(PagoAnticipadoTransaccion.class)
 public class PagoAnticipadoTransaccion_ { 
 
@@ -22,5 +23,6 @@ public class PagoAnticipadoTransaccion_ {
     public static volatile SingularAttribute<PagoAnticipadoTransaccion, String> moneda;
     public static volatile SingularAttribute<PagoAnticipadoTransaccion, Date> fechaInsert;
     public static volatile SingularAttribute<PagoAnticipadoTransaccion, NotaDebitoTransaccion> idNotaTransaccion;
+    public static volatile SingularAttribute<PagoAnticipadoTransaccion, Devolucion> idDevolucion;
 
 }

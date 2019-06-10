@@ -352,5 +352,13 @@ public interface ComprobanteRemote extends DaoRemoteFacade {
     public void anularAsientosContables(NotaCreditoTransaccion tr, String usuario) throws CRUDException;
 
     public void anularAsientosContables(PagoAnticipadoTransaccion tr, String usuario) throws CRUDException;
+    
+    /**
+     * 
+     * @param idEmpresa
+     * @return
+     * @throws CRUDException 
+     */
+    public List<ComprobanteContable> getComprobantesPendientes(Integer idEmpresa) throws CRUDException ;
 
 }

@@ -14,11 +14,13 @@ import com.contabilidad.entities.IngresoCaja;
 import com.contabilidad.entities.IngresoTransaccion;
 import com.contabilidad.entities.NotaCreditoTransaccion;
 import com.contabilidad.entities.NotaDebitoTransaccion;
+import com.contabilidad.entities.PagoAnticipado;
 import com.contabilidad.entities.TipoComprobante;
 import com.contabilidad.remote.ComprobanteRemote;
 import com.contabilidad.remote.IngresoCajaRemote;
 import com.contabilidad.remote.NotaDebitoRemote;
 import com.contabilidad.remote.NotasCreditoRemote;
+import com.contabilidad.remote.PagoAnticipadoRemote;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -31,6 +33,7 @@ import com.response.json.contabilidad.ComprobanteContableJSON;
 import com.response.json.contabilidad.IngresoTransaccionJson;
 import com.response.json.contabilidad.NotaCreditoTransaccionJson;
 import com.response.json.contabilidad.NotaDebitoTransaccionJson;
+import com.response.json.contabilidad.PagoAnticipadoJson;
 import com.seguridad.control.entities.Log;
 import com.seguridad.control.exception.CRUDException;
 import com.seguridad.queries.Queries;
@@ -84,6 +87,9 @@ public class ComprobantesResource extends TemplateResource {
     private NotasCreditoRemote ejbNotaCredito;
 
     @EJB
+    private PagoAnticipadoRemote ejbPagoAnticipado;
+
+    @EJB
     private BoletoRemote ejbBoleto;
 
     /**
@@ -106,6 +112,37 @@ public class ComprobantesResource extends TemplateResource {
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     public void putJson(String content) {
+    }
+
+    @POST
+    @Path("pago-anticipado/get")
+    @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
+    public RestResponse getPagoAnticipado(final RestRequest request) {
+        RestResponse response = doValidations(request);
+
+        PagoAnticipado p;
+        try {
+
+            AsientoContableJSON json = BeanUtils.convertToAsientoContable(request);
+            Optional op = Optional.ofNullable(json);
+
+            p = (PagoAnticipado) ejbPagoAnticipado.get(json.getIdPagoAnticipado() != null 
+                    ? json.getIdPagoAnticipado().getIdPagoAnticipado() 
+                    : json.getIdPagoAnticipadoTransaccion().getIdPagoAnticipado(),
+                    PagoAnticipado.class);
+
+            PagoAnticipadoJson toJson = PagoAnticipadoJson.toPagoAnticipadoJson(p);
+
+            response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
+            response.setContent(toJson);
+        } catch (CRUDException ex) {
+            response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+            response.setContent(ex.getMessage());
+            Logger.getLogger(PagoAnticipadoResource.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        return response;
     }
 
     @POST
@@ -399,6 +436,30 @@ public class ComprobantesResource extends TemplateResource {
         return response;
     }
 
+    @POST
+    @Path("index/pendiente")
+    @Produces(MediaType.APPLICATION_JSON)
+    public RestResponse getAllIngresoCajaPendiente(final RestRequest request) {
+        RestResponse response = doValidations(request);
+
+        if (response.getCode() == ResponseCode.RESTFUL_SUCCESS.getCode()) {
+            try {
+                List<ComprobanteContable> list = ejbComprobante.getComprobantesPendientes(user.getIdEmpleado().getIdEmpresa().getIdEmpresa());
+
+                List<ComprobanteContableJSON> returnList = ComprobanteContableJSON.toComprobanteContableJSON(list);
+
+                response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
+                response.setContent(returnList);
+
+            } catch (CRUDException ex) {
+                response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+                response.setContent(ex.getCause());
+                Logger.getLogger(NotadebitoResource.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return response;
+    }
+
     /**
      * No se esta pidiendo la validacion del token debido a un error con los
      * formatos de los numeros Se debe depurar valor por valor mas adelante con
@@ -457,8 +518,8 @@ public class ComprobantesResource extends TemplateResource {
                 }
 
                 String m = Log.COMPROBANTE_SAVE.replace("id", json.getGestion().toString() + "-" + json.getIdNumeroGestion());
-                
-                ejbLogger.add(Accion.INSERT, user.getUserName(), com.view.menu.Formulario.COMPROBANTES, m );
+
+                ejbLogger.add(Accion.INSERT, user.getUserName(), com.view.menu.Formulario.COMPROBANTES, m);
             }
 
             return response;
@@ -490,22 +551,22 @@ public class ComprobantesResource extends TemplateResource {
             insert.setIdLibro(new ComprobanteContable(pc.getIdLibro()));
             insert.setFechaMovimiento(DateContable.getCurrentDate());
 
-            String m = Log.COMPROBANTE_ADD_TRANSACCION.replace("id", pc.getIdLibro().toString()) ;
+            String m = Log.COMPROBANTE_ADD_TRANSACCION.replace("id", pc.getIdLibro().toString());
             if (insert.getMontoDebeExt() != null) {
                 m = m.replace("monto", " monto debe ext: " + insert.getMontoDebeExt().toString());
             }
-            if (insert.getMontoDebeNac()!= null) {
-                m = m.replace("monto", "monto debe nac: " +insert.getMontoDebeNac().toString());
+            if (insert.getMontoDebeNac() != null) {
+                m = m.replace("monto", "monto debe nac: " + insert.getMontoDebeNac().toString());
             }
-            if (insert.getMontoHaberExt()!= null) {
-                m = m.replace("monto", "monto haber ext: " +insert.getMontoHaberExt().toString());
+            if (insert.getMontoHaberExt() != null) {
+                m = m.replace("monto", "monto haber ext: " + insert.getMontoHaberExt().toString());
             }
-            if (insert.getMontoHaberNac()!= null) {
+            if (insert.getMontoHaberNac() != null) {
                 m = m.replace("monto", "monto haber nac: " + insert.getMontoHaberNac().toString());
             }
-            
+
             insert = ejbComprobante.addTransaccion(insert);
-            ejbLogger.add(Accion.INSERT, user.getUserName(), Formulario.COMPROBANTES, user.getIp(),m);
+            ejbLogger.add(Accion.INSERT, user.getUserName(), Formulario.COMPROBANTES, user.getIp(), m);
 
             response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
             response.setContent(mensajes.getProperty(RestResponse.RESTFUL_SUCCESS));
@@ -545,13 +606,13 @@ public class ComprobantesResource extends TemplateResource {
             if (insert.getMontoDebeExt() != null) {
                 m = m.replace("monto", " monto debe ext: " + insert.getMontoDebeExt().toString());
             }
-            if (insert.getMontoDebeNac()!= null) {
-                m = m.replace("monto", "monto debe nac: " +insert.getMontoDebeNac().toString());
+            if (insert.getMontoDebeNac() != null) {
+                m = m.replace("monto", "monto debe nac: " + insert.getMontoDebeNac().toString());
             }
-            if (insert.getMontoHaberExt()!= null) {
-                m = m.replace("monto", "monto haber ext: " +insert.getMontoHaberExt().toString());
+            if (insert.getMontoHaberExt() != null) {
+                m = m.replace("monto", "monto haber ext: " + insert.getMontoHaberExt().toString());
             }
-            if (insert.getMontoHaberNac()!= null) {
+            if (insert.getMontoHaberNac() != null) {
                 m = m.replace("monto", "monto haber nac: " + insert.getMontoHaberNac().toString());
             }
 
@@ -569,7 +630,6 @@ public class ComprobantesResource extends TemplateResource {
         return response;
     }
 
-    
     //TODO aqui debe preguntarse si tiene un id boleto o una nota de debito o cualquier elemento
     // como id, si lo tiene debe actualizar el original y debe verificarse que los montos del total no se exedan
     // del monto actual

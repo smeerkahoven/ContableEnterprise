@@ -506,12 +506,11 @@ public class NotaCreditoEJB extends FacadeEJB implements NotasCreditoRemote {
                         msg = msg.replace("%n", ndt.getIdNotaDebito().toString());
                         throw new CRUDException(msg);
                     }
+                    AsientoContable debe = ejbComprobante.createTotalCancelarIngresoCajaDebe(comprobanteIngreso, conf, ndt, fromDb, b, tran);
+                    insert(debe);
 
                     AsientoContable haber = ejbComprobante.createTotalCancelarIngresoClienteHaber(comprobanteIngreso, conf, tran, fromDb, b);
                     insert(haber);
-
-                    AsientoContable debe = ejbComprobante.createTotalCancelarIngresoCajaDebe(comprobanteIngreso, conf, ndt, fromDb, b, tran);
-                    insert(debe);
                 } else {
                     CargoBoleto c = em.find(CargoBoleto.class, ndt.getIdCargo());
                     if (c == null) {
@@ -521,13 +520,11 @@ public class NotaCreditoEJB extends FacadeEJB implements NotasCreditoRemote {
                         msg = msg.replace("%n", ndt.getIdNotaDebito().toString());
                         throw new CRUDException(msg);
                     }
-
-                    AsientoContable haber = ejbComprobante.createTotalCancelarIngresoClienteHaber(comprobanteIngreso, conf, ndt, fromDb, c, tran);
-                    insert(haber);
-
                     AsientoContable debe = ejbComprobante.createTotalCancelarIngresoCajaDebe(comprobanteIngreso, conf, ndt, fromDb, c, tran);
                     insert(debe);
 
+                    AsientoContable haber = ejbComprobante.createTotalCancelarIngresoClienteHaber(comprobanteIngreso, conf, ndt, fromDb, c, tran);
+                    insert(haber);
                 }
                 em.merge(ndt);
 
@@ -556,6 +553,25 @@ public class NotaCreditoEJB extends FacadeEJB implements NotasCreditoRemote {
         //String q = queries.getPropertie(Queries.GET_NOTA_CREDITO_TRX_BY_ID_NOTA_DEBITO);
         Query query = em.createNamedQuery("NotaCreditoTransaccion.findByIdNotaCreditoTransaccion", NotaCreditoTransaccion.class);
         query.setParameter("idNotaDebito", idNotaDebito);
+
+        lreturn = query.getResultList();
+
+        if (lreturn.isEmpty()) {
+            lreturn = new LinkedList<>();
+        }
+
+        return lreturn;
+    }
+
+    @Override
+    public List<NotaCredito> getNotaCreditoPendiente(Integer idEmpresa) throws CRUDException {
+
+        List<NotaCredito> lreturn = null;
+
+        //String q = queries.getPropertie(Queries.GET_NOTA_CREDITO_TRX_BY_ID_NOTA_DEBITO);
+        Query query = em.createNamedQuery("NotaCredito.findByEstado", NotaCredito.class);
+        query.setParameter("idEmpresa", idEmpresa);
+        query.setParameter("estado", "P");
 
         lreturn = query.getResultList();
 

@@ -57,7 +57,7 @@ import javax.xml.bind.annotation.XmlTransient;
     , @NamedQuery(name = "NotaCredito.findByMontoAbonadoUsd", query = "SELECT n FROM NotaCredito n WHERE n.montoAbonadoUsd = :montoAbonadoUsd")
     , @NamedQuery(name = "NotaCredito.findByFactorCambiario", query = "SELECT n FROM NotaCredito n WHERE n.factorCambiario = :factorCambiario")
     , @NamedQuery(name = "NotaCredito.findByConcepto", query = "SELECT n FROM NotaCredito n WHERE n.concepto = :concepto")
-    , @NamedQuery(name = "NotaCredito.findByEstado", query = "SELECT n FROM NotaCredito n WHERE n.estado = :estado")
+    , @NamedQuery(name = "NotaCredito.findByEstado", query = "SELECT n FROM NotaCredito n WHERE n.estado = :estado and n.idEmpresa=:idEmpresa")
     , @NamedQuery(name="NotaCredito.updateToPendiente", 
             query="UPDATE NotaCredito i SET i.idCliente=:idCliente, "
                     + "i.fechaEmision=:fechaEmision,"
