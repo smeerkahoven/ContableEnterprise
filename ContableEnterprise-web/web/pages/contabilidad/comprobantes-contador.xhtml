@@ -904,6 +904,295 @@
                             </form>
                             <!-- ./Modal VER-->
 
+                             <!-- Pago Anticipado -->
+                            <form id="myFormPagoAnticipado" name="myFormPagoAnticipado">
+                                <div class="modal fade" id="frmPagoAnticipado" tabindex="-1" role="dialog" aria-labelledby="modalAmadeus" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered modal-mlg" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLongTitle">Datos Transacci&oacute;n</h5>
+                                                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">×</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body table-responsive-md">
+
+                                                <div id="formData" class="container " ng-show="verFormPago"  >
+                                                    <legend>Pago Anticipado</legend>
+                                                    <div class="form-group row">
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Nro. Pago Anticipado</label>
+                                                        <div class="col-sm-4">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verFormPago.idPagoAnticipado"></input>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group row">
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Cliente</label>
+                                                        <div class="col-sm-4">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verFormPago.idCliente.name"></input>
+                                                        </div>
+
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Moneda</label>
+                                                        <div class="col-sm-4">
+                                                            <input class="form-control" ng-disabled="true" value="{{verFormPago.moneda|printMoneda}}"></input>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                     <div class="form-group row">
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Monto Anticipado</label>
+                                                        <div class="col-sm-4">
+                                                            <input class="form-control" ng-disabled="true" value="{{verFormPago.montoAnticipado|printNumber}}" ></input>
+                                                        </div>
+
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Monto Disponible</label>
+                                                        <div class="col-sm-4">
+                                                            <input class="form-control" ng-disabled="true" value="{{verFormPago.montoTotalDisponible|printNumber}}"></input>
+                                                        </div>
+
+                                                    </div>
+
+                                                    <div class="form-group row">
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Descripci&oacute;n</label>
+                                                        <div class="col-sm-10">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verFormPago.concepto"></input>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group row">
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Fecha Emision:</label>
+                                                        <div class="col-sm-4">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verFormPago.fechaEmision"></input>
+                                                        </div>
+                                                        
+                                                         <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Usuario </label>
+                                                        <div class="col-sm-4">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verFormPago.idUsuarioCreador"></input>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                
+                                                <div class="container" ng-show="verFormPago.trx !== undefined">
+                                                    <table class="table table-sm">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Id Transacci&oacute;n</th>
+                                                                <th>Tipo</th>
+                                                                <th>Descripci&oacute;n</th>
+                                                                <th>Usuario</th>
+                                                                <th>Moneda</th>
+                                                                <th>Monto</th>
+                                                                <th>Fecha</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>{{verFormPago.trx.idPagoAnticipado}}</td>
+                                                                <td>{{verFormPago.trx.tipo|printTipoPagoAnticipado}}</td>
+                                                                <td>{{verFormPago.trx.descripcion}}</td>
+                                                                <td>{{verFormPago.trx.idUsuarioCreador}}</td>
+                                                                <td>{{verFormPago.trx.moneda|printMoneda}}</td>
+                                                                <td>{{verFormPago.trx.monto|printNumber}}</td>
+                                                                <td>{{verFormPago.trx.fechaInsert}}</td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                    
+                                                </div>
+
+                                            </div>
+                                            <div class="modal-footer">
+                                                <div class="btn-group" role="group"  >
+                                                    <!--<div class="form-group row ng-hide" ng-show="formData.idAerolinea.id">-->
+
+
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <!-- ./Pago Anticipado -->
+                            
+                            <!-- Devolucion -->
+                            <form id="myFormDevolucion" name="myFormDevolucion">
+                                <div class="modal fade" id="frmDevolucion" tabindex="-1" role="dialog" aria-labelledby="modalAmadeus" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered modal-mlg" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLongTitle">Datos Transacci&oacute;n</h5>
+                                                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">×</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body table-responsive-md">
+
+                                                <div id="formData" class="container "  >
+                                                    <legend>Devoluci&oacute;n</legend>
+                                                    <div class="form-group row">
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Nro. Pago Anticipado</label>
+                                                        <div class="col-sm-4">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verFormDevolucion.idPagoAnticipado"></input>
+                                                        </div>
+                                                        
+                                                         <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Nro. Devoluci&oacute;n</label>
+                                                        <div class="col-sm-4">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verFormDevolucion.idDevolucion"></input>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group row">
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Cliente</label>
+                                                        <div class="col-sm-4">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verFormDevolucion.nombreCliente"></input>
+                                                        </div>
+
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Moneda</label>
+                                                        <div class="col-sm-4">
+                                                            <input class="form-control" ng-disabled="true" value="{{verFormDevolucion.moneda|printMoneda}}"></input>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                     <div class="form-group row">
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Monto Devoluci&oacute;n</label>
+                                                        <div class="col-sm-4">
+                                                            <input class="form-control" ng-disabled="true" value="{{verFormDevolucion.monto|printNumber}}" ></input>
+                                                        </div>
+
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Estado</label>
+                                                        <div class="col-sm-4">
+                                                            <input class="form-control" ng-disabled="true" value="{{verFormDevolucion.estado|checkStatus}}"></input>
+                                                        </div>
+
+                                                    </div>
+
+                                                    <div class="form-group row">
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Descripci&oacute;n</label>
+                                                        <div class="col-sm-10">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verFormDevolucion.concepto"></input>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group row">
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Fecha Emision:</label>
+                                                        <div class="col-sm-4">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verFormDevolucion.fechaEmision"></input>
+                                                        </div>
+                                                        
+                                                         <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Usuario </label>
+                                                        <div class="col-sm-4">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verFormDevolucion.idUsuarioCreador"></input>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+                                            <div class="modal-footer">
+                                                <div class="btn-group" role="group"  >
+                                                    <!--<div class="form-group row ng-hide" ng-show="formData.idAerolinea.id">-->
+
+
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <!-- ./Pago Anticipado -->
+                            <!-- ./Devolucion -->
+                            
+                            
+                            <!-- Nota Credito -->
+                            <form id="myFormNotaCredito" name="myFormNotaCredito">
+                                <div class="modal fade" id="frmNotaCredito" tabindex="-1" role="dialog" aria-labelledby="modalAmadeus" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered modal-mlg" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="exampleModalLongTitle">Datos Transacci&oacute;n</h5>
+                                                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">×</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body table-responsive-md">
+
+                                                <div id="formData" class="container "  >
+                                                    <legend>Nota de Cr&eacute;dito</legend>
+                                                    <div class="form-group row">
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Nro. Nota Cre&eacute;dito</label>
+                                                        <div class="col-sm-4">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verFormCredito.idNotaCredito"></input>
+                                                        </div>
+                                                        
+                                                         <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Nro. Transacci&oacute;n</label>
+                                                        <div class="col-sm-4">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verFormCredito.idNotaCreditoTransaccion"></input>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group row">
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Nro Nota D&eacute;bito</label>
+                                                        <div class="col-sm-4">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verFormCredito.idNotaDebito"></input>
+                                                        </div>
+
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Moneda</label>
+                                                        <div class="col-sm-4">
+                                                            <input class="form-control" ng-disabled="true" value="{{verFormCredito.moneda|printMoneda}}"></input>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                     <div class="form-group row">
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Monto </label>
+                                                        <div class="col-sm-4">
+                                                            <input class="form-control" ng-disabled="true" value="{{verFormCredito.monto|printNumber}}" ></input>
+                                                        </div>
+
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Estado</label>
+                                                        <div class="col-sm-4">
+                                                            <input class="form-control" ng-disabled="true" value="{{verFormCredito.estado|checkStatus}}"></input>
+                                                        </div>
+
+                                                    </div>
+
+                                                    <div class="form-group row">
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Descripci&oacute;n</label>
+                                                        <div class="col-sm-10">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verFormCredito.descripcion"></input>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group row">
+                                                        <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Fecha </label>
+                                                        <div class="col-sm-4">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verFormCredito.fechaInsert"></input>
+                                                        </div>
+                                                        
+                                                         <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Usuario </label>
+                                                        <div class="col-sm-4">
+                                                            <input class="form-control" ng-disabled="true" ng-value="verFormCredito.idUsuario"></input>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+
+                                            </div>
+                                            <div class="modal-footer">
+                                                <div class="btn-group" role="group"  >
+                                                    <!--<div class="form-group row ng-hide" ng-show="formData.idAerolinea.id">-->
+
+
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <!-- ./nota Credito -->
+                            
                         </div>
                         <!-- /.page-inner -->
                     </div>

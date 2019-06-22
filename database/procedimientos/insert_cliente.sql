@@ -34,5 +34,5 @@ select
     ,0 calc_automatico_interes
     ,NOMBRE representante
     ,sysdate() fecha_alta
-from clientes;
+from CLIENTES;
 commit ;

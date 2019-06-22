@@ -418,8 +418,25 @@ angular.module('jsComprobantesContador.controllers', []).controller('frmComproba
                         //PAQUETE
                         $scope.loadTransaccionPaquete(row);
                         showModalWindow('#frmTransaccion');
+                    } else if (row.tipo === 'D') {
+                        // DEVOLUCION
+                        $scope.loadDevolucion(row);
+                        showModalWindow('#frmDevolucion');
+                    } else if (row.tipo === 'E') {
+                        // NOTA CREDITO TRANSACCION
+                        $scope.loadNotaCredito(row);
+                        showModalWindow('#frmNotaCredito');
+                    } else if (row.tipo === 'I') {
+                        // INGRESO CAJA TRANSACCION
+                    } else if (row.tipo === 'G') {
+                        // PAGO ANTICIPADO 
+                        $scope.loadPagoAnticipado(row);
+                        showModalWindow('#frmPagoAnticipado');
+                    } else if (row.tipo === 'O') {
+                        // PAGO ANTICIPADO TRANSACcion
+                        $scope.loadPagoAnticipadoTransaccion(row);
+                        showModalWindow('#frmPagoAnticipado');
                     }
-
                 }
 
                 $scope.loadTransaccionBoleto = function (row) {
@@ -473,6 +490,52 @@ angular.module('jsComprobantesContador.controllers', []).controller('frmComproba
                         }
                     }, $scope.errorFunction
                             );
+                }
+
+                $scope.loadPagoAnticipado = function (row) {
+                    return $http({
+                        method: 'POST',
+                        url: `${url.value}pago-anticipado/get`,
+                        data: {token: token.value, content: angular.toJson(row)},
+                        headers: {'Content-Type': 'application/json'}
+                    }).then(function (response) {
+                        if (response.data.code === 201) {
+                            $scope.verFormPago = response.data.content;
+                            //console.log($scope.verForm);
+                        } else {
+                            $scope.showRestfulMessage = response.data.content;
+                            $scope.showRestfulError = true;
+                            return {};
+                        }
+                    }, $scope.errorFunction
+                            );
+                }
+
+                $scope.loadPagoAnticipadoTransaccion = function (row) {
+                    return $http({
+                        method: 'POST',
+                        url: `${url.value}pago-anticipado/get`,
+                        data: {token: token.value, content: angular.toJson(row)},
+                        headers: {'Content-Type': 'application/json'}
+                    }).then(function (response) {
+                        if (response.data.code === 201) {
+                            $scope.verFormPago = response.data.content;
+                            $scope.verFormPago.trx = row.idPagoAnticipadoTransaccion;
+                            console.log($scope.verFormPago);
+                        } else {
+                            $scope.showRestfulMessage = response.data.content;
+                            $scope.showRestfulError = true;
+                            return {};
+                        }
+                    }, $scope.errorFunction
+                            );
+                }
+
+                $scope.loadDevolucion = function (row) {
+                    $scope.verFormDevolucion = row.idDevolucion;
+                }
+                $scope.loadNotaCredito = function (row) {
+                    $scope.verFormCredito = row.idNotaCreditoTransaccion;
                 }
 
                 $scope.existenTransaccionesInvalidas = function () {
@@ -579,7 +642,7 @@ angular.module('jsComprobantesContador.controllers', []).controller('frmComproba
                                 $scope.showRestfulMessage = response.data.content;
                                 $scope.showRestfulError = true;
                             }
-                            
+
 
                         }, $scope.errorFunction);
                     } else {

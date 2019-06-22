@@ -413,7 +413,6 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                 }
 
                 $scope.verTransaccion = function (row) {
-                    console.log(row);
                     if (row.tipo === 'B') {
                         //BOLETO
                         $scope.loadTransaccionBoleto(row);

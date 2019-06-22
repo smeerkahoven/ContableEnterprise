@@ -9,7 +9,7 @@ import javax.persistence.metamodel.CollectionAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2019-06-10T01:04:07")
+@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2019-06-13T17:57:51")
 @StaticMetamodel(PagoAnticipado.class)
 public class PagoAnticipado_ { 
 
