@@ -81,7 +81,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "ComprobanteContable.findByEstado", query = "SELECT c FROM ComprobanteContable c WHERE c.estado=:estado")
     , @NamedQuery(name = "ComprobanteContable.findAllComprobanteByNotaDebito", query = "SELECT c FROM ComprobanteContable c WHERE c.idNotaDebito=:idNotaDebito")
     , @NamedQuery(name = "ComprobanteContable.findAllComprobanteByNotaCredito", query = "SELECT c FROM ComprobanteContable c WHERE c.idNotaCredito=:idNotaCredito")
-    , @NamedQuery(name = "ComprobanteContable.findAllComprobanteByIngresoCaja", query = "SELECT c FROM ComprobanteContable c WHERE c.idIngresoCaja=:idIngresoCaja")
+        , @NamedQuery(name = "ComprobanteContable.findAllComprobanteByIngresoCaja", query = "SELECT c FROM ComprobanteContable c WHERE c.idIngresoCaja=:idIngresoCaja")
     , @NamedQuery(name = "ComprobanteContable.findAllComprobanteByPagoAnticipado", query = "SELECT c FROM ComprobanteContable c WHERE c.idPagoAnticipado=:idPagoAnticipado")
 
 })

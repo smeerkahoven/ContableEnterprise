@@ -100,15 +100,15 @@ list-on-top {
 
 
 .lvl-0 {
-    font-weight: 500;
-    font-size: 18px;
+    font-weight: 400;
+    font-size: 16px;
     background-color: #f5fbfa;
     color:#038d7a;
 }
 
 .lvl-1 {
-    font-weight: 500;
-    font-size: 18px;
+    font-weight: 400;
+    font-size: 16px;
 }
 
 .lvl-2 {
@@ -117,16 +117,16 @@ list-on-top {
 }
 
 .lvl-3 {
-    font-weight: 350;
+    font-weight: 400;
     font-size: 16px;
 }
 
 .lvl-4 {
-    font-weight: 350;
-    font-size: 14px;
+    font-weight: 400;
+    font-size: 16px;
 }
 
 .lvl-5 {
-    font-weight: 300;
-    font-size: 14px;
+    font-weight: 400;
+    font-size: 16px;
 }

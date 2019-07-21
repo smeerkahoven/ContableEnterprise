@@ -334,7 +334,7 @@ public interface ComprobanteRemote extends DaoRemoteFacade {
     public List getComprobantesByNotaDebito(Integer idNota) throws CRUDException;
 
     public List getComprobantesByIngresoCaja(Integer idIngreso) throws CRUDException;
-
+    
     public List getComprobantesByNotaCredito(Integer idNota) throws CRUDException;
 
     public List getComprobantesByPagoAnticipado(Integer idPagoAnticipado) throws CRUDException;

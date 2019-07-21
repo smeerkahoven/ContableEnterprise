@@ -94,7 +94,7 @@ public class MayoresResource extends TemplateResource {
 
             } catch (Exception ex) {
                 response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
-                response.setContent(ex.getCause());
+                response.setContent(ex.getMessage());
                 Logger.getLogger(MayoresResource.class.getName()).log(Level.SEVERE, null, ex);
             }
 

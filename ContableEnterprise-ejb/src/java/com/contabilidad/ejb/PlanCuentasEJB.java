@@ -5,9 +5,11 @@
  */
 package com.contabilidad.ejb;
 
+import com.contabilidad.entities.EstadosResultadosDto;
 import com.contabilidad.entities.PlanCuentas;
 import com.contabilidad.entities.SumasSaldosDto;
 import com.contabilidad.remote.PlanCuentasRemote;
+import com.response.json.contabilidad.EstadosResultadosSearchJson;
 import com.response.json.contabilidad.SumasSaldosSearchJson;
 import com.seguridad.control.FacadeEJB;
 import com.seguridad.control.LoggerContable;
@@ -189,6 +191,41 @@ public class PlanCuentasEJB extends FacadeEJB implements PlanCuentasRemote {
     }
     
     
+        @Override
+    public List<EstadosResultadosDto> generarEstadosDeResultados(EstadosResultadosSearchJson search) throws CRUDException {
+    
+        if (search.getFechaInicio() == null) {
+            throw new CRUDException("Debe ingresar una fecha Inicio.");
+        }
+        
+        if (search.getFechaFin()== null) {
+            throw new CRUDException("Debe ingresar una fecha Fin");
+        }
+        
+        if (search.getMoneda() == null) {
+            throw new CRUDException("Debe ingresar una moneda");
+        }
+        
+        if (search.getIdEmpresa() == null) {
+            throw new CRUDException("Debe ingresar una empresa.");
+        }
+        
+        int year = Calendar.YEAR ;
+        
+        Date startDate = DateContable.toLatinAmericaDateFormat(search.fechaInicio);
+        Date endDate = DateContable.toLatinAmericaDateFormat(search.fechaFin);
+        
+        StoredProcedureQuery stp = em.createNamedStoredProcedureQuery("PlanCuenta.estadoResultado");
+        stp.setParameter("in_start_date", startDate);
+        stp.setParameter("in_end_date", endDate);
+        stp.setParameter("in_moneda", search.moneda);
+        stp.setParameter("in_id_empresa", search.idEmpresa);
+        
+        List l = stp.getResultList();
+        
+        return l ;
+        
+    }
     
     
 

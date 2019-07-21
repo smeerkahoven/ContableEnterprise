@@ -1408,6 +1408,7 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                     $scope.showTableAmadeus = false;
                     $scope.showRestfulError = false;
                     $scope.frmTitle = 'Boletos Automaticos SABRE';
+                    $scope.amadeusGrid = [] ;
                     return $http({
                         method: 'POST',
                         url: `${urlBoletos.value}all/sabre`,
@@ -1433,6 +1434,7 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                     $scope.showTableAmadeus = false;
                     $scope.showRestfulError = false;
                     $scope.frmTitle = 'Boletos Automaticos AMADEUS';
+                    $scope.amadeusGrid = [] ;
                     return $http({
                         method: 'POST',
                         url: `${urlBoletos.value}all/amadeus`,
@@ -1528,8 +1530,10 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                     if ($scope.formData.idCliente === undefined || $scope.formData.idPromotor === undefined)
                         return true;
 
-                    if ($scope.formData.idCliente.id === undefined || $scope.formData.idPromotor.id === undefined)
-                        return true;
+                    if ($scope.formData.hasOwnProperty('idCliente')){
+                        if ($scope.formData.idCliente.id === undefined || $scope.formData.idPromotor.id === undefined)
+                            return true;
+                    }
 
                     if ($scope.formData.fechaEmision === undefined)
                         return true;

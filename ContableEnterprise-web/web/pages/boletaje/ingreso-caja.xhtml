@@ -295,7 +295,6 @@
                                                         </span> 
                                                     </div>
 
-
                                                     <label class="col-form-label col-sm-2 text-right" for="flatpickr-wrap">Creado por</label>
                                                     <div class="col-sm-3 " >
                                                         <input id="txtIdUsuario" name="txtIdUsuario" type="text" class="form-control flatpick-input" data-input="" 
@@ -317,8 +316,15 @@
                                                             Debe seleccionar un valor entre {{formData.factorMin}} y {{formData.factorMax}}.
                                                         </span>
                                                     </div>
-
-
+                                                    
+                                                    <!-- Comprobante -->
+                                                    <label ng-show="showComprobante"  class="col-form-label col-sm-2 text-right" for="flatpickr-wrap">Comprobante de Ingreso</label>
+                                                    <div class="col-sm-3" ng-show="showComprobante" >
+                                                        <input id="txtIdUsuario" name="txtIdComprobante" type="text" 
+                                                               class="form-control flatpick-input" data-input="" 
+                                                               value="{{comprobante.gestion}}-{{comprobante.idNumeroGestion}}"
+                                                               readonly="true"/>
+                                                    </div>
                                                 </div>
                                                 <!-- /Factor USD -->
 

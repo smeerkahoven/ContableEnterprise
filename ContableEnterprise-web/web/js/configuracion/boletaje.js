@@ -117,6 +117,10 @@ angular.module('jsBoletaje.controllers', []).controller('frmBoletaje',
                     }).then(function (response) {
                         if (response.data.code === 201) {
                             $scope.comboEmpresa = response.data.content;
+                            if ($scope.comboEmpresa.length > 0){
+                                $scope.formData.idEmpresa = $scope.comboEmpresa[0].id;
+                                $scope.getData();
+                            }
                             $scope.showTable = true;
                         } else {
                             $scope.showRestfulMessage = response.data.content;

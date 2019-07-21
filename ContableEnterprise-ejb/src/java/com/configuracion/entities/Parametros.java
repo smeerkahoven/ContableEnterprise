@@ -68,6 +68,8 @@ public class Parametros extends Entidad {
     private String idParametro;
     @Column(name = "valor", length = 128)
     private String valor;
+    @Column(name = "descripcion", length =256)
+    private String descripcion ;
 
     public Parametros() {
     }
@@ -97,6 +99,14 @@ public class Parametros extends Entidad {
         this.valor = valor;
     }
 
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 0;

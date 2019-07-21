@@ -75,7 +75,7 @@
                 <!-- .wrapper -->
                 <div class="wrapper">
                     <!-- .page -->
-                    <div class="page" ng-app="jsSumasSaldos" ng-controller="frmSumasSaldos">
+                    <div class="page" ng-app="jsEstadosResultados" ng-controller="frmEstadosResultados">
                         <!-- .page-inner -->
                         <div class="page-inner">
                             <!-- .page-title-bar -->
@@ -84,13 +84,13 @@
                                     <ol class="breadcrumb">
                                         <li class="breadcrumb-item active">
                                             <a href="#">
-                                                <i class="breadcrumb-icon fa fa-angle-left mr-2"></i>#{sumasSaldos.formulario.modulo}
+                                                <i class="breadcrumb-icon fa fa-angle-left mr-2"></i>#{estadosResultados.formulario.modulo}
                                             </a>
                                         </li>
                                     </ol>
                                 </nav>
                                 <div class="d-md-flex">
-                                    <h1 class="page-title mr-sm-auto"> #{sumasSaldos.formulario.nombre}</h1>
+                                    <h1 class="page-title mr-sm-auto"> #{estadosResultados.formulario.nombre}</h1>
                                     <div class="dt-button btn-group">
 
                                         <button type="button" class="btn btn-warning buttons-html5" tabindex="0" ng-click="cancelar()"><span class="fa fa-undo"></span> Cancelar</button>
@@ -126,23 +126,6 @@
                                         <!-- Tabla Contenido -->
                                         <div >
                                             <form>
-
-
-                                                <div class="form-group row">
-                                                    <label for="txtStatus" class="col-form-label col-sm-2 text-right">Moneda </label>
-                                                    <div class="col-sm-3">
-                                                        <select name="txtMoneda" class="form-control" ng-model="search.moneda" required="">
-                                                            <option style="display:none" value="">seleccione una opcion</option>
-                                                            <option value="B" selected="selected">Bolivianos</option>
-                                                            <option value="U">Dolares</option>
-                                                        </select>
-                                                        <span class="alert-danger" ng-show="!search.moneda">Debe seleccionar una opcion.</span>
-                                                    </div>
-
-                                                    
-                                                </div>
-
-
                                                 <div class="form-group row">
                                                     <label class="col-form-label col-sm-2 text-right" for="flatpickr-wrap">Desde:</label>
                                                     <div class="col-sm-3 input-group input-group-alt flatpickr " id="flatpickr9">
@@ -156,8 +139,9 @@
                                                                 <i class="fa fa-times"></i>
                                                             </button>
                                                         </div>
+                                                        <span class="alert-danger" ng-show="!search.fechaInicio">Debe seleccionar una fecha.</span>
                                                     </div>
-                                                    <span class="alert-danger" ng-show="!search.fecha">Debe seleccionar una fecha.</span>
+                                                    
                                                     
                                                     
                                                     <label class="col-form-label col-sm-2 text-right" for="flatpickr-wrap">Hasta:</label>
@@ -172,11 +156,23 @@
                                                                 <i class="fa fa-times"></i>
                                                             </button>
                                                         </div>
+                                                        <span class="alert-danger" ng-show="!search.fechaFin">Debe seleccionar una fecha.</span>
                                                     </div>
-                                                    <span class="alert-danger" ng-show="!search.fecha">Debe seleccionar una fecha.</span>
                                                     
                                                 </div>
-                                                <c:if test="#{sumasSaldos.formulario.buscar == sumasSaldos.formulario.PERMITIR}">
+                                                
+                                                <div class="form-group row">
+                                                    <label for="txtStatus" class="col-form-label col-sm-2 text-right">Moneda </label>
+                                                    <div class="col-sm-3">
+                                                        <select name="txtMoneda" class="form-control" ng-model="search.moneda" required="">
+                                                            <option style="display:none" value="">seleccione una opcion</option>
+                                                            <option value="B" selected="selected">Bolivianos</option>
+                                                            <option value="U">Dolares</option>
+                                                        </select>
+                                                        <span class="alert-danger" ng-show="!search.moneda">Debe seleccionar una opcion.</span>
+                                                    </div>
+                                                </div>
+                                                <c:if test="#{estadosResultados.formulario.buscar == estadosResultados.formulario.PERMITIR}">
                                                     <button type="button" class="btn btn-primary col-sm-2"  ng-click="find()"><span class="fa fa-search"></span> Generar</button>
                                                 </c:if>
                                             </form>
@@ -245,9 +241,9 @@
                                             <fieldset>
                                                 <!-- Contenido Formulario-->
                                                 <div id="formData" class="container animated fadeIn ng-hide"   ng-show="showForm" >
-                                                    <input type="hidden" id="hdUrl" name="hdUrl" value="#{sumasSaldos.formulario.restful}"/>
+                                                    <input type="hidden" id="hdUrl" name="hdUrl" value="#{estadosResultados.formulario.restful}"/>
                                                     <input type="hidden" id="hdToken" name="hdToken" value="#{sessionView.token}"/>
-                                                    <input type="hidden" id="hdFormName" name="hdFormName" value="#{sumasSaldos.formulario.nombre}"/>
+                                                    <input type="hidden" id="hdFormName" name="hdFormName" value="#{estadosResultados.formulario.nombre}"/>
                                                     <input type="hidden" id="hdUrlPlanCuentas" name="hdUrlPlanCuentas" value="#{planCuentas.formulario.restful}"/>
                                                     <input type="hidden" id="hdUrlComprobantes" name="hdUrlComprobantes" value="#{comprobantes.formulario.restful}"/>
                                                     <input type="hidden" id="idEmpresa" name="idEmpresa" value="#{login.empleado.idEmpresa.idEmpresa}"/>
@@ -316,7 +312,7 @@
         <!-- END PLUGINS JS -->
         <!-- BEGIN THEME JS -->
         <script src="../../assets/javascript/main.min.js"></script>
-        <script type="text/javascript" src="../../js/contabilidad/sumas-saldos.js" />
+        <script type="text/javascript" src="../../js/contabilidad/estados-resultados.js" />
         <script type="text/javascript" src="../../js/tableexport.min.js" />
 
         <script type="text/javascript" src="../../assets/javascript/pages/flatpickr-demo.js"></script>

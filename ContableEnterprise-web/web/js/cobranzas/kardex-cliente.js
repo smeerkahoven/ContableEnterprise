@@ -36,7 +36,7 @@ angular.module('jsKardexCliente.controllers', []).controller('frmKardexCliente',
                 $scope.PASAJERO = "P";
 
                 $scope.showForm = false;
-                $scope.showTable = true;
+                $scope.showTable = false;
 
                 $scope.itemsByPage = 99999;
 
@@ -45,7 +45,7 @@ angular.module('jsKardexCliente.controllers', []).controller('frmKardexCliente',
                     $scope.showTable = true;
                     $scope.search = {fechaInicio: firstDay, fechaFin: today};
                     $scope.hideMessagesBox();
-                    $scope.mainGrid = {} ;
+                    $scope.mainGrid = [] ;
                 }
 
                 $scope.find = function () {
@@ -100,6 +100,7 @@ angular.module('jsKardexCliente.controllers', []).controller('frmKardexCliente',
                         if (response.data.code === 201) {
                             $scope.mainGrid = response.data.content;
                             $scope.sumarTotales();
+                            $scope.showTable = true ;
                         } else {
                             $scope.showRestfulMessage = response.data.content;
                             $scope.showRestfulError = true;
@@ -155,7 +156,6 @@ angular.module('jsKardexCliente.controllers', []).controller('frmKardexCliente',
                     $scope.totalSaldoDebitoExt = totalSaldoDebitoExt.toFixed(2);
                     $scope.totalSaldoDepositoNac = totalSaldoDepositoNac.toFixed(2);
                     $scope.totalSaldoDepositoExt = totalSaldoDepositoExt.toFixed(2);
-
                 }
 
                 $scope.getClientes();

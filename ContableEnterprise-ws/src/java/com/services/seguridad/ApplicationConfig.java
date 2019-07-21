@@ -41,9 +41,11 @@ public class ApplicationConfig extends Application {
         resources.add(com.services.cobranzas.KardexClienteResource.class);
         resources.add(com.services.configuracion.BoletajeResource.class);
         resources.add(com.services.configuracion.FactoresResource.class);
+        resources.add(com.services.configuracion.ParametrosResource.class);
         resources.add(com.services.configuracion.UserPersonalResource.class);
         resources.add(com.services.contabilidad.ComprobantesResource.class);
         resources.add(com.services.contabilidad.DevolucionResource.class);
+        resources.add(com.services.contabilidad.EstadosResultadosResource.class);
         resources.add(com.services.contabilidad.IngresoCajaResource.class);
         resources.add(com.services.contabilidad.MayoresResource.class);
         resources.add(com.services.contabilidad.NotasCreditoResource.class);

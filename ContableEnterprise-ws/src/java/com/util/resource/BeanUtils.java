@@ -15,10 +15,12 @@ import com.google.gson.JsonParser;
 import com.response.json.boletaje.IngresoCajaSearchJson;
 import com.response.json.boletaje.NotaCreditoSearchJson;
 import com.response.json.boletaje.PagoAnticipadoSearchJson;
+import com.response.json.configuracion.ParametrosJson;
 import com.response.json.contabilidad.AsientoContableJSON;
 import com.response.json.contabilidad.CargoBoletoJSON;
 import com.response.json.contabilidad.ComprobanteContableJSON;
 import com.response.json.contabilidad.DevolucionJson;
+import com.response.json.contabilidad.EstadosResultadosSearchJson;
 import com.response.json.contabilidad.IngresoCajaJSON;
 import com.response.json.contabilidad.IngresoTransaccionJson;
 import com.response.json.contabilidad.NotaCreditoJson;
@@ -49,8 +51,7 @@ public class BeanUtils {
         return pc;
         
     }*/
-    
-        public static KardexClienteSearchJson convertToKardexClienteSearchJson(final RestRequest request) {
+    public static KardexClienteSearchJson convertToKardexClienteSearchJson(final RestRequest request) {
 
         if (request.getContent() == null) {
             return new KardexClienteSearchJson();
@@ -65,7 +66,7 @@ public class BeanUtils {
         return pc;
 
     }
-    
+
     public static LogSearch convertToLogSearchJson(final RestRequest request) {
 
         if (request.getContent() == null) {
@@ -293,6 +294,20 @@ public class BeanUtils {
         return bjson;
     }
 
+    public static ParametrosJson convertToParametroJson(final RestRequest request) {
+        if (request.getContent() == null) {
+            return new ParametrosJson();
+        }
+
+        ParametrosJson bjson;
+        Gson gson = new GsonBuilder().create();
+        JsonParser parser = new JsonParser();
+        JsonObject object = parser.parse((String) request.getContent()).getAsJsonObject();
+        bjson = gson.fromJson(object.toString(), ParametrosJson.class);
+
+        return bjson;
+    }
+
     public static AsientoContableJSON convertToAsientoContable(final RestRequest request) {
 
         if (request.getContent() == null) {
@@ -322,8 +337,8 @@ public class BeanUtils {
 
         return bjson;
     }
-    
-        public static SumasSaldosSearchJson convertToSumasySaldos(RestRequest request) {
+
+    public static SumasSaldosSearchJson convertToSumasySaldos(RestRequest request) {
 
         if (request.getContent() == null) {
             return new SumasSaldosSearchJson();
@@ -334,6 +349,21 @@ public class BeanUtils {
         JsonParser parser = new JsonParser();
         JsonObject object = parser.parse((String) request.getContent()).getAsJsonObject();
         bjson = gson.fromJson(object.toString(), SumasSaldosSearchJson.class);
+
+        return bjson;
+    }
+
+    public static EstadosResultadosSearchJson convertToEstadosResultadosSearchJson(RestRequest request) {
+
+        if (request.getContent() == null) {
+            return new EstadosResultadosSearchJson();
+        }
+
+        EstadosResultadosSearchJson bjson;
+        Gson gson = new GsonBuilder().create();
+        JsonParser parser = new JsonParser();
+        JsonObject object = parser.parse((String) request.getContent()).getAsJsonObject();
+        bjson = gson.fromJson(object.toString(), EstadosResultadosSearchJson.class);
 
         return bjson;
     }

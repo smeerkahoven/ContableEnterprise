@@ -23,12 +23,10 @@ public interface DaoRemote {
 
     public Entidad get(String q) throws CRUDException;
 
-            
     public List get() throws CRUDException;
 
     public List get(Entidad e, String q) throws CRUDException;
     
-
     public void remove(Entidad e) throws CRUDException;
 
 }

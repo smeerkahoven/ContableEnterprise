@@ -25,13 +25,13 @@ angular.module('jsVentasBoletos.controllers', []).controller('frmVentasBoletos',
 
                 $scope.loading = false;
                 $scope.search = {fechaInicio: firstDay, fechaFin: today};
-                $scope.mainGrid = {};
+                $scope.mainGrid = [];
                 $scope.modalConfirmation = {};
 
                 $scope.showForm = false;
                 $scope.showTable = true;
 
-                $scope.itemsByPage = 99999;
+                $scope.itemsByPage = 15;
 
                 $scope.find = function () {
                     

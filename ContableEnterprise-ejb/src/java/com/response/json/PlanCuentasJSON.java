@@ -31,6 +31,9 @@ public class PlanCuentasJSON {
     private String moneda;
     private Integer ctaItb;
     private String comodin ;
+    
+    private String tipoRegularizacion;
+    private Integer idCuentaRegularizacion ;
 
     //
     /*private int aplica;
@@ -94,6 +97,9 @@ public class PlanCuentasJSON {
         json.setMantenimientoValor(p.getMantenimientoValor());
         json.setCtaItb(p.getCtaItb());
         json.setComodin(p.getComodin());
+        json.setTipoRegularizacion(p.getTipoRegularizacion());
+        json.setIdCuentaRegularizacion(p.getIdCuentaRegularizacion());
+        
         return json;
     }
 
@@ -111,6 +117,8 @@ public class PlanCuentasJSON {
         pc.setCtaItb(json.getCtaItb());
         pc.setAplicaMovimiento(json.getAplicaMovimiento());
         pc.setComodin(json.getComodin());
+        pc.setTipoRegularizacion(json.getTipoRegularizacion());
+        pc.setIdCuentaRegularizacion(json.getIdCuentaRegularizacion());
         
         return pc;
     }
@@ -123,6 +131,24 @@ public class PlanCuentasJSON {
 
         return json;
     }
+
+    public String getTipoRegularizacion() {
+        return tipoRegularizacion;
+    }
+
+    public void setTipoRegularizacion(String tipoRegularizacion) {
+        this.tipoRegularizacion = tipoRegularizacion;
+    }
+
+    public Integer getIdCuentaRegularizacion() {
+        return idCuentaRegularizacion;
+    }
+
+    public void setIdCuentaRegularizacion(Integer idCuentaRegularizacion) {
+        this.idCuentaRegularizacion = idCuentaRegularizacion;
+    }
+    
+    
 
     public String getComodin() {
         return comodin;

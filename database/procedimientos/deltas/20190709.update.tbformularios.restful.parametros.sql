@@ -1,0 +1,1 @@
+update tb_formularios set restful_url = '/ContableEnterprise-ws/ws-api/parametros/' where url_acceso='parametros';

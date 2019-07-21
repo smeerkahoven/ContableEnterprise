@@ -37,6 +37,7 @@ public class Formulario implements Serializable {
     public static final String BOLETOS_OTROS = "boletaje-otros";
     public static final String NOTA_DEBITO = "nota-debito";
     public static final String CONFIGURACION_BOLETOS = "configuracion-boletaje";
+    public static final String PARAMETROS = "parametros";
     public static final String CONFIGURACION_USER = "user-personal";
     public static final String MAYORES = "mayores";
     public static final String SUMAS_SALDOS = "sumas-saldos";

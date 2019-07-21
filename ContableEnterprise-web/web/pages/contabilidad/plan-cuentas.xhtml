@@ -122,7 +122,7 @@
                                                 <div class="row col-8">
                                                     <label for="txtNombre" class=" col-form-label col-sm-3 text-right">Entidad : </label>
                                                     <select class="form-control col-sm-8" ng-model="idEmpresa" 
-                                                            ng-change="getData('all', empresa.idEmpresa)" 
+                                                            ng-change="getData('all')" 
                                                             ng-options="option.id as option.name for option in comboEmpresa">
                                                         <option style="display:none" value="">seleccione un tipo</option>
                                                     </select>
@@ -232,7 +232,6 @@
                                                                    required="required" maxlength="12" 
                                                                    ng-model="frmNewTransaction.nroPlanCuenta"/>
                                                         </div>
-
                                                     </div>
 
                                                     <div class="form-group row">
@@ -325,9 +324,37 @@
                                                         <div class="col-sm-4">
                                                             <select name="txtComodin" class="form-control" ng-model="frmNewTransaction.comodin" >
                                                                 <option style="display:none" value="">seleccione una opcion</option>
-                                                                <option value="S" selected="selected">SI</option>
+                                                                <option value="S">SI</option>
                                                                 <option value="N">NO</option>
                                                             </select>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    
+                                                    <div class="form-group row ng-hide" ng-show="frmNewTransaction.aplicaMovimiento == 'T'" >
+                                                        <label for="txtTipoRegularizacion" class=" col-form-label col-sm-3 text-right" >Tipo Regularizaci&oacute;n</label>
+                                                        <div class="col-sm-4">
+                                                            <select name="txtTipoRegularizacion" class="form-control" ng-model="frmNewTransaction.tipoRegularizacion" >
+                                                                <option style="display:none" value="">seleccione una opcion</option>
+                                                                <option value="D">DEPRECIACION</option>
+                                                                <option value="P">PREVISION</option>
+                                                                <option value="A">AMORTIZACION</option>
+                                                                <option value="N">NINGUNO</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="form-group row ng-hide-animate" ng-show="frmNewTransaction.tipoRegularizacion !== 'N'">
+                                                        <label class=" col-form-label col-sm-3 text-right">Cuenta de Regularizaci&oacute;n </label>
+                                                        <div class="col-sm-4">
+                                                            <input type="text" ng-model="frmNewTransaction.cuentaRegularizacion" placeholder="Cuenta de Regularizacion"
+                                                                   uib-typeahead="cuenta as cuenta.name for cuenta in comboAitb | filter:{name:$viewValue}"
+                                                                   class="form-control" typeahead-show-hint="true" typeahead-min-length="1" 
+                                                                   typeahead-template-url="customTemplate.html" 
+                                                                   />
+                                                            <span class="alert-danger" ng-show="!frmNewTransaction.cuentaRegularizacion.id">
+                                                                Debe ingresar una Cuenta de Regularizaci&oacute;n v&aacute;lida
+                                                            </span>
                                                         </div>
                                                     </div>
                                                     
@@ -360,6 +387,16 @@
                                 <!-- /.card -->
                             </div>
                             <!-- /.page-section -->
+                            
+                            <!-- Modal Background -->
+                            <div class="modal fade bd-example-modal-lg" data-backdrop="static" data-keyboard="false" tabindex="-1" id="frmBackground">
+                                <div class="modal-dialog modal-sm">
+                                    <div class="modal-content" style="width: 48px">
+                                        <span class="fa fa-spinner fa-spin fa-3x"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- /Modal Background -->
 
                             <!-- Modal Eliminar -->
                             <div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true" id="frmConfirmation">
@@ -406,6 +443,8 @@
         <!-- BEGIN PLUGINS JS -->
         <script src="../../assets/vendor/stacked-menu/stacked-menu.min.js"></script>
         <script src="../../assets/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+        <script type="text/javascript" src="../../js/utils.js" />
+
         <!-- END PLUGINS JS -->
         <!-- BEGIN THEME JS -->
         <script src="../../assets/javascript/main.min.js"></script>

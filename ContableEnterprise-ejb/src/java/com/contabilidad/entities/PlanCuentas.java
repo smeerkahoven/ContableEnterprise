@@ -58,6 +58,19 @@ import javax.xml.bind.annotation.XmlRootElement;
             }
     )
 
+
+@NamedStoredProcedureQuery(
+            name = "PlanCuenta.estadoResultado",
+            procedureName = "estadoResultado",
+            resultSetMappings = "EstadosResultadosDto",
+            parameters = {
+                @StoredProcedureParameter(mode = ParameterMode.IN, type = Date.class, name = "in_start_date")
+                ,@StoredProcedureParameter(mode = ParameterMode.IN, type = Date.class, name = "in_end_date")
+                ,@StoredProcedureParameter(mode = ParameterMode.IN, type = String.class, name = "in_moneda")
+                ,@StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_empresa")
+            }
+    )
+
 @SqlResultSetMapping(
         name = "SumasSaldosDto",
         classes = @ConstructorResult(
@@ -75,7 +88,32 @@ import javax.xml.bind.annotation.XmlRootElement;
                 }
         )
 )
+
+@SqlResultSetMapping(
+        name = "EstadosResultadosDto",
+        classes = @ConstructorResult(
+                targetClass = EstadosResultadosDto.class,
+                columns = {
+                    @ColumnResult(name = "v_id_plan_cuenta", type = Integer.class)
+                    ,@ColumnResult(name = "v_cuenta", type = String.class)
+                    ,@ColumnResult(name = "v_nro_plan_cuenta", type = Long.class)
+                    ,@ColumnResult(name = "v_nro_plan_cuenta_padre", type = Long.class)
+                    ,@ColumnResult(name = "v_suma_debe", type = BigDecimal.class)
+                    ,@ColumnResult(name = "v_suma_haber", type = BigDecimal.class)
+                    ,@ColumnResult(name = "v_saldo_debe", type = BigDecimal.class)
+                    ,@ColumnResult(name = "v_saldo_haber", type = BigDecimal.class)
+                    ,@ColumnResult(name = "v_nivel", type = Integer.class)
+                }
+        )
+)
 public class PlanCuentas extends Entidad {
+    
+    class Regularizacion {
+        public static final String DEPRECIACION = "D";
+        public static final String PREVISION = "P";
+        public static final String AMORTIZACION ="A" ;
+        public static final String NINGUNO ="A" ;
+    }
 
     private static final long serialVersionUID = 1L;
     @Column(name = "id_empresa", updatable = false)
@@ -119,12 +157,36 @@ public class PlanCuentas extends Entidad {
     
     @Column(name = "comodin")
     private String comodin;
+    
+    @Column(name="tipo_regularizacion")
+    private String tipoRegularizacion;
+    
+    @Column(name="id_cuenta_regularizacion")
+    private Integer idCuentaRegularizacion ;
 
     @Transient
     private String ctaItbNombre;
 
     @Transient
     private String idPlanCuentaPadreNombre;
+
+    public String getTipoRegularizacion() {
+        return tipoRegularizacion;
+    }
+
+    public void setTipoRegularizacion(String tipoRegularizacion) {
+        this.tipoRegularizacion = tipoRegularizacion;
+    }
+
+    public Integer getIdCuentaRegularizacion() {
+        return idCuentaRegularizacion;
+    }
+
+    public void setIdCuentaRegularizacion(Integer idCuentaRegularizacion) {
+        this.idCuentaRegularizacion = idCuentaRegularizacion;
+    }
+    
+    
     
     public PlanCuentas(Integer idPlanCuentas) {
         this.idPlanCuentas = idPlanCuentas;

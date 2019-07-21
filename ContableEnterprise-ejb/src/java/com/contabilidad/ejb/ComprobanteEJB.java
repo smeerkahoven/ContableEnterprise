@@ -616,6 +616,7 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
         a.setIdLibro(c);
         a.setGestion(c.getGestion());
         a.setIdAsiento(insert(a));
+        a.setEstado(c.getEstado());
 
         return a;
 
@@ -2091,7 +2092,7 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
 
         return l;
     }
-
+    
     @Override
     public void anularComprobanteContable(IngresoCaja ing, String usuario) throws CRUDException {
         Query q = em.createNamedQuery("ComprobanteContable.findAllComprobanteByIngresoCaja");

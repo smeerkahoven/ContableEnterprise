@@ -19,10 +19,19 @@ import javax.ejb.Stateless;
  */
 @Stateless
 public class ParametrosEJB extends FacadeEJB implements ParametrosRemote {
-
-    @Override
+    
+    public ParametrosEJB(){
+        this.findAll = "Parametros.findAll";
+    }
+    
+     @Override
     public void update(Entidad e) throws CRUDException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Parametros fromDb = em.find(Parametros.class, ((Parametros)e).getIdParametro() );
+        if (fromDb != null){
+            fromDb.setDescripcion( ((Parametros)e).getDescripcion() );
+            fromDb.setValor(((Parametros)e).getValor());
+            em.merge(e);
+        }
     }
 
     @Override
@@ -48,11 +57,6 @@ public class ParametrosEJB extends FacadeEJB implements ParametrosRemote {
 
     @Override
     public void remove(Entidad e) throws CRUDException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    @Override
-    public List get() throws CRUDException {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

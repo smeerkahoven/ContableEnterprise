@@ -32,7 +32,7 @@ angular.module('jsPlanCuentas.controllers', []).controller('frmPlanCuentas', ['$
         $scope.frmNewTransaction = {};
         $scope.frmDelTransaction = {};
         $scope.frmPlanCuentas = {};
-        $scope.mainGrid = {};
+        $scope.mainGrid = [];
         $scope.comboAitb = {};
         $scope.comboEmpresa = [];
 
@@ -40,15 +40,20 @@ angular.module('jsPlanCuentas.controllers', []).controller('frmPlanCuentas', ['$
         $scope.showTable = false;
         $scope.showBtnNuevo = true;
 
+        // regularizacion
+        $scope.NINGUNO = 'N';
+        $scope.DEPRECIACION = 'D';
+        $scope.AMORTIZACION = 'A';
+        $scope.PREVISION = 'P';
+
         $scope.itemsByPage = 15;
 
-        $scope.getData = function (method, value) {
-            //return;
+        $scope.getData = function (method) {
+            showBackground();
             $scope.loading = true;
-            //console.log(formName);
             return $http({
                 method: 'POST',
-                url: url.value + method + "/" + $scope.idEmpresa,
+                url: `${url.value}${method}/${$scope.idEmpresa}`,
                 data: {token: token.value, content: ''},
                 headers: {'Content-Type': 'application/json'}
             }).then(function (response) {
@@ -72,9 +77,7 @@ angular.module('jsPlanCuentas.controllers', []).controller('frmPlanCuentas', ['$
         }
 
         $scope.getDataAitb = function (method) {
-            //return;
             $scope.loading = true;
-            //console.log(formName);
             return $http({
                 method: 'POST',
                 url: url.value + method + "/" + $scope.idEmpresa,
@@ -82,7 +85,6 @@ angular.module('jsPlanCuentas.controllers', []).controller('frmPlanCuentas', ['$
                 headers: {'Content-Type': 'application/json'}
             }).then(function (response) {
                 if (response.data.code === 201) {
-
                     $scope.comboAitb = response.data.content;
                     $scope.loading = false;
                 } else {
@@ -101,6 +103,18 @@ angular.module('jsPlanCuentas.controllers', []).controller('frmPlanCuentas', ['$
                 return;
             }
             $scope.frmNewTransaction.ctaItb = $scope.frmNewTransaction.itb.id;
+
+            if ($scope.frmNewTransaction.tipoRegularizacion !== $scope.NINGUNO) {
+                if ($scope.frmNewTransaction.hasOwnProperty('cuentaRegularizacion')) {
+                    if ($scope.frmNewTransaction.cuentaRegularizacion !== undefined) {
+                        $scope.frmNewTransaction.idCuentaRegularizacion = $scope.frmNewTransaction.cuentaRegularizacion.id;
+                    }
+                }else {
+                    $scope.showAlert('Advertencia','Debe ingresar una cuenta de Regularizacion');
+                }
+            }
+
+
             $scope.loading = true;
             $http({
                 method: 'POST',
@@ -136,6 +150,9 @@ angular.module('jsPlanCuentas.controllers', []).controller('frmPlanCuentas', ['$
             $scope.loading = true;
 
             $scope.frmNewTransaction.ctaItb = $scope.frmNewTransaction.itb.id;
+            if ($scope.frmNewTransaction.tipoRegularizacion!== $scope.NINGUNO){
+                $scope.frmNewTransaction.idCuentaRegularizacion = $scope.frmNewTransaction.cuentaRegularizacion.id ;
+            }
             $http({
                 method: 'POST',
                 url: url.value + 'update',
@@ -159,12 +176,10 @@ angular.module('jsPlanCuentas.controllers', []).controller('frmPlanCuentas', ['$
                 $scope.loading = false;
                 $scope.showRestfulMessage = error.statusText;
                 $scope.showRestfulError = true;
-                //$scope.showForm = true;
             });
         };
 
         $scope.delete = function () {
-
             $scope.loading = true;
             $http({
                 method: 'POST',
@@ -199,7 +214,7 @@ angular.module('jsPlanCuentas.controllers', []).controller('frmPlanCuentas', ['$
 
             $http({
                 method: 'POST',
-                url: url.value + 'get',
+                url: `${url.value}get`,
                 data: {token: token.value, formName: $scope.formName, content: angular.toJson(data)},
                 headers: {'Content-Type': 'application/json'}
             }).then(function (response) {
@@ -274,7 +289,8 @@ angular.module('jsPlanCuentas.controllers', []).controller('frmPlanCuentas', ['$
             $scope.frmNewTransaction.moneda = 'B';
             $scope.frmNewTransaction.mantenimientoValor = 'MON';
             $scope.frmNewTransaction.itb = '';
-            $scope.frmNewTransaction.comodin = 'N' ;
+            $scope.frmNewTransaction.comodin = 'N';
+            $scope.frmNewTransaction.tipoRegularizacion = $scope.NINGUNO ;
 
             if (item.nivel < 4) {
                 $scope.frmNewTransaction.aplicaMovimiento = 'M';
@@ -300,6 +316,7 @@ angular.module('jsPlanCuentas.controllers', []).controller('frmPlanCuentas', ['$
             $scope.showRestfulError = false;
 
             $scope.showBtnNuevoForm = false;
+            $scope.frmNewTransaction.comodin = item.comodin;
             $scope.frmNewTransaction.idEmpresa = item.idEmpresa;
             $scope.frmNewTransaction.idPlanCuentas = item.idPlanCuentas;
             $scope.frmNewTransaction.nroPlanCuenta = item.nroPlanCuenta;
@@ -310,9 +327,11 @@ angular.module('jsPlanCuentas.controllers', []).controller('frmPlanCuentas', ['$
             $scope.frmNewTransaction.marco = item.marco;
             $scope.frmNewTransaction.marcoNombre = item.marcoNombre;
             $scope.frmNewTransaction.itb = $scope.findCta(item.ctaItb, $scope.comboAitb);
-            $scope.frmNewTransaction.ctaItb = ($scope.frmNewTransaction.itb != undefined ? $scope.frmNewTransaction.itb.id : null);
+            $scope.frmNewTransaction.ctaItb = (item.itb !== undefined ? item.itb.id : null);
             $scope.frmNewTransaction.aplicaMovimiento = item.aplicaMovimiento;
             $scope.frmNewTransaction.aplicaMovimientoNombre = item.aplicaMovimientoNombre;
+            $scope.frmNewTransaction.tipoRegularizacion = item.tipoRegularizacion ;
+            $scope.frmNewTransaction.cuentaRegularizacion = $scope.findCta(item.idCuentaRegularizacion, $scope.comboAitb);
 
             if (item.nivel < 4) {
                 $scope.frmNewTransaction.moneda = null;
@@ -338,7 +357,7 @@ angular.module('jsPlanCuentas.controllers', []).controller('frmPlanCuentas', ['$
                 }
             }
         }
-        
+
 
         $scope.getLastNroPlanCuentas = function (item) {
             if (item.children != undefined && item.children.length > 0) {
@@ -367,6 +386,10 @@ angular.module('jsPlanCuentas.controllers', []).controller('frmPlanCuentas', ['$
             }).then(function (response) {
                 if (response.data.code === 201) {
                     $scope.comboEmpresa = response.data.content;
+                    if ($scope.comboEmpresa.length > 0) {
+                        $scope.idEmpresa = $scope.comboEmpresa[0].id;
+                        $scope.getData('all', $scope.idEmpresa);
+                    }
                     $scope.showTable = true;
                 } else {
                     $scope.showRestfulMessage = response.data.content;

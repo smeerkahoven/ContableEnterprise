@@ -12,7 +12,6 @@
             <redirect />
         </navigation-case>
     </navigation-rule>
-    
                     
     <navigation-rule>
         <from-view-id>pages/*</from-view-id>
@@ -131,8 +130,7 @@
             <redirect />
         </navigation-case>
     </navigation-rule>
-
-        
+<!-- ./AGENCIA-->        
     <navigation-rule>
         <from-view-id>pages/*</from-view-id>
         <navigation-case>
@@ -180,8 +178,6 @@
         </navigation-case>
     </navigation-rule>
     
-  
-    
     <navigation-rule>
         <from-view-id>pages/*</from-view-id>
         <navigation-case>
@@ -190,7 +186,6 @@
             <redirect />
         </navigation-case>
     </navigation-rule>
-    
     <!-- cobranzas -->
     <navigation-rule>
         <from-view-id>pages/*</from-view-id>
@@ -215,7 +210,7 @@
     <navigation-rule>
         <from-view-id>pages/*</from-view-id>
         <navigation-case>
-            <from-outcome>configuracion-parametros</from-outcome>
+            <from-outcome>parametros</from-outcome>
             <to-view-id>pages/configuracion/parametros.xhtml?faces-redirect=true</to-view-id>
             <redirect />
         </navigation-case>
@@ -303,6 +298,15 @@
             <redirect />
         </navigation-case>
     </navigation-rule>
+    
+    <navigation-rule>
+        <from-view-id>pages/*</from-view-id>
+        <navigation-case>
+            <from-outcome>estados-resultados</from-outcome>
+            <to-view-id>pages/contabilidad/estados-resultados.xhtml?faces-redirect=true</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
 
     <!-- reports -->
 
@@ -379,6 +383,4 @@
             <redirect />
         </navigation-case>
     </navigation-rule>
-    
-    
 </faces-config>

@@ -25,9 +25,9 @@ var tableToExcel = (function () {
     }
 })();
 
-var app = angular.module("jsSumasSaldos", ['jsSumasSaldos.controllers', 'smart-table', 'ui.bootstrap']);
+var app = angular.module("jsEstadosResultados", ['jsEstadosResultados.controllers', 'smart-table', 'ui.bootstrap']);
 
-angular.module('jsSumasSaldos.controllers', []).controller('frmSumasSaldos',
+angular.module('jsEstadosResultados.controllers', []).controller('frmEstadosResultados',
         ['$scope', '$http', '$uibModal', '$window', function ($scope, $http, $window) {
 
                 var token = document.getElementsByName("hdToken")[0];
@@ -72,7 +72,7 @@ angular.module('jsSumasSaldos.controllers', []).controller('frmSumasSaldos',
 
                     return $http({
                         method: 'POST',
-                        url: `${url.value}`,
+                        url: `${url.value}generar`,
                         data: {token: token.value, content: angular.toJson($scope.search)},
                         headers: {'Content-Type': 'application/json'}
                     }).then(function (response) {
@@ -97,14 +97,14 @@ angular.module('jsSumasSaldos.controllers', []).controller('frmSumasSaldos',
                         $scope.showMonedaRequired = false;
                     }
 
-                    if ($scope.search.fecha === undefined) {
+                    if ($scope.search.fechaInicio === undefined) {
                         $scope.showFechaInicioRequired = true;
                         return true;
                     } else {
                         $scope.showFechaInicioRequired = false;
                     }
-
-                    if ($scope.search.nivel === undefined) {
+                    
+                    if ($scope.search.fechaFin === undefined) {
                         $scope.showFechaFinRequired = true;
                         return true;
                     } else {
@@ -130,7 +130,7 @@ angular.module('jsSumasSaldos.controllers', []).controller('frmSumasSaldos',
 
                 
                 $scope.imprimirComprobante = function (data) {
-                    window.open(`../../ComprobanteReporteServlet?idLibro=${data.idLibro}`, '_target');
+                    window.open(`../../EstadosResultadosServlet?idLibro=${data.idLibro}`, '_target');
                 }
 
                 $scope.cancelar = function () {

@@ -103,28 +103,10 @@ angular.module('jsIngresoCaja.controllers', []).controller('frmIngresoCaja',
                 $scope.showTable = true;
                 $scope.itemsByPage = 15;
                 $scope.search = {fechaInicio: firstDay, fechaFin: today};
+                $scope.showComprobante=false ;
 
 
                 $scope.find = function () {
-
-                    /*if ($scope.search === undefined) {
-                     $scope.showClienteRequieredSearch = true;
-                     showAlert(ERROR_RESPUESTA_TITLE, "Ingreso un cliente Valido para la busqueda");
-                     return;
-                     }
-                     
-                     if ($scope.search.idCliente === undefined) {
-                     showAlert(ERROR_RESPUESTA_TITLE, "Ingreso un cliente Valido para la busqueda");
-                     $scope.showClienteRequieredSearch = true;
-                     return;
-                     }
-                     
-                     if ($scope.search.idCliente.id === undefined) {
-                     showAlert(ERROR_RESPUESTA_TITLE, "Ingreso un cliente Valido para la busqueda");
-                     $scope.showClienteRequieredSearch = true;
-                     return;
-                     }*/
-
 
                     $scope.showClienteRequieredSearch = false;
                     $scope.loading = true;
@@ -154,6 +136,22 @@ angular.module('jsIngresoCaja.controllers', []).controller('frmIngresoCaja',
                     $scope.showBtnEditar = true;
                     $scope.hideMessagesBox();
                     $scope.formData = item;
+                    
+                    $http({
+                        method : 'GET', 
+                        url: `${url.value}comprobante/${item.idIngresoCaja}`,
+                        headers: {'Content-Type':'application/json'}
+                    }).then(
+                            function (response){
+                                if (response.data.code === 201){
+                                    $scope.showComprobante = true ;
+                                    $scope.comprobante = response.data.content ;
+                                }
+                            },
+                            $scope.errorFunction
+                            );
+                    
+                    
                     return $http({
                         method: 'POST',
                         url: `${url.value}all/transaccion`,
@@ -367,7 +365,6 @@ angular.module('jsIngresoCaja.controllers', []).controller('frmIngresoCaja',
 
 
                 $scope.hasFormaDePagos = function () {
-                    console.log(`formaPago:${$scope.formData}`);
                     switch ($scope.formData.formaPago) {
                         case $scope.EFECTIVO:
                             break;
@@ -464,7 +461,6 @@ angular.module('jsIngresoCaja.controllers', []).controller('frmIngresoCaja',
 
                     $scope.loading = true;
                     $scope.formData.idEmpresa = $scope.formData.idEmpresa.id;
-                    console.log($scope.formData);
                     $http({
                         method: 'POST',
                         url: url.value + 'save',
@@ -568,6 +564,8 @@ angular.module('jsIngresoCaja.controllers', []).controller('frmIngresoCaja',
                 }
 
                 $scope.nuevo = function () {
+                    $scope.showComprobante = false ;
+                    $scope.comprobante = {} ;
                     $scope.showLoading = true;
                     $scope.showRestfulSuccess = false;
                     $scope.showRestfulError = false;

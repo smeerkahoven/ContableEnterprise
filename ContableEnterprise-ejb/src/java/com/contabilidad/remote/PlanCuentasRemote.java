@@ -5,8 +5,10 @@
  */
 package com.contabilidad.remote;
 
+import com.contabilidad.entities.EstadosResultadosDto;
 import com.contabilidad.entities.PlanCuentas;
 import com.contabilidad.entities.SumasSaldosDto;
+import com.response.json.contabilidad.EstadosResultadosSearchJson;
 import com.response.json.contabilidad.SumasSaldosSearchJson;
 import com.seguridad.control.entities.Empresa;
 import com.seguridad.control.entities.Entidad;
@@ -45,6 +47,8 @@ public interface PlanCuentasRemote extends DaoRemoteFacade {
     public void update(Entidad e) throws CRUDException;
     
     public List<SumasSaldosDto> generarSumasYSaldos(SumasSaldosSearchJson search) throws CRUDException;
+    
+    public List<EstadosResultadosDto> generarEstadosDeResultados(EstadosResultadosSearchJson search) throws CRUDException  ;
 
     
 }

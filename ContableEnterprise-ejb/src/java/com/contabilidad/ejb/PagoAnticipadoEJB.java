@@ -33,7 +33,6 @@ import com.seguridad.queries.Queries;
 import com.seguridad.utils.DateContable;
 import com.seguridad.utils.Estado;
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;

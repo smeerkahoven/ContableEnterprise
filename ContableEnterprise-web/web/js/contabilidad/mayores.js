@@ -72,6 +72,7 @@ angular.module('jsMayores.controllers', []).controller('frmMayores',
                         data: {token: token.value, content: angular.toJson($scope.search)},
                         headers: {'Content-Type': 'application/json'}
                     }).then(function (response) {
+                        console.log(response);
                         $scope.loading = false;
                         if (response.data.code === 201) {
                             $scope.formData = response.data.content;
@@ -120,6 +121,7 @@ angular.module('jsMayores.controllers', []).controller('frmMayores',
                 }
                 
                  $scope.errorFunction = function (error) {
+                     console.log(error);
                     $scope.loading = false;
                     $scope.showRestfulError = true;
                     $scope.showRestfulMessage = error.statusText;
@@ -160,7 +162,6 @@ angular.module('jsMayores.controllers', []).controller('frmMayores',
                     $scope.loading = true;
                     return $http.get(`${urlComprobantes.value}${row.idLibro}`).then(function (response) {
                         if (response.data.code === 201) {
-                            console.log(response.data.content);
                             $scope.comprobante = response.data.content;
                             showModalWindow('#frmComprobante');
                             //$scope.sumarTotales();

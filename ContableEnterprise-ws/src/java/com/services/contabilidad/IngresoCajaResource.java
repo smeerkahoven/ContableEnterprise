@@ -5,16 +5,17 @@
  */
 package com.services.contabilidad;
 
+import com.contabilidad.entities.ComprobanteContable;
 import com.contabilidad.entities.IngresoCaja;
 import com.contabilidad.entities.IngresoTransaccion;
-import com.contabilidad.entities.NotaDebito;
 import com.contabilidad.entities.NotaDebitoTransaccion;
+import com.contabilidad.remote.ComprobanteRemote;
 import com.contabilidad.remote.IngresoCajaRemote;
 import com.contabilidad.remote.NotaDebitoRemote;
 import com.response.json.boletaje.IngresoCajaSearchJson;
+import com.response.json.contabilidad.ComprobanteContableJSON;
 import com.response.json.contabilidad.IngresoCajaJSON;
 import com.response.json.contabilidad.IngresoTransaccionJson;
-import com.response.json.contabilidad.NotaDebitoJSON;
 import com.response.json.contabilidad.NotaDebitoTransaccionJson;
 import com.seguridad.control.entities.Log;
 import com.seguridad.control.exception.CRUDException;
@@ -52,6 +53,9 @@ public class IngresoCajaResource extends TemplateResource {
 
     @EJB
     private IngresoCajaRemote ejbIngresoCaja;
+    
+    @EJB
+    private ComprobanteRemote ejbComprobante ;
 
     @EJB
     private NotaDebitoRemote ejbNotaDebito;
@@ -129,6 +133,35 @@ public class IngresoCajaResource extends TemplateResource {
         }
 
         return response;
+    }
+    
+    @GET
+    @Path("comprobante/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public RestResponse getComprobante(final RestRequest request, @PathParam("id")Integer id) {
+        RestResponse response = new RestResponse();
+        try {
+            List fromDb = ejbComprobante.getComprobantesByIngresoCaja(id);
+           
+            
+            if (fromDb.isEmpty()){
+                 response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+                response.setContent(null);
+                return response;
+            }else {
+                 response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
+                ComprobanteContable content= (ComprobanteContable) fromDb.get(0);
+                ComprobanteContableJSON json = ComprobanteContableJSON.toComprobanteContableJSON(content);
+                response.setContent(json);
+            }
+            
+        } catch (CRUDException ex) {
+            response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+            response.setContent(ex.getMessage());
+            Logger.getLogger(IngresoCajaResource.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return response ;
     }
 
     @POST

@@ -29,7 +29,7 @@ public class BoletajeManagedBean extends ViewManagedBean {
      * Creates a new instance of BoletajeManagedBean
      */
     public BoletajeManagedBean() {
-        this.formName = "configuracion-boletaje";
+        this.formName = Formulario.CONFIGURACION_BOLETOS;
     }
 
     @PostConstruct

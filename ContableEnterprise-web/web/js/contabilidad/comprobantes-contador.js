@@ -521,7 +521,6 @@ angular.module('jsComprobantesContador.controllers', []).controller('frmComproba
                         if (response.data.code === 201) {
                             $scope.verFormPago = response.data.content;
                             $scope.verFormPago.trx = row.idPagoAnticipadoTransaccion;
-                            console.log($scope.verFormPago);
                         } else {
                             $scope.showRestfulMessage = response.data.content;
                             $scope.showRestfulError = true;
@@ -1229,6 +1228,18 @@ app.filter('printTipo', function ($filter) {
     }
 });
 
+
+app.filter('printTipoPagoAnticipado', function ($filter) {
+    return function (input, predicate) {
+        switch (input) {
+            case 'AC':
+                return 'ACREDITACION';
+            case 'DE' :
+                return 'DEVOLUCION';
+        }
+    }
+});
+
 app.filter('printMoneda', function ($filter) {
     return function (input, predicate) {
         switch (input) {
@@ -1295,8 +1306,6 @@ app.filter('printDiferencias', function ($filter) {
 
 app.filter('printNumber', function ($filter) {
     return function (input, predicate) {
-        console.log('printNumber');
-        console.log(input);
         if (input === undefined || input === null || input === 0 || input === 0.00)
             return '-';
         else {

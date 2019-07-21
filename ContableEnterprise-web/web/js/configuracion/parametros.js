@@ -13,11 +13,9 @@ function isNumberKey(evt)
 }
 ;
 
+var app = angular.module("jsParametros", ['jsParametros.controllers', 'smart-table', 'ui.bootstrap']);
 
-
-var app = angular.module("jsPromotores", ['jsPromotores.controllers', 'smart-table', 'ui.bootstrap']);
-
-angular.module('jsPromotores.controllers', []).controller('frmPromotores',
+angular.module('jsParametros.controllers', []).controller('frmParametros',
         ['$scope', '$http', '$uibModal', '$window', function ($scope, $http, $window) {
 
                 var token = document.getElementsByName("hdToken")[0];
@@ -33,7 +31,7 @@ angular.module('jsPromotores.controllers', []).controller('frmPromotores',
 
                 $scope.loading = false;
                 $scope.formData = {};
-                $scope.mainGrid = {};
+                $scope.mainGrid = [];
                 $scope.modalConfirmation = {};
 
                 $scope.showForm = false;
@@ -41,37 +39,21 @@ angular.module('jsPromotores.controllers', []).controller('frmPromotores',
 
                 $scope.itemsByPage = 15;
 
-                $scope.getData = function (urls, method) {
+                $scope.getData = function () {
                     $scope.loading = true;
                     return $http({
                         method: 'POST',
-                        url: urls + method,
+                        url: `${url.value}all`,
                         data: {token: token.value, content: ''},
                         headers: {'Content-Type': 'application/json'}
                     }).then(function (response) {
                         if (response.data.code === 201) {
-                            if (urls === url.value) {
-                                $scope.mainGrid = response.data.content;
-                                $scope.showTable = true;
-                            }
-
-                            if (urls === urlEmpresa.value) {
-                                $scope.comboSucursales = response.data.content;
-                            }
-
-                            if (method === "all-combo/B") {
-                                $scope.gridNacionales = response.data.content;
-                            }
-
-                            if (method === "all-combo/D") {
-                                $scope.gridInternacionales = response.data.content;
-                            }
-
+                            $scope.mainGrid = response.data.content;
+                            $scope.showTable = true;
                             $scope.loading = false;
                         } else {
                             $scope.showRestfulMessage = response.data.content;
                             $scope.showRestfulError = true;
-                            return {};
                         }
                     }, function (error) {
                         $scope.showRestfulMessage = error;
@@ -79,22 +61,12 @@ angular.module('jsPromotores.controllers', []).controller('frmPromotores',
                     });
                 }
 
-                $scope.save = function () {
-                    $scope.clickNuevo = false;
-                    if (!$scope.myForm.$valid) {
-                        //$scope.showAlert('Error de Verificacion', 'Verifique los mensajes de los valores requeridos')
-                        return;
-                    }
-                    if ($scope.formHasError()) {
-                        $scope.showAlert('Error de Verificacion', 'Verifique los mensajes de los valores requeridos')
-                        return;
-                    }
+                $scope.save = function (row) {
                     $scope.loading = true;
-                    $scope.formData.idEmpresa = $scope.formData.idEmpresa.id;
                     $http({
                         method: 'POST',
-                        url: url.value + 'save',
-                        data: {token: token.value, content: angular.toJson($scope.formData)},
+                        url: `${url.value}save`,
+                        data: {token: token.value, content: angular.toJson(row)},
                         headers: {'Content-Type': 'application/json'}
                     }).then(function (response) {
                         if (response.data.code === 201) {
@@ -102,110 +74,34 @@ angular.module('jsPromotores.controllers', []).controller('frmPromotores',
                             $scope.showRestfulSuccess = true;
                             $scope.showForm = false;
                             $scope.showTable = true;
-                            $scope.getData(url.value, 'all');
+
                         } else {
                             $scope.showRestfulMessage = response.data.content;
                             $scope.showRestfulError = true;
                             $scope.showForm = false;
                         }
                         $scope.loading = false;
-
+                        goScrollToSuccess();
                     }, function (error) {
                         $scope.loading = false;
                         $scope.showRestfulMessage = error.statusText;
                         $scope.showRestfulError = true;
                         $scope.showForm = false;
+                        goScrollToSuccess();
                     });
                 };
-
-                $scope.formHasError = function () {
-                    if ($scope.formData.idEmpresa == undefined) {
-                        return true;
-                    }
-                    return (!$scope.formData.idEmpresa.id);
-                }
-
-                $scope.update = function () {
-                    if (!$scope.myForm.$valid) {
-                        $scope.showAlert('Error de Verificacion', 'Verifique los mensajes de los valores requeridos')
-                        return;
-                    }
-                    if ($scope.formHasError()) {
-                        $scope.showAlert('Error de Verificacion', 'Verifique los mensajes de los valores requeridos')
-                        return;
-                    }
-
-                    $scope.loading = true;
-
-                    $scope.formData.idEmpresa = $scope.formData.idEmpresa.id;
-
-                    $http({
-                        method: 'POST',
-                        url: url.value + 'update',
-                        data: {token: token.value, content: angular.toJson($scope.formData)},
-                        headers: {'Content-Type': 'application/json'}
-                    }).then(function (response) {
-                        $scope.loading = false;
-                        if (response.data.code === 201) {
-                            $scope.showRestfulMessage = response.data.content;
-                            $scope.showRestfulSuccess = true;
-                            $scope.showForm = false;
-                            $scope.showTable = true;
-                            //$scope.getData();
-                        } else {
-                            $scope.showRestfulMessage = response.data.content;
-                            $scope.showRestfulError = true;
-                            $scope.showForm = false;
-                        }
-
-                    }, function (error) {
-                        $scope.loading = false;
-                        $scope.showRestfulMessage = error;
-                        $scope.showRestfulError = true;
-                        //$scope.showForm = true;
-                    });
-                };
-
-                $scope.delete = function () {
-
-                    if ($scope.modalConfirmation.method === 'delete-comision') {
-                        $scope.deleteComision();
-                    }
-                };
-
 
                 $scope.hideMessagesBox = function () {
                     $scope.showRestfulSuccess = false;
                     $scope.showRestfulError = false;
                 }
 
-                $scope.edit = function (item) {
-                    $scope.showTable = false;
-                    $scope.showForm = true;
-                    $scope.showBtnNuevo = false;
-                    $scope.showBtnEditar = true;
-                    $scope.hideMessagesBox();
-                    $scope.formData = item;
-
-                    $scope.formData.idEmpresa = $scope.findCta(item.idEmpresa, $scope.comboSucursales);
-                }
-
                 $scope.nuevo = function () {
-                    $scope.showForm = true;
-                    $scope.showBtnNuevo = true;
-                    $scope.showBtnEditar = false;
-                    $scope.showTable = false;
-                    $scope.showRestfulSuccess = false;
-                    $scope.showRestfulError = false;
-                    $scope.formData = {};
-                    $scope.clickNuevo = true;
-                    $scope.myForm.$setPristine();
-                    myForm.reset();
+
                 }
 
                 $scope.cancelar = function () {
-                    $scope.showForm = false;
-                    $scope.showTable = true;
+
                     $scope.hideMessagesBox();
                 }
 
@@ -232,6 +128,8 @@ angular.module('jsPromotores.controllers', []).controller('frmPromotores',
                     }
                 }
 
+                $scope.getData();
+
                 // los watch sirven para verificar si el valor cambio
                 $scope.$watch('formData.ctaDevolucionMonExt.id', function (now, old) {
                     if (now == undefined) {
@@ -249,12 +147,7 @@ app.filter('myStrictFilter', function ($filter) {
     }
 });
 
-app.controller('frView', ['$scope', '$http', 'record', function ($scope, $http, record) {
-        function init() {
-            $scope.sucursal = record.content;
-        }
-        init();
-    }]);
+
 
 app.directive('pageSelect', function () {
     return {
