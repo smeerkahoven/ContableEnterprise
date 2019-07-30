@@ -129,8 +129,9 @@ angular.module('jsEstadosResultados.controllers', []).controller('frmEstadosResu
                 }
 
                 
-                $scope.imprimirComprobante = function (data) {
-                    window.open(`../../EstadosResultadosServlet?idLibro=${data.idLibro}`, '_target');
+                $scope.imprimir = function () {
+                    var data = $scope.search;
+                    window.open(`../../EstadoResultadoServlet?pi=${data.fechaInicio}&pf=${data.fechaFin}&mn=${data.moneda}`, '_target');
                 }
 
                 $scope.cancelar = function () {

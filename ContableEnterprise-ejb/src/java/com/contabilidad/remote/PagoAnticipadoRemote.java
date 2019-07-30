@@ -52,6 +52,7 @@ public interface PagoAnticipadoRemote extends DaoRemoteFacade {
     public void anularPagoAnticipado(Integer idPagoAnticipado, String usuario) throws CRUDException;
 
     public void anularTransaccion(PagoAnticipadoTransaccion trx, String usuario) throws CRUDException;
+    
     public void anularTransaccion(NotaDebitoTransaccion trx, String usuario) throws CRUDException;
 
     public void guardar(PagoAnticipado idPagoAnticipado) throws CRUDException;

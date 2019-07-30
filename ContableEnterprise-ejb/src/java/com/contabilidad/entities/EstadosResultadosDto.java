@@ -23,12 +23,17 @@ public class EstadosResultadosDto implements Serializable {
     private BigDecimal saldoDebe;
     private BigDecimal saldoHaber;
     private Integer nivel;
+    private String saldo;
+    private BigDecimal saldoMonto;
 
     public EstadosResultadosDto() {
     }
     
 
-    public EstadosResultadosDto(Integer idPlanCuenta, String cuenta, Long nroPlanCuenta, Long nroPlanCuentaPadre, BigDecimal sumaDebe, BigDecimal sumaHaber, BigDecimal saldoDebe, BigDecimal saldoHaber, Integer nivel) {
+    public EstadosResultadosDto(Integer idPlanCuenta, String cuenta, Long nroPlanCuenta, 
+            Long nroPlanCuentaPadre, BigDecimal sumaDebe, BigDecimal sumaHaber,
+            BigDecimal saldoDebe, BigDecimal saldoHaber, Integer nivel, String saldo,
+            BigDecimal saldoMonto) {
         this.idPlanCuenta = idPlanCuenta;
         this.cuenta = cuenta;
         this.nroPlanCuenta = nroPlanCuenta;
@@ -38,8 +43,25 @@ public class EstadosResultadosDto implements Serializable {
         this.saldoDebe = saldoDebe;
         this.saldoHaber = saldoHaber;
         this.nivel = nivel;
+        this.saldo = saldo ;
+        this.saldoMonto = saldoMonto ;
     }
 
+    public BigDecimal getSaldoMonto() {
+        return saldoMonto;
+    }
+
+    public void setSaldoMonto(BigDecimal saldoMonto) {
+        this.saldoMonto = saldoMonto;
+    }
+
+    public String getSaldo() {
+        return saldo;
+    }
+
+    public void setSaldo(String saldo) {
+        this.saldo = saldo;
+    }
     
     public Integer getIdPlanCuenta() {
         return idPlanCuenta;

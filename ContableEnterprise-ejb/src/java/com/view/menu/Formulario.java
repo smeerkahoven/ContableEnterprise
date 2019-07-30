@@ -42,6 +42,7 @@ public class Formulario implements Serializable {
     public static final String MAYORES = "mayores";
     public static final String SUMAS_SALDOS = "sumas-saldos";
     public static final String ESTADOS_RESULTADOS = "estados-resultados";
+    public static final String BALANCE_GENERAL = "balance-general";
     public static final String SISTEMA = "sistema";
     public static final String LOGS = "logs";
     //---REPORTES
@@ -51,6 +52,7 @@ public class Formulario implements Serializable {
     public static final String REPORTES_COMISION_CLIENTE = "reportes-comision-cliente";
     //cobranzas
     public static final String KARDEX_CLIENTE = "kardex-cliente";
+    public static final String HISTORICO_CLIENTE = "historico-cliente";
 
     public int PERMITIR = 1;
     public int DENEGAR = 0;

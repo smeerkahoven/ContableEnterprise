@@ -103,6 +103,8 @@ import javax.xml.bind.annotation.XmlRootElement;
                     ,@ColumnResult(name = "v_saldo_debe", type = BigDecimal.class)
                     ,@ColumnResult(name = "v_saldo_haber", type = BigDecimal.class)
                     ,@ColumnResult(name = "v_nivel", type = Integer.class)
+                    ,@ColumnResult(name = "v_saldo", type = String.class)
+                    ,@ColumnResult(name = "v_saldo_monto", type = BigDecimal.class)
                 }
         )
 )

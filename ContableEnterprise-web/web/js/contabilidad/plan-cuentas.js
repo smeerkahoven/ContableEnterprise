@@ -70,6 +70,7 @@ angular.module('jsPlanCuentas.controllers', []).controller('frmPlanCuentas', ['$
                     $scope.showRestfulError = true;
                     return {};
                 }
+                hideModalWindow('frmBackground');
             }, function (error) {
                 $scope.showRestfulMessage = error;
                 $scope.showRestfulError = true;
@@ -291,6 +292,7 @@ angular.module('jsPlanCuentas.controllers', []).controller('frmPlanCuentas', ['$
             $scope.frmNewTransaction.itb = '';
             $scope.frmNewTransaction.comodin = 'N';
             $scope.frmNewTransaction.tipoRegularizacion = $scope.NINGUNO ;
+            $scope.frmNewTransaction.cuentaRegularizacion = '' ;
 
             if (item.nivel < 4) {
                 $scope.frmNewTransaction.aplicaMovimiento = 'M';

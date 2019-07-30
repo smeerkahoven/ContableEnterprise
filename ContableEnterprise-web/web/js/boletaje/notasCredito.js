@@ -188,6 +188,7 @@ angular.module('jsNotasCredito.controllers', []).controller('frmNotasCredito',
                                     $scope.showAlert(ERROR_RESPUESTA_TITLE, response.data.content);
                                 }
                                 hideBackground();
+                                hideModalWindow('frmBackground');
                                 goScrollTo('#restful-success');
                             },
                             $scope.errorFunction);
@@ -213,6 +214,7 @@ angular.module('jsNotasCredito.controllers', []).controller('frmNotasCredito',
                                     showAlert(ERROR_RESPUESTA_TITLE, response.data.content);
                                 }
                                 hideBackground();
+                                hideModalWindow('frmBackground');
                                 goScrollTo('#restful-success');
                             },
                             $scope.errorFunction);

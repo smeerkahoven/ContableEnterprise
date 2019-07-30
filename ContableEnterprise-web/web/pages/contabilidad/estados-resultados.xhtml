@@ -45,7 +45,6 @@
         <script type="text/javascript" src="../../js/date.format.js" />
         <script type="text/javascript" src="../../js/moment.js" />
 
-
         <!--CORRIGE ng-show -->
         <link rel="stylesheet" href="../../css/main.css"  />
     </head>
@@ -181,7 +180,7 @@
                                                        class="table table-hover" >
                                                     <thead>
                                                         <tr>
-                                                            <td colspan="8"><strong>Estado de Resultados:</strong>
+                                                            <td colspan="4"><strong>Estado de Resultados:</strong>
                                                                 <strong>&nbsp;&nbsp;Desde:</strong>
                                                                 {{search.fechaInicio}}
                                                                 <strong>&nbsp;&nbsp;Hasta:</strong>
@@ -190,30 +189,19 @@
                                                                 {{search.moneda|printMoneda}}
                                                             </td>
                                                         </tr>
-                                                        <tr>
-                                                            <th colspan="2"></th>
-                                                            <th colspan="2">Sumas</th>
-                                                            <th colspan="2">Saldos</th>
-                                                        </tr>
+                                                        
                                                         <tr>
                                                             <th class="align-middle">Nro. Cuenta</th>
                                                             <th class="align-middle">Cuenta</th>
-                                                            <th align="right" class="align-middle">Debe</th>
-                                                            <th align="right" class="align-middle">Haber</th>
-                                                            <th align="right" class="align-middle">Debe</th>
-                                                            <th align="right" class="align-middle">Haber</th>
+                                                            <th align="right" class="align-middle">Monto</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         <tr st-select-row="row" st-select-mode="multiple" 
                                                             ng-repeat="row in display_records" class="lvl-{{row.nivel}}">
-
                                                             <td>{{row.nroPlanCuenta}} </td>
                                                             <td>{{row.cuenta}} </td>
-                                                            <td align="right">{{row.sumaDebe|printNumero}}  </td>
-                                                            <td align="right">{{row.sumaHaber|printNumero}} </td>
-                                                            <td align="right">{{row.saldoDebe|printNumero}} </td>
-                                                            <td align="right">{{row.saldoHaber|printNumero}} </td>
+                                                            <td align="right">{{row.saldo}} </td>
                                                         </tr>
                                                     </tbody>
                                                     <!--<tfoot>
@@ -225,12 +213,18 @@
                                                     </tfoot> -->
                                                 </table>
                                                 <div class="modal-footer">
-                                                    <c:if test="#{comprobantes.formulario.crear== comprobantes.formulario.PERMITIR}">
+                                                    <c:if test="#{estadosResultados.formulario.crear== estadosResultados.formulario.PERMITIR}">
                                                         <div class="row" >
                                                             <label for="txtNombre" class="col-form-label col-sm-3 text-right" ></label>
                                                             <button id="btn-export-excel"  class="btn btn-success" onclick="tableToExcel('dataTable', 'W3C Example Table')"  value="Exportar Excel" title="Exportar a Excel"  ><span class="fa fa-file-excel"></span> Exportar</button>
                                                         </div>
                                                     </c:if>
+                                                    
+                                                    <c:if test="#{estadosResultados.formulario.acceder== estadosResultados.formulario.PERMITIR}">
+                                                            <div class="row" >
+                                                                <label for="txtNombre" class="col-form-label col-sm-3 text-right" ></label>
+                                                                <button type="button" class="btn btn-dark"  ng-click="imprimir()" value="Imprimir" > <span class="fa fa-print"></span> Imprimir</button></div>
+                                                        </c:if>
                                                 </div>
                                             </div>
                                         </div>
@@ -290,7 +284,7 @@
                 <!-- /.wrapper -->
                 <!-- Logout Form -->
                 <ui:include src="../index/logout.xhtml" />
-                <!-- /Logout Form -->
+                <!-- /Logout Form -->fechaInicio
             </main>
             <!-- /.app-main -->
         </div>

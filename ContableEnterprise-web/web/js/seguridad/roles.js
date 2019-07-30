@@ -92,7 +92,7 @@ angular.module('jsRoles.controllers', []).controller('frmRoles', ['$scope', '$ht
                 data: {token: token.value, content: data},
                 headers: {'Content-Type': 'application/json'}
             }).then(function (response) {
-
+                hideModalWindow('frmBackground');
                 if (response.data.code === 201) {
                     $scope.showRestfulMessage = response.data.content;
                     $scope.showRestfulSuccess = true;
@@ -128,6 +128,7 @@ angular.module('jsRoles.controllers', []).controller('frmRoles', ['$scope', '$ht
                 data: {token: token.value, content: $scope.formDataEdit},
                 headers: {'Content-Type': 'application/json'}
             }).then(function (response) {
+                hideModalWindow('frmBackground');
                 $scope.loading = false;
                 if (response.data.code === 201) {
                     $scope.showRestfulMessage = response.data.content;

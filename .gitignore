@@ -10,3 +10,8 @@
 /ContableEnterprise-ejb/build
 /ContableEnterprise-ws/nbproject/private/
 /ContableEnterprise-ejb/nbproject/private/
+/ContableEnterprise-ejb/dist/
+/ContableEnterprise/build/
+/ContableEnterprise-ws/build/
+/ContableEnterprise/dist/
+/ContableEnterprise-ws/dist/

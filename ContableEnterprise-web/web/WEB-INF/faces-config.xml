@@ -196,6 +196,15 @@
         </navigation-case>
     </navigation-rule>
     
+    <navigation-rule>
+        <from-view-id>pages/*</from-view-id>
+        <navigation-case>
+            <from-outcome>historico-cliente</from-outcome>
+            <to-view-id>/pages/cobranzas/historico-cliente.xhtml?faces-redirect=true</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
     <!-- configuracion -->
     
     <navigation-rule>

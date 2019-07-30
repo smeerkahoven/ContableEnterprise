@@ -45,7 +45,7 @@ id_modulo
 (select id_modulo from tb_modulos where nombre = 'Contabilidad')
 , 'Comprobantes-Contador'
 , 'comprobantes-contador'
-, 'http://172.31.32.112:8080/ContableEnterprise-ws/ws-api/comprobantes-contador/'
+, '/ContableEnterprise-ws/ws-api/comprobantes-contador/'
 , 'ACTIVO'
 , curdate()
 , '/pages/contabilidad/comprobantes-contador.xhtml'
@@ -76,7 +76,7 @@ id_modulo
 (select id_modulo from tb_modulos where nombre = 'Contabilidad')
 , 'Sumas y Saldos'
 , 'sumas-saldos'
-, 'http://172.31.32.112:8080/ContableEnterprise-ws/ws-api/sumas-saldos/'
+, '/ContableEnterprise-ws/ws-api/sumas-saldos/'
 , 'ACTIVO'
 , curdate()
 , '/pages/contabilidad/sumas-saldos.xhtml'
@@ -108,7 +108,7 @@ id_modulo
 (select id_modulo from tb_modulos where nombre = 'Contabilidad')
 , 'Estados de Resultados'
 , 'estados-resultados'
-, 'http://172.31.32.112:8080/ContableEnterprise-ws/ws-api/estados-resultados/'
+, '/ContableEnterprise-ws/ws-api/estados-resultados/'
 , 'ACTIVO'
 , curdate()
 , '/pages/contabilidad/estados-resultados.xhtml'
@@ -124,5 +124,33 @@ values (
 ;
 
 
+-- formulario Estados de REsultadso y Saldos
+insert into tb_formularios (
+id_modulo
+, nombre
+, url_acceso
+, restful_url
+, status
+, fecha_alta
+, full_path
+)values 
+(
+(select id_modulo from tb_modulos where nombre = 'Contabilidad')
+, 'Balance General'
+, 'balance-general'
+, '/ContableEnterprise-ws/ws-api/balance-general/'
+, 'ACTIVO'
+, curdate()
+, '/pages/contabilidad/balance-general.xhtml'
+)
+;
+-- PErmisos ADMIN
+insert into tb_rol_formulario (id_rol,id_formularios, crear, actualizar, eliminar, acceder, buscar, editar, anular, ver)
+values (
+ (select id_rol from tb_rol where nombre = 'ADMINISTRADOR')
+, (select id_formulario from tb_formularios where url_acceso = 'balance-general')
+, 1,1,1,1,1,1,1,1
+)
+;
 
 

@@ -17,7 +17,7 @@ function showBackground() {
 
     setTimeout(function () {
         $('#frmBackground').modal('hide');
-    }, 1000);
+    }, 2000);
 }
 
 function hideBackground() {

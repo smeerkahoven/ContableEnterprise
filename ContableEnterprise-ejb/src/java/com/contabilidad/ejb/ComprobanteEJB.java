@@ -2255,7 +2255,16 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
                 ac.setIdUsuarioAnular(usuario);
                 em.merge(ac);
             }
+            
+             ComprobanteContable c = em.find(ComprobanteContable.class, ac.getIdLibro().getIdLibro());
+             if (c != null) {
+                 c.setEstado(ComprobanteContable.ANULADO);
+                 ac.setIdUsuarioAnular(usuario);
+                 em.merge(tr);
+             }
         }
+        
+       
 
         //actualizamos los montos de los Comprobantes Contables
         actualizarMontosAnularAsientosContables(tr.getIdPagoAnticipado());

@@ -1,3 +1,5 @@
+insert into cnt_cliente_grupo values ('2','JUDICIAL'),('3','EMPRESA'),('1','PERSONA');
+
 insert into cnt_cliente(
 id_cliente_grupo
 ,id_promotor
@@ -16,9 +18,9 @@ id_cliente_grupo
 ,fecha_alta
 )
 select 
-	case TIPO when 'J' then 47
-			  when 'E' then 48
-              else 1
+	case TIPO when 'J' then 1
+			  when 'E' then 2
+              else 3
 	end id_cliente_grupo
     ,null id_promotor
     ,null id_cliente_corporativo

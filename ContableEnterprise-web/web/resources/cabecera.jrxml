@@ -1,33 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="cabecera_empresa" language="groovy" pageWidth="612" pageHeight="792" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="e7d65f31-51ac-413c-a8a9-63c3c8f66715">
-	<property name="ireport.zoom" value="3.452271214393106"/>
+	<property name="ireport.zoom" value="1.2100000000000017"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="EMPRESA_ID" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA[1]]></defaultValueExpression>
 	</parameter>
 	<parameter name="PATH_SUBREPORTE" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["cobranza/carta_cobranza.jasper"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["contabilidad/estado_resultado.jasper"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="ID_LIBRO" class="java.lang.Integer" isForPrompting="false">
 		<defaultValueExpression><![CDATA[22]]></defaultValueExpression>
 	</parameter>
 	<parameter name="ID_NOTA_DEBITO" class="java.lang.Integer" isForPrompting="false"/>
 	<parameter name="ID_INGRESO" class="java.lang.Integer" isForPrompting="false"/>
-	<parameter name="FECHA_INICIO" class="java.lang.String" isForPrompting="false"/>
-	<parameter name="FECHA_FIN" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="FECHA_INICIO" class="java.lang.String"/>
+	<parameter name="FECHA_FIN" class="java.lang.String"/>
 	<parameter name="ID_CREDITO" class="java.lang.String" isForPrompting="false"/>
-	<parameter name="ID_PAGO" class="java.lang.Integer">
+	<parameter name="ID_PAGO" class="java.lang.Integer" isForPrompting="false">
 		<defaultValueExpression><![CDATA[40000001]]></defaultValueExpression>
 	</parameter>
 	<parameter name="ID_TRANSACCION" class="java.lang.Integer" isForPrompting="false">
 		<defaultValueExpression><![CDATA[50000001]]></defaultValueExpression>
 	</parameter>
-	<parameter name="ID_DEVOLUCION" class="java.lang.Integer"/>
-	<parameter name="ID_AEROLINEA" class="java.lang.Integer"/>
-	<parameter name="ID_CLIENTE" class="java.lang.Integer"/>
-	<parameter name="ID_USER" class="java.lang.String"/>
-	<parameter name="PATH_FIRMA" class="java.lang.String"/>
+	<parameter name="ID_DEVOLUCION" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="ID_AEROLINEA" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="ID_CLIENTE" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="ID_USER" class="java.lang.String" isForPrompting="false"/>
+	<parameter name="PATH_FIRMA" class="java.lang.String" isForPrompting="false"/>
 	<queryString>
 		<![CDATA[SELECT
      tb_empresa.`id_empresa` AS tb_empresa_id_empresa,

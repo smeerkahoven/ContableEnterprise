@@ -1222,7 +1222,7 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                                 } else {
                                     showAlert(ERROR_RESPUESTA_TITLE, response.data.content);
                                 }
-                                hideBackground();
+                                hideModalWindow('frmBackground');
                                 goScrollTo('#restful-success');
                             },
                             $scope.errorFunction);
@@ -1247,6 +1247,7 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                                     $scope.showAlert(ERROR_RESPUESTA_TITLE, response.data.content);
                                 }
                                 hideBackground();
+                                hideModalWindow('frmBackground');
                                 goScrollTo('#restful-success');
                             },
                             $scope.errorFunction);
@@ -1272,6 +1273,7 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                                     $scope.showAlert(ERROR_RESPUESTA_TITLE, response.data.content);
                                 }
                                 hideBackground();
+                                hideModalWindow('frmBackground');
                             },
                             $scope.errorFunction);
 
@@ -1699,7 +1701,7 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                         }
                         $scope.loading = false;
                         hideModalWindow('#frmCargos');
-                        hideModalWindow('#frmBackGround');
+                        hideModalWindow('frmBackground');
                         hideBackground();
                     }, $scope.errorFunction);
                 };

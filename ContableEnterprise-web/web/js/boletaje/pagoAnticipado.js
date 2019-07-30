@@ -233,6 +233,7 @@ angular.module('jsPagoAnticipado.controllers', []).controller('frmPagoAnticipado
                         data: {token: token.value, content: angular.toJson($scope.trx)},
                         headers: {'Content-type': 'application/json'}
                     }).then(function (response) {
+                        hideModalWindow('frmBackground');
                         if (response.data.code === 201) {
                             var pago = response.data.entidad;
                             var trx = response.data.content;
@@ -904,6 +905,7 @@ angular.module('jsPagoAnticipado.controllers', []).controller('frmPagoAnticipado
                                     showAlert(ERROR_RESPUESTA_TITLE, response.data.content);
                                 }
                                 hideBackground();
+                                hideModalWindow('frmBackground');
                                 goScrollTo('#restful-success');
                             },
                             $scope.errorFunction);
@@ -929,6 +931,7 @@ angular.module('jsPagoAnticipado.controllers', []).controller('frmPagoAnticipado
                                     $scope.showAlert(ERROR_RESPUESTA_TITLE, response.data.content);
                                 }
                                 hideBackground();
+                                hideModalWindow('frmBackground');
                                 goScrollTo('#restful-success');
                             },
                             $scope.errorFunction);
