@@ -5,10 +5,13 @@
  */
 package com.reports.servlet;
 
+import com.configuracion.entities.Parametros;
+import com.configuracion.remote.ParametrosRemote;
 import com.reportes.entities.Reportes;
 import com.reportes.remote.ReportAgenciaRemote;
 import com.reports.ReportViewer;
 import com.reports.agencia.ReporteAgenciaMBean;
+import com.seguridad.control.exception.CRUDException;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -59,6 +62,10 @@ public class PagoAnticipadoTodoReportServlet extends HttpServlet {
 
     protected String idFormulario;
 
+    @EJB
+    protected ParametrosRemote ejbParametros;
+    private Parametros printPaper;
+
     /**
      *
      * @param reportPath
@@ -106,8 +113,26 @@ public class PagoAnticipadoTodoReportServlet extends HttpServlet {
 
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+
         try {
-            String jrxmlFileName = "/resources/cabecera_240.jasper";
+            this.printPaper = (Parametros) ejbParametros.get(new Parametros(Parametros.PRINT_PAPER));
+        } catch (CRUDException ex) {
+            Logger.getLogger(NotaDebitoReportServlet.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        String cabecera = "";
+        String contenido = "";
+        if (this.printPaper.getValor().equals(Parametros.CARTA)) {
+            contenido = "_lt";
+            cabecera = "_lt";
+        } else if (this.printPaper.getValor().equals(Parametros.CONTINUO)) {
+            cabecera = "_240";
+        }
+
+        try {
+            String jrxmlFileName = "/resources/cabecera" + cabecera + ".jasper";
+            String subreporte = "contabilidad/pago_anticipado_todo" + contenido + ".jasper";
+            
             File archivoReporte = new File(request.getSession().getServletContext().getRealPath(jrxmlFileName));
             Integer idNotaDebito = Integer.parseInt(request.getParameter("idPago"));
             HashMap hm = null;
@@ -120,7 +145,7 @@ public class PagoAnticipadoTodoReportServlet extends HttpServlet {
             try {
 
                 hm.put("ID_PAGO", idNotaDebito);
-                hm.put("PATH_SUBREPORTE", "contabilidad/pago_anticipado_todo.jasper");
+                hm.put("PATH_SUBREPORTE", subreporte);
 
                 bytes = JasperRunManager.runReportToPdf(archivoReporte.getPath(), hm, datasource.getConnection());
 

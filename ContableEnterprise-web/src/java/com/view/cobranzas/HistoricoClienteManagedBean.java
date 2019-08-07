@@ -22,7 +22,7 @@ public class HistoricoClienteManagedBean extends ViewManagedBean {
      * Creates a new instance of KardexClienteManagedBean
      */
     public HistoricoClienteManagedBean() {
-        this.formName = Formulario.KARDEX_CLIENTE;
+        this.formName = Formulario.HISTORICO_CLIENTE;
     }
     
 }

@@ -107,7 +107,7 @@ public class SabreFileEJB extends FacadeEJB implements SabreFileRemote {
         while (i < line.length - 1) {
             //El primer parametro debe SER AADDMMMHH MM M01
             //                             AA10MAY0452M0117
-            
+
             String lineColumn = line[i];
 
             //FIN DE ARCHIVO
@@ -424,7 +424,7 @@ public class SabreFileEJB extends FacadeEJB implements SabreFileRemote {
                 }
 
                 b.setTotalBoleto(totalBoleto);
-                
+
                 //if (b.getMontoComision() == null) {
                 if (b.getTipoCupon().equals(Boleto.Cupon.INTERNACIONAL)) {
                     if (aerolinea.getComisionPromIntTipo() != null) {
@@ -442,17 +442,22 @@ public class SabreFileEJB extends FacadeEJB implements SabreFileRemote {
                             b.setComision(aerolinea.getComisionPromInt());
                             b.setMontoComision(new BigDecimal(total).setScale(Contabilidad.VALOR_DECIMAL_2, RoundingMode.HALF_DOWN));
 
-                            if (aerolinea.getIvaItComision()) {
-                                if (porcentajeComision != null) {
-                                    Double porcentaje = Double.parseDouble(porcentajeComision.getValor());
-                                    Double totalComisonIva = ((total * porcentaje) / 100) + total;
-                                    if (aerolinea.getRoundComisionUsd()) {
-                                        b.setMontoComision(new BigDecimal(Math.round( totalComisonIva)).setScale(Contabilidad.VALOR_DECIMAL_0, RoundingMode.HALF_DOWN));
-                                    } else {
-                                        b.setMontoComision(new BigDecimal(totalComisonIva).setScale(Contabilidad.VALOR_DECIMAL_2, RoundingMode.HALF_DOWN));
-                                    }
-                                }
+                            if (aerolinea.getIvaItComision() != null) {
+                                if (aerolinea.getIvaItComision()) {
+                                    if (porcentajeComision != null) {
+                                        Double porcentaje = Double.parseDouble(porcentajeComision.getValor());
+                                        Double totalComisonIva = ((total * porcentaje) / 100) + total;
 
+                                        if (aerolinea.getRoundComisionUsd() != null) {
+                                            if (aerolinea.getRoundComisionUsd()) {
+                                                b.setMontoComision(new BigDecimal(Math.round(totalComisonIva)).setScale(Contabilidad.VALOR_DECIMAL_0, RoundingMode.HALF_DOWN));
+                                            } else {
+                                                b.setMontoComision(new BigDecimal(totalComisonIva).setScale(Contabilidad.VALOR_DECIMAL_2, RoundingMode.HALF_DOWN));
+                                            }
+                                        }
+                                    }
+
+                                }
                             }
                         }
                     }
@@ -472,31 +477,35 @@ public class SabreFileEJB extends FacadeEJB implements SabreFileRemote {
                             b.setComision(aerolinea.getComisionPromNac());
                             b.setMontoComision(new BigDecimal(total).setScale(Contabilidad.VALOR_DECIMAL_2, RoundingMode.HALF_DOWN));
 
-                            if (aerolinea.getIvaItComision()) {
-                                if (porcentajeComision != null) {
-                                    Double porcentaje = Double.parseDouble(porcentajeComision.getValor());
-                                    Double totalComisonIva = ((total * porcentaje) / 100) + total;
-                                    if (aerolinea.getRoundComisionBob()) {
-                                        b.setMontoComision(new BigDecimal(Math.round( totalComisonIva)).setScale(Contabilidad.VALOR_DECIMAL_0, RoundingMode.HALF_DOWN));
-                                    } else {
-                                        b.setMontoComision(new BigDecimal(totalComisonIva).setScale(Contabilidad.VALOR_DECIMAL_2, RoundingMode.HALF_DOWN));
+                            if (aerolinea.getIvaItComision() != null) {
+                                if (aerolinea.getIvaItComision()) {
+                                    if (porcentajeComision != null) {
+                                        Double porcentaje = Double.parseDouble(porcentajeComision.getValor());
+                                        Double totalComisonIva = ((total * porcentaje) / 100) + total;
+                                        if (aerolinea.getRoundComisionBob() != null) {
+                                            if (aerolinea.getRoundComisionBob()) {
+                                                b.setMontoComision(new BigDecimal(Math.round(totalComisonIva)).setScale(Contabilidad.VALOR_DECIMAL_0, RoundingMode.HALF_DOWN));
+                                            } else {
+                                                b.setMontoComision(new BigDecimal(totalComisonIva).setScale(Contabilidad.VALOR_DECIMAL_2, RoundingMode.HALF_DOWN));
+                                            }
+                                        }
                                     }
-                                }
 
+                                }
                             }
                         }
                     }
                 }
                 //}
                 try {
-                    if (b.getMontoComision() != null){
-                        Double comision = b.getMontoComision().doubleValue() ;
-                        Double totalBoleto = b.getTotalBoleto().doubleValue() ;
-                        
-                        Double montoPagarLinea = totalBoleto - comision ;
+                    if (b.getMontoComision() != null) {
+                        Double comision = b.getMontoComision().doubleValue();
+                        Double totalBoleto = b.getTotalBoleto().doubleValue();
+
+                        Double montoPagarLinea = totalBoleto - comision;
                         b.setMontoPagarLineaAerea(new BigDecimal(montoPagarLinea));
                     }
-                    
+
                     b.setTotalMontoCobrar(totalBoleto);
                     //creamos el boleto
                     insert(b);

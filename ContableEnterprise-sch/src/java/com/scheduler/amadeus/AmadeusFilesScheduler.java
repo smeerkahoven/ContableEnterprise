@@ -48,7 +48,7 @@ public class AmadeusFilesScheduler {
     private ParametrosRemote ejbParametros;
 
     // MODIFICAR ESTO EN PRODUCCION
-    @Schedule(dayOfWeek = "Mon-Fri", month = "*", hour = "7-18", dayOfMonth = "*", year = "*", minute = "5", second = "0")
+    @Schedule(dayOfWeek = "Mon-Fri", month = "*", hour = "7-18", dayOfMonth = "*", year = "*", minute = "*/5", second = "0")
     //@Schedule(dayOfWeek = "*", month = "*", hour = "*", dayOfMonth = "*", year = "*", minute = "*/1", second = "0")
     public void dailyFileChecker() {
         Parametros p;

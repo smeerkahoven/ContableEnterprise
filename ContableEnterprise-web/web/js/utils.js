@@ -81,6 +81,12 @@ function  showInfo(title, message) {
 }
 ;
 
+
+function showManualUsuario(){
+    window.open(`https://docs.google.com/document/d/1cvzb_q4KdbhIK8xtbBrXb-I_Ed987aj9oZpnBpcwgT8/edit?usp=sharing`, '_blank');
+}
+
+
 function isNumberKey(evt)
 {
     var charCode = (evt.which) ? evt.which : event.keyCode

@@ -51,7 +51,7 @@ public class SabreFileScheduler {
     @EJB
     private ParametrosRemote ejbParametros;
 
-    @Schedule(dayOfWeek = "Mon-Fri", month = "*", hour = "7-18", dayOfMonth = "*", year = "*", minute = "5", second = "0")
+    @Schedule(dayOfWeek = "Mon-Fri", month = "*", hour = "7-19", dayOfMonth = "*", year = "*", minute = "*/5", second = "0")
     //@Schedule(dayOfWeek = "*", month = "*", hour = "*", minute = "*/1", second = "0")
     public void dailyFileChecker() {
         Parametros p;

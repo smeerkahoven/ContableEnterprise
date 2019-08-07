@@ -346,8 +346,8 @@ public class AmadeusFileEJB extends FacadeEJB implements AmadeusFileRemote {
                 }
 
                 i++;
-            }else {
-                i = line.length + 1  ;
+            } else {
+                i = line.length + 1;
             }
 
             //System.out.println(archivoBoleto.getNombreArchivo() + ":" + line[i]);
@@ -506,17 +506,21 @@ public class AmadeusFileEJB extends FacadeEJB implements AmadeusFileRemote {
                             b.setComision(aerolinea.getComisionPromInt());
                             b.setMontoComision(new BigDecimal(total).setScale(Contabilidad.VALOR_DECIMAL_2, RoundingMode.HALF_DOWN));
 
-                            if (aerolinea.getIvaItComision()) {
-                                if (porcentajeComision != null) {
-                                    Double porcentaje = Double.parseDouble(porcentajeComision.getValor());
-                                    Double totalComisonIva = (total * porcentaje) / 100 + total;
-                                    if (aerolinea.getRoundComisionUsd()) {
-                                        b.setMontoComision(new BigDecimal(Math.round(totalComisonIva)).setScale(Contabilidad.VALOR_DECIMAL_0, RoundingMode.HALF_DOWN));
-                                    } else {
-                                        b.setMontoComision(new BigDecimal(totalComisonIva).setScale(Contabilidad.VALOR_DECIMAL_2, RoundingMode.HALF_DOWN));
+                            if (aerolinea.getIvaItComision() != null) {
+                                if (aerolinea.getIvaItComision()) {
+                                    if (porcentajeComision != null) {
+                                        Double porcentaje = Double.parseDouble(porcentajeComision.getValor());
+                                        Double totalComisonIva = (total * porcentaje) / 100 + total;
+                                        if (aerolinea.getRoundComisionUsd() != null) {
+                                            if (aerolinea.getRoundComisionUsd()) {
+                                                b.setMontoComision(new BigDecimal(Math.round(totalComisonIva)).setScale(Contabilidad.VALOR_DECIMAL_0, RoundingMode.HALF_DOWN));
+                                            } else {
+                                                b.setMontoComision(new BigDecimal(totalComisonIva).setScale(Contabilidad.VALOR_DECIMAL_2, RoundingMode.HALF_DOWN));
+                                            }
+                                        }
                                     }
-                                }
 
+                                }
                             }
                         }
                     }
@@ -536,17 +540,21 @@ public class AmadeusFileEJB extends FacadeEJB implements AmadeusFileRemote {
                             b.setComision(aerolinea.getComisionPromNac());
                             b.setMontoComision(new BigDecimal(total).setScale(Contabilidad.VALOR_DECIMAL_2, RoundingMode.HALF_DOWN));
 
-                            if (aerolinea.getIvaItComision()) {
-                                if (porcentajeComision != null) {
-                                    Double porcentaje = Double.parseDouble(porcentajeComision.getValor());
-                                    Double totalComisonIva = ((total * porcentaje) / 100) + total;
-                                    if (aerolinea.getRoundComisionBob()) {
-                                        b.setMontoComision(new BigDecimal(Math.round(totalComisonIva)).setScale(Contabilidad.VALOR_DECIMAL_0, RoundingMode.HALF_DOWN));
-                                    } else {
-                                        b.setMontoComision(new BigDecimal(totalComisonIva).setScale(Contabilidad.VALOR_DECIMAL_2, RoundingMode.HALF_DOWN));
+                            if (aerolinea.getIvaItComision() != null) {
+                                if (aerolinea.getIvaItComision()) {
+                                    if (porcentajeComision != null) {
+                                        Double porcentaje = Double.parseDouble(porcentajeComision.getValor());
+                                        Double totalComisonIva = ((total * porcentaje) / 100) + total;
+                                        if (aerolinea.getRoundComisionBob() != null) {
+                                            if (aerolinea.getRoundComisionBob()) {
+                                                b.setMontoComision(new BigDecimal(Math.round(totalComisonIva)).setScale(Contabilidad.VALOR_DECIMAL_0, RoundingMode.HALF_DOWN));
+                                            } else {
+                                                b.setMontoComision(new BigDecimal(totalComisonIva).setScale(Contabilidad.VALOR_DECIMAL_2, RoundingMode.HALF_DOWN));
+                                            }
+                                        }
                                     }
-                                }
 
+                                }
                             }
                         }
                     }

@@ -125,6 +125,20 @@ import javax.xml.bind.annotation.XmlRootElement;
                 ,@StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_selected")
             }
     )
+    ,
+@NamedStoredProcedureQuery(
+            name = "NotaDebito.historicoCliente",
+            procedureName = "historicoCliente",
+            resultSetMappings = "KardexClienteDto",
+            parameters = {
+                @StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_cliente")
+                ,@StoredProcedureParameter(mode = ParameterMode.IN, type = Date.class, name = "in_start_date")
+                ,@StoredProcedureParameter(mode = ParameterMode.IN, type = Date.class, name = "in_end_date")
+                ,@StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_selected")
+            }
+    )
+        
+        
 
 })
 

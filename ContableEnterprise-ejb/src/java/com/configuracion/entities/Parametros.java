@@ -61,6 +61,12 @@ public class Parametros extends Entidad {
     public static final String FOLDER_FILES_AMADEUS="FOLDER_FILES_AMADEUS";
     public static final String FOLDER_FILES_SABRE="FOLDER_FILES_SABRE";
     
+    // impresion
+    public static final String PRINT_PAPER="PRINT_PAPER";
+    
+    // solo puede haber dos tipos de papeles
+    public static final String CARTA = "CARTA";
+    public static final String CONTINUO = "CONTINUO";
     
     private static final long serialVersionUID = 1L;
     @Id

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="612" pageHeight="792" columnWidth="602" leftMargin="5" rightMargin="5" topMargin="5" bottomMargin="5" uuid="aa0a61be-b419-419d-9b39-7b75bd33b97a">
-	<property name="ireport.zoom" value="1.1000000000000005"/>
-	<property name="ireport.x" value="150"/>
+	<property name="ireport.zoom" value="1.7715610000000015"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="table">
 		<box>
@@ -55,30 +55,30 @@
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="76" splitType="Stretch">
+		<band height="69" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="0" width="555" height="31" uuid="442e88ed-57cf-46c4-8683-778341d11206"/>
+				<reportElement x="0" y="0" width="571" height="31" uuid="442e88ed-57cf-46c4-8683-778341d11206"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="DejaVu Sans Mono" size="18" isBold="true" isItalic="false" pdfFontName="Courier-Bold" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["ESTADO DE RESULTADO"]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="0" y="31" width="555" height="19" uuid="f9baad31-4ce2-441a-8a67-818f75b20b1a"/>
+				<reportElement x="0" y="31" width="571" height="16" uuid="f9baad31-4ce2-441a-8a67-818f75b20b1a"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" size="12" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="DejaVu Sans Mono" size="11" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["del " + $P{FECHA_INICIO} + " al " + $P{FECHA_FIN}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="0" y="51" width="555" height="19" uuid="cbb02b89-64a1-4716-830b-e3c373fddfec"/>
+				<reportElement x="0" y="47" width="571" height="16" uuid="cbb02b89-64a1-4716-830b-e3c373fddfec"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="DejaVu Sans Mono" size="12" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="DejaVu Sans Mono" size="11" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Moneda : " + ($P{MONEDA}=="B"?" Bolivianos" : "Extranjera") ]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Moneda : " + ($P{MONEDA}=="B"?" Bolivianos" : "Extranjera")]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="0" y="69" width="555" height="1" uuid="e152b971-366a-4936-b5ef-ec6997bbad84"/>
+				<reportElement x="0" y="65" width="571" height="1" uuid="e152b971-366a-4936-b5ef-ec6997bbad84"/>
 			</line>
 		</band>
 	</title>
@@ -91,9 +91,9 @@
 	<detail>
 		<band height="18" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="0" width="395" height="14" isPrintWhenDetailOverflows="true" uuid="97e19354-e13d-48eb-a45c-e78320e1baa4"/>
+				<reportElement x="0" y="0" width="432" height="14" isPrintWhenDetailOverflows="true" uuid="97e19354-e13d-48eb-a45c-e78320e1baa4"/>
 				<textElement>
-					<font fontName="DejaVu Sans Mono" size="12" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="DejaVu Sans Mono" size="11" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{v_nivel}==1 ? $F{v_cuenta} : 
 ( $F{v_nivel}==2 ? "  " + $F{v_cuenta}: 
@@ -106,15 +106,15 @@
 )]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="416" y="0" width="139" height="14" uuid="9de1d589-8939-4529-91ce-c46a3b57de78"/>
+				<reportElement x="432" y="0" width="139" height="14" uuid="9de1d589-8939-4529-91ce-c46a3b57de78"/>
 				<textElement textAlignment="Right">
-					<font fontName="DejaVu Sans Mono" size="12" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="DejaVu Sans Mono" size="11" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{v_saldo}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="0" y="15" width="555" height="1" uuid="381b79d9-28ff-4a81-a045-1da30971cded">
-					<printWhenExpression><![CDATA[$F{v_nivel} == 1   || $F{v_nivel} == 0 ]]></printWhenExpression>
+				<reportElement x="0" y="15" width="571" height="1" uuid="381b79d9-28ff-4a81-a045-1da30971cded">
+					<printWhenExpression><![CDATA[$F{v_nivel} == 1   || $F{v_nivel} == 0]]></printWhenExpression>
 				</reportElement>
 				<graphicElement>
 					<pen lineStyle="Dashed"/>

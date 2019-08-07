@@ -32,8 +32,8 @@ public class FileProcessor {
     @EJB
     private AmadeusFileRemote ejbAmadeus ;
     //EN PRODUCCION DEBE FUNCIONAR CADA 10 MINUTOS
-//    @Schedule(dayOfWeek = "Mon-Fri", month = "*", hour = "9-17", dayOfMonth = "*", year = "*", minute = "*/10", second = "0")
-    @Schedule(dayOfWeek = "*", month = "*", hour = "*", dayOfMonth = "*", year = "*", minute = "0", second = "0")
+//    @Schedule(dayOfWeek = "Mon-Fri", month = "*", hour = "9-19", dayOfMonth = "*", year = "*", minute = "*/5", second = "0")
+    @Schedule(dayOfWeek = "*", month = "*", hour = "9-19", dayOfMonth = "*", year = "*", minute = "*/5", second = "0")
     public void processArchivosBoletos() {
         
         

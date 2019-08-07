@@ -38,6 +38,7 @@ public class ApplicationConfig extends Application {
         resources.add(com.services.agencia.PromotorResource.class);
         resources.add(com.services.agencia.TarjetasCreditoResource.class);
         resources.add(com.services.agencia.boletaje.PlanillaBspResource.class);
+        resources.add(com.services.cobranzas.HistoricoClienteResource.class);
         resources.add(com.services.cobranzas.KardexClienteResource.class);
         resources.add(com.services.configuracion.BoletajeResource.class);
         resources.add(com.services.configuracion.FactoresResource.class);

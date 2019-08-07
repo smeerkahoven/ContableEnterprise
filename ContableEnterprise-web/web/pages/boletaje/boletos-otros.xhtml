@@ -189,7 +189,7 @@
                                                     <thead >
                                                         <c:if test="#{boletajeOtros.formulario.buscar == boletajeOtros.formulario.PERMITIR}">
                                                             <tr>
-                                                                <th colspan="8">
+                                                                <th colspan="10">
                                                                     <!-- .input-group -->
                                                                     <div class="input-group has-clearable">
                                                                         <div class="input-group-prepend">
@@ -198,6 +198,8 @@
                                                                             </span>
                                                                         </div>
                                                                         <input st-search="" id="table-search" class="form-control placeholder-shown" placeholder="Busqueda" type="text" /> 
+                                                                        
+
                                                                     </div>
                                                                     <!-- /.input-group -->
                                                                 </th>
@@ -306,7 +308,7 @@
                                                             <input type="text" ng-model="formData.idCliente" placeholder="Seleccione un Cliente"
                                                                    uib-typeahead="cuenta as cuenta.name for cuenta in comboCliente | filter:{name:$viewValue}"
                                                                    class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="1" 
-                                                                   typeahead-template-url="customTemplate.html" ng-disabled="formData.transacciones.length > 0"  typeahead-focus-first="true"
+                                                                   typeahead-template-url="customTemplate.html" ng-disabled="disabledByEstado()"  typeahead-focus-first="true"
                                                                    />
                                                             <span class="alert-danger"  ng-show="formData.idCliente.id === undefined"  >
                                                                 Ingrese un Cliente V&aacute;lido.
@@ -331,6 +333,16 @@
                                                                 Debe seleccionar un valor entre {{formData.factorMin}} y {{formData.factorMax}}.
                                                             </span>
                                                         </div>
+                                                        
+                                                        <!-- Comprobante -->
+                                                        <label ng-show="showComprobante"  class="col-form-label col-sm-2 text-right" for="flatpickr-wrap">Asiento Diario</label>
+                                                        <div class="col-sm-3" ng-show="showComprobante" >
+                                                            <input id="txtIdUsuario" name="txtIdComprobante" type="text" 
+                                                               class="form-control flatpick-input" data-input="" 
+                                                               value="{{comprobante.gestion}}-{{comprobante.idNumeroGestion}}"
+                                                               readonly="true"/>
+                                                        </div>
+                                                    
                                                     </div>
                                                     <!-- /Factor USD -->
 
@@ -651,7 +663,7 @@
                                             <table st-table="amadeus_records" st-safe-src="amadeusGrid" class="table table-hover" ng-show="showTableAmadeus">
                                                 <thead>
                                                     <tr>
-                                                        <th colspan="6">
+                                                        <th colspan="10">
                                                             <!-- .input-group -->
                                                             <div class="input-group has-clearable">
                                                                 <div class="input-group-prepend">
@@ -659,7 +671,8 @@
                                                                         <span class="oi oi-magnifying-glass"></span>
                                                                     </span>
                                                                 </div>
-                                                                <input st-search="" id="table-search" class="form-control placeholder-shown" placeholder="Busqueda" type="text" /> 
+                                                                <input st-search="" id="table-search" class="form-control placeholder-shown" ng-model="txtAutomaticTicketSearch" placeholder="Busqueda" type="text" /> 
+                                                                <button class="btn btn-warning" type="button" st-reset-search="">Limpiar</button>
                                                             </div>
                                                             <!-- /.input-group -->
                                                         </th>
@@ -690,7 +703,6 @@
                                                         <td align="right">{{row.moneda === MONEDA_EXTRANJERA ? (row.totalBoletoUsd | printNumber) : (row.totalBoletoBs | printNumber)}}</td>
                                                         <td>
                                                             <input ng-model="row.selected" type="checkbox"/>
-                                                            
                                                         </td>
                                                         <td></td>
                                                     </tr>

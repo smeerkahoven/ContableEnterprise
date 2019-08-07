@@ -7,6 +7,8 @@ id_empresa
 -- ,cta_itb
 ,nivel
 ,aplica_movimiento
+,comodin
+,tipo_regularizacion
 )
 select 
   1
@@ -17,7 +19,9 @@ select
 -- , CTAITB cta_itb
  , NIVEL nivel
  , case NIVEL  when '5' then 'T' else 'M' end aplica_movimiento
-FROM cuentas; 
+ , 'N'
+ , 'N'
+FROM CUENTAS; 
 
 update cnt_plan_cuentas set comodin='N';
 

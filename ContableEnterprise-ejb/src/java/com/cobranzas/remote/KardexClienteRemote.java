@@ -28,4 +28,7 @@ public interface KardexClienteRemote extends DaoRemote {
      */
     public List<KardexClienteDto> generarKardexCliente (KardexClienteSearchJson search) throws CRUDException ;
     
+    public List<KardexClienteDto> generarHistorico (KardexClienteSearchJson search) throws CRUDException ;
+    
+    
 }

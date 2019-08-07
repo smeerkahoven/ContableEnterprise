@@ -128,6 +128,8 @@
                                         <div>
 
                                             <div class="form-group row">
+
+                                                <!-- fecha inicio -->
                                                 <label class="col-form-label col-sm-2 text-right" for="flatpickr-wrap">Desde:</label>
                                                 <div class="col-sm-3 input-group input-group-alt flatpickr " id="flatpickr9">
                                                     <input id="txtFechaInicio" type="text" class="form-control flatpick-input" data-input="" 
@@ -144,6 +146,7 @@
                                                 </div>
 
 
+                                                <!-- fecha fin -->
                                                 <label class="col-form-label col-sm-2 text-right" for="flatpickr-wrap">Hasta:</label>
                                                 <div class="col-sm-3 input-group input-group-alt flatpickr " id="flatpickr9">
                                                     <input id="txtFechaInicio" type="text" class="form-control flatpick-input" data-input="" 
@@ -158,54 +161,56 @@
                                                     </div>
                                                     <span class="alert-danger" ng-show="!search.fechaFin">Debe seleccionar una fecha.</span>
                                                 </div>
+                                            </div>
 
-
-                                                <div class="form-group row col-9">
-                                                    <label for="txtNombre" class=" col-form-label col-sm-2 text-right">Cuenta</label>
-                                                    <div class="col-sm-6">
-                                                        <input type="text" ng-model="search.idCliente" placeholder="Seleccione una Cuenta"
-                                                               uib-typeahead="cuenta as cuenta.name for cuenta in comboCliente | filter:{name:$viewValue}"
-                                                               class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="1" 
-                                                               typeahead-template-url="customTemplate.html"  typeahead-focus-first="true"
-                                                               />
-                                                        <span class="alert-danger"  ng-show="search.idCliente.id === undefined"  >
-                                                            Ingrese un Cliente V&aacute;lido.
-                                                        </span> 
-                                                    </div>
+                                            <!-- Cuenta -->
+                                            <div class="form-group row">
+                                                <label for="txtNombre" class=" col-form-label col-sm-2 text-right">Cuenta</label>
+                                                <div class="col-sm-6">
+                                                    <input type="text" ng-model="search.idCliente" placeholder="Seleccione una Cuenta"
+                                                           uib-typeahead="cuenta as cuenta.name for cuenta in comboCliente | filter:{name:$viewValue}"
+                                                           class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="1" 
+                                                           typeahead-template-url="customTemplate.html"  typeahead-focus-first="true"
+                                                           />
+                                                    <span class="alert-danger"  ng-show="search.idCliente.id === undefined"  >
+                                                        Ingrese un Cliente V&aacute;lido.
+                                                    </span> 
                                                 </div>
 
                                                 <div class="col-3">
                                                     <button type="button" class="btn btn-primary"  ng-click="find()"><span class="fa fa-search"></span> Buscar</button>
                                                 </div>
                                             </div>
+
                                         </div>
 
                                         <div  id="tableData" class="ng-hide table-responsive" ng-show="showTable" >
-                                            <table st-table="display_records"    st-safe-src="mainGrid" 
+
+                                            <table id="dataTable" st-table="display_records" st-safe-src="mainGrid" 
                                                    class="table table-hover ">
                                                 <thead >
+
                                                     <tr >
                                                         <th>N&uacute;mero</th>
                                                         <th>Dcto.</th>
                                                         <th>Glosa</th>
                                                         <th>F.Emision</th>
-                                                        <th>Vcto.</th>
+                                                        <th>Estado</th>
                                                         <th class="text-right">Debe M/Nac</th>
                                                         <th class="text-right">Haber M/Nac</th>
                                                         <th class="text-right">Saldo M/Nac</th>
                                                         <th class="text-right">Debe M/Ext</th>
                                                         <th class="text-right">Haber M/Ext</th>
                                                         <th class="text-right">Saldo M/Ext</th>
-                                                        <!--<th>Estado</th>-->
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr  st-select-row="row" st-select-mode="multiple" ng-repeat="row in display_records" class="{{row.row}}" ng-class="row.selected === 'S' ? 'table-primary' : ''">
+                                                    <tr  st-select-row="row" st-select-mode="multiple" ng-repeat="row in display_records" >
                                                         <td>{{row.idDocumento}} </td>
                                                         <td>{{row.tipoDocumento}} </td>
                                                         <td>{{row.glosa}} </td>
                                                         <td>{{row.fecha}} </td>
-                                                        <td>{{row|printCancelado}} </td>
+                                                        <td>{{row.estado|printEstado}} </td>
                                                         <td class="text-right">{{row.montoDebeNac|printNumber}} </td>
                                                         <td class="text-right">{{row.montoHaberNac|printNumber}} </td>
                                                         <td class="text-right">{{row.saldoNac|printNumber}} </td>
@@ -214,32 +219,12 @@
                                                         <td class="text-right">{{row.saldoExt|printNumber}} </td>
                                                     </tr>
                                                 </tbody>
-                                                <tfoot>
-                                                    <tr><td colspan="10"></td></tr>
-                                                    <tr class="debito" ng-show="mainGrid.length > 0" >
-                                                        <td colspan="7"><strong>TOTALES NOTA DEBITO</strong></td>
-                                                        <td class="text-right"><strong>{{totalSaldoDebitoNac|printNumber}}</strong></td>
-                                                        <td colspan="2"></td>
-                                                        <td class="text-right"><strong>{{totalSaldoDebitoExt|printNumber}}</strong></td>
-                                                    </tr>
-                                                    <tr class="deposito" ng-show="mainGrid.length > 0">
-                                                        <td colspan="7"><strong>TOTALES DEPOSITOS</strong></td>
-                                                        <td class="text-right"><strong>{{totalSaldoDepositoNac|printNumber}}</strong></td>
-                                                        <td colspan="2"></td>
-                                                        <td class="text-right"><strong>{{totalSaldoDepositoExt|printNumber}}</strong></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td colspan="10" class="text-center">
-                                                            <div class="container" st-items-by-page="itemsByPage" st-pagination="" st-template="../index/pagination.custom.html"></div>
-                                                        </td>
-                                                    </tr>
-                                                </tfoot>
                                             </table>
+                                        </div>
 
-                                            <div class="modal-footer" ng-show="mainGrid.length > 0">
-                                                <!--<button type="button" class="btn btn-dark" ng-click="exportar()"><span class="fa  fa-print"></span>&nbsp; Imprimir</button> -->
-                                                <button type="button" class="btn btn-dark" ng-click="cartaCobranza()"><span class="fa  fa-print"></span>&nbsp; Carta de Cobranza</button>
-                                            </div>
+                                        <div class="modal-footer" ng-show="showTable">
+                                            <button id="btn-export-excel"  class="btn btn-success" onclick="tableToExcel('dataTable', 'W3C Example Table')"  value="Exportar Excel" title="Exportar a Excel"  ><span class="fa fa-file-excel"></span> Exportar</button>
+                                            <!--<button type="button" class="btn btn-dark" ng-click="exportar()"><span class="fa  fa-print"></span>&nbsp; Imprimir</button>-->
                                         </div>
                                         <!-- /Tabla Contenido -->
                                         <form name="myForm" id="myForm">
@@ -338,7 +323,7 @@
         <!-- END PLUGINS JS -->
         <!-- BEGIN THEME JS -->
         <script src="../../assets/javascript/main.min.js"></script>
-        <script type="text/javascript" src="../../js/cobranzas/kardex-cliente.js" />
+        <script type="text/javascript" src="../../js/cobranzas/historico-cliente.js" />
 
         <script type="text/javascript" src="../../assets/javascript/pages/flatpickr-demo.js"></script>
         <script type="text/javascript" src="../../assets/javascript/pages/typeahead-demo.js"></script>

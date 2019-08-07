@@ -304,6 +304,7 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                 $scope.search = {fechaInicio: firstDay, fechaFin: today};
 
                 $scope.itemsByPage = 15;
+                $scope.showComprobante = false ;
 
                 /*
                  * Obtencion de Datos Nota Debito
@@ -930,6 +931,22 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                     $scope.showBtnEditar = true;
                     $scope.hideMessagesBox();
                     $scope.formData = item;
+                    
+                    
+                    $http({
+                        method : 'GET', 
+                        url: `${url.value}comprobante/${item.idNotaDebito}`,
+                        headers: {'Content-Type':'application/json'}
+                    }).then(
+                            function (response){
+                                if (response.data.code === 201){
+                                    $scope.showComprobante = true ;
+                                    $scope.comprobante = response.data.content ;
+                                }
+                            },
+                            $scope.errorFunction
+                    );
+                    
                     return $http({
                         method: 'POST',
                         url: url.value + 'all/transaccion',
@@ -960,7 +977,6 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                 }
 
                 $scope.editTransaccion = function (row) {
-                    console.log(row);
                     if (row.tipo === $scope.BOLETO) {
                         $scope.editBoleto(row.idBoleto);
                     } else {
@@ -969,8 +985,8 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                 }
 
                 $scope.editCargo = function (idCargo) {
-                    $scope.showDebito = false ;
-                    $scope.showCargo = false ;
+                    $scope.showDebito = false;
+                    $scope.showCargo = false;
                     //showBackground();
                     return $http({
                         method: 'POST',
@@ -986,21 +1002,21 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                             switch ($scope.cargos.tipo) {
                                 case $scope.PAQUETE :
                                     $scope.showFormCargoTitle = 'Datos del Paquete';
-                                    $scope.showCargo = true ;
+                                    $scope.showCargo = true;
                                     break;
                                 case $scope.SEGURO :
                                     $scope.showFormCargoTitle = 'Datos del Seguro';
-                                    $scope.showCargo = true ;
+                                    $scope.showCargo = true;
                                     break;
                                 case $scope.ALQUILER :
                                     $scope.showFormCargoTitle = 'Datos del Alquiler';
-                                    $scope.showCargo = true ;
+                                    $scope.showCargo = true;
                                     break;
                                 case  $scope.DEBITO :
                                     $scope.showFormCargoTitle = 'Datos del Alquiler';
-                                    $scope.showDebito = true ;
-                                    break ;
-                                    
+                                    $scope.showDebito = true;
+                                    break;
+
                             }
 
                             if ($scope.cargos.estado === $scope.PENDIENTE) {
@@ -1142,6 +1158,11 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                     hideBackground();
                     showModalWindow('#frmBoletoVoid');
                     $scope.boleto.idPromotor = $scope.findCta($scope.boleto.idPromotor !== undefined ? $scope.boleto.idPromotor.id : null, $scope.comboCounter);
+                }
+                
+                $scope.disabledByEstado = function () {
+                    return $scope.formData.estado!== $scope.PENDIENTE && 
+                            $scope.formData.estado!== $scope.CREADO ;
                 }
 
                 $scope.ngDisableForAutomaticTicket = function () {
@@ -1409,8 +1430,10 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                     $scope.loadingFrmAmadeus = true;
                     $scope.showTableAmadeus = false;
                     $scope.showRestfulError = false;
+                    $scope.txtAutomaticTicketSearch = '' ;
                     $scope.frmTitle = 'Boletos Automaticos SABRE';
-                    $scope.amadeusGrid = [] ;
+                    $scope.amadeusGrid = [];
+                    
                     return $http({
                         method: 'POST',
                         url: `${urlBoletos.value}all/sabre`,
@@ -1436,7 +1459,11 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                     $scope.showTableAmadeus = false;
                     $scope.showRestfulError = false;
                     $scope.frmTitle = 'Boletos Automaticos AMADEUS';
-                    $scope.amadeusGrid = [] ;
+                    $scope.amadeusGrid = [];
+                    $scope.txtAutomaticTicketSearch='';
+                    //$scope.stResetSearch.directiveFunction();
+                    console.log($scope);
+                    
                     return $http({
                         method: 'POST',
                         url: `${urlBoletos.value}all/amadeus`,
@@ -1478,6 +1505,7 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                 }
 
                 $scope.loadBoletos = function () {
+                    
                     var data = [];
                     for (var i in $scope.amadeusGrid) {
                         if ($scope.amadeusGrid[i].selected) {
@@ -1488,12 +1516,13 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                                 return;
                             }
                         }
-
-                        if (data.length == 0) {
+                    }
+                    
+                    if (data.length === 0) {
                             showWarning(WARNING_TITLE, 'Debe elegir al menos un Boleto.');
                             return;
-                        }
                     }
+                        
                     if (data.length > 0) {
                         var asociacion = {
                             idNotaDebito: $scope.formData.idNotaDebito,
@@ -1529,13 +1558,41 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
 
                 $scope.disableButtonAnadir = function () {
 
-                    if ($scope.formData.idCliente === undefined || $scope.formData.idPromotor === undefined)
-                        return true;
-
-                    if ($scope.formData.hasOwnProperty('idCliente')){
-                        if ($scope.formData.idCliente.id === undefined || $scope.formData.idPromotor.id === undefined)
-                            return true;
+                    if ($scope.formData.idCliente === undefined || 
+                            $scope.formData.idPromotor === undefined ||
+                                $scope.formData.idCliente === null ||
+                                    $scope.formData.idPromotor === null){
+                        return true ;
                     }
+
+                    if ($scope.formData.hasOwnProperty('idCliente')) {
+                        if ($scope.formData.idCliente === null) {
+                            return true;
+                        }
+                        if ($scope.formData.idCliente.hasOwnProperty('id')) {
+                            if ($scope.formData.idCliente.id === undefined) {
+                                return true;
+                            }
+                        }else {
+                            return true;
+                        }
+                    }
+
+
+                    if ($scope.formData.hasOwnProperty('idPromotor')) {
+                        if ($scope.formData.idPromotor === null) {
+                            return true;
+                        }
+
+                        if ($scope.formData.idPromotor.hasOwnProperty('id')) {
+                            if ($scope.formData.idPromotor.id === undefined) {
+                                return true;
+                            }
+                        }else {
+                            return true ;
+                        }
+                    }
+
 
                     if ($scope.formData.fechaEmision === undefined)
                         return true;
@@ -1690,9 +1747,9 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                             $scope.formData.montoAdeudadoUsd = nota.montoAdeudadoUsd;
 
                             $scope.loadTransacciones();
-                            
-                            $scope.showDebito = false ;
-                            $scope.showCargo = false ;
+
+                            $scope.showDebito = false;
+                            $scope.showCargo = false;
                         } else {
                             $scope.showAlert("Error", response.data.content);
                             $scope.showRestfulMessage = response.data.content;
@@ -2537,8 +2594,8 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                 $scope.setCreditoVencimiento = function () {
                     if ($scope.formData.creditoDias !== null) {
 
-                        var fechaEmision = $scope.formData.fechaEmision !== undefined ? $scope.formData.fechaEmision : today ;
-                        var dias = $scope.formData.creditoDias !== undefined ? $scope.formData.creditoDias : 0 ;
+                        var fechaEmision = $scope.formData.fechaEmision !== undefined ? $scope.formData.fechaEmision : today;
+                        var dias = $scope.formData.creditoDias !== undefined ? $scope.formData.creditoDias : 0;
 
                         return $http.get(`${urlBoletos.value}sumar-fecha/${fechaEmision}/${dias}`).then(function (response) {
                             if (response.data.code === 201) {
@@ -2565,7 +2622,6 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                     $scope.showTable = true;
                     $scope.search = {fechaInicio: firstDay, fechaFin: today};
                     $scope.hideMessagesBox();
-                    $scope.mainGrid = [];
                 }
 
                 $scope.showAlert = function (title, message) {
@@ -3112,3 +3168,22 @@ app.directive('pageSelect', function () {
     }
 });
 
+
+app.directive("stResetSearch", function() {
+         return {
+                restrict: 'EA',
+                require: '^stTable',
+                link: function(scope, element, attrs, ctrl) {
+                  return element.bind('click', function() {
+                    return scope.$apply(function() {
+                      var tableState;
+                      tableState = ctrl.tableState();
+                      tableState.search.predicateObject = {};
+                      tableState.pagination.start = 0;
+                      scope.txtAutomaticTicketSearch="";
+                      return ctrl.pipe();
+                    });
+                  });
+                }
+              };
+    });

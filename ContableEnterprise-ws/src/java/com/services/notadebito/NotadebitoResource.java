@@ -12,14 +12,17 @@ import com.agencia.entities.Promotor;
 import com.agencia.search.dto.BoletoSearchForm;
 import com.contabilidad.entities.AsociacionBoletoNotaDebitoJSON;
 import com.contabilidad.entities.CargoBoleto;
+import com.contabilidad.entities.ComprobanteContable;
 import com.contabilidad.entities.NotaDebito;
 import com.contabilidad.entities.NotaDebitoTransaccion;
+import com.contabilidad.remote.ComprobanteRemote;
 import com.contabilidad.remote.NotaDebitoRemote;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.response.json.contabilidad.CargoBoletoJSON;
+import com.response.json.contabilidad.ComprobanteContableJSON;
 import com.response.json.contabilidad.NotaDebitoJSON;
 import com.response.json.contabilidad.NotaDebitoTransaccionJson;
 import com.seguridad.control.entities.Log;
@@ -30,6 +33,7 @@ import com.seguridad.utils.Estado;
 import com.seguridad.utils.ResponseCode;
 import com.services.TemplateResource;
 import com.services.agencia.BoletoResource;
+import com.services.contabilidad.IngresoCajaResource;
 import com.services.seguridad.util.RestRequest;
 import com.services.seguridad.util.RestResponse;
 import com.util.resource.BeanUtils;
@@ -48,6 +52,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PUT;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 
 /**
@@ -60,6 +65,9 @@ public class NotadebitoResource extends TemplateResource {
     
     @EJB
     private NotaDebitoRemote ejbNotaDebito;
+    
+    @EJB
+    private ComprobanteRemote ejbComprobante ;
     
     @EJB
     private BoletoRemote ejbBoleto;
@@ -557,5 +565,35 @@ public class NotadebitoResource extends TemplateResource {
         }
         
         return response;
+    }
+    
+    
+    
+    @GET
+    @Path("comprobante/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public RestResponse getComprobante(final RestRequest request, @PathParam("id")Integer id) {
+        RestResponse response = new RestResponse();
+        try {
+            List fromDb = ejbComprobante.getComprobantesByNotaDebito(id);
+            
+            if (fromDb.isEmpty()){
+                 response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+                response.setContent(null);
+                return response;
+            }else {
+                 response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
+                ComprobanteContable content= (ComprobanteContable) fromDb.get(0);
+                ComprobanteContableJSON json = ComprobanteContableJSON.toComprobanteContableJSON(content);
+                response.setContent(json);
+            }
+            
+        } catch (CRUDException ex) {
+            response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
+            response.setContent(ex.getMessage());
+            Logger.getLogger(IngresoCajaResource.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return response ;
     }
 }

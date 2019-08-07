@@ -279,7 +279,7 @@
                                                 <!-- Cuenta -->
                                                 <div class="form-group row">
                                                     <label for="txtNombre" class=" col-form-label col-sm-2 text-right">Cuenta</label>
-                                                    <div class="col-sm-4">
+                                                    <div class="col-sm-6">
                                                         <input type="text" ng-model="formData.idCliente" placeholder="Seleccione un Cliente"
                                                                uib-typeahead="cuenta as cuenta.name for cuenta in comboCliente | filter:{name:$viewValue}"
                                                                class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="1" 
@@ -291,11 +291,7 @@
                                                     </div>
 
 
-                                                    <label class="col-form-label col-sm-2 text-right" for="flatpickr-wrap">Creado por</label>
-                                                    <div class="col-sm-3 " >
-                                                        <input id="txtIdUsuario" name="txtIdUsuario" type="text" class="form-control flatpick-input" data-input="" 
-                                                               ng-model="formData.idUsuario" readonly="true"/>
-                                                    </div>
+                                                    
                                                 </div>
                                                 <!-- Cuenta -->
 
@@ -354,6 +350,11 @@
 
                                                 <!-- Creado por -->
                                                 <div class="form-group row">
+                                                    <label class="col-form-label col-sm-2 text-right" for="flatpickr-wrap">Creado por</label>
+                                                    <div class="col-sm-3 " >
+                                                        <input id="txtIdUsuario" name="txtIdUsuario" type="text" class="form-control flatpick-input" data-input="" 
+                                                               ng-model="formData.idUsuario" readonly="true"/>
+                                                    </div>
                                                 </div>
 
                                                 <!--./ Creado por -->
@@ -503,7 +504,8 @@
                                                                         <span class="oi oi-magnifying-glass"></span>
                                                                     </span>
                                                                 </div>
-                                                                <input st-search="" id="table-search" class="form-control placeholder-shown" placeholder="Busqueda" type="text" /> 
+                                                                <input st-search="" id="table-search" class="form-control placeholder-shown" ng-model="txtAutomaticTicketSearch" placeholder="Busqueda" type="text" /> 
+                                                                <button class="btn btn-warning" type="button" st-reset-search="">Limpiar</button>
                                                             </div>
                                                             <!-- /.input-group -->
                                                         </th>

@@ -211,7 +211,8 @@ angular.module('jsIndex.controllers', []).controller('frmIndex',
                     }, function (error) {}
             );
         }
-
+        
+        
 
         $scope.getDataFactor('dollar');
         $scope.getDataFactor('ufv');
