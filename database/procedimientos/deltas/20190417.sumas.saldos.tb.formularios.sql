@@ -83,7 +83,7 @@ id_modulo
 )
 ;
 -- PErmisos ADMIN
-select * from tb_rol_formulario ;
+select * from tb_formularios;
 insert into tb_rol_formulario (id_rol,id_formularios, crear, actualizar, eliminar, acceder, buscar, editar, anular, ver)
 values (
  (select id_rol from tb_rol where nombre = 'ADMINISTRADOR')
@@ -149,6 +149,36 @@ insert into tb_rol_formulario (id_rol,id_formularios, crear, actualizar, elimina
 values (
  (select id_rol from tb_rol where nombre = 'ADMINISTRADOR')
 , (select id_formulario from tb_formularios where url_acceso = 'balance-general')
+, 1,1,1,1,1,1,1,1
+)
+;
+
+
+
+insert into tb_formularios (
+id_modulo
+, nombre
+, url_acceso
+, restful_url
+, status
+, fecha_alta
+, full_path
+)values 
+(
+(select id_modulo from tb_modulos where nombre = 'Cobranzas')
+, 'Historico Cliente'
+, 'historico-cliente'
+, '/ContableEnterprise-ws/ws-api/historico-cliente/'
+, 'ACTIVO'
+, curdate()
+, '/pages/cobranzas/historico-cliente.xhtml'
+)
+;
+-- PErmisos ADMIN
+insert into tb_rol_formulario (id_rol,id_formularios, crear, actualizar, eliminar, acceder, buscar, editar, anular, ver)
+values (
+ (select id_rol from tb_rol where nombre = 'ADMINISTRADOR')
+, (select id_formulario from tb_formularios where url_acceso = 'historico-cliente')
 , 1,1,1,1,1,1,1,1
 )
 ;

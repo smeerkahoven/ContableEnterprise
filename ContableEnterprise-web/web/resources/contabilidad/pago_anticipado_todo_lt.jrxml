@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="612" pageHeight="792" columnWidth="572" leftMargin="10" rightMargin="30" topMargin="5" bottomMargin="1" uuid="1b7078e6-ceb5-4087-92f3-21ab3eca1288">
-	<property name="ireport.zoom" value="1.4641000000000095"/>
+	<property name="ireport.zoom" value="1.6105100000000105"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="ID_PAGO" class="java.lang.Integer">
@@ -130,14 +130,14 @@ WHERE pa.id_pago_anticipado=$P{ID_PAGO}]]>
 			<textField>
 				<reportElement x="243" y="2" width="329" height="14" uuid="ce333745-016b-4ba7-9da3-95d039bf3d32"/>
 				<textElement textAlignment="Right">
-					<font fontName="DejaVu Sans Mono" size="12" isBold="true" isItalic="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="Monospaced" size="12" isBold="false" isItalic="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Pago Anticipado #"+$F{id_pago_anticipado}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="76" y="4" width="147" height="12" uuid="ca94cafc-2689-4783-b095-d2e97d8258be"/>
 				<textElement>
-					<font fontName="DejaVu Sans Mono" size="10" pdfFontName="Courier"/>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{gestion}+ "-"+ 
     ($F{id_numero_gestion}<10 
@@ -148,7 +148,7 @@ WHERE pa.id_pago_anticipado=$P{ID_PAGO}]]>
 			<staticText>
 				<reportElement x="0" y="4" width="76" height="12" uuid="4988aad0-c660-4106-893c-0bef541491bb"/>
 				<textElement textAlignment="Right">
-					<font fontName="DejaVu Sans Mono" size="10" pdfFontName="Courier"/>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[Asiento:]]></text>
 			</staticText>
@@ -162,133 +162,133 @@ WHERE pa.id_pago_anticipado=$P{ID_PAGO}]]>
 			<staticText>
 				<reportElement x="3" y="1" width="80" height="12" uuid="91211e5a-700a-442e-9e9a-67d3115dfca0"/>
 				<textElement textAlignment="Right">
-					<font fontName="DejaVu Sans Mono" size="10" pdfFontName="Courier"/>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[Señores:]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="482" y="14" width="90" height="12" uuid="f012d6dc-7a1f-4385-a4df-4e3d93e299a6"/>
 				<textElement>
-					<font fontName="DejaVu Sans Mono" size="10" pdfFontName="Courier"/>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{fecha_emision}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="405" y="1" width="77" height="12" uuid="69d122cc-524f-409e-8377-3ab5e99f0540"/>
 				<textElement textAlignment="Right">
-					<font fontName="DejaVu Sans Mono" size="10" pdfFontName="Courier"/>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[Factor:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="393" y="14" width="89" height="12" uuid="d97a1993-c0bc-4d22-9304-bab80c31ac7d"/>
 				<textElement textAlignment="Right">
-					<font fontName="DejaVu Sans Mono" size="10" pdfFontName="Courier"/>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[Fecha Emision:]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="88" y="1" width="317" height="12" uuid="aa446270-d579-48a9-b474-0968ef915e27"/>
 				<textElement>
-					<font fontName="DejaVu Sans Mono" size="10" pdfFontName="Courier"/>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{cliente}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="484" y="1" width="88" height="12" uuid="9cf860d9-5b99-4ce4-863b-17ebf7c1b111"/>
 				<textElement>
-					<font fontName="DejaVu Sans Mono" size="10" pdfFontName="Courier"/>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{factor_cambiario}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="3" y="13" width="80" height="12" uuid="a3e1565e-59a7-43a2-8b85-0a6f5e2afc8e"/>
 				<textElement textAlignment="Right">
-					<font fontName="DejaVu Sans Mono" size="10" pdfFontName="Courier"/>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[Estado:]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="88" y="13" width="294" height="12" uuid="cc6dcc58-a6d5-4787-9a6f-8be8093af3d0"/>
 				<textElement>
-					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfFontName="Courier-Bold" isPdfEmbedded="true"/>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{estado}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="88" y="39" width="100" height="12" uuid="1c603167-c19e-468d-825e-12f3c5235eb2"/>
 				<textElement textAlignment="Left">
-					<font fontName="DejaVu Sans Mono" size="10" pdfFontName="Courier"/>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{moneda}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00">
 				<reportElement x="283" y="38" width="99" height="12" uuid="3f0064f6-0b23-4b7d-9c5d-f8994da6ce46"/>
 				<textElement textAlignment="Right">
-					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfFontName="Courier-Bold" isPdfEmbedded="true"/>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{monto_anticipado}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="88" y="26" width="482" height="12" isPrintWhenDetailOverflows="true" uuid="40928b92-7ec9-46d4-8733-37acad64bf38"/>
 				<textElement>
-					<font fontName="DejaVu Sans Mono" size="10" pdfFontName="Courier"/>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{concepto}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="3" y="26" width="80" height="12" uuid="7286db1d-3718-4c78-a50e-df190ae22b5b"/>
 				<textElement textAlignment="Right">
-					<font fontName="DejaVu Sans Mono" size="10" pdfFontName="Courier"/>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[Descripción:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="3" y="39" width="80" height="12" uuid="bc62881b-6f77-4630-b872-bff4daa24b50"/>
 				<textElement textAlignment="Right">
-					<font fontName="DejaVu Sans Mono" size="10" pdfFontName="Courier"/>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[Moneda:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="207" y="38" width="76" height="12" uuid="f91b5eb9-950f-4e7f-9c60-2f01e41c610e"/>
 				<textElement textAlignment="Right">
-					<font fontName="DejaVu Sans Mono" size="10" pdfFontName="Courier"/>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[Monto Total:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="3" y="79" width="78" height="12" uuid="2ab1f506-2d75-47c5-98bd-8501a165dbd2"/>
 				<textElement>
-					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfFontName="Courier-Bold" isPdfEmbedded="true"/>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[NRO]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="148" y="79" width="344" height="12" uuid="37bf0086-f3bb-4adb-92f4-70eb24e56d88"/>
+				<reportElement x="148" y="79" width="306" height="12" uuid="37bf0086-f3bb-4adb-92f4-70eb24e56d88"/>
 				<textElement>
-					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfFontName="Courier-Bold" isPdfEmbedded="true"/>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[DETALLE]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="492" y="79" width="80" height="12" uuid="617c9eba-f7d6-4397-9e0c-474d49159e9a"/>
+				<reportElement x="454" y="79" width="118" height="12" uuid="617c9eba-f7d6-4397-9e0c-474d49159e9a"/>
 				<textElement textAlignment="Center">
-					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfFontName="Courier-Bold" isPdfEmbedded="true"/>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[MONTO]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="207" y="51" width="76" height="24" uuid="e584b74f-02e8-4ae8-b3df-5324945d5e6a"/>
 				<textElement textAlignment="Right">
-					<font fontName="DejaVu Sans Mono" size="10" pdfFontName="Courier"/>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[Monto Total Disponible:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="83" y="79" width="65" height="12" uuid="8d0f667d-e243-476d-8f3e-4d07d20fb9c8"/>
 				<textElement>
-					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfFontName="Courier-Bold" isPdfEmbedded="true"/>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[FECHA]]></text>
 			</staticText>
@@ -298,7 +298,7 @@ WHERE pa.id_pago_anticipado=$P{ID_PAGO}]]>
 			<textField pattern="#,##0.00">
 				<reportElement x="283" y="63" width="99" height="12" uuid="6a2d6781-6184-4f4f-9d08-427b42126398"/>
 				<textElement textAlignment="Right">
-					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{monto_disponible}]]></textFieldExpression>
 			</textField>
@@ -309,14 +309,14 @@ WHERE pa.id_pago_anticipado=$P{ID_PAGO}]]>
 			<textField>
 				<reportElement x="1" y="0" width="82" height="12" uuid="320f7b2d-c09d-4eb3-94c8-c6413ee76dbd"/>
 				<textElement textAlignment="Left">
-					<font fontName="DejaVu Sans Mono" size="10" pdfFontName="Courier"/>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{id_pago_anticipado_transaccion}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement x="147" y="0" width="345" height="12" uuid="e21c8439-99da-44dc-af8f-77175da24e9e"/>
+				<reportElement x="147" y="0" width="307" height="12" uuid="e21c8439-99da-44dc-af8f-77175da24e9e"/>
 				<textElement textAlignment="Left">
-					<font fontName="DejaVu Sans Mono" size="10" pdfFontName="Courier"/>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{descripcion} + 
 ( $F{id_nota_debito}!= null? " - ND : " + $F{id_nota_debito} : " - DE : " +$F{id_devolucion} ) 
@@ -325,14 +325,14 @@ WHERE pa.id_pago_anticipado=$P{ID_PAGO}]]>
 			<textField pattern="#,##0.00">
 				<reportElement x="492" y="0" width="80" height="12" uuid="d47da4a6-c01d-47ef-b17c-b18bdb48457c"/>
 				<textElement textAlignment="Right">
-					<font fontName="DejaVu Sans Mono" size="10" pdfFontName="Courier"/>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{monto_trx}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="83" y="0" width="65" height="12" uuid="d89cfed8-8162-485c-ad22-f2009397db4f"/>
 				<textElement textAlignment="Left">
-					<font fontName="DejaVu Sans Mono" size="10" pdfFontName="Courier"/>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{fecha_emision_trx}]]></textFieldExpression>
 			</textField>
@@ -349,14 +349,14 @@ WHERE pa.id_pago_anticipado=$P{ID_PAGO}]]>
 			<staticText>
 				<reportElement x="0" y="1" width="427" height="12" uuid="ec5e034f-fe5a-4596-b3b5-fba92a343bae"/>
 				<textElement>
-					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfFontName="Courier-Bold" isPdfEmbedded="true"/>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[TOTAL]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true">
 				<reportElement x="0" y="14" width="572" height="12" isPrintWhenDetailOverflows="true" uuid="c55180f6-32b4-4297-a54b-b869ccfd2192"/>
 				<textElement>
-					<font fontName="DejaVu Sans Mono" size="10" pdfFontName="Courier"/>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Pago:" + $F{forma_pago_literal}]]></textFieldExpression>
 			</textField>
@@ -366,14 +366,14 @@ WHERE pa.id_pago_anticipado=$P{ID_PAGO}]]>
 			<staticText>
 				<reportElement x="348" y="73" width="180" height="12" uuid="2da1d7a4-23ba-46c0-b77c-c97acfc64208"/>
 				<textElement textAlignment="Center">
-					<font fontName="DejaVu Sans Mono" size="10" pdfFontName="Courier"/>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[FIRMA DEL CLIENTE]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="43" y="73" width="180" height="12" uuid="72313c7b-c225-410f-8ea8-17bcadb4c591"/>
 				<textElement textAlignment="Center">
-					<font fontName="DejaVu Sans Mono" size="10" pdfFontName="Courier"/>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["AUTORIZADO POR :" + $F{id_usuario_creador}]]></textFieldExpression>
 			</textField>
@@ -386,14 +386,14 @@ WHERE pa.id_pago_anticipado=$P{ID_PAGO}]]>
 			<textField>
 				<reportElement x="1" y="91" width="569" height="12" uuid="1a165738-5c3d-404d-8dbb-dd241f33b51e"/>
 				<textElement>
-					<font fontName="DejaVu Sans Mono" size="10" pdfFontName="Courier"/>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Creado por: " + $F{id_usuario_creador} + " fecha: " + $F{fecha_insert}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00">
 				<reportElement x="454" y="2" width="118" height="12" uuid="619a3b2a-1db7-4d6a-8e19-e4b9a2800e00"/>
 				<textElement textAlignment="Right">
-					<font fontName="DejaVu Sans Mono" size="10" isBold="true" pdfFontName="Courier-Bold" isPdfEmbedded="true"/>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$V{TOTAL_TRANS}]]></textFieldExpression>
 			</textField>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="612" pageHeight="792" columnWidth="572" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="1" uuid="05708238-32c6-4b2d-94c3-a78b24b631fb">
-	<property name="ireport.zoom" value="1.693421790161341"/>
+	<property name="ireport.zoom" value="1.3995221406292073"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="ID_CREDITO" class="java.lang.String">
@@ -115,7 +115,7 @@ sucursal]]></fieldDescription>
 			<textField>
 				<reportElement x="223" y="0" width="347" height="16" uuid="cd6fad28-c39b-4c89-a744-a59a3fc15091"/>
 				<textElement textAlignment="Right">
-					<font fontName="Monospaced" size="12" isBold="true" pdfFontName="Courier-Bold" isPdfEmbedded="true"/>
+					<font fontName="Monospaced" size="12" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Nota de Crédito #"+$F{id_nota_credito}]]></textFieldExpression>
 			</textField>
@@ -125,7 +125,7 @@ sucursal]]></fieldDescription>
 			<textField>
 				<reportElement x="62" y="0" width="161" height="14" uuid="cf152777-bdc5-4033-aabf-14d8ae714d20"/>
 				<textElement>
-					<font fontName="Monospaced" size="10" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{gestion}+ "-"+
     $F{id_numero_gestion} + " AD"]]></textFieldExpression>
@@ -133,7 +133,7 @@ sucursal]]></fieldDescription>
 			<staticText>
 				<reportElement x="1" y="0" width="61" height="14" uuid="2254cf5c-ca79-4ee0-b72d-d568f5bfff96"/>
 				<textElement textAlignment="Right">
-					<font fontName="Monospaced" size="10" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[Asiento:]]></text>
 			</staticText>
@@ -144,63 +144,63 @@ sucursal]]></fieldDescription>
 			<textField isStretchWithOverflow="true">
 				<reportElement x="62" y="2" width="348" height="14" uuid="a9d5ff25-277e-42b1-9f89-9ae1d471e9a9"/>
 				<textElement>
-					<font fontName="Monospaced" size="10" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{cliente}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="1" y="2" width="60" height="14" uuid="69cb3b93-8979-496c-a203-73ea1a815c03"/>
 				<textElement textAlignment="Right">
-					<font fontName="Monospaced" size="10" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[Señores:]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="501" y="2" width="69" height="14" uuid="0a5f2962-fe77-45a2-9edc-3e9ce5e12258"/>
 				<textElement>
-					<font fontName="Monospaced" size="10" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{factor_cambiario}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="501" y="16" width="69" height="14" uuid="a9d48ee5-0099-44bc-8274-1bd1eea5a0dd"/>
 				<textElement>
-					<font fontName="Monospaced" size="10" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{fecha_emision}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="424" y="2" width="77" height="14" uuid="4087cc5b-a49f-42b4-b22c-6c98879f99ca"/>
 				<textElement textAlignment="Right">
-					<font fontName="Monospaced" size="10" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[Factor:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="410" y="16" width="91" height="14" uuid="90987dfa-23ff-41b1-9536-c4501233f704"/>
 				<textElement textAlignment="Right">
-					<font fontName="Monospaced" size="10" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[Fecha Emision:]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="0" y="47" width="330" height="14" uuid="34cfe6bc-8811-4eb3-a1c7-fb5846edf163"/>
 				<textElement>
-					<font fontName="Monospaced" size="10" isBold="true" pdfFontName="Courier-Bold" isPdfEmbedded="true"/>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[DESCRIPCION]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="451" y="50" width="60" height="14" uuid="341dd98e-a90a-49ab-8ec4-c3564b9f3f03"/>
 				<textElement textAlignment="Right">
-					<font fontName="Monospaced" size="10" isBold="true" pdfFontName="Courier-Bold" isPdfEmbedded="true"/>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[BS.]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="512" y="50" width="60" height="14" uuid="b5987175-7def-4392-a9c6-7ec6e2889325"/>
 				<textElement textAlignment="Right">
-					<font fontName="Monospaced" size="10" isBold="true" pdfFontName="Courier-Bold" isPdfEmbedded="true"/>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[USD.]]></text>
 			</staticText>
@@ -210,42 +210,42 @@ sucursal]]></fieldDescription>
 			<staticText>
 				<reportElement x="0" y="16" width="61" height="14" uuid="7ee88a32-77b5-455a-976e-f4f2e6542ae4"/>
 				<textElement textAlignment="Right">
-					<font fontName="Monospaced" size="10" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[Concepto:]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="61" y="16" width="349" height="14" uuid="360a2f9c-e1bf-4252-a179-8d50c3f778dd"/>
 				<textElement>
-					<font fontName="Monospaced" size="10" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{concepto}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="390" y="50" width="60" height="14" uuid="bb479792-665e-4356-a10d-a863aec9a835"/>
 				<textElement textAlignment="Right">
-					<font fontName="Monospaced" size="10" isBold="true" pdfFontName="Courier-Bold" isPdfEmbedded="true"/>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[USD.]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="330" y="50" width="60" height="14" uuid="6783511d-7149-4a8c-a9d2-39cf9b659e98"/>
 				<textElement textAlignment="Right">
-					<font fontName="Monospaced" size="10" isBold="true" pdfFontName="Courier-Bold" isPdfEmbedded="true"/>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[BS.]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="274" y="36" width="135" height="14" uuid="42cbc717-a71a-4251-9e54-97e64f680b6d"/>
 				<textElement textAlignment="Right">
-					<font fontName="Monospaced" size="10" isBold="true" isUnderline="true" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="Monospaced" size="10" isBold="false" isUnderline="true" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[Monto Adeudado]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="410" y="36" width="160" height="14" uuid="68faa86c-680a-4e0d-9b6b-84afc3a23249"/>
 				<textElement textAlignment="Right">
-					<font fontName="Monospaced" size="10" isBold="true" isUnderline="true" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="Monospaced" size="10" isBold="false" isUnderline="true" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[Monto Acreditado]]></text>
 			</staticText>
@@ -256,35 +256,35 @@ sucursal]]></fieldDescription>
 			<textField isStretchWithOverflow="true">
 				<reportElement x="0" y="0" width="330" height="14" uuid="36e191bc-a6a8-49df-9aa2-efa6f75bbf99"/>
 				<textElement>
-					<font fontName="Monospaced" size="10" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{tr_descripcion} + " Ref. Nota Debito:" + $F{id_nota_debito}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement x="451" y="0" width="60" height="14" uuid="335d3751-78ee-4576-b673-2bc65539e8df"/>
 				<textElement textAlignment="Right">
-					<font fontName="Monospaced" size="10" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{monto_bs_tr}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="false">
 				<reportElement x="512" y="0" width="60" height="14" uuid="b92f8830-1c43-4b73-b1c9-e44e8b399e07"/>
 				<textElement textAlignment="Right">
-					<font fontName="Monospaced" size="10" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{monto_usd_tr}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement x="390" y="0" width="60" height="14" uuid="3d17d1d9-69da-4a0d-8353-7b99515692c6"/>
 				<textElement textAlignment="Right">
-					<font fontName="Monospaced" size="10" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{monto_adeudado_usd}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement x="330" y="0" width="60" height="14" uuid="ddbde28f-37e1-4118-98cb-0deaec6b8626"/>
 				<textElement textAlignment="Right">
-					<font fontName="Monospaced" size="10" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{monto_adeudado_bs}]]></textFieldExpression>
 			</textField>
@@ -304,21 +304,21 @@ sucursal]]></fieldDescription>
 			<staticText>
 				<reportElement x="0" y="1" width="435" height="14" uuid="cdb77b20-454f-489c-9798-b3afc384ce24"/>
 				<textElement>
-					<font fontName="Monospaced" size="10" isBold="true" pdfFontName="Courier-Bold" isPdfEmbedded="true"/>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[TOTAL]]></text>
 			</staticText>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement x="451" y="1" width="60" height="14" uuid="7a01dcb6-ec36-4051-a7a7-28e9b3e309a3"/>
 				<textElement textAlignment="Right">
-					<font fontName="Monospaced" size="10" isBold="true" pdfFontName="Courier-Bold" isPdfEmbedded="true"/>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{monto_abonado_bs}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement x="512" y="1" width="60" height="14" uuid="9e4e95d1-c2a4-40d8-a922-d62d34cb0dce"/>
 				<textElement textAlignment="Right">
-					<font fontName="Monospaced" size="10" isBold="true" pdfFontName="Courier-Bold" isPdfEmbedded="true"/>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{monto_abonado_usd}]]></textFieldExpression>
 			</textField>
@@ -327,7 +327,7 @@ sucursal]]></fieldDescription>
 					<printWhenExpression><![CDATA[$F{monto_abonado_bs}!= null]]></printWhenExpression>
 				</reportElement>
 				<textElement>
-					<font fontName="Monospaced" size="10" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{literal_bs}!=null && $F{decimal_part_bs}!=null?"Son:"+$F{literal_bs} + " " + ($F{decimal_part_bs}<10?"0"+$F{decimal_part_bs}:$F{decimal_part_bs}) + "/100 BOLIVIANOS.":""]]></textFieldExpression>
 			</textField>
@@ -336,21 +336,21 @@ sucursal]]></fieldDescription>
 					<printWhenExpression><![CDATA[$F{monto_abonado_usd}!= null]]></printWhenExpression>
 				</reportElement>
 				<textElement>
-					<font fontName="Monospaced" size="10" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{literal_usd}!= null && $F{decimal_part_usd}!=null?"Son:" + $F{literal_usd} + " " + ($F{decimal_part_usd}<10?"0"+$F{decimal_part_usd}:$F{decimal_part_usd})+"/100 DOLARES.": ""]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="312" y="87" width="200" height="14" uuid="31565672-d2e2-41a4-8684-c68ee15de330"/>
 				<textElement textAlignment="Center">
-					<font fontName="Monospaced" size="10" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<text><![CDATA[FIRMA DEL CLIENTE]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="1" y="87" width="200" height="14" uuid="9ee79ed2-1388-497c-985c-7eaf1e38896c"/>
 				<textElement textAlignment="Center">
-					<font fontName="Monospaced" size="10" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["AUTORIZADO POR :" + $F{id_usuario}]]></textFieldExpression>
 			</textField>
@@ -363,7 +363,7 @@ sucursal]]></fieldDescription>
 			<textField>
 				<reportElement x="1" y="118" width="571" height="14" uuid="a711826e-311c-4a90-af3d-900ac056c2af"/>
 				<textElement>
-					<font fontName="Monospaced" size="10" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Creado por: " + $F{id_usuario} + " fecha: " + $F{fecha_insert}]]></textFieldExpression>
 			</textField>
