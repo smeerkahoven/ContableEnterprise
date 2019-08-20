@@ -53,6 +53,7 @@ public class Formulario implements Serializable {
     //cobranzas
     public static final String KARDEX_CLIENTE = "kardex-cliente";
     public static final String HISTORICO_CLIENTE = "historico-cliente";
+    public static final String ESTADO_CLIENTES = "estado-clientes";
 
     public int PERMITIR = 1;
     public int DENEGAR = 0;

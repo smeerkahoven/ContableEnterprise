@@ -6,7 +6,10 @@
 package com.cobranzas.remote;
 
 import com.cobranzas.dto.KardexClienteDto;
+import com.cobranzas.dto.ReporteEstadoClienteDto;
+import com.cobranzas.dto.ReporteEstadoClienteMainDto;
 import com.cobranzas.json.KardexClienteSearchJson;
+import com.cobranzas.json.ReporteEstadoClienteSearchJson;
 import com.seguridad.control.exception.CRUDException;
 import com.seguridad.control.remote.DaoRemote;
 import java.util.List;
@@ -30,5 +33,5 @@ public interface KardexClienteRemote extends DaoRemote {
     
     public List<KardexClienteDto> generarHistorico (KardexClienteSearchJson search) throws CRUDException ;
     
-    
+    public List<ReporteEstadoClienteMainDto> generarReporteEstadoCliente(ReporteEstadoClienteSearchJson search) throws CRUDException ;
 }

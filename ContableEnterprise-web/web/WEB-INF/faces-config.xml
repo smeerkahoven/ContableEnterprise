@@ -205,6 +205,15 @@
         </navigation-case>
     </navigation-rule>
     
+    <navigation-rule>
+        <from-view-id>pages/*</from-view-id>
+        <navigation-case>
+            <from-outcome>estado-clientes</from-outcome>
+            <to-view-id>/pages/cobranzas/estado-clientes.xhtml?faces-redirect=true</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
     <!-- configuracion -->
     
     <navigation-rule>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="612" pageHeight="792" columnWidth="591" leftMargin="1" rightMargin="20" topMargin="1" bottomMargin="1" uuid="05708238-32c6-4b2d-94c3-a78b24b631fb">
-	<property name="ireport.zoom" value="1.2722928551174593"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="0"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="612" pageHeight="792" columnWidth="596" leftMargin="1" rightMargin="15" topMargin="1" bottomMargin="1" uuid="05708238-32c6-4b2d-94c3-a78b24b631fb">
+	<property name="ireport.zoom" value="4.39230000000002"/>
+	<property name="ireport.x" value="1775"/>
+	<property name="ireport.y" value="18"/>
 	<parameter name="ID_INGRESO" class="java.lang.String">
 		<defaultValueExpression><![CDATA[6]]></defaultValueExpression>
 	</parameter>
@@ -126,7 +126,7 @@ sucursal]]></fieldDescription>
 		<band splitType="Stretch"/>
 	</title>
 	<pageHeader>
-		<band height="25" splitType="Stretch">
+		<band height="19" splitType="Stretch">
 			<textField>
 				<reportElement x="237" y="3" width="343" height="14" uuid="cd6fad28-c39b-4c89-a744-a59a3fc15091"/>
 				<textElement textAlignment="Right">
@@ -135,7 +135,7 @@ sucursal]]></fieldDescription>
 				<textFieldExpression><![CDATA["Ingreso a Caja #"+$F{id_ingreso_caja}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="7" y="23" width="570" height="1" uuid="222a71a6-8039-492a-8577-0288016e208c"/>
+				<reportElement x="7" y="18" width="570" height="1" uuid="222a71a6-8039-492a-8577-0288016e208c"/>
 			</line>
 			<staticText>
 				<reportElement x="9" y="4" width="77" height="12" uuid="7d5a4dfa-c483-43a3-b99b-69fbd133594b"/>

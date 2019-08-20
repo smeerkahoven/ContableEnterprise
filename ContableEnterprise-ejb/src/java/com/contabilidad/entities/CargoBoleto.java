@@ -78,7 +78,7 @@ public class CargoBoleto extends Entidad {
     private BigDecimal comisionPromotor;
 
 //    @Size(max = 256)
-    @Column(name = "concepto", length = 256)
+    @Column(name = "concepto", length = 512)
     private String concepto;
 //    @Size(max = 1)
     @Column(name = "tipo", length = 1)

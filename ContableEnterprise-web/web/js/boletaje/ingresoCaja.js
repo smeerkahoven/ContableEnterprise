@@ -42,7 +42,8 @@ function IngresoTransaccion() {
     this.idNotaTransaccion = null;
     this.idNotaDebito = null;
     this.estado = null;
-    this.monto = null;
+    this.montoCancelarUsd = null;
+    this.montoCancelarBs = null;
 }
 
 IngresoCaja.prototype = Object.create(IngresoCaja.prototype);
@@ -87,14 +88,15 @@ angular.module('jsIngresoCaja.controllers', []).controller('frmIngresoCaja',
                 $scope.CHEQUE = "H";
                 $scope.DEPOSITO = "D";
                 $scope.TARJETA = "T";
-                
+
                 $scope.MONEDA_NACIONAL = 'B';
                 $scope.MONEDA_EXTRANJERA = 'U';
                 $scope.INGRESO = 'I';
                 $scope.TRANSACCION = 'T';
                 $scope.showClienteRequieredSearch = false;
                 $scope.loading = false;
-                $scope.showErrorMontoIngresado = false;
+                $scope.showErrorMontoIngresadoBs = false;
+                $scope.showErrorMontoIngresadoUsd = false;
                 $scope.montoQueDebeIngresar = '';
                 $scope.formData = {};
                 $scope.mainGrid = [];
@@ -103,7 +105,7 @@ angular.module('jsIngresoCaja.controllers', []).controller('frmIngresoCaja',
                 $scope.showTable = true;
                 $scope.itemsByPage = 15;
                 $scope.search = {fechaInicio: firstDay, fechaFin: today};
-                $scope.showComprobante=false ;
+                $scope.showComprobante = false;
 
 
                 $scope.find = function () {
@@ -136,22 +138,22 @@ angular.module('jsIngresoCaja.controllers', []).controller('frmIngresoCaja',
                     $scope.showBtnEditar = true;
                     $scope.hideMessagesBox();
                     $scope.formData = item;
-                    
+
                     $http({
-                        method : 'GET', 
+                        method: 'GET',
                         url: `${url.value}comprobante/${item.idIngresoCaja}`,
-                        headers: {'Content-Type':'application/json'}
+                        headers: {'Content-Type': 'application/json'}
                     }).then(
-                            function (response){
-                                if (response.data.code === 201){
-                                    $scope.showComprobante = true ;
-                                    $scope.comprobante = response.data.content ;
+                            function (response) {
+                                if (response.data.code === 201) {
+                                    $scope.showComprobante = true;
+                                    $scope.comprobante = response.data.content;
                                 }
                             },
                             $scope.errorFunction
                             );
-                    
-                    
+
+
                     return $http({
                         method: 'POST',
                         url: `${url.value}all/transaccion`,
@@ -254,23 +256,21 @@ angular.module('jsIngresoCaja.controllers', []).controller('frmIngresoCaja',
                     $scope.formData.factorMin = parseFloat($scope.formData.factorCambiario) - parseFloat(factorMaxMin.value);
                 }
 
-                $scope.checkMontoIngresado = function () {
-                    if ($scope.trx.moneda === $scope.MONEDA_NACIONAL) {
-                        if ($scope.trx.monto > $scope.trx.montoAdeudadoBs) {
-                            $scope.showErrorMontoIngresado = true;
-                            $scope.montoQueDebeIngresar = $scope.trx.montoAdeudadoBs;
-                        } else {
-                            $scope.showErrorMontoIngresado = false;
-                        }
-                    } else {
-                        if ($scope.trx.monto > $scope.trx.montoAdeudadoUsd) {
-                            $scope.showErrorMontoIngresado = true;
-                            $scope.montoQueDebeIngresar = $scope.trx.montoAdeudadoUsd;
-                        } else {
-                            $scope.showErrorMontoIngresado = false;
-                        }
-                    }
+                $scope.checkMontoIngresadoBs = function () {
 
+                    if ($scope.trx.montoCancelarBs > $scope.trx.montoAdeudadoBs) {
+                        $scope.showErrorMontoIngresadoBs = true;
+                    } else {
+                        $scope.showErrorMontoIngresadoBs = false;
+                    }
+                }
+
+                $scope.checkMontoIngresadoUsd = function () {
+                    if ($scope.trx.montoCancelarUsd > $scope.trx.montoAdeudadoUsd) {
+                        $scope.showErrorMontoIngresadoUsd = true;
+                    } else {
+                        $scope.showErrorMontoIngresadoUsd = false;
+                    }
                 }
 
                 $scope.formIngresoHasErrores = function () {
@@ -332,7 +332,7 @@ angular.module('jsIngresoCaja.controllers', []).controller('frmIngresoCaja',
                         $scope.showAlert(ERROR_RESPUESTA_TITLE, ERROR_NOTA_DEBITO_EMITIDA);
                         return;
                     }
-                    
+
                     showBackground();
                     $http({
                         method: 'POST',
@@ -346,7 +346,7 @@ angular.module('jsIngresoCaja.controllers', []).controller('frmIngresoCaja',
                                     $scope.showForm = false;
                                     $scope.showRestfulSuccess = true;
                                     $scope.showRestfulMessage = response.data.content;
-                                    $scope.formData= response.data.entidad;
+                                    $scope.formData = response.data.entidad;
                                     goScrollTo('#restful-success');
                                     $scope.imprimir();
                                 } else {
@@ -455,8 +455,8 @@ angular.module('jsIngresoCaja.controllers', []).controller('frmIngresoCaja',
                         $scope.showAlert('Error de Verificacion', 'Verifique los mensajes de los valores requeridos')
                         return;
                     }
-                    
-                    if (!$scope.hasFormaDePagos()){
+
+                    if (!$scope.hasFormaDePagos()) {
                         $scope.showAlert(ERROR_TITLE, $scope.errorFormaPagoMessage);
                         return
                     }
@@ -488,7 +488,7 @@ angular.module('jsIngresoCaja.controllers', []).controller('frmIngresoCaja',
                         $scope.showForm = false;
                     });
                 };
-                
+
                 $scope.editTransaccion = function (row) {
                     $scope.showFrmEditarTrx = true;
                     return $http({
@@ -499,8 +499,8 @@ angular.module('jsIngresoCaja.controllers', []).controller('frmIngresoCaja',
                     }).then(function (response) {
                         if (response.data.code === 201) {
                             $scope.trx = response.data.content;
-                            if ($scope.formData.estado === $scope.EMITIDO){
-                                $scope.showFrmEditarTrx = false ;
+                            if ($scope.formData.estado === $scope.EMITIDO) {
+                                $scope.showFrmEditarTrx = false;
                             }
                             showModalWindow('#frmIngresoTransaccion');
                         } else {
@@ -509,7 +509,7 @@ angular.module('jsIngresoCaja.controllers', []).controller('frmIngresoCaja',
 
                     }, $scope.errorFunction);
                 }
-                
+
                 $scope.formHasError = function () {
                     if ($scope.formData.idEmpresa === undefined) {
                         return true;
@@ -566,8 +566,8 @@ angular.module('jsIngresoCaja.controllers', []).controller('frmIngresoCaja',
                 }
 
                 $scope.nuevo = function () {
-                    $scope.showComprobante = false ;
-                    $scope.comprobante = {} ;
+                    $scope.showComprobante = false;
+                    $scope.comprobante = {};
                     $scope.showLoading = true;
                     $scope.showRestfulSuccess = false;
                     $scope.showRestfulError = false;
@@ -604,8 +604,8 @@ angular.module('jsIngresoCaja.controllers', []).controller('frmIngresoCaja',
                     $scope.trx.estado = $scope.PENDIENTE;
                     $scope.trx.idNotaDebito = $scope.formData.idNotaDebito;
                     $scope.trx.idIngresoCaja = $scope.formData.idIngresoCaja;
-                    
-                    $scope.itemTrxSelected=false ;
+
+                    $scope.itemTrxSelected = false;
 
                     $scope.showFrmBoletoNuevo = true;
                     $scope.showFrmBoletoEditar = false;
@@ -707,21 +707,25 @@ angular.module('jsIngresoCaja.controllers', []).controller('frmIngresoCaja',
 
                 $scope.seleccionarItemNotaDebito = function (row) {
                     $scope.trx = row;
-                    $scope.itemTrxSelected = true ;
+                    $scope.itemTrxSelected = true;
                 }
 
                 $scope.seleccionarTransaccion = function () {
                     console.log($scope.trx);
                     $scope.showRestfulError = false;
                     $scope.showRestfulSuccess = false;
-                    
+
 
                     $scope.trx.monedaTransaccion = $scope.trx.moneda;
                     if ($scope.trx.moneda === $scope.MONEDA_EXTRANJERA) {
-                        $scope.trx.monto = $scope.trx.montoAdeudadoUsd;
+                        $scope.trx.montoCancelarUsd = $scope.trx.montoAdeudadoUsd;
                     } else {
-                        $scope.trx.monto = $scope.trx.montoAdeudadoBs;
+                        $scope.trx.montoCancelarBs = $scope.trx.montoAdeudadoBs;
                     }
+
+                    $scope.trx.montoQueDebeIngresarUsd = $scope.trx.montoAdeudadoUsd;
+                    $scope.trx.montoQueDebeIngresarBs = $scope.trx.montoAdeudadoBs;
+
                     hideModalWindow('#frmNotasDebitos');
                     $scope.showFrmNuevaTrx = true;
                     $scope.showFrmEditarTrx = false;
@@ -837,8 +841,8 @@ angular.module('jsIngresoCaja.controllers', []).controller('frmIngresoCaja',
                     $scope.showRestfulMessage = error.statusText;
                     goScrollTo('#restful-success');
                 }
-                
-                 /*
+
+                /*
                  *  Eventos Click Pestanhas
                  */
                 $scope.efectivoClick = function () {
@@ -868,7 +872,7 @@ angular.module('jsIngresoCaja.controllers', []).controller('frmIngresoCaja',
                 $scope.combinadoClick = function () {
                     $scope.initCombinado();
                 }
-                
+
                 /**
                  * 
                  * eventos formas de pago
@@ -1055,25 +1059,25 @@ app.directive('pageSelect', function () {
             });
         }
     }
-}) ;
+});
 
 
 
-app.directive("stResetSearch", function() {
-return {
-       restrict: 'EA',
-       require: '^stTable',
-       link: function(scope, element, attrs, ctrl) {
-         return element.bind('click', function() {
-           return scope.$apply(function() {
-             var tableState;
-             tableState = ctrl.tableState();
-             tableState.search.predicateObject = {};
-             tableState.pagination.start = 0;
-             scope.txtAutomaticTicketSearch="";
-             return ctrl.pipe();
-           });
-         });
-       }
-     };
+app.directive("stResetSearch", function () {
+    return {
+        restrict: 'EA',
+        require: '^stTable',
+        link: function (scope, element, attrs, ctrl) {
+            return element.bind('click', function () {
+                return scope.$apply(function () {
+                    var tableState;
+                    tableState = ctrl.tableState();
+                    tableState.search.predicateObject = {};
+                    tableState.pagination.start = 0;
+                    scope.txtAutomaticTicketSearch = "";
+                    return ctrl.pipe();
+                });
+            });
+        }
+    };
 });

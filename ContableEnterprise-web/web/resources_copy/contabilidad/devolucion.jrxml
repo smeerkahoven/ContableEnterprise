@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="907" pageHeight="521" columnWidth="886" leftMargin="1" rightMargin="20" topMargin="1" bottomMargin="1" uuid="1b7078e6-ceb5-4087-92f3-21ab3eca1288">
+	<property name="ireport.zoom" value="1.0000000000000036"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ID_PAGO" class="java.lang.Integer"/>
+	<parameter name="ID_DEVOLUCION" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select de.id_devolucion
+, cc.id_numero_gestion
+, cc.gestion
+, de.id_cliente
+, cl.nombre as cliente
+, case de.moneda when 'B' then 'BOLIVIANOS' when 'U' then 'DOLARES' end moneda
+, de.id_nota_debito
+, de.id_pago_anticipado
+, de.concepto
+, date_format(de.fecha_emision,'%d/%m/%Y')fecha_emision
+, de.moneda
+, de.factor_cambiario
+, number_to_string(de.monto) literal
+, round(abs(mod(de.monto,1)*100)) decimal_part
+, coalesce(de.monto,0) monto_devolucion
+, de.concepto
+, de.tipo_devolucion
+, case de.tipo_devolucion 	
+		when 'E' then 'CONTADO EFECTIVO' 
+		when 'H' then concat('CONTADO con CHEQUE Nro :',de.nro_cheque, ' en la Cuenta: ',coalesce( pc.cuenta,'SIN NOMBRE'))
+	end forma_pago_literal
+, de.fecha_insert
+, de.id_usuario_creador
+, case de.estado when 'A' then 'ANULADO' when 'E' then 'EMITIDO' end estado
+
+from cnt_devolucion de
+inner join cnt_cliente cl on cl.id_cliente = de.id_cliente
+left join cnt_pago_anticipado pa on pa.id_pago_anticipado = de.id_pago_anticipado
+left join cnt_plan_cuentas pc on pc.id_plan_cuentas = de.id_cuenta_deposito
+left join cnt_comprobante_contable cc on cc.id_devolucion = de.id_devolucion and cc.tipo='CE'
+WHERE de.id_devolucion = $P{ID_DEVOLUCION}]]>
+	</queryString>
+	<field name="id_devolucion" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="id_numero_gestion" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="gestion" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="id_cliente" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="cliente" class="java.lang.String"/>
+	<field name="moneda" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="id_nota_debito" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="id_pago_anticipado" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="concepto" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="fecha_emision" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="factor_cambiario" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="literal" class="java.lang.String"/>
+	<field name="decimal_part" class="java.math.BigDecimal"/>
+	<field name="monto_devolucion" class="java.math.BigDecimal"/>
+	<field name="tipo_devolucion" class="java.lang.String">
+		<fieldDescription><![CDATA[EFECTIVO
+CHEQUE]]></fieldDescription>
+	</field>
+	<field name="forma_pago_literal" class="java.lang.String"/>
+	<field name="fecha_insert" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="id_usuario_creador" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="estado" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="36" splitType="Stretch">
+			<line>
+				<reportElement x="20" y="32" width="800" height="1" uuid="3bc058aa-e879-4659-b64b-16760e44442f"/>
+			</line>
+			<textField>
+				<reportElement x="354" y="7" width="466" height="19" uuid="ce333745-016b-4ba7-9da3-95d039bf3d32"/>
+				<textElement textAlignment="Right">
+					<font fontName="Monospaced" size="15" isBold="false" isItalic="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Nota de Devolución #"+$F{id_devolucion}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="125" y="12" width="168" height="19" uuid="84ada0e0-0618-4ea7-97da-bb2aa3b6c141"/>
+				<textElement>
+					<font fontName="Monospaced" size="15" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{gestion}+ "-"+ 
+    $F{id_numero_gestion} +  " CE"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="21" y="12" width="99" height="19" uuid="f12ac47f-7c49-40ac-bcc7-680a0997066d"/>
+				<textElement textAlignment="Right">
+					<font fontName="Monospaced" size="15" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Asiento:]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="66" splitType="Stretch">
+			<staticText>
+				<reportElement x="20" y="1" width="77" height="19" uuid="91211e5a-700a-442e-9e9a-67d3115dfca0"/>
+				<textElement textAlignment="Right">
+					<font fontName="Monospaced" size="15" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Señores:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="717" y="20" width="103" height="19" uuid="f012d6dc-7a1f-4385-a4df-4e3d93e299a6"/>
+				<textElement>
+					<font fontName="Monospaced" size="15" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fecha_emision}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="578" y="20" width="137" height="19" uuid="d97a1993-c0bc-4d22-9304-bab80c31ac7d"/>
+				<textElement textAlignment="Right">
+					<font fontName="Monospaced" size="15" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Fecha Emision:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="97" y="1" width="494" height="19" uuid="aa446270-d579-48a9-b474-0968ef915e27"/>
+				<textElement>
+					<font fontName="Monospaced" size="15" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{cliente}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="20" y="20" width="77" height="19" uuid="a3e1565e-59a7-43a2-8b85-0a6f5e2afc8e"/>
+				<textElement textAlignment="Right">
+					<font fontName="Monospaced" size="15" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Estado:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="97" y="20" width="306" height="19" uuid="cc6dcc58-a6d5-4787-9a6f-8be8093af3d0"/>
+				<textElement>
+					<font fontName="Monospaced" size="15" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{estado}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="627" y="46" width="100" height="19" uuid="33b2b612-3881-444a-abe3-1d2844441aad"/>
+				<textElement textAlignment="Center">
+					<font fontName="Monospaced" size="15" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[MONEDA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="46" width="364" height="19" uuid="e4199d13-a92a-4363-9ab5-39a871af2c62"/>
+				<textElement>
+					<font fontName="Monospaced" size="15" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[DESCRIPCION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="729" y="46" width="93" height="19" uuid="b9973bd9-ac0b-4157-a451-93c5a0552fd5"/>
+				<textElement textAlignment="Right">
+					<font fontName="Monospaced" size="15" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[MONTO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="638" y="1" width="77" height="19" uuid="69d122cc-524f-409e-8377-3ab5e99f0540"/>
+				<textElement textAlignment="Right">
+					<font fontName="Monospaced" size="15" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Factor:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="717" y="1" width="90" height="19" uuid="9cf860d9-5b99-4ce4-863b-17ebf7c1b111"/>
+				<textElement>
+					<font fontName="Monospaced" size="15" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{factor_cambiario}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Immediate">
+			<line>
+				<reportElement x="20" y="0" width="802" height="1" uuid="aa9fb224-9a40-496d-bf69-8d1655ffa819"/>
+			</line>
+			<textField>
+				<reportElement x="20" y="1" width="607" height="19" uuid="40928b92-7ec9-46d4-8733-37acad64bf38"/>
+				<textElement>
+					<font fontName="Monospaced" size="15" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{concepto} +
+     ($F{id_nota_debito}!= null? "- NOTA DE DEBITO : " +$F{id_nota_debito} : 
+        ($F{id_pago_anticipado}!=null ? "- PAGO ANTICIPADO:" + $F{id_pago_anticipado} : "")
+      )]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="134" splitType="Immediate">
+			<textField isBlankWhenNull="true">
+				<reportElement x="20" y="41" width="803" height="19" uuid="f0579487-6e2c-4581-856d-545a9722a1ee"/>
+				<textElement>
+					<font fontName="Monospaced" size="15" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Son:" + $F{literal} + " " + ($F{decimal_part}>10?$F{decimal_part}:"0"+$F{decimal_part})+"/100 " + $F{moneda}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="20" y="22" width="802" height="19" isPrintWhenDetailOverflows="true" uuid="c55180f6-32b4-4297-a54b-b869ccfd2192"/>
+				<textElement>
+					<font fontName="Monospaced" size="15" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Forma de devolución:" + $F{forma_pago_literal}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="558" y="90" width="252" height="19" uuid="2da1d7a4-23ba-46c0-b77c-c97acfc64208"/>
+				<textElement textAlignment="Center">
+					<font fontName="Monospaced" size="15" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[FIRMA DEL CLIENTE]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="253" y="90" width="254" height="19" uuid="72313c7b-c225-410f-8ea8-17bcadb4c591"/>
+				<textElement textAlignment="Center">
+					<font fontName="Monospaced" size="15" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["AUTORIZADO POR :" + $F{id_usuario_creador}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="253" y="89" width="254" height="1" uuid="7daf2de4-3486-45f7-a7d3-d02d42e569d1"/>
+			</line>
+			<line>
+				<reportElement x="558" y="89" width="248" height="1" uuid="3d325509-9800-4fef-9da6-9376c61ff5d8"/>
+			</line>
+			<textField>
+				<reportElement x="18" y="115" width="489" height="19" uuid="1a165738-5c3d-404d-8dbb-dd241f33b51e"/>
+				<textElement>
+					<font fontName="Monospaced" size="15" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Creado por: " + $F{id_usuario_creador} + " fecha: " + $F{fecha_insert}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="729" y="-19" width="93" height="19" uuid="3f0064f6-0b23-4b7d-9c5d-f8994da6ce46"/>
+				<textElement textAlignment="Right">
+					<font fontName="Monospaced" size="15" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{monto_devolucion}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="20" y="3" width="462" height="19" uuid="ec5e034f-fe5a-4596-b3b5-fba92a343bae"/>
+				<textElement>
+					<font fontName="Monospaced" size="15" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="627" y="-19" width="100" height="19" uuid="1c603167-c19e-468d-825e-12f3c5235eb2"/>
+				<textElement textAlignment="Center">
+					<font fontName="Monospaced" size="15" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{moneda}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="21" y="1" width="802" height="1" uuid="0fd860af-ca11-4252-a705-01ebb7e5aa13"/>
+			</line>
+			<textField pattern="#,##0.00">
+				<reportElement x="729" y="3" width="93" height="19" uuid="53003912-bffe-4b37-9185-01e38041bfc6"/>
+				<textElement textAlignment="Right">
+					<font fontName="Monospaced" size="15" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{monto_devolucion}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

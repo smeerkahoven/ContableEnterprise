@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="907" pageHeight="391" columnWidth="905" leftMargin="1" rightMargin="1" topMargin="1" bottomMargin="1" uuid="c6d5ac85-d154-42b4-b451-dcd03b103eae">
-	<property name="ireport.zoom" value="1.6105100000000145"/>
-	<property name="ireport.x" value="255"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="612" pageHeight="346" columnWidth="596" leftMargin="1" rightMargin="15" topMargin="1" bottomMargin="1" uuid="c6d5ac85-d154-42b4-b451-dcd03b103eae">
+	<property name="ireport.zoom" value="1.6105100000000199"/>
+	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="ID_LIBRO" class="java.lang.Integer">
 		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
@@ -148,214 +148,220 @@ where cc.id_libro=$P{ID_LIBRO} order by nro_plan_cuenta , id_asiento asc]]>
 		<band splitType="Stretch"/>
 	</title>
 	<pageHeader>
-		<band height="23" splitType="Stretch">
+		<band height="12" splitType="Stretch">
 			<textField>
-				<reportElement x="278" y="0" width="550" height="22" uuid="b37222b5-8d88-423e-8538-9d8a2df765ce"/>
+				<reportElement x="307" y="0" width="267" height="12" uuid="b37222b5-8d88-423e-8538-9d8a2df765ce"/>
 				<textElement textAlignment="Right">
-					<font fontName="Monospaced" size="15" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="Courier 10 Pitch" size="11" isBold="false" pdfFontName="Courier" isPdfEmbedded="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{tipo}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>
 	<columnHeader>
-		<band height="102" splitType="Stretch">
+		<band height="61" splitType="Stretch">
 			<line>
-				<reportElement x="0" y="0" width="828" height="1" uuid="a5fe6b21-920f-44c8-a497-122290fcf661"/>
+				<reportElement x="0" y="0" width="573" height="1" uuid="a5fe6b21-920f-44c8-a497-122290fcf661"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineStyle="Dashed"/>
+				</graphicElement>
 			</line>
 			<textField>
-				<reportElement x="90" y="3" width="144" height="18" uuid="19ae09c0-f40f-4bd2-bda2-ded305d50d7e"/>
+				<reportElement x="74" y="3" width="114" height="12" uuid="19ae09c0-f40f-4bd2-bda2-ded305d50d7e"/>
 				<textElement>
-					<font fontName="Monospaced" size="15" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="Courier 10 Pitch" size="11" isBold="false" pdfFontName="Courier" isPdfEmbedded="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{gestion}+"-"+$F{id_numero_gestion}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="1" y="3" width="85" height="18" uuid="03600d8e-d201-4bef-bbfc-109cd88306c2"/>
+				<reportElement x="1" y="3" width="73" height="12" uuid="03600d8e-d201-4bef-bbfc-109cd88306c2"/>
 				<textElement textAlignment="Right">
-					<font fontName="Monospaced" size="15" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="Courier 10 Pitch" size="11" isBold="false" pdfFontName="Courier" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[Numero:]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="652" y="3" width="76" height="18" uuid="b488dd38-d63e-4f1c-8a5d-9a8ca394330c"/>
+				<reportElement x="423" y="3" width="76" height="12" uuid="b488dd38-d63e-4f1c-8a5d-9a8ca394330c"/>
 				<textElement textAlignment="Right">
-					<font fontName="Monospaced" size="15" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="Courier 10 Pitch" size="11" isBold="false" pdfFontName="Courier" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[Factor:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="730" y="3" width="85" height="18" uuid="8c9e20cb-9d9a-4261-a5ae-f46b7036bcb7"/>
+				<reportElement x="499" y="3" width="75" height="12" uuid="8c9e20cb-9d9a-4261-a5ae-f46b7036bcb7"/>
 				<textElement>
-					<font fontName="Monospaced" size="15" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="Courier 10 Pitch" size="11" isBold="false" pdfFontName="Courier" isPdfEmbedded="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{factor_cambiario}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="1" y="21" width="85" height="18" uuid="a409563b-e504-4359-a7c5-4722eb8aace5"/>
+				<reportElement x="1" y="14" width="73" height="12" uuid="a409563b-e504-4359-a7c5-4722eb8aace5"/>
 				<textElement textAlignment="Right">
-					<font fontName="Monospaced" size="15" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="Courier 10 Pitch" size="11" isBold="false" pdfFontName="Courier" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[Señor(es):]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="89" y="21" width="455" height="18" uuid="9baaeac9-8594-4886-a221-ec0bce0f5296"/>
+				<reportElement x="73" y="14" width="315" height="12" uuid="9baaeac9-8594-4886-a221-ec0bce0f5296"/>
 				<textElement>
-					<font fontName="Monospaced" size="15" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="Courier 10 Pitch" size="11" isBold="false" pdfFontName="Courier" isPdfEmbedded="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nombre}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="1" y="39" width="85" height="18" uuid="789661e0-99e8-44ee-92a1-b1b166a17bd0"/>
+				<reportElement x="1" y="25" width="73" height="12" uuid="789661e0-99e8-44ee-92a1-b1b166a17bd0"/>
 				<textElement textAlignment="Right">
-					<font fontName="Monospaced" size="15" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="Courier 10 Pitch" size="11" isBold="false" pdfFontName="Courier" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[Concepto:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="90" y="39" width="455" height="18" isPrintWhenDetailOverflows="true" uuid="7f9471c4-1f3e-480e-b02c-a5dbd6da4a80"/>
+				<reportElement x="74" y="25" width="501" height="12" isPrintWhenDetailOverflows="true" uuid="7f9471c4-1f3e-480e-b02c-a5dbd6da4a80"/>
 				<textElement>
-					<font fontName="Monospaced" size="15" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="Courier 10 Pitch" size="11" isBold="false" pdfFontName="Courier" isPdfEmbedded="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{concepto}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="471" y="65" width="178" height="18" uuid="2a3e1ecc-1093-4491-a59b-8cc5bad4b42f"/>
+				<reportElement x="277" y="37" width="148" height="12" uuid="2a3e1ecc-1093-4491-a59b-8cc5bad4b42f"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Monospaced" size="15" isBold="false" isUnderline="true" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="Courier 10 Pitch" size="11" isBold="false" isUnderline="true" pdfFontName="Courier" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[Bolivianos]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="439" y="82" width="88" height="18" uuid="7c3a83d3-717d-4bc1-9ec9-d8b66c04f926"/>
+				<reportElement x="276" y="49" width="75" height="12" uuid="7c3a83d3-717d-4bc1-9ec9-d8b66c04f926"/>
 				<textElement textAlignment="Right">
-					<font fontName="Monospaced" size="15" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="Courier 10 Pitch" size="11" isBold="false" pdfFontName="Courier" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[DEBE]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="529" y="83" width="100" height="18" uuid="1d77fb8d-da00-4fc0-9991-696e598c58a8"/>
+				<reportElement x="350" y="49" width="75" height="12" uuid="1d77fb8d-da00-4fc0-9991-696e598c58a8"/>
 				<textElement textAlignment="Right">
-					<font fontName="Monospaced" size="15" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="Courier 10 Pitch" size="11" isBold="false" pdfFontName="Courier" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[HABER]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="629" y="83" width="100" height="18" uuid="d5ca1bbd-0e24-40ee-ac8a-7fee7574df5f"/>
+				<reportElement x="425" y="49" width="75" height="12" uuid="d5ca1bbd-0e24-40ee-ac8a-7fee7574df5f"/>
 				<textElement textAlignment="Right">
-					<font fontName="Monospaced" size="15" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="Courier 10 Pitch" size="11" isBold="false" pdfFontName="Courier" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[DEBE]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="1" y="82" width="275" height="18" uuid="4445ffa0-b853-4ac3-9181-f52967b946cd"/>
+				<reportElement x="1" y="49" width="238" height="12" uuid="4445ffa0-b853-4ac3-9181-f52967b946cd"/>
 				<textElement>
-					<font fontName="Monospaced" size="15" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="Courier 10 Pitch" size="11" isBold="false" pdfFontName="Courier" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[CUENTA]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="649" y="65" width="179" height="18" uuid="7d4ccd70-f264-4b0f-a783-745ed7d780a5"/>
+				<reportElement x="425" y="37" width="147" height="12" uuid="7d4ccd70-f264-4b0f-a783-745ed7d780a5"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="Monospaced" size="15" isBold="false" isUnderline="true" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="Courier 10 Pitch" size="11" isBold="false" isUnderline="true" pdfFontName="Courier" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[Dolares]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="729" y="83" width="100" height="18" uuid="69e09b42-4a16-40d6-9699-7fbce044da95"/>
+				<reportElement x="499" y="49" width="75" height="12" uuid="69e09b42-4a16-40d6-9699-7fbce044da95"/>
 				<textElement textAlignment="Right">
-					<font fontName="Monospaced" size="15" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="Courier 10 Pitch" size="11" isBold="false" pdfFontName="Courier" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[HABER]]></text>
 			</staticText>
 			<line>
-				<reportElement x="0" y="100" width="828" height="1" uuid="4de5a047-85ce-486f-9a0a-7a4b2c3592a2"/>
+				<reportElement x="0" y="60" width="573" height="1" uuid="4de5a047-85ce-486f-9a0a-7a4b2c3592a2"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineStyle="Dashed"/>
+				</graphicElement>
 			</line>
 			<staticText>
-				<reportElement x="596" y="23" width="132" height="18" uuid="e7e34fb5-eb76-4bf3-9ca6-f70e59b501df"/>
+				<reportElement x="406" y="14" width="91" height="12" uuid="e7e34fb5-eb76-4bf3-9ca6-f70e59b501df"/>
 				<textElement textAlignment="Right">
-					<font fontName="Monospaced" size="15" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="Courier 10 Pitch" size="11" isBold="false" pdfFontName="Courier" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[Fecha Emision:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="730" y="23" width="99" height="18" uuid="77f82a8f-d4ba-4edf-be63-73edbe9e3d8c"/>
+				<reportElement x="497" y="14" width="77" height="12" uuid="77f82a8f-d4ba-4edf-be63-73edbe9e3d8c"/>
 				<textElement>
-					<font fontName="Monospaced" size="15" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="Courier 10 Pitch" size="11" isBold="false" pdfFontName="Courier" isPdfEmbedded="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{fecha}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="395" y="82" width="33" height="18" uuid="502237d9-551f-4235-8d3b-f81d052e7174"/>
+				<reportElement x="252" y="49" width="25" height="12" uuid="502237d9-551f-4235-8d3b-f81d052e7174"/>
 				<textElement textAlignment="Center">
-					<font fontName="Monospaced" size="15" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="Courier 10 Pitch" size="11" isBold="false" pdfFontName="Courier" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[MON.]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="239" y="3" width="200" height="18" uuid="d3f01a6f-be1d-4663-9816-87122a3982b9"/>
+				<reportElement x="188" y="3" width="200" height="12" uuid="d3f01a6f-be1d-4663-9816-87122a3982b9"/>
 				<textElement>
-					<font fontName="Monospaced" size="15" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="Courier 10 Pitch" size="11" isBold="false" pdfFontName="Courier" isPdfEmbedded="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{denominacion}+"-"+($F{ambito} != null ? $F{ambito}: "-")]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="441" y="3" width="59" height="18" uuid="bc3611ce-6d9b-45ce-bea7-45da08299081"/>
+				<reportElement x="22" y="37" width="51" height="12" uuid="bc3611ce-6d9b-45ce-bea7-45da08299081"/>
 				<textElement textAlignment="Right">
-					<font fontName="Monospaced" size="15" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="Courier 10 Pitch" size="11" isBold="false" pdfFontName="Courier" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[Estado:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="505" y="3" width="126" height="18" uuid="b5518abf-cd07-4d58-97f9-769f2496cdeb"/>
+				<reportElement x="73" y="37" width="88" height="12" uuid="b5518abf-cd07-4d58-97f9-769f2496cdeb"/>
 				<textElement>
-					<font fontName="Monospaced" size="15" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="Courier 10 Pitch" size="11" isBold="false" pdfFontName="Courier" isPdfEmbedded="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{estado}]]></textFieldExpression>
 			</textField>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="19" splitType="Stretch">
-			<textField pattern="#,##0.00">
-				<reportElement x="629" y="0" width="100" height="18" uuid="d9c38372-d189-4e7e-9abc-3155bb63bb7f"/>
+		<band height="12" splitType="Stretch">
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="499" y="0" width="75" height="12" isPrintWhenDetailOverflows="true" uuid="d9c38372-d189-4e7e-9abc-3155bb63bb7f"/>
 				<textElement textAlignment="Right">
-					<font fontName="Monospaced" size="14" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="Courier 10 Pitch" size="11" isBold="false" pdfFontName="Courier" isPdfEmbedded="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{monto_debe_ext}==null?"":$F{monto_debe_ext}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{monto_debe_ext}==null?"-":$F{monto_debe_ext}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0.00">
-				<reportElement x="729" y="0" width="100" height="18" uuid="630221c6-73f1-4cf9-bf02-e68f8664f660"/>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="425" y="0" width="75" height="12" isPrintWhenDetailOverflows="true" uuid="630221c6-73f1-4cf9-bf02-e68f8664f660"/>
 				<textElement textAlignment="Right">
-					<font fontName="Monospaced" size="14" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="Courier 10 Pitch" size="11" isBold="false" pdfFontName="Courier" isPdfEmbedded="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{monto_haber_ext}==null?"":$F{monto_haber_ext}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{monto_haber_ext}==null?"-":$F{monto_haber_ext}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
-				<reportElement x="1" y="-1" width="394" height="18" uuid="13262b30-feac-40f7-9718-8dba224fefdd"/>
+				<reportElement x="1" y="-1" width="251" height="12" uuid="13262b30-feac-40f7-9718-8dba224fefdd"/>
 				<textElement>
-					<font fontName="Monospaced" size="14" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="Courier 10 Pitch" size="11" isBold="false" pdfFontName="Courier" isPdfEmbedded="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nro_plan_cuenta} +"-"+ $F{cuenta}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0.00">
-				<reportElement x="529" y="0" width="100" height="18" uuid="5691d379-149f-482b-9ebf-89f0263fa4da"/>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="351" y="0" width="75" height="12" isPrintWhenDetailOverflows="true" uuid="5691d379-149f-482b-9ebf-89f0263fa4da"/>
 				<textElement textAlignment="Right">
-					<font fontName="Monospaced" size="14" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="Courier 10 Pitch" size="11" isBold="false" pdfFontName="Courier" isPdfEmbedded="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{monto_haber_nac}==null?"":$F{monto_haber_nac}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{monto_haber_nac}==null?"-":$F{monto_haber_nac}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="277" y="0" width="75" height="12" isPrintWhenDetailOverflows="true" uuid="f79fa554-01ff-410b-babc-43781708fb91"/>
+				<textElement textAlignment="Right">
+					<font fontName="Courier 10 Pitch" size="11" isBold="false" pdfFontName="Courier" isPdfEmbedded="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{monto_debe_nac}==null?"-":$F{monto_debe_nac}]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00">
-				<reportElement x="429" y="0" width="100" height="18" uuid="f79fa554-01ff-410b-babc-43781708fb91"/>
-				<textElement textAlignment="Right">
-					<font fontName="Monospaced" size="14" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{monto_debe_nac}==null?"":$F{monto_debe_nac}]]></textFieldExpression>
-			</textField>
-			<textField pattern="#,##0.00">
-				<reportElement x="395" y="0" width="34" height="18" uuid="80510b5f-07f3-488d-b539-5c0c6cb70425"/>
-				<textElement textAlignment="Right">
-					<font fontName="Monospaced" size="14" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				<reportElement x="252" y="0" width="25" height="12" uuid="80510b5f-07f3-488d-b539-5c0c6cb70425"/>
+				<textElement textAlignment="Left">
+					<font fontName="Courier 10 Pitch" size="11" isBold="false" pdfFontName="Courier" isPdfEmbedded="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{moneda_trx}]]></textFieldExpression>
 			</textField>
@@ -368,102 +374,111 @@ where cc.id_libro=$P{ID_LIBRO} order by nro_plan_cuenta , id_asiento asc]]>
 		<band splitType="Stretch"/>
 	</pageFooter>
 	<summary>
-		<band height="181" splitType="Stretch">
+		<band height="136" splitType="Immediate">
 			<textField>
-				<reportElement x="119" y="88" width="207" height="18" uuid="a44566cc-7dd0-4696-869b-7e29078e2718"/>
+				<reportElement x="19" y="74" width="160" height="12" uuid="a44566cc-7dd0-4696-869b-7e29078e2718"/>
 				<textElement textAlignment="Center">
-					<font fontName="Monospaced" size="15" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="Courier 10 Pitch" size="11" isBold="false" pdfFontName="Courier" isPdfEmbedded="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{firma1}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="579" y="88" width="202" height="18" uuid="3ea33746-6cac-4809-9451-3e21b8b00e0e"/>
+				<reportElement x="393" y="74" width="160" height="12" uuid="3ea33746-6cac-4809-9451-3e21b8b00e0e"/>
 				<textElement textAlignment="Center">
-					<font fontName="Monospaced" size="15" isBold="false" isStrikeThrough="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="Courier 10 Pitch" size="11" isBold="false" isStrikeThrough="false" pdfFontName="Courier" isPdfEmbedded="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{firma2}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="351" y="110" width="192" height="18" uuid="4a03f538-c8a7-459a-93da-26868bc866e8">
+				<reportElement x="206" y="95" width="160" height="12" uuid="4a03f538-c8a7-459a-93da-26868bc866e8">
 					<printWhenExpression><![CDATA[!$F{firma3}.equals("")]]></printWhenExpression>
 				</reportElement>
 				<textElement textAlignment="Center">
-					<font fontName="Monospaced" size="15" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="Courier 10 Pitch" size="11" isBold="false" pdfFontName="Courier" isPdfEmbedded="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{firma3}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="0" y="18" width="817" height="18" uuid="d45cc385-ed17-47a3-ad5d-7dfb271c36f6"/>
+				<reportElement x="0" y="12" width="575" height="12" isPrintWhenDetailOverflows="true" uuid="d45cc385-ed17-47a3-ad5d-7dfb271c36f6"/>
 				<textElement>
-					<font fontName="Monospaced" size="15" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="Courier 10 Pitch" size="11" isBold="false" pdfFontName="Courier" isPdfEmbedded="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Son:" +$F{literal} + " " + ($F{decimal_part}<10?"0"+$F{decimal_part}:$F{decimal_part})+"/100 BOLIVIANOS."]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="0" y="2" width="267" height="18" uuid="b348fcd7-5e1a-4f32-a23e-1d7984f9d15f"/>
+				<reportElement x="0" y="2" width="218" height="12" uuid="b348fcd7-5e1a-4f32-a23e-1d7984f9d15f"/>
 				<textElement>
-					<font fontName="Monospaced" size="15" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="Courier 10 Pitch" size="11" isBold="false" pdfFontName="Courier" isPdfEmbedded="false"/>
 				</textElement>
 				<text><![CDATA[TOTALES]]></text>
 			</staticText>
-			<textField pattern="#,##0.00">
-				<reportElement x="629" y="1" width="100" height="18" uuid="0763f3e7-9293-48ee-b773-df61afc01898"/>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="425" y="1" width="75" height="12" isPrintWhenDetailOverflows="true" uuid="0763f3e7-9293-48ee-b773-df61afc01898"/>
 				<textElement textAlignment="Right">
-					<font fontName="Monospaced" size="14" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="Courier 10 Pitch" size="11" isBold="false" pdfFontName="Courier" isPdfEmbedded="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{total_debe_ext}==null?"":$F{total_debe_ext}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{total_debe_ext}==null?"-":$F{total_debe_ext}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0.00">
-				<reportElement x="729" y="1" width="100" height="18" uuid="a171fefb-5cfe-4015-9e37-482e64d3ef41"/>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="499" y="1" width="75" height="12" isPrintWhenDetailOverflows="true" uuid="a171fefb-5cfe-4015-9e37-482e64d3ef41"/>
 				<textElement textAlignment="Right">
-					<font fontName="Monospaced" size="14" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="Courier 10 Pitch" size="11" isBold="false" pdfFontName="Courier" isPdfEmbedded="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{total_haber_ext}==null?"":$F{total_haber_ext}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{total_haber_ext}==null?"-":$F{total_haber_ext}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement x="0" y="0" width="829" height="1" uuid="00c21694-87ae-4484-8db1-e32d3c723b4d"/>
+				<reportElement x="0" y="0" width="573" height="1" uuid="00c21694-87ae-4484-8db1-e32d3c723b4d"/>
 				<graphicElement>
-					<pen lineStyle="Double"/>
+					<pen lineWidth="0.5" lineStyle="Dashed"/>
 				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="119" y="88" width="192" height="1" uuid="4188bcea-8289-41c4-85b4-383b83f60584"/>
+				<reportElement x="19" y="74" width="160" height="1" uuid="4188bcea-8289-41c4-85b4-383b83f60584"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineStyle="Dashed"/>
+				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="579" y="87" width="192" height="1" uuid="ed7f8111-880f-4fcb-9047-fc801be7edd0"/>
+				<reportElement x="393" y="73" width="160" height="1" uuid="ed7f8111-880f-4fcb-9047-fc801be7edd0"/>
+				<graphicElement>
+					<pen lineWidth="0.5" lineStyle="Dashed"/>
+				</graphicElement>
 			</line>
 			<line>
-				<reportElement x="351" y="108" width="192" height="1" uuid="6f2c669d-a66a-4d4d-ab04-281fe9439938">
+				<reportElement x="206" y="94" width="160" height="1" uuid="6f2c669d-a66a-4d4d-ab04-281fe9439938">
 					<printWhenExpression><![CDATA[!$F{firma3}.equals("")]]></printWhenExpression>
 				</reportElement>
+				<graphicElement>
+					<pen lineWidth="0.5" lineStyle="Dashed"/>
+				</graphicElement>
 			</line>
 			<textField>
-				<reportElement x="1" y="160" width="556" height="18" uuid="3dadd26f-a865-4312-bf77-1c0f4ba932ca"/>
+				<reportElement x="2" y="117" width="575" height="12" uuid="3dadd26f-a865-4312-bf77-1c0f4ba932ca"/>
 				<textElement>
-					<font fontName="Monospaced" size="15" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="Courier 10 Pitch" size="11" isBold="false" pdfFontName="Courier" isPdfEmbedded="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Creado por: " + $F{usuario_completo} + " fecha: " + $F{fecha_insert}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="-1" y="36" width="818" height="18" uuid="13b73cd0-5691-4777-82d5-ba4720db7aa1"/>
+				<reportElement x="0" y="23" width="575" height="12" isPrintWhenDetailOverflows="true" uuid="13b73cd0-5691-4777-82d5-ba4720db7aa1"/>
 				<textElement>
-					<font fontName="Monospaced" size="15" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="Courier 10 Pitch" size="11" isBold="false" pdfFontName="Courier" isPdfEmbedded="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA["Son:" +$F{literal_usd} + " " + ($F{decimal_part_usd}<10?"0"+$F{decimal_part_usd}:$F{decimal_part_usd})+"/100 DOLARES."]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0.00">
-				<reportElement x="529" y="1" width="100" height="18" uuid="1ab629f5-8a81-4813-8fde-d526be78f7a5"/>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="351" y="1" width="75" height="12" isPrintWhenDetailOverflows="true" uuid="1ab629f5-8a81-4813-8fde-d526be78f7a5"/>
 				<textElement textAlignment="Right">
-					<font fontName="Monospaced" size="14" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="Courier 10 Pitch" size="11" isBold="false" pdfFontName="Courier" isPdfEmbedded="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{total_haber_nac}==null?"":$F{total_haber_nac}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{total_haber_nac}==null?"-":$F{total_haber_nac}]]></textFieldExpression>
 			</textField>
-			<textField pattern="#,##0.00">
-				<reportElement x="428" y="1" width="100" height="18" uuid="0b3235f4-0b24-442b-9636-25f6085ab125"/>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="277" y="1" width="75" height="12" isPrintWhenDetailOverflows="true" uuid="0b3235f4-0b24-442b-9636-25f6085ab125"/>
 				<textElement textAlignment="Right">
-					<font fontName="Monospaced" size="14" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+					<font fontName="Courier 10 Pitch" size="11" isBold="false" pdfFontName="Courier" isPdfEmbedded="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{total_debe_nac}==null?"":$F{total_debe_nac}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{total_debe_nac}==null?"-":$F{total_debe_nac}]]></textFieldExpression>
 			</textField>
 		</band>
 	</summary>

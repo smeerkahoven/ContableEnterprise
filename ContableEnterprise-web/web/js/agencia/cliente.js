@@ -240,16 +240,19 @@ angular.module('jsCliente.controllers', []).controller('frmCliente', ['$scope', 
 
         $scope.formHasError = function () {
             return (
-                    $scope.formData.idClienteGrupo == undefined);
+                    $scope.formData.idClienteGrupo === undefined);
 
         }
 
         $scope.update = function () {
+            console.log($scope.myForm);
             if (!$scope.myForm.$valid) {
+                console.log('error en myForm');
                 $scope.showAlert('Error de Verificacion', 'Verifique los mensajes de los valores requeridos');
                 return;
             }
             if ($scope.formHasError()) {
+                console.log('error en formHasError');
                 $scope.showAlert('Error de Verificacion', 'Verifique los mensajes de los valores requeridos');
                 return;
             }

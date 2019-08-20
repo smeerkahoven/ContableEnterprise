@@ -8,15 +8,22 @@ package com.cobranzas.ejb;
 import com.agencia.entities.Boleto;
 import com.agencia.entities.Cliente;
 import com.cobranzas.dto.KardexClienteDto;
+import com.cobranzas.dto.ReporteEstadoClienteDto;
+import com.cobranzas.dto.ReporteEstadoClienteMainDto;
 import com.cobranzas.json.KardexClienteSearchJson;
 import com.cobranzas.json.KardexClienteSearchTipo;
+import com.cobranzas.json.ReporteEstadoClienteSearchJson;
 import com.cobranzas.remote.KardexClienteRemote;
 import com.contabilidad.entities.NotaDebito;
 import com.seguridad.control.FacadeEJB;
 import com.seguridad.control.exception.CRUDException;
 import com.seguridad.utils.DateContable;
 import com.seguridad.utils.Estado;
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.Query;
@@ -178,4 +185,92 @@ public class KardexClienteEJB extends FacadeEJB implements KardexClienteRemote {
         return l;
 
     }
+
+    @Override
+    public List<ReporteEstadoClienteMainDto> generarReporteEstadoCliente(ReporteEstadoClienteSearchJson search) throws CRUDException {
+
+        boolean inicio = false;
+        boolean fin = false;
+
+        if (search.getFechaInicio() == null) {
+            inicio = true;
+        }
+
+        if (search.getFechaFin() == null) {
+            fin = true;
+        }
+
+        // fecha de inicio del sistema
+        Date startDate = DateContable.toLatinAmericaDateFormat(inicio ? "01/01/2019" : search.getFechaInicio());
+        Date endDate = DateContable.toLatinAmericaDateFormat(fin ? DateContable.getCurrentDateStr() : search.getFechaFin());
+
+        StoredProcedureQuery stp = em.createNamedStoredProcedureQuery("NotaDebito.generarReporteClienteEstados");
+        stp.setParameter("in_id_empresa", search.getIdEmpresa());
+        stp.setParameter("in_start_date", startDate);
+        stp.setParameter("in_end_date", endDate);
+
+        List l = stp.getResultList();
+
+        List<ReporteEstadoClienteMainDto> entities = new LinkedList<>();
+
+        if (!l.isEmpty()) {
+
+            Iterator i = l.iterator();
+            while (i.hasNext()) {
+
+                ReporteEstadoClienteDto current = (ReporteEstadoClienteDto) i.next();
+
+                if (entities.isEmpty()) {
+                    ReporteEstadoClienteMainDto main = new ReporteEstadoClienteMainDto();
+                    main.setIdCliente(current.getIdCliente());
+                    main.setNombre(current.getNombreCliente());
+                    main.setTotalSaldoExt(current.getSaldoExt() != null ? current.getSaldoExt() : new BigDecimal(BigInteger.ZERO));
+                    main.setTotalSaldoNac(current.getSaldoNac() != null ? current.getSaldoNac() : new BigDecimal(BigInteger.ZERO));
+
+                    main.getEntities().add(current);
+
+                    entities.add(main);
+                } else {
+                    //iteramos la lista de entidades
+                    Iterator mainIterator = entities.iterator();
+                    boolean findCliente = false;
+                    while (mainIterator.hasNext()) {
+                        ReporteEstadoClienteMainDto currentMain = (ReporteEstadoClienteMainDto) mainIterator.next();
+                        
+                        // current row
+                        BigDecimal currentSaldoExt = current.getSaldoExt() != null ? current.getSaldoExt() : new BigDecimal(BigInteger.ZERO);
+                        BigDecimal currentSaldoNac = current.getSaldoNac() != null ? current.getSaldoNac() : new BigDecimal(BigInteger.ZERO);
+
+                        if (currentMain.getIdCliente().equals(current.getIdCliente())) {
+                            currentMain.getEntities().add(current);
+                            currentMain.setTotalSaldoExt(currentMain.getTotalSaldoExt()!= null ? currentMain.getTotalSaldoExt().add(currentSaldoExt) : currentSaldoExt);
+                            currentMain.setTotalSaldoNac(currentMain.getTotalSaldoNac()!= null ? currentMain.getTotalSaldoNac().add(currentSaldoNac) : currentSaldoNac  );
+
+                            findCliente = true;
+                        }
+
+                    }
+
+                    if (!findCliente) {
+                        ReporteEstadoClienteMainDto main = new ReporteEstadoClienteMainDto();
+                        main.setIdCliente(current.getIdCliente());
+                        main.setNombre(current.getNombreCliente());
+                        main.setTotalSaldoExt(current.getSaldoExt());
+                        main.setTotalSaldoNac(current.getSaldoNac());
+
+                        main.getEntities().add(current);
+
+                        entities.add(main);
+                    }
+
+                }
+
+            }
+
+        }
+
+        return entities;
+
+    }
+
 }

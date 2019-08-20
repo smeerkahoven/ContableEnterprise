@@ -38,6 +38,9 @@ public class IngresoTransaccionJson implements Serializable {
     private BigDecimal montoTransaccionUsd;
     private String monedaTransaccion;
     private String descripcionTransaccion;
+    
+    private BigDecimal montoCancelarBs;
+    private BigDecimal montoCancelarUsd;
 
     private ComboSelect idCliente;
     private BigDecimal factorCambiario;
@@ -53,9 +56,9 @@ public class IngresoTransaccionJson implements Serializable {
         data.setMoneda(json.getMoneda());
 
         if (json.getMoneda().equals(Moneda.NACIONAL)) {
-            data.setMontoBs(json.getMonto());
+            data.setMontoBs(json.getMontoCancelarBs());
         } else {
-            data.setMontoUsd(json.getMonto());
+            data.setMontoUsd(json.getMontoCancelarUsd());
         }
 
         return data;
@@ -92,6 +95,23 @@ public class IngresoTransaccionJson implements Serializable {
         return json;
     }
 
+    public BigDecimal getMontoCancelarBs() {
+        return montoCancelarBs;
+    }
+
+    public void setMontoCancelarBs(BigDecimal montoCancelarBs) {
+        this.montoCancelarBs = montoCancelarBs;
+    }
+
+    public BigDecimal getMontoCancelarUsd() {
+        return montoCancelarUsd;
+    }
+
+    public void setMontoCancelarUsd(BigDecimal montoCancelarUsd) {
+        this.montoCancelarUsd = montoCancelarUsd;
+    }
+
+    
     public BigDecimal getMontoAdeudadoBs() {
         return montoAdeudadoBs;
     }

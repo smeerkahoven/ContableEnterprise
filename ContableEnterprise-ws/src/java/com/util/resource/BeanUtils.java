@@ -7,6 +7,7 @@ package com.util.resource;
 
 import com.agencia.search.dto.MayoresSearch;
 import com.cobranzas.json.KardexClienteSearchJson;
+import com.cobranzas.json.ReporteEstadoClienteSearchJson;
 import com.contabilidad.entities.SumasSaldosDto;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -62,6 +63,22 @@ public class BeanUtils {
         JsonParser parser = new JsonParser();
         JsonObject object = parser.parse((String) request.getContent()).getAsJsonObject();
         pc = gson.fromJson(object.toString(), KardexClienteSearchJson.class);
+
+        return pc;
+
+    }
+    
+       public static ReporteEstadoClienteSearchJson convertToReporteEstadoCliente(final RestRequest request) {
+
+        if (request.getContent() == null) {
+            return new ReporteEstadoClienteSearchJson();
+        }
+
+        ReporteEstadoClienteSearchJson pc = new ReporteEstadoClienteSearchJson();
+        Gson gson = new GsonBuilder().create();
+        JsonParser parser = new JsonParser();
+        JsonObject object = parser.parse((String) request.getContent()).getAsJsonObject();
+        pc = gson.fromJson(object.toString(), ReporteEstadoClienteSearchJson.class);
 
         return pc;
 

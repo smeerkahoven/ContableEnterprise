@@ -70,7 +70,7 @@ import javax.xml.bind.annotation.XmlRootElement;
             + " from cnt_boleto bo\n"
             + " inner join cnt_aerolinea ae on ae.id_aerolinea = bo.id_aerolinea\n"
             + " where bo.id_nota_debito is not null and fecha_emision >= ?1 and fecha_emision <=?2 \n"
-            + " and bo.id_empresa = ?3 and bo.tipo_cupon = ?4 ORDER BY bo.fecha_emision, bo.numero",
+            + " and bo.id_empresa = ?3 and bo.tipo_cupon = ?4 and ae.bsp=1 ORDER BY bo.fecha_emision, bo.numero",
             resultSetMapping = "BoletoPlanillaBsp2"
     )
     ,

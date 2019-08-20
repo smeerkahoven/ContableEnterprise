@@ -10,6 +10,7 @@ import com.agencia.entities.Boleto;
 import com.agencia.entities.Cliente;
 import com.agencia.entities.FormasPago;
 import com.agencia.entities.Promotor;
+import com.contabilidad.entities.Moneda;
 import com.seguridad.control.exception.CRUDException;
 import com.seguridad.utils.ComboSelect;
 import com.seguridad.utils.Contabilidad;
@@ -193,8 +194,10 @@ public class BoletoJSON implements Serializable {
         boleto.setComision(bjson.getComision());
         boleto.setFee(bjson.getFee());
         boleto.setDescuento(bjson.getDescuento());
+        
+        boleto.setMoneda(bjson.moneda);
         //Dolares
-        if (bjson.getTipoCupon().equals(Boleto.Cupon.INTERNACIONAL)) {
+        if (bjson.getMoneda().equals(Moneda.EXTRANJERA)) {
             boleto.setImporteNeto(bjson.getImporteNetoUsd());
             boleto.setImpuestoBob(bjson.getImpuestoBobUsd());
             boleto.setImpuestoQm(bjson.getImpuestoQmUsd());
@@ -228,7 +231,7 @@ public class BoletoJSON implements Serializable {
 
         //formas de pago
         boleto.setFormaPago(bjson.getFormaPago());
-        boleto.setMoneda(bjson.moneda);
+        
 
         if (bjson.getFormaPago() != null) {
 
@@ -348,9 +351,10 @@ public class BoletoJSON implements Serializable {
         bjson.setFee(boleto.getFee());
         bjson.setDescuento(boleto.getDescuento());
         bjson.setMoneda(boleto.getMoneda());
+        
         //Dolares
-        if (boleto.getTipoCupon() != null) {
-            if (boleto.getTipoCupon().equals(Boleto.Cupon.INTERNACIONAL)) {
+        //if (boleto.getTipoCupon() != null) {
+            if (boleto.getMoneda().equals(Moneda.EXTRANJERA)) {
                 bjson.setImporteNetoUsd(boleto.getImporteNeto());
                 bjson.setImpuestoBobUsd(boleto.getImpuestoBob());
                 bjson.setImpuestoQmUsd(boleto.getImpuestoQm());
@@ -521,7 +525,7 @@ public class BoletoJSON implements Serializable {
                     }
                 }
             }
-        }
+        //}
 
         //formas de pago
         bjson.setFormaPago(boleto.getFormaPago());

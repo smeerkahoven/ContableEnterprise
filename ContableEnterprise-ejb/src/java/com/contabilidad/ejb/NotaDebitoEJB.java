@@ -100,10 +100,13 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
         notaDebito.setGestion(DateContable.getPartitionDateInt(DateContable.getDateFormat(DateContable.getCurrentDate(), DateContable.LATIN_AMERICA_FORMAT)));
         notaDebito.setEstado(Estado.EMITIDO);
 
-        if (boleto.getTipoCupon().equals(Boleto.Cupon.INTERNACIONAL)) {
+        // cambio 2019-08
+        if (boleto.getMoneda().equals(Moneda.EXTRANJERA)){
+        //if (boleto.getTipoCupon().equals(Boleto.Cupon.INTERNACIONAL)) {
             notaDebito.setMontoTotalUsd(boleto.getTotalMontoCobrar());
             notaDebito.setMontoAdeudadoUsd(boleto.getTotalMontoCobrar());
-        } else if (boleto.getTipoCupon().equals(Boleto.Cupon.NACIONAL)) {
+        }else {
+    //} else if (boleto.getTipoCupon().equals(Boleto.Cupon.NACIONAL)) {
             notaDebito.setMontoTotalBs(boleto.getTotalMontoCobrar());
             notaDebito.setMontoAdeudadoBs(boleto.getTotalMontoCobrar());
         }
@@ -200,9 +203,12 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
         transaccion.setDescripcion(buff.toString());
         // montos
 
-        if (boleto.getTipoCupon().equals(Boleto.Cupon.INTERNACIONAL)) {
+        // cambio 2019-08
+        if (boleto.getMoneda().equals(Moneda.EXTRANJERA)){
+        //if (boleto.getTipoCupon().equals(Boleto.Cupon.INTERNACIONAL)) {
             transaccion.setMontoUsd(boleto.getTotalMontoCobrar());
-        } else if (boleto.getTipoCupon().equals(Boleto.Cupon.NACIONAL)) {
+        }else {        
+//} else if (boleto.getTipoCupon().equals(Boleto.Cupon.NACIONAL)) {
             transaccion.setMontoBs(boleto.getTotalMontoCobrar());
         }
 

@@ -1,0 +1,402 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="755" leftMargin="7" rightMargin="30" topMargin="20" bottomMargin="20" uuid="7daf1030-034d-4db1-bcb2-afded2af4484">
+	<property name="ireport.zoom" value="1.3310000000000035"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="FECHA_INICIO" class="java.lang.String">
+		<defaultValueExpression><![CDATA["2018/11/01"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="FECHA_FIN" class="java.lang.String">
+		<defaultValueExpression><![CDATA["2018/11/07"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ID_CLIENTE" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ID_TIPO_CUPON" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select 
+   bo.id_boleto 
+ , bo.id_aerolinea 
+ , ae.iata
+ , ae.numero
+ , bo.id_nota_debito 
+ , bo.tipo_boleto 
+ , bo.tipo_cupon 
+ , bo.numero ticket_number
+ , date_format(bo.fecha_emision,'%d/%m/%y') fecha_emision,
+  coalesce(date_format(bo.fecha_viaje,'%d/%m/%y'),'') fecha_viaje , 
+  coalesce (bo.importe_neto ,0)importe_neto,
+  (coalesce(bo.impuesto_bob,0) + coalesce(bo.impuesto_qm,0) 
+	+ coalesce(bo.impuesto_1,0) + coalesce(bo.impuesto_2,0)
+		 + coalesce(bo.impuesto_3,0) + coalesce(bo.impuesto_4,0) 
+		 + coalesce(bo.impuesto_5,0)) impuestos
+ , coalesce(bo.total_boleto,0) total_boleto
+ , concat (coalesce(bo.id_ruta_1,''),'/', coalesce(bo.id_ruta_2,''),'/',coalesce(bo.id_ruta_3,''),'/',coalesce(bo.id_ruta_4,''),'/',coalesce(bo.id_ruta_5,'')) ruta
+ , coalesce(bo.nombre_pasajero,'') nombre_pasajero
+ , coalesce(bo.monto_fee, 0.00) fee
+ , coalesce(bo.monto_descuento,0.00)descuento
+ , cl.nombre cliente
+from cnt_boleto bo
+inner join cnt_aerolinea ae on ae.id_aerolinea = bo.id_aerolinea
+inner join cnt_nota_debito nd on nd.id_nota_debito = bo.id_nota_debito
+inner join cnt_cliente cl on cl.id_cliente = nd.id_cliente
+where bo.id_nota_debito is not null 
+and bo.fecha_emision>=str_to_date($P{FECHA_INICIO},'%d/%m/%Y') 
+and bo.fecha_emision<=str_to_date($P{FECHA_FIN},'%d/%m/%Y')
+ and nd.id_cliente = $P{ID_CLIENTE}
+and bo.tipo_cupon = $P{ID_TIPO_CUPON}
+order by bo.fecha_emision
+ ;]]>
+	</queryString>
+	<field name="ticket_number" class="java.lang.Long"/>
+	<field name="impuestos" class="java.math.BigDecimal"/>
+	<field name="ruta" class="java.lang.String"/>
+	<field name="cliente" class="java.lang.String"/>
+	<field name="id_boleto" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="id_aerolinea" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="iata" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="numero" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="id_nota_debito" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="fecha_emision" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="fecha_viaje" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="importe_neto" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="total_boleto" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nombre_pasajero" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="fee" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="descuento" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="tipo_cupon" class="java.lang.String">
+		<fieldDescription><![CDATA[Internacional I
+NAcional N]]></fieldDescription>
+	</field>
+	<field name="tipo_boleto" class="java.lang.String">
+		<fieldDescription><![CDATA[Multiple M
+Simple S]]></fieldDescription>
+	</field>
+	<variable name="TOTAL_IMPORTE_NETO" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{importe_neto}]]></variableExpression>
+		<initialValueExpression><![CDATA[0]]></initialValueExpression>
+	</variable>
+	<variable name="TOTAL_IMPUESTO" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{impuestos}]]></variableExpression>
+	</variable>
+	<variable name="TOTAL" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{total_boleto}]]></variableExpression>
+	</variable>
+	<variable name="TOTAL_FEE" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{fee}]]></variableExpression>
+	</variable>
+	<variable name="TOTAL_DESCUENTO" class="java.math.BigDecimal" calculation="Sum">
+		<variableExpression><![CDATA[$F{descuento}]]></variableExpression>
+	</variable>
+	<variable name="TOTAL_COBRAR" class="java.math.BigDecimal">
+		<variableExpression><![CDATA[$V{TOTAL}+$V{TOTAL_FEE}-$V{TOTAL_DESCUENTO}]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="21" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="63" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="754" height="22" uuid="d2f58dd9-d679-410c-886f-95ac58e251d6"/>
+				<textElement textAlignment="Center">
+					<font fontName="Monospaced" size="18" isBold="true" isUnderline="false" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[REPORTE DE COMISION CLIENTES]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="62" width="755" height="1" uuid="8e30738f-ef20-42e4-a624-b2a557e15a9a"/>
+				<graphicElement>
+					<pen lineStyle="Solid"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement x="473" y="31" width="281" height="15" uuid="923dca4b-8bdf-484f-ac51-bf2848dd4fc7"/>
+				<textElement>
+					<font fontName="Monospaced"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Periodo del : " + $P{FECHA_INICIO} + " al " +$P{FECHA_FIN}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="473" y="46" width="281" height="15" uuid="b07ae92a-fbe7-4367-a542-f445b3dcb110"/>
+				<textElement>
+					<font fontName="Monospaced"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Cliente:" + $F{cliente}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1" y="46" width="279" height="15" uuid="c27f27d6-efaf-4509-b959-bde8cb146282"/>
+				<textElement>
+					<font fontName="Monospaced"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Tipo de Cupon:"+($P{ID_TIPO_CUPON}=="I"?"INTERNACIONAL":($P{ID_TIPO_CUPON}=="N"?"NACIONAL":"" ) )]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="23" splitType="Stretch">
+			<line>
+				<reportElement x="0" y="22" width="754" height="1" uuid="6f723044-f79a-4113-9466-eee63df9991c"/>
+				<graphicElement>
+					<pen lineStyle="Solid"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="59" y="0" width="72" height="22" uuid="a4ff60a9-db2f-435e-9f05-bf4a8857cd8c"/>
+				<textElement textAlignment="Center">
+					<font fontName="Monospaced" size="9" isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[NUMERO BOLETO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="375" y="0" width="47" height="22" uuid="b8d1af76-86f7-4a6f-b16f-6a0e08b606e8"/>
+				<textElement textAlignment="Center">
+					<font fontName="Monospaced" size="9" isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[FECHA EMISION]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="422" y="0" width="53" height="22" uuid="700f1ad2-3243-42d0-9e4a-05ad91e5840f"/>
+				<textElement textAlignment="Center">
+					<font fontName="Monospaced" size="9" isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[IMPORTE NETO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="476" y="0" width="55" height="22" uuid="609b6a9d-c841-4a0f-b4a7-3924199977c1"/>
+				<textElement textAlignment="Right">
+					<font fontName="Monospaced" size="9" isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[IMPUESTO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="532" y="0" width="61" height="22" uuid="911d6fbb-b6fa-4583-9c56-397d1beebc64"/>
+				<textElement textAlignment="Center">
+					<font fontName="Monospaced" size="9" isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL BOLETO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="593" y="0" width="44" height="22" uuid="797844f7-781e-4ac3-b184-aca33548c839"/>
+				<textElement textAlignment="Right">
+					<font fontName="Monospaced" size="9" isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[FEE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="637" y="0" width="54" height="22" uuid="4edd675f-9712-43d9-b2a0-1621b77906ec"/>
+				<textElement textAlignment="Right">
+					<font fontName="Monospaced" size="9" isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[DESCUENTO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="131" y="0" width="104" height="22" uuid="9d3dbe6f-c780-43ba-86df-d1a5e1ff6d9a"/>
+				<textElement textAlignment="Left">
+					<font fontName="Monospaced" size="9" isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[RUTA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="235" y="0" width="140" height="22" uuid="18b7ea8b-92e8-4b9f-86dd-ca6781167b9e"/>
+				<textElement textAlignment="Left">
+					<font fontName="Monospaced" size="9" isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[PASAJERO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="59" height="22" uuid="21b42a15-4831-4601-8c4e-bc6eacabe6b4"/>
+				<textElement textAlignment="Center">
+					<font fontName="Monospaced" size="9" isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[AEROLINEA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="691" y="0" width="63" height="22" uuid="d0d99617-9ecf-4c3b-b45f-836d33d6b273"/>
+				<textElement textAlignment="Center">
+					<font fontName="Monospaced" size="9" isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[ID NOTA]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="15" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement x="59" y="0" width="72" height="14" uuid="874bc032-6e40-4cef-9271-d470b943ae09"/>
+				<textElement>
+					<font fontName="Monospaced"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ticket_number}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="477" y="0" width="54" height="14" uuid="70d493f5-b24c-4f15-be2d-171178fc8d48"/>
+				<textElement textAlignment="Right">
+					<font fontName="Monospaced"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{impuestos}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="532" y="0" width="61" height="14" uuid="7b3839e9-8b5b-4f40-a943-c25056a4630f"/>
+				<textElement textAlignment="Right">
+					<font fontName="Monospaced"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{total_boleto}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="593" y="0" width="44" height="14" uuid="f2d3d8f1-f834-498c-ab55-84963ddf109e"/>
+				<textElement textAlignment="Right">
+					<font fontName="Monospaced"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fee}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="637" y="0" width="54" height="14" uuid="fd3df945-c48b-4f84-b463-33f577391a53"/>
+				<textElement textAlignment="Right">
+					<font fontName="Monospaced"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{descuento}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="690" y="0" width="63" height="14" uuid="3146720e-662a-42f7-8605-5c490c7b8fef"/>
+				<textElement textAlignment="Right">
+					<font fontName="Monospaced"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{id_nota_debito}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="131" y="0" width="104" height="14" uuid="4a187750-3a67-45a1-94c3-db981895cf7e"/>
+				<textElement>
+					<font fontName="Monospaced"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ruta}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="235" y="0" width="140" height="14" uuid="dbbd0f58-1977-4f78-965f-24c663d378b7"/>
+				<textElement>
+					<font fontName="Monospaced"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nombre_pasajero}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="59" height="14" uuid="11328593-8c8e-43ac-93bb-de7f69d6f1c8"/>
+				<textElement>
+					<font fontName="Monospaced"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{iata}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00" isBlankWhenNull="true">
+				<reportElement x="422" y="0" width="55" height="14" uuid="b2abcd17-583d-41a8-a9d1-53a075021fca"/>
+				<textElement textAlignment="Right">
+					<font fontName="Monospaced"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{importe_neto}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="375" y="0" width="47" height="14" uuid="5cc6a0aa-c7fe-44ad-bcc5-8571d654d37e"/>
+				<textElement>
+					<font fontName="Monospaced"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fecha_emision}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="36" splitType="Stretch">
+			<textField pattern="#,##0.00">
+				<reportElement x="422" y="2" width="55" height="14" uuid="0f7f948d-8b7f-4584-894c-b8f12a31e3a9"/>
+				<textElement textAlignment="Right">
+					<font fontName="Monospaced" isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL_IMPORTE_NETO}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="477" y="2" width="54" height="14" uuid="84a0f550-99fd-452f-b876-8c0389ce28ed"/>
+				<textElement textAlignment="Right">
+					<font fontName="Monospaced" isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL_IMPUESTO}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="2" width="401" height="14" uuid="c1f1ee12-e33d-4cae-a261-4b8a4f2512e1"/>
+				<textElement textAlignment="Left">
+					<font fontName="Monospaced" isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[TOTALES]]></text>
+			</staticText>
+			<textField pattern="#,##0.00">
+				<reportElement x="637" y="2" width="54" height="14" uuid="5843a300-cf70-4c3d-8475-64f4d6d6e31a"/>
+				<textElement textAlignment="Right">
+					<font fontName="Monospaced" isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL_DESCUENTO}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="1" width="755" height="1" uuid="9c256af9-978d-4f74-b364-8399d89c0467"/>
+				<graphicElement>
+					<pen lineStyle="Double"/>
+				</graphicElement>
+			</line>
+			<textField pattern="#,##0.00">
+				<reportElement x="532" y="2" width="61" height="14" uuid="42eedec0-4d9c-4e6e-980a-89d36ef231be"/>
+				<textElement textAlignment="Right">
+					<font fontName="Monospaced" isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="593" y="2" width="44" height="14" uuid="e15a30db-69e3-4973-9016-ad534d6f8762"/>
+				<textElement textAlignment="Right">
+					<font fontName="Monospaced" isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL_FEE}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="16" width="401" height="14" backcolor="#000000" uuid="6a8e7102-47dd-482d-9551-88962880cd43"/>
+				<textElement textAlignment="Left">
+					<font fontName="Monospaced" isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[TOTAL POR COBRAR]]></text>
+			</staticText>
+			<textField pattern="#,##0.00">
+				<reportElement x="401" y="16" width="100" height="14" backcolor="#6E0E0E" uuid="e8faac88-67e7-4ef3-bf54-a504777b027e"/>
+				<textElement textAlignment="Right">
+					<font fontName="Monospaced" isBold="true" pdfFontName="Helvetica-Bold" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{TOTAL_COBRAR}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="11" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

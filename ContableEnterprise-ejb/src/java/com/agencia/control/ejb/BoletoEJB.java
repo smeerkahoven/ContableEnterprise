@@ -310,9 +310,13 @@ public class BoletoEJB extends FacadeEJB implements BoletoRemote {
         HashMap<String, Object> parameters2 = new HashMap<>();
         parameters2.put("idAerolinea", b.getIdAerolinea().getIdAerolinea());
         parameters2.put("tipo", tipo);//Ventas
-        if (b.getTipoCupon().equals(Boleto.Cupon.INTERNACIONAL)) {
+
+        // cambio 2019-08
+        //if (b.getTipoCupon().equals(Boleto.Cupon.INTERNACIONAL)) {
+        if (b.getMoneda().equals(Moneda.EXTRANJERA)) {
             parameters2.put("moneda", Moneda.EXTRANJERA);
-        } else if (b.getTipoCupon().equals(Boleto.Cupon.NACIONAL)) {
+            //} else if (b.getTipoCupon().equals(Boleto.Cupon.NACIONAL)) {
+        } else if (b.getMoneda().equals(Moneda.NACIONAL)) {
             parameters2.put("moneda", Moneda.NACIONAL);
         }
         List lac = get("AerolineaCuenta.find", AerolineaCuenta.class, parameters2);
@@ -451,7 +455,9 @@ public class BoletoEJB extends FacadeEJB implements BoletoRemote {
                 double totalHaberNac = 0;
                 double totalHaberExt = 0;
                 //Se realizan las sumas para el comprobanteAsiento.
-                if (b.getTipoCupon().equals(Boleto.Cupon.INTERNACIONAL)) {
+                // cambio 2019-08
+                if (b.getMoneda().equals(Moneda.EXTRANJERA)){
+                    //if (b.getTipoCupon().equals(Boleto.Cupon.INTERNACIONAL)) {
                     op = Optional.ofNullable(totalCancelar.getMontoDebeExt());
                     if (op.isPresent()) {
                         totalDebeExt += totalCancelar.getMontoDebeExt().doubleValue();
@@ -488,7 +494,8 @@ public class BoletoEJB extends FacadeEJB implements BoletoRemote {
                         totalHaberNac = totalHaberExt * b.getFactorCambiario().doubleValue();
                     }
 
-                } else if (b.getTipoCupon().equals(Boleto.Cupon.NACIONAL)) {
+                } else if (b.getMoneda().equals(Moneda.NACIONAL)){
+                //} else if (b.getTipoCupon().equals(Boleto.Cupon.NACIONAL)) {
                     op = Optional.ofNullable(totalCancelar.getMontoDebeNac());
                     if (op.isPresent()) {
                         totalDebeNac += totalCancelar.getMontoDebeNac().doubleValue();

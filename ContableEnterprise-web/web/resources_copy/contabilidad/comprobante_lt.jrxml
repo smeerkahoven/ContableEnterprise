@@ -1,0 +1,476 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="612" pageHeight="792" columnWidth="610" leftMargin="1" rightMargin="1" topMargin="1" bottomMargin="1" uuid="c6d5ac85-d154-42b4-b451-dcd03b103eae">
+	<property name="ireport.zoom" value="1.6105100000000168"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="ID_LIBRO" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select cc.id_numero_gestion
+, case cc.estado when 'E' then 'EMITIDO' when 'A' then 'ANULADO' else 'PENDIENTE' end estado
+, coalesce ( cc.id_nota_credito, cc.id_nota_debito
+	, cc.id_ingreso_caja, cc.id_devolucion
+	, cc.id_pago_anticipado) ambito
+, if ( cc.id_nota_credito is not null,'NC', 
+	if (cc.id_nota_debito is not null,'ND', 
+		if (cc.id_ingreso_caja is not null, 'IC', 
+			if ( cc.id_devolucion is not null, 'DE', 
+				if (cc.id_pago_anticipado is not null , 'PA', '-') ) ))) denominacion 
+, cc.gestion
+, date_format(cc.fecha,'%d/%m/%Y')fecha
+, cc.concepto
+, cc.factor_cambiario
+, coalesce( cl.nombre, cc.nombre) nombre
+, case cc.tipo 	when  'AD' then 'Asiento Diario'   
+	  when  'AJ' then 'Asiento de Ajuste' 
+            when  'CI' then 'Comprobante de Ingreso' 
+            when  'CE' then 'Comprobante de Egreso' 
+            when  'CT' then 'Comprobante de Traspaso' end tipo 
+, coalesce(cc.total_debe_nac,0)total_debe_nac
+, coalesce(cc.total_debe_ext,0)total_debe_ext
+, coalesce(cc.total_haber_ext,0)total_haber_ext
+, coalesce(cc.total_haber_nac,0)total_haber_nac
+, number_to_string(cc.total_debe_nac) as literal
+, number_to_string(cc.total_debe_ext) as literal_usd
+, case ac.moneda when 'B' then 'BOB' when 'U' then 'USD' end moneda_trx
+, ac.gestion
+, ac.fecha_movimiento
+, coalesce(ac.monto_debe_nac,0)monto_debe_nac
+, coalesce(ac.monto_debe_ext,0)monto_debe_ext
+, coalesce(ac.monto_haber_nac,0)monto_haber_nac
+, coalesce(ac.monto_haber_ext,0)monto_haber_ext
+, pc.nro_plan_cuenta
+, pc.cuenta
+, coalesce(round(abs(mod(total_debe_nac,1)*100)),0) decimal_part
+, coalesce(round(abs(mod(total_debe_ext,1)*100)),0) decimal_part_usd
+, case cc.tipo 	when  'AD' then 'Contabilidad'   
+	when  'AJ' then 'Contabilidad' 
+           when  'CI' then 'Contabilidad' 
+           when  'CE' then 'Caja' 
+           when  'CT' then 'Contabilidad' end firma1 ,
+case cc.tipo 	when  'AD' then 'Cliente'   
+	when  'AJ' then 'Administracion' 
+           when  'CI' then 'Cliente' 
+           when  'CE' then 'Administracion' 
+           when  'CT' then 'Administracion' end  firma2 ,
+case cc.tipo 	when  'CE' then 'Cliente' else '' end firma3,
+concat(emp.nombre, ' ' , emp.apellido)usuario_completo,cc.id_usuario_creador,
+cc.fecha_insert
+ from cnt_comprobante_contable  cc
+ inner join cnt_asiento_contable ac on ac.id_libro = cc.id_libro
+ inner join cnt_plan_cuentas pc on pc.id_plan_cuentas = ac.id_plan_cuenta
+ left join cnt_cliente cl on cl.id_cliente = cc.id_cliente
+ inner join tb_user u on u.user_name = cc.id_usuario_creador
+ inner join tb_empleado emp on emp.id_empleado = u.id_empleado
+where cc.id_libro=$P{ID_LIBRO} order by nro_plan_cuenta , id_asiento asc]]>
+	</queryString>
+	<field name="id_numero_gestion" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="estado" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ambito" class="java.lang.Integer"/>
+	<field name="denominacion" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="gestion" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="fecha" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="concepto" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="factor_cambiario" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nombre" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="tipo" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="total_debe_nac" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="total_debe_ext" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="total_haber_ext" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="total_haber_nac" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="literal" class="java.lang.String"/>
+	<field name="literal_usd" class="java.lang.String"/>
+	<field name="moneda_trx" class="java.lang.String"/>
+	<field name="fecha_movimiento" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="monto_debe_nac" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="monto_debe_ext" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="monto_haber_nac" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="monto_haber_ext" class="java.math.BigDecimal">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nro_plan_cuenta" class="java.lang.Long">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="cuenta" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="decimal_part" class="java.math.BigDecimal"/>
+	<field name="decimal_part_usd" class="java.math.BigDecimal"/>
+	<field name="firma1" class="java.lang.String"/>
+	<field name="firma2" class="java.lang.String"/>
+	<field name="firma3" class="java.lang.String"/>
+	<field name="usuario_completo" class="java.lang.String"/>
+	<field name="id_usuario_creador" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="fecha_insert" class="java.sql.Timestamp">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="18" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="3" width="573" height="14" uuid="b37222b5-8d88-423e-8538-9d8a2df765ce"/>
+				<textElement textAlignment="Right">
+					<font fontName="Monospaced" size="12" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{tipo}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="59" splitType="Stretch">
+			<line>
+				<reportElement x="0" y="0" width="572" height="1" uuid="a5fe6b21-920f-44c8-a497-122290fcf661"/>
+			</line>
+			<textField>
+				<reportElement x="68" y="1" width="114" height="12" uuid="19ae09c0-f40f-4bd2-bda2-ded305d50d7e"/>
+				<textElement>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{gestion}+"-"+$F{id_numero_gestion}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="1" width="69" height="12" uuid="03600d8e-d201-4bef-bbfc-109cd88306c2"/>
+				<textElement textAlignment="Right">
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Numero:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="435" y="0" width="59" height="12" uuid="b488dd38-d63e-4f1c-8a5d-9a8ca394330c"/>
+				<textElement textAlignment="Right">
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Factor:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="495" y="0" width="77" height="12" uuid="8c9e20cb-9d9a-4261-a5ae-f46b7036bcb7"/>
+				<textElement>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{factor_cambiario}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="12" width="69" height="12" uuid="a409563b-e504-4359-a7c5-4722eb8aace5"/>
+				<textElement textAlignment="Right">
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Señor(es):]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="68" y="12" width="283" height="12" uuid="9baaeac9-8594-4886-a221-ec0bce0f5296"/>
+				<textElement>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nombre}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="23" width="69" height="12" uuid="789661e0-99e8-44ee-92a1-b1b166a17bd0"/>
+				<textElement textAlignment="Right">
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Concepto:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="68" y="23" width="283" height="12" isPrintWhenDetailOverflows="true" uuid="7f9471c4-1f3e-480e-b02c-a5dbd6da4a80"/>
+				<textElement>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{concepto}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="337" y="32" width="118" height="12" uuid="2a3e1ecc-1093-4491-a59b-8cc5bad4b42f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Bolivianos]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="335" y="45" width="58" height="12" uuid="7c3a83d3-717d-4bc1-9ec9-d8b66c04f926"/>
+				<textElement textAlignment="Right">
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[DEBE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="393" y="45" width="60" height="12" uuid="1d77fb8d-da00-4fc0-9991-696e598c58a8"/>
+				<textElement textAlignment="Right">
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[HABER]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="452" y="45" width="60" height="12" uuid="d5ca1bbd-0e24-40ee-ac8a-7fee7574df5f"/>
+				<textElement textAlignment="Right">
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[DEBE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="1" y="45" width="303" height="12" uuid="4445ffa0-b853-4ac3-9181-f52967b946cd"/>
+				<textElement>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[CUENTA]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="456" y="32" width="116" height="12" uuid="7d4ccd70-f264-4b0f-a783-745ed7d780a5"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Dolares]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="512" y="45" width="60" height="12" uuid="69e09b42-4a16-40d6-9699-7fbce044da95"/>
+				<textElement textAlignment="Right">
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[HABER]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="57" width="572" height="2" uuid="4de5a047-85ce-486f-9a0a-7a4b2c3592a2"/>
+			</line>
+			<staticText>
+				<reportElement x="399" y="13" width="95" height="12" uuid="e7e34fb5-eb76-4bf3-9ca6-f70e59b501df"/>
+				<textElement textAlignment="Right">
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Fecha Emision:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="456" y="44" width="116" height="1" uuid="2ba55f9c-e5c6-4b70-bf4e-04401ea5f065"/>
+			</line>
+			<textField>
+				<reportElement x="181" y="1" width="95" height="12" uuid="d3f01a6f-be1d-4663-9816-87122a3982b9"/>
+				<textElement>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{denominacion}+"-"+$F{ambito}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="304" y="1" width="53" height="12" uuid="bc3611ce-6d9b-45ce-bea7-45da08299081"/>
+				<textElement textAlignment="Right">
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[Estado:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="357" y="1" width="69" height="12" uuid="b5518abf-cd07-4d58-97f9-769f2496cdeb"/>
+				<textElement>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{estado}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="495" y="13" width="77" height="12" uuid="77f82a8f-d4ba-4edf-be63-73edbe9e3d8c"/>
+				<textElement>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{fecha}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="303" y="45" width="29" height="12" uuid="502237d9-551f-4235-8d3b-f81d052e7174"/>
+				<textElement textAlignment="Center">
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[MON.]]></text>
+			</staticText>
+			<line>
+				<reportElement x="337" y="44" width="117" height="1" uuid="082a15ba-00e8-4ef0-a297-da97e8558325"/>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="12" splitType="Stretch">
+			<textField pattern="#,##0.00">
+				<reportElement x="452" y="0" width="60" height="12" uuid="d9c38372-d189-4e7e-9abc-3155bb63bb7f"/>
+				<textElement textAlignment="Right">
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{monto_debe_ext}==null?"":$F{monto_debe_ext}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="512" y="0" width="60" height="12" uuid="630221c6-73f1-4cf9-bf02-e68f8664f660"/>
+				<textElement textAlignment="Right">
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{monto_haber_ext}==null?"":$F{monto_haber_ext}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="1" y="0" width="302" height="12" uuid="13262b30-feac-40f7-9718-8dba224fefdd"/>
+				<textElement>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nro_plan_cuenta} +"-"+ $F{cuenta}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="392" y="0" width="60" height="12" uuid="5691d379-149f-482b-9ebf-89f0263fa4da"/>
+				<textElement textAlignment="Right">
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{monto_haber_nac}==null?"":$F{monto_haber_nac}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="332" y="0" width="60" height="12" uuid="f79fa554-01ff-410b-babc-43781708fb91"/>
+				<textElement textAlignment="Right">
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{monto_debe_nac}==null?"":$F{monto_debe_nac}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="303" y="0" width="29" height="12" uuid="2c123fe5-5f38-40b0-adb3-8f05f1b1144a"/>
+				<textElement textAlignment="Right">
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{moneda_trx}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="147" splitType="Stretch">
+			<textField>
+				<reportElement x="19" y="86" width="149" height="12" uuid="a44566cc-7dd0-4696-869b-7e29078e2718"/>
+				<textElement textAlignment="Center">
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{firma1}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="408" y="87" width="149" height="12" uuid="3ea33746-6cac-4809-9451-3e21b8b00e0e"/>
+				<textElement textAlignment="Center">
+					<font fontName="Monospaced" size="10" isBold="false" isStrikeThrough="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{firma2}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="215" y="99" width="149" height="12" uuid="4a03f538-c8a7-459a-93da-26868bc866e8">
+					<printWhenExpression><![CDATA[!$F{firma3}.equals("")]]></printWhenExpression>
+				</reportElement>
+				<textElement textAlignment="Center">
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{firma3}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="18" width="572" height="12" uuid="d45cc385-ed17-47a3-ad5d-7dfb271c36f6"/>
+				<textElement>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Son:" +$F{literal} + " " + ($F{decimal_part}<10?"0"+$F{decimal_part}:$F{decimal_part})+"/100 BOLIVIANOS."]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="2" width="267" height="12" uuid="b348fcd7-5e1a-4f32-a23e-1d7984f9d15f"/>
+				<textElement>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[TOTALES]]></text>
+			</staticText>
+			<textField pattern="#,##0.00">
+				<reportElement x="452" y="0" width="60" height="12" uuid="0763f3e7-9293-48ee-b773-df61afc01898"/>
+				<textElement textAlignment="Right">
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{total_debe_ext}==null?"":$F{total_debe_ext}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="512" y="0" width="60" height="12" uuid="a171fefb-5cfe-4015-9e37-482e64d3ef41"/>
+				<textElement textAlignment="Right">
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{total_haber_ext}==null?"":$F{total_haber_ext}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="0" width="572" height="1" uuid="00c21694-87ae-4484-8db1-e32d3c723b4d"/>
+				<graphicElement>
+					<pen lineStyle="Double"/>
+				</graphicElement>
+			</line>
+			<line>
+				<reportElement x="19" y="85" width="149" height="1" uuid="4188bcea-8289-41c4-85b4-383b83f60584"/>
+			</line>
+			<line>
+				<reportElement x="408" y="86" width="149" height="1" uuid="ed7f8111-880f-4fcb-9047-fc801be7edd0"/>
+			</line>
+			<line>
+				<reportElement x="215" y="98" width="149" height="1" uuid="6f2c669d-a66a-4d4d-ab04-281fe9439938">
+					<printWhenExpression><![CDATA[!$F{firma3}.equals("")]]></printWhenExpression>
+				</reportElement>
+			</line>
+			<textField>
+				<reportElement x="1" y="128" width="556" height="12" uuid="3dadd26f-a865-4312-bf77-1c0f4ba932ca"/>
+				<textElement>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Creado por: " + $F{usuario_completo} + " fecha: " + $F{fecha_insert}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="-1" y="31" width="573" height="12" uuid="13b73cd0-5691-4777-82d5-ba4720db7aa1"/>
+				<textElement>
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Son:" +$F{literal_usd} + " " + ($F{decimal_part_usd}<10?"0"+$F{decimal_part_usd}:$F{decimal_part_usd})+"/100 DOLARES."]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="392" y="0" width="60" height="12" uuid="1ab629f5-8a81-4813-8fde-d526be78f7a5"/>
+				<textElement textAlignment="Right">
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{total_haber_nac}==null?"":$F{total_haber_nac}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00">
+				<reportElement x="332" y="0" width="60" height="12" uuid="0b3235f4-0b24-442b-9636-25f6085ab125"/>
+				<textElement textAlignment="Right">
+					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{total_debe_nac}==null?"":$F{total_debe_nac}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>

@@ -154,7 +154,7 @@ values (
 ;
 
 
-
+/*Historico Cliente*/
 insert into tb_formularios (
 id_modulo
 , nombre
@@ -183,4 +183,33 @@ values (
 )
 ;
 
+
+/*Historico Cliente*/
+insert into tb_formularios (
+id_modulo
+, nombre
+, url_acceso
+, restful_url
+, status
+, fecha_alta
+, full_path
+)values 
+(
+(select id_modulo from tb_modulos where nombre = 'Cobranzas')
+, 'Estado de Clientes'
+, 'estado-clientes'
+, '/ContableEnterprise-ws/ws-api/estado-clientes/'
+, 'ACTIVO'
+, curdate()
+, '/pages/cobranzas/estado-clientes.xhtml'
+)
+;
+-- PErmisos ADMIN
+insert into tb_rol_formulario (id_rol,id_formularios, crear, actualizar, eliminar, acceder, buscar, editar, anular, ver)
+values (
+ (select id_rol from tb_rol where nombre = 'ADMINISTRADOR')
+, (select id_formulario from tb_formularios where url_acceso = 'estado-clientes')
+, 1,1,1,1,1,1,1,1
+)
+;
 

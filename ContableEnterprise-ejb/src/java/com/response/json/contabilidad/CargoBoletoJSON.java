@@ -65,13 +65,15 @@ public class CargoBoletoJSON implements Serializable {
         if (json.getIdCuentaAgencia() != null) {
             cargo.setIdCuentaAgencia(new PlanCuentas(((Double) json.getIdCuentaAgencia().getId()).intValue()));
         } else {
-            throw new CRUDException("No se ha enviado la cuenta de la comision de la Agencia");
+            //throw new CRUDException("No se ha enviado la cuenta de la comision de la Agencia");
+            cargo.setIdCuentaAgencia(null);
         }
 
         if (json.getIdCuentaPromotor() != null) {
             cargo.setIdCuentaPromotor(new PlanCuentas(((Double) json.getIdCuentaPromotor().getId()).intValue()));
         } else {
-            throw new CRUDException("No se ha enviado la cuenta de la comision de Promotor");
+            //throw new CRUDException("No se ha enviado la cuenta de la comision de Promotor");
+            cargo.setIdCuentaPromotor(null);
         }
 
         cargo.setIdEmpresa(json.getIdEmpresa());

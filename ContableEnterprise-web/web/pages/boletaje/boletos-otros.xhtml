@@ -1033,9 +1033,10 @@
                                                                    class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="1" 
                                                                    typeahead-template-url="customTemplate.html" 
                                                                    />
-                                                            <span class="alert-danger"  ng-show="cargos.idCuentaAgencia.id === undefined"  >
+                                                            <!--<span class="alert-danger"  ng-show="cargos.idCuentaAgencia.id === undefined"  >
                                                                 Ingrese una cuenta de Comisi&oacute;n Agencia
-                                                            </span> 
+                                                            </span>
+                                                            -->
                                                         </div>
                                                         <label for="txtNombre" class=" col-form-label text-right">Monto</label>
                                                         <div class="col-sm-2">
@@ -1052,7 +1053,7 @@
                                                         <div class="col-sm-8">
                                                             <div >
                                                                 <textarea type="text" class="form-control" rows="3" name="txtConcepto" required="required" 
-                                                                          onkeyup="this.value = this.value.toUpperCase()" maxlength="256" ng-model="cargos.concepto"/>
+                                                                          onkeyup="this.value = this.value.toUpperCase()" maxlength="512" ng-model="cargos.concepto"/>
                                                                 <span class="alert-danger"  ng-show="!myFormCargos.txtConcepto.$valid"  >
                                                                     Debe insertar un concepto.
                                                                 </span>

@@ -79,10 +79,13 @@ public class IngresoCajaEJB extends FacadeEJB implements IngresoCajaRemote {
         //ingreso.setIdCounter(boleto.getIdPromotor());
         ingreso.setEstado(Estado.EMITIDO);
 
-        if (boleto.getTipoCupon().equals(Boleto.Cupon.INTERNACIONAL)) {
+        // cambio 2019-08
+        if (boleto.getMoneda().equals(Moneda.EXTRANJERA)){
+        //if (boleto.getTipoCupon().equals(Boleto.Cupon.INTERNACIONAL)) {
             ingreso.setMontoAbonadoUsd(boleto.getTotalMontoCobrar());
 
-        } else if (boleto.getTipoCupon().equals(Boleto.Cupon.NACIONAL)) {
+        }else {
+        //} else if (boleto.getTipoCupon().equals(Boleto.Cupon.NACIONAL)) {
             ingreso.setMontoAbonadoBs(boleto.getTotalMontoCobrar());
         }
 
@@ -222,12 +225,14 @@ public class IngresoCajaEJB extends FacadeEJB implements IngresoCajaRemote {
         transaccion.setIdIngresoCaja(ingreso);
         transaccion.setIdNotaTransaccion(transacciones);
         transaccion.setEstado(Estado.EMITIDO);
-
-        if (boleto.getTipoCupon().equals(Boleto.Cupon.INTERNACIONAL)) {
+        // cambio 2019-08
+        if (boleto.getMoneda().equals(Moneda.EXTRANJERA)){
+        //if (boleto.getTipoCupon().equals(Boleto.Cupon.INTERNACIONAL)) {
             transaccion.setMoneda(Moneda.EXTRANJERA);
             transaccion.setMontoUsd(boleto.getTotalMontoCobrar());
             transaccion.setMontoBs(BigDecimal.ZERO);
-        } else if (boleto.getTipoCupon().equals(Boleto.Cupon.NACIONAL)) {
+        }else {
+        //} else if (boleto.getTipoCupon().equals(Boleto.Cupon.NACIONAL)) {
             transaccion.setMoneda(Moneda.NACIONAL);
             transaccion.setMontoBs(boleto.getTotalMontoCobrar());
             transaccion.setMontoUsd(BigDecimal.ZERO);

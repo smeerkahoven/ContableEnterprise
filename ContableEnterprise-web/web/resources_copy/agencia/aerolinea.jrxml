@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="aerolinea" language="groovy" pageWidth="612" pageHeight="792" columnWidth="582" leftMargin="10" rightMargin="20" topMargin="10" bottomMargin="10" uuid="d6094d85-5dc7-4592-ad7e-f88b14052532">
+	<property name="ireport.zoom" value="1.4641000000000048"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["/home/xeio/proyectos/netbeans/repository/ContableEnterprise-web/src/java/com/reports/"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="EMPRESA_ID" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[1]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[SELECT
+     cnt_aerolinea.`id_aerolinea` AS cnt_aerolinea_id_aerolinea,
+     cnt_aerolinea.`numero` AS cnt_aerolinea_numero,
+     cnt_aerolinea.`iata` AS cnt_aerolinea_iata,
+     cnt_aerolinea.`nit` AS cnt_aerolinea_nit,
+     cnt_aerolinea.`emitir_factura_a` AS cnt_aerolinea_emitir_factura_a,
+     cnt_aerolinea.`nombre` AS cnt_aerolinea_nombre,
+     cnt_aerolinea.`representante` AS cnt_aerolinea_representante,
+     cnt_aerolinea.`direccion` AS cnt_aerolinea_direccion,
+     cnt_aerolinea.`telefono` AS cnt_aerolinea_telefono,
+     coalesce(cnt_aerolinea.`celular`,'') AS cnt_aerolinea_celular,
+     cnt_aerolinea.`email` AS cnt_aerolinea_email,
+     cnt_aerolinea.`persona_contacto` AS cnt_aerolinea_persona_contacto,
+     cnt_aerolinea.`bsp` AS cnt_aerolinea_bsp,
+     cnt_aerolinea.`comision_prom_int` AS cnt_aerolinea_comision_prom_int,
+     case cnt_aerolinea.`comision_prom_int_tipo` when 'T' then 'TOTAL' when 'N' then 'NETO' else 'N/A' end AS cnt_aerolinea_comision_prom_int_tipo,
+     cnt_aerolinea.`comision_prom_nac` AS cnt_aerolinea_comision_prom_nac,
+     case cnt_aerolinea.`comision_prom_nac_tipo` when 'T' then 'TOTAL' when 'N' then 'TOTAL' else 'N/A' end AS cnt_aerolinea_comision_prom_nac_tipo,
+     cnt_aerolinea.`round_comision_bob` AS cnt_aerolinea_round_comision_bob,
+     cnt_aerolinea.`round_comision_usd` AS cnt_aerolinea_round_comision_usd,
+     cnt_aerolinea.`iva_it_comision` AS cnt_aerolinea_iva_it_comision,
+
+     cnt_aerolinea.`boletos_mon_nac` AS cnt_aerolinea_boletos_mon_nac,
+     cnt_aerolinea.`boletos_mon_ext` AS cnt_aerolinea_boletos_mon_ext,
+     cnt_aerolinea.`moneda` AS cnt_aerolinea_moneda,
+     cnt_aerolinea.`impuesto_valor_neto` AS cnt_aerolinea_impuesto_valor_neto,
+     cnt_aerolinea.`impuesto_qm` AS cnt_aerolinea_impuesto_qm,
+     cnt_aerolinea.`cargo_no_fiscal` AS cnt_aerolinea_cargo_no_fiscal,
+     cnt_aerolinea.`modalidad_boleto` AS cnt_aerolinea_modalidad_boleto,
+     cnt_aerolinea.`registra_pnr` AS cnt_aerolinea_registra_pnr,
+     cnt_aerolinea.`modifica_comision` AS cnt_aerolinea_modifica_comision,
+     cnt_aerolinea.`tipo_modalidad` AS cnt_aerolinea_tipo_modalidad
+FROM
+     `cnt_aerolinea` cnt_aerolinea]]>
+	</queryString>
+	<field name="cnt_aerolinea_id_aerolinea" class="java.lang.Integer"/>
+	<field name="cnt_aerolinea_numero" class="java.lang.String"/>
+	<field name="cnt_aerolinea_iata" class="java.lang.String"/>
+	<field name="cnt_aerolinea_nit" class="java.lang.String"/>
+	<field name="cnt_aerolinea_emitir_factura_a" class="java.lang.String"/>
+	<field name="cnt_aerolinea_nombre" class="java.lang.String"/>
+	<field name="cnt_aerolinea_representante" class="java.lang.String"/>
+	<field name="cnt_aerolinea_direccion" class="java.lang.String"/>
+	<field name="cnt_aerolinea_telefono" class="java.lang.String"/>
+	<field name="cnt_aerolinea_celular" class="java.lang.String"/>
+	<field name="cnt_aerolinea_email" class="java.lang.String"/>
+	<field name="cnt_aerolinea_persona_contacto" class="java.lang.String"/>
+	<field name="cnt_aerolinea_bsp" class="java.lang.Boolean"/>
+	<field name="cnt_aerolinea_comision_prom_int" class="java.math.BigDecimal"/>
+	<field name="cnt_aerolinea_comision_prom_int_tipo" class="java.lang.String"/>
+	<field name="cnt_aerolinea_comision_prom_nac" class="java.math.BigDecimal"/>
+	<field name="cnt_aerolinea_comision_prom_nac_tipo" class="java.lang.String"/>
+	<field name="cnt_aerolinea_round_comision_bob" class="java.lang.Boolean"/>
+	<field name="cnt_aerolinea_round_comision_usd" class="java.lang.Boolean"/>
+	<field name="cnt_aerolinea_iva_it_comision" class="java.lang.Boolean"/>
+	<field name="cnt_aerolinea_boletos_mon_nac" class="java.lang.Boolean"/>
+	<field name="cnt_aerolinea_boletos_mon_ext" class="java.lang.Boolean"/>
+	<field name="cnt_aerolinea_moneda" class="java.lang.String"/>
+	<field name="cnt_aerolinea_impuesto_valor_neto" class="java.lang.Boolean"/>
+	<field name="cnt_aerolinea_impuesto_qm" class="java.lang.Boolean"/>
+	<field name="cnt_aerolinea_cargo_no_fiscal" class="java.lang.Boolean"/>
+	<field name="cnt_aerolinea_modalidad_boleto" class="java.lang.Boolean"/>
+	<field name="cnt_aerolinea_registra_pnr" class="java.lang.Boolean"/>
+	<field name="cnt_aerolinea_modifica_comision" class="java.lang.Boolean"/>
+	<field name="cnt_aerolinea_tipo_modalidad" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="25" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="552" height="22" uuid="a1b36be9-3ff4-413c-8c11-e097dad151bc"/>
+				<textElement textAlignment="Right">
+					<font size="18" isUnderline="false"/>
+				</textElement>
+				<text><![CDATA[Listado de Aerolineas]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="21" width="550" height="1" uuid="40966121-b6d8-408b-b313-68952d808200"/>
+				<graphicElement>
+					<pen lineStyle="Solid"/>
+				</graphicElement>
+			</line>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="86" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="14" width="101" height="14" uuid="976671ab-81c6-4cb3-ab43-ba93eae3522a"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Aerolinea:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="103" y="1" width="121" height="14" uuid="737efd60-7d52-41e3-9562-f855fb35ec53"/>
+				<textFieldExpression><![CDATA[$F{cnt_aerolinea_numero}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="1" width="101" height="14" uuid="f57a02b4-7390-4e20-b66a-0b7d56567f57"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Numero:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="317" y="1" width="48" height="14" uuid="f606ac17-72c4-46b1-a9f6-8973cc1f8dfa"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[IATA:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="103" y="14" width="193" height="14" uuid="5f1a30c3-533a-4a33-8f5a-679eb5f86f8d"/>
+				<textFieldExpression><![CDATA[$F{cnt_aerolinea_nombre}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="367" y="1" width="169" height="14" uuid="5aa80a45-4ae5-4da0-9399-ad874ee32fbd"/>
+				<textFieldExpression><![CDATA[$F{cnt_aerolinea_iata}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="367" y="14" width="185" height="14" uuid="10db3e76-01bb-4177-862d-0e832a84d94b"/>
+				<textFieldExpression><![CDATA[$F{cnt_aerolinea_nit}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="317" y="14" width="48" height="14" uuid="f3559aeb-d370-4bc5-aa60-f50b40a72a9d"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[NIT:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="103" y="27" width="192" height="14" uuid="61a41f0b-65b9-420d-b931-4c62efd09715"/>
+				<textFieldExpression><![CDATA[$F{cnt_aerolinea_emitir_factura_a}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="27" width="101" height="14" uuid="3500d3bb-a055-40e1-8846-efe5a673f45d"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Emitir Factura a:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="103" y="40" width="193" height="14" uuid="ec6e9aab-9776-45c8-882d-b102348cbabd"/>
+				<textFieldExpression><![CDATA[$F{cnt_aerolinea_representante}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="40" width="101" height="14" uuid="11521a99-30b4-4950-9ef3-9d54ad6ee36e"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Representante:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="305" y="27" width="60" height="14" uuid="eaf5e0ae-39b5-4250-8f4c-c3134ffd3d43"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Telefono:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="367" y="27" width="185" height="14" uuid="536c25b7-5b43-4fe3-a9ca-e61397bd0190"/>
+				<textFieldExpression><![CDATA[$F{cnt_aerolinea_telefono}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="367" y="40" width="185" height="14" uuid="ac0920a9-f020-4884-8fd9-a3352ea4a18c"/>
+				<textFieldExpression><![CDATA[$F{cnt_aerolinea_celular}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="305" y="40" width="60" height="14" uuid="4a8b1591-f4d5-4245-ba5d-4c943d810aee"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Celular:]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="81" width="548" height="1" uuid="89ec4032-bddc-4c12-9071-fa0422475fca"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="0" y="53" width="101" height="14" uuid="8107a092-0858-46a5-86d4-fdbe051a8d3a"/>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Comisiones:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="103" y="53" width="439" height="14" uuid="26dbcb2b-7d73-4304-a951-5840f9d2b979"/>
+				<textFieldExpression><![CDATA["Internacional : " + $F{cnt_aerolinea_comision_prom_int} + "  %  sobre " +   $F{cnt_aerolinea_comision_prom_int_tipo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="103" y="67" width="439" height="14" uuid="47323e22-64d7-44dd-b9d2-7c36a92272c7"/>
+				<textFieldExpression><![CDATA["Nacional : " + $F{cnt_aerolinea_comision_prom_nac} + "  %  sobre " +   $F{cnt_aerolinea_comision_prom_nac_tipo}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

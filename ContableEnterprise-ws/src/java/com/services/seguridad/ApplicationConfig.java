@@ -40,6 +40,7 @@ public class ApplicationConfig extends Application {
         resources.add(com.services.agencia.boletaje.PlanillaBspResource.class);
         resources.add(com.services.cobranzas.HistoricoClienteResource.class);
         resources.add(com.services.cobranzas.KardexClienteResource.class);
+        resources.add(com.services.cobranzas.ReporteEstadoClienteResource.class);
         resources.add(com.services.configuracion.BoletajeResource.class);
         resources.add(com.services.configuracion.FactoresResource.class);
         resources.add(com.services.configuracion.ParametrosResource.class);
