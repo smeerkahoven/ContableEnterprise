@@ -66,7 +66,7 @@ public class NotaDebitoTransaccion extends Entidad {
     @JoinColumn(name = "id_nota_debito")
     private NotaDebito idNotaDebito;
 //    @Size(max = 128)
-    @Column(name = "descripcion", length = 128)
+    @Column(name = "descripcion", length = 512)
     private String descripcion;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "monto_bs")
