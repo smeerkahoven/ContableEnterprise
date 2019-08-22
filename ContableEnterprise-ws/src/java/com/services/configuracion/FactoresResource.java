@@ -180,13 +180,18 @@ public class FactoresResource extends TemplateResource {
                         CambioDolar dollarToday = (CambioDolar) ejbCambio.get(new CambioDolar(date));
 
                         if (dollarToday == null) {
+                            
+                            CambioDolar last = (CambioDolar) ejbCambio.getLast() ;
+                            
                             r.setCode(ResponseCode.VALOR_DOLAR_NO_ESTABLECIDO.getCode());
-                            r.setContent(RestResponse.VALOR_DOLAR_NO_ESTABLECIDO);
+                            r.setContent(last);
 
                             return r;
                         } else if (dollarToday.getValor().intValue() == 0) {
+                            CambioDolar last = (CambioDolar) ejbCambio.getLast() ;
+                                    
                             r.setCode(ResponseCode.VALOR_DOLAR_NO_ESTABLECIDO.getCode());
-                            r.setContent(RestResponse.VALOR_DOLAR_NO_ESTABLECIDO);
+                            r.setContent(last);
 
                             return r;
                         }

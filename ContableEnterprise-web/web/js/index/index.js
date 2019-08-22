@@ -72,6 +72,7 @@ angular.module('jsIndex.controllers', []).controller('frmIndex',
                 } else if (response.data.code === 301) {
                     $scope.showBtnGuardarDolarFactor = true;
                     $scope.showBtnCerrarDolarFactor = false;
+                    $scope.valorDolar = response.data.content.valor ;
                     document.getElementById("openModalButton").click();
                 }
             }, function (error) {
@@ -189,7 +190,6 @@ angular.module('jsIndex.controllers', []).controller('frmIndex',
             );
         }
         
-        
         $scope.showComprobante = function () {
             $scope.showTableNshowTableComprobanteotaCredito = false;
             $scope.showMessageComprobante = false;
@@ -211,7 +211,6 @@ angular.module('jsIndex.controllers', []).controller('frmIndex',
                     }, function (error) {}
             );
         }
-        
         
 
         $scope.getDataFactor('dollar');

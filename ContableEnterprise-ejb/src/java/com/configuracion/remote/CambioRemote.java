@@ -24,5 +24,7 @@ public interface CambioRemote extends DaoRemote {
     public List get() throws CRUDException;
     
     public CambioDolar saveCambio (CambioDolar cambio) throws CRUDException ;
+    
+    public CambioDolar getLast() throws CRUDException ;
 
 }

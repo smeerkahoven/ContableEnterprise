@@ -126,6 +126,23 @@ public class CambioEJB extends FacadeEJB implements CambioRemote {
     }
 
     @Override
+    public CambioDolar getLast() throws CRUDException {
+        Query q = em.createQuery("select t from CambioDolar t order by t.fecha desc");
+        
+        if (q.getResultList().size() >0 ){
+            List l =  q.setMaxResults(1).getResultList() ;
+            
+            CambioDolar c =(CambioDolar) l.get(0);
+            
+            return c ;
+        }
+
+        return null;
+    }
+    
+    
+
+    @Override
     public List get() throws CRUDException {
         
         Query q = em.createNamedQuery("CambioDolar.findAll");

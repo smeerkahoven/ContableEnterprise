@@ -327,7 +327,7 @@
                                                     </div>
 
 
-                                                    <div class="form-group row" ng-show="formData.tipo === ASIENTO_DIARIO || formData.tipo === COMPROBANTE_INGRESO">
+                                                    <div class="form-group row" ng-show="formData.tipo === ASIENTO_DIARIO ">
                                                         <label for="txtNombre" class=" col-form-label col-sm-2 text-right">Cliente</label>
                                                         <div class="col-sm-6">
                                                             <input type="text" ng-model="formData.idCliente" placeholder="Seleccione un Cliente"
@@ -339,7 +339,7 @@
                                                         <!--<span class=" fa fa-info-circle text-blue" data-toggle="tooltip" data-placement="top" title="La secci&oacute;n de Formas de Pago se habilitar&aacute; al momento de seleccionar una Cuenta de Cliente v&aacute;lida."></span>-->
                                                     </div>
 
-                                                    <div class="form-group row" ng-show="formData.tipo === COMPROBANTE_TRASPASO || formData.tipo === ASIENTO_AJUSTE || formData.tipo === COMPROBANTE_EGRESO">
+                                                    <div class="form-group row" ng-show="formData.tipo === COMPROBANTE_TRASPASO || formData.tipo === ASIENTO_AJUSTE || formData.tipo === COMPROBANTE_EGRESO || formData.tipo === COMPROBANTE_INGRESO">
                                                         <label for="txtNombre" class=" col-form-label col-sm-2 text-right">Nombre</label>
                                                         <div class="col-sm-6">
                                                             <input type="text" maxlength="64" class="form-control" ng-model="formData.nombre" onkeyup="this.value = this.value.toUpperCase()" placeholder="Seleccione un Nombre"/>

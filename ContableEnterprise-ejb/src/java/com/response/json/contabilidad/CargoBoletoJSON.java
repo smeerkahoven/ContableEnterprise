@@ -99,7 +99,7 @@ public class CargoBoletoJSON implements Serializable {
         json.setFechaInsert(DateContable.getDateFormat(cargo.getFechaInsert(), DateContable.LATIN_AMERICA_TIME_FORMAT));
 
         if (cargo.getIdCuentaMayorista() != null) {
-            json.setIdCuentaMayorista(new ComboSelect(cargo.getIdCuentaMayorista().getIdPlanCuentas(), cargo.getIdCuentaAgencia().getCuenta()));
+            json.setIdCuentaMayorista(new ComboSelect(cargo.getIdCuentaMayorista().getIdPlanCuentas(), cargo.getIdCuentaMayorista().getCuenta()));
         }
 
         if (cargo.getIdCuentaAgencia() != null) {
@@ -107,7 +107,7 @@ public class CargoBoletoJSON implements Serializable {
         }
 
         if (cargo.getIdCuentaPromotor() != null) {
-            json.setIdCuentaPromotor(new ComboSelect(cargo.getIdCuentaPromotor().getIdPlanCuentas(), cargo.getIdCuentaAgencia().getCuenta()));
+            json.setIdCuentaPromotor(new ComboSelect(cargo.getIdCuentaPromotor().getIdPlanCuentas(), cargo.getIdCuentaPromotor().getCuenta()));
         }
 
         json.setIdEmpresa(cargo.getIdEmpresa());
