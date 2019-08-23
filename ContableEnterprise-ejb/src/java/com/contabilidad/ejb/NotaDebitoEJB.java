@@ -39,6 +39,7 @@ import com.seguridad.utils.DateContable;
 import com.seguridad.utils.Estado;
 import com.seguridad.utils.Operacion;
 import java.math.BigDecimal;
+import java.text.DecimalFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -1141,13 +1142,22 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
         } else {
             if (trx.getMoneda().equals(Moneda.EXTRANJERA)
                     && notaFromDb.getMoneda().equals(Moneda.NACIONAL)) {
-                montoIngresado = trx.getMontoUsd().doubleValue() * factorCambio;
+                
+                montoIngresado =  trx.getMontoUsd().doubleValue() * factorCambio;
+                
+                
             } else if (trx.getMoneda().equals(Moneda.NACIONAL)
                     && notaFromDb.getMoneda().equals(Moneda.EXTRANJERA)) {
                 montoIngresado = trx.getMontoBs().doubleValue() / factorCambio;
             }
         }
 
+        
+        DecimalFormat df = new DecimalFormat("#########.##");
+        String value = df.format(montoIngresado);
+        montoIngresado = Double.parseDouble(value) ;
+                
+                
         if (montoIngresado > montoAdeudado) {
             String mensaje = "El monto de Pago de la transaccion de Ingreso:";
             mensaje += montoIngresado.toString();

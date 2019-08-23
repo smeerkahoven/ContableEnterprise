@@ -537,7 +537,7 @@ angular.module('jsNotasCredito.controllers', []).controller('frmNotasCredito',
 
                             hideModalWindow('#frmNotaCreditoTransaccion');
                         }else {
-                            showAlert(ERROR_TITLE, )
+                            showAlert(ERROR_RESPUESTA_TITLE, response.data.content);
                         }
                     }, $scope.errorFunction);
                 }

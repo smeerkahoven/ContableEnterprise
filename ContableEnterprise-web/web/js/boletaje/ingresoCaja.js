@@ -653,7 +653,8 @@ angular.module('jsIngresoCaja.controllers', []).controller('frmIngresoCaja',
                             $scope.loadTransacciones();
 
                             hideModalWindow('#frmIngresoTransaccion');
-
+                        } else {
+                            showAlert(ERROR_RESPUESTA_TITLE, response.data.content);
                         }
                     }, $scope.errorFunction);
                 }
