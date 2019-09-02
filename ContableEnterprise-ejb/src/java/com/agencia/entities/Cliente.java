@@ -54,11 +54,11 @@ public class Cliente extends Entidad {
     private String nombre;
 
 //    @Size(max = 12)
-    @Column(name = "ci", length = 12)
+    @Column(name = "ci", length = 128)
     private String ci;
 
 //    @Size(max = 12)
-    @Column(name = "nit", length = 12)
+    @Column(name = "nit", length = 128)
     private String nit;
 
 //    @Size(max = 128)
@@ -66,11 +66,11 @@ public class Cliente extends Entidad {
     private String direccion;
 
 //    @Size(max = 32)
-    @Column(name = "telefono_fijo", length = 32)
+    @Column(name = "telefono_fijo", length = 128)
     private String telefonoFijo;
 
 //    @Size(max = 32)
-    @Column(name = "telefono_celular", length = 32)
+    @Column(name = "telefono_celular", length = 128)
     private String telefonoCelular;
 
     // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
@@ -102,22 +102,45 @@ public class Cliente extends Entidad {
     @Column(name = "representante", length = 64)
     private String representante;
 //    @Size(max = 64)
-    @Column(name = "representante_direccion", length = 64)
+    @Column(name = "representante_direccion", length = 128)
     private String representanteDireccion;
 //    @Size(max = 32)
-    @Column(name = "representante_telefono", length = 32)
+    @Column(name = "representante_telefono", length = 128)
     private String representanteTelefono;
 //    @Size(max = 32)
-    @Column(name = "representante_celular", length = 32)
+    @Column(name = "representante_celular", length = 128)
     private String representanteCelular;
 //    @Size(max = 12)
     @Column(name = "representante_ci", length = 12)
     private String representanteCi;
+
+    @Column(name = "representante_email", length = 128)
+    private String representanteEmail;
+
+    @Column(name = "representante_nacimiento")
+    private String representanteNacimiento;
+
     @Column(name = "fecha_alta", updatable = false)
     @Temporal(TemporalType.DATE)
     private Date fechaAlta;
 
     public Cliente() {
+    }
+
+    public String getRepresentanteEmail() {
+        return representanteEmail;
+    }
+
+    public void setRepresentanteEmail(String representanteEmail) {
+        this.representanteEmail = representanteEmail;
+    }
+
+    public String getRepresentanteNacimiento() {
+        return representanteNacimiento;
+    }
+
+    public void setRepresentanteNacimiento(String representanteNacimiento) {
+        this.representanteNacimiento = representanteNacimiento;
     }
 
     public String getMonedaCredito() {

@@ -3,3 +3,6 @@ CHANGE COLUMN `descripcion` `descripcion` VARCHAR(512) NULL DEFAULT NULL ;
 
 ALTER TABLE `db_travel`.`cnt_cargo_boleto` 
 CHANGE COLUMN `concepto` `concepto` VARCHAR(511) NULL DEFAULT NULL ;
+
+ALTER TABLE `db_travel`.`cnt_boleto` 
+CHANGE COLUMN `fee` `fee` DECIMAL(6,2) NULL DEFAULT NULL ;

@@ -16,7 +16,7 @@
 		<defaultValueExpression><![CDATA[10000157]]></defaultValueExpression>
 	</parameter>
 	<parameter name="ID_INGRESO" class="java.lang.Integer" isForPrompting="false">
-		<defaultValueExpression><![CDATA[20000000]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA[20000002]]></defaultValueExpression>
 	</parameter>
 	<parameter name="FECHA_INICIO" class="java.lang.String" isForPrompting="false"/>
 	<parameter name="FECHA_FIN" class="java.lang.String" isForPrompting="false"/>
@@ -105,7 +105,7 @@ WHERE
 				<textFieldExpression><![CDATA["NIT:" + $F{tb_empresa_nit}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="64" y="46" width="385" height="12" uuid="c9821523-e0ef-4dcd-adfd-c85c1ee7e457"/>
+				<reportElement x="64" y="46" width="512" height="12" uuid="c9821523-e0ef-4dcd-adfd-c85c1ee7e457"/>
 				<textElement>
 					<font fontName="Courier 10 Pitch" size="11" isStrikeThrough="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
@@ -133,8 +133,8 @@ WHERE
 	</columnHeader>
 	<detail>
 		<band height="62" splitType="Immediate">
-			<subreport>
-				<reportElement stretchType="RelativeToBandHeight" x="4" y="1" width="106" height="53" isPrintWhenDetailOverflows="true" uuid="9e5bdce7-711b-40e0-9b51-f915333152d9"/>
+			<subreport runToBottom="true">
+				<reportElement stretchType="RelativeToBandHeight" x="4" y="1" width="106" height="61" isPrintWhenDetailOverflows="true" uuid="9e5bdce7-711b-40e0-9b51-f915333152d9"/>
 				<subreportParameter name="ID_DEVOLUCION">
 					<subreportParameterExpression><![CDATA[$P{ID_DEVOLUCION}]]></subreportParameterExpression>
 				</subreportParameter>

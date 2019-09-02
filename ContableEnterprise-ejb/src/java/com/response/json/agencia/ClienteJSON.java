@@ -39,6 +39,8 @@ public class ClienteJSON {
     private String representanteTelefono;
     private String representanteCelular;
     private String representanteCi;
+    private String representanteEmail;
+    private String representanteNacimiento;
     
     private LinkedList<ClienteSolicitadoJSON> listSolicitadoPor = new LinkedList<>();
     
@@ -66,11 +68,31 @@ public class ClienteJSON {
         cliente.setRepresentanteCi(json.getRepresentanteCi());
         cliente.setRepresentanteDireccion(json.getRepresentanteDireccion());
         cliente.setRepresentanteTelefono(json.getRepresentanteTelefono());
+        cliente.setRepresentanteEmail(json.getRepresentanteEmail());
+        cliente.setRepresentanteNacimiento(json.getRepresentanteNacimiento());
         cliente.setTelefonoFijo(json.getTelefonoFijo());
         cliente.setTelefonoCelular(json.getTelefonoCelular());
         
         return cliente;
     }
+
+    public String getRepresentanteEmail() {
+        return representanteEmail;
+    }
+
+    public void setRepresentanteEmail(String representanteEmail) {
+        this.representanteEmail = representanteEmail;
+    }
+
+    public String getRepresentanteNacimiento() {
+        return representanteNacimiento;
+    }
+
+    public void setRepresentanteNacimiento(String representanteNacimiento) {
+        this.representanteNacimiento = representanteNacimiento;
+    }
+    
+    
     
     public String getMonedaCredito() {
         return monedaCredito;

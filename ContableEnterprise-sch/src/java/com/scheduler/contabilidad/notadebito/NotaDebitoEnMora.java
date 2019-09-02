@@ -33,7 +33,7 @@ public class NotaDebitoEnMora {
     @EJB
     private NotaDebitoRemote ejbNotaDebito;
 
-    @Schedule(dayOfWeek = "Mon-Fri", month = "*", hour = "*/1", dayOfMonth = "*", year = "*", minute = "*", second = "0")
+    @Schedule(dayOfWeek = "Mon-Fri", month = "*", hour = "*/1", dayOfMonth = "*", year = "*", minute = "0", second = "0")
 
     public void myTimer() {
 

@@ -172,7 +172,7 @@ angular.module('jsBoletos.controllers', []).controller('frmBoletos',
 
                 $scope.MANUAL = "MA";
                 $scope.MANUAL_VOID = "MV";
-                
+
                 $scope.INICIAL = 'I';
                 $scope.EMITIDO = 'E';
                 $scope.ANULADO = 'A';
@@ -180,10 +180,10 @@ angular.module('jsBoletos.controllers', []).controller('frmBoletos',
                 $scope.NOTA_DEBITO = 'N';
                 $scope.COMPROBANTE_INGRESO = 'I';
                 $scope.COMPROBANTE_CONTABLE = 'C';
-                
-                $scope.NOTA_DEBITO = 'N' ;
-                $scope.COMPROBANTE_INGRESO = 'I' ;
-                $scope.COMPROBANTE_CONTABLE = 'C' ;
+
+                $scope.NOTA_DEBITO = 'N';
+                $scope.COMPROBANTE_INGRESO = 'I';
+                $scope.COMPROBANTE_CONTABLE = 'C';
 
                 var token = document.getElementsByName("hdToken")[0];
                 var url = document.getElementsByName("hdUrl")[0];
@@ -1265,18 +1265,18 @@ angular.module('jsBoletos.controllers', []).controller('frmBoletos',
                                 .then(function (response) {
                                     $scope.showLoadingBoletoOrigen = false;
                                     if (response.data.code === 201) {
-                                         console.log(response.data.entidad);
-                                        var boleto = response.data.entidad ;
+                                        console.log(response.data.entidad);
+                                        var boleto = response.data.entidad;
                                         $scope.showBoletoOrigenExiste = true;
-                                        
-                                        $scope.formData.nombrePasajero = boleto.nombrePasajero ;
+
+                                        $scope.formData.nombrePasajero = boleto.nombrePasajero;
                                         $scope.formData.idCliente = $scope.findCta(boleto.idCliente, $scope.comboCliente);
                                         $scope.formData.idPromotor = $scope.findCta(boleto.idPromotor, $scope.comboCliente);
-                                        $scope.formData.fechaEmision = boleto.fechaEmision ;
-                                        $scope.formData.fechaViaje = boleto.fechaViaje ;
-                                        $scope.formData.moneda = boleto.moneda ;
-                                        $scope.formData.factorCambiario = boleto.factorCambiario ;
-                                       
+                                        $scope.formData.fechaEmision = boleto.fechaEmision;
+                                        $scope.formData.fechaViaje = boleto.fechaViaje;
+                                        $scope.formData.moneda = boleto.moneda;
+                                        $scope.formData.factorCambiario = boleto.factorCambiario;
+
                                     } else {
                                         $scope.showAlert("Error", response.data.content);
                                         $scope.showMensajeBoletoOrigenNoExiste = true;
@@ -1294,17 +1294,20 @@ angular.module('jsBoletos.controllers', []).controller('frmBoletos',
                  */
                 $scope.setCreditoVencimiento = function () {
                     if ($scope.formData.creditoDias !== null || $scope.formData.combinadoCreditoDias !== null) {
-                        var date = new Date(today);
-                        var newdate = new Date(date);
+                        if (!$scope.editMode) {
+                            var date = new Date(today);
+                            var newdate = new Date(date);
 
-                        newdate.setDate(newdate.getDate() + $scope.formData.creditoDias);
+                            newdate.setDate(newdate.getDate() + $scope.formData.creditoDias);
 
-                        var dd = newdate.getDate();
-                        var mm = newdate.getMonth() + 1;
-                        var y = newdate.getFullYear();
-                        var someFormattedDate = dd + '/' + mm + '/' + y;
-                        $scope.formData.creditoVencimiento = someFormattedDate;
-                        $scope.formData.combinadoCreditoVencimiento = someFormattedDate;
+                            var dd = newdate.getDate();
+                            var mm = newdate.getMonth() + 1;
+                            var y = newdate.getFullYear();
+                            var someFormattedDate = dd + '/' + mm + '/' + y;
+                            $scope.formData.creditoVencimiento = someFormattedDate;
+                            $scope.formData.combinadoCreditoVencimiento = someFormattedDate;
+                        }
+
                         //$scope.formData.creditoVencimiento = creditToday.format("dd/mm/yyyy");
                     }
                 }
@@ -1507,7 +1510,7 @@ angular.module('jsBoletos.controllers', []).controller('frmBoletos',
                         return false;
                     }
 
-                    return false ;
+                    return false;
                 }
 
 
@@ -1823,17 +1826,17 @@ angular.module('jsBoletos.controllers', []).controller('frmBoletos',
                     $scope.formData.tipoBoleto = tipo;
 
                     /*if (tipo === $scope.MANUAL) {
-                        $scope.showMultiple = true;
-                        $scope.showForm = false;
-                        $scope.showFormVoid = false;
-                        $scope.showTableMultiple = true;
-                        $scope.showFormMultiple = false;
-                        $scope.showBtnSaveMultiple = false;
-                        $scope.showBtnFinalizar = true;
-
-                        $scope.multiple = new Multiple();
-
-                    } else */
+                     $scope.showMultiple = true;
+                     $scope.showForm = false;
+                     $scope.showFormVoid = false;
+                     $scope.showTableMultiple = true;
+                     $scope.showFormMultiple = false;
+                     $scope.showBtnSaveMultiple = false;
+                     $scope.showBtnFinalizar = true;
+                     
+                     $scope.multiple = new Multiple();
+                     
+                     } else */
                     if (tipo === $scope.MANUAL) {
                         $scope.showForm = true;
                         $scope.showFormVoid = false;
@@ -1846,7 +1849,7 @@ angular.module('jsBoletos.controllers', []).controller('frmBoletos',
 
                     } else if (tipo === $scope.MANUAL_VOID) {
                         $scope.showFormVoid = true;
-                        $scope.showForm =false ;
+                        $scope.showForm = false;
                         $scope.showMultiple = false;
                     }
 
@@ -1886,11 +1889,11 @@ angular.module('jsBoletos.controllers', []).controller('frmBoletos',
 
                 $scope.findCta = function (cta, input) {
                     var i = 0;
-                    if (cta === undefined){
-                        return ;
+                    if (cta === undefined) {
+                        return;
                     }
-                    
-                    if (cta === null){
+
+                    if (cta === null) {
                         return;
                     }
                     if (cta.id !== undefined) {
@@ -2108,9 +2111,9 @@ app.filter('printNumber', function ($filter) {
 
 app.filter('printRuta', function ($filter) {
     return function (input, predicate) {
-        if (input !== null && input !== undefined){
-            return input.id ;
-        }else {
+        if (input !== null && input !== undefined) {
+            return input.id;
+        } else {
             return "";
         }
     }

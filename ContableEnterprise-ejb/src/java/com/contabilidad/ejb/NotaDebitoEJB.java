@@ -40,9 +40,12 @@ import com.seguridad.utils.Estado;
 import com.seguridad.utils.Operacion;
 import java.math.BigDecimal;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.text.NumberFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -102,12 +105,12 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
         notaDebito.setEstado(Estado.EMITIDO);
 
         // cambio 2019-08
-        if (boleto.getMoneda().equals(Moneda.EXTRANJERA)){
-        //if (boleto.getTipoCupon().equals(Boleto.Cupon.INTERNACIONAL)) {
+        if (boleto.getMoneda().equals(Moneda.EXTRANJERA)) {
+            //if (boleto.getTipoCupon().equals(Boleto.Cupon.INTERNACIONAL)) {
             notaDebito.setMontoTotalUsd(boleto.getTotalMontoCobrar());
             notaDebito.setMontoAdeudadoUsd(boleto.getTotalMontoCobrar());
-        }else {
-    //} else if (boleto.getTipoCupon().equals(Boleto.Cupon.NACIONAL)) {
+        } else {
+            //} else if (boleto.getTipoCupon().equals(Boleto.Cupon.NACIONAL)) {
             notaDebito.setMontoTotalBs(boleto.getTotalMontoCobrar());
             notaDebito.setMontoAdeudadoBs(boleto.getTotalMontoCobrar());
         }
@@ -205,10 +208,10 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
         // montos
 
         // cambio 2019-08
-        if (boleto.getMoneda().equals(Moneda.EXTRANJERA)){
-        //if (boleto.getTipoCupon().equals(Boleto.Cupon.INTERNACIONAL)) {
+        if (boleto.getMoneda().equals(Moneda.EXTRANJERA)) {
+            //if (boleto.getTipoCupon().equals(Boleto.Cupon.INTERNACIONAL)) {
             transaccion.setMontoUsd(boleto.getTotalMontoCobrar());
-        }else {        
+        } else {
 //} else if (boleto.getTipoCupon().equals(Boleto.Cupon.NACIONAL)) {
             transaccion.setMontoBs(boleto.getTotalMontoCobrar());
         }
@@ -1142,22 +1145,24 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
         } else {
             if (trx.getMoneda().equals(Moneda.EXTRANJERA)
                     && notaFromDb.getMoneda().equals(Moneda.NACIONAL)) {
-                
-                montoIngresado =  trx.getMontoUsd().doubleValue() * factorCambio;
-                
-                
+
+                montoIngresado = trx.getMontoUsd().doubleValue() * factorCambio;
+
             } else if (trx.getMoneda().equals(Moneda.NACIONAL)
                     && notaFromDb.getMoneda().equals(Moneda.EXTRANJERA)) {
                 montoIngresado = trx.getMontoBs().doubleValue() / factorCambio;
             }
         }
 
+        Locale currentLocale = Locale.getDefault();
+        DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(currentLocale);
+        otherSymbols.setDecimalSeparator('.');
+        otherSymbols.setGroupingSeparator(',');
         
-        DecimalFormat df = new DecimalFormat("#########.##");
+        DecimalFormat df = new DecimalFormat("#########.##", otherSymbols);
         String value = df.format(montoIngresado);
-        montoIngresado = Double.parseDouble(value) ;
-                
-                
+        montoIngresado = Double.parseDouble(value);
+
         if (montoIngresado > montoAdeudado) {
             String mensaje = "El monto de Pago de la transaccion de Ingreso:";
             mensaje += montoIngresado.toString();

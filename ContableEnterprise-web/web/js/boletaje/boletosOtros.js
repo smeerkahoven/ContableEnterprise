@@ -641,7 +641,6 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                     window.open(`../../ComprobanteReporteServlet?idLibro=${item.idLibro}`, '_blank');
                 }
 
-
                 /**
                  * Falta realizar las validaciones de los valores que son requeridos
                  * @returns {Boolean}
@@ -913,7 +912,6 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                 };
 
                 $scope.delete = function () {
-
                     if ($scope.modalConfirmation.method === 'delete-comision') {
                         $scope.deleteComision();
                     }
@@ -925,6 +923,7 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                 }
 
                 $scope.edit = function (item) {
+                    $scope.editMode = true ;
                     $scope.showTable = false;
                     $scope.showForm = true;
                     $scope.showBtnNuevo = false;
@@ -1313,8 +1312,11 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                     $scope.showRestfulError = false;
                     $scope.formData = new NotaDebito();
                     $scope.formData.formaPago = $scope.EFECTIVO;
+                    $scope.comprobante = {} ;
+                    $scope.showComprobante = false ;
 
                     $scope.clickNuevo = true;
+                    $scope.editMode = false ;
                     return $http({
                         method: 'POST',
                         url: `${url.value}new`,
@@ -1462,7 +1464,6 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                     $scope.amadeusGrid = [];
                     $scope.txtAutomaticTicketSearch='';
                     //$scope.stResetSearch.directiveFunction();
-                    console.log($scope);
                     
                     return $http({
                         method: 'POST',
@@ -2592,7 +2593,11 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                  * Credito
                  */
                 $scope.setCreditoVencimiento = function () {
-                    if ($scope.formData.creditoDias !== null) {
+                    console.log($scope.editMode);
+                    if ($scope.editMode){
+                        $scope.editMode = false ;
+                        return ;
+                    }else if ($scope.formData.creditoDias !== null ) {
 
                         var fechaEmision = $scope.formData.fechaEmision !== undefined ? $scope.formData.fechaEmision : today;
                         var dias = $scope.formData.creditoDias !== undefined ? $scope.formData.creditoDias : 0;

@@ -246,7 +246,7 @@
                                                         <div class="form-group row">
                                                             <label for="txtNit" class=" col-form-label col-sm-3 text-right">NIT</label>
                                                             <div class="col-sm-5">
-                                                                <input type="text" class="form-control" name="txtNit"  maxlength="12" validate-number="" ng-model="formData.nit"/>
+                                                                <input type="text" class="form-control" name="txtNit"  maxlength="128" ng-model="formData.nit"/>
                                                             </div>
                                                         </div>
 
@@ -263,7 +263,7 @@
                                                         <div class="form-group row">
                                                             <label for="txtTelefonoFijo" class="col-form-label col-sm-3 text-right">Tel&eacute;fono</label>
                                                             <div class="col-sm-5">
-                                                                <input type="text" class="form-control " name="txtTelefonoFijo" maxlength="24" ng-model="formData.telefonoFijo"/>
+                                                                <input type="text" class="form-control " name="txtTelefonoFijo" maxlength="128" ng-model="formData.telefonoFijo"/>
 
                                                             </div>
                                                         </div>
@@ -271,7 +271,7 @@
                                                         <div class="form-group row">
                                                             <label for="txtTelefonoCelular" class="col-form-label col-sm-3 text-right">N&uacute;mero Celular</label>
                                                             <div class="col-sm-5">
-                                                                <input type="text" class="form-control " name="txtTelefonoCelular" required="true" maxlength="24" ng-model="formData.telefonoCelular"/>
+                                                                <input type="text" class="form-control " name="txtTelefonoCelular" required="true" maxlength="128" ng-model="formData.telefonoCelular"/>
                                                                 <span class="alert-danger"  ng-show="!myForm.txtTelefonoCelular.$valid"  >
                                                                     Debe ingresar un n&uacute;mero de celular.
                                                                 </span>
@@ -281,7 +281,7 @@
                                                         <div class="form-group row">
                                                             <label for="txtEmail" class="col-form-label col-sm-3 text-right">Email</label>
                                                             <div class="col-sm-5">
-                                                                <input type="email" class="form-control " name="txtEmail" maxlength="128" ng-model="formData.email"/>
+                                                                <input type="text" class="form-control " name="txtEmail" maxlength="128" ng-model="formData.email"/>
 
                                                             </div>
                                                         </div>
@@ -447,7 +447,7 @@
                                                             <label for="txtRepresentanteTelefono" class="col-sm-3 text-right" >Tel&eacute;fono Fijo</label>
                                                             <div class="col-sm-5">
                                                                 <input type="text" class="form-control " name="txtRepresentanteTelefono" 
-                                                                       maxlength="12" ng-model="formData.representanteTelefono"/>
+                                                                       maxlength="128" ng-model="formData.representanteTelefono"/>
                                                                 <span class="alert-danger" ng-show="!myForm.txtRepresentanteTelefono.$valid"  >
                                                                     Debe ingresar un n&uacute;mero de tel&eacute;fono
                                                                 </span>
@@ -458,12 +458,37 @@
                                                             <label for="txtRepresentanteCelular" class="col-sm-3 text-right" >Tel&eacute;fono Celular</label>
                                                             <div class="col-sm-5">
                                                                 <input type="text" class="form-control " name="txtRepresentanteCelular"
-                                                                       maxlength="12" ng-model="formData.representanteCelular"/>
+                                                                       maxlength="128" ng-model="formData.representanteCelular"/>
                                                                 <span class="alert-danger" ng-show="!myForm.txtRepresentanteCelular.$valid"  >
                                                                     Debe ingresar un n&uacute;mero de tel&eacute;fono
                                                                 </span>
                                                             </div>
                                                         </div>
+                                                        
+                                                        <div class="form-group row">
+                                                            <label for="txtRepresentanteEmail" class="col-sm-3 text-right" >Email</label>
+                                                            <div class="col-sm-5">
+                                                                <input type="text" class="form-control " name="txtRepresentanteEmail"
+                                                                       maxlength="128" ng-model="formData.representanteEmail"/>
+                                                            </div>
+                                                        </div>
+                                                        
+                                                        
+                                                        <div class="form-group row">
+                                                            <label class="col-form-label col-sm-3 text-right" for="flatpickr-wrap">Fecha de Nacimiento</label>
+                                                            <div class="col-sm-4">
+                                                                <div class="input-group input-group-alt flatpickr" id="flatpickr10">
+                                                                    <input id="txtRepresentanteNacimiento"  name="txtRepresentanteNacimiento" type="text" 
+                                                                           class="form-control flatpick-input" data-input="" 
+                                                                           ng-model="formData.representanteNacimiento"/>
+                                                                    <div class="input-group-append">
+                                                                        <button type="button" disabled="true" class="btn btn-secondary" data-toggle=""><i class="far fa-calendar"></i></button>
+                                                                        <button type="button" disabled="true" class="btn btn-secondary" data-clear=""><i class="fa fa-times"></i></button>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        
 
                                                         <div class="form-group row ">
                                                             <label  class="col-sm-3 text-right">Solicitado por</label>
@@ -636,8 +661,12 @@
         <!-- BEGIN PLUGINS JS -->
         <script src="../../assets/vendor/stacked-menu/stacked-menu.min.js"></script>
         <script src="../../assets/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+        
+        <script src="../../assets/vendor/flatpickr/flatpickr.min.js"></script>
         <!-- END PLUGINS JS -->
         <!-- BEGIN THEME JS -->
+        <script type="text/javascript" src="../../assets/javascript/pages/flatpickr-demo.js"></script>
+        <script type="text/javascript" src="../../assets/javascript/pages/typeahead-demo.js"></script>
         <script src="../../assets/javascript/main.min.js"></script>
         <!-- END THEME JS -->
         <!-- BEGIN PAGE LEVEL JS -->

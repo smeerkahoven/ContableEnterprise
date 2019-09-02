@@ -219,13 +219,13 @@ angular.module('jsCliente.controllers', []).controller('frmCliente', ['$scope', 
 
         $scope.checkValues = function () {
 
-            if ($scope.formData.idClienteCorporativo != undefined) {
+            if ($scope.formData.idClienteCorporativo !== undefined) {
                 if ($scope.formData.idClienteCorporativo.id) {
                     $scope.formData.idClienteCorporativo = $scope.formData.idClienteCorporativo.id;
                 }
             }
 
-            if ($scope.formData.idPromotor != undefined) {
+            if ($scope.formData.idPromotor !== undefined) {
                 if ($scope.formData.idPromotor.id) {
                     $scope.formData.idPromotor = $scope.formData.idPromotor.id;
                 }
@@ -288,7 +288,6 @@ angular.module('jsCliente.controllers', []).controller('frmCliente', ['$scope', 
         };
 
         $scope.delete = function (method) {
-
             $scope.loading = true;
             var data = {};
 
@@ -344,7 +343,7 @@ angular.module('jsCliente.controllers', []).controller('frmCliente', ['$scope', 
 
         $scope.updateAddSolicitadoPor = function () {
 
-            if ($scope.formData.solicitadoPor == undefined) {
+            if ($scope.formData.solicitadoPor === undefined) {
                 $scope.showErrorSolicitadoPor = true;
                 return;
             }

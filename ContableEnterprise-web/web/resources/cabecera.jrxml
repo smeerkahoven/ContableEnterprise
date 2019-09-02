@@ -7,13 +7,15 @@
 		<defaultValueExpression><![CDATA[1]]></defaultValueExpression>
 	</parameter>
 	<parameter name="PATH_SUBREPORTE" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA["contabilidad/estado_resultado.jasper"]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA["contabilidad/ingreso_caja_lt.jasper"]]></defaultValueExpression>
 	</parameter>
 	<parameter name="ID_LIBRO" class="java.lang.Integer" isForPrompting="false">
 		<defaultValueExpression><![CDATA[22]]></defaultValueExpression>
 	</parameter>
 	<parameter name="ID_NOTA_DEBITO" class="java.lang.Integer" isForPrompting="false"/>
-	<parameter name="ID_INGRESO" class="java.lang.Integer" isForPrompting="false"/>
+	<parameter name="ID_INGRESO" class="java.lang.Integer" isForPrompting="false">
+		<defaultValueExpression><![CDATA[20000029]]></defaultValueExpression>
+	</parameter>
 	<parameter name="FECHA_INICIO" class="java.lang.String"/>
 	<parameter name="FECHA_FIN" class="java.lang.String"/>
 	<parameter name="ID_CREDITO" class="java.lang.String" isForPrompting="false"/>
@@ -124,9 +126,9 @@ WHERE
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="100" splitType="Stretch">
+		<band height="110" splitType="Stretch">
 			<subreport>
-				<reportElement x="6" y="0" width="200" height="100" uuid="9e5bdce7-711b-40e0-9b51-f915333152d9"/>
+				<reportElement x="6" y="0" width="200" height="110" uuid="9e5bdce7-711b-40e0-9b51-f915333152d9"/>
 				<subreportParameter name="ID_DEVOLUCION">
 					<subreportParameterExpression><![CDATA[$P{ID_DEVOLUCION}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -174,7 +176,7 @@ WHERE
 		</band>
 	</detail>
 	<columnFooter>
-		<band height="11" splitType="Stretch"/>
+		<band height="1" splitType="Stretch"/>
 	</columnFooter>
 	<pageFooter>
 		<band height="26" splitType="Stretch">
