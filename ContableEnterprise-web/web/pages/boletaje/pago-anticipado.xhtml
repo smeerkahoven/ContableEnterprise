@@ -380,7 +380,8 @@
                                                         <div class="col-sm-4">
                                                             <input type="number" class="form-control col-sm" name="txtMonto" placeholder="0.00" 
                                                                    ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01" min="1.00" max="1000000"
-                                                                   ng-model="formData.montoAnticipado"  data-toggle="tooltip" required="required" ng-disabled="formData.estado !== PENDIENTE" 
+                                                                   ng-model="formData.montoAnticipado"  data-toggle="tooltip" required="required" 
+                                                                   ng-disabled="formData.estado !== PENDIENTE" 
                                                                    data-placement="top"  />
                                                             <p class="alert-danger"  ng-show="!myForm.txtMonto.$valid">
                                                                 Debe seleccionar un valor entre 1 y 1,000,000.
@@ -723,7 +724,7 @@
                                                                 <div class="form-group row">
                                                                     <label for="txtStatus" class="col-form-label col-sm-3 text-right"> Moneda</label>
                                                                     <div class="col-sm-5">
-                                                                        <select name="txtMoneda" class="form-control" ng-model="trx.moneda" ng-change="checkMontoIngresado()" required="">
+                                                                        <select name="txtMoneda" class="form-control" ng-model="trx.moneda" ng-change="initializeMonto()" required="">
                                                                             <option style="display:none" value="">seleccione una opcion</option>
                                                                             <option value="B" selected="selected">Bolivianos</option>
                                                                             <option value="U">Dolares</option>

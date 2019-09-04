@@ -576,7 +576,7 @@ public class PagoAnticipadoEJB extends FacadeEJB implements PagoAnticipadoRemote
 
         BigDecimal decAcreditado = new BigDecimal(montoTotalAcreditado);
 
-        Double montoDisponible = paFromDb.getMontoAnticipado().subtract(decAcreditado).setScale(2).doubleValue();
+        Double montoDisponible = paFromDb.getMontoAnticipado().subtract(decAcreditado).setScale(2, BigDecimal.ROUND_DOWN).doubleValue();
 
         if (trx.getMoneda().equals(Moneda.NACIONAL)) {
             if (paFromDb.getMoneda().equals(Moneda.NACIONAL)) {

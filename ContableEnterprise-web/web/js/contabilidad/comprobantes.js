@@ -311,8 +311,8 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                 }
 
                 $scope.formHasErrors = function () {
-                    if ($scope.formData.tipo === $scope.ASIENTO_DIARIO ||
-                            $scope.formData.tipo === $scope.COMPROBANTE_INGRESO) {
+                    if ($scope.formData.tipo === $scope.ASIENTO_DIARIO
+                            ) {
                         if ($scope.formData.idCliente === undefined) {
                             $scope.showErrorMessage = "Ingrese un Cliente";
                             return true;
@@ -325,7 +325,8 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
 
                     if ($scope.formData.tipo === $scope.ASIENTO_AJUSTE ||
                             $scope.formData.tipo === $scope.COMPROBANTE_TRASPASO ||
-                            $scope.formData.tipo === $scope.COMPROBANTE_EGRESO) {
+                            $scope.formData.tipo === $scope.COMPROBANTE_EGRESO || 
+                            $scope.formData.tipo === $scope.COMPROBANTE_INGRESO ) {
                         if ($scope.formData.nombre === undefined) {
                             $scope.showErrorMessage = "Ingrese el Nombre del Comprobante";
                         }

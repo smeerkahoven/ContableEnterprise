@@ -691,10 +691,23 @@ angular.module('jsPagoAnticipado.controllers', []).controller('frmPagoAnticipado
                                 }
                             }, $scope.errorFunction);
                 }
+                
+                $scope.initializeMonto = function () {
+                    $scope.trx.monto = undefined ;
+                    $scope.trx.montoCambioBs = undefined;
+                    $scope.trx.montoCambioUsd = undefined;
+                    
+                    if ($scope.trx.moneda === $scope.MONEDA_NACIONAL){
+                        $scope.showMontoUsd = true;
+                        $scope.showMontoBs = false ;
+                        
+                    }else {
+                        $scope.showMontoBs =true;
+                        $scope.showMontoUsd = false ;
+                    }
+                }
 
                 $scope.checkMontoIngresado = function () {
-                    $scope.showMontoUsd = false;
-                    $scope.showMontoBs = false;
 
                     if ($scope.trx.moneda === $scope.MONEDA_NACIONAL) {
                         if ($scope.trx.monto !== undefined) {

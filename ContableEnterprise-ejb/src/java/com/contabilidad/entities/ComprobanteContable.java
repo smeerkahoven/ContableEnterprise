@@ -246,7 +246,7 @@ public class ComprobanteContable extends Entidad {
     private Date fecha;
 
 //    @Size(max = 128, )
-    @Column(name = "concepto", length = 128)
+    @Column(name = "concepto", length = 512)
     private String concepto;
 //    @Size(max = 2)
     @Column(name = "estado", length = 2)

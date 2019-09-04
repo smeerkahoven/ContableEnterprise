@@ -288,7 +288,7 @@
                                                         <div class="col-sm-3">
                                                             <!--<label for="txtFactor" class=" col-form-label col-sm-3 "><strong>{{formData.factorCambiario}}</strong></label>-->
                                                             <input type="number" class="form-control col-sm" name="txtFactor" placeholder="0.00 BOB" 
-                                                                   ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01" readonly=""
+                                                                   ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01" 
                                                                    ng-model="formData.factorCambiario" value="{{formData.factorCambiario}}" data-toggle="tooltip" 
                                                                    data-placement="top"  />
                                                             <!--<span class="alert-danger"  ng-show="!myForm.txtFactor.$valid"  >
@@ -351,7 +351,8 @@
                                                     <div class="form-group row">
                                                         <label for="txtConcepto" class=" col-form-label col-sm-2 text-right">Concepto</label>
                                                         <div class="col-sm-8">
-                                                            <textarea type="text" class="form-control" rows="3" name="txtConcepto" required="required" onkeyup="this.value = this.value.toUpperCase()" maxlength="128" ng-model="formData.concepto"/>
+                                                            <textarea type="text" class="form-control" rows="4" name="txtConcepto" 
+                                                                      required="required" onkeyup="this.value = this.value.toUpperCase()" maxlength="512" ng-model="formData.concepto"/>
                                                             <span class="alert-danger"  ng-show="!myForm.txtConcepto.$valid"  >
                                                                 Debe insertar un concepto.
                                                             </span>
