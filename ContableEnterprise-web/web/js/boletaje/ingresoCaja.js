@@ -712,7 +712,6 @@ angular.module('jsIngresoCaja.controllers', []).controller('frmIngresoCaja',
                 }
 
                 $scope.seleccionarTransaccion = function () {
-                    console.log($scope.trx);
                     $scope.showRestfulError = false;
                     $scope.showRestfulSuccess = false;
 

@@ -63,6 +63,10 @@ public class PagoAnticipadoTransaccion extends Entidad {
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "monto")
     private BigDecimal monto;
+    @Column(name = "monto_bs")
+    private BigDecimal montoBs;
+    @Column(name = "monto_usd")
+    private BigDecimal montoUsd;
     @Column(name = "fecha_insert")
     @Temporal(TemporalType.TIMESTAMP)
     private Date fechaInsert;
@@ -90,10 +94,10 @@ public class PagoAnticipadoTransaccion extends Entidad {
     private Devolucion idDevolucion;
 
     @Transient
-    private BigDecimal montoCambioUsd;
+    private BigDecimal montoCancelarBs;
 
     @Transient
-    private BigDecimal montoCambioBs;
+    private BigDecimal montoCancelarUsd;
 
     public PagoAnticipadoTransaccion() {
     }
@@ -102,6 +106,23 @@ public class PagoAnticipadoTransaccion extends Entidad {
         this.idPagoAnticipadoTransaccion = idPagoAnticipadoTransaccion;
     }
 
+    public BigDecimal getMontoBs() {
+        return montoBs;
+    }
+
+    public void setMontoBs(BigDecimal montoBs) {
+        this.montoBs = montoBs;
+    }
+
+    public BigDecimal getMontoUsd() {
+        return montoUsd;
+    }
+
+    public void setMontoUsd(BigDecimal montoUsd) {
+        this.montoUsd = montoUsd;
+    }
+
+    
     public String getMoneda() {
         return moneda;
     }
@@ -126,21 +147,23 @@ public class PagoAnticipadoTransaccion extends Entidad {
         this.descripcion = descripcion;
     }
 
-    public BigDecimal getMontoCambioUsd() {
-        return montoCambioUsd;
+    public BigDecimal getMontoCancelarBs() {
+        return montoCancelarBs;
     }
 
-    public void setMontoCambioUsd(BigDecimal montoCambioUsd) {
-        this.montoCambioUsd = montoCambioUsd;
+    public void setMontoCancelarBs(BigDecimal montoCancelarBs) {
+        this.montoCancelarBs = montoCancelarBs;
     }
 
-    public BigDecimal getMontoCambioBs() {
-        return montoCambioBs;
+    public BigDecimal getMontoCancelarUsd() {
+        return montoCancelarUsd;
     }
 
-    public void setMontoCambioBs(BigDecimal montoCambioBs) {
-        this.montoCambioBs = montoCambioBs;
+    public void setMontoCancelarUsd(BigDecimal montoCancelarUsd) {
+        this.montoCancelarUsd = montoCancelarUsd;
     }
+
+    
 
     public BigDecimal getMonto() {
         return monto;
@@ -233,7 +256,12 @@ public class PagoAnticipadoTransaccion extends Entidad {
 
     @Override
     public String toString() {
-        return "com.contabilidad.entities.PagoAnticipadoTransaccion[ idPagoAnticipadoTransaccion=" + idPagoAnticipadoTransaccion + " ]";
+        return "com.contabilidad.entities.PagoAnticipadoTransaccion[ idPagoAnticipadoTransaccion=" + idPagoAnticipadoTransaccion + 
+                ", monto="+ monto
+                + ", montoCancelarUsd= "+ montoCancelarUsd 
+                + ", montoCancelarBs=" + montoCancelarBs
+                + ", moneda=" + moneda
+                +" ]";
     }
 
 }

@@ -50,7 +50,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @NamedNativeQueries({
     @NamedNativeQuery(
-            name = "Boleto.getPlanillaBsp",
+            name = "Boleto.getPlanillaBspCredito",
             query = "select \n"
             + "	 bo.id_boleto idBoleto, bo.id_aerolinea idAerolinea, ae.iata, ae.numero, ae.iva_it_comision ivaItComision,\n"
             + "      bo.id_nota_debito idNotaDebito, bo.tipo_boleto tipoBoleto, bo.tipo_cupon tipoCupon, bo.numero ticketNumber,\n"
@@ -69,8 +69,39 @@ import javax.xml.bind.annotation.XmlRootElement;
             + "      bo.estado boletoEstado \n"
             + " from cnt_boleto bo\n"
             + " inner join cnt_aerolinea ae on ae.id_aerolinea = bo.id_aerolinea\n"
-            + " where bo.id_nota_debito is not null and fecha_emision >= ?1 and fecha_emision <=?2 \n"
-            + " and bo.id_empresa = ?3 and bo.tipo_cupon = ?4 and ae.bsp=1 ORDER BY bo.fecha_emision, bo.numero",
+            + " inner join cnt_nota_debito nd on nd.id_nota_debito= bo.id_nota_debito \n"
+            + " where bo.fecha_emision >= ?1 and bo.fecha_emision <=?2 \n"
+            + " and bo.id_empresa = ?3 and bo.tipo_cupon = ?4 and ae.bsp=1 "
+            + " and nd.forma_pago in ('C') \n"        
+            + " ORDER BY bo.fecha_emision, bo.numero",
+            resultSetMapping = "BoletoPlanillaBsp2"
+    )
+        ,
+        @NamedNativeQuery(
+            name = "Boleto.getPlanillaBspEfectivo",
+            query = "select \n"
+            + "	 bo.id_boleto idBoleto, bo.id_aerolinea idAerolinea, ae.iata, ae.numero, ae.iva_it_comision ivaItComision,\n"
+            + "      bo.id_nota_debito idNotaDebito, bo.tipo_boleto tipoBoleto, bo.tipo_cupon tipoCupon, bo.numero ticketNumber,\n"
+            + "      date_format(bo.fecha_emision,'%d/%m/%y') fechaEmision,\n"
+            + "      coalesce(date_format(bo.fecha_viaje,'%d/%m/%y'),'') fechaViaje ,"
+            + "      case bo.estado when 'A' then 0.00 else coalesce (bo.importe_neto ,0) end importeNeto,\n"
+            + "      case bo.estado when 'A' then 0.00 else (coalesce(bo.impuesto_bob,0) + coalesce(bo.impuesto_qm,0) \n"
+            + "		+ coalesce(bo.impuesto_1,0) + coalesce(bo.impuesto_2,0)\n"
+            + "             + coalesce(bo.impuesto_3,0) + coalesce(bo.impuesto_4,0) \n"
+            + "             + coalesce(bo.impuesto_5,0)) end impuestos, \n"
+            + "      case bo.estado when 'A' then 0.00 else coalesce(bo.total_boleto,0) end totalBoleto, "
+            + "      case bo.estado when 'A' then 0.00 else coalesce(bo.comision,0) end comision, \n"
+            + "      case bo.estado when 'A' then 0.00 else coalesce(bo.monto_comision,0) end montoComision ,\n"
+            + "      case bo.estado when 'A' then 0.00 else bo.monto_pagar_linea_aerea end totalMontoCobrar ,\n"
+            + "      case bo.tipo_boleto when 'MV' then 'VOID' when 'SV' then 'VOID' when 'AV' then 'VOID' else '' end estado, \n"
+            + "      bo.estado boletoEstado \n"
+            + " from cnt_boleto bo\n"
+            + " inner join cnt_aerolinea ae on ae.id_aerolinea = bo.id_aerolinea\n"
+            + " inner join cnt_nota_debito nd on nd.id_nota_debito= bo.id_nota_debito \n"
+            + " where bo.fecha_emision >= ?1 and bo.fecha_emision <=?2 \n"
+            + " and bo.id_empresa = ?3 and bo.tipo_cupon = ?4 and ae.bsp=1 "
+            + " and nd.forma_pago in ('E','T','D','H') \n"        
+            + " ORDER BY bo.fecha_emision, bo.numero",
             resultSetMapping = "BoletoPlanillaBsp2"
     )
     ,
@@ -83,7 +114,7 @@ import javax.xml.bind.annotation.XmlRootElement;
             + "      , bo.tipo_boleto tipoBoleto \n"
             + "      , bo.tipo_cupon tipoCupon \n"
             + "      , bo.numero ticketNumber \n"
-            + "      , date_format(bo.fecha_emision,'%d/%m/%y') fechaEmision \n "                    
+            + "      , date_format(bo.fecha_emision,'%d/%m/%y') fechaEmision \n "
             + "      , coalesce(date_format(bo.fecha_viaje,'%d/%m/%y'),'') fechaViaje \n"
             + "      , case bo.estado when 'A' then 0.00 else coalesce (bo.importe_neto ,0) end importeNeto \n"
             + "      , case bo.estado when 'A' then 0.00 else (coalesce(bo.impuesto_bob,0) + coalesce(bo.impuesto_qm,0) \n"
@@ -97,7 +128,7 @@ import javax.xml.bind.annotation.XmlRootElement;
             + "      , case bo.tipo_boleto when 'MV' then 'VOID' when 'SV' then 'VOID' when 'AV' then 'VOID' else '' end estado \n"
             + "      , concat (coalesce(bo.id_ruta_1,''),'/', coalesce(bo.id_ruta_2,''),'/',coalesce(bo.id_ruta_3,''),'/',coalesce(bo.id_ruta_4,''),'/',coalesce(bo.id_ruta_5,'')) ruta \n"
             + "      , coalesce(bo.nombre_pasajero,'') nombrePasajero \n"
-            + "      , bo.estado boletoEstado \n"                
+            + "      , bo.estado boletoEstado \n"
             + " from cnt_boleto bo\n"
             + " inner join cnt_aerolinea ae on ae.id_aerolinea = bo.id_aerolinea\n"
             + " where bo.id_nota_debito is not null and bo.fecha_emision >= ?2 and bo.fecha_emision <=?3  and bo.id_aerolinea =?4 \n"
@@ -310,7 +341,7 @@ public class Boleto extends Entidad {
     private String emision;
     @Basic(optional = false)
     //@Size(min = 2, max = 2)
-    @Column(name = "tipo_boleto" , length = 2)
+    @Column(name = "tipo_boleto", length = 2)
     private String tipoBoleto;
     //@Size(max = 1)
     @Column(name = "tipo_cupon", length = 1)
@@ -390,7 +421,7 @@ public class Boleto extends Entidad {
     @Temporal(TemporalType.DATE)
     private Date creditoVencimiento;
     //@Size(max = 1)
-    @Column(name = "moneda" , length = 1)
+    @Column(name = "moneda", length = 1)
     private String moneda;
     @Column(name = "importe_neto")
     private BigDecimal importeNeto;

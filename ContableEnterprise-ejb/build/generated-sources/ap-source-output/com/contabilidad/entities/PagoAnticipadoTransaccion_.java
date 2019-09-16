@@ -9,19 +9,21 @@ import javax.annotation.Generated;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2019-09-03T23:53:11")
+@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2019-09-15T22:35:57")
 @StaticMetamodel(PagoAnticipadoTransaccion.class)
 public class PagoAnticipadoTransaccion_ { 
 
     public static volatile SingularAttribute<PagoAnticipadoTransaccion, String> descripcion;
+    public static volatile SingularAttribute<PagoAnticipadoTransaccion, BigDecimal> montoUsd;
     public static volatile SingularAttribute<PagoAnticipadoTransaccion, String> estado;
     public static volatile SingularAttribute<PagoAnticipadoTransaccion, String> tipo;
-    public static volatile SingularAttribute<PagoAnticipadoTransaccion, BigDecimal> monto;
     public static volatile SingularAttribute<PagoAnticipadoTransaccion, Integer> idPagoAnticipadoTransaccion;
     public static volatile SingularAttribute<PagoAnticipadoTransaccion, PagoAnticipado> idPagoAnticipado;
+    public static volatile SingularAttribute<PagoAnticipadoTransaccion, Date> fechaInsert;
+    public static volatile SingularAttribute<PagoAnticipadoTransaccion, BigDecimal> montoBs;
+    public static volatile SingularAttribute<PagoAnticipadoTransaccion, BigDecimal> monto;
     public static volatile SingularAttribute<PagoAnticipadoTransaccion, String> idUsuarioCreador;
     public static volatile SingularAttribute<PagoAnticipadoTransaccion, String> moneda;
-    public static volatile SingularAttribute<PagoAnticipadoTransaccion, Date> fechaInsert;
     public static volatile SingularAttribute<PagoAnticipadoTransaccion, NotaDebitoTransaccion> idNotaTransaccion;
     public static volatile SingularAttribute<PagoAnticipadoTransaccion, Devolucion> idDevolucion;
 

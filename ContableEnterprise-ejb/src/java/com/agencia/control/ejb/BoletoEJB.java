@@ -37,6 +37,7 @@ import com.seguridad.utils.ComboSelect;
 import com.seguridad.utils.DateContable;
 import com.seguridad.utils.Operacion;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -456,7 +457,7 @@ public class BoletoEJB extends FacadeEJB implements BoletoRemote {
                 double totalHaberExt = 0;
                 //Se realizan las sumas para el comprobanteAsiento.
                 // cambio 2019-08
-                if (b.getMoneda().equals(Moneda.EXTRANJERA)){
+                if (b.getMoneda().equals(Moneda.EXTRANJERA)) {
                     //if (b.getTipoCupon().equals(Boleto.Cupon.INTERNACIONAL)) {
                     op = Optional.ofNullable(totalCancelar.getMontoDebeExt());
                     if (op.isPresent()) {
@@ -494,8 +495,8 @@ public class BoletoEJB extends FacadeEJB implements BoletoRemote {
                         totalHaberNac = totalHaberExt * b.getFactorCambiario().doubleValue();
                     }
 
-                } else if (b.getMoneda().equals(Moneda.NACIONAL)){
-                //} else if (b.getTipoCupon().equals(Boleto.Cupon.NACIONAL)) {
+                } else if (b.getMoneda().equals(Moneda.NACIONAL)) {
+                    //} else if (b.getTipoCupon().equals(Boleto.Cupon.NACIONAL)) {
                     op = Optional.ofNullable(totalCancelar.getMontoDebeNac());
                     if (op.isPresent()) {
                         totalDebeNac += totalCancelar.getMontoDebeNac().doubleValue();
@@ -1215,14 +1216,23 @@ public class BoletoEJB extends FacadeEJB implements BoletoRemote {
             throw new CRUDException("El parametro Fecha Fin es necesario");
         }
 
-        Query q = em.createNamedQuery("Boleto.getPlanillaBsp");
+        String queryFrom = "";
+        if (search.getFormaPago().equals(FormasPago.CREDITO)){
+            queryFrom = "Boleto.getPlanillaBspCredito";
+        }else {
+            queryFrom = "Boleto.getPlanillaBspEfectivo";
+        }
+        
+        Query q = em.createNamedQuery(queryFrom);
         q.setParameter("1", DateContable.toLatinAmericaDateFormat(search.getFechaInicio()));
         q.setParameter("2", DateContable.toLatinAmericaDateFormat(search.getFechaFin()));
         q.setParameter("3", search.getIdEmpresa());
         q.setParameter("4", search.getTipoCupon());
 
+        
         List<BoletoPlanillaBsp> l = q.getResultList();
 
+        System.out.println(queryFrom);
         return l;
 
     }

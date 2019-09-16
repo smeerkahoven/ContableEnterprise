@@ -41,6 +41,8 @@ function PagoAnticipadoTransaccion() {
     this.idNotaTransaccion = null;
     this.idNotaDebito = null;
     this.estado = null;
+    this.montoCancelarUsd = null;
+    this.montoCancelarBs = null;
 }
 
 function Devolucion() {
@@ -589,7 +591,7 @@ angular.module('jsPagoAnticipado.controllers', []).controller('frmPagoAnticipado
                     }
 
 
-                    $scope.trx.monedaTransaccion = $scope.trx.moneda;
+                   /* $scope.trx.monedaTransaccion = $scope.trx.moneda;
                     if ($scope.trx.moneda === $scope.MONEDA_EXTRANJERA) {
                         if ($scope.trx.montoAdeudadoUsd < $scope.trx.montoDisponibleUsd) {
                             $scope.trx.monto = $scope.trx.montoAdeudadoUsd;
@@ -608,8 +610,17 @@ angular.module('jsPagoAnticipado.controllers', []).controller('frmPagoAnticipado
 
                         $scope.trx.maxMontoBs = $scope.trx.monto;
                         $scope.trx.maxMontoUsd = Number(parseFloat($scope.trx.maxMontoBs) / parseFloat($scope.formData.factorCambiario)).toFixed(2);
+                    }*/
+                    
+                    $scope.trx.monedaTransaccion = $scope.trx.moneda;
+                    if ($scope.trx.moneda === $scope.MONEDA_EXTRANJERA) {
+                        $scope.trx.montoCancelarUsd = $scope.trx.montoAdeudadoUsd;
+                    } else {
+                        $scope.trx.montoCancelarBs = $scope.trx.montoAdeudadoBs;
                     }
 
+                    $scope.trx.montoQueDebeIngresarUsd = $scope.trx.montoAdeudadoUsd;
+                    $scope.trx.montoQueDebeIngresarBs = $scope.trx.montoAdeudadoBs;
 
 
                     hideModalWindow('#frmNotasDebitos');
@@ -691,19 +702,36 @@ angular.module('jsPagoAnticipado.controllers', []).controller('frmPagoAnticipado
                                 }
                             }, $scope.errorFunction);
                 }
-                
+
                 $scope.initializeMonto = function () {
-                    $scope.trx.monto = undefined ;
+                    $scope.trx.monto = undefined;
                     $scope.trx.montoCambioBs = undefined;
                     $scope.trx.montoCambioUsd = undefined;
-                    
-                    if ($scope.trx.moneda === $scope.MONEDA_NACIONAL){
+
+                    if ($scope.trx.moneda === $scope.MONEDA_NACIONAL) {
                         $scope.showMontoUsd = true;
-                        $scope.showMontoBs = false ;
-                        
-                    }else {
-                        $scope.showMontoBs =true;
-                        $scope.showMontoUsd = false ;
+                        $scope.showMontoBs = false;
+
+                    } else {
+                        $scope.showMontoBs = true;
+                        $scope.showMontoUsd = false;
+                    }
+                }
+
+                $scope.checkMontoIngresadoBs = function () {
+
+                    if ($scope.trx.montoCancelarBs > $scope.trx.montoAdeudadoBs) {
+                        $scope.showErrorMontoIngresadoBs = true;
+                    } else {
+                        $scope.showErrorMontoIngresadoBs = false;
+                    }
+                }
+
+                $scope.checkMontoIngresadoUsd = function () {
+                    if ($scope.trx.montoCancelarUsd > $scope.trx.montoAdeudadoUsd) {
+                        $scope.showErrorMontoIngresadoUsd = true;
+                    } else {
+                        $scope.showErrorMontoIngresadoUsd = false;
                     }
                 }
 

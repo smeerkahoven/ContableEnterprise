@@ -714,16 +714,16 @@
                                                             <div class="card-body bg-light">
 
                                                                 <div class="form-group row">
-                                                                    <label for="txtMoneda" class="col-form-label col-sm-3 text-right">Factor</label>
-                                                                    <div class="col-sm-5">
+                                                                    <label for="txtMoneda" class="col-form-label col-sm-4 text-right">Factor</label>
+                                                                    <div class="col-sm-6">
                                                                         <input readonly="readonly" class="form-control" value="{{formData.factorCambiario}}" ng-value="formData.factorCambiario" />
                                                                     </div>
                                                                 </div>
 
                                                                 <!-- Moneda Transaccion -->
                                                                 <div class="form-group row">
-                                                                    <label for="txtStatus" class="col-form-label col-sm-3 text-right"> Moneda</label>
-                                                                    <div class="col-sm-5">
+                                                                    <label for="txtStatus" class="col-form-label col-sm-4 text-right"> Moneda</label>
+                                                                    <div class="col-sm-6">
                                                                         <select name="txtMoneda" class="form-control" ng-model="trx.moneda" ng-change="initializeMonto()" required="">
                                                                             <option style="display:none" value="">seleccione una opcion</option>
                                                                             <option value="B" selected="selected">Bolivianos</option>
@@ -732,23 +732,36 @@
                                                                         <span class="alert-danger" ng-show="!myFormTrx.txtMoneda.$valid">Debe seleccionar una opcion.</span>
                                                                     </div>
                                                                 </div>
-
-                                                                <!-- Monto -->
-                                                                <div class="form-group row">
-                                                                    <label for="txtNombre" class=" col-form-label text-right col-sm-3"><strong>Monto</strong></label>
-                                                                    <div class="col-sm">
-                                                                        <input type="number" class="form-control col-sm-6" name="txtMonto" placeholder="0.00" 
-                                                                               ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01" min="0" max="{{trx.montoAdeudadoBs}}"
-                                                                               ng-model="trx.monto" ng-change="checkMontoIngresado()"
-                                                                               data-toggle="tooltip" data-placement="top" />
-                                                                        <span class="row col" ng-show="showMontoBs"><strong>Bs. {{trx.montoCambioBs|printNumber}}</strong></span>
-                                                                        <span  class="row col" ng-show="showMontoUsd"><strong>Usd. {{trx.montoCambioUsd|printNumber}}</strong></span>
-
-                                                                        <span class="alert-danger bg-light row col" ng-show="trx.monto === undefined">Debe ingresar un monto v&aacute;lido.</span>
-                                                                        <span  class="alert-danger bg-light row col" ng-show="showErrorMontoIngresado">Debe ingresar un monto igual o menor a {{montoQueDebeIngresar|printNumber}}</span>
-                                                                    </div>
+                                                                
+                                                                <!-- Monto Bs. -->
+                                                            <div class="form-group row" ng-show="trx.moneda===MONEDA_NACIONAL">
+                                                                <label for="txtNombre" class=" col-form-label text-right col-sm-4"><strong>Monto BOB. a Cancelar</strong></label>
+                                                                <div class="col-sm-6">
+                                                                    <input type="number" class="form-control col-sm" name="txtMontoCancelarBs" placeholder="0.00" 
+                                                                           ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01" min="0" 
+                                                                           ng-model="trx.montoCancelarBs" required="" ng-change="checkMontoIngresadoBs()"
+                                                                           data-toggle="tooltip" data-placement="top" />
+                                                                    <span class="alert-danger bg-light" ng-show="!myFormTrx.txtMontoCancelarBs.$valid">Debe ingresar un monto v&aacute;lido.</span>
+                                                                    <span class="alert-danger bg-light" ng-show="showErrorMontoIngresadoBs">Debe ingresar un monto igual o menor a {{trx.montoAdeudadoBs|printNumber}}</span>
 
                                                                 </div>
+                                                            </div>
+                                                            
+                                                            <!-- Monto Usd. -->
+                                                            <div class="form-group row" ng-show="trx.moneda===MONEDA_EXTRANJERA">
+                                                                <label for="txtNombre" class=" col-form-label text-right col-sm-4"><strong>Monto USD. a Cancelar</strong></label>
+                                                                <div class="col-sm-6">
+                                                                    <input type="number" class="form-control col-sm" name="txtMontoCancelarUsd" placeholder="0.00" 
+                                                                           ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01" min="0" 
+                                                                           ng-model="trx.montoCancelarUsd" required="" ng-change="checkMontoIngresadoUsd()"
+                                                                           data-toggle="tooltip" data-placement="top" />
+                                                                    <span class="alert-danger bg-light" ng-show="!myFormTrx.txtMontoCancelarUsd.$valid">Debe ingresar un monto v&aacute;lido.</span>
+                                                                    <span class="alert-danger bg-light" ng-show="showErrorMontoIngresadoUsd">Debe ingresar un monto igual o menor a {{trx.montoAdeudadoUsd|printNumber}}</span>
+
+                                                                </div>
+                                                            </div>
+                                                            
+                                                            
                                                             </div>
                                                             <div class="modal-footer">
                                                                 <div class="btn-group" role="group"  >

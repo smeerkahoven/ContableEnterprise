@@ -19,6 +19,7 @@ import com.response.json.contabilidad.PagoAnticipadoTransaccionJson;
 import com.seguridad.control.entities.Log;
 import com.seguridad.control.exception.CRUDException;
 import com.seguridad.utils.Accion;
+import com.seguridad.utils.Contabilidad;
 import com.seguridad.utils.ResponseCode;
 import com.services.TemplateResource;
 import com.services.seguridad.util.RestRequest;
@@ -178,7 +179,7 @@ public class PagoAnticipadoResource extends TemplateResource {
                             ? fromDb.getMontoAnticipado().subtract(fromDb.getMontoTotalAcreditado()).doubleValue()
                             : fromDb.getMontoAnticipado().doubleValue();
 
-                    devJson.setMontoMaximoDevolucion(new BigDecimal(montMaximo));
+                    devJson.setMontoMaximoDevolucion(new BigDecimal(montMaximo).setScale(Contabilidad.VALOR_DECIMAL_2,BigDecimal.ROUND_HALF_DOWN));
 
                     response.setContent(devJson);
                     response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());

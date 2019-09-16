@@ -19,6 +19,7 @@ public class PlanillaSearchForm implements Serializable {
     private ComboSelect idPromotor;
     private Integer idEmpresa;
     private String tipoCupon;
+    private String formaPago ;
 
     public Integer getIdEmpresa() {
         return idEmpresa;
@@ -59,5 +60,15 @@ public class PlanillaSearchForm implements Serializable {
     public void setIdPromotor(ComboSelect idPromotor) {
         this.idPromotor = idPromotor;
     }
+
+    public String getFormaPago() {
+        return formaPago;
+    }
+
+    public void setFormaPago(String formaPago) {
+        this.formaPago = formaPago;
+    }
+    
+    
 
 }

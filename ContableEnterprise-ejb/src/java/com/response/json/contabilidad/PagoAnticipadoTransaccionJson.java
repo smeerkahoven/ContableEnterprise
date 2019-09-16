@@ -42,6 +42,9 @@ public class PagoAnticipadoTransaccionJson implements Serializable {
     private String monedaTransaccion;
     private String descripcionTransaccion;
     private String tipo;
+    
+    private BigDecimal montoCancelarBs;
+    private BigDecimal montoCancelarUsd;
 
     private ComboSelect idCliente;
     private BigDecimal factorCambiario;
@@ -96,11 +99,33 @@ public class PagoAnticipadoTransaccionJson implements Serializable {
         data.setIdUsuarioCreador(json.getIdUsuarioCreador());
         data.setMoneda(json.getMoneda());
         data.setMonto(json.getMonto());
-        data.setMontoCambioBs(json.getMontoCambioBs());
-        data.setMontoCambioUsd(json.getMontoCambioUsd());
 
+        data.setMontoCancelarBs(json.getMontoCancelarBs());
+        data.setMontoCancelarUsd(json.getMontoCancelarUsd());
+        
+        System.out.println("montoBs:"+ json.getMontoCancelarBs());
+        System.out.println("montoUsd:"+ json.getMontoCancelarUsd());
+        
         return data;
     }
+
+    public BigDecimal getMontoCancelarBs() {
+        return montoCancelarBs;
+    }
+
+    public void setMontoCancelarBs(BigDecimal montoCancelarBs) {
+        this.montoCancelarBs = montoCancelarBs;
+    }
+
+    public BigDecimal getMontoCancelarUsd() {
+        return montoCancelarUsd;
+    }
+
+    public void setMontoCancelarUsd(BigDecimal montoCancelarUsd) {
+        this.montoCancelarUsd = montoCancelarUsd;
+    }
+    
+    
 
     public String getTipo() {
         return tipo;

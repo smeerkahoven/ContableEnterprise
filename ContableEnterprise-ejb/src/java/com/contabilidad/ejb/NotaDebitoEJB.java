@@ -1158,7 +1158,7 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
         DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(currentLocale);
         otherSymbols.setDecimalSeparator('.');
         otherSymbols.setGroupingSeparator(',');
-        
+
         DecimalFormat df = new DecimalFormat("#########.##", otherSymbols);
         String value = df.format(montoIngresado);
         montoIngresado = Double.parseDouble(value);
@@ -1318,6 +1318,15 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
                 montoIngresado = trx.getMonto().doubleValue() / factorCambio;
             }
         }
+
+        Locale currentLocale = Locale.getDefault();
+        DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(currentLocale);
+        otherSymbols.setDecimalSeparator('.');
+        otherSymbols.setGroupingSeparator(',');
+
+        DecimalFormat df = new DecimalFormat("#########.##", otherSymbols);
+        String value = df.format(montoIngresado);
+        montoIngresado = Double.parseDouble(value);
 
         if (montoIngresado > montoAdeudado) {
             String mensaje = "El monto de Pago de la transaccion de Nota de Crédito:";

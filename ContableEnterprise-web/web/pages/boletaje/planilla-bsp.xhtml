@@ -138,6 +138,16 @@
                                                     </select>
                                                     <span class="alert-danger" ng-show="!search.tipoCupon">Debe seleccionar una opci&oacute;n.</span>
                                                 </div>
+                                                
+                                                <label for="txtStatus" class="col-form-label col-sm-2 text-right">Forma de Pago</label>
+                                                <div class="col-sm-3">
+                                                    <select name="txtMoneda" class="form-control" ng-model="search.formaPago" required="">
+                                                        <option style="display:none" value="">seleccione una opcion</option>
+                                                        <option value="C" selected="selected">CREDITO</option>
+                                                        <option value="E">EFECTIVO/CHEQUE/DEPOSITO</option>
+                                                    </select>
+                                                    <span class="alert-danger" ng-show="!search.formaPago">Debe seleccionar una opci&oacute;n.</span>
+                                                </div>
                                             </div>
 
 
