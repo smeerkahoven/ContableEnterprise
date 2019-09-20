@@ -1996,8 +1996,11 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
 
                 $scope.calculateFeeMontoBs = function () {
                     if ($scope.boleto.montoFeeBs !== null && $scope.boleto.montoFeeBs !== undefined) {
-                        var feeNumber = Number(parseFloat($scope.boleto.montoFeeBs).toFixed(2) * 100).toFixed(2) / Number(parseFloat($scope.boleto.importeNetoBs).toFixed(2)).toFixed(2);
-                        $scope.boleto.fee = parseFloat(feeNumber.toFixed(2));
+                        if ($scope.boleto.importeNetoBs !== undefined && $scope.boleto.importeNetoBs > 0){
+                            var feeNumber = Number(parseFloat($scope.boleto.montoFeeBs).toFixed(2) * 100).toFixed(2) / Number(parseFloat($scope.boleto.importeNetoBs).toFixed(2)).toFixed(2);
+                            $scope.boleto.fee = parseFloat(feeNumber.toFixed(2));
+                        }
+                        
                     }
                     $scope.transformarMontoFeeToUsd();
                     $scope.calculateTotalCancelBs();

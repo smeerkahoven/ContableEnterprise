@@ -1220,7 +1220,7 @@ public class BoletoEJB extends FacadeEJB implements BoletoRemote {
         if (search.getFormaPago().equals(FormasPago.CREDITO)){
             queryFrom = "Boleto.getPlanillaBspCredito";
         }else {
-            queryFrom = "Boleto.getPlanillaBspEfectivo";
+            queryFrom = "Boleto.getPlanillaBspTarjeta";
         }
         
         Query q = em.createNamedQuery(queryFrom);

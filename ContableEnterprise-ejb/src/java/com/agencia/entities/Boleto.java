@@ -78,7 +78,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     )
         ,
         @NamedNativeQuery(
-            name = "Boleto.getPlanillaBspEfectivo",
+            name = "Boleto.getPlanillaBspTarjeta",
             query = "select \n"
             + "	 bo.id_boleto idBoleto, bo.id_aerolinea idAerolinea, ae.iata, ae.numero, ae.iva_it_comision ivaItComision,\n"
             + "      bo.id_nota_debito idNotaDebito, bo.tipo_boleto tipoBoleto, bo.tipo_cupon tipoCupon, bo.numero ticketNumber,\n"
@@ -100,7 +100,7 @@ import javax.xml.bind.annotation.XmlRootElement;
             + " inner join cnt_nota_debito nd on nd.id_nota_debito= bo.id_nota_debito \n"
             + " where bo.fecha_emision >= ?1 and bo.fecha_emision <=?2 \n"
             + " and bo.id_empresa = ?3 and bo.tipo_cupon = ?4 and ae.bsp=1 "
-            + " and nd.forma_pago in ('E','T','D','H') \n"        
+            + " and nd.forma_pago in ('T') \n"        
             + " ORDER BY bo.fecha_emision, bo.numero",
             resultSetMapping = "BoletoPlanillaBsp2"
     )

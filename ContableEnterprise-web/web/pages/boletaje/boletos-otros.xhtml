@@ -813,9 +813,10 @@
                                                     <div class="form-group row" ng-show="boleto.emision === 'CHG' || boleto.emision === 'CNX'">
                                                         <label for="txtNroOrigen" class="col-form-label col-sm-3 text-right">Boleto Origen</label>
                                                         <div class="col-sm-7">
-                                                            <input type="number" class="form-control" name="txtNumeroOrigen" 
-                                                                   ng-model="boleto.numeroOrigen" ng-blur="validarNroBoletoOrigen()"
-                                                                   data-toggle="tooltip" data-placement="top"   />                                                          
+                                                            <input type="text" class="form-control" name="txtNumeroOrigen" id="txtNumeroOrigen" 
+                                                                   ng-model="boleto.numeroOrigen" size="10" maxlength="10" ng-blur="validarNroBoletoOrigen()"
+                                                                   data-toggle="tooltip" data-placement="top" onkeypress="return isNumberKey(event);"   />
+                                                            
                                                             <span class="alert-danger" ng-show="!boleto.numeroOrigen">Debe ingresar un Numero de Boleto Origen</span>
                                                             <span ng-show="showMensajeBoletoOrigenNoExiste" class="alert-danger">{{showMensajeBoletoOrigen}}</span>
                                                         </div>
@@ -1188,9 +1189,10 @@
                                                         <div class="form-group row" ng-show="boleto.emision === 'CHG' || boleto.emision === 'CNX'">
                                                             <label for="txtNroOrigen" class="col-form-label col-sm-3 text-right">Boleto Origen</label>
                                                             <div class="col-sm-7">
-                                                                <input type="number" class="form-control" name="txtNumeroOrigen" 
-                                                                       ng-model="boleto.numeroOrigen" ng-blur="validarNroBoletoOrigen()"
-                                                                       data-toggle="tooltip" data-placement="top" onkeypress="return isNumberKey(event)"  />                                                          
+                                                                <input type="input" class="form-control" name="txtNumeroOrigen" id="txtNumero" 
+                                                                       ng-model="boleto.numeroOrigen" size="10" maxlength="10" ng-blur="validarNroBoletoOrigen()"
+                                                                       data-toggle="tooltip" data-placement="top" onkeypress="return isNumberKey(event)"   />  
+                                                                     
                                                                 <span class="alert-danger" ng-show="!boleto.numeroOrigen">Debe ingresar un Numero de Boleto Origen</span>
                                                                 <span ng-show="showMensajeBoletoOrigenNoExiste" class="alert-danger">{{showMensajeBoletoOrigen}}</span>
                                                             </div>

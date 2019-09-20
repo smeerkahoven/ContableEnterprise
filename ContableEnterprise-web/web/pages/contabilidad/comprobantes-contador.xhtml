@@ -264,12 +264,15 @@
                                                         <label for="txtIdLibro" class=" col-form-label col-sm-2 text-right"><strong>N&uacute;mero </strong></label>
                                                         <div class="col-sm-3">
                                                             <label for="txtIdLibro" class="col-form-label"  ><strong><h4> {{formData.idLibro == 0 ? '-' : formData.gestion + "-" + formData.idNumeroGestion}}</h4></strong></label>
+                                                            <span class=" fa fa-info-circle text-blue" data-toggle="tooltip" data-placement="top" title="El numero de comprobante se asignar&aacute; al guardar los datos."></span>
                                                         </div>
-                                                        <span class=" fa fa-info-circle text-blue" data-toggle="tooltip" data-placement="top" title="El numero de comprobante se asignar&aacute; al guardar los datos."></span>
+
                                                         <label for="txtSucursal" class="col-form-label col-sm-2 text-right">Estado</label>
                                                         <div class="col-sm-4">
                                                             <label for="txtSucursal" class="col-form-label"><strong><h5>{{ formData.estado | checkStatus  }}</h5></strong></label>
                                                         </div>
+                                                        
+                                                        <label for="txtIdLibro" ng-show="formData.idLibro !== 0" class=" col-form-label col-sm-1 text-right"><strong>ID:</strong>{{ formData.idLibro}}</label>
                                                     </div>
                                                     <div class="form-group row">
                                                         <label for="txtSucursal" class="col-form-label col-sm-2 text-right">Tipo de Comprobante</label>
@@ -392,7 +395,7 @@
                                                                     </td>
                                                                     <td style="width: 9%">
                                                                         <!--<td class="col-1">-->
-                                                                        <div ng-show="!row.editable">{{row.moneda=='B' ? 'BOB' : 'USD'}}</div>
+                                                                        <div align="right" ng-show="!row.editable">{{row.moneda=='B' ? 'BOB' : 'USD'}}</div>
                                                                         <div ng-show="row.editable">
                                                                             <select name="txtMoneda" class="form-control" ng-model="row.moneda" required="required" ng-change="onChangeMoneda(row)">
                                                                                 <option style="display:none" value="">seleccione una opcion</option>
@@ -404,7 +407,7 @@
                                                                     <td style="width: 13%">
                                                                         <!--<td class="col-2">-->
                                                                         <!--<div ng-show="!row.editable">{{row.debeMonNac == '0.00' ? '' : row.debeMonNac}}</div>-->
-                                                                        <div ng-show="!row.editable">{{row.debeMonNac| printNumber}}</div>
+                                                                        <div align="right" ng-show="!row.editable">{{row.debeMonNac| printNumber}}</div>
                                                                         <div ng-show="row.editable">
                                                                             <input type="number" string-to-number="string-to-number" class="form-control col input-number" placeholder="0.00 Bs" required="required" name="txtDebeMonNac" min="0" value="0" 
                                                                                    step="0.01" title="Monto Debe Moneda Nacional" pattern="^\d+(?:\.\d{1,2})?$" 
@@ -418,7 +421,7 @@
                                                                     <td style="width: 13%">
                                                                         <!--<td class="col-2">-->
                                                                         <!--<div ng-show="!row.editable">{{row.haberMonNac == '0.00' ? '' : row.haberMonNac }}</div> -->
-                                                                        <div ng-show="!row.editable">{{row.haberMonNac| printNumber }}</div>
+                                                                        <div align="right" ng-show="!row.editable">{{row.haberMonNac| printNumber }}</div>
                                                                         <div ng-show="row.editable">
                                                                             <input type="number" string-to-number="string-to-number" class="form-control col input-number" placeholder="0.00 Bs" required="required" name="txtHaberMonNac" min="0" value="0" 
                                                                                    step="0.01" title="Monto Haber Moneda Nacional" pattern="^\d+(?:\.\d{1,2})?$" 
@@ -429,7 +432,7 @@
                                                                     <td style="width: 13%">
                                                                         <!--<td class="col-2">-->
                                                                         <!-- <div ng-show="!row.editable">{{row.debeMonExt == '0.00' ? '' : row.debeMonExt }}</div> -->
-                                                                        <div ng-show="!row.editable">{{row.debeMonExt| printNumber  }}</div>
+                                                                        <div align="right" ng-show="!row.editable">{{row.debeMonExt| printNumber  }}</div>
                                                                         <div ng-show="row.editable">
                                                                             <input type="number" string-to-number="string-to-number" class="form-control col input-number" placeholder="0.00 Bs" required="required" name="txtDebeMonExt" min="0" value="0" 
                                                                                    step="0.01" title="Monto Debe Moneda Extranjera" pattern="^\d+(?:\.\d{1,2})?$" 
@@ -440,7 +443,7 @@
                                                                     <td style="width: 13%">
                                                                         <!--<td class="col-2">-->
                                                                         <!--<div ng-show="!row.editable">{{row.haberMonExt== '0.00' ? '' : row.haberMonExt}}</div> -->
-                                                                        <div ng-show="!row.editable">{{row.haberMonExt|printNumber}}</div>
+                                                                        <div align="right" ng-show="!row.editable">{{row.haberMonExt|printNumber}}</div>
                                                                         <div ng-show="row.editable">
                                                                             <input type="number" string-to-number="string-to-number" class="form-control col input-number" placeholder="0.00 Bs" required="required" name="txtHaberMonExt" min="0" value="0" 
                                                                                    step="0.01" title="Monto Haber Moneda Extranjera" pattern="^\d+(?:\.\d{1,2})?$" 
@@ -490,16 +493,16 @@
                                                                         <div></div>
                                                                     </td>
                                                                     <td style="width: 13%">
-                                                                        <div><strong>{{formData.totalDebeMonNac|printNumber}} </strong></div>
+                                                                        <div align="right"><strong>{{formData.totalDebeMonNac|printNumber}} </strong></div>
                                                                     </td>
                                                                     <td style="width: 13%">
-                                                                        <div><strong>{{formData.totalHaberMonNac|printNumber }}</strong></div>
+                                                                        <div align="right"><strong>{{formData.totalHaberMonNac|printNumber }}</strong></div>
                                                                     </td>
                                                                     <td style="width: 13%">
-                                                                        <div><strong>{{formData.totalDebeMonExt|printNumber}}</strong></div>
+                                                                        <div align="right"><strong>{{formData.totalDebeMonExt|printNumber}}</strong></div>
                                                                     </td>
                                                                     <td style="width: 13%">
-                                                                        <div><strong>{{formData.totalHaberMonExt|printNumber}}</strong></div>
+                                                                        <div align="right"><strong>{{formData.totalHaberMonExt|printNumber}}</strong></div>
                                                                     </td>
                                                                     <td style="width: 9%">
                                                                     </td>
@@ -512,16 +515,16 @@
                                                                         <div></div>
                                                                     </td>
                                                                     <td style="width: 13%">
-                                                                        <div ng-show="showDifDebeNac"><strong>{{formData.difMonNac| makePositive}}</strong></div>
+                                                                        <div align="right" ng-show="showDifDebeNac"><strong>{{formData.difMonNac| makePositive}}</strong></div>
                                                                     </td>
                                                                     <td style="width: 13%">
-                                                                        <div ng-show="showDifHaberNac"><strong>{{formData.difMonNac| makePositive}}</strong></div>
+                                                                        <div align="right" ng-show="showDifHaberNac"><strong>{{formData.difMonNac| makePositive}}</strong></div>
                                                                     </td>
                                                                     <td style="width: 13%">
-                                                                        <div ng-show="showDifDebeExt"><strong>{{formData.difMonExt| makePositive}}</strong></div>
+                                                                        <div align="right" ng-show="showDifDebeExt"><strong>{{formData.difMonExt| makePositive}}</strong></div>
                                                                     </td>
                                                                     <td style="width: 13%">
-                                                                        <div ng-show="showDifHaberExt"><strong>{{formData.difMonExt| makePositive}}</strong></div>
+                                                                        <div align="right" ng-show="showDifHaberExt"><strong>{{formData.difMonExt| makePositive}}</strong></div>
                                                                     </td>
                                                                     <td style="width: 9%">
                                                                         <button type="button" class="btn btn-sm btn-success" ng-click="clickCorregir()" ng-disabled="ngDisabledBtnCorregir" ng-show="existeDiferencias"><span class="fa fa-book"></span> Corregir</button>

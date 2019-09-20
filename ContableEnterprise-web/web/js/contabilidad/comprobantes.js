@@ -749,6 +749,8 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                 }
 
                 $scope.saveTransaccion = function (item) {
+                    console.log($scope.formData) ;
+                    
                     $scope.showRowError = false;
                     if (item.idPlanCuenta.id === undefined) {
                         $scope.showRowError = true;
@@ -841,7 +843,7 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                             $http({
                                 method: 'POST',
                                 url: `${url.value}add-transaction`,
-                                data: {token: token.value, content: angular.toJson($scope.formData)},
+                                data: {token: token.value, content: angular.toJson(item)},
                                 headers: {'Content-Type': 'application/json'}
                             }).then(function (response) {
                                 item = response.data.entidad;
@@ -854,7 +856,7 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                             $http({
                                 method: 'POST',
                                 url: `${url.value}update-transaction`,
-                                data: {token: token.value, content: angular.toJson($scope.formData)},
+                                data: {token: token.value, content: angular.toJson(item)},
                                 headers: {'Content-Type': 'application/json'}
                             }).then(function (response) {
 

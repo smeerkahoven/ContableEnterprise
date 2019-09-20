@@ -886,8 +886,6 @@ angular.module('jsComprobantesContador.controllers', []).controller('frmComproba
                     }
                 }
 
-
-
                 $scope.corregirTransaccion = function (item) {
                     $scope.showRowError = false;
                     if (item.idPlanCuenta.id === undefined) {

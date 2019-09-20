@@ -23,14 +23,14 @@
                                     <input type="number" class="form-control input-number" name="txtImporteNeto" placeholder="0.00 BOB" 
                                            ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01" min="0" ng-blur="calculateImporteNetoBs()"
                                            ng-model="boleto.importeNetoBs"
-                                           data-toggle="tooltip" data-placement="top" ng-disabled="boleto.moneda === 'U'" required="" />
+                                           data-toggle="tooltip" data-placement="top" ng-disabled="boleto.moneda === 'U'"  />
                                 </td>
                                 <td class="col-sm-3">
                                     <!-- Permite Decimales -->
                                     <input type="number" class="form-control input-number" name="txtImporteNeto" placeholder="0.00 USD" 
                                            ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01" min="0" ng-blur="calculateImporteNetoUsd()"
                                            ng-model="boleto.importeNetoUsd"
-                                           data-toggle="tooltip" data-placement="top" ng-disabled="boleto.moneda === 'B'" required=""/>
+                                           data-toggle="tooltip" data-placement="top" ng-disabled="boleto.moneda === 'B'" />
                                 </td>
                             </tr>
                             <tr class="d-flex" ng-show="aerolinea.impuestoValorNeto">
@@ -39,8 +39,10 @@
                                 </td>
                                 <td class="col-sm-3"> 
                                     <!-- Permite Decimales -->
-                                    <input type="number" class="form-control input-number" name="txtImpuestoBobBs" placeholder="0.00 " ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" 
-                                           step="0.01" min="0" ng-blur="calculateImpuestoBobBs()" ng-model="boleto.impuestoBobBs" data-toggle="tooltip" 
+                                    <input type="number" class="form-control input-number" name="txtImpuestoBobBs" placeholder="0.00 " 
+                                           ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" 
+                                           step="0.01" min="0" ng-blur="calculateImpuestoBobBs()" 
+                                           ng-model="boleto.impuestoBobBs" data-toggle="tooltip" 
                                            data-placement="top"  ng-disabled="boleto.moneda === 'U'"/></td>
                                 <td class="col-sm-3"> 
                                     <!-- Permite Decimales -->
@@ -157,10 +159,12 @@
                                            ng-model="boleto.fee" ng-blur="calculateFeeMonto()"
                                            data-toggle="tooltip" data-placement="top"  />
                                 </td>
-                                <td class="col-sm-3"><input type="number" class="form-control input-number" name="txtMontoFeeBs" placeholder="0.00 BOB" 
+                                <td class="col-sm-3"><input type="number" class="form-control input-number" name="txtMontoFeeBs" 
+                                                            placeholder="0.00 BOB" 
                                                             ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01" min="0" 
                                                             ng-model="boleto.montoFeeBs" ng-blur="calculateFeeMontoBs()"
-                                                            data-toggle="tooltip" data-placement="top"  ng-disabled="boleto.moneda === 'U'"/></td>
+                                                            data-toggle="tooltip" data-placement="top"  
+                                                            ng-disabled="boleto.moneda === 'U'"/></td>
 
                                 <td class="col-sm-3"><input type="number" class="form-control input-number" name="txtMontoFeeUsd" placeholder="0.00 USD" 
                                                             ng-pattern="/^[0-9]+(\.[0-9]{1,2})?$/" step="0.01" min="0" 
