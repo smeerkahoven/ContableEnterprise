@@ -722,12 +722,6 @@ public class ComprobantesResource extends TemplateResource {
         BigDecimal totalHaberMonExt = new BigDecimal(0);
 
         for (AsientoContableJSON json : c.getTransacciones()) {
-            /* System.out.println("json.getDebeMonExt():" + json.getDebeMonExt());
-            System.out.println("json.getDebeMonNac():" + json.getDebeMonNac());
-            System.out.println("json.getHaberMonExt():" + json.getHaberMonExt());
-            System.out.println("json.getHaberMonNac():" + json.getHaberMonNac());
-            System.out.println("------------------");*/
-
             totalDebeMonExt = totalDebeMonExt.add(json.getDebeMonExt());
             totalDebeMonNac = totalDebeMonNac.add(json.getDebeMonNac());
             totalHaberMonExt = totalHaberMonExt.add(json.getHaberMonExt());
@@ -739,10 +733,6 @@ public class ComprobantesResource extends TemplateResource {
         c.setTotalHaberMonExt(totalHaberMonExt);
         c.setTotalHaberMonNac(totalHaberMonNac);
 
-        /*System.out.println("totalDebeMonExt:" + totalDebeMonExt);
-        System.out.println("totalDebeMonNac:" + totalDebeMonNac);
-        System.out.println("totalHaberMonExt:" + totalHaberMonExt);
-        System.out.println("totalHaberMonNac:" + totalHaberMonNac);*/
         return c;
     }
 

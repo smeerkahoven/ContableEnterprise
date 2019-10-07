@@ -366,7 +366,20 @@ public class AsientoContable extends Entidad {
 
     @Override
     public String toString() {
-        return "AsientoContable{" + "idAsiento=" + idAsiento + ", gestion=" + gestion + ", estado=" + estado + ", fechaMovimiento=" + fechaMovimiento + ", idLibro=" + idLibro + ", idPlanCuenta=" + idPlanCuenta + ", moneda=" + moneda + ", montoDebeExt=" + montoDebeExt + ", montoDebeNac=" + montoDebeNac + ", montoHaberExt=" + montoHaberExt + ", montoHaberNac=" + montoHaberNac + ", idBoleto=" + idBoleto + ", idNotaTransaccion=" + idNotaTransaccion + ", idNotaCreditoTransaccion=" + idNotaCreditoTransaccion + ", idIngresoCajaTransaccion=" + idIngresoCajaTransaccion + ", idPagoAnticipado=" + idPagoAnticipado + ", idPagoAnticipadoTransaccion=" + idPagoAnticipadoTransaccion + ", idDevolucion=" + idDevolucion + ", idCargo=" + idCargo + ", tipo=" + tipo + ", idUsuarioAnular=" + idUsuarioAnular + ", tipoMontoBoleto=" + tipoMontoBoleto + '}';
+        return "AsientoContable{" + "idAsiento=" + idAsiento 
+                + ", gestion=" + gestion + ", estado=" + estado 
+                + ", fechaMovimiento=" + fechaMovimiento 
+                + ", idLibro=" + idLibro 
+                + ", idPlanCuenta=" + idPlanCuenta 
+                + ", moneda=" + moneda 
+                + ", montoDebeExt=" + montoDebeExt 
+                + ", montoDebeNac=" + montoDebeNac 
+                + ", montoHaberExt=" + montoHaberExt 
+                + ", montoHaberNac=" + montoHaberNac 
+                + ", idBoleto=" + idBoleto + 
+                ", idNotaTransaccion=" + idNotaTransaccion 
+                + ", idNotaCreditoTransaccion=" + idNotaCreditoTransaccion 
+                + ", idIngresoCajaTransaccion=" + idIngresoCajaTransaccion + ", idPagoAnticipado=" + idPagoAnticipado + ", idPagoAnticipadoTransaccion=" + idPagoAnticipadoTransaccion + ", idDevolucion=" + idDevolucion + ", idCargo=" + idCargo + ", tipo=" + tipo + ", idUsuarioAnular=" + idUsuarioAnular + ", tipoMontoBoleto=" + tipoMontoBoleto + '}';
     }
 
 }

@@ -42,7 +42,6 @@ public class StartupSetricon {
                 while (addresses.hasMoreElements()) {
                     InetAddress addr = addresses.nextElement();
                     ip = addr.getHostAddress();
-                    System.out.println("System IP Address:" + iface.getDisplayName() + " " + ip);
                 }
             }
         } catch (SocketException e) {

@@ -549,19 +549,24 @@ public class IngresoCajaEJB extends FacadeEJB implements IngresoCajaRemote {
 
     @Override
     public void anularTransaccion(IngresoTransaccion trx, String usuario) throws CRUDException {
-
+        
         IngresoTransaccion fromDb = em.find(IngresoTransaccion.class, trx.getIdTransaccion());
         Optional op = Optional.ofNullable(fromDb);
         if (!op.isPresent()) {
-            throw new CRUDException("La transaccion del Ingreso de Caja %s, no se ha encontrado.".replace("%s", trx.getIdIngresoCaja().toString()));
+            throw new CRUDException(
+                    String.format("La transaccion del Ingreso de Caja %d, no se ha encontrado.",
+                            trx.getIdIngresoCaja().getId()));
         }
 
         if (fromDb.getEstado().equals(Estado.ANULADO)) {
-            throw new CRUDException("La transaccion del Ingreso de Caja %s que ha ingresado ya se encuentra ANULADA".replace("%s", trx.getIdIngresoCaja().toString()));
+            throw new CRUDException(
+                    String.format("La transaccion del Ingreso de Caja %s que ha ingresado ya se encuentra ANULADA",
+                            trx.getIdIngresoCaja().getId()));
         }
 
         if (fromDb.getEstado().equals(Estado.PENDIENTE)) {
-            revertirMontosAnteriors(trx, fromDb);
+            //revertirMontosAnteriors(trx, fromDb);
+            ejbNotaDebito.anularMontoAdeudadoTransaccion(trx);
 
             fromDb.setEstado(Estado.ANULADO);
             updateMontosIngresoCaja(trx.getIdIngresoCaja().getIdIngresoCaja());
@@ -569,14 +574,20 @@ public class IngresoCajaEJB extends FacadeEJB implements IngresoCajaRemote {
 
         // Si esta emitido, se revierten los montos
         if (fromDb.getEstado().equals(Estado.EMITIDO)) {
-            revertirMontosAnteriors(trx, fromDb);
+            //revertirMontosAnteriors(trx, fromDb);
 
+            ejbNotaDebito.anularMontoAdeudadoTransaccion(trx);
+            
             fromDb.setEstado(Estado.ANULADO);
             em.merge(fromDb);
 
             updateMontosIngresoCaja(trx.getIdIngresoCaja().getIdIngresoCaja());
             //anulamos los asientos contables
+            try {
             ejbComprobante.anularAsientosContables(fromDb, usuario);
+            }catch (CRUDException ex) {
+                //es una exepcion valida ya que si no hay asientos devolvera ok
+            }
         }
 
     }
@@ -588,8 +599,13 @@ public class IngresoCajaEJB extends FacadeEJB implements IngresoCajaRemote {
             throw new CRUDException("No existe la Transaccion %s de Ingreso de Caja.".replace("%s", idTransaccion.toString()));
         }
 
-        IngresoTransaccion tmp = new IngresoTransaccion(idTransaccion);
-        anularTransaccion(tmp, usuario);
+        IngresoTransaccion fromDb = em.find(IngresoTransaccion.class, idTransaccion);
+        
+        if (fromDb == null) {
+            throw new CRUDException(String.format("No existe la transaccion %d de Ingreso de Caja", idTransaccion));
+        }
+        
+        anularTransaccion(fromDb, usuario);
 
     }
 
@@ -773,13 +789,14 @@ public class IngresoCajaEJB extends FacadeEJB implements IngresoCajaRemote {
         em.merge(fromDb);
 
         Double montoBdNdTrx = 0d;
+        
         //Nuevo monto Adeudado
         if (fromDb.getIdNotaTransaccion().getMoneda().equals(Moneda.NACIONAL)) {
-            montoBdNdTrx = fromDb.getIdNotaTransaccion().getMontoAdeudadoBs().doubleValue();
+            montoBdNdTrx = fromDb.getIdNotaTransaccion().getMontoAdeudadoBs()!= null ? fromDb.getIdNotaTransaccion().getMontoAdeudadoBs().doubleValue(): 0d;
             Double montoUpdated = montoBdIc + montoBdNdTrx;
             fromDb.getIdNotaTransaccion().setMontoAdeudadoBs(new BigDecimal(montoUpdated));
         } else {
-            montoBdNdTrx = fromDb.getIdNotaTransaccion().getMontoAdeudadoUsd().doubleValue();
+            montoBdNdTrx = fromDb.getIdNotaTransaccion().getMontoAdeudadoUsd()!= null ? fromDb.getIdNotaTransaccion().getMontoAdeudadoUsd().doubleValue(): 0d;
             Double montoUpdated = montoBdIc + montoBdNdTrx;
             fromDb.getIdNotaTransaccion().setMontoAdeudadoUsd(new BigDecimal(montoUpdated));
         }

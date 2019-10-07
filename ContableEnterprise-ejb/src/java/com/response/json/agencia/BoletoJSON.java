@@ -312,7 +312,6 @@ public class BoletoJSON implements Serializable {
         bjson.setIdNotaDebitoTransaccion(boleto.getIdNotaDebitoTransaccion());
         bjson.setIdBoleto(boleto.getIdBoleto());
         bjson.setIdBoletoPadre(boleto.getIdBoletoPadre());
-        //System.out.println(boleto.getIdBoletoPadre());
         bjson.setIdLibro(boleto.getIdLibro());
         bjson.setIdIngresoCaja(boleto.getIdIngresoCaja());
         bjson.setIdNotaDebito(boleto.getIdNotaDebito());
@@ -460,10 +459,6 @@ public class BoletoJSON implements Serializable {
                 } else {
                     bjson.setMontoPagarLineaAereaBs(boleto.getTotalBoleto());
                 }
-
-                System.out.println("Importe Neto :" + boleto.getImporteNeto());
-                System.out.println("Factor Cambiario :" + boleto.getFactorCambiario());
-                //System.out.println("Divide :" + boleto.getImporteNeto().doubleValue() / boleto.getFactorCambiario().doubleValue());
 
                 if (boleto.getImporteNeto() != null) {
                     bjson.setImporteNetoUsd(boleto.getImporteNeto().divide(boleto.getFactorCambiario(), RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_DECIMAL_2, BigDecimal.ROUND_DOWN));

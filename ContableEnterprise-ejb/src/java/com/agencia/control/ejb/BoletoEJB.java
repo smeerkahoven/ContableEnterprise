@@ -91,7 +91,6 @@ public class BoletoEJB extends FacadeEJB implements BoletoRemote {
     public boolean isBoletoRegistrado(Boleto b) throws CRUDException {
 
         Query q = em.createNamedQuery("Boleto.findNroBoleto", Boleto.class);
-        System.out.println("Numero Boleto :" + b.getNumero());
         q.setParameter("numero", b.getNumero());
         /*q.setParameter("list", Boleto.Estado.EMITIDO);
         q.setParameter("list", Boleto.Estado.VOID);
@@ -107,15 +106,12 @@ public class BoletoEJB extends FacadeEJB implements BoletoRemote {
     public Boleto getBoletoRegistrado(Boleto b) throws CRUDException {
 
         Query q = em.createNamedQuery("Boleto.findNroBoleto", Boleto.class);
-        System.out.println("Numero Boleto :" + b.getNumero());
         q.setParameter("numero", b.getNumero());
         /*q.setParameter("list", Boleto.Estado.EMITIDO);
         q.setParameter("list", Boleto.Estado.VOID);
         q.setParameter("list", Boleto.Estado.PENDIENTE);*/
 
         List l = q.getResultList();
-
-        System.out.println("Lista de BOletos : " + l.size());
 
         if (l.size() > 0) {
             return (Boleto) l.get(0);
@@ -1025,9 +1021,6 @@ public class BoletoEJB extends FacadeEJB implements BoletoRemote {
 
         //Si el Boleto esta Emitido se deben dar de bajas su contabilidad
         if (boletoAnular.getEstado().equals(Boleto.Estado.EMITIDO)) {
-            System.out.println("Anulando Boleto:" + boleto.getIdBoleto());
-            System.out.println("Anulando Boleto NotaDebito:" + boleto.getIdNotaDebito());
-            System.out.println("Anulando Boleto IngresoCaja :" + boleto.getIdIngresoCaja());
             boletoAnular.setEstado(Boleto.Estado.ANULADO);
             em.merge(boletoAnular);
 

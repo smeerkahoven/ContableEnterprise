@@ -222,7 +222,12 @@ public class NotaDebitoTransaccion extends Entidad {
 
     @Override
     public String toString() {
-        return "com.contabilidad.entities.NotaDebitoTransaccion[ notaDebitoTransaccionPK=" + idNotaDebito + " ]";
+        return "com.contabilidad.entities.NotaDebitoTransaccion[ notaDebitoTransaccionPK=" + idNotaDebitoTransaccion
+                + ",  idNotaDebito:" + idNotaDebito.getIdNotaDebito()
+                + ", Monto Adeudado:" + montoAdeudadoBs
+                + ", Monto Adeudado:" + montoAdeudadoUsd
+                + ", "
+                + " ]";
     }
 
     @Override

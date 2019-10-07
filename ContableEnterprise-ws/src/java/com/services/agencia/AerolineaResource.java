@@ -127,7 +127,6 @@ public class AerolineaResource extends TemplateResource {
         try {
             /*Verificamos el ID Token*/
             if (request.getToken() != null && !request.getToken().isEmpty()) {
-                System.out.println(request.getToken());
                 UserToken t = ejbUsuario.get(new UserToken(request.getToken()));
                 User u = ejbUsuario.get(new User(t.getUserName()));
 
@@ -183,7 +182,6 @@ public class AerolineaResource extends TemplateResource {
         try {
             /*Verificamos el ID Token*/
             if (request.getToken() != null && !request.getToken().isEmpty()) {
-                System.out.println(request.getToken());
                 UserToken t = ejbUsuario.get(new UserToken(request.getToken()));
                 User u = ejbUsuario.get(new User(t.getUserName()));
 
@@ -251,7 +249,6 @@ public class AerolineaResource extends TemplateResource {
         try {
             /*Verificamos el ID Token*/
             if (request.getToken() != null && !request.getToken().isEmpty()) {
-                System.out.println(request.getToken());
                 UserToken t = ejbUsuario.get(new UserToken(request.getToken()));
                 User u = ejbUsuario.get(new User(t.getUserName()));
 
@@ -310,7 +307,6 @@ public class AerolineaResource extends TemplateResource {
         try {
             /*Verificamos el ID Token*/
             if (request.getToken() != null && !request.getToken().isEmpty()) {
-                System.out.println(request.getToken());
                 UserToken t = ejbUsuario.get(new UserToken(request.getToken()));
                 User u = ejbUsuario.get(new User(t.getUserName()));
 
@@ -386,27 +382,21 @@ public class AerolineaResource extends TemplateResource {
                 Gson gson = new GsonBuilder().create();
                 JsonParser parser = new JsonParser();
                 JsonObject object = parser.parse((String) request.getContent()).getAsJsonObject();
-                System.out.println((String) request.getContent());
                 ajson = gson.fromJson(object.toString(), AerolineaJSON.class);
 
                 Aerolinea pcu = AerolineaJSON.toAerolinea(ajson);
-                System.out.println("saveAerolinea:");
                 pcu.setIdAerolinea(ejbAerolinea.insert(pcu));
 
                 //se debe insertar los impuestos nuevos
                 if (!ajson.getAerolineaImpuestoList().isEmpty()) {
                     Iterator i = ajson.getAerolineaImpuestoList().iterator();
                     while (i.hasNext()) {
-                         System.out.println("insertandos impuestos");
                         AerolineaImpuestoJSON aijson = (AerolineaImpuestoJSON) i.next();
                         AerolineaImpuesto aim = AerolineaImpuestoJSON.toAerolineaImpuesto(aijson);
                         
                         Aerolinea fromDb = (Aerolinea)ejbAerolinea.get(pcu.getIdAerolinea(), Aerolinea.class);
                         
                         aim.setIdAerolinea(fromDb.getIdAerolinea());
-                        //System.out.println ("ID:"+aim.getId());
-                        System.out.println ("insertandos idAerolinea:"+aim.getIdAerolinea());
-                        System.out.println ("idAerolineaImpuesto:"+aim.getIdAerolineaImpuesto());
                         ejbAerolinea.insert(aim);
                     }
                 }
@@ -463,7 +453,6 @@ public class AerolineaResource extends TemplateResource {
                 Gson gson = new GsonBuilder().create();
                 JsonParser parser = new JsonParser();
                 JsonObject object = parser.parse((String) request.getContent()).getAsJsonObject();
-                System.out.println((String) request.getContent());
                 ajson = gson.fromJson(object.toString(), AerolineaCuentaJSON.class);
 
                 AerolineaCuenta pcu = AerolineaCuentaJSON.toAerolinea(ajson);

@@ -381,12 +381,12 @@
                                                         <table st-table="transacciones" st-safe-src="formData.transacciones" class="table table-sm table-hover" >
                                                             <thead>
                                                                 <tr class="d-flex" >
-                                                                    <th style="width: 30%">Cuenta</th>
-                                                                    <th style="width: 9%">Moneda.</th>
-                                                                    <th style="width: 13%">Debe M/N</th>
-                                                                    <th style="width: 13%">Haber M/N</th>
-                                                                    <th style="width: 13%">Debe M/E</th>
-                                                                    <th style="width: 13%">Haber M/E</th>
+                                                                    <td  style="width: 30%"><strong>Cuenta</strong> </td>
+                                                                    <td style="width: 9%"><strong>Moneda</strong></td>
+                                                                    <td align="right" style="width: 13%"><strong>Debe M/N</strong></td>
+                                                                    <td align="right" style="width: 13%"><strong>Haber M/N</strong></td>
+                                                                    <td align="right" style="width: 13%"><strong>Debe M/E</strong></td>
+                                                                    <td align="right" style="width: 13%"><strong>Haber M/E</strong></td>
                                                                     <th style="width: 9%"></th>
                                                                 </tr>
                                                             </thead>
@@ -417,7 +417,7 @@
                                                                     <td style="width: 13%">
                                                                         <!--<td class="col-2">-->
                                                                         <!--<div ng-show="!row.editable">{{row.debeMonNac == '0.00' ? '' : row.debeMonNac}}</div>-->
-                                                                        <div ng-show="!row.editable">{{row.debeMonNac| printNumber}}</div>
+                                                                        <div align="right" ng-show="!row.editable">{{row.debeMonNac| printNumber}}</div>
                                                                         <div ng-show="row.editable">
                                                                             <input type="number" string-to-number="string-to-number" class="form-control col input-number" placeholder="0.00 Bs" required="required" name="txtDebeMonNac" min="0" value="0" 
                                                                                    step="0.01" title="Monto Debe Moneda Nacional" pattern="^\d+(?:\.\d{1,2})?$" 

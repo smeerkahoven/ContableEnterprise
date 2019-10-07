@@ -38,13 +38,11 @@ public class AuthorizationFilter implements Filter {
             FilterChain chain) throws IOException, ServletException {
         try {
 
-            System.out.println("Filtering ..");
             HttpServletRequest reqt = (HttpServletRequest) request;
             HttpServletResponse resp = (HttpServletResponse) response;
             HttpSession ses = reqt.getSession(false);
 
             String servletPath = reqt.getServletPath();
-            System.out.println("Accessing to .." + servletPath);
             String reqURI = reqt.getRequestURI();
             if (reqURI.indexOf("/login.xhtml") >= 0
                     || (ses != null && ses.getAttribute(SessionUtils.SESION_USUARIO) != null)
@@ -68,7 +66,6 @@ public class AuthorizationFilter implements Filter {
                                     if (m.getSubmenus() != null) {
                                         for (Menu sb : m.getSubmenus()) {
                                             if (servletPath.equals(sb.getFormulario().getFullPath())) {
-                                                System.out.println(servletPath + ":" + sb.getFormulario().getNombre() + ":" + sb.getFormulario().getAcceder());
                                                 if (sb.getFormulario().getAcceder() == Menu.IGUAL) {
                                                     ok = true;
                                                     break;

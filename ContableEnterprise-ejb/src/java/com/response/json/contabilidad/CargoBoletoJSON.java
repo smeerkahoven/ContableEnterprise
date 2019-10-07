@@ -83,8 +83,6 @@ public class CargoBoletoJSON implements Serializable {
         cargo.setIdNotaDebito(json.getIdNotaDebito());
         cargo.setIdNotaDebitoTransaccion(json.getIdNotaDebitoTransaccion());
 
-        System.out.println("CargoBoletoJSON:cargo:"+ cargo);
-        
         return cargo;
     }
 

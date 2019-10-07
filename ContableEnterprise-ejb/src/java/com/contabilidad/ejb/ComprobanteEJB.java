@@ -85,9 +85,7 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
 
         Boleto b = fromDb.getIdBoleto();
 
-        System.out.println("updateTransaccion:" + b);
         if (b != null) {
-            System.out.println("updateTransaccion:idBoleto:" + b.getIdBoleto() + ", tipoMontoBoleto:" + fromDb.getTipoMontoBoleto());
             if (fromDb.getTipoMontoBoleto().equals(AsientoContable.MontoBoleto.COMISION)) {
                 //haber
                 if (fromDb.getMoneda().equals(Moneda.NACIONAL)) {
@@ -272,8 +270,11 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
     @Override
     public ComprobanteContable createComprobante(String tipo, String concepto,
             NotaDebito nota) throws CRUDException {
+        Cliente c = em.find(Cliente.class, nota.getIdCliente().getIdCliente());
+        
         ComprobanteContable comprobante = new ComprobanteContable();
         comprobante.setIdCliente(nota.getIdCliente());
+        comprobante.setNombre(c.getNombre());
         comprobante.setConcepto(concepto);
         comprobante.setFactorCambiario(nota.getFactorCambiario());
         comprobante.setFecha(nota.getFechaEmision());
@@ -292,8 +293,11 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
     @Override
     public ComprobanteContable createComprobante(String tipo, String concepto,
             PagoAnticipado pago) throws CRUDException {
+        Cliente c = em.find(Cliente.class, pago.getIdCliente().getIdCliente());
+        
         ComprobanteContable comprobante = new ComprobanteContable();
         comprobante.setIdCliente(pago.getIdCliente());
+        comprobante.setNombre(c.getNombre());
         comprobante.setConcepto(concepto);
         comprobante.setFactorCambiario(pago.getFactorCambiario());
         comprobante.setFecha(pago.getFechaEmision());
@@ -313,9 +317,11 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
     @Override
     public ComprobanteContable createComprobante(String tipo, String concepto,
             Devolucion dev) throws CRUDException {
+        Cliente c = em.find(Cliente.class, dev.getIdCliente().getIdCliente());
+        
         ComprobanteContable comprobante = new ComprobanteContable();
         comprobante.setIdCliente(dev.getIdCliente());
-        comprobante.setNombre(dev.getIdCliente().getNombre());
+        comprobante.setNombre(c.getNombre());
         comprobante.setConcepto(concepto);
         comprobante.setFactorCambiario(dev.getFactorCambiario());
         comprobante.setFecha(dev.getFechaEmision());
@@ -334,9 +340,11 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
 
     @Override
     public ComprobanteContable createComprobante(String tipo, String concepto, IngresoCaja ingreso) throws CRUDException {
+        Cliente c = em.find(Cliente.class, ingreso.getIdCliente().getIdCliente());
+        
         ComprobanteContable comprobante = new ComprobanteContable();
         comprobante.setIdCliente(ingreso.getIdCliente());
-        comprobante.setNombre(ingreso.getIdCliente().getNombre());
+        comprobante.setNombre(c.getNombre());
         comprobante.setConcepto(concepto);
         comprobante.setFactorCambiario(ingreso.getFactorCambiario());
         comprobante.setFecha(ingreso.getFechaEmision());
@@ -354,8 +362,11 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
 
     @Override
     public ComprobanteContable createComprobante(String tipo, String concepto, NotaCredito nota) throws CRUDException {
+        Cliente c = em.find(Cliente.class, nota.getIdCliente().getIdCliente());
+        
         ComprobanteContable comprobante = new ComprobanteContable();
         comprobante.setIdCliente(nota.getIdCliente());
+        comprobante.setNombre(c.getNombre());
         comprobante.setConcepto(concepto);
         comprobante.setFactorCambiario(nota.getFactorCambiario());
         comprobante.setFecha(nota.getFechaEmision());
@@ -372,6 +383,7 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
     }
 
     // YA NO SE VA USAR
+    @Deprecated
     @Override
     public ComprobanteContable createComprobante(Aerolinea a, Boleto boleto, Cliente cliente, String tipo, NotaDebito nota) throws CRUDException {
 
@@ -427,6 +439,7 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
         return comprobante;
     }
 
+    @Deprecated
     // YA NO SE VA USAR
     @Override
     public ComprobanteContable createComprobante(
@@ -485,6 +498,7 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
     }
 
     // YA NO SE VA USAR
+    @Deprecated
     @Override
     public ComprobanteContable createAsientoDiarioBoleto(Boleto boleto) throws CRUDException {
 
@@ -555,15 +569,14 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
     @Override
     public ComprobanteContable createAsientoDiarioBoleto(NotaDebito nota, String concepto) throws CRUDException {
 
+        Cliente c = em.find(Cliente.class, nota.getIdCliente().getIdCliente());
+        
         Optional op;
         ComprobanteContable comprobante = new ComprobanteContable();
-        //ComprobanteContablePK pk = new ComprobanteContablePK();
-        //pk.setGestion(DateContable.getPartitionDateInt(DateContable.getDateFormat(boleto.getFechaEmision(), DateContable.LATIN_AMERICA_FORMAT)));
         comprobante.setEstado(ComprobanteContable.EMITIDO);
-        //comprobante.setComprobanteContablePK(pk);
         comprobante.setIdNotaDebito(nota.getIdNotaDebito());
-
         comprobante.setIdCliente(nota.getIdCliente());
+        comprobante.setNombre(c.getNombre());
         comprobante.setConcepto(concepto);
         comprobante.setFactorCambiario(nota.getFactorCambiario());
         comprobante.setFecha(nota.getFechaEmision());
@@ -582,12 +595,10 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
     @Override
     public synchronized ComprobanteContable procesarComprobante(ComprobanteContable comprobante) throws CRUDException {
 
-        //ComprobanteContablePK numero = getNextComprobantePK(comprobante.getFecha(), comprobante.getTipo());
         Integer numero = getNextComprobantePK(comprobante.getFecha(), comprobante.getTipo());
 
         comprobante.setIdNumeroGestion(numero);
         comprobante.setFechaInsert(DateContable.getCurrentDate());
-        //comprobante.setComprobanteContablePK(new ComprobanteContablePK(0, numero.getGestion()));
         comprobante.setGestion(DateContable.getPartitionDateInt(DateContable.getDateFormat(comprobante.getFecha(), DateContable.LATIN_AMERICA_FORMAT)));
         Integer idLibro = insert(comprobante);
 
@@ -603,7 +614,6 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
         comprobante.setIdNumeroGestion(numero);
         comprobante.setFechaInsert(DateContable.getCurrentDate());
         comprobante.setGestion(DateContable.getPartitionDateInt(DateContable.getDateFormat(comprobante.getFecha(), DateContable.LATIN_AMERICA_FORMAT)));
-        //comprobante.setComprobanteContablePK(new ComprobanteContablePK(0, numero.getGestion()));
 
         return comprobante;
 
@@ -1139,7 +1149,7 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
     @Override
     public AsientoContable createTotalCancelarIngresoCajaDebe(ComprobanteContable c,
             final ContabilidadBoletaje conf, final NotaDebitoTransaccion ndt, final NotaDebito nota,
-            final Boleto boleto) throws CRUDException {
+            final Boleto boleto, IngresoTransaccion ingTransaccion) throws CRUDException {
 
         AsientoContable ingCajaDebe = new AsientoContable();
 
@@ -1150,6 +1160,7 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
         //ingCajaDebe.setIdBoleto(boleto.getIdBoleto());
         ingCajaDebe.setIdBoleto(boleto);
         ingCajaDebe.setIdNotaTransaccion(ndt);
+        ingCajaDebe.setIdIngresoCajaTransaccion(ingTransaccion);
         ingCajaDebe.setTipo(ndt.getTipo());
         ingCajaDebe.setMoneda(ndt.getMoneda());
 
@@ -1317,14 +1328,15 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
     @Override
     public AsientoContable createTotalCancelarIngresoClienteHaber(ComprobanteContable c,
             ContabilidadBoletaje conf, final NotaDebitoTransaccion ndt,
-            final NotaDebito nota, final Boleto boleto) {
+            final NotaDebito nota, final Boleto boleto, 
+            IngresoTransaccion ingTransaccion) {
         AsientoContable ingCajaHaber = new AsientoContable();
 
         ingCajaHaber.setIdLibro(c);
         ingCajaHaber.setGestion(c.getGestion());
         ingCajaHaber.setFechaMovimiento(DateContable.getCurrentDate());
         ingCajaHaber.setEstado(ComprobanteContable.EMITIDO);
-        //ingCajaHaber.setIdBoleto(boleto.getIdBoleto());
+        ingCajaHaber.setIdIngresoCajaTransaccion(ingTransaccion);
         ingCajaHaber.setIdBoleto(boleto);
         ingCajaHaber.setTipo(ndt.getTipo());
         ingCajaHaber.setMoneda(ndt.getMoneda());
@@ -2337,6 +2349,8 @@ public class ComprobanteEJB extends FacadeEJB implements ComprobanteRemote {
     }
 
     private void actualizarComprobanteContableMontosAnularTransaccion(ComprobanteContable cc) {
+        System.out.println("actualizarComprobanteContableMontosAnularTransaccion");
+        System.out.println(cc);
         StoredProcedureQuery spq = em.createNamedStoredProcedureQuery("ComprobanteContable.updateComprobanteContableAnularTransaccion");
         spq.setParameter("in_id_libro", cc.getIdLibro());
         spq.executeUpdate();

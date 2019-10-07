@@ -109,7 +109,6 @@ public class FactoresResource extends TemplateResource {
         try {
             /*Verificamos el ID token*/
             if (request.getToken() != null && !request.getToken().isEmpty()) {
-                System.out.println(request.getToken());
                 UserToken t = ejbUsuario.get(new UserToken(request.getToken()));
 
                 if (t != null) {
@@ -165,7 +164,6 @@ public class FactoresResource extends TemplateResource {
         try {
             /*Verificamos el ID token*/
             if (request.getToken() != null && !request.getToken().isEmpty()) {
-                System.out.println(request.getToken());
                 UserToken t = ejbUsuario.get(new UserToken(request.getToken()));
 
                 if (t != null) {
@@ -241,7 +239,6 @@ public class FactoresResource extends TemplateResource {
         try {
             /*Verificamos el ID token*/
             if (request.getToken() != null && !request.getToken().isEmpty()) {
-                System.out.println(request.getToken());
                 UserToken t = ejbUsuario.get(new UserToken(request.getToken()));
 
                 if (t != null) {
@@ -298,7 +295,6 @@ public class FactoresResource extends TemplateResource {
         try {
             /*Verificamos el ID token*/
             if (request.getToken() != null && !request.getToken().isEmpty()) {
-                System.out.println(request.getToken());
                 UserToken t = ejbUsuario.get(new UserToken(request.getToken()));
 
                 if (t != null) {
@@ -357,7 +353,6 @@ public class FactoresResource extends TemplateResource {
         try {
             /*Verificamos el ID token*/
             if (request.getToken() != null && !request.getToken().isEmpty()) {
-                System.out.println(request.getToken());
                 UserToken t = ejbUsuario.get(new UserToken(request.getToken()));
 
                 if (t != null) {
@@ -414,7 +409,6 @@ public class FactoresResource extends TemplateResource {
         try {
             /*Verificamos el ID token*/
             if (request.getToken() != null && !request.getToken().isEmpty()) {
-                System.out.println(request.getToken());
                 UserToken t = ejbUsuario.get(new UserToken(request.getToken()));
 
                 if (t != null) {
@@ -469,7 +463,6 @@ public class FactoresResource extends TemplateResource {
         try {
             /*Verificamos el ID token*/
             if (request.getToken() != null && !request.getToken().isEmpty()) {
-                System.out.println(request.getToken());
                 UserToken t = ejbUsuario.get(new UserToken(request.getToken()));
 
                 if (t != null) {

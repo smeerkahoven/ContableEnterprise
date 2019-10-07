@@ -103,9 +103,6 @@ public class PagoAnticipadoTransaccionJson implements Serializable {
         data.setMontoCancelarBs(json.getMontoCancelarBs());
         data.setMontoCancelarUsd(json.getMontoCancelarUsd());
         
-        System.out.println("montoBs:"+ json.getMontoCancelarBs());
-        System.out.println("montoUsd:"+ json.getMontoCancelarUsd());
-        
         return data;
     }
 

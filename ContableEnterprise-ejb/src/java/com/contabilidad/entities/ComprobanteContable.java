@@ -546,4 +546,12 @@ public class ComprobanteContable extends Entidad {
         return true;
     }
 
+    @Override
+    public String toString() {
+        return "ComprobanteContable{" + "idLibro=" + idLibro + ", gestion=" + gestion + ", idNumeroGestion=" + idNumeroGestion + ", idUsuarioCreador=" + idUsuarioCreador + ", idUsuarioAnulado=" + idUsuarioAnulado + ", fecha=" + fecha + ", concepto=" + concepto + ", estado=" + estado + ", factorCambiario=" + factorCambiario + ", tipo=" + tipo + ", idEmpresa=" + idEmpresa + ", idNotaDebito=" + idNotaDebito + ", idNotaCredito=" + idNotaCredito + ", idIngresoCaja=" + idIngresoCaja + ", idPagoAnticipado=" + idPagoAnticipado + ", idDevolucion=" + idDevolucion + ", totalDebeNac=" + totalDebeNac + ", totalHaberNac=" + totalHaberNac + ", totalDebeExt=" + totalDebeExt + ", totalHaberExt=" + totalHaberExt + ", fechaInsert=" + fechaInsert + ", conErrores=" + conErrores + ", nombre=" + nombre + ", idCliente=" + idCliente + ", transacciones=" + transacciones + '}';
+    }
+
+    
+    
+
 }

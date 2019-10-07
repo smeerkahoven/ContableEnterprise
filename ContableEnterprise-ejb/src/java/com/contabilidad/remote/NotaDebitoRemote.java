@@ -113,6 +113,8 @@ public interface NotaDebitoRemote extends DaoRemoteFacade {
     public Integer actualizarMontosNotaDebito(Integer idNotaDebito) throws CRUDException;
 
     public Integer actualizarMontosNotaDebitoEmitida(Integer idNotaDebito) throws CRUDException;
+    
+    public void anularMontoAdeudadoTransaccion( IngresoTransaccion trx) throws CRUDException ;
 
     /**
      * Asociacion en Base de datos del Boleto b con la Nota de Debito.

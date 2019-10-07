@@ -308,7 +308,6 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
 
         query.setParameter("1", search.getIdEmpresa());
 
-        System.out.println("Query:" + q);
 
         return query.getResultList();
 
@@ -416,7 +415,6 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
         spq.setParameter("in_usuario_creador", bFromDb.getIdUsuarioCreador());
         spq.setParameter("out_id_transacion", idTransaccion);
 
-        System.out.println("factor:" + n.getFactorCambiario());
 
         spq.executeUpdate();
 
@@ -438,7 +436,6 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
         spq.setParameter("in_usuario_creador", b.getIdUsuarioCreador());
         spq.setParameter("out_id_transacion", idTransaccion);
 
-        System.out.println("factor:" + n.getFactorCambiario());
 
         spq.executeUpdate();
 
@@ -549,7 +546,6 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
 
     @Override
     public CargoBoleto updateCargo(CargoBoleto cargo) throws CRUDException {
-        System.out.println("NotaDebitoEJB:cargo:" + cargo);
         CargoBoleto fromDb = em.find(CargoBoleto.class, cargo.getIdCargo());
         Optional op = Optional.ofNullable(fromDb);
 
@@ -739,6 +735,7 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
                     ingreso = ejbComprobante.createComprobante(ComprobanteContable.Tipo.COMPROBANTE_INGRESO,
                             glosa.toString(), caja);
                     ingreso.setIdLibro(insert(ingreso));
+                    ingreso.setIdNotaDebito(nota.getIdNotaDebito());
 
                     // COn esto solucionamos el problema de la nota de debito y los ingresos de Caja
                     debitoIngreso = ejbIngresoCaja.createDebitoIngresoCaja(nota, caja);
@@ -773,28 +770,19 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
                                     ejbBoleto.enviarAsientoDiario(boleto, nota, diario, conf);
 
                                     if (caja != null) {
-                                        //Al boleto no le sirve 1 solo ingreso de caja
-                                        //boleto.setIdIngresoCaja(caja.getIdIngresoCaja());
-                                        //creamos la transaccion para el ingreso de caja
                                         IngresoTransaccion ing = ejbIngresoCaja.createIngresoCajaTransaccion(nt, nota, caja);
                                         ing.setIdTransaccion(insert(ing));
 
-                                        //Al boleto no le sirve un solo ingreso de caja
-                                        //boleto.setIdIngresoCajaTransaccion(ing.getIdTransaccion());
-                                        AsientoContable ingTotalCancelarCaja = ejbComprobante.createTotalCancelarIngresoCajaDebe(ingreso, conf, nt, nota, boleto);
-                                        //ingTotalCancelarCaja.setIdIngresoCajaTransaccion(ing.getIdTransaccion());
+                                        AsientoContable ingTotalCancelarCaja = ejbComprobante.createTotalCancelarIngresoCajaDebe(ingreso, conf, nt, nota, boleto, ing);
                                         ingTotalCancelarCaja.setIdIngresoCajaTransaccion(ing);
-                                        insert(ingTotalCancelarCaja);
 
-                                        AsientoContable ingTotalCancelarHaber = ejbComprobante.createTotalCancelarIngresoClienteHaber(ingreso, conf, nt, nota, boleto);
-                                        //ingTotalCancelarHaber.setIdIngresoCajaTransaccion(ing.getIdTransaccion());
+                                        AsientoContable ingTotalCancelarHaber = ejbComprobante.createTotalCancelarIngresoClienteHaber(ingreso, conf, nt, nota, boleto, ing);
                                         ingTotalCancelarHaber.setIdIngresoCajaTransaccion(ing);
                                         insert(ingTotalCancelarHaber);
                                     }
                                 }
                             } catch (CRUDException ex) {
                                 throw new CRUDException(ex.getMessage() + " Nro Nota Debito : " + nota.getIdNotaDebito());
-                                //agregar logs que el boleto ya existe.
                             }
 
                             if (insertRecibo) {
@@ -848,10 +836,8 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
                 // Actualizamos el comprobante contable de los AD de los Boletos
                 ejbComprobante.actualizarMontosFinalizar(diario);
                 if (caja != null) {
-                    System.out.println("Actualizando Montos Comprobante para %s.".replace("%s", ingreso.getIdLibro().toString()));
                     // Actualizamos el comprobante contable de los CI de los Boletos
                     ejbComprobante.actualizarMontosFinalizar(ingreso);
-                    System.out.println("Actualizando Montos Ingreso a Caja para %s.".replace("%s", caja.getIdIngresoCaja().toString()));
                     // Actualizamos los montos del ingreso de Caja                    
                     ejbIngresoCaja.actualizarMontosFinalizar(caja);
                 }
@@ -1101,13 +1087,9 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
 
         return r;
     }
-
-    @Override
-    public void actualizarMontosAdeudadosTransaccion(IngresoTransaccion trx) throws CRUDException {
-        /*BEGIN  */
-        // Calculo de la reduccion del monto adeudado sea cual sea la moneda del pago
-
-        // del ingreso de caja
+    
+    public void anularMontoAdeudadoTransaccion( IngresoTransaccion trx) throws CRUDException {
+        
         NotaDebitoTransaccion notaFromDb = em.find(NotaDebitoTransaccion.class, trx.getIdNotaTransaccion().getIdNotaDebitoTransaccion());
         Optional op = Optional.ofNullable(notaFromDb);
         if (!op.isPresent()) {
@@ -1138,19 +1120,19 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
         //Si las monedas son iguales
         if (trx.getMoneda().equals(notaFromDb.getMoneda())) {
             if (trx.getMoneda().equals(Moneda.EXTRANJERA)) {
-                montoIngresado = trx.getMontoUsd().doubleValue();
+                montoIngresado = trx.getMontoUsd()!=null ? trx.getMontoUsd().doubleValue():0d ;
             } else {
-                montoIngresado = trx.getMontoBs().doubleValue();
+                montoIngresado = trx.getMontoBs() != null ? trx.getMontoBs().doubleValue() : 0d;
             }
         } else {
             if (trx.getMoneda().equals(Moneda.EXTRANJERA)
                     && notaFromDb.getMoneda().equals(Moneda.NACIONAL)) {
 
-                montoIngresado = trx.getMontoUsd().doubleValue() * factorCambio;
+                montoIngresado = trx.getMontoUsd()!= null? trx.getMontoBs().doubleValue() * factorCambio: 0;
 
             } else if (trx.getMoneda().equals(Moneda.NACIONAL)
                     && notaFromDb.getMoneda().equals(Moneda.EXTRANJERA)) {
-                montoIngresado = trx.getMontoBs().doubleValue() / factorCambio;
+                montoIngresado = trx.getMontoBs()!= null ?trx.getMontoBs().doubleValue() / factorCambio: 0 ;
             }
         }
 
@@ -1158,7 +1140,99 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
         DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(currentLocale);
         otherSymbols.setDecimalSeparator('.');
         otherSymbols.setGroupingSeparator(',');
+        
+        DecimalFormat df = new DecimalFormat("#########.##", otherSymbols);
+        String value = df.format(montoIngresado);
+        montoIngresado = Double.parseDouble(value);
 
+        /*if (montoIngresado > montoAdeudado) {
+            String mensaje = "El monto de Pago de la transaccion de Ingreso:";
+            mensaje += montoIngresado.toString();
+            mensaje += " es mayor que el monto adeudado: ";
+            mensaje += montoAdeudado.toString();
+            throw new CRUDException(mensaje);
+        }*/
+
+        Double montoTotal = montoAdeudado + montoIngresado;
+        if (notaFromDb.getMoneda().equals(Moneda.NACIONAL)) {
+            notaFromDb.setMontoAdeudadoBs(new BigDecimal(montoTotal));
+
+            if (notaFromDb.getMontoAdeudadoBs().doubleValue() == 0d) {
+                notaFromDb.setEstado(Estado.CANCELADO);
+            }
+
+        } else if (notaFromDb.getMoneda().equals(Moneda.EXTRANJERA)) {
+            notaFromDb.setMontoAdeudadoUsd(new BigDecimal(montoTotal));
+
+            if (notaFromDb.getMontoAdeudadoUsd().doubleValue() == 0d) {
+                notaFromDb.setEstado(Estado.CANCELADO);
+            }
+        }        
+        
+        if(notaFromDb.getIdNotaDebito().getEstado().equals(Estado.CANCELADO)){
+            notaFromDb.getIdNotaDebito().setEstado(Estado.EMITIDO);
+        }
+        
+        em.merge(notaFromDb);
+
+        //actualizamos notas debitos
+        actualizarMontosNotaDebitoEmitida(notaFromDb.getIdNotaDebito().getIdNotaDebito());
+    }
+
+    @Override
+    public void actualizarMontosAdeudadosTransaccion(IngresoTransaccion trx) throws CRUDException {
+        
+        NotaDebitoTransaccion notaFromDb = em.find(NotaDebitoTransaccion.class, trx.getIdNotaTransaccion().getIdNotaDebitoTransaccion());
+        Optional op = Optional.ofNullable(notaFromDb);
+        if (!op.isPresent()) {
+            throw new CRUDException("No se ha encontrado la Nota de Debito para la transaccion del ingreso de Caja.");
+        }
+
+        //obtenemos el factor del ingreso de caja
+        Double factorCambio = trx.getIdIngresoCaja().getFactorCambiario().doubleValue();
+
+        op = Optional.ofNullable(factorCambio);
+        if (!op.isPresent()) {
+            throw new CRUDException("No se especifico un Factor Cambiario para el ingreso de caja : " + trx.getIdIngresoCaja().getIdIngresoCaja().toString());
+        }
+
+        Double montoAdeudado = 0d;
+        if (notaFromDb.getMoneda().equals(Moneda.EXTRANJERA)) {
+            montoAdeudado = notaFromDb.getMontoAdeudadoUsd().doubleValue();
+        } else {
+            montoAdeudado = notaFromDb.getMontoAdeudadoBs().doubleValue();
+        }
+
+        op = Optional.ofNullable(montoAdeudado);
+        if (!op.isPresent()) {
+            throw new CRUDException("No existe un monto Adeudado para la moneda especificada en la Transaccion " + notaFromDb.getIdNotaDebitoTransaccion().toString() + " de la nota de debito : " + notaFromDb.getIdNotaDebito().getIdNotaDebito().toString());
+        }
+
+        Double montoIngresado = 0d;
+        //Si las monedas son iguales
+        if (trx.getMoneda().equals(notaFromDb.getMoneda())) {
+            if (trx.getMoneda().equals(Moneda.EXTRANJERA)) {
+                montoIngresado = trx.getMontoUsd()!=null ? trx.getMontoUsd().doubleValue():0d ;
+            } else {
+                montoIngresado = trx.getMontoBs() != null ? trx.getMontoBs().doubleValue() : 0d;
+            }
+        } else {
+            if (trx.getMoneda().equals(Moneda.EXTRANJERA)
+                    && notaFromDb.getMoneda().equals(Moneda.NACIONAL)) {
+
+                montoIngresado = trx.getMontoUsd()!= null? trx.getMontoBs().doubleValue() * factorCambio: 0;
+
+            } else if (trx.getMoneda().equals(Moneda.NACIONAL)
+                    && notaFromDb.getMoneda().equals(Moneda.EXTRANJERA)) {
+                montoIngresado = trx.getMontoBs()!= null ?trx.getMontoBs().doubleValue() / factorCambio: 0 ;
+            }
+        }
+
+        Locale currentLocale = Locale.getDefault();
+        DecimalFormatSymbols otherSymbols = new DecimalFormatSymbols(currentLocale);
+        otherSymbols.setDecimalSeparator('.');
+        otherSymbols.setGroupingSeparator(',');
+        
         DecimalFormat df = new DecimalFormat("#########.##", otherSymbols);
         String value = df.format(montoIngresado);
         montoIngresado = Double.parseDouble(value);

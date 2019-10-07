@@ -179,8 +179,6 @@ public class PagoAnticipadoEJB extends FacadeEJB implements PagoAnticipadoRemote
 
         query.setParameter("1", search.getIdEmpresa());
 
-        System.out.println("Query:" + q);
-
         return query.getResultList();
 
     }
@@ -577,11 +575,8 @@ public class PagoAnticipadoEJB extends FacadeEJB implements PagoAnticipadoRemote
             throw new CRUDException("No se ha especificado un Pago Anticipado Válido.");
         }
 
-        System.out.println("PagoAnticipado:" + paFromDb.getIdPagoAnticipado());
-        System.out.println("MontoAnticipado:" + paFromDb.getMontoAnticipado());
         Double montoTotalAcreditado = paFromDb.getMontoTotalAcreditado() == null ? new Double(0)
                 : paFromDb.getMontoTotalAcreditado().doubleValue();
-        System.out.println("getMontoTotalAcreditado:" + montoTotalAcreditado);
 
         BigDecimal decAcreditado = new BigDecimal(montoTotalAcreditado);
         
@@ -622,9 +617,6 @@ public class PagoAnticipadoEJB extends FacadeEJB implements PagoAnticipadoRemote
         trx.setEstado(Estado.EMITIDO);
         trx.setDescripcion(trNDFromDB.getDescripcion());
         trx.setIdUsuarioCreador(usuario);
-
-        System.out.println("Trx Monto");
-        System.out.println(trx);
 
         ejbNotaDebito.actualizarMontosAdeudadosTransaccion(trx);
 

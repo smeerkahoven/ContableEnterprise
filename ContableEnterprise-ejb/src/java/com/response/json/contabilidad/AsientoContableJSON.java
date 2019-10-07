@@ -51,7 +51,6 @@ public class AsientoContableJSON implements Serializable {
     private String tipoMontoBoleto ;
 
     public static AsientoContable toAsientoContable(AsientoContableJSON a) {
-        System.out.println(a.getIdPlanCuenta().getId());
         Number idPlanCuenta = a.getIdPlanCuenta().getId() instanceof Double ? (Double) a.getIdPlanCuenta().getId() : (BigDecimal) a.getIdPlanCuenta().getId();
         AsientoContable anew = new AsientoContable();
         anew.setEstado(a.getEstado());

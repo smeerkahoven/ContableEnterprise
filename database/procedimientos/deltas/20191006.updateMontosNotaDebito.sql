@@ -1,3 +1,8 @@
+USE `db_travel`;
+DROP procedure IF EXISTS `updateComprobanteContableUpdateAsiento`;
+
+DELIMITER $$
+USE `db_travel`$$
 CREATE DEFINER=`web_contabilidad`@`localhost` PROCEDURE `updateComprobanteContableUpdateAsiento`(IN in_id_libro INT)
 BEGIN
 DECLARE v_total_debe_nac DECIMAL(12,2);
@@ -53,4 +58,8 @@ LOOP_ASIENTOS :LOOP
 END LOOP LOOP_ASIENTOS;
 CLOSE cur_asientos;
 	
-END
+END$$
+
+DELIMITER ;
+
+

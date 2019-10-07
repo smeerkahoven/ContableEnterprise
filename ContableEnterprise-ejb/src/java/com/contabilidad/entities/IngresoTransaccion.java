@@ -170,7 +170,12 @@ public class IngresoTransaccion extends Entidad {
 
     @Override
     public String toString() {
-        return "com.contabilidad.entities.IngresoTransaccion[ idTransaccion=" + idTransaccion + " ]";
+        return "com.contabilidad.entities.IngresoTransaccion[ idTransaccion=" + idTransaccion 
+                + ", montoBs:" + montoBs
+                + ", montoUsd:" + montoUsd
+                + ", idNotaDebitoTransaccion:" + idNotaTransaccion
+                + ", moneda:" + moneda 
+                + " ]";
     }
 
     @Override

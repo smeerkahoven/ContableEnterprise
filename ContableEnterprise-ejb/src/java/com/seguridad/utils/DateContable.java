@@ -150,8 +150,6 @@ public class DateContable {
         Date nota = new Date();
         int gestion = DateContable.getPartitionDateInt(DateContable.getDateFormat(nota, DateContable.LATIN_AMERICA_FORMAT));
 
-        System.out.println(gestion);
-        System.out.println(fromFormatToOtherFormat("180427", "yyMMdd", "dd/MM/yyyy"));
 
     }
 }

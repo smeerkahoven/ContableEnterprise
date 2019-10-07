@@ -1907,6 +1907,7 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                             $scope.boleto.montoComisionBs = Number(parseFloat(((porcentaje * $scope.boleto.montoComisionBs) / 100) + $scope.boleto.montoComisionBs).toFixed(2));
                         }
 
+                        console.log("redondea:"+$scope.aerolinea.roundComisionBob);
                         if ($scope.aerolinea.roundComisionBob) {
                             $scope.boleto.montoComisionBs = Math.round($scope.boleto.montoComisionBs);
                         }

@@ -327,7 +327,6 @@ public class LoginManagedBean implements Serializable {
                                 modulo.setAcceder(submenu.getAcceder());
                             }
 
-                            System.out.println("1 Modulo : " + modulo.getNombre() +" Acceder : " + modulo.getAcceder()+  " Submenu : " + submenu.getNombre() + " Acceder :" + submenu.getAcceder());
                         }
                     }
 
@@ -340,7 +339,6 @@ public class LoginManagedBean implements Serializable {
                         menu.getSubmenus().add(submenu);
 
                         modulos.add(menu);
-                        System.out.println("2 Modulo : " + menu.getNombre() +" Acceder : " + menu.getAcceder()+  " Submenu : " + submenu.getNombre() + " Acceder :" + submenu.getAcceder());
 
                     }
                 }
@@ -357,7 +355,6 @@ public class LoginManagedBean implements Serializable {
 
     public String getIp() {
         final HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
-        //System.out.println("IP:" + request.getRemoteAddr());
         return request.getRemoteAddr();
     }
 
@@ -399,7 +396,6 @@ public class LoginManagedBean implements Serializable {
             ejbLogger.add(Accion.LOGOUT, usuario, Formulario.SISTEMA, ul.getIp());
         }
 
-        System.out.println("Sesion del usuario :" + (User) SessionUtils.getSession(SessionUtils.SESION_USUARIO));
         return Navegacion.LOGIN;
     }
 

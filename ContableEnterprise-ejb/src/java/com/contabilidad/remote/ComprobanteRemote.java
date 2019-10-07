@@ -223,21 +223,24 @@ public interface ComprobanteRemote extends DaoRemoteFacade {
      *
      * Crea la transaccion para el comprobante de Ingreso a Caja al Debe
      *
-     * @param a
      * @param c
      * @param conf
-     * @param aerolinea
+     * @param ndt
+     * @param nota
      * @param boleto
+     * @param ingTransaccion
      * @return
      * @throws CRUDException
      */
     /*public AsientoContable createTotalCancelarIngresoClienteHaber(ComprobanteContable c,
             ContabilidadBoletaje conf, Aerolinea aerolinea, Boleto boleto) throws CRUDException;*/
     public AsientoContable createTotalCancelarIngresoCajaDebe(ComprobanteContable c,
-            ContabilidadBoletaje conf, NotaDebitoTransaccion ndt, NotaDebito nota, Boleto boleto) throws CRUDException;
+            ContabilidadBoletaje conf, NotaDebitoTransaccion ndt, NotaDebito nota, Boleto boleto, 
+            IngresoTransaccion ingTransaccion) throws CRUDException;
 
     public AsientoContable createTotalCancelarIngresoClienteHaber(ComprobanteContable c,
-            ContabilidadBoletaje conf, NotaDebitoTransaccion ndt, NotaDebito nota, Boleto boleto) throws CRUDException;
+            ContabilidadBoletaje conf, NotaDebitoTransaccion ndt, NotaDebito nota, Boleto boleto,
+            IngresoTransaccion ingTransaccion) throws CRUDException;
 
     public AsientoContable createTotalCancelarIngresoCajaDebe(ComprobanteContable c,
             ContabilidadBoletaje conf, NotaDebitoTransaccion ndt, NotaDebito nota, CargoBoleto cargoBoleto) throws CRUDException;

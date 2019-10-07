@@ -70,6 +70,7 @@ public interface IngresoCajaRemote extends DaoRemoteFacade {
      * Anula la Transaccion de acuerdo a la Transaccion de la Nota de Debito
      *
      * @param tr
+     * @param usuario
      * @param update
      * @throws CRUDException
      */
@@ -106,6 +107,7 @@ public interface IngresoCajaRemote extends DaoRemoteFacade {
     /**
      * Anula la transaccion. Actualiza los montos del Ingreso de Caja
      * @param idTransaccion
+     * @param usuario
      * @throws CRUDException 
      */
     public void anularTransaccion (Integer idTransaccion , String usuario) throws CRUDException ;
