@@ -239,8 +239,8 @@ angular.module('jsIngresoCaja.controllers', []).controller('frmIngresoCaja',
                                 $scope.showLoading = false;
                                 if (response.data.code === 201) {
                                     showSuccess(SUCCESS_TITLE, response.data.content);
-                                    var notadebito = response.data.entidad;
-                                    $scope.edit(notadebito);
+                                    var ingresoCaja = response.data.entidad;
+                                    $scope.edit(ingresoCaja);
                                 } else {
                                     showAlert(ERROR_RESPUESTA_TITLE, response.data.content);
                                 }

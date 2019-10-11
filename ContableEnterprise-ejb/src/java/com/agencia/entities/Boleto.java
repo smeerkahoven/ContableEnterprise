@@ -440,15 +440,15 @@ public class Boleto extends Entidad {
     @Column(name = "impuesto_5")
     private BigDecimal impuesto5;
 
-    @Column(name = "impuesto_1_nombre")
+    @Column(name = "impuesto_1_nombre", length = 32)
     private String impuesto1nombre;
-    @Column(name = "impuesto_2_nombre")
+    @Column(name = "impuesto_2_nombre", length = 32)
     private String impuesto2nombre;
-    @Column(name = "impuesto_3_nombre")
+    @Column(name = "impuesto_3_nombre", length = 32)
     private String impuesto3nombre;
-    @Column(name = "impuesto_4_nombre")
+    @Column(name = "impuesto_4_nombre", length = 32)
     private String impuesto4nombre;
-    @Column(name = "impuesto_5_nombre")
+    @Column(name = "impuesto_5_nombre", length = 32)
     private String impuesto5nombre;
 
     @Column(name = "total_boleto")

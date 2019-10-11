@@ -108,9 +108,10 @@ public interface IngresoCajaRemote extends DaoRemoteFacade {
      * Anula la transaccion. Actualiza los montos del Ingreso de Caja
      * @param idTransaccion
      * @param usuario
+     * @return 
      * @throws CRUDException 
      */
-    public void anularTransaccion (Integer idTransaccion , String usuario) throws CRUDException ;
+    public IngresoCaja anularTransaccion (Integer idTransaccion , String usuario) throws CRUDException ;
     
     public void anularTransaccion(IngresoTransaccion idTransaccion, String usuario) throws CRUDException ;
     

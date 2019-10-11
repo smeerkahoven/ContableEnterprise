@@ -379,11 +379,14 @@ public class IngresoCajaResource extends TemplateResource {
             if (response.getCode() == ResponseCode.RESTFUL_SUCCESS.getCode()) {
                 IngresoTransaccionJson json = BeanUtils.convertoToIngresoCajaTransaccionJson(request);
 
-                ejbIngresoCaja.anularTransaccion(json.getIdTransaccion(), user.getUserName());
+                IngresoCaja returnValue = ejbIngresoCaja.anularTransaccion(json.getIdTransaccion(), user.getUserName());
 
                 String mensaje = Log.INGRESO_CAJA_ANULAR_TRANSACCION.replace("<id>", json.getIdTransaccion().toString());
                 ejbLogger.add(Accion.ANULAR, user.getUserName(), com.view.menu.Formulario.INGRESO_CAJA, user.getIp(), mensaje);
 
+                IngresoCajaJSON jsonToReturn = IngresoCajaJSON.toJSON(returnValue);
+                
+                response.setEntidad(jsonToReturn);
                 response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
                 response.setContent(mensaje);
 

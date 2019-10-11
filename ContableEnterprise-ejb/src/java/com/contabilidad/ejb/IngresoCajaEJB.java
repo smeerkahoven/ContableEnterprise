@@ -593,7 +593,7 @@ public class IngresoCajaEJB extends FacadeEJB implements IngresoCajaRemote {
     }
 
     @Override
-    public void anularTransaccion(Integer idTransaccion, String usuario) throws CRUDException {
+    public IngresoCaja anularTransaccion(Integer idTransaccion, String usuario) throws CRUDException {
         Optional op = Optional.ofNullable(idTransaccion);
         if (!op.isPresent()) {
             throw new CRUDException("No existe la Transaccion %s de Ingreso de Caja.".replace("%s", idTransaccion.toString()));
@@ -606,6 +606,10 @@ public class IngresoCajaEJB extends FacadeEJB implements IngresoCajaRemote {
         }
         
         anularTransaccion(fromDb, usuario);
+        
+        IngresoCaja ingFromDb = em.find( IngresoCaja.class, fromDb.getIdIngresoCaja().getId());
+        
+        return ingFromDb ;
 
     }
 

@@ -1208,6 +1208,9 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
             throw new CRUDException("No existe un monto Adeudado para la moneda especificada en la Transaccion " + notaFromDb.getIdNotaDebitoTransaccion().toString() + " de la nota de debito : " + notaFromDb.getIdNotaDebito().getIdNotaDebito().toString());
         }
 
+        System.out.println("Mareatours");
+        System.out.println(trx);
+        
         Double montoIngresado = 0d;
         //Si las monedas son iguales
         if (trx.getMoneda().equals(notaFromDb.getMoneda())) {
@@ -1220,7 +1223,7 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
             if (trx.getMoneda().equals(Moneda.EXTRANJERA)
                     && notaFromDb.getMoneda().equals(Moneda.NACIONAL)) {
 
-                montoIngresado = trx.getMontoUsd()!= null? trx.getMontoBs().doubleValue() * factorCambio: 0;
+                montoIngresado = trx.getMontoUsd()!= null? trx.getMontoUsd().doubleValue() * factorCambio: 0;
 
             } else if (trx.getMoneda().equals(Moneda.NACIONAL)
                     && notaFromDb.getMoneda().equals(Moneda.EXTRANJERA)) {

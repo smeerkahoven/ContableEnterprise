@@ -2312,6 +2312,8 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                 }
 
                 $scope.transformarImporteNetoUsd = function () {
+                    console.log($scope.boleto.importeNetoBs);
+                    console.log($scope.boleto.factorCambiario);
                     $scope.boleto.importeNetoUsd = $scope.boleto.importeNetoBs === null ? undefined : Number(parseFloat($scope.boleto.importeNetoBs / $scope.boleto.factorCambiario).toFixed(2));
                     /*if ($scope.aerolinea.roundComisionUsd) {
                      $scope.boleto.importeNetoUsd = Math.trunc($scope.boleto.importeNetoUsd);
