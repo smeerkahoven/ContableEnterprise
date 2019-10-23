@@ -218,6 +218,7 @@ public interface NotaDebitoRemote extends DaoRemoteFacade {
      * y su estado es EN MORA, EMITIDA
      *
      * @param idCliente
+     * @param idEmpresa
      * @return
      * @throws CRUDException
      */

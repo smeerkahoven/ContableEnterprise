@@ -5,7 +5,6 @@
  */
 package com.scheduler.ufv;
 
-import com.configuracion.entities.CambioDolar;
 import com.configuracion.entities.CambioUfv;
 import com.configuracion.entities.Parametros;
 import com.configuracion.remote.CambioRemote;
@@ -46,7 +45,7 @@ public class UFVScheduler implements UFVSchedulerLocal {
     @EJB
     private CambioRemote ejbCambio;
 
-    @Schedule(dayOfWeek = "*", month = "*", hour = "*", dayOfMonth = "*", year = "*", minute = "*/5")
+    //@Schedule(dayOfWeek = "*", month = "*", hour = "*", dayOfMonth = "*", year = "*", minute = "*/5")
     @Override
     public void checkUFVFactor() {
                 Date today = new Date();

@@ -348,6 +348,8 @@ angular.module('jsComprobantesContador.controllers', []).controller('frmComproba
                 $scope.colocarPendiente = function () {
                     if ($scope.formData.estado === $scope.INICIAL) {
                         $scope.save($scope.PENDIENTE);
+                        $scope.showForm = false;
+                        $scope.showTable = true;
                     } else if ($scope.formData.estado === $scope.ANULADO) {
                         $scope.loading = true;
                         return $http({

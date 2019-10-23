@@ -356,6 +356,8 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                 $scope.colocarPendiente = function () {
                     if ($scope.formData.estado === $scope.INICIAL) {
                         $scope.save($scope.PENDIENTE);
+                        $scope.showForm = false;
+                        $scope.showTable = true;
                     } else if ($scope.formData.estado === $scope.ANULADO) {
                         $scope.loading = true;
                         return $http({
@@ -843,7 +845,7 @@ angular.module('jsComprobantes.controllers', []).controller('frmComprobantes',
                             $http({
                                 method: 'POST',
                                 url: `${url.value}add-transaction`,
-                                data: {token: token.value, content: angular.toJson(item)},
+                                data: {token: token.value, content: angular.toJson($scope.formData)},
                                 headers: {'Content-Type': 'application/json'}
                             }).then(function (response) {
                                 item = response.data.entidad;

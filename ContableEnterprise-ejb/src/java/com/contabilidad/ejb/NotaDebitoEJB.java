@@ -35,10 +35,12 @@ import com.seguridad.control.FacadeEJB;
 import com.seguridad.control.entities.Entidad;
 import com.seguridad.control.exception.CRUDException;
 import com.seguridad.queries.Queries;
+import com.seguridad.utils.Contabilidad;
 import com.seguridad.utils.DateContable;
 import com.seguridad.utils.Estado;
 import com.seguridad.utils.Operacion;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
@@ -775,6 +777,7 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
 
                                         AsientoContable ingTotalCancelarCaja = ejbComprobante.createTotalCancelarIngresoCajaDebe(ingreso, conf, nt, nota, boleto, ing);
                                         ingTotalCancelarCaja.setIdIngresoCajaTransaccion(ing);
+                                        insert(ingTotalCancelarCaja);
 
                                         AsientoContable ingTotalCancelarHaber = ejbComprobante.createTotalCancelarIngresoClienteHaber(ingreso, conf, nt, nota, boleto, ing);
                                         ingTotalCancelarHaber.setIdIngresoCajaTransaccion(ing);
@@ -1211,23 +1214,27 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
         System.out.println("Mareatours");
         System.out.println(trx);
         
-        Double montoIngresado = 0d;
+        BigDecimal montoIngresado = new BigDecimal(BigInteger.ZERO);
         //Si las monedas son iguales
         if (trx.getMoneda().equals(notaFromDb.getMoneda())) {
             if (trx.getMoneda().equals(Moneda.EXTRANJERA)) {
-                montoIngresado = trx.getMontoUsd()!=null ? trx.getMontoUsd().doubleValue():0d ;
+                montoIngresado = trx.getMontoUsd()!=null ? trx.getMontoUsd(): montoIngresado ;
             } else {
-                montoIngresado = trx.getMontoBs() != null ? trx.getMontoBs().doubleValue() : 0d;
+                montoIngresado = trx.getMontoBs() != null ? trx.getMontoBs():  montoIngresado;
             }
         } else {
             if (trx.getMoneda().equals(Moneda.EXTRANJERA)
                     && notaFromDb.getMoneda().equals(Moneda.NACIONAL)) {
 
-                montoIngresado = trx.getMontoUsd()!= null? trx.getMontoUsd().doubleValue() * factorCambio: 0;
+                montoIngresado = trx.getMontoUsd()!= null? 
+                        BigDecimal.valueOf(trx.getMontoUsd().doubleValue() * factorCambio).setScale(Contabilidad.VALOR_DECIMAL_2, BigDecimal.ROUND_DOWN) 
+                        : montoIngresado;
 
             } else if (trx.getMoneda().equals(Moneda.NACIONAL)
                     && notaFromDb.getMoneda().equals(Moneda.EXTRANJERA)) {
-                montoIngresado = trx.getMontoBs()!= null ?trx.getMontoBs().doubleValue() / factorCambio: 0 ;
+                montoIngresado = trx.getMontoBs()!= null ?
+                        BigDecimal.valueOf( trx.getMontoBs().doubleValue() / factorCambio).setScale(Contabilidad.VALOR_DECIMAL_2, BigDecimal.ROUND_DOWN)
+                        : montoIngresado;
             }
         }
 
@@ -1237,19 +1244,26 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
         otherSymbols.setGroupingSeparator(',');
         
         DecimalFormat df = new DecimalFormat("#########.##", otherSymbols);
-        String value = df.format(montoIngresado);
-        montoIngresado = Double.parseDouble(value);
+        String value = df.format(montoIngresado.doubleValue());
+        montoIngresado = new BigDecimal( Double.parseDouble(value));
 
-        if (montoIngresado > montoAdeudado) {
+        
+        if (montoIngresado.doubleValue() > montoAdeudado) {
             String mensaje = "El monto de Pago de la transaccion de Ingreso:";
             mensaje += montoIngresado.toString();
             mensaje += " es mayor que el monto adeudado: ";
             mensaje += montoAdeudado.toString();
             throw new CRUDException(mensaje);
         }
+        
+        
+        System.out.println("monto Ingresado:" + montoIngresado.doubleValue());
+        System.out.println("monto Adeudado:" + montoAdeudado);
 
-        Double montoTotal = montoAdeudado - montoIngresado;
+        Double montoTotal = montoAdeudado - montoIngresado.doubleValue();
         if (notaFromDb.getMoneda().equals(Moneda.NACIONAL)) {
+            
+            
             notaFromDb.setMontoAdeudadoBs(new BigDecimal(montoTotal));
 
             if (notaFromDb.getMontoAdeudadoBs().doubleValue() == 0d) {
