@@ -175,6 +175,7 @@ public class IngresoTransaccion extends Entidad {
                 + ", montoUsd:" + montoUsd
                 + ", idNotaDebitoTransaccion:" + idNotaTransaccion
                 + ", moneda:" + moneda 
+                + ", estado:"+ estado
                 + " ]";
     }
 

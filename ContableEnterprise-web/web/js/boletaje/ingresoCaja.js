@@ -232,7 +232,7 @@ angular.module('jsIngresoCaja.controllers', []).controller('frmIngresoCaja',
                     return $http({
                         method: 'POST',
                         headers: {'Content-Type': 'application/json'},
-                        url: `${url.value}anular/transaccion`,
+                        url: `${url.value}anular/transaccionanular/transaccion`,
                         data: {token: token.value, content: angular.toJson($scope.itemAnular.item)}
                     }).then(
                             function (response) {

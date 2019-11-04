@@ -1176,6 +1176,10 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
             notaFromDb.getIdNotaDebito().setEstado(Estado.EMITIDO);
         }
         
+        if (notaFromDb.getEstado().equals(Estado.CANCELADO)){
+            notaFromDb.setEstado(Estado.EMITIDO);
+        }
+        
         em.merge(notaFromDb);
 
         //actualizamos notas debitos

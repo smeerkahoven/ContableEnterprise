@@ -58,7 +58,7 @@ public class PagoAnticipadoTransaccion extends Entidad {
     @Column(name = "id_pago_anticipado_transaccion")
     private Integer idPagoAnticipadoTransaccion;
 //    @Size(max = 128)
-    @Column(name = "descripcion", length = 128)
+    @Column(name = "descripcion", length = 512)
     private String descripcion;
     // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Column(name = "monto")
