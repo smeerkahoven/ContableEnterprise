@@ -1225,8 +1225,11 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                 }
 
                 $scope.anularTransaccion = function () {
+                    console.log($scope.formData);
+                    console.log($scope.itemAnular);
                     $scope.showLoading = true;
                     showBackground();
+                    $scope.itemAnular.item.idNotaDebito = $scope.formData.idNotaDebito ;
                     return $http({
                         method: 'POST',
                         headers: {'Content-Type': 'application/json'},
