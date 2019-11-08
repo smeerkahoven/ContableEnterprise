@@ -38,7 +38,7 @@ DECLARE cur_nota_debito CURSOR FOR
         , date_format(nd.credito_vencimiento,'%d/%m/%Y') 	   vencimiento
 		, nd.forma_pago 			forma_pago
         , ndtr.monto_bs				monto_debe_nac
-        , 0							monto_haber_nac
+        , 0							monto_haber_nac 
         , coalesce(ndtr.monto_adeudado_bs,0) saldo_nac
         , ndtr.monto_usd 		monto_debe_ext
         , 0							monto_haber_ext
@@ -143,11 +143,11 @@ open cur_nota_debito ;
 			);
             
             
-			 CALL  generarKardexClienteNdIc(v_id_transaccion, in_id_selected);
+			  CALL  generarKardexClienteNdIc(v_id_transaccion, in_id_selected);
             
-             CALL  generarKardexClienteNdNc(v_id_transaccion, in_id_selected);
+              CALL  generarKardexClienteNdNc(v_id_transaccion, in_id_selected);
             
-             CALL  generarKardexClienteNdPa(v_id_transaccion, in_id_selected);
+              CALL  generarKardexClienteNdPa(v_id_transaccion, in_id_selected);
             
 	END LOOP loop_cur_nota_debito ;
 

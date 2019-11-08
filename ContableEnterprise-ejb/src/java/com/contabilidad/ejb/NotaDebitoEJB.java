@@ -1019,7 +1019,7 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
 
                 }
 
-                //updateMontosNotaDebito(fromDb.getIdNotaDebito().getIdNotaDebito());
+                updateMontosNotaDebito(fromDb.getIdNotaDebito().getIdNotaDebito());
             } else {
                 throw new CRUDException("La transaccion %s se encuentra ANULADA.".replace("%s", fromDb.getIdNotaDebitoTransaccion().toString()));
             }
@@ -1131,7 +1131,7 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
             if (trx.getMoneda().equals(Moneda.EXTRANJERA)
                     && notaFromDb.getMoneda().equals(Moneda.NACIONAL)) {
 
-                montoIngresado = trx.getMontoUsd()!= null? trx.getMontoBs().doubleValue() * factorCambio: 0;
+                montoIngresado = trx.getMontoUsd()!= null? trx.getMontoUsd().doubleValue() * factorCambio: 0;
 
             } else if (trx.getMoneda().equals(Moneda.NACIONAL)
                     && notaFromDb.getMoneda().equals(Moneda.EXTRANJERA)) {
