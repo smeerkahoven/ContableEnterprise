@@ -68,10 +68,23 @@ public class IngresoTransaccion extends Entidad {
 
     @Column(name = "estado")
     private String estado;
+    
+    @Column(name = "factor_cambiario")
+    private BigDecimal factorCambiario ;
 
     public IngresoTransaccion() {
     }
 
+    public BigDecimal getFactorCambiario() {
+        return factorCambiario;
+    }
+
+    public void setFactorCambiario(BigDecimal factorCambiario) {
+        this.factorCambiario = factorCambiario;
+    }
+
+    
+    
     public IngresoTransaccion(Integer idTransaccion) {
         this.idTransaccion = idTransaccion;
     }
@@ -176,6 +189,7 @@ public class IngresoTransaccion extends Entidad {
                 + ", idNotaDebitoTransaccion:" + idNotaTransaccion
                 + ", moneda:" + moneda 
                 + ", estado:"+ estado
+                + ", factorCambiario:" + factorCambiario 
                 + " ]";
     }
 

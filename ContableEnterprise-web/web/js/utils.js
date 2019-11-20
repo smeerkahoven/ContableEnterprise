@@ -137,6 +137,9 @@ function IsAlphaNumeric(e) {
     return ret;
 }
 
+function precise(value, precision){
+    return Number.parseFloat(value).toPrecision(precision);
+}
 
 var tableToExcel = (function () {
     var uri = 'data:application/vnd.ms-excel;base64,'

@@ -44,6 +44,9 @@ function IngresoTransaccion() {
     this.estado = null;
     this.montoCancelarUsd = null;
     this.montoCancelarBs = null;
+    this.factorCambiario = null;
+    this.montoMaxCancelarBs = null;
+    this.montoMaxCancelarUsd = null;
 }
 
 IngresoCaja.prototype = Object.create(IngresoCaja.prototype);
@@ -106,7 +109,10 @@ angular.module('jsIngresoCaja.controllers', []).controller('frmIngresoCaja',
                 $scope.itemsByPage = 15;
                 $scope.search = {fechaInicio: firstDay, fechaFin: today};
                 $scope.showComprobante = false;
+                $scope.showErrorFactorCambiario = false;
 
+                $scope.montoConvertido = null;
+                $scope.noValidarMontos = false;
 
                 $scope.find = function () {
 
@@ -256,20 +262,65 @@ angular.module('jsIngresoCaja.controllers', []).controller('frmIngresoCaja',
                     $scope.formData.factorMin = parseFloat($scope.formData.factorCambiario) - parseFloat(factorMaxMin.value);
                 }
 
-                $scope.checkMontoIngresadoBs = function () {
+                $scope.setMoneda = function () {
+                    $scope.trx.factorCambiario = $scope.formData.factorCambiario;
+                }
+                
+                $scope.checkNoValidarMontos = function(value) {
+                    $scope.noValidarMontos = value ;
+                    $scope.showErrorMontoIngresadoBs = false ;
+                    $scope.showErrorMontoIngresadoUsd = false ;
+                    
+                    $scope.applyFactorCambiario() ;
+                }
 
-                    if ($scope.trx.montoCancelarBs > $scope.trx.montoAdeudadoBs) {
-                        $scope.showErrorMontoIngresadoBs = true;
+                $scope.applyFactorCambiario = function () {
+                    if ($scope.trx.moneda === 'B') {
+                        if (!$scope.noValidarMontos) {
+                            if ($scope.trx.factorCambiario > 0) {
+                                $scope.trx.montoMaxCancelarBs = precise($scope.trx.montoAdeudadoUsd * $scope.trx.factorCambiario, 2);
+                                $scope.showErrorFactorCambiario = false;
+                            } else {
+                                $scope.showErrorFactorCambiario = true;
+                            }
+                        }
+
+                        $scope.checkMontoIngresadoBs();
                     } else {
-                        $scope.showErrorMontoIngresadoBs = false;
+
+                        if (!$scope.noValidarMontos) {
+                            if ($scope.trx.factorCambiario > 0) {
+                                $scope.trx.montoMaxCancelarUsd = precise($scope.trx.montoAdeudadoBs / $scope.trx.factorCambiario, 2);
+                                $scope.showErrorFactorCambiario = false;
+                            } else {
+                                $scope.showErrorFactorCambiario = true;
+                            }
+                        }
+
+                        $scope.checkMontoIngresadoUsd();
+                    }
+                }
+
+                $scope.checkMontoIngresadoBs = function () {
+                    $scope.montoConvertido = $scope.trx.montoCancelarBs / $scope.trx.factorCambiario;
+                    if ($scope.noValidarMontos) {
+                        if ($scope.trx.montoCancelarBs > $scope.trx.montoMaxCancelarBs) {
+                            $scope.showErrorMontoIngresadoBs = true;
+                        } else {
+                            $scope.showErrorMontoIngresadoBs = false;
+                        }
                     }
                 }
 
                 $scope.checkMontoIngresadoUsd = function () {
-                    if ($scope.trx.montoCancelarUsd > $scope.trx.montoAdeudadoUsd) {
-                        $scope.showErrorMontoIngresadoUsd = true;
-                    } else {
-                        $scope.showErrorMontoIngresadoUsd = false;
+                    console.log($scope.noValidarMontos);
+                    $scope.montoConvertido = $scope.trx.montoCancelarUsd * $scope.trx.factorCambiario;
+                    if (!$scope.noValidarMontos) {
+                        if ($scope.trx.montoCancelarUsd > $scope.trx.montoMaxCancelarUsd) {
+                            $scope.showErrorMontoIngresadoUsd = true;
+                        } else {
+                            $scope.showErrorMontoIngresadoUsd = false;
+                        }
                     }
                 }
 
@@ -365,7 +416,6 @@ angular.module('jsIngresoCaja.controllers', []).controller('frmIngresoCaja',
                     }
                 }
 
-
                 $scope.hasFormaDePagos = function () {
                     switch ($scope.formData.formaPago) {
                         case $scope.EFECTIVO:
@@ -407,7 +457,6 @@ angular.module('jsIngresoCaja.controllers', []).controller('frmIngresoCaja',
                                 $scope.errorFormaPagoMessage = 'Debe seleccionar una cuenta de deposito';
                                 return false;
                             }
-
 
                             break;
 
@@ -636,8 +685,15 @@ angular.module('jsIngresoCaja.controllers', []).controller('frmIngresoCaja',
                         return;
                     }
 
+                    if ($scope.showErrorFactorCambiario) {
+                        showAlert("Ingrese un Factor Cambiario");
+                        return;
+                    }
+
                     $scope.trx.idIngresoCaja = $scope.formData.idIngresoCaja;
                     $scope.trx.estado = $scope.PENDIENTE;
+                    $scope.showErrorFactorCambiario = false;
+                    $scope.noValidarMontos = false;
 
                     return $http({
                         url: `${url.value}save/transaccion`,
@@ -714,17 +770,22 @@ angular.module('jsIngresoCaja.controllers', []).controller('frmIngresoCaja',
                 $scope.seleccionarTransaccion = function () {
                     $scope.showRestfulError = false;
                     $scope.showRestfulSuccess = false;
-
+                    $scope.montoConvertido = null;
+                    $scope.trx.factorCambiario = $scope.formData.factorCambiario;
 
                     $scope.trx.monedaTransaccion = $scope.trx.moneda;
                     if ($scope.trx.moneda === $scope.MONEDA_EXTRANJERA) {
                         $scope.trx.montoCancelarUsd = $scope.trx.montoAdeudadoUsd;
+
                     } else {
                         $scope.trx.montoCancelarBs = $scope.trx.montoAdeudadoBs;
                     }
 
-                    $scope.trx.montoQueDebeIngresarUsd = $scope.trx.montoAdeudadoUsd;
-                    $scope.trx.montoQueDebeIngresarBs = $scope.trx.montoAdeudadoBs;
+                    $scope.trx.montoMaxCancelarBs = $scope.trx.montoAdeudadoBs;
+                    $scope.trx.montoMaxCancelarUsd = $scope.trx.montoAdeudadoUsd;
+
+                    //$scope.trx.montoQueDebeIngresarUsd = $scope.trx.montoAdeudadoUsd;
+                    //$scope.trx.montoQueDebeIngresarBs = $scope.trx.montoAdeudadoBs;
 
                     hideModalWindow('#frmNotasDebitos');
                     $scope.showFrmNuevaTrx = true;

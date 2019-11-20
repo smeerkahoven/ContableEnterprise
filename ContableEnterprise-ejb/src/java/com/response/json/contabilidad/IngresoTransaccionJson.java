@@ -54,6 +54,7 @@ public class IngresoTransaccionJson implements Serializable {
         data.setIdNotaTransaccion(new NotaDebitoTransaccion(json.getIdNotaDebitoTransaccion()));
         data.setIdTransaccion(json.getIdTransaccion());
         data.setMoneda(json.getMoneda());
+        data.setFactorCambiario(json.getFactorCambiario());
 
         if (json.getMoneda().equals(Moneda.NACIONAL)) {
             data.setMontoBs(json.getMontoCancelarBs());
@@ -82,6 +83,7 @@ public class IngresoTransaccionJson implements Serializable {
         
         json.setMontoAdeudadoBs(data.getIdNotaTransaccion().getMontoAdeudadoBs());
         json.setMontoAdeudadoUsd(data.getIdNotaTransaccion().getMontoAdeudadoUsd());
+        json.setFactorCambiario(data.getFactorCambiario());
 
         if (json.getMoneda().equals(Moneda.NACIONAL)) {
             json.setMonto(data.getMontoBs());

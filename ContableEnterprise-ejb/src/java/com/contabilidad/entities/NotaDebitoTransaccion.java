@@ -226,7 +226,8 @@ public class NotaDebitoTransaccion extends Entidad {
                 + ",  idNotaDebito:" + idNotaDebito.getIdNotaDebito()
                 + ", Monto Adeudado:" + montoAdeudadoBs
                 + ", Monto Adeudado:" + montoAdeudadoUsd
-                + ", "
+                + ", Monto Bs: " + montoBs
+                + ", montoUsd: "+ montoUsd
                 + " ]";
     }
 

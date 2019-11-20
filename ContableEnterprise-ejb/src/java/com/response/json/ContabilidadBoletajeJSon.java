@@ -7,7 +7,6 @@ package com.response.json;
 
 import com.configuracion.entities.ContabilidadBoletaje;
 import com.seguridad.utils.ComboSelect;
-import com.seguridad.utils.Contabilidad;
 
 /**
  *
@@ -58,6 +57,8 @@ public class ContabilidadBoletajeJSon {
     private ComboSelect devolucionDepositoAnticipadoDebeBs;
     private ComboSelect devolucionDepositoAnticipadoHaberUsd;
     private ComboSelect devolucionDepositoAnticipadoDebeUsd;
+    
+    private ComboSelect diferenciaCambio ;
 
     public static ContabilidadBoletajeJSon toJSon(ContabilidadBoletaje data) {
         ContabilidadBoletajeJSon json = new ContabilidadBoletajeJSon();
@@ -110,8 +111,18 @@ public class ContabilidadBoletajeJSon {
         json.setTarjetaCreditoBspDebeUsd(new ComboSelect(data.getTarjetaCreditoBspDebeUsd()));
         json.setTarjetaCreditoBspHaberBs(new ComboSelect(data.getTarjetaCreditoBspHaberBs()));
         json.setTarjetaCreditoBspHaberUsd(new ComboSelect(data.getTarjetaCreditoBspHaberUsd()));
+        
+        json.setDiferenciaCambio(new ComboSelect(data.getDiferenciaCambio()));
 
         return json;
+    }
+
+    public ComboSelect getDiferenciaCambio() {
+        return diferenciaCambio;
+    }
+
+    public void setDiferenciaCambio(ComboSelect diferenciaCambio) {
+        this.diferenciaCambio = diferenciaCambio;
     }
 
     public static ContabilidadBoletaje toContabilidadBoletaje(ContabilidadBoletajeJSon json) {
@@ -163,6 +174,8 @@ public class ContabilidadBoletajeJSon {
         data.setTarjetaCreditoBspDebeUsd(((Double) json.getTarjetaCreditoBspDebeUsd().getId()).intValue());
         data.setTarjetaCreditoBspHaberBs(((Double) json.getTarjetaCreditoBspHaberBs().getId()).intValue());
         data.setTarjetaCreditoBspHaberUsd(((Double) json.getTarjetaCreditoBspHaberUsd().getId()).intValue());
+        
+        data.setDiferenciaCambio((((Double) json.getDiferenciaCambio().getId()).intValue()));
         
         return data;
     }

@@ -79,6 +79,8 @@ public class IngresoCajaJSON implements Serializable {
         caja.setMontoAbonadoBs(json.getMontoAbonadoBs());
         caja.setMontoAbonadoUsd(json.getMontoAbonadoUsd());
         
+        caja.setFactorCambiario(json.getFactorCambiario());
+        
         return caja;
     }
     
@@ -108,6 +110,8 @@ public class IngresoCajaJSON implements Serializable {
         json.setNroCheque(ingreso.getNroCheque());
         json.setNroDeposito(ingreso.getNroDeposito());
         json.setNroTarjeta(ingreso.getNroTarjeta());
+        
+        json.setFactorCambiario(ingreso.getFactorCambiario());
         
         return json;
     }

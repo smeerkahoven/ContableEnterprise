@@ -1215,9 +1215,6 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
             throw new CRUDException("No existe un monto Adeudado para la moneda especificada en la Transaccion " + notaFromDb.getIdNotaDebitoTransaccion().toString() + " de la nota de debito : " + notaFromDb.getIdNotaDebito().getIdNotaDebito().toString());
         }
 
-        System.out.println("Mareatours");
-        System.out.println(trx);
-        
         BigDecimal montoIngresado = new BigDecimal(BigInteger.ZERO);
         //Si las monedas son iguales
         if (trx.getMoneda().equals(notaFromDb.getMoneda())) {
@@ -1250,33 +1247,28 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
         DecimalFormat df = new DecimalFormat("#########.##", otherSymbols);
         String value = df.format(montoIngresado.doubleValue());
         montoIngresado = new BigDecimal( Double.parseDouble(value));
-
         
-        if (montoIngresado.doubleValue() > montoAdeudado) {
+        /*if (montoIngresado.doubleValue() > montoAdeudado) {
             String mensaje = "El monto de Pago de la transaccion de Ingreso:";
             mensaje += montoIngresado.toString();
             mensaje += " es mayor que el monto adeudado: ";
             mensaje += montoAdeudado.toString();
             throw new CRUDException(mensaje);
-        }
-        
-        
-        System.out.println("monto Ingresado:" + montoIngresado.doubleValue());
-        System.out.println("monto Adeudado:" + montoAdeudado);
+        }*/
 
         Double montoTotal = montoAdeudado - montoIngresado.doubleValue();
+        if (montoTotal < 0 ) {
+            montoTotal = new Double(0) ;
+        }
+        
         if (notaFromDb.getMoneda().equals(Moneda.NACIONAL)) {
-            
-            
             notaFromDb.setMontoAdeudadoBs(new BigDecimal(montoTotal));
-
             if (notaFromDb.getMontoAdeudadoBs().doubleValue() == 0d) {
                 notaFromDb.setEstado(Estado.CANCELADO);
             }
 
         } else if (notaFromDb.getMoneda().equals(Moneda.EXTRANJERA)) {
             notaFromDb.setMontoAdeudadoUsd(new BigDecimal(montoTotal));
-
             if (notaFromDb.getMontoAdeudadoUsd().doubleValue() == 0d) {
                 notaFromDb.setEstado(Estado.CANCELADO);
             }

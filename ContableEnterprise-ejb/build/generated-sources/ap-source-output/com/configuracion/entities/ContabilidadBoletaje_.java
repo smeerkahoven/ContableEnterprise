@@ -4,7 +4,7 @@ import javax.annotation.Generated;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2019-11-08T10:35:13")
+@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2019-11-20T00:49:52")
 @StaticMetamodel(ContabilidadBoletaje.class)
 public class ContabilidadBoletaje_ { 
 
@@ -31,6 +31,7 @@ public class ContabilidadBoletaje_ {
     public static volatile SingularAttribute<ContabilidadBoletaje, Integer> tarjetaCreditoBspDebeBs;
     public static volatile SingularAttribute<ContabilidadBoletaje, Integer> idTotalBoletoUs;
     public static volatile SingularAttribute<ContabilidadBoletaje, Integer> depositoBancoHaberUsd;
+    public static volatile SingularAttribute<ContabilidadBoletaje, Integer> diferenciaCambio;
     public static volatile SingularAttribute<ContabilidadBoletaje, Integer> depositoBancoDebeUsd;
     public static volatile SingularAttribute<ContabilidadBoletaje, Integer> idCuentaFee;
     public static volatile SingularAttribute<ContabilidadBoletaje, String> emisionDolares;

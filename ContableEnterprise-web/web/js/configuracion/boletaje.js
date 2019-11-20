@@ -193,7 +193,7 @@ angular.module('jsBoletaje.controllers', []).controller('frmBoletaje',
                             $scope.formData.devolucionDepositoAnticipadoDebeUsd =  $scope.findCta($scope.formData.devolucionDepositoAnticipadoDebeUsd, $scope.comboCuentas);
                             $scope.formData.devolucionDepositoAnticipadoHaberUsd =  $scope.findCta($scope.formData.devolucionDepositoAnticipadoHaberUsd, $scope.comboCuentas);
                             
-                            
+                            $scope.formData.diferenciaCambio = $scope.findCta($scope.formData.diferenciaCambio, $scope.comboCuentas);
                             
                             $scope.loading = false;
                             $scope.showBtnNuevo = true;
@@ -446,6 +446,15 @@ angular.module('jsBoletaje.controllers', []).controller('frmBoletaje',
                     } else {
                         if ($scope.formData.devolucionDepositoAnticipadoHaberUsd.id === undefined) {
                             return true;
+                        }
+                    }
+                    
+                    //diferencia cambio
+                    if ($scope.formData.diferenciaCambio === undefined) {
+                        return true ;
+                    }else {
+                        if ($scope.formData.diferenciaCambio.id === undefined){
+                            return true ;
                         }
                     }
                     

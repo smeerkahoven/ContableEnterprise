@@ -719,7 +719,7 @@ angular.module('jsPagoAnticipado.controllers', []).controller('frmPagoAnticipado
                 }
 
                 $scope.checkMontoIngresadoBs = function () {
-
+                    $scope.changeMontosTotales() ;
                     if ($scope.trx.montoCancelarBs > $scope.trx.montoAdeudadoBs) {
                         $scope.showErrorMontoIngresadoBs = true;
                     } else {
@@ -728,6 +728,7 @@ angular.module('jsPagoAnticipado.controllers', []).controller('frmPagoAnticipado
                 }
 
                 $scope.checkMontoIngresadoUsd = function () {
+                    $scope.changeMontosTotales() ;
                     if ($scope.trx.montoCancelarUsd > $scope.trx.montoAdeudadoUsd) {
                         $scope.showErrorMontoIngresadoUsd = true;
                     } else {

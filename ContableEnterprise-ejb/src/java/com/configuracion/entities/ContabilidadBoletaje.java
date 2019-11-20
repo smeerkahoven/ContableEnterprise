@@ -141,9 +141,21 @@ public class ContabilidadBoletaje extends Entidad {
     @Column(name = "devolucion_deposito_anticipado_debe_usd")
     private Integer devolucionDepositoAnticipadoDebeUsd;
 
+    @Column(name = "diferencia_cambio")
+    private Integer diferenciaCambio ;
+    
     public ContabilidadBoletaje() {
     }
 
+    public Integer getDiferenciaCambio() {
+        return diferenciaCambio;
+    }
+
+    public void setDiferenciaCambio(Integer diferenciaCambio) {
+        this.diferenciaCambio = diferenciaCambio;
+    }
+
+    
     public Integer getNotaCreditoHaberBs() {
         return notaCreditoHaberBs;
     }
