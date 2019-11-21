@@ -584,14 +584,14 @@ public class PagoAnticipadoEJB extends FacadeEJB implements PagoAnticipadoRemote
         Double montoDisponibleUsd= 0d;
         
         if (paFromDb.getMoneda().equals(Moneda.EXTRANJERA)){
-            montoDisponibleUsd = paFromDb.getMontoAnticipado().subtract(decAcreditado).setScale(2, BigDecimal.ROUND_DOWN).doubleValue();
+            montoDisponibleUsd = paFromDb.getMontoAnticipado().subtract(decAcreditado).setScale(2, BigDecimal.ROUND_UP).doubleValue();
             montoDisponibleBs= montoDisponibleUsd * paFromDb.getFactorCambiario().doubleValue();
         }else {
-            montoDisponibleBs = paFromDb.getMontoAnticipado().subtract(decAcreditado).setScale(2, BigDecimal.ROUND_DOWN).doubleValue();
+            montoDisponibleBs = paFromDb.getMontoAnticipado().subtract(decAcreditado).setScale(2, BigDecimal.ROUND_UP).doubleValue();
             montoDisponibleUsd= montoDisponibleBs/ paFromDb.getFactorCambiario().doubleValue();
         }
 
-        //Double montoDisponible = paFromDb.getMontoAnticipado().subtract(decAcreditado).setScale(2, BigDecimal.ROUND_DOWN).doubleValue();
+        //Double montoDisponible = paFromDb.getMontoAnticipado().subtract(decAcreditado).setScale(2, BigDecimal.ROUND_UP).doubleValue();
 
         if (trx.getMoneda().equals(Moneda.NACIONAL)) {
             if (montoDisponibleBs < trx.getMontoCancelarBs().doubleValue()) {
@@ -599,7 +599,7 @@ public class PagoAnticipadoEJB extends FacadeEJB implements PagoAnticipadoRemote
             }
             trx.setMonto(trx.getMontoCancelarBs());
             trx.setMontoBs(trx.getMontoCancelarBs());
-            trx.setMontoUsd(trx.getMontoCancelarBs().divide(paFromDb.getFactorCambiario(),RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_DECIMAL_2,BigDecimal.ROUND_DOWN));
+            trx.setMontoUsd(trx.getMontoCancelarBs().divide(paFromDb.getFactorCambiario(),RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_DECIMAL_2,BigDecimal.ROUND_UP));
             
         } else {
             if (montoDisponibleUsd < trx.getMontoCancelarUsd().doubleValue()) {
@@ -607,7 +607,7 @@ public class PagoAnticipadoEJB extends FacadeEJB implements PagoAnticipadoRemote
             }
             trx.setMonto(trx.getMontoCancelarUsd());
             trx.setMontoUsd(trx.getMontoCancelarUsd());
-            trx.setMontoBs(trx.getMontoCancelarUsd().multiply(paFromDb.getFactorCambiario()).setScale(Contabilidad.VALOR_DECIMAL_2,BigDecimal.ROUND_DOWN));
+            trx.setMontoBs(trx.getMontoCancelarUsd().multiply(paFromDb.getFactorCambiario()).setScale(Contabilidad.VALOR_DECIMAL_2,BigDecimal.ROUND_UP));
 
         }
 

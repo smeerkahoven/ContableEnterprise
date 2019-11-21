@@ -676,6 +676,9 @@ public class IngresoCajaEJB extends FacadeEJB implements IngresoCajaRemote {
                     AsientoContable haber = ejbComprobante.createTotalCancelarIngresoClienteHaber(comprobanteIngreso, conf, ndt, fromDb, b, tran);
                     insert(haber);
                     
+                    AsientoContable diferencia = ejbComprobante.createTotalCancelarIngresoClienteHaberDiferencia(comprobanteIngreso, conf, ndt, fromDb, b, tran);
+                    insert(diferencia);
+                    
                 } else {
                     CargoBoleto c = em.find(CargoBoleto.class, ndt.getIdCargo());
                     if (c == null) {

@@ -30,6 +30,7 @@ import javax.persistence.NamedStoredProcedureQueries;
 import javax.persistence.NamedStoredProcedureQuery;
 import javax.persistence.ParameterMode;
 import javax.persistence.SqlResultSetMapping;
+import javax.persistence.SqlResultSetMappings;
 import javax.persistence.StoredProcedureParameter;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -138,7 +139,7 @@ import javax.xml.bind.annotation.XmlRootElement;
                 ,@StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_selected")
             }
     )
-        ,
+    ,
 
 @NamedStoredProcedureQuery(
             name = "NotaDebito.generarReporteClienteEstados",
@@ -150,8 +151,6 @@ import javax.xml.bind.annotation.XmlRootElement;
                 ,@StoredProcedureParameter(mode = ParameterMode.IN, type = Date.class, name = "in_end_date")
             }
     )
-        
-        
 
 })
 
@@ -178,32 +177,33 @@ import javax.xml.bind.annotation.XmlRootElement;
                 }
         )
 )
-
-@SqlResultSetMapping(
-        name = "ReporteEstadoClienteDto",
-        classes = @ConstructorResult(
-                targetClass = ReporteEstadoClienteDto.class,
-                columns = {
-                    @ColumnResult(name = "v_id_documento", type = Integer.class)
-                    ,@ColumnResult(name = "v_glosa", type = String.class)
-                    ,@ColumnResult(name = "v_fecha", type = String.class)
-                    ,@ColumnResult(name = "v_vencimiento", type = String.class)
-                    ,@ColumnResult(name = "v_forma_pago", type = String.class)
-                    ,@ColumnResult(name = "v_monto_debe_nac", type = BigDecimal.class)
-                    ,@ColumnResult(name = "v_monto_haber_nac", type = BigDecimal.class)
-                    ,@ColumnResult(name = "v_saldo_nac", type = BigDecimal.class)
-                    ,@ColumnResult(name = "v_monto_debe_ext", type = BigDecimal.class)
-                    ,@ColumnResult(name = "v_monto_haber_ext", type = BigDecimal.class)
-                    ,@ColumnResult(name = "v_saldo_ext", type = BigDecimal.class)
-                    ,@ColumnResult(name = "v_tipo_documento", type = String.class)
-                    ,@ColumnResult(name = "v_estado", type = String.class)
-                    ,@ColumnResult(name = "v_row", type = String.class)
-                    ,@ColumnResult(name = "v_id_cliente", type = Integer.class)
-                    ,@ColumnResult(name = "v_nombre_cliente", type = String.class)
-                    ,@ColumnResult(name = "v_telefono_fijo", type = String.class)
-                    ,@ColumnResult(name = "v_telefono_celular", type = String.class)
-                    ,@ColumnResult(name = "v_email", type = String.class)
-                }
+@SqlResultSetMappings(
+        @SqlResultSetMapping(
+                name = "ReporteEstadoClienteDto",
+                classes = @ConstructorResult(
+                        targetClass = ReporteEstadoClienteDto.class,
+                        columns = {
+                            @ColumnResult(name = "v_id_documento", type = Integer.class)
+                            ,@ColumnResult(name = "v_glosa", type = String.class)
+                            ,@ColumnResult(name = "v_fecha", type = String.class)
+                            ,@ColumnResult(name = "v_vencimiento", type = String.class)
+                            ,@ColumnResult(name = "v_forma_pago", type = String.class)
+                            ,@ColumnResult(name = "v_monto_debe_nac", type = BigDecimal.class)
+                            ,@ColumnResult(name = "v_monto_haber_nac", type = BigDecimal.class)
+                            ,@ColumnResult(name = "v_saldo_nac", type = BigDecimal.class)
+                            ,@ColumnResult(name = "v_monto_debe_ext", type = BigDecimal.class)
+                            ,@ColumnResult(name = "v_monto_haber_ext", type = BigDecimal.class)
+                            ,@ColumnResult(name = "v_saldo_ext", type = BigDecimal.class)
+                            ,@ColumnResult(name = "v_tipo_documento", type = String.class)
+                            ,@ColumnResult(name = "v_estado", type = String.class)
+                            ,@ColumnResult(name = "v_row", type = String.class)
+                            ,@ColumnResult(name = "v_id_cliente", type = Integer.class)
+                            ,@ColumnResult(name = "v_nombre_cliente", type = String.class)
+                            ,@ColumnResult(name = "v_telefono_fijo", type = String.class)
+                            ,@ColumnResult(name = "v_telefono_celular", type = String.class)
+                            ,@ColumnResult(name = "v_email", type = String.class)
+                        }
+                )
         )
 )
 

@@ -19,9 +19,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.NamedStoredProcedureQueries;
 import javax.persistence.NamedStoredProcedureQuery;
 import javax.persistence.ParameterMode;
 import javax.persistence.SqlResultSetMapping;
+import javax.persistence.SqlResultSetMappings;
 import javax.persistence.StoredProcedureParameter;
 import javax.persistence.Table;
 import javax.persistence.Transient;
@@ -35,86 +37,99 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "cnt_plan_cuentas")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "PlanCuentas.findAll", query = "SELECT p FROM PlanCuentas p WHERE p.idEmpresa=:idEmpresa ORDER BY p.nroPlanCuenta, p.cuenta, p.nivel asc"),
+    @NamedQuery(name = "PlanCuentas.findAll", query = "SELECT p FROM PlanCuentas p WHERE p.idEmpresa=:idEmpresa ORDER BY p.nroPlanCuenta, p.cuenta, p.nivel asc")
+    ,
     //@NamedQuery(name = "PlanCuentas.findAll", query = "SELECT p ,(select c.cuenta from PlanCuentas c where p.idPlanCuentas=c.idPlanCuentas ) as idPlanCuentaPadreNombre FROM PlanCuentas p ORDER BY p.idPlanCuentas, p.cuenta, p.nivel asc"),
-    @NamedQuery(name = "PlanCuentas.forCombo", query = "SELECT p.idPlanCuentas,p.cuenta,p.comodin FROM PlanCuentas p WHERE p.nivel = 5 AND p.idEmpresa=:idEmpresa  Order by p.cuenta"),
-    @NamedQuery(name = "PlanCuentas.forComboPlan", query = "SELECT p FROM PlanCuentas p WHERE p.idEmpresa=:idEmpresa and p.nroPlanCuentaPadre= (SELECT q.nroPlanCuenta FROM PlanCuentas q WHERE q.cuenta = :cuenta ) ORDER BY p.nroPlanCuenta, p.cuenta, p.nivel asc"),
-    @NamedQuery(name = "PlanCuentas.forComboIdPlan", query = "SELECT p FROM PlanCuentas p WHERE p.idEmpresa=:idEmpresa and p.nroPlanCuentaPadre=:nroPlanCuentas ORDER BY p.nroPlanCuenta, p.cuenta, p.nivel asc"),
-    @NamedQuery(name = "PlanCuentas.forSearch", query = "SELECT p.idPlanCuentas,p.cuenta FROM PlanCuentas p WHERE p.nivel < 5 Order by p.cuenta"),
+    @NamedQuery(name = "PlanCuentas.forCombo", query = "SELECT p.idPlanCuentas,p.cuenta,p.comodin FROM PlanCuentas p WHERE p.nivel = 5 AND p.idEmpresa=:idEmpresa  Order by p.cuenta")
+    ,
+    @NamedQuery(name = "PlanCuentas.forComboPlan", query = "SELECT p FROM PlanCuentas p WHERE p.idEmpresa=:idEmpresa and p.nroPlanCuentaPadre= (SELECT q.nroPlanCuenta FROM PlanCuentas q WHERE q.cuenta = :cuenta ) ORDER BY p.nroPlanCuenta, p.cuenta, p.nivel asc")
+    ,
+    @NamedQuery(name = "PlanCuentas.forComboIdPlan", query = "SELECT p FROM PlanCuentas p WHERE p.idEmpresa=:idEmpresa and p.nroPlanCuentaPadre=:nroPlanCuentas ORDER BY p.nroPlanCuenta, p.cuenta, p.nivel asc")
+    ,
+    @NamedQuery(name = "PlanCuentas.forSearch", query = "SELECT p.idPlanCuentas,p.cuenta FROM PlanCuentas p WHERE p.nivel < 5 Order by p.cuenta")
+    ,
     @NamedQuery(name = "PlanCuentas.nivel4Central", query = "SELECT p FROM PlanCuentas p WHERE p.nivel < 5 and p.idEmpresa=1 Order by p.cuenta")
-    
+
 })
 
 @NamedStoredProcedureQuery(
-            name = "PlanCuenta.sumasYsaldos",
-            procedureName = "sumasYsaldosNivel",
-            resultSetMappings = "SumasSaldosDto",
-            parameters = {
-                @StoredProcedureParameter(mode = ParameterMode.IN, type = Date.class, name = "in_start_date")
-                ,@StoredProcedureParameter(mode = ParameterMode.IN, type = Date.class, name = "in_end_date")
-                ,@StoredProcedureParameter(mode = ParameterMode.IN, type = String.class, name = "in_moneda")
-                ,@StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_empresa")
-                ,@StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_nivel")
-            }
-    )
+        name = "PlanCuenta.sumasYsaldos",
+        procedureName = "sumasYsaldosNivel",
+        resultSetMappings = "SumasSaldosDto",
+        parameters = {
+            @StoredProcedureParameter(mode = ParameterMode.IN, type = Date.class, name = "in_start_date")
+            ,@StoredProcedureParameter(mode = ParameterMode.IN, type = Date.class, name = "in_end_date")
+            ,@StoredProcedureParameter(mode = ParameterMode.IN, type = String.class, name = "in_moneda")
+            ,@StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_empresa")
+            ,@StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_nivel")
+        }
+)
 
-
-@NamedStoredProcedureQuery(
-            name = "PlanCuenta.estadoResultado",
-            procedureName = "estadoResultado",
-            resultSetMappings = "EstadosResultadosDto",
-            parameters = {
-                @StoredProcedureParameter(mode = ParameterMode.IN, type = Date.class, name = "in_start_date")
-                ,@StoredProcedureParameter(mode = ParameterMode.IN, type = Date.class, name = "in_end_date")
-                ,@StoredProcedureParameter(mode = ParameterMode.IN, type = String.class, name = "in_moneda")
-                ,@StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_empresa")
-            }
-    )
-
-@SqlResultSetMapping(
-        name = "SumasSaldosDto",
-        classes = @ConstructorResult(
-                targetClass = SumasSaldosDto.class,
-                columns = {
-                    @ColumnResult(name = "v_id_plan_cuenta", type = Integer.class)
-                    ,@ColumnResult(name = "v_cuenta", type = String.class)
-                    ,@ColumnResult(name = "v_nro_plan_cuenta", type = Long.class)
-                    ,@ColumnResult(name = "v_nro_plan_cuenta_padre", type = Long.class)
-                    ,@ColumnResult(name = "v_suma_debe", type = BigDecimal.class)
-                    ,@ColumnResult(name = "v_suma_haber", type = BigDecimal.class)
-                    ,@ColumnResult(name = "v_saldo_debe", type = BigDecimal.class)
-                    ,@ColumnResult(name = "v_saldo_haber", type = BigDecimal.class)
-                    ,@ColumnResult(name = "v_nivel", type = Integer.class)
+@NamedStoredProcedureQueries(
+        @NamedStoredProcedureQuery(
+                name = "PlanCuenta.estadoResultado",
+                procedureName = "estadoResultado",
+                resultSetMappings = "EstadosResultadosDto",
+                parameters = {
+                    @StoredProcedureParameter(mode = ParameterMode.IN, type = Date.class, name = "in_start_date")
+                    ,@StoredProcedureParameter(mode = ParameterMode.IN, type = Date.class, name = "in_end_date")
+                    ,@StoredProcedureParameter(mode = ParameterMode.IN, type = String.class, name = "in_moneda")
+                    ,@StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_empresa")
                 }
         )
 )
 
-@SqlResultSetMapping(
-        name = "EstadosResultadosDto",
-        classes = @ConstructorResult(
-                targetClass = EstadosResultadosDto.class,
-                columns = {
-                    @ColumnResult(name = "v_id_plan_cuenta", type = Integer.class)
-                    ,@ColumnResult(name = "v_cuenta", type = String.class)
-                    ,@ColumnResult(name = "v_nro_plan_cuenta", type = Long.class)
-                    ,@ColumnResult(name = "v_nro_plan_cuenta_padre", type = Long.class)
-                    ,@ColumnResult(name = "v_suma_debe", type = BigDecimal.class)
-                    ,@ColumnResult(name = "v_suma_haber", type = BigDecimal.class)
-                    ,@ColumnResult(name = "v_saldo_debe", type = BigDecimal.class)
-                    ,@ColumnResult(name = "v_saldo_haber", type = BigDecimal.class)
-                    ,@ColumnResult(name = "v_nivel", type = Integer.class)
-                    ,@ColumnResult(name = "v_saldo", type = String.class)
-                    ,@ColumnResult(name = "v_saldo_monto", type = BigDecimal.class)
-                }
-        )
+@SqlResultSetMappings(
+        {
+            @SqlResultSetMapping(
+                    name = "SumasSaldosDto",
+                    classes = @ConstructorResult(
+                            targetClass = SumasSaldosDto.class,
+                            columns = {
+                                @ColumnResult(name = "v_id_plan_cuenta", type = Integer.class)
+                                ,@ColumnResult(name = "v_cuenta", type = String.class)
+                                ,@ColumnResult(name = "v_nro_plan_cuenta", type = Long.class)
+                                ,@ColumnResult(name = "v_nro_plan_cuenta_padre", type = Long.class)
+                                ,@ColumnResult(name = "v_suma_debe", type = BigDecimal.class)
+                                ,@ColumnResult(name = "v_suma_haber", type = BigDecimal.class)
+                                ,@ColumnResult(name = "v_saldo_debe", type = BigDecimal.class)
+                                ,@ColumnResult(name = "v_saldo_haber", type = BigDecimal.class)
+                                ,@ColumnResult(name = "v_nivel", type = Integer.class)
+                            }
+                    )
+            )
+            ,
+        
+                @SqlResultSetMapping(
+                    name = "EstadosResultadosDto",
+                    classes = @ConstructorResult(
+                            targetClass = EstadosResultadosDto.class,
+                            columns = {
+                                @ColumnResult(name = "v_id_plan_cuenta", type = Integer.class)
+                                ,@ColumnResult(name = "v_cuenta", type = String.class)
+                                ,@ColumnResult(name = "v_nro_plan_cuenta", type = Long.class)
+                                ,@ColumnResult(name = "v_nro_plan_cuenta_padre", type = Long.class)
+                                ,@ColumnResult(name = "v_suma_debe", type = BigDecimal.class)
+                                ,@ColumnResult(name = "v_suma_haber", type = BigDecimal.class)
+                                ,@ColumnResult(name = "v_saldo_debe", type = BigDecimal.class)
+                                ,@ColumnResult(name = "v_saldo_haber", type = BigDecimal.class)
+                                ,@ColumnResult(name = "v_nivel", type = Integer.class)
+                                ,@ColumnResult(name = "v_saldo", type = String.class)
+                                ,@ColumnResult(name = "v_saldo_monto", type = BigDecimal.class)
+                            }
+                    )
+            )
+        }
 )
+
 public class PlanCuentas extends Entidad {
-    
+
     class Regularizacion {
+
         public static final String DEPRECIACION = "D";
         public static final String PREVISION = "P";
-        public static final String AMORTIZACION ="A" ;
-        public static final String NINGUNO ="A" ;
+        public static final String AMORTIZACION = "A";
+        public static final String NINGUNO = "A";
     }
 
     private static final long serialVersionUID = 1L;
@@ -129,7 +144,7 @@ public class PlanCuentas extends Entidad {
 
     @Column(name = "nro_plan_cuenta")
     private Long nroPlanCuenta;
-    
+
     @Column(name = "nro_plan_cuenta_padre")
     private Long nroPlanCuentaPadre;
 
@@ -156,15 +171,15 @@ public class PlanCuentas extends Entidad {
 
     @Column(name = "mantenimiento_valor")
     private String mantenimientoValor;
-    
+
     @Column(name = "comodin")
     private String comodin;
-    
-    @Column(name="tipo_regularizacion")
+
+    @Column(name = "tipo_regularizacion")
     private String tipoRegularizacion;
-    
-    @Column(name="id_cuenta_regularizacion")
-    private Integer idCuentaRegularizacion ;
+
+    @Column(name = "id_cuenta_regularizacion")
+    private Integer idCuentaRegularizacion;
 
     @Transient
     private String ctaItbNombre;
@@ -187,9 +202,7 @@ public class PlanCuentas extends Entidad {
     public void setIdCuentaRegularizacion(Integer idCuentaRegularizacion) {
         this.idCuentaRegularizacion = idCuentaRegularizacion;
     }
-    
-    
-    
+
     public PlanCuentas(Integer idPlanCuentas) {
         this.idPlanCuentas = idPlanCuentas;
     }
@@ -201,7 +214,6 @@ public class PlanCuentas extends Entidad {
     public void setComodin(String comodin) {
         this.comodin = comodin;
     }
-    
 
     public String getCtaItbNombre() {
         return ctaItbNombre;
@@ -211,7 +223,6 @@ public class PlanCuentas extends Entidad {
         this.ctaItbNombre = ctaItbNombre;
     }
 
-    
     public String getIdPlanCuentaPadreNombre() {
         return idPlanCuentaPadreNombre;
     }
@@ -263,8 +274,6 @@ public class PlanCuentas extends Entidad {
         this.nroPlanCuentaPadre = nroPlanCuentaPadre;
     }
 
-
-    
     public String getCuenta() {
         return cuenta;
     }
@@ -348,9 +357,7 @@ public class PlanCuentas extends Entidad {
 
     @Override
     public int getId() throws CRUDException {
-        return 0 ;
+        return 0;
     }
-    
-    
 
 }

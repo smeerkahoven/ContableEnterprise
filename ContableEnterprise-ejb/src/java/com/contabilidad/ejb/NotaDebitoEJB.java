@@ -1228,13 +1228,13 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
                     && notaFromDb.getMoneda().equals(Moneda.NACIONAL)) {
 
                 montoIngresado = trx.getMontoUsd()!= null? 
-                        BigDecimal.valueOf(trx.getMontoUsd().doubleValue() * factorCambio).setScale(Contabilidad.VALOR_DECIMAL_2, BigDecimal.ROUND_DOWN) 
+                        BigDecimal.valueOf(trx.getMontoUsd().doubleValue() * factorCambio).setScale(Contabilidad.VALOR_DECIMAL_2, BigDecimal.ROUND_HALF_UP) 
                         : montoIngresado;
 
             } else if (trx.getMoneda().equals(Moneda.NACIONAL)
                     && notaFromDb.getMoneda().equals(Moneda.EXTRANJERA)) {
                 montoIngresado = trx.getMontoBs()!= null ?
-                        BigDecimal.valueOf( trx.getMontoBs().doubleValue() / factorCambio).setScale(Contabilidad.VALOR_DECIMAL_2, BigDecimal.ROUND_DOWN)
+                        BigDecimal.valueOf( trx.getMontoBs().doubleValue() / factorCambio).setScale(Contabilidad.VALOR_DECIMAL_2, BigDecimal.ROUND_HALF_UP)
                         : montoIngresado;
             }
         }

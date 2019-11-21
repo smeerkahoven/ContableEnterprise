@@ -179,7 +179,7 @@ public class PagoAnticipadoResource extends TemplateResource {
                             ? fromDb.getMontoAnticipado().subtract(fromDb.getMontoTotalAcreditado()).doubleValue()
                             : fromDb.getMontoAnticipado().doubleValue();
 
-                    devJson.setMontoMaximoDevolucion(new BigDecimal(montMaximo).setScale(Contabilidad.VALOR_DECIMAL_2,BigDecimal.ROUND_HALF_DOWN));
+                    devJson.setMontoMaximoDevolucion(new BigDecimal(montMaximo).setScale(Contabilidad.VALOR_DECIMAL_2,BigDecimal.ROUND_UP));
 
                     response.setContent(devJson);
                     response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
