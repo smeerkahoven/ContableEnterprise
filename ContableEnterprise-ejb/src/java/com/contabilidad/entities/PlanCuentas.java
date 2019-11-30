@@ -38,49 +38,76 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "PlanCuentas.findAll", query = "SELECT p FROM PlanCuentas p WHERE p.idEmpresa=:idEmpresa ORDER BY p.nroPlanCuenta, p.cuenta, p.nivel asc")
-    ,
-    //@NamedQuery(name = "PlanCuentas.findAll", query = "SELECT p ,(select c.cuenta from PlanCuentas c where p.idPlanCuentas=c.idPlanCuentas ) as idPlanCuentaPadreNombre FROM PlanCuentas p ORDER BY p.idPlanCuentas, p.cuenta, p.nivel asc"),
-    @NamedQuery(name = "PlanCuentas.forCombo", query = "SELECT p.idPlanCuentas,p.cuenta,p.comodin FROM PlanCuentas p WHERE p.nivel = 5 AND p.idEmpresa=:idEmpresa  Order by p.cuenta")
-    ,
-    @NamedQuery(name = "PlanCuentas.forComboPlan", query = "SELECT p FROM PlanCuentas p WHERE p.idEmpresa=:idEmpresa and p.nroPlanCuentaPadre= (SELECT q.nroPlanCuenta FROM PlanCuentas q WHERE q.cuenta = :cuenta ) ORDER BY p.nroPlanCuenta, p.cuenta, p.nivel asc")
-    ,
-    @NamedQuery(name = "PlanCuentas.forComboIdPlan", query = "SELECT p FROM PlanCuentas p WHERE p.idEmpresa=:idEmpresa and p.nroPlanCuentaPadre=:nroPlanCuentas ORDER BY p.nroPlanCuenta, p.cuenta, p.nivel asc")
-    ,
-    @NamedQuery(name = "PlanCuentas.forSearch", query = "SELECT p.idPlanCuentas,p.cuenta FROM PlanCuentas p WHERE p.nivel < 5 Order by p.cuenta")
-    ,
-    @NamedQuery(name = "PlanCuentas.nivel4Central", query = "SELECT p FROM PlanCuentas p WHERE p.nivel < 5 and p.idEmpresa=1 Order by p.cuenta")
+    ,@NamedQuery(name = "PlanCuentas.forCombo", query = "SELECT p.idPlanCuentas,p.cuenta,p.comodin FROM PlanCuentas p WHERE p.nivel = 5 AND p.idEmpresa=:idEmpresa  Order by p.cuenta")
+    ,@NamedQuery(name = "PlanCuentas.forComboPlan", query = "SELECT p FROM PlanCuentas p WHERE p.idEmpresa=:idEmpresa and p.nroPlanCuentaPadre= (SELECT q.nroPlanCuenta FROM PlanCuentas q WHERE q.cuenta = :cuenta ) ORDER BY p.nroPlanCuenta, p.cuenta, p.nivel asc")
+    ,@NamedQuery(name = "PlanCuentas.forComboIdPlan", query = "SELECT p FROM PlanCuentas p WHERE p.idEmpresa=:idEmpresa and p.nroPlanCuentaPadre=:nroPlanCuentas ORDER BY p.nroPlanCuenta, p.cuenta, p.nivel asc")
+    ,@NamedQuery(name = "PlanCuentas.forSearch", query = "SELECT p.idPlanCuentas,p.cuenta FROM PlanCuentas p WHERE p.nivel < 5 Order by p.cuenta")
+    ,@NamedQuery(name = "PlanCuentas.nivel4Central", query = "SELECT p FROM PlanCuentas p WHERE p.nivel < 5 and p.idEmpresa=1 Order by p.cuenta")
 
 })
 
-@NamedStoredProcedureQuery(
-        name = "PlanCuenta.sumasYsaldos",
-        procedureName = "sumasYsaldosNivel",
-        resultSetMappings = "SumasSaldosDto",
-        parameters = {
-            @StoredProcedureParameter(mode = ParameterMode.IN, type = Date.class, name = "in_start_date")
-            ,@StoredProcedureParameter(mode = ParameterMode.IN, type = Date.class, name = "in_end_date")
-            ,@StoredProcedureParameter(mode = ParameterMode.IN, type = String.class, name = "in_moneda")
-            ,@StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_empresa")
-            ,@StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_nivel")
-        }
-)
-
 @NamedStoredProcedureQueries(
-        @NamedStoredProcedureQuery(
-                name = "PlanCuenta.estadoResultado",
-                procedureName = "estadoResultado",
-                resultSetMappings = "EstadosResultadosDto",
-                parameters = {
-                    @StoredProcedureParameter(mode = ParameterMode.IN, type = Date.class, name = "in_start_date")
-                    ,@StoredProcedureParameter(mode = ParameterMode.IN, type = Date.class, name = "in_end_date")
-                    ,@StoredProcedureParameter(mode = ParameterMode.IN, type = String.class, name = "in_moneda")
-                    ,@StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_empresa")
-                }
-        )
+        {
+            @NamedStoredProcedureQuery(
+                    name = "PlanCuenta.estadoResultado",
+                    procedureName = "estadoResultado",
+                    resultSetMappings = "EstadosResultadosDto",
+                    parameters = {
+                        @StoredProcedureParameter(mode = ParameterMode.IN, type = Date.class, name = "in_start_date")
+                        ,@StoredProcedureParameter(mode = ParameterMode.IN, type = Date.class, name = "in_end_date")
+                        ,@StoredProcedureParameter(mode = ParameterMode.IN, type = String.class, name = "in_moneda")
+                        ,@StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_empresa")
+                    }
+            )
+            ,
+            @NamedStoredProcedureQuery(
+                    name = "PlanCuenta.sumasYsaldos",
+                    procedureName = "sumasYsaldosNivel",
+                    resultSetMappings = "SumasSaldosDto",
+                    parameters = {
+                        @StoredProcedureParameter(mode = ParameterMode.IN, type = Date.class, name = "in_start_date")
+                        ,@StoredProcedureParameter(mode = ParameterMode.IN, type = Date.class, name = "in_end_date")
+                        ,@StoredProcedureParameter(mode = ParameterMode.IN, type = String.class, name = "in_moneda")
+                        ,@StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_empresa")
+                        ,@StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_nivel")
+                    }
+            )
+            ,
+            @NamedStoredProcedureQuery(
+                    name = "PlanCuenta.balanceGeneral",
+                    procedureName = "balanceGeneral",
+                    resultSetMappings = "BalanceGeneralDto",
+                    parameters = {
+                        @StoredProcedureParameter(mode = ParameterMode.IN, type = Date.class, name = "in_start_date" )
+                        ,@StoredProcedureParameter(mode = ParameterMode.IN, type = Date.class, name = "in_end_date" )
+                        ,@StoredProcedureParameter(mode = ParameterMode.IN, type = String.class, name = "in_moneda" )
+                        ,@StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_empresa" )
+                    }
+            )
+
+        }
 )
 
 @SqlResultSetMappings(
         {
+            @SqlResultSetMapping(
+                    name = "BalanceGeneralDto",
+                    classes = @ConstructorResult(
+                            targetClass = BalanceGeneralDto.class,
+                            columns = {
+                                @ColumnResult(name = "v_id_plan_cuenta", type = Integer.class)
+                                ,@ColumnResult(name = "v_nro_plan_cuenta", type = Integer.class)
+                                ,@ColumnResult(name = "v_nro_plan_cuenta_padre", type = Integer.class)
+                                ,@ColumnResult(name = "v_nivel", type = Integer.class)
+                                ,@ColumnResult(name = "id_cuenta_regularizacion", type = Integer.class)
+                                ,@ColumnResult(name = "v_cuenta", type = Integer.class)
+                                ,@ColumnResult(name = "v_saldo_debe", type = Integer.class)
+                                ,@ColumnResult(name = "v_saldo_haber", type = Integer.class)
+                            }
+                    )
+            )
+            ,
+            
             @SqlResultSetMapping(
                     name = "SumasSaldosDto",
                     classes = @ConstructorResult(

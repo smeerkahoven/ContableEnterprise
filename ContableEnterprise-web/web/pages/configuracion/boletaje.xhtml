@@ -669,6 +669,23 @@
                                                                 </span> 
                                                             </div>
                                                         </div>
+                                                        
+                                                        
+                                                         <legend>Contabilidad</legend>
+                                                        
+                                                        <div class="form-group row">
+                                                            <label for="txtNombre" class=" col-form-label col-sm-4 text-right">Cuenta Utilidad de la Gesti&oacute;n</label>
+                                                            <div class="col-sm-4">
+                                                                <input type="text" ng-model="formData.utilidadGestion" placeholder="Seleccione una cuenta"
+                                                                       uib-typeahead="cuenta as cuenta.name for cuenta in comboCuentas | filter:{name:$viewValue}"
+                                                                       class="form-control tt-input" typeahead-show-hint="true" typeahead-min-length="0" 
+                                                                       typeahead-template-url="customTemplate.html" 
+                                                                       />
+                                                                <span class="alert-danger"  ng-show="formData.utilidadGestion.id === undefined"  >
+                                                                    Ingrese una cuenta para Utilidad de la Gesti&oacute;n.
+                                                                </span> 
+                                                            </div>
+                                                        </div>
 
                                                         <div class="form-group">
                                                             <c:if test="#{confBoletaje.formulario.crear== confBoletaje.formulario.PERMITIR}">

@@ -1,0 +1,1 @@
+UPDATE `db_travel`.`tb_formularios` SET `nombre`='Boletaje y Contabilidad' WHERE `id_formulario`='20';

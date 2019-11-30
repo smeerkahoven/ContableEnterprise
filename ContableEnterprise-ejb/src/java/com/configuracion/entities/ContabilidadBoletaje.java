@@ -37,7 +37,7 @@ public class ContabilidadBoletaje extends Entidad {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
-    @Column(name = "id_empresa", updatable = false , nullable = false)
+    @Column(name = "id_empresa", updatable = false, nullable = false)
     private Integer idEmpresa;
     @Column(name = "id_total_boleto_bs")
     private Integer idTotalBoletoBs;
@@ -142,9 +142,20 @@ public class ContabilidadBoletaje extends Entidad {
     private Integer devolucionDepositoAnticipadoDebeUsd;
 
     @Column(name = "diferencia_cambio")
-    private Integer diferenciaCambio ;
-    
+    private Integer diferenciaCambio;
+
+    @Column(name = "utilidad_gestion")
+    private Integer utilidadGestion;
+
     public ContabilidadBoletaje() {
+    }
+
+    public Integer getUtilidadGestion() {
+        return utilidadGestion;
+    }
+
+    public void setUtilidadGestion(Integer utilidadGestion) {
+        this.utilidadGestion = utilidadGestion;
     }
 
     public Integer getDiferenciaCambio() {
@@ -155,7 +166,6 @@ public class ContabilidadBoletaje extends Entidad {
         this.diferenciaCambio = diferenciaCambio;
     }
 
-    
     public Integer getNotaCreditoHaberBs() {
         return notaCreditoHaberBs;
     }

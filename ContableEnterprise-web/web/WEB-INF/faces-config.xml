@@ -214,6 +214,16 @@
         </navigation-case>
     </navigation-rule>
     
+    
+    <navigation-rule>
+        <from-view-id>pages/*</from-view-id>
+        <navigation-case>
+            <from-outcome>balance-general</from-outcome>
+            <to-view-id>/pages/cobranzas/balance-general.xhtml?faces-redirect=true</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
     <!-- configuracion -->
     
     <navigation-rule>

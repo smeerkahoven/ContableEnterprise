@@ -271,6 +271,7 @@ angular.module('jsIngresoCaja.controllers', []).controller('frmIngresoCaja',
                     $scope.showErrorMontoIngresadoBs = false ;
                     $scope.showErrorMontoIngresadoUsd = false ;
                     
+                    console.log(`$scope.noValidarMontos:${$scope.noValidarMontos}`);
                     $scope.applyFactorCambiario() ;
                 }
 
@@ -278,32 +279,31 @@ angular.module('jsIngresoCaja.controllers', []).controller('frmIngresoCaja',
                     if ($scope.trx.moneda === 'B') {
                         if (!$scope.noValidarMontos) {
                             if ($scope.trx.factorCambiario > 0) {
-                                $scope.trx.montoMaxCancelarBs = precise($scope.trx.montoAdeudadoUsd * $scope.trx.factorCambiario, 2);
+                                $scope.trx.montoMaxCancelarBs = Number($scope.trx.montoAdeudadoUsd * $scope.trx.factorCambiario).toFixed(2);
                                 $scope.showErrorFactorCambiario = false;
                             } else {
                                 $scope.showErrorFactorCambiario = true;
                             }
                         }
-
                         $scope.checkMontoIngresadoBs();
                     } else {
-
                         if (!$scope.noValidarMontos) {
                             if ($scope.trx.factorCambiario > 0) {
-                                $scope.trx.montoMaxCancelarUsd = precise($scope.trx.montoAdeudadoBs / $scope.trx.factorCambiario, 2);
+                                $scope.trx.montoMaxCancelarUsd = Number($scope.trx.montoAdeudadoBs / $scope.trx.factorCambiario).toFixed(2);
                                 $scope.showErrorFactorCambiario = false;
                             } else {
                                 $scope.showErrorFactorCambiario = true;
                             }
                         }
-
                         $scope.checkMontoIngresadoUsd();
                     }
                 }
 
                 $scope.checkMontoIngresadoBs = function () {
+                     console.log(`$scope.noValidarMontos:${$scope.noValidarMontos}`);
+                    console.log(`$scope.trx.montoCancelarBs:${$scope.trx.montoCancelarBs}, $scope.trx.montoMaxCancelarBs:${$scope.trx.montoMaxCancelarBs}`);
                     $scope.montoConvertido = $scope.trx.montoCancelarBs / $scope.trx.factorCambiario;
-                    if ($scope.noValidarMontos) {
+                    if (!$scope.noValidarMontos) {
                         if ($scope.trx.montoCancelarBs > $scope.trx.montoMaxCancelarBs) {
                             $scope.showErrorMontoIngresadoBs = true;
                         } else {

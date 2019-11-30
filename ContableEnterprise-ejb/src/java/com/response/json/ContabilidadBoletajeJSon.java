@@ -57,8 +57,9 @@ public class ContabilidadBoletajeJSon {
     private ComboSelect devolucionDepositoAnticipadoDebeBs;
     private ComboSelect devolucionDepositoAnticipadoHaberUsd;
     private ComboSelect devolucionDepositoAnticipadoDebeUsd;
-    
-    private ComboSelect diferenciaCambio ;
+
+    private ComboSelect diferenciaCambio;
+    private ComboSelect utilidadGestion;
 
     public static ContabilidadBoletajeJSon toJSon(ContabilidadBoletaje data) {
         ContabilidadBoletajeJSon json = new ContabilidadBoletajeJSon();
@@ -111,10 +112,19 @@ public class ContabilidadBoletajeJSon {
         json.setTarjetaCreditoBspDebeUsd(new ComboSelect(data.getTarjetaCreditoBspDebeUsd()));
         json.setTarjetaCreditoBspHaberBs(new ComboSelect(data.getTarjetaCreditoBspHaberBs()));
         json.setTarjetaCreditoBspHaberUsd(new ComboSelect(data.getTarjetaCreditoBspHaberUsd()));
-        
+
         json.setDiferenciaCambio(new ComboSelect(data.getDiferenciaCambio()));
+        json.setUtilidadGestion(new ComboSelect(data.getUtilidadGestion()));
 
         return json;
+    }
+
+    public ComboSelect getUtilidadGestion() {
+        return utilidadGestion;
+    }
+
+    public void setUtilidadGestion(ComboSelect utilidadGestion) {
+        this.utilidadGestion = utilidadGestion;
     }
 
     public ComboSelect getDiferenciaCambio() {
@@ -132,30 +142,30 @@ public class ContabilidadBoletajeJSon {
         data.setAcreditacionDepositoAnticipadoDebeUsd(((Double) json.getAcreditacionDepositoAnticipadoDebeUsd().getId()).intValue());
         data.setAcreditacionDepositoAnticipadoHaberBs(((Double) json.getAcreditacionDepositoAnticipadoHaberBs().getId()).intValue());
         data.setAcreditacionDepositoAnticipadoHaberUsd(((Double) json.getAcreditacionDepositoAnticipadoHaberUsd().getId()).intValue());
-        
+
         data.setCuentaEfectivoDebeBs(((Double) json.getCuentaEfectivoDebeBs().getId()).intValue());
         data.setCuentaEfectivoDebeUsd(((Double) json.getCuentaEfectivoDebeUsd().getId()).intValue());
         data.setCuentaEfectivoHaberBs(((Double) json.getCuentaEfectivoHaberBs().getId()).intValue());
         data.setCuentaEfectivoHaberUsd(((Double) json.getCuentaEfectivoHaberUsd().getId()).intValue());
-        
+
         data.setCuentaEfectivoNoBspDebeBs(((Double) json.getCuentaEfectivoNoBspDebeBs().getId()).intValue());
         data.setCuentaEfectivoNoBspDebeUsd(((Double) json.getCuentaEfectivoNoBspDebeUsd().getId()).intValue());
         data.setCuentaEfectivoNoBspHaberBs(((Double) json.getCuentaEfectivoNoBspHaberBs().getId()).intValue());
         data.setCuentaEfectivoNoBspHaberUsd(((Double) json.getCuentaEfectivoNoBspHaberUsd().getId()).intValue());
-        
+
         data.setDepositoBancoDebeBs(((Double) json.getDepositoBancoDebeBs().getId()).intValue());
         data.setDepositoBancoDebeUsd(((Double) json.getDepositoBancoDebeUsd().getId()).intValue());
         data.setDepositoBancoHaberBs(((Double) json.getDepositoBancoHaberBs().getId()).intValue());
         data.setDepositoBancoHaberUsd(((Double) json.getDepositoBancoHaberUsd().getId()).intValue());
-        
+
         data.setDepositoClienteAnticipadoBs(((Double) json.getDepositoClienteAnticipadoBs().getId()).intValue());
         data.setDepositoClienteAnticipadoUsd(((Double) json.getDepositoClienteAnticipadoUsd().getId()).intValue());
-        
+
         data.setDevolucionDepositoAnticipadoDebeBs(((Double) json.getDevolucionDepositoAnticipadoDebeBs().getId()).intValue());
         data.setDevolucionDepositoAnticipadoDebeUsd(((Double) json.getDevolucionDepositoAnticipadoDebeUsd().getId()).intValue());
         data.setDevolucionDepositoAnticipadoHaberBs(((Double) json.getDevolucionDepositoAnticipadoHaberBs().getId()).intValue());
         data.setDevolucionDepositoAnticipadoHaberUsd(((Double) json.getDevolucionDepositoAnticipadoHaberUsd().getId()).intValue());
-        
+
         data.setEmisionBolivianos(json.getEmisionBolivianos());
         data.setEmisionDolares(json.getEmisionDolares());
         data.setIdCuentaFee(((Double) json.getIdCuentaFee().getId()).intValue());
@@ -163,20 +173,21 @@ public class ContabilidadBoletajeJSon {
         data.setIdEmpresa(json.getIdEmpresa());
         data.setIdTotalBoletoBs(((Double) json.getIdTotalBoletoBs().getId()).intValue());
         data.setIdTotalBoletoUs(((Double) json.getIdTotalBoletoUs().getId()).intValue());
-        
+
         data.setNotaCreditoHaberBs(((Double) json.getNotaCreditoHaberBs().getId()).intValue());
         data.setNotaCreditoHaberUsd(((Double) json.getNotaCreditoHaberUsd().getId()).intValue());
-        
+
         data.setOtrosCargosClienteCobrarDebeBs(((Double) json.getOtrosCargosClienteCobrarDebeBs().getId()).intValue());
         data.setOtrosCargosClienteCobrarDebeUsd(((Double) json.getOtrosCargosClienteCobrarDebeUsd().getId()).intValue());
-        
+
         data.setTarjetaCreditoBspDebeBs(((Double) json.getTarjetaCreditoBspDebeBs().getId()).intValue());
         data.setTarjetaCreditoBspDebeUsd(((Double) json.getTarjetaCreditoBspDebeUsd().getId()).intValue());
         data.setTarjetaCreditoBspHaberBs(((Double) json.getTarjetaCreditoBspHaberBs().getId()).intValue());
         data.setTarjetaCreditoBspHaberUsd(((Double) json.getTarjetaCreditoBspHaberUsd().getId()).intValue());
-        
+
         data.setDiferenciaCambio((((Double) json.getDiferenciaCambio().getId()).intValue()));
-        
+        data.setUtilidadGestion((((Double) json.getUtilidadGestion().getId()).intValue()));
+
         return data;
     }
 

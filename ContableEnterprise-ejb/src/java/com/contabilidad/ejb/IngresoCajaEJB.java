@@ -670,13 +670,16 @@ public class IngresoCajaEJB extends FacadeEJB implements IngresoCajaRemote {
                         throw new CRUDException(msg);
                     }
                     
-                    AsientoContable debe = ejbComprobante.createTotalCancelarIngresoCajaDebe(comprobanteIngreso, conf, ndt, fromDb, b, tran);
+                    AsientoContable debe = ejbComprobante
+                            .createTotalCancelarIngresoCajaDebe(comprobanteIngreso, conf, ndt, fromDb, b, tran);
                     insert(debe);
                     
-                    AsientoContable haber = ejbComprobante.createTotalCancelarIngresoClienteHaber(comprobanteIngreso, conf, ndt, fromDb, b, tran);
+                    AsientoContable haber = ejbComprobante
+                            .createTotalCancelarIngresoClienteHaber(comprobanteIngreso, conf, ndt, fromDb, b, tran);
                     insert(haber);
                     
-                    AsientoContable diferencia = ejbComprobante.createTotalCancelarIngresoClienteHaberDiferencia(comprobanteIngreso, conf, ndt, fromDb, b, tran);
+                    AsientoContable diferencia = ejbComprobante
+                            .createTotalCancelarIngresoClienteHaberDiferencia(comprobanteIngreso, conf, ndt, fromDb, b, tran);
                     insert(diferencia);
                     
                 } else {
@@ -689,11 +692,17 @@ public class IngresoCajaEJB extends FacadeEJB implements IngresoCajaRemote {
                         throw new CRUDException(msg);
                     }
                     
-                    AsientoContable debe = ejbComprobante.createTotalCancelarIngresoCajaDebe(comprobanteIngreso, conf, ndt, fromDb, c, tran);
+                    AsientoContable debe = ejbComprobante
+                            .createTotalCancelarIngresoCajaDebe(comprobanteIngreso, conf, ndt, fromDb, c, tran);
                     insert(debe);
                     
-                    AsientoContable haber = ejbComprobante.createTotalCancelarIngresoClienteHaber(comprobanteIngreso, conf, ndt, fromDb, c, tran);
+                    AsientoContable haber = ejbComprobante
+                            .createTotalCancelarIngresoClienteHaber(comprobanteIngreso, conf, ndt, fromDb, c, tran);
                     insert(haber);
+                    
+                    AsientoContable diferencia = ejbComprobante
+                            .createTotalCancelarIngresoClienteHaberDiferencia(comprobanteIngreso, conf, ndt, fromDb, c, tran);
+                    insert(diferencia);
                     
                 }
                 em.merge(ndt);
