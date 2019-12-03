@@ -74,7 +74,7 @@
                 <!-- .wrapper -->
                 <div class="wrapper">
                     <!-- .page -->
-                    <div class="page" ng-app="jsEstadosResultados" ng-controller="frmEstadosResultados">
+                    <div class="page" ng-app="jsBalanceGeneral" ng-controller="frmBalanceGeneral">
                         <!-- .page-inner -->
                         <div class="page-inner">
                             <!-- .page-title-bar -->
@@ -83,13 +83,13 @@
                                     <ol class="breadcrumb">
                                         <li class="breadcrumb-item active">
                                             <a href="#">
-                                                <i class="breadcrumb-icon fa fa-angle-left mr-2"></i>#{estadosResultados.formulario.modulo}
+                                                <i class="breadcrumb-icon fa fa-angle-left mr-2"></i>#{balanceGeneral.formulario.modulo}
                                             </a>
                                         </li>
                                     </ol>
                                 </nav>
                                 <div class="d-md-flex">
-                                    <h1 class="page-title mr-sm-auto"> #{estadosResultados.formulario.nombre}</h1>
+                                    <h1 class="page-title mr-sm-auto"> #{balanceGeneral.formulario.nombre}</h1>
                                     <div class="dt-button btn-group">
 
                                         <button type="button" class="btn btn-warning buttons-html5" tabindex="0" ng-click="cancelar()"><span class="fa fa-undo"></span> Cancelar</button>
@@ -176,11 +176,11 @@
                                                 </c:if>
                                             </form>
                                             <div  id="tableData" class="ng-hide table-responsive" ng-show="showTable">
-                                                <table id="dataTable" st-table="display_records" st-safe-src="gridMain" 
+                                                <table id="dataTable" st-table="display_records" st-safe-src="gridMain.activos" 
                                                        class="table table-hover" >
                                                     <thead>
                                                         <tr>
-                                                            <td colspan="4"><strong>Estado de Resultados:</strong>
+                                                            <td colspan="4"><strong>A la Fecha:</strong>
                                                                 <strong>&nbsp;&nbsp;Desde:</strong>
                                                                 {{search.fechaInicio}}
                                                                 <strong>&nbsp;&nbsp;Hasta:</strong>
@@ -190,10 +190,69 @@
                                                             </td>
                                                         </tr>
                                                         
+                                                        <legend>ACTIVOS</legend>
                                                         <tr>
-                                                            <th class="align-middle">Nro. Cuenta</th>
                                                             <th class="align-middle">Cuenta</th>
-                                                            <th align="right" class="align-middle">Monto</th>
+                                                            <th align="right" class="align-middle"></th>
+                                                            <th align="right" class="align-middle"></th>
+                                                            <th align="right" class="align-middle"></th>
+                                                            <th align="right" class="align-middle"></th>
+                                                            
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr st-select-row="row" st-select-mode="multiple" 
+                                                            ng-repeat="row in display_records" >
+                                                            <td>{{row.v_cuenta}} </td>
+                                                            <td>{{row.v_nivel === 1 ? printMonto(row)|prinNumber}} </td>
+                                                            <td>{{row.v_nivel === 2 ? printMonto(row)|prinNumber}} </td>
+                                                            <td>{{row.v_nivel === 3 ? printMonto(row)|prinNumber}} </td>
+                                                            <td>{{row.v_nivel === 4 ? printMonto(row)|prinNumber}} </td>
+                                                            <td>{{row.v_nivel === 5 ? printMonto(row)|prinNumber}} </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                                <div class="modal-footer">
+                                                    <c:if test="#{estadosResultados.formulario.crear== estadosResultados.formulario.PERMITIR}">
+                                                        <div class="row" >
+                                                            <label for="txtNombre" class="col-form-label col-sm-3 text-right" ></label>
+                                                            <button id="btn-export-excel"  class="btn btn-success" onclick="tableToExcel('dataTable', 'W3C Example Table')"  value="Exportar Excel" title="Exportar a Excel"  ><span class="fa fa-file-excel"></span> Exportar</button>
+                                                        </div>
+                                                    </c:if>
+                                                    
+                                                    <c:if test="#{estadosResultados.formulario.acceder== estadosResultados.formulario.PERMITIR}">
+                                                            <div class="row" >
+                                                                <label for="txtNombre" class="col-form-label col-sm-3 text-right" ></label>
+                                                                <button type="button" class="btn btn-dark"  ng-click="imprimir()" value="Imprimir" > <span class="fa fa-print"></span> Imprimir</button></div>
+                                                        </c:if>
+                                                </div>
+                                                
+                                                
+                                                
+                                                
+                                                <div  id="tableData" class="ng-hide table-responsive" ng-show="showTable">
+                                                <table id="dataTable" st-table="display_records" st-safe-src="gridMain" 
+                                                       class="table table-hover" >
+                                                    <thead>
+                                                        <tr>
+                                                            <td colspan="4"><strong>A la Fecha:</strong>
+                                                                <strong>&nbsp;&nbsp;Desde:</strong>
+                                                                {{search.fechaInicio}}
+                                                                <strong>&nbsp;&nbsp;Hasta:</strong>
+                                                                {{search.fechaFin}}
+                                                                <strong>&nbsp;&nbsp;Moneda :</strong>
+                                                                {{search.moneda|printMoneda}}
+                                                            </td>
+                                                        </tr>
+                                                        
+                                                        <legend>PASIVOS Y PATRIMONIOS</legend>
+                                                        <tr>
+                                                            <th class="align-middle">Cuenta</th>
+                                                            <th align="right" class="align-middle"></th>
+                                                            <th align="right" class="align-middle"></th>
+                                                            <th align="right" class="align-middle"></th>
+                                                            <th align="right" class="align-middle"></th>
+                                                            
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -204,13 +263,6 @@
                                                             <td align="right">{{row.saldo}} </td>
                                                         </tr>
                                                     </tbody>
-                                                    <!--<tfoot>
-                                                        <tr>
-                                                            <td colspan="10" class="text-center">
-                                                                <div class="container" st-items-by-page="itemsByPage" st-pagination="" st-template="../index/pagination.custom.html"></div>
-                                                            </td>
-                                                        </tr>
-                                                    </tfoot> -->
                                                 </table>
                                                 <div class="modal-footer">
                                                     <c:if test="#{estadosResultados.formulario.crear== estadosResultados.formulario.PERMITIR}">
@@ -238,8 +290,6 @@
                                                     <input type="hidden" id="hdUrl" name="hdUrl" value="#{estadosResultados.formulario.restful}"/>
                                                     <input type="hidden" id="hdToken" name="hdToken" value="#{sessionView.token}"/>
                                                     <input type="hidden" id="hdFormName" name="hdFormName" value="#{estadosResultados.formulario.nombre}"/>
-                                                    <input type="hidden" id="hdUrlPlanCuentas" name="hdUrlPlanCuentas" value="#{planCuentas.formulario.restful}"/>
-                                                    <input type="hidden" id="hdUrlComprobantes" name="hdUrlComprobantes" value="#{comprobantes.formulario.restful}"/>
                                                     <input type="hidden" id="idEmpresa" name="idEmpresa" value="#{login.empleado.idEmpresa.idEmpresa}"/>
                                                     <!--<input type="hidden" id="txtFechaAlta" name="txtFechaAlta" ng-model="formData.fechaAlta"/>-->
                                                     <!--<input type="hidden" id="txtFechaBaja" name="txtFechaBaja" ng-model="formData.fechaBaja"/>-->
@@ -306,7 +356,7 @@
         <!-- END PLUGINS JS -->
         <!-- BEGIN THEME JS -->
         <script src="../../assets/javascript/main.min.js"></script>
-        <script type="text/javascript" src="../../js/contabilidad/estados-resultados.js" />
+        <script type="text/javascript" src="../../js/contabilidad/balance-general.js" />
         <script type="text/javascript" src="../../js/tableexport.min.js" />
 
         <script type="text/javascript" src="../../assets/javascript/pages/flatpickr-demo.js"></script>

@@ -18,6 +18,7 @@ import com.response.json.boletaje.NotaCreditoSearchJson;
 import com.response.json.boletaje.PagoAnticipadoSearchJson;
 import com.response.json.configuracion.ParametrosJson;
 import com.response.json.contabilidad.AsientoContableJSON;
+import com.response.json.contabilidad.BalanceGeneralSearchJson;
 import com.response.json.contabilidad.CargoBoletoJSON;
 import com.response.json.contabilidad.ComprobanteContableJSON;
 import com.response.json.contabilidad.DevolucionJson;
@@ -381,6 +382,23 @@ public class BeanUtils {
         JsonParser parser = new JsonParser();
         JsonObject object = parser.parse((String) request.getContent()).getAsJsonObject();
         bjson = gson.fromJson(object.toString(), EstadosResultadosSearchJson.class);
+
+        return bjson;
+    }
+    
+    
+    
+    public static BalanceGeneralSearchJson convertToBalanceGeneralSearchJson(RestRequest request) {
+
+        if (request.getContent() == null) {
+            return new BalanceGeneralSearchJson();
+        }
+
+        BalanceGeneralSearchJson bjson;
+        Gson gson = new GsonBuilder().create();
+        JsonParser parser = new JsonParser();
+        JsonObject object = parser.parse((String) request.getContent()).getAsJsonObject();
+        bjson = gson.fromJson(object.toString(), BalanceGeneralSearchJson.class);
 
         return bjson;
     }

@@ -15,15 +15,15 @@ import java.math.BigDecimal;
 public class BalanceGeneralDto implements Serializable {
 
     private Integer idPlanCuenta;
-    private Long nroPlanCuenta;
-    private Long nroPlanCuentaPadre;
+    private String nroPlanCuenta;
+    private String nroPlanCuentaPadre;
     private Integer nivel;
     private Integer cuentaRegularizacion;
     private String cuenta;
     private BigDecimal saldoDebe;
     private BigDecimal saldoHaber;
 
-    public BalanceGeneralDto(Integer idPlanCuenta, Long nroPlanCuenta, Long nroPlanCuentaPadre, Integer nivel, Integer cuentaRegularizacion, String cuenta, BigDecimal saldoDebe, BigDecimal saldoHaber) {
+    public BalanceGeneralDto(Integer idPlanCuenta, String nroPlanCuenta, String nroPlanCuentaPadre, Integer nivel, Integer cuentaRegularizacion, String cuenta, BigDecimal saldoDebe, BigDecimal saldoHaber) {
         this.idPlanCuenta = idPlanCuenta;
         this.nroPlanCuenta = nroPlanCuenta;
         this.nroPlanCuentaPadre = nroPlanCuentaPadre;
@@ -44,19 +44,19 @@ public class BalanceGeneralDto implements Serializable {
         this.idPlanCuenta = idPlanCuenta;
     }
 
-    public Long getNroPlanCuenta() {
+    public String getNroPlanCuenta() {
         return nroPlanCuenta;
     }
 
-    public void setNroPlanCuenta(Long nroPlanCuenta) {
+    public void setNroPlanCuenta(String nroPlanCuenta) {
         this.nroPlanCuenta = nroPlanCuenta;
     }
 
-    public Long getNroPlanCuentaPadre() {
+    public String getNroPlanCuentaPadre() {
         return nroPlanCuentaPadre;
     }
 
-    public void setNroPlanCuentaPadre(Long nroPlanCuentaPadre) {
+    public void setNroPlanCuentaPadre(String nroPlanCuentaPadre) {
         this.nroPlanCuentaPadre = nroPlanCuentaPadre;
     }
 

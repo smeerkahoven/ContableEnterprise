@@ -5,10 +5,9 @@
  */
 package com.contabilidad.remote;
 
-import com.contabilidad.entities.BalanceGeneralDto;
+import com.contabilidad.entities.BalanceDto;
 import com.response.json.contabilidad.BalanceGeneralSearchJson;
 import com.seguridad.control.exception.CRUDException;
-import java.util.List;
 import javax.ejb.Remote;
 
 /**
@@ -18,6 +17,6 @@ import javax.ejb.Remote;
 @Remote
 public interface BalanceGeneralRemote {
     
-    public List<BalanceGeneralDto> generarBalance (final BalanceGeneralSearchJson search) throws CRUDException ;
+    public BalanceDto generarBalance (final BalanceGeneralSearchJson search) throws CRUDException ;
     
 }

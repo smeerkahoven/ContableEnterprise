@@ -83,6 +83,17 @@ import javax.xml.bind.annotation.XmlRootElement;
                         ,@StoredProcedureParameter(mode = ParameterMode.IN, type = String.class, name = "in_moneda" )
                         ,@StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_empresa" )
                     }
+            ),
+            @NamedStoredProcedureQuery(
+                    name = "PlanCuenta.balanceGeneralObtenerActivos",
+                    procedureName = "balanceGeneralObtenerActivos",
+                    resultSetMappings = "BalanceGeneralDto"
+            ),
+            
+            @NamedStoredProcedureQuery(
+                    name = "PlanCuenta.balanceGeneralObtenerPasivos",
+                    procedureName = "balanceGeneralObtenerPasivos",
+                    resultSetMappings = "BalanceGeneralDto"
             )
 
         }
@@ -96,8 +107,8 @@ import javax.xml.bind.annotation.XmlRootElement;
                             targetClass = BalanceGeneralDto.class,
                             columns = {
                                 @ColumnResult(name = "v_id_plan_cuenta", type = Integer.class)
-                                ,@ColumnResult(name = "v_nro_plan_cuenta", type = Integer.class)
-                                ,@ColumnResult(name = "v_nro_plan_cuenta_padre", type = Integer.class)
+                                ,@ColumnResult(name = "v_nro_plan_cuenta", type = String.class)
+                                ,@ColumnResult(name = "v_nro_plan_cuenta_padre", type = String.class)
                                 ,@ColumnResult(name = "v_nivel", type = Integer.class)
                                 ,@ColumnResult(name = "id_cuenta_regularizacion", type = Integer.class)
                                 ,@ColumnResult(name = "v_cuenta", type = Integer.class)
