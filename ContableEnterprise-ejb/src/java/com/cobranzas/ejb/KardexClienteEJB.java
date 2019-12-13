@@ -135,7 +135,11 @@ public class KardexClienteEJB extends FacadeEJB implements KardexClienteRemote {
         stp.setParameter("in_id_cliente", idCliente);
         stp.setParameter("in_id_selected", idNotaDebito);
 
-        List l = stp.getResultList();
+        List<KardexClienteDto> l = (List<KardexClienteDto>) stp.getResultList();
+        
+        for (KardexClienteDto k : l) {
+            System.out.println(k);
+        }
 
         return l;
 
@@ -180,7 +184,9 @@ public class KardexClienteEJB extends FacadeEJB implements KardexClienteRemote {
         stp.setParameter("in_end_date", endDate);
         stp.setParameter("in_selected", 0);
 
-        List l = stp.getResultList();
+        List<KardexClienteDto> l = stp.getResultList();
+        
+        System.out.println(l) ;
 
         return l;
 

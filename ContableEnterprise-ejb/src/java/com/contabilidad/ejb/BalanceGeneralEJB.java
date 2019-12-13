@@ -39,9 +39,7 @@ public class BalanceGeneralEJB extends FacadeEJB implements BalanceGeneralRemote
             throw new CRUDException("Debe ingresar una Moneda");
         }
 
-        int year = Calendar.YEAR;
-
-        Date startDate = DateContable.toLatinAmericaDateFormat("01/01/" + year);
+        Date startDate = DateContable.toLatinAmericaDateFormat(search.getFechaInicio());
         Date endDate = DateContable.toLatinAmericaDateFormat(search.getFechaFin());
 
         StoredProcedureQuery stp = em.createNamedStoredProcedureQuery("PlanCuenta.balanceGeneral");
@@ -50,19 +48,15 @@ public class BalanceGeneralEJB extends FacadeEJB implements BalanceGeneralRemote
         stp.setParameter("in_moneda", search.getMoneda());
         stp.setParameter("in_id_empresa", search.getIdEmpresa());
 
-        List l = stp.getResultList();
-
         BalanceDto balance = new BalanceDto();
 
-        if (!l.isEmpty()) {
-            stp = em.createNamedStoredProcedureQuery("PlanCuenta.balanceGeneralObtenerActivos");
-            List<BalanceGeneralDto> listActivos = stp.getResultList();
-
-            balance.setActivos(listActivos);
-
-            //TODO falta pasivos
-        }
-
+        StoredProcedureQuery stpActi = em.createNamedStoredProcedureQuery("PlanCuenta.balanceGeneralObtenerActivos");
+        StoredProcedureQuery stpPas = em.createNamedStoredProcedureQuery("PlanCuenta.balanceGeneralObtenerPasivosPatrimonio");
+        
+        
+        balance.setActivos(stpActi.getResultList());
+        balance.setPasivos(stpPas.getResultList());
+        
         return balance;
 
     }

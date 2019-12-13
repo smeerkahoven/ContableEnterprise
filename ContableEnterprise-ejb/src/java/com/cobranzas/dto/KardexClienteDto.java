@@ -172,4 +172,13 @@ public class KardexClienteDto implements Serializable {
         this.estado = estado;
     }
 
+    @Override
+    public String toString() {
+        return "KardexClienteDto{" + "idDocumento=" + idDocumento + ", glosa=" + glosa + ", fecha=" + fecha + ", vencimiento=" + vencimiento + ", formaPago=" + formaPago + ", montoDebeNac=" + montoDebeNac + ", montoHaberNac=" + montoHaberNac + ", saldoNac=" + saldoNac + ", montoDebeExt=" + montoDebeExt + ", montoHaberExt=" + montoHaberExt + ", saldoExt=" + saldoExt + ", tipoDocumento=" + tipoDocumento + ", estado=" + estado + ", row=" + row + ", selected=" + selected + '}';
+    }
+    
+    
+    
+
+    
 }

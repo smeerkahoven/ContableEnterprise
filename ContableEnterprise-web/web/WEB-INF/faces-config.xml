@@ -130,7 +130,7 @@
             <redirect />
         </navigation-case>
     </navigation-rule>
-<!-- ./AGENCIA-->        
+    <!-- ./AGENCIA-->        
     <navigation-rule>
         <from-view-id>pages/*</from-view-id>
         <navigation-case>
@@ -215,14 +215,7 @@
     </navigation-rule>
     
     
-    <navigation-rule>
-        <from-view-id>pages/*</from-view-id>
-        <navigation-case>
-            <from-outcome>balance-general</from-outcome>
-            <to-view-id>/pages/cobranzas/balance-general.xhtml?faces-redirect=true</to-view-id>
-            <redirect />
-        </navigation-case>
-    </navigation-rule>
+
     
     <!-- configuracion -->
     
@@ -332,6 +325,16 @@
         <navigation-case>
             <from-outcome>estados-resultados</from-outcome>
             <to-view-id>pages/contabilidad/estados-resultados.xhtml?faces-redirect=true</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
+    
+    <navigation-rule>
+        <from-view-id>pages/*</from-view-id>
+        <navigation-case>
+            <from-outcome>balance-general</from-outcome>
+            <to-view-id>/pages/contabilidad/balance-general.xhtml?faces-redirect=true</to-view-id>
             <redirect />
         </navigation-case>
     </navigation-rule>

@@ -36,7 +36,6 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 //import javax.validation.constraints.NotNull;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
@@ -44,22 +43,22 @@ import javax.xml.bind.annotation.XmlRootElement;
  */
 @Entity
 @Table(name = "cnt_nota_debito")
-@XmlRootElement
-@NamedStoredProcedureQuery(
-        name = "NotaDebito.asociarBoletoNotaDebito",
-        procedureName = "asociarBoletoNotaDebito",
-        parameters = {
-            @StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_nota_debito")
-            ,@StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_boleto")
-            ,@StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_cliente")
-            ,@StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_counter")
-            ,@StoredProcedureParameter(mode = ParameterMode.IN, type = BigDecimal.class, name = "in_factor")
-            ,@StoredProcedureParameter(mode = ParameterMode.IN, type = String.class, name = "in_usuario_creador")
-            ,@StoredProcedureParameter(mode = ParameterMode.OUT, type = Integer.class, name = "out_id_transacion")
-        }
-)
 
 @NamedStoredProcedureQueries({
+    @NamedStoredProcedureQuery(
+            name = "NotaDebito.asociarBoletoNotaDebito",
+            procedureName = "asociarBoletoNotaDebito",
+            parameters = {
+                @StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_nota_debito")
+                ,@StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_boleto")
+                ,@StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_cliente")
+                ,@StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_counter")
+                ,@StoredProcedureParameter(mode = ParameterMode.IN, type = BigDecimal.class, name = "in_factor")
+                ,@StoredProcedureParameter(mode = ParameterMode.IN, type = String.class, name = "in_usuario_creador")
+                ,@StoredProcedureParameter(mode = ParameterMode.OUT, type = Integer.class, name = "out_id_transacion")
+            }
+    )
+    ,
     @NamedStoredProcedureQuery(
             name = "NotaDebito.updateBoletoNotaDebito",
             procedureName = "updateBoletoNotaDebito",
@@ -154,30 +153,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 })
 
-@SqlResultSetMapping(
-        name = "KardexClienteDto",
-        classes = @ConstructorResult(
-                targetClass = KardexClienteDto.class,
-                columns = {
-                    @ColumnResult(name = "v_id_documento", type = Integer.class)
-                    ,@ColumnResult(name = "v_glosa", type = String.class)
-                    ,@ColumnResult(name = "v_fecha", type = String.class)
-                    ,@ColumnResult(name = "v_vencimiento", type = String.class)
-                    ,@ColumnResult(name = "v_forma_pago", type = String.class)
-                    ,@ColumnResult(name = "v_monto_debe_nac", type = BigDecimal.class)
-                    ,@ColumnResult(name = "v_monto_haber_nac", type = BigDecimal.class)
-                    ,@ColumnResult(name = "v_saldo_nac", type = BigDecimal.class)
-                    ,@ColumnResult(name = "v_monto_debe_ext", type = BigDecimal.class)
-                    ,@ColumnResult(name = "v_monto_haber_ext", type = BigDecimal.class)
-                    ,@ColumnResult(name = "v_saldo_ext", type = BigDecimal.class)
-                    ,@ColumnResult(name = "v_tipo_documento", type = String.class)
-                    ,@ColumnResult(name = "v_estado", type = String.class)
-                    ,@ColumnResult(name = "v_row", type = String.class)
-                    ,@ColumnResult(name = "v_selected", type = String.class)
-                }
-        )
-)
-@SqlResultSetMappings(
+
+@SqlResultSetMappings({
         @SqlResultSetMapping(
                 name = "ReporteEstadoClienteDto",
                 classes = @ConstructorResult(
@@ -205,6 +182,32 @@ import javax.xml.bind.annotation.XmlRootElement;
                         }
                 )
         )
+        ,
+    
+    @SqlResultSetMapping(
+        name = "KardexClienteDto",
+        classes = @ConstructorResult(
+                targetClass = KardexClienteDto.class,
+                columns = {
+                    @ColumnResult(name = "v_id_documento", type = Integer.class)
+                    ,@ColumnResult(name = "v_glosa", type = String.class)
+                    ,@ColumnResult(name = "v_fecha", type = String.class)
+                    ,@ColumnResult(name = "v_vencimiento", type = String.class)
+                    ,@ColumnResult(name = "v_forma_pago", type = String.class)
+                    ,@ColumnResult(name = "v_monto_debe_nac", type = BigDecimal.class)
+                    ,@ColumnResult(name = "v_monto_haber_nac", type = BigDecimal.class)
+                    ,@ColumnResult(name = "v_saldo_nac", type = BigDecimal.class)
+                    ,@ColumnResult(name = "v_monto_debe_ext", type = BigDecimal.class)
+                    ,@ColumnResult(name = "v_monto_haber_ext", type = BigDecimal.class)
+                    ,@ColumnResult(name = "v_saldo_ext", type = BigDecimal.class)
+                    ,@ColumnResult(name = "v_tipo_documento", type = String.class)
+                    ,@ColumnResult(name = "v_estado", type = String.class)
+                    ,@ColumnResult(name = "v_row", type = String.class)
+                    ,@ColumnResult(name = "v_selected", type = String.class)
+                }
+        )
+)
+}
 )
 
 @NamedQueries({

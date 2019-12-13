@@ -66,11 +66,17 @@ public class KardexClienteResource extends TemplateResource {
                 KardexClienteSearchJson json = BeanUtils.convertToKardexClienteSearchJson(request);
                 
                 List <KardexClienteDto> l = ejbKardex.generarKardexCliente(json);
+                System.out.println(l);
                 if (l.isEmpty()) {
                     response.setContent(mensajes.getProperty(RestResponse.RESTFUL_LISTA_VACIA));
                     response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());
                     return response ;
                 }
+                
+                for(KardexClienteDto k : l){
+                    System.out.println(k);
+                }
+                
                 
                 response.setContent(l);
                 response.setCode(ResponseCode.RESTFUL_SUCCESS.getCode());

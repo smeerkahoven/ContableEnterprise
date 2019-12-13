@@ -76,7 +76,6 @@ import javax.xml.bind.annotation.XmlRootElement;
             @NamedStoredProcedureQuery(
                     name = "PlanCuenta.balanceGeneral",
                     procedureName = "balanceGeneral",
-                    resultSetMappings = "BalanceGeneralDto",
                     parameters = {
                         @StoredProcedureParameter(mode = ParameterMode.IN, type = Date.class, name = "in_start_date" )
                         ,@StoredProcedureParameter(mode = ParameterMode.IN, type = Date.class, name = "in_end_date" )
@@ -91,29 +90,29 @@ import javax.xml.bind.annotation.XmlRootElement;
             ),
             
             @NamedStoredProcedureQuery(
-                    name = "PlanCuenta.balanceGeneralObtenerPasivos",
-                    procedureName = "balanceGeneralObtenerPasivos",
+                    name = "PlanCuenta.balanceGeneralObtenerPasivosPatrimonio",
+                    procedureName = "balanceGeneralObtenerPasivosPatrimonio",
                     resultSetMappings = "BalanceGeneralDto"
             )
 
         }
 )
 
-@SqlResultSetMappings(
-        {
+@SqlResultSetMappings({
             @SqlResultSetMapping(
                     name = "BalanceGeneralDto",
                     classes = @ConstructorResult(
                             targetClass = BalanceGeneralDto.class,
                             columns = {
                                 @ColumnResult(name = "v_id_plan_cuenta", type = Integer.class)
-                                ,@ColumnResult(name = "v_nro_plan_cuenta", type = String.class)
-                                ,@ColumnResult(name = "v_nro_plan_cuenta_padre", type = String.class)
+                                
+                                ,@ColumnResult(name = "v_nro_plan_cuenta", type = Long.class)
+                                ,@ColumnResult(name = "v_nro_plan_cuenta_padre", type = Long.class)
+                                ,@ColumnResult(name = "v_id_cuenta_regularizacion", type = Integer.class)
+                                ,@ColumnResult(name = "v_saldo_debe", type = BigDecimal.class)
+                                ,@ColumnResult(name = "v_saldo_haber", type = BigDecimal.class)
                                 ,@ColumnResult(name = "v_nivel", type = Integer.class)
-                                ,@ColumnResult(name = "id_cuenta_regularizacion", type = Integer.class)
-                                ,@ColumnResult(name = "v_cuenta", type = Integer.class)
-                                ,@ColumnResult(name = "v_saldo_debe", type = Integer.class)
-                                ,@ColumnResult(name = "v_saldo_haber", type = Integer.class)
+                                    ,@ColumnResult(name="v_cuenta", type = String.class)
                             }
                     )
             )

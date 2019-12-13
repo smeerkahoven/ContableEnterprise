@@ -5,6 +5,7 @@
  */
 package com.contabilidad.entities;
 
+import com.seguridad.utils.Contabilidad;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
@@ -15,26 +16,27 @@ import java.math.BigDecimal;
 public class BalanceGeneralDto implements Serializable {
 
     private Integer idPlanCuenta;
-    private String nroPlanCuenta;
-    private String nroPlanCuentaPadre;
-    private Integer nivel;
+    
+    private Long nroPlanCuenta;
+    private Long nroPlanCuentaPadre;
     private Integer cuentaRegularizacion;
-    private String cuenta;
     private BigDecimal saldoDebe;
     private BigDecimal saldoHaber;
+    private Integer nivel;
+private String cuenta;
 
-    public BalanceGeneralDto(Integer idPlanCuenta, String nroPlanCuenta, String nroPlanCuentaPadre, Integer nivel, Integer cuentaRegularizacion, String cuenta, BigDecimal saldoDebe, BigDecimal saldoHaber) {
+    public BalanceGeneralDto(Integer idPlanCuenta, Long nroPlanCuenta, Long nroPlanCuentaPadre, Integer cuentaRegularizacion, BigDecimal saldoDebe, BigDecimal saldoHaber, Integer nivel, String cuenta) {
         this.idPlanCuenta = idPlanCuenta;
         this.nroPlanCuenta = nroPlanCuenta;
         this.nroPlanCuentaPadre = nroPlanCuentaPadre;
-        this.nivel = nivel;
         this.cuentaRegularizacion = cuentaRegularizacion;
-        this.cuenta = cuenta;
         this.saldoDebe = saldoDebe;
         this.saldoHaber = saldoHaber;
+        this.nivel = nivel;
+        this.cuenta = cuenta;
     }
-
     
+
     
     public Integer getIdPlanCuenta() {
         return idPlanCuenta;
@@ -44,19 +46,19 @@ public class BalanceGeneralDto implements Serializable {
         this.idPlanCuenta = idPlanCuenta;
     }
 
-    public String getNroPlanCuenta() {
+    public Long getNroPlanCuenta() {
         return nroPlanCuenta;
     }
 
-    public void setNroPlanCuenta(String nroPlanCuenta) {
+    public void setNroPlanCuenta(Long nroPlanCuenta) {
         this.nroPlanCuenta = nroPlanCuenta;
     }
 
-    public String getNroPlanCuentaPadre() {
+    public Long getNroPlanCuentaPadre() {
         return nroPlanCuentaPadre;
     }
 
-    public void setNroPlanCuentaPadre(String nroPlanCuentaPadre) {
+    public void setNroPlanCuentaPadre(Long nroPlanCuentaPadre) {
         this.nroPlanCuentaPadre = nroPlanCuentaPadre;
     }
 
@@ -85,7 +87,11 @@ public class BalanceGeneralDto implements Serializable {
     }
 
     public BigDecimal getSaldoDebe() {
-        return saldoDebe;
+        
+        if (saldoDebe!= null)
+            saldoDebe.setScale(Contabilidad.VALOR_DECIMAL_2, BigDecimal.ROUND_UP);
+        
+        return  saldoDebe;
     }
 
     public void setSaldoDebe(BigDecimal saldoDebe) {
@@ -93,6 +99,10 @@ public class BalanceGeneralDto implements Serializable {
     }
 
     public BigDecimal getSaldoHaber() {
+               if (saldoHaber!= null)
+            saldoHaber.setScale(Contabilidad.VALOR_DECIMAL_2, BigDecimal.ROUND_UP);
+  
+               
         return saldoHaber;
     }
 
@@ -100,6 +110,13 @@ public class BalanceGeneralDto implements Serializable {
         this.saldoHaber = saldoHaber;
     }
 
+    @Override
+    public String toString() {
+        return "BalanceGeneralDto{" + "idPlanCuenta=" + idPlanCuenta + ", cuenta=" + cuenta + ", nroPlanCuenta=" + nroPlanCuenta + ", nroPlanCuentaPadre=" + nroPlanCuentaPadre + ", cuentaRegularizacion=" + cuentaRegularizacion + ", saldoDebe=" + saldoDebe + ", saldoHaber=" + saldoHaber + ", nivel=" + nivel + '}';
+    }
+
+    
+    
     
     
 }
