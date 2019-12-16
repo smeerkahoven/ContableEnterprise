@@ -125,6 +125,9 @@
                                         <!-- Tabla Contenido -->
                                         <div >
                                             <form>
+                                                <input type="hidden" id="hdUrl" name="hdUrl" value="#{balanceGeneral.formulario.restful}"/>
+                                                <input type="hidden" id="hdToken" name="hdToken" value="#{sessionView.token}"/>
+                                                <input type="hidden" id="hdIdEmpresa" name="hdIdEmpresa" value="#{balanceGeneral.idEmpresa}"/>
                                                 <div class="form-group row">
                                                     <label class="col-form-label col-sm-2 text-right" for="flatpickr-wrap">Desde:</label>
                                                     <div class="col-sm-3 input-group input-group-alt flatpickr " id="flatpickr9">
@@ -140,9 +143,9 @@
                                                         </div>
                                                         <span class="alert-danger" ng-show="!search.fechaInicio">Debe seleccionar una fecha.</span>
                                                     </div>
-                                                    
-                                                    
-                                                    
+
+
+
                                                     <label class="col-form-label col-sm-2 text-right" for="flatpickr-wrap">Hasta:</label>
                                                     <div class="col-sm-3 input-group input-group-alt flatpickr " id="flatpickr9">
                                                         <input id="txtFechaInicio" type="text" class="form-control flatpick-input" data-input="" 
@@ -157,9 +160,9 @@
                                                         </div>
                                                         <span class="alert-danger" ng-show="!search.fechaFin">Debe seleccionar una fecha.</span>
                                                     </div>
-                                                    
+
                                                 </div>
-                                                
+
                                                 <div class="form-group row">
                                                     <label for="txtStatus" class="col-form-label col-sm-2 text-right">Moneda </label>
                                                     <div class="col-sm-3">
@@ -176,7 +179,7 @@
                                                 </c:if>
                                             </form>
                                             <div  id="tableData" class="ng-hide table-responsive" ng-show="showTable">
-                                                <table id="dataTable" st-table="display_records" st-safe-src="gridMain.activos" 
+                                                <table id="dataTable" st-table="display_records" st-safe-src="gridActivos" 
                                                        class="table table-hover" >
                                                     <thead>
                                                         <tr>
@@ -189,7 +192,7 @@
                                                                 {{search.moneda|printMoneda}}
                                                             </td>
                                                         </tr>
-                                                        
+
                                                         <legend>ACTIVOS</legend>
                                                         <tr>
                                                             <th class="align-middle">Cuenta</th>
@@ -197,70 +200,18 @@
                                                             <th align="right" class="align-middle"></th>
                                                             <th align="right" class="align-middle"></th>
                                                             <th align="right" class="align-middle"></th>
-                                                            
+
                                                         </tr>
                                                     </thead>
                                                     <tbody>
                                                         <tr st-select-row="row" st-select-mode="multiple" 
-                                                            ng-repeat="row in display_records" >
-                                                            <td>{{row.v_cuenta}} </td>
-                                                            <td>{{row.v_nivel === 1 ? printMonto(row)|prinNumber}} </td>
-                                                            <td>{{row.v_nivel === 2 ? printMonto(row)|prinNumber}} </td>
-                                                            <td>{{row.v_nivel === 3 ? printMonto(row)|prinNumber}} </td>
-                                                            <td>{{row.v_nivel === 4 ? printMonto(row)|prinNumber}} </td>
-                                                            <td>{{row.v_nivel === 5 ? printMonto(row)|prinNumber}} </td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                                <div class="modal-footer">
-                                                    <c:if test="#{estadosResultados.formulario.crear== estadosResultados.formulario.PERMITIR}">
-                                                        <div class="row" >
-                                                            <label for="txtNombre" class="col-form-label col-sm-3 text-right" ></label>
-                                                            <button id="btn-export-excel"  class="btn btn-success" onclick="tableToExcel('dataTable', 'W3C Example Table')"  value="Exportar Excel" title="Exportar a Excel"  ><span class="fa fa-file-excel"></span> Exportar</button>
-                                                        </div>
-                                                    </c:if>
-                                                    
-                                                    <c:if test="#{estadosResultados.formulario.acceder== estadosResultados.formulario.PERMITIR}">
-                                                            <div class="row" >
-                                                                <label for="txtNombre" class="col-form-label col-sm-3 text-right" ></label>
-                                                                <button type="button" class="btn btn-dark"  ng-click="imprimir()" value="Imprimir" > <span class="fa fa-print"></span> Imprimir</button></div>
-                                                        </c:if>
-                                                </div>
-                                                
-                                                
-                                                
-                                                
-                                                <div  id="tableData" class="ng-hide table-responsive" ng-show="showTable">
-                                                <table id="dataTable" st-table="display_records" st-safe-src="gridMain" 
-                                                       class="table table-hover" >
-                                                    <thead>
-                                                        <tr>
-                                                            <td colspan="4"><strong>A la Fecha:</strong>
-                                                                <strong>&nbsp;&nbsp;Desde:</strong>
-                                                                {{search.fechaInicio}}
-                                                                <strong>&nbsp;&nbsp;Hasta:</strong>
-                                                                {{search.fechaFin}}
-                                                                <strong>&nbsp;&nbsp;Moneda :</strong>
-                                                                {{search.moneda|printMoneda}}
-                                                            </td>
-                                                        </tr>
-                                                        
-                                                        <legend>PASIVOS Y PATRIMONIOS</legend>
-                                                        <tr>
-                                                            <th class="align-middle">Cuenta</th>
-                                                            <th align="right" class="align-middle"></th>
-                                                            <th align="right" class="align-middle"></th>
-                                                            <th align="right" class="align-middle"></th>
-                                                            <th align="right" class="align-middle"></th>
-                                                            
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <tr st-select-row="row" st-select-mode="multiple" 
-                                                            ng-repeat="row in display_records" class="lvl-{{row.nivel}}">
-                                                            <td>{{row.nroPlanCuenta}} </td>
+                                                            ng-repeat="row in display_records" ng-class="{'table-success': row.idPlanCuenta === 0 }">
                                                             <td>{{row.cuenta}} </td>
-                                                            <td align="right">{{row.saldo}} </td>
+                                                            <td>{{row.nivel === 5 ? printMonto(row) : '-'}} </td>
+                                                            <td>{{row.nivel === 4 ? printMonto(row) : '-'}} </td>
+                                                            <td>{{row.nivel === 3 ? printMonto(row) : '-'}} </td>
+                                                            <td>{{row.nivel === 2 ? printMonto(row) : '-'}} </td>
+                                                            <td>{{row.nivel === 1 ? printMonto(row) : '-'}} </td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -271,43 +222,71 @@
                                                             <button id="btn-export-excel"  class="btn btn-success" onclick="tableToExcel('dataTable', 'W3C Example Table')"  value="Exportar Excel" title="Exportar a Excel"  ><span class="fa fa-file-excel"></span> Exportar</button>
                                                         </div>
                                                     </c:if>
-                                                    
+
                                                     <c:if test="#{estadosResultados.formulario.acceder== estadosResultados.formulario.PERMITIR}">
+                                                        <div class="row" >
+                                                            <label for="txtNombre" class="col-form-label col-sm-3 text-right" ></label>
+                                                            <button type="button" class="btn btn-dark"  ng-click="imprimir()" value="Imprimir" > <span class="fa fa-print"></span> Imprimir</button></div>
+                                                    </c:if>
+                                                </div>
+
+                                                <div  id="tableData" class="ng-hide table-responsive" ng-show="showTable">
+                                                    <table id="dataTable" class="table table-hover" >
+                                                        <thead>
+                                                            <tr>
+                                                                <td colspan="4"><strong>A la Fecha:</strong>
+                                                                    <strong>&nbsp;&nbsp;Desde:</strong>
+                                                                    {{search.fechaInicio}}
+                                                                    <strong>&nbsp;&nbsp;Hasta:</strong>
+                                                                    {{search.fechaFin}}
+                                                                    <strong>&nbsp;&nbsp;Moneda :</strong>
+                                                                    {{search.moneda|printMoneda}}
+                                                                </td>
+                                                            </tr>
+
+                                                            <legend>ACTIVOS</legend>
+                                                            <tr>
+                                                                <th class="align-middle">Cuenta</th>
+                                                                <th align="right" class="align-middle"></th>
+                                                                <th align="right" class="align-middle"></th>
+                                                                <th align="right" class="align-middle"></th>
+                                                                <th align="right" class="align-middle"></th>
+
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                            <tr 
+                                                                ng-repeat="row in gridPasivos" ng-class="{'table-success': row.idPlanCuenta === 0 }">
+                                                                <td>{{row.cuenta}} </td>
+                                                                <td>{{row.nivel === 5 ? printMonto(row) : '-'}} </td>
+                                                                <td>{{row.nivel === 4 ? printMonto(row) : '-'}} </td>
+                                                                <td>{{row.nivel === 3 ? printMonto(row) : '-'}} </td>
+                                                                <td>{{row.nivel === 2 ? printMonto(row) : '-'}} </td>
+                                                                <td>{{row.nivel === 1 ? printMonto(row) : '-'}} </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                    <div class="modal-footer">
+                                                        <c:if test="#{estadosResultados.formulario.crear== estadosResultados.formulario.PERMITIR}">
+                                                            <div class="row" >
+                                                                <label for="txtNombre" class="col-form-label col-sm-3 text-right" ></label>
+                                                                <button id="btn-export-excel"  class="btn btn-success" onclick="tableToExcel('dataTable', 'W3C Example Table')"  value="Exportar Excel" title="Exportar a Excel"  ><span class="fa fa-file-excel"></span> Exportar</button>
+                                                            </div>
+                                                        </c:if>
+
+                                                        <c:if test="#{estadosResultados.formulario.acceder== estadosResultados.formulario.PERMITIR}">
                                                             <div class="row" >
                                                                 <label for="txtNombre" class="col-form-label col-sm-3 text-right" ></label>
                                                                 <button type="button" class="btn btn-dark"  ng-click="imprimir()" value="Imprimir" > <span class="fa fa-print"></span> Imprimir</button></div>
                                                         </c:if>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <!-- /Tabla Contenido -->
-                                        <form name="myForm" id="myForm"  ng-submit="save()">
-                                            <!-- .form -->
-                                            <!-- .fieldset -->
-                                            <fieldset>
-                                                <!-- Contenido Formulario-->
-                                                <div id="formData" class="container animated fadeIn ng-hide"   ng-show="showForm" >
-                                                    <input type="hidden" id="hdUrl" name="hdUrl" value="#{estadosResultados.formulario.restful}"/>
-                                                    <input type="hidden" id="hdToken" name="hdToken" value="#{sessionView.token}"/>
-                                                    <input type="hidden" id="hdFormName" name="hdFormName" value="#{estadosResultados.formulario.nombre}"/>
-                                                    <input type="hidden" id="idEmpresa" name="idEmpresa" value="#{login.empleado.idEmpresa.idEmpresa}"/>
-                                                    <!--<input type="hidden" id="txtFechaAlta" name="txtFechaAlta" ng-model="formData.fechaAlta"/>-->
-                                                    <!--<input type="hidden" id="txtFechaBaja" name="txtFechaBaja" ng-model="formData.fechaBaja"/>-->
-                                                    <br />
-                                                    <script  type="text/ng-template" id="customTemplate.html">
-                                                        <a><div >
-                                                        <span class=" tt-suggestion"  ng-bind-html="match.label | uibTypeaheadHighlight:query"></span>
-                                                        </div></a>
-                                                    </script>
+                                            <!-- /Tabla Contenido -->
 
-                                                </div>
-                                                <!-- /.form-group -->
-                                            </fieldset>
-                                            <!-- /.fieldset -->
-                                        </form>
-                                        <!-- /.form -->
+                                        </div>
+                                        <!-- /.card-body -->
                                     </div>
-                                    <!-- /.card-body -->
                                 </section>
                                 <!-- /.card -->
                             </div>

@@ -33,10 +33,7 @@ angular.module('jsBalanceGeneral.controllers', []).controller('frmBalanceGeneral
                 var token = document.getElementsByName("hdToken")[0];
                 var url = document.getElementsByName("hdUrl")[0];
                 var urlEmpresa = document.getElementsByName("hdUrlEmpresa")[0];
-                var urlPlanCuentas = document.getElementsByName("hdUrlPlanCuentas")[0];
-                var urlComprobantes = document.getElementsByName("hdUrlComprobantes")[0];
                 var formName = document.getElementsByName("hdFormName")[0];
-                var idEmpresa = document.getElementsByName("idEmpresa")[0];
                 var myForm = document.getElementById("myForm");
 
                 $scope.showRestfulMessage = '';
@@ -44,7 +41,6 @@ angular.module('jsBalanceGeneral.controllers', []).controller('frmBalanceGeneral
                 $scope.showRestfulSuccess = false;
                 $scope.showTable = false;
 
-                $scope.idEmpresa = idEmpresa.value;
                 $scope.loading = false;
                 $scope.formData = {};
                 $scope.mainGrid = {};
@@ -53,10 +49,11 @@ angular.module('jsBalanceGeneral.controllers', []).controller('frmBalanceGeneral
                 $scope.showForm = false;
 
                 $scope.itemsByPage = 15;
-                
+
                 $scope.cancelar = function () {
-                    $scope.gridMain = {} ;
-                    $scope.search = {} ;
+                    $scope.gridActivos = {};
+                    $scope.gridPasivos = {};
+                    $scope.search = {};
                 }
 
                 $scope.find = function () {
@@ -77,13 +74,15 @@ angular.module('jsBalanceGeneral.controllers', []).controller('frmBalanceGeneral
                         headers: {'Content-Type': 'application/json'}
                     }).then(function (response) {
                         $scope.loading = false;
-                        if (response.data.code === 201) {   
-                            $scope.gridMain = response.data.content.balance;
+                        if (response.data.code === 201) {
+                            $scope.gridActivos = response.data.content.activos;
+                            $scope.gridPasivos = response.data.content.pasivos;
                             $scope.showTable = true;
                         } else {
                             $scope.showRestfulMessage = response.data.content;
                             $scope.showRestfulError = true;
-                            $scope.gridMain = [];
+                            $scope.gridActivos = [];
+                            $scope.gridPasivos = [];
                         }
                     }, $scope.errorFunction);
                 }
@@ -103,7 +102,7 @@ angular.module('jsBalanceGeneral.controllers', []).controller('frmBalanceGeneral
                     } else {
                         $scope.showFechaInicioRequired = false;
                     }
-                    
+
                     if ($scope.search.fechaFin === undefined) {
                         $scope.showFechaFinRequired = true;
                         return true;
@@ -113,8 +112,8 @@ angular.module('jsBalanceGeneral.controllers', []).controller('frmBalanceGeneral
 
                     return false;
                 }
-                
-                 $scope.errorFunction = function (error) {
+
+                $scope.errorFunction = function (error) {
                     $scope.loading = false;
                     $scope.showRestfulError = true;
                     $scope.showRestfulMessage = error.statusText;
@@ -128,7 +127,7 @@ angular.module('jsBalanceGeneral.controllers', []).controller('frmBalanceGeneral
                     $scope.showRestfulError = false;
                 }
 
-                
+
                 $scope.imprimir = function () {
                     var data = $scope.search;
                     window.open(`../../EstadoResultadoServlet?pi=${data.fechaInicio}&pf=${data.fechaFin}&mn=${data.moneda}`, '_target');
@@ -140,6 +139,19 @@ angular.module('jsBalanceGeneral.controllers', []).controller('frmBalanceGeneral
                     $scope.hideMessagesBox();
                 }
 
+                $scope.printMonto = function (row) {
+                    if (row.saldoDebe > 0) {
+                        var value = new Number(row.saldoDebe).toFixed(2);
+
+                        value = value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                        return `(${value})`;
+                    } else {
+                        var value = new Number(row.saldoHaber).toFixed(2);
+                        value = value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                         return `${value}`;
+                    }
+                }
+
                 $scope.showAlert = function (title, message) {
                     swal({
                         title: title,
@@ -147,17 +159,6 @@ angular.module('jsBalanceGeneral.controllers', []).controller('frmBalanceGeneral
                         type: 'error',
                         closeOnConfirm: true
                     });
-                }
-
-
-
-                $scope.findCta = function (cta, input) {
-                    var i = 0;
-                    for (i; i < input.length; i++) {
-                        if (input[i].id == cta) {
-                            return input[i];
-                        }
-                    }
                 }
 
                 // los watch sirven para verificar si el valor cambio
@@ -178,11 +179,49 @@ app.filter('printNumero', function ($filter) {
         else {
             var value = new Number(input).toFixed(2);
 
-            return  value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+            return   value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
             ;
         }
     }
 });
+
+app.filter('printMonto', function ($filter) {
+    return function (input, predicate) {
+        return 'HOLA';
+        /*if (input === undefined || input === null || input === 0 || input === 0.00)
+         return '-';
+         else {
+         var value = input.saldoDebe;
+         return  value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+         ;
+         }*/
+    }
+});
+/*
+ app.filter('printMonto', function ($filter) {
+ return function (input, predicate) {
+ console.log(input);
+ 
+ if (input === undefined || input === null || input === 0 || input === 0.00)
+ return '-';
+ else {
+ var value;
+ if (input.saldoDebe > 0) {
+ value = new Number(input.saldoDebe).toFixed(2);
+ } else if(input.saldoHaber > 0) {
+ value = new Number(input.saldoHaber).toFixed(2);
+ }
+ 
+ console.log(input);
+ 
+ var output = value < 0 ? `(${value})` : value ;
+ 
+ 
+ return  output.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+ ;
+ }
+ }
+ });*/
 
 
 app.filter('printMoneda', function ($filter) {
