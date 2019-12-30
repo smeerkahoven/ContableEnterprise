@@ -9,7 +9,7 @@ import javax.annotation.Generated;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2019-12-16T01:24:55")
+@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2019-12-30T03:02:47")
 @StaticMetamodel(Devolucion.class)
 public class Devolucion_ { 
 
@@ -20,6 +20,8 @@ public class Devolucion_ {
     public static volatile SingularAttribute<Devolucion, Integer> idCuentaDeposito;
     public static volatile SingularAttribute<Devolucion, Date> fechaEmision;
     public static volatile SingularAttribute<Devolucion, Date> fechaInsert;
+    public static volatile SingularAttribute<Devolucion, Integer> idGestion;
+    public static volatile SingularAttribute<Devolucion, Integer> numeracion;
     public static volatile SingularAttribute<Devolucion, BigDecimal> factorCambiario;
     public static volatile SingularAttribute<Devolucion, BigDecimal> monto;
     public static volatile SingularAttribute<Devolucion, String> nroCheque;

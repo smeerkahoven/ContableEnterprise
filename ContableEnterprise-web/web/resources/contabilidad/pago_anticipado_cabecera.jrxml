@@ -7,6 +7,7 @@
 	<queryString>
 		<![CDATA[select 
   pa.id_pago_anticipado
+, pa.numeracion
 , pa.factor_cambiario
 , pa.id_cliente, upper(cl.nombre) cliente, cl.telefono_fijo
 , case pa.moneda when 'B' then 'BOB.' when 'U' then 'USD.' end moneda
@@ -37,6 +38,9 @@
 WHERE pa.id_pago_anticipado=$P{ID_PAGO}]]>
 	</queryString>
 	<field name="id_pago_anticipado" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="numeracion" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="factor_cambiario" class="java.math.BigDecimal">
@@ -98,7 +102,7 @@ WHERE pa.id_pago_anticipado=$P{ID_PAGO}]]>
 				<textElement textAlignment="Right">
 					<font fontName="Courier 10 Pitch" size="11" isBold="false" isItalic="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Pago Anticipado #"+$F{id_pago_anticipado}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Pago Anticipado #"+$F{numeracion}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="66" y="0" width="167" height="12" uuid="7797c006-a577-4b80-a8df-7f9b3c2e1190"/>

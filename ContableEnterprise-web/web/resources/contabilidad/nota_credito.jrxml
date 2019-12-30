@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="612" pageHeight="346" columnWidth="596" leftMargin="1" rightMargin="15" topMargin="1" bottomMargin="1" uuid="05708238-32c6-4b2d-94c3-a78b24b631fb">
-	<property name="ireport.zoom" value="1.693421790161343"/>
+	<property name="ireport.zoom" value="2.4793388429752232"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="ID_CREDITO" class="java.lang.String">
@@ -9,10 +9,12 @@
 	<queryString>
 		<![CDATA[select 
 	nc.id_nota_credito, 
+	nc.numeracion,
 	cc.gestion,
 	cc.id_numero_gestion,
 	ndtr.id_nota_debito,
 	ndtr.monto_adeudado_bs,
+	nd.numeracion nd_numeracion,
 	case nc.estado  when 'E' then 'EMITIDO' when 'A' then 'ANULADO' when 'M' then 'MORA' end estado,
 	ndtr.monto_adeudado_usd,
 	nc.id_usuario,
@@ -34,11 +36,15 @@ inner join tb_empresa em on em.id_empresa = nc.id_empresa
 inner join cnt_cliente cl on cl.id_cliente = nc.id_cliente
 inner join cnt_nota_credito_transaccion tr on tr.id_nota_credito = nc.id_nota_credito
 inner join cnt_nota_debito_transaccion ndtr on ndtr.id_nota_debito_transaccion = tr.id_nota_transaccion
+inner join cnt_nota_debito nd on nd.id_nota_debito = ndtr.id_nota_debito
 left join cnt_plan_cuentas pc on pc.id_plan_cuentas = tr.id_plan_cuenta
 left join cnt_comprobante_contable cc on cc.id_nota_credito = nc.id_nota_credito and cc.tipo='AD'
 WHERE nc.id_nota_credito=$P{ID_CREDITO}]]>
 	</queryString>
 	<field name="id_nota_credito" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="numeracion" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="gestion" class="java.lang.Integer">
@@ -53,6 +59,7 @@ WHERE nc.id_nota_credito=$P{ID_CREDITO}]]>
 	<field name="monto_adeudado_bs" class="java.math.BigDecimal">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
+	<field name="nd_numeracion" class="java.lang.Integer"/>
 	<field name="estado" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
@@ -117,7 +124,7 @@ sucursal]]></fieldDescription>
 				<textElement textAlignment="Right">
 					<font fontName="Courier 10 Pitch" size="11" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Nota de Crédito #"+$F{id_nota_credito}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Nota de Crédito #"+$F{numeracion} ]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement x="1" y="14" width="571" height="1" uuid="222a71a6-8039-492a-8577-0288016e208c"/>
@@ -258,13 +265,13 @@ sucursal]]></fieldDescription>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="12" splitType="Stretch">
+		<band height="14" splitType="Stretch">
 			<textField isStretchWithOverflow="true">
 				<reportElement x="0" y="0" width="292" height="12" isPrintWhenDetailOverflows="true" uuid="36e191bc-a6a8-49df-9aa2-efa6f75bbf99"/>
 				<textElement>
 					<font fontName="Courier 10 Pitch" size="11" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{tr_descripcion} + " Ref. Nota Debito:" + $F{id_nota_debito}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{tr_descripcion} + " Ref. Nota Debito:" + $F{nd_numeracion}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement x="432" y="0" width="70" height="12" uuid="335d3751-78ee-4576-b673-2bc65539e8df"/>
@@ -385,4 +392,3 @@ sucursal]]></fieldDescription>
 		</band>
 	</summary>
 </jasperReport>
-

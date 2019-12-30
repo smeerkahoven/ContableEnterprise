@@ -8,6 +8,7 @@
 		<![CDATA[select 
  distinct
  pat.id_pago_anticipado_transaccion
+, pat.numeracion
  , cc.id_numero_gestion 
  , cc.gestion
  , pa.factor_cambiario
@@ -24,15 +25,21 @@
 , case pat.estado when 'A' then 'ANULADO' ELSE 'EMITIDO'  END estado
 , case pat.moneda when 'B' then 'BOLIVIANOS' when 'U' then 'DOLARES' end moneda
 , pat.id_usuario_creador
+, pa.numeracion pa_numeracion
+, nd.numeracion nd_numeracion
  from cnt_pago_anticipado_transaccion  pat
  inner join cnt_pago_anticipado pa on pa.id_pago_anticipado = pat.id_pago_anticipado
  inner join cnt_cliente cl on cl.id_cliente = pa.id_cliente
  inner join cnt_nota_debito_transaccion ndt on ndt.id_nota_debito_transaccion = pat.id_nota_debito_transaccion
+ inner join cnt_nota_debito nd on nd.id_nota_debito = ndt.id_nota_debito
  left join cnt_asiento_contable ac on ac.id_pago_anticipado_transaccion = pat.id_pago_anticipado_transaccion
  left join cnt_comprobante_contable cc on cc.id_libro = ac.id_libro and cc.tipo in ('AD')
 where pat.id_pago_anticipado_transaccion = $P{ID_TRANSACCION}]]>
 	</queryString>
 	<field name="id_pago_anticipado_transaccion" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="numeracion" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="id_numero_gestion" class="java.lang.Integer">
@@ -83,6 +90,8 @@ where pat.id_pago_anticipado_transaccion = $P{ID_TRANSACCION}]]>
 	<field name="id_usuario_creador" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
+	<field name="pa_numeracion" class="java.lang.Integer"/>
+	<field name="nd_numeracion" class="java.lang.Integer"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -96,7 +105,7 @@ where pat.id_pago_anticipado_transaccion = $P{ID_TRANSACCION}]]>
 				<textElement textAlignment="Right">
 					<font fontName="Monospaced" size="12" isBold="false" isItalic="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Acreditación Depósito #"+$F{id_pago_anticipado_transaccion}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Acreditación Depósito #"+$F{numeracion}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="85" y="3" width="137" height="12" uuid="83c8dc82-c156-486c-86ac-c12706ee2eab"/>
@@ -223,7 +232,7 @@ where pat.id_pago_anticipado_transaccion = $P{ID_TRANSACCION}]]>
 				<textElement>
 					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["DEPOSITO ANTICIPADO " + $F{id_pago_anticipado} + " PARA LA NOTA DE DEBITO "+ $F{id_nota_debito}+ " CON DESCRIPCION: " +  $F{descripcion}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["DEPOSITO ANTICIPADO " + $F{pa_numeracion} + " PARA LA NOTA DE DEBITO "+ $F{nd_numeracion}+ " CON DESCRIPCION: " +  $F{descripcion}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

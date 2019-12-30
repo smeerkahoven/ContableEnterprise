@@ -201,7 +201,7 @@
                                                             ng-repeat="row in display_records" class="lvl-{{row.nivel}}">
                                                             <td>{{row.nroPlanCuenta}} </td>
                                                             <td>{{row.cuenta}} </td>
-                                                            <td align="right">{{row.saldo}} </td>
+                                                            <td align="right">{{row.saldo| printNumero}} </td>
                                                         </tr>
                                                     </tbody>
                                                     <!--<tfoot>

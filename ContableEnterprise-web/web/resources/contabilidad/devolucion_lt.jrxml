@@ -9,6 +9,7 @@
 	</parameter>
 	<queryString>
 		<![CDATA[select de.id_devolucion
+, de.numeracion
 , cc.id_numero_gestion
 , cc.gestion
 , de.id_cliente
@@ -32,15 +33,20 @@
 , de.fecha_insert
 , de.id_usuario_creador
 , case de.estado when 'A' then 'ANULADO' when 'E' then 'EMITIDO' end estado
-
+, pa.numeracion pa_numeracion
+, nd.numeracion nd_numeracion
 from cnt_devolucion de
 inner join cnt_cliente cl on cl.id_cliente = de.id_cliente
+left join cnt_nota_debito nd on nd.id_nota_debito = de.id_nota_debito
 left join cnt_pago_anticipado pa on pa.id_pago_anticipado = de.id_pago_anticipado
 left join cnt_plan_cuentas pc on pc.id_plan_cuentas = de.id_cuenta_deposito
 left join cnt_comprobante_contable cc on cc.id_devolucion = de.id_devolucion and cc.tipo='CE'
 WHERE de.id_devolucion = $P{ID_DEVOLUCION}]]>
 	</queryString>
 	<field name="id_devolucion" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="numeracion" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="id_numero_gestion" class="java.lang.Integer">
@@ -76,7 +82,8 @@ WHERE de.id_devolucion = $P{ID_DEVOLUCION}]]>
 	<field name="monto_devolucion" class="java.math.BigDecimal"/>
 	<field name="tipo_devolucion" class="java.lang.String">
 		<fieldDescription><![CDATA[EFECTIVO
-CHEQUE]]></fieldDescription>
+CHEQUE
+]]></fieldDescription>
 	</field>
 	<field name="forma_pago_literal" class="java.lang.String"/>
 	<field name="fecha_insert" class="java.sql.Timestamp">
@@ -88,6 +95,8 @@ CHEQUE]]></fieldDescription>
 	<field name="estado" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
+	<field name="pa_numeracion" class="java.lang.Integer"/>
+	<field name="nd_numeracion" class="java.lang.Integer"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
@@ -101,7 +110,7 @@ CHEQUE]]></fieldDescription>
 				<textElement textAlignment="Right">
 					<font fontName="Monospaced" size="12" isBold="false" isItalic="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Nota de Devolución #"+$F{id_devolucion}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Nota de Devolución #"+$F{numeracion}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="104" y="16" width="168" height="12" uuid="84ada0e0-0618-4ea7-97da-bb2aa3b6c141"/>
@@ -215,8 +224,8 @@ CHEQUE]]></fieldDescription>
 					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{concepto} +
-     ($F{id_nota_debito}!= null? "- NOTA DE DEBITO : " +$F{id_nota_debito} : 
-        ($F{id_pago_anticipado}!=null ? "- PAGO ANTICIPADO:" + $F{id_pago_anticipado} : "")
+     ($F{id_nota_debito}!= null? "- NOTA DE DEBITO : " +$F{nd_numeracion} : 
+        ($F{id_pago_anticipado}!=null ? "- PAGO ANTICIPADO:" + $F{pa_numeracion} : "")
       )]]></textFieldExpression>
 			</textField>
 			<textField>

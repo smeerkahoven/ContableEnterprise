@@ -44,6 +44,7 @@ public class Formulario implements Serializable {
     public static final String ESTADOS_RESULTADOS = "estados-resultados";
     public static final String BALANCE_GENERAL = "balance-general";
     public static final String SISTEMA = "sistema";
+    public static final String GESTIONES = "gestiones";
     public static final String LOGS = "logs";
     //---REPORTES
     public static final String REPORTES_AGENCIA = "reportes-agencia";

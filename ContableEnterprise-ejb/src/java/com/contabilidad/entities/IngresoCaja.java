@@ -153,6 +153,12 @@ public class IngresoCaja extends Entidad {
 
     @Column(name = "estado")
     private String estado;
+    
+    @Column(name = "id_gestion")
+    private Integer idGestion ;
+    
+    @Column(name="numeracion")
+    private Integer numeracion ;
 
     public IngresoCaja() {
     }
@@ -327,6 +333,24 @@ public class IngresoCaja extends Entidad {
     public void setEstado(String estado) {
         this.estado = estado;
     }
+
+    public Integer getIdGestion() {
+        return idGestion;
+    }
+
+    public void setIdGestion(Integer idGestion) {
+        this.idGestion = idGestion;
+    }
+
+    public Integer getNumeracion() {
+        return numeracion;
+    }
+
+    public void setNumeracion(Integer numeracion) {
+        this.numeracion = numeracion;
+    }
+    
+    
 
     @Override
     public int hashCode() {

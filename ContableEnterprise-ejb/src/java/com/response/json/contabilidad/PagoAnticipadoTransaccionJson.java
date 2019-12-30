@@ -50,6 +50,7 @@ public class PagoAnticipadoTransaccionJson implements Serializable {
     private BigDecimal factorCambiario;
     private String fechaEmision;
     private Integer idDevolucion;
+    private Integer numeracion ;
 
     public static PagoAnticipadoTransaccionJson toPagoAnticipadoTransaccionJsOn(PagoAnticipadoTransaccion data) {
         PagoAnticipadoTransaccionJson json = new PagoAnticipadoTransaccionJson();
@@ -84,6 +85,7 @@ public class PagoAnticipadoTransaccionJson implements Serializable {
         json.setMoneda(data.getMoneda());
 
         json.setMonto(data.getMonto());
+        json.setNumeracion(data.getNumeracion());
 
         return json;
     }
@@ -105,6 +107,16 @@ public class PagoAnticipadoTransaccionJson implements Serializable {
         
         return data;
     }
+
+    public Integer getNumeracion() {
+        return numeracion;
+    }
+
+    public void setNumeracion(Integer numeracion) {
+        this.numeracion = numeracion;
+    }
+    
+    
 
     public BigDecimal getMontoCancelarBs() {
         return montoCancelarBs;

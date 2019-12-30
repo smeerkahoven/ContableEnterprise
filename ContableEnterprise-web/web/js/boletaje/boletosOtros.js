@@ -175,6 +175,7 @@ function NotaDebito() {
      this.combinadoContadoTipo = null;*/
     this.estado = null;
     this.transacciones = null;
+    this.numeracion = null ;
 }
 
 function OtroCargo() {
@@ -1225,8 +1226,6 @@ angular.module('jsBoletosOtros.controllers', []).controller('frmBoletosOtros',
                 }
 
                 $scope.anularTransaccion = function () {
-                    console.log($scope.formData);
-                    console.log($scope.itemAnular);
                     $scope.showLoading = true;
                     showBackground();
                     $scope.itemAnular.item.idNotaDebito = $scope.formData.idNotaDebito ;

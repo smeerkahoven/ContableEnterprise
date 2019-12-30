@@ -45,6 +45,7 @@ public class PagoAnticipadoJson implements Serializable {
     private String fechaInsert;
     private String estado;
     private LinkedList<PagoAnticipadoTransaccionJson> pagoAnticipadoTransaccionCollection;
+    private Integer numeracion ;
 
     public static PagoAnticipadoJson toPagoAnticipadoJson(PagoAnticipado data) {
         PagoAnticipadoJson json = new PagoAnticipadoJson();
@@ -78,7 +79,7 @@ public class PagoAnticipadoJson implements Serializable {
         json.setNroCheque(data.getNroCheque());
         json.setNroDeposito(data.getNroDeposito());
         json.setNroTarjeta(data.getNroTarjeta());
-        
+        json.setNumeracion(data.getNumeracion());
         
         return json;
     }
@@ -109,10 +110,20 @@ public class PagoAnticipadoJson implements Serializable {
         data.setNroCheque(json.getNroCheque());
         data.setNroDeposito(json.getNroDeposito());
         data.setNroTarjeta(json.getNroTarjeta());
+        data.setNumeracion(json.getNumeracion());
         
         return data;
     }
 
+    public Integer getNumeracion() {
+        return numeracion;
+    }
+
+    public void setNumeracion(Integer numeracion) {
+        this.numeracion = numeracion;
+    }
+
+    
     public BigDecimal getMontoTotalDisponible() {
         return montoTotalDisponible;
     }

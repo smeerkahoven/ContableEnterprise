@@ -9,9 +9,11 @@
 	<queryString>
 		<![CDATA[select 
 	ic.id_ingreso_caja, 
+	ic.numeracion,
 	cc.gestion,
 	cc.id_numero_gestion,
 	ndtr.id_nota_debito,
+	nd.numeracion nd_numeracion,
 	ndtr.descripcion nota_debito_descripcion,
     	ndtr.monto_adeudado_bs,
     	coalesce(ndtr.monto_adeudado_usd,0) monto_adeudado_usd,
@@ -52,6 +54,7 @@ inner join tb_empresa em on em.id_empresa = ic.id_empresa
 inner join cnt_cliente cl on cl.id_cliente = ic.id_cliente
 inner join cnt_ingreso_transaccion tr on tr.id_ingreso_caja = ic.id_ingreso_caja
 inner join cnt_nota_debito_transaccion ndtr on ndtr.id_nota_debito_transaccion = tr.id_nota_transaccion
+inner join cnt_nota_debito nd on nd.id_nota_debito = ndtr.id_nota_debito
 left join cnt_bancos ba on ba.id_banco = ic.id_banco
 left join cnt_plan_cuentas pc on pc.id_plan_cuentas = ic.id_cuenta_deposito
 left join cnt_tarjetas_credito tc on tc.id_tarjeta_credito = ic.id_tarjeta_credito
@@ -132,7 +135,7 @@ sucursal]]></fieldDescription>
 				<textElement textAlignment="Right">
 					<font fontName="Courier 10 Pitch" size="11" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Ingreso a Caja #"+$F{id_ingreso_caja}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Ingreso a Caja #"+$F{numeracion}]]></textFieldExpression>
 			</textField>
 			<line>
 				<reportElement x="7" y="16" width="566" height="1" uuid="222a71a6-8039-492a-8577-0288016e208c"/>
@@ -265,7 +268,7 @@ sucursal]]></fieldDescription>
 				<textElement>
 					<font fontName="Courier 10 Pitch" size="11" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{descripcion} +  " Ref. Nota Débito :" + $F{id_nota_debito}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{descripcion} +  " Ref. Nota Débito :" + $F{nd_numeracion}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" pattern="#,##0.00" isBlankWhenNull="true">
 				<reportElement x="433" y="1" width="70" height="12" uuid="335d3751-78ee-4576-b673-2bc65539e8df"/>

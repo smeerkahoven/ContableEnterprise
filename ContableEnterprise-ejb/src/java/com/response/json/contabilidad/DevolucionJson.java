@@ -38,6 +38,7 @@ public class DevolucionJson implements Serializable {
     private String idUsuarioCreador;
     private String estado;
     private BigDecimal montoMaximoDevolucion;
+    private Integer numeracion ;
 
     public static DevolucionJson toDevolucionJson(final Devolucion data) {
         DevolucionJson json = new DevolucionJson();
@@ -60,6 +61,7 @@ public class DevolucionJson implements Serializable {
         json.setTipoDevolucion(data.getTipoDevolucion());
         json.setIdCuentaDeposito(data.getIdCuentaDeposito());
         json.setNroDeposito(data.getNroDeposito());
+        json.setNumeracion(data.getNumeracion());
 
         return json;
     }
@@ -87,6 +89,14 @@ public class DevolucionJson implements Serializable {
         return data;
     }
 
+    public Integer getNumeracion() {
+        return numeracion;
+    }
+
+    public void setNumeracion(Integer numeracion) {
+        this.numeracion = numeracion;
+    }
+    
     public String getNroDeposito() {
         return nroDeposito;
     }

@@ -98,9 +98,33 @@ public class PagoAnticipadoTransaccion extends Entidad {
 
     @Transient
     private BigDecimal montoCancelarUsd;
+    
+    @Column(name = "id_gestion")
+    private Integer idGestion ;
+    
+    @Column(name="numeracion")
+    private Integer numeracion ;
 
     public PagoAnticipadoTransaccion() {
     }
+
+    public Integer getIdGestion() {
+        return idGestion;
+    }
+
+    public void setIdGestion(Integer idGestion) {
+        this.idGestion = idGestion;
+    }
+
+    public Integer getNumeracion() {
+        return numeracion;
+    }
+
+    public void setNumeracion(Integer numeracion) {
+        this.numeracion = numeracion;
+    }
+    
+    
 
     public PagoAnticipadoTransaccion(Integer idPagoAnticipadoTransaccion) {
         this.idPagoAnticipadoTransaccion = idPagoAnticipadoTransaccion;

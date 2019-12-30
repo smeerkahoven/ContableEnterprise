@@ -36,6 +36,7 @@ public class NotaDebitoTransaccionJson implements Serializable {
     private String fechaVencimiento;
     private String formaPago;
     private String fechaEmision;
+    private Integer ndNumeracion ;
 
     public static NotaDebitoTransaccion toNotaDebitoTransaccion(NotaDebitoTransaccionJson json) {
         NotaDebitoTransaccion tr = new NotaDebitoTransaccion();
@@ -74,6 +75,7 @@ public class NotaDebitoTransaccionJson implements Serializable {
         json.setMontoAdeudadoBs(tr.getMontoAdeudadoBs());
         json.setMontoAdeudadoUsd(tr.getMontoAdeudadoUsd());
         json.setTipo(tr.getTipo());
+        json.setNdNumeracion(tr.getIdNotaDebito().getNumeracion());
 
         if (tr.getIdNotaDebito() != null) {
             json.setFechaEmision(DateContable.getDateFormat(tr.getIdNotaDebito().getFechaEmision(), DateContable.LATIN_AMERICA_FORMAT));
@@ -83,6 +85,16 @@ public class NotaDebitoTransaccionJson implements Serializable {
 
         return json;
     }
+
+    public Integer getNdNumeracion() {
+        return ndNumeracion;
+    }
+
+    public void setNdNumeracion(Integer ndNumeracion) {
+        this.ndNumeracion = ndNumeracion;
+    }
+    
+    
 
     public BigDecimal getMontoAdeudadoBs() {
         return montoAdeudadoBs;

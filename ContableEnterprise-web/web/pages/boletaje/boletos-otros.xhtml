@@ -219,7 +219,7 @@
                                                     </thead>
                                                     <tbody>
                                                         <tr st-select-row="row" st-select-mode="multiple" ng-repeat="row in display_records" ng-class="row.estado == EN_MORA ? 'table-primary' : ( row.estado == PENDIENTE || row.estado == CREADO ? 'table-warning' : (row.estado == ANULADO ? 'table-danger' : '') )  ">
-                                                            <td>{{row.idNotaDebito}} </td>
+                                                            <td>{{row.numeracion}} </td>
                                                             <td>{{row.idCliente.name}} </td>
                                                             <td>{{row.idPromotor.name}} </td>
                                                             <td>{{row.formaPago|printFormaPago}}  </td>
@@ -292,7 +292,7 @@
                                                     <div class="form-group row">
                                                         <label for="txtCodigo" class="col-form-label col-sm-2 text-right">N&uacute;mero Nota D&eacute;bito</label>
                                                         <div class="col-sm-4">
-                                                            <label for="txtIdLibro" class="col-form-label"  ><strong><h4>{{formData.idNotaDebito}}</h4></strong></label>
+                                                            <label for="txtIdLibro" class="col-form-label"  ><strong><h4>{{formData.numeracion}}</h4></strong></label>
                                                         </div>
                                                         <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Estado</label>
                                                         <div class="col-sm-4">
@@ -1424,7 +1424,7 @@
                                         </div>
                                         <div class="modal-body"> 
                                             <dl class="dl-horizontal">
-                                                Desea anular  {{itemAnular.title}} con ID <strong> {{itemAnular.id}}</strong>  ?
+                                                Desea anular  {{itemAnular.title}}  ?
                                             </dl>
                                         </div>
                                         <div class="modal-footer">

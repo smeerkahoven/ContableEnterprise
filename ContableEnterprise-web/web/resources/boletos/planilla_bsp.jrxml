@@ -19,8 +19,10 @@
     coalesce(bo.impuesto_3,0) + coalesce(bo.impuesto_4,0) + coalesce(bo.impuesto_5,0)) impuestos,
     bo.total_boleto, bo.comision, bo.monto_comision, bo.monto_pagar_linea_aerea total_monto_cobrar,
     case bo.tipo_boleto when 'MV' then 'VOID' when 'SV' then 'VOID' when 'AV' then 'VOID' end estado
+, nd.numeracion
  from cnt_boleto bo
  inner join cnt_aerolinea ae on ae.id_aerolinea = bo.id_aerolinea
+inner join cnt_nota_debito nd on nd.id_nota_debito = bo.id_nota_debito
  where bo.id_nota_debito is not null 
 and bo.fecha_emision>=str_to_date($P{FECHA_INICIO},'%d/%m/%Y') 
 and bo.fecha_emision<=str_to_date($P{FECHA_FIN},'%d/%m/%Y')
@@ -78,6 +80,9 @@ NAcional N]]></fieldDescription>
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="estado" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="numeracion" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<variable name="TOTAL_IMPORTE_NETO" class="java.math.BigDecimal" calculation="Sum">
@@ -283,7 +288,7 @@ NAcional N]]></fieldDescription>
 				<textElement textAlignment="Right">
 					<font fontName="Monospaced" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{id_nota_debito}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{numeracion}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="637" y="0" width="47" height="14" uuid="6ab0705c-43f8-4ce5-a59b-88115a35ef04"/>

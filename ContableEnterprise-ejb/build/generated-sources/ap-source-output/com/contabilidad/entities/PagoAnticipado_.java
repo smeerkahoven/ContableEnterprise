@@ -9,7 +9,7 @@ import javax.persistence.metamodel.CollectionAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2019-12-16T01:24:55")
+@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2019-12-30T03:02:47")
 @StaticMetamodel(PagoAnticipado.class)
 public class PagoAnticipado_ { 
 
@@ -20,6 +20,8 @@ public class PagoAnticipado_ {
     public static volatile SingularAttribute<PagoAnticipado, Integer> idCuentaDeposito;
     public static volatile SingularAttribute<PagoAnticipado, Date> fechaEmision;
     public static volatile SingularAttribute<PagoAnticipado, Date> fechaInsert;
+    public static volatile SingularAttribute<PagoAnticipado, Integer> idGestion;
+    public static volatile SingularAttribute<PagoAnticipado, Integer> numeracion;
     public static volatile SingularAttribute<PagoAnticipado, BigDecimal> factorCambiario;
     public static volatile SingularAttribute<PagoAnticipado, BigDecimal> montoAnticipado;
     public static volatile SingularAttribute<PagoAnticipado, BigDecimal> montoTotalAcreditado;

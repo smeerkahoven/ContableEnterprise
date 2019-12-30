@@ -208,7 +208,7 @@
                                                 </thead>
                                                 <tbody>
                                                     <tr st-select-row="row" st-select-mode="multiple" ng-repeat="row in display_records" class="boleto-estado-{{row.estado}}">
-                                                        <td>{{row.idNotaCredito}} </td>
+                                                        <td>{{row.numeracion}} </td>
                                                         <td>{{row.idCliente.name}} </td>
                                                         <td>{{row.estado| printEstado }} </td>
                                                         <td>{{row.fechaEmision}} </td>
@@ -266,7 +266,7 @@
                                                 <div class="form-group row">
                                                     <label for="txtCodigo" class="col-form-label col-sm-2 text-right">N&uacute;mero Nota de Cr&eacute;dito</label>
                                                     <div class="col-sm-4">
-                                                        <label for="txtIdLibro" class="col-form-label"  ><strong><h4>{{formData.idNotaCredito}}</h4></strong></label>
+                                                        <label for="txtIdLibro" class="col-form-label"  ><strong><h4>{{formData.numeracion}}</h4></strong></label>
                                                     </div>
 
                                                     <label for="txtCodigo" class="col-form-label col-sm-2 text-right">Estado</label>
@@ -391,7 +391,7 @@
                                                         <tbody>
                                                             <tr class="boleto-estado-{{row.estado}}" st-select-row="row" st-select-mode="multiple" ng-repeat="row in transacciones"  >
                                                                 <td>{{row.idNotaCreditoTransaccion}}</td>
-                                                                <td>{{row.idNotaDebito}}</td>
+                                                                <td>{{row.ndNumeracion}}</td>
                                                                 <td>{{row.descripcion| limitTo:35}}{{ row.descripcion.length > 35 ?'...':''}}</td>
                                                                 <td>{{row.moneda|printMoneda}}</td>
                                                                 <td>{{row.estado|printEstado}}</td>
@@ -525,7 +525,7 @@
                                             <tbody>
                                                 <tr  ng-repeat="row in gridRecords" 
                                                      class="clickable-row" ng-click="seleccionarItemNotaDebito(row)">
-                                                    <td>{{row.idNotaDebito}} </td>
+                                                    <td>{{row.ndNumeracion}} </td>
                                                     <td>{{row.fechaEmision}} </td>
                                                     <td>{{row.tipo|printTipo}}</td>
                                                     <td>{{row.descripcion}} </td>
@@ -600,7 +600,8 @@
                                                     <div class="form-group row">
                                                         <label for="txtNombre" class=" col-form-label col-sm-3 text-right"> Nota de D&eacute;bito</label>
                                                         <div class="col-sm-3">
-                                                            <input readonly="readonly" class="form-control" value="{{trx.idNotaDebito}}" ng-value="trx.idNotaDebito" />
+                                                            <input readonly="readonly" class="form-control" value="{{trx.ndNumeracion}}" />
+                                                            <input type="hidden" readonly="readonly" class="form-control" value="{{trx.idNotaDebito}}" ng-value="trx.idNotaDebito" />
                                                         </div>
 
                                                         <label for="txtMoneda" class="col-form-label col-sm-3 text-right">Moneda</label>
@@ -778,7 +779,7 @@
                                     </div>
                                     <div class="modal-body"> 
                                         <dl class="dl-horizontal">
-                                            Desea anular  {{itemAnular.title}} con ID <strong> {{itemAnular.id}}</strong>  ?
+                                            Desea anular  {{itemAnular.title}}  ?
                                         </dl>
                                     </div>
                                     <div class="modal-footer">

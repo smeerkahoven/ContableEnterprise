@@ -14,7 +14,10 @@ import com.agencia.entities.FormasPago;
 import com.agencia.search.dto.BoletoSearchForm;
 import com.configuracion.entities.CambioDolar;
 import com.configuracion.entities.ContabilidadBoletaje;
+import com.configuracion.entities.Gestion;
 import com.configuracion.remote.CambioRemote;
+import com.configuracion.remote.GestionRemote;
+import com.configuracion.remote.NumeracionRemote;
 import com.contabilidad.entities.AsientoContable;
 import com.contabilidad.entities.CargoBoleto;
 import com.contabilidad.entities.ComprobanteContable;
@@ -25,6 +28,7 @@ import com.contabilidad.entities.Moneda;
 import com.contabilidad.entities.NotaCreditoTransaccion;
 import com.contabilidad.entities.NotaDebito;
 import com.contabilidad.entities.NotaDebitoTransaccion;
+import com.contabilidad.entities.NotaDebito_;
 import com.contabilidad.entities.PagoAnticipadoTransaccion;
 import com.contabilidad.remote.ComprobanteRemote;
 import com.contabilidad.remote.IngresoCajaRemote;
@@ -43,7 +47,6 @@ import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.text.NumberFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -81,6 +84,12 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
 
     @EJB
     private PagoAnticipadoRemote ejbPagoAnticipado;
+    
+    @EJB
+    private GestionRemote ejbGestion ;
+    
+    @EJB
+    private NumeracionRemote ejbNumeracion ;
 
     @Override
     public Entidad get(Entidad e) throws CRUDException {
@@ -93,6 +102,7 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
 
     @Override
     public synchronized NotaDebito createNotaDebito(Boleto boleto) throws CRUDException {
+        
 
         NotaDebito notaDebito = new NotaDebito();
 
@@ -105,6 +115,7 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
         notaDebito.setIdUsuarioCreador(boleto.getIdUsuarioCreador());
         notaDebito.setGestion(DateContable.getPartitionDateInt(DateContable.getDateFormat(DateContable.getCurrentDate(), DateContable.LATIN_AMERICA_FORMAT)));
         notaDebito.setEstado(Estado.EMITIDO);
+        notaDebito.setNumeracion(ejbNumeracion.getNotaDebito(Integer.SIZE));
 
         // cambio 2019-08
         if (boleto.getMoneda().equals(Moneda.EXTRANJERA)) {
@@ -317,6 +328,12 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
 
     @Override
     public NotaDebito createNotaDebito(Integer idEmpresa, String usuario) throws CRUDException {
+        
+        Gestion gestion = ejbGestion.getCurrent() ;
+        
+        if (gestion == null) {
+            throw new CRUDException ("No ha iniciado una gestion. Por favor inicie una Gestion para poder continuar");
+        }
 
         String date = DateContable.getCurrentDateStr().substring(0, 10);
         NotaDebito nota = new NotaDebito();
@@ -327,6 +344,8 @@ public class NotaDebitoEJB extends FacadeEJB implements NotaDebitoRemote {
         nota.setFechaEmision(DateContable.getCurrentDate());
         nota.setGestion(DateContable.getPartitionDateInt(date));
         nota.setFormaPago(FormasPago.EFECTIVO);
+        nota.setIdGestion(gestion.getIdGestion());
+        nota.setNumeracion(ejbNumeracion.getNotaDebito(gestion.getIdGestion()));
 
         String fechaEmision = DateContable.getCurrentDateStr(DateContable.LATIN_AMERICA_FORMAT);
         CambioDolar diario = ejbCambio.get(fechaEmision, "CambioDolar.findFecha");

@@ -45,6 +45,8 @@ public class IngresoTransaccionJson implements Serializable {
     private ComboSelect idCliente;
     private BigDecimal factorCambiario;
     private String fechaEmision;
+    
+    private Integer ndNumeracion ;
 
     public static IngresoTransaccion toIngresoCaja(IngresoTransaccionJson json) {
         IngresoTransaccion data = new IngresoTransaccion();
@@ -84,6 +86,8 @@ public class IngresoTransaccionJson implements Serializable {
         json.setMontoAdeudadoBs(data.getIdNotaTransaccion().getMontoAdeudadoBs());
         json.setMontoAdeudadoUsd(data.getIdNotaTransaccion().getMontoAdeudadoUsd());
         json.setFactorCambiario(data.getFactorCambiario());
+        
+        json.setNdNumeracion(data.getIdNotaTransaccion().getIdNotaDebito().getNumeracion());
 
         if (json.getMoneda().equals(Moneda.NACIONAL)) {
             json.setMonto(data.getMontoBs());
@@ -96,6 +100,16 @@ public class IngresoTransaccionJson implements Serializable {
 
         return json;
     }
+
+    public Integer getNdNumeracion() {
+        return ndNumeracion;
+    }
+
+    public void setNdNumeracion(Integer ndNumeracion) {
+        this.ndNumeracion = ndNumeracion;
+    }
+    
+    
 
     public BigDecimal getMontoCancelarBs() {
         return montoCancelarBs;

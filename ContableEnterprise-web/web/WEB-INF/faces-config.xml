@@ -246,6 +246,15 @@
         </navigation-case>
     </navigation-rule>
     
+        <navigation-rule>
+        <from-view-id>pages/*</from-view-id>
+        <navigation-case>
+            <from-outcome>gestiones</from-outcome>
+            <to-view-id>pages/configuracion/gestiones.xhtml?faces-redirect=true</to-view-id>
+            <redirect />
+        </navigation-case>
+    </navigation-rule>
+    
     <!-- contabilidad-->
     
     <navigation-rule>

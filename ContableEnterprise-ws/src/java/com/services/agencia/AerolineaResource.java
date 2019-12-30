@@ -147,7 +147,7 @@ public class AerolineaResource extends TemplateResource {
                         //r.setCode(u.getIdEmpleado().getIdEmpresa().getIdEmpresa());
                         r.setContent(lcomsion);
 
-                        ejbLogger.add(Accion.ACCESS, t.getUserName(), Formulario.AEROLINEA, user.getIp());
+                        ejbLogger.add(Accion.INSERT, t.getUserName(), Formulario.GESTIONES, user.getIp());
 
                         return r;
                     } else {

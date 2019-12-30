@@ -288,8 +288,8 @@ public class PagoAnticipadoResource extends TemplateResource {
                 response.setContent(json);
                 response.setEntidad(tmpJson);
 
-                String mensaje = Log.PAGO_ANTICIPADO_NUEVA_TRANSACION.replace("trx", trx.getIdPagoAnticipadoTransaccion().toString());
-                mensaje = mensaje.replace("<id>", trx.getIdPagoAnticipado().getIdPagoAnticipado().toString());
+                String mensaje = Log.PAGO_ANTICIPADO_NUEVA_TRANSACION.replace("trx", trx.getNumeracion().toString());
+                mensaje = mensaje.replace("<id>", trx.getIdPagoAnticipado().getNumeracion().toString());
                 
                 ejbLogger.add(Accion.INSERT, user.getUserName(), com.view.menu.Formulario.PAGOS_ANTICIPADOS, user.getIp(), mensaje);
 
@@ -528,7 +528,7 @@ public class PagoAnticipadoResource extends TemplateResource {
 
                 String msg = Log.PAGO_ANTICIPADO_DEVOLUCION;
                 msg = msg.replace("monto", data.getMonto().toString());
-                msg = msg.replace("id", data.getIdPagoAnticipado().getIdPagoAnticipado().toString());
+                msg = msg.replace("id", data.getIdPagoAnticipado().getNumeracion().toString());
 
                 ejbLogger.add(Accion.DEVOLUCION, user.getUserName(),
                         com.view.menu.Formulario.PAGOS_ANTICIPADOS, user.getIp(), msg);

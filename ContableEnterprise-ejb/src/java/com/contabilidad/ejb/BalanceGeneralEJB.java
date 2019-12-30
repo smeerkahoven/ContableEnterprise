@@ -6,17 +6,12 @@
 package com.contabilidad.ejb;
 
 import com.contabilidad.entities.BalanceDto;
-import com.contabilidad.entities.BalanceGeneralDto;
 import com.contabilidad.remote.BalanceGeneralRemote;
 import com.response.json.contabilidad.BalanceGeneralSearchJson;
 import com.seguridad.control.FacadeEJB;
 import com.seguridad.control.exception.CRUDException;
 import com.seguridad.utils.DateContable;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.StoredProcedureQuery;
 

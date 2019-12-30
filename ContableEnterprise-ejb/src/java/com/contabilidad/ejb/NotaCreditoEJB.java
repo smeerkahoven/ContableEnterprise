@@ -10,7 +10,10 @@ import com.agencia.entities.Boleto;
 import com.agencia.entities.Cliente;
 import com.configuracion.entities.CambioDolar;
 import com.configuracion.entities.ContabilidadBoletaje;
+import com.configuracion.entities.Gestion;
 import com.configuracion.remote.CambioRemote;
+import com.configuracion.remote.GestionRemote;
+import com.configuracion.remote.NumeracionRemote;
 import com.contabilidad.entities.AsientoContable;
 import com.contabilidad.entities.CargoBoleto;
 import com.contabilidad.entities.ComprobanteContable;
@@ -60,8 +63,21 @@ public class NotaCreditoEJB extends FacadeEJB implements NotasCreditoRemote {
     @EJB
     private NotaDebitoRemote ejbNotaDebito;
 
+    @EJB
+    private GestionRemote ejbGestion;
+
+    @EJB
+    private NumeracionRemote ejbNumeracion;
+
     @Override
     public NotaCredito createNewNotaCredito(String idUsuario, Integer idEmpresa) throws CRUDException {
+
+        Gestion gestion = ejbGestion.getCurrent();
+
+        if (gestion == null) {
+            throw new CRUDException("No ha iniciado una gestion. Por favor inicie una Gestion para poder continuar");
+        }
+
         User uFromDb = em.find(User.class, idUsuario);
         Optional op = Optional.ofNullable(uFromDb);
 
@@ -82,6 +98,9 @@ public class NotaCreditoEJB extends FacadeEJB implements NotasCreditoRemote {
         nota.setFechaInsert(DateContable.getCurrentDate());
         nota.setEstado(Estado.CREADO);
         nota.setFechaEmision(DateContable.getCurrentDate());
+        nota.setIdGestion(gestion.getIdGestion());
+        nota.setNumeracion(ejbNumeracion.getNotaCredito(gestion.getIdGestion()));
+        
         String fechaEmision = DateContable.getCurrentDateStr(DateContable.LATIN_AMERICA_FORMAT);
         CambioDolar diario = ejbCambio.get(fechaEmision, "CambioDolar.findFecha");
 

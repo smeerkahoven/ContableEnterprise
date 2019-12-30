@@ -48,15 +48,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "cnt_comprobante_contable")
 @TableGenerator(name = "comprobante_tg", initialValue = 0, allocationSize = 1)
 @XmlRootElement
-@NamedStoredProcedureQuery(
-        name = "ComprobanteContable.updateComprobanteContable",
-        procedureName = "updateComprobanteContable",
-        parameters = {
-            @StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_boleto")
-        }
-)
 
 @NamedStoredProcedureQueries({
+    @NamedStoredProcedureQuery(
+            name = "ComprobanteContable.updateComprobanteContable",
+            procedureName = "updateComprobanteContable",
+            parameters = {
+                @StoredProcedureParameter(mode = ParameterMode.IN, type = Integer.class, name = "in_id_boleto")
+            }
+    )
+    ,
     @NamedStoredProcedureQuery(
             name = "ComprobanteContable.updateMontosComprobanteContableFromAsientos",
             procedureName = "updateMontosComprobanteContableFromAsientos",
@@ -81,7 +82,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     , @NamedQuery(name = "ComprobanteContable.findByEstado", query = "SELECT c FROM ComprobanteContable c WHERE c.estado=:estado")
     , @NamedQuery(name = "ComprobanteContable.findAllComprobanteByNotaDebito", query = "SELECT c FROM ComprobanteContable c WHERE c.idNotaDebito=:idNotaDebito")
     , @NamedQuery(name = "ComprobanteContable.findAllComprobanteByNotaCredito", query = "SELECT c FROM ComprobanteContable c WHERE c.idNotaCredito=:idNotaCredito")
-        , @NamedQuery(name = "ComprobanteContable.findAllComprobanteByIngresoCaja", query = "SELECT c FROM ComprobanteContable c WHERE c.idIngresoCaja=:idIngresoCaja")
+    , @NamedQuery(name = "ComprobanteContable.findAllComprobanteByIngresoCaja", query = "SELECT c FROM ComprobanteContable c WHERE c.idIngresoCaja=:idIngresoCaja")
     , @NamedQuery(name = "ComprobanteContable.findAllComprobanteByPagoAnticipado", query = "SELECT c FROM ComprobanteContable c WHERE c.idPagoAnticipado=:idPagoAnticipado")
 
 })
@@ -524,7 +525,6 @@ public class ComprobanteContable extends Entidad {
         this.idDevolucion = idDevolucion;
     }
 
-
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -550,8 +550,5 @@ public class ComprobanteContable extends Entidad {
     public String toString() {
         return "ComprobanteContable{" + "idLibro=" + idLibro + ", gestion=" + gestion + ", idNumeroGestion=" + idNumeroGestion + ", idUsuarioCreador=" + idUsuarioCreador + ", idUsuarioAnulado=" + idUsuarioAnulado + ", fecha=" + fecha + ", concepto=" + concepto + ", estado=" + estado + ", factorCambiario=" + factorCambiario + ", tipo=" + tipo + ", idEmpresa=" + idEmpresa + ", idNotaDebito=" + idNotaDebito + ", idNotaCredito=" + idNotaCredito + ", idIngresoCaja=" + idIngresoCaja + ", idPagoAnticipado=" + idPagoAnticipado + ", idDevolucion=" + idDevolucion + ", totalDebeNac=" + totalDebeNac + ", totalHaberNac=" + totalHaberNac + ", totalDebeExt=" + totalDebeExt + ", totalHaberExt=" + totalHaberExt + ", fechaInsert=" + fechaInsert + ", conErrores=" + conErrores + ", nombre=" + nombre + ", idCliente=" + idCliente + ", transacciones=" + transacciones + '}';
     }
-
-    
-    
 
 }

@@ -10,7 +10,10 @@ import com.agencia.entities.Cliente;
 import com.agencia.entities.FormasPago;
 import com.configuracion.entities.CambioDolar;
 import com.configuracion.entities.ContabilidadBoletaje;
+import com.configuracion.entities.Gestion;
 import com.configuracion.remote.CambioRemote;
+import com.configuracion.remote.GestionRemote;
+import com.configuracion.remote.NumeracionRemote;
 import com.contabilidad.entities.AsientoContable;
 import com.contabilidad.entities.CargoBoleto;
 import com.contabilidad.entities.ComprobanteContable;
@@ -62,8 +65,21 @@ public class PagoAnticipadoEJB extends FacadeEJB implements PagoAnticipadoRemote
     @EJB
     private DevolucionRemote ejbDevolucion;
 
+    @EJB
+    private GestionRemote ejbGestion;
+
+    @EJB
+    private NumeracionRemote ejbNumeracion;
+
     @Override
     public PagoAnticipado createNewPagoAnticipado(String idUsuario, Integer idEmpresa) throws CRUDException {
+
+        Gestion gestion = ejbGestion.getCurrent();
+
+        if (gestion == null) {
+            throw new CRUDException("No ha iniciado una gestion. Por favor inicie una Gestion para poder continuar");
+        }
+
         User uFromDb = em.find(User.class, idUsuario);
         Optional op = Optional.ofNullable(uFromDb);
 
@@ -85,6 +101,8 @@ public class PagoAnticipadoEJB extends FacadeEJB implements PagoAnticipadoRemote
         pago.setEstado(Estado.PENDIENTE);
         pago.setFechaEmision(DateContable.getCurrentDate());
         pago.setFormaPago(FormasPago.EFECTIVO);
+        pago.setIdGestion(gestion.getIdGestion());
+        pago.setNumeracion(ejbNumeracion.getPagoAnticipado(gestion.getIdGestion()));
 
         String fechaEmision = DateContable.getCurrentDateStr(DateContable.LATIN_AMERICA_FORMAT);
         CambioDolar diario = ejbCambio.get(fechaEmision, "CambioDolar.findFecha");
@@ -375,17 +393,16 @@ public class PagoAnticipadoEJB extends FacadeEJB implements PagoAnticipadoRemote
         //Sacamos el mmonto anterior de la transaccion
         //y lo sumaremos al monto adeudado para actualizarlo
         Double montoBdIc = 0d;
-        if (fromDb.getIdPagoAnticipado().getMoneda().equals(Moneda.EXTRANJERA)){
+        if (fromDb.getIdPagoAnticipado().getMoneda().equals(Moneda.EXTRANJERA)) {
             montoBdIc = fromDb.getMontoUsd().doubleValue();
-        }else {
-            montoBdIc = fromDb.getMontoBs().doubleValue() ;
+        } else {
+            montoBdIc = fromDb.getMontoBs().doubleValue();
         }
         //montoBdIc = fromDb.getMonto().doubleValue();
-        
+
         // ESTO  ya estaba comentado
         //fromDb.setMonto(null);
         //em.merge(fromDb);
-
         Double montoBdNdTrx = 0d;
         //Nuevo monto Adeudado
         if (fromDb.getIdNotaTransaccion().getMoneda().equals(Moneda.NACIONAL)) {
@@ -538,6 +555,13 @@ public class PagoAnticipadoEJB extends FacadeEJB implements PagoAnticipadoRemote
 
     @Override
     public PagoAnticipadoTransaccion saveTransaccion(PagoAnticipadoTransaccion trx, String usuario) throws CRUDException {
+
+        Gestion gestion = ejbGestion.getCurrent();
+
+        if (gestion == null) {
+            throw new CRUDException("No ha iniciado una gestion. Por favor inicie una Gestion para poder continuar");
+        }
+
         Optional op = Optional.ofNullable(trx);
         if (!op.isPresent()) {
             throw new CRUDException("Debe especificar una Transacción.");
@@ -579,35 +603,34 @@ public class PagoAnticipadoEJB extends FacadeEJB implements PagoAnticipadoRemote
                 : paFromDb.getMontoTotalAcreditado().doubleValue();
 
         BigDecimal decAcreditado = new BigDecimal(montoTotalAcreditado);
-        
-        Double montoDisponibleBs= 0d;
-        Double montoDisponibleUsd= 0d;
-        
-        if (paFromDb.getMoneda().equals(Moneda.EXTRANJERA)){
+
+        Double montoDisponibleBs = 0d;
+        Double montoDisponibleUsd = 0d;
+
+        if (paFromDb.getMoneda().equals(Moneda.EXTRANJERA)) {
             montoDisponibleUsd = paFromDb.getMontoAnticipado().subtract(decAcreditado).setScale(2, BigDecimal.ROUND_UP).doubleValue();
-            montoDisponibleBs= montoDisponibleUsd * paFromDb.getFactorCambiario().doubleValue();
-        }else {
+            montoDisponibleBs = montoDisponibleUsd * paFromDb.getFactorCambiario().doubleValue();
+        } else {
             montoDisponibleBs = paFromDb.getMontoAnticipado().subtract(decAcreditado).setScale(2, BigDecimal.ROUND_UP).doubleValue();
-            montoDisponibleUsd= montoDisponibleBs/ paFromDb.getFactorCambiario().doubleValue();
+            montoDisponibleUsd = montoDisponibleBs / paFromDb.getFactorCambiario().doubleValue();
         }
 
         //Double montoDisponible = paFromDb.getMontoAnticipado().subtract(decAcreditado).setScale(2, BigDecimal.ROUND_UP).doubleValue();
-
         if (trx.getMoneda().equals(Moneda.NACIONAL)) {
             if (montoDisponibleBs < trx.getMontoCancelarBs().doubleValue()) {
                 throw new CRUDException(String.format("El monto introducido es mayor al total disponible: Total Disponible %.2f ", montoDisponibleBs));
             }
             trx.setMonto(trx.getMontoCancelarBs());
             trx.setMontoBs(trx.getMontoCancelarBs());
-            trx.setMontoUsd(trx.getMontoCancelarBs().divide(paFromDb.getFactorCambiario(),RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_DECIMAL_2,BigDecimal.ROUND_UP));
-            
+            trx.setMontoUsd(trx.getMontoCancelarBs().divide(paFromDb.getFactorCambiario(), RoundingMode.HALF_UP).setScale(Contabilidad.VALOR_DECIMAL_2, BigDecimal.ROUND_UP));
+
         } else {
             if (montoDisponibleUsd < trx.getMontoCancelarUsd().doubleValue()) {
                 throw new CRUDException(String.format("El monto introducido es mayor al total disponible: Total Disponible %.2f ", montoDisponibleUsd));
             }
             trx.setMonto(trx.getMontoCancelarUsd());
             trx.setMontoUsd(trx.getMontoCancelarUsd());
-            trx.setMontoBs(trx.getMontoCancelarUsd().multiply(paFromDb.getFactorCambiario()).setScale(Contabilidad.VALOR_DECIMAL_2,BigDecimal.ROUND_UP));
+            trx.setMontoBs(trx.getMontoCancelarUsd().multiply(paFromDb.getFactorCambiario()).setScale(Contabilidad.VALOR_DECIMAL_2, BigDecimal.ROUND_UP));
 
         }
 
@@ -617,6 +640,8 @@ public class PagoAnticipadoEJB extends FacadeEJB implements PagoAnticipadoRemote
         trx.setEstado(Estado.EMITIDO);
         trx.setDescripcion(trNDFromDB.getDescripcion());
         trx.setIdUsuarioCreador(usuario);
+        trx.setIdGestion(gestion.getIdGestion());
+        trx.setNumeracion(ejbNumeracion.getPagoAnticipadoTrans(gestion.getIdGestion()));
 
         ejbNotaDebito.actualizarMontosAdeudadosTransaccion(trx);
 
@@ -675,6 +700,12 @@ public class PagoAnticipadoEJB extends FacadeEJB implements PagoAnticipadoRemote
 
     @Override
     public Devolucion devolver(Devolucion d, String usuario) throws CRUDException {
+
+        Gestion gestion = ejbGestion.getCurrent();
+
+        if (gestion == null) {
+            throw new CRUDException("No ha iniciado una gestion. Por favor inicie una Gestion para poder continuar");
+        }
 
         Optional op = Optional.ofNullable(d.getIdPagoAnticipado());
         if (!op.isPresent()) {
@@ -744,13 +775,15 @@ public class PagoAnticipadoEJB extends FacadeEJB implements PagoAnticipadoRemote
         //Aqui se sabe que la transaccion es una devolucion
         trxDev.setTipo(PagoAnticipadoTransaccion.Tipo.DEVOLUCION);
         trxDev.setIdDevolucion(d);
+        trxDev.setIdGestion(gestion.getIdGestion());
+        trxDev.setNumeracion(ejbNumeracion.getPagoAnticipadoTrans(gestion.getIdGestion()));
 
-        if (pFromDb.getMoneda().equals(Moneda.EXTRANJERA)){
+        if (pFromDb.getMoneda().equals(Moneda.EXTRANJERA)) {
             trxDev.setMontoUsd(trxDev.getMonto());
-        }else {
+        } else {
             trxDev.setMontoBs(trxDev.getMonto());
         }
-        
+
         //salvamos la Transaccion del pago
         saveTransaccionDevolucion(trxDev, usuario);
 

@@ -16,6 +16,7 @@ import com.google.gson.JsonParser;
 import com.response.json.boletaje.IngresoCajaSearchJson;
 import com.response.json.boletaje.NotaCreditoSearchJson;
 import com.response.json.boletaje.PagoAnticipadoSearchJson;
+import com.response.json.configuracion.GestionJson;
 import com.response.json.configuracion.ParametrosJson;
 import com.response.json.contabilidad.AsientoContableJSON;
 import com.response.json.contabilidad.BalanceGeneralSearchJson;
@@ -326,6 +327,20 @@ public class BeanUtils {
         return bjson;
     }
 
+     public static GestionJson converToGestion(final RestRequest request) {
+        if (request.getContent() == null) {
+            return new GestionJson();
+        }
+
+        GestionJson bjson;
+        Gson gson = new GsonBuilder().create();
+        JsonParser parser = new JsonParser();
+        JsonObject object = parser.parse((String) request.getContent()).getAsJsonObject();
+        bjson = gson.fromJson(object.toString(), GestionJson.class);
+
+        return bjson;
+    }
+    
     public static AsientoContableJSON convertToAsientoContable(final RestRequest request) {
 
         if (request.getContent() == null) {

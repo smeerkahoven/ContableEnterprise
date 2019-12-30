@@ -43,6 +43,7 @@ public class ApplicationConfig extends Application {
         resources.add(com.services.cobranzas.ReporteEstadoClienteResource.class);
         resources.add(com.services.configuracion.BoletajeResource.class);
         resources.add(com.services.configuracion.FactoresResource.class);
+        resources.add(com.services.configuracion.GestionResource.class);
         resources.add(com.services.configuracion.ParametrosResource.class);
         resources.add(com.services.configuracion.UserPersonalResource.class);
         resources.add(com.services.contabilidad.BalanceGeneralResource.class);

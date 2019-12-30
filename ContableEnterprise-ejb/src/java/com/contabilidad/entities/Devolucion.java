@@ -91,6 +91,12 @@ public class Devolucion extends Entidad {
 //    @Size(max = 1)
     @Column(name = "estado", length = 1)
     private String estado;
+    
+    @Column(name="id_gestion")
+    private Integer idGestion ;
+    
+    @Column(name="numeracion")
+    private Integer numeracion ;
 
     public Devolucion() {
     }
@@ -98,6 +104,24 @@ public class Devolucion extends Entidad {
     public Devolucion(Integer idDevolucion) {
         this.idDevolucion = idDevolucion;
     }
+
+    public Integer getIdGestion() {
+        return idGestion;
+    }
+
+    public void setIdGestion(Integer idGestion) {
+        this.idGestion = idGestion;
+    }
+
+    public Integer getNumeracion() {
+        return numeracion;
+    }
+
+    public void setNumeracion(Integer numeracion) {
+        this.numeracion = numeracion;
+    }
+    
+    
 
     public Integer getIdDevolucion() {
         return idDevolucion;

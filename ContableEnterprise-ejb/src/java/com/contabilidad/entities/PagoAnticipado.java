@@ -114,6 +114,12 @@ public class PagoAnticipado extends Entidad {
     private String estado;
     @OneToMany(mappedBy = "idPagoAnticipado")
     private Collection<PagoAnticipadoTransaccion> pagoAnticipadoTransaccionCollection;
+    
+    @Column(name = "id_gestion")
+    private Integer idGestion ;
+    
+    @Column(name = "numeracion")
+    private Integer numeracion ;
 
     public PagoAnticipado() {
     }
@@ -136,6 +142,22 @@ public class PagoAnticipado extends Entidad {
 
     public void setIdTarjetaCredito(Integer idTarjetaCredito) {
         this.idTarjetaCredito = idTarjetaCredito;
+    }
+
+    public Integer getIdGestion() {
+        return idGestion;
+    }
+
+    public void setIdGestion(Integer idGestion) {
+        this.idGestion = idGestion;
+    }
+
+    public Integer getNumeracion() {
+        return numeracion;
+    }
+
+    public void setNumeracion(Integer numeracion) {
+        this.numeracion = numeracion;
     }
     
     

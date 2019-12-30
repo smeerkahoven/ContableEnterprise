@@ -8,7 +8,7 @@ import javax.annotation.Generated;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2019-12-16T01:24:55")
+@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2019-12-30T03:02:47")
 @StaticMetamodel(NotaDebito.class)
 public class NotaDebito_ { 
 
@@ -16,6 +16,8 @@ public class NotaDebito_ {
     public static volatile SingularAttribute<NotaDebito, String> estado;
     public static volatile SingularAttribute<NotaDebito, Integer> idNotaDebito;
     public static volatile SingularAttribute<NotaDebito, Date> fechaInsert;
+    public static volatile SingularAttribute<NotaDebito, Integer> numeracion;
+    public static volatile SingularAttribute<NotaDebito, Integer> idGestion;
     public static volatile SingularAttribute<NotaDebito, Short> combinadoCredito;
     public static volatile SingularAttribute<NotaDebito, Date> creditoVencimiento;
     public static volatile SingularAttribute<NotaDebito, String> nroCheque;

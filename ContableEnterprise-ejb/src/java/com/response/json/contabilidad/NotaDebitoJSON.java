@@ -47,9 +47,12 @@ public class NotaDebitoJSON {
     private Short combinadoCredito;
     private String combinadoContadoTipo;
     private String estado ;
+    private Integer numeracion ;
 
     public static NotaDebitoJSON toNotaDebitoJSON(NotaDebito nota) {
         NotaDebitoJSON ndj = new NotaDebitoJSON();
+        
+        ndj.setNumeracion(nota.getNumeracion());
         ndj.setCombinadoContado(nota.getCombinadoContado());
         ndj.setCombinadoContadoTipo(nota.getCombinadoContadoTipo());
         ndj.setCombinadoCredito(nota.getCombinadoCredito());
@@ -135,6 +138,7 @@ public class NotaDebitoJSON {
         ndj.setNroDeposito(nota.getNroDeposito());
         ndj.setNroTarjeta(nota.getNroTarjeta());
         ndj.setEstado(nota.getEstado());
+        ndj.setNumeracion(nota.getNumeracion());
         
         return ndj;
     }
@@ -156,6 +160,14 @@ public class NotaDebitoJSON {
 
     public void setEstado(String estado) {
         this.estado = estado;
+    }
+
+    public Integer getNumeracion() {
+        return numeracion;
+    }
+
+    public void setNumeracion(Integer numeracion) {
+        this.numeracion = numeracion;
     }
     
     

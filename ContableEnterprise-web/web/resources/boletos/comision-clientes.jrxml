@@ -36,6 +36,7 @@
  , coalesce(bo.monto_fee, 0.00) fee
  , coalesce(bo.monto_descuento,0.00)descuento
  , cl.nombre cliente
+ , nd.numeracion
 from cnt_boleto bo
 inner join cnt_aerolinea ae on ae.id_aerolinea = bo.id_aerolinea
 inner join cnt_nota_debito nd on nd.id_nota_debito = bo.id_nota_debito
@@ -48,10 +49,6 @@ and bo.tipo_cupon = $P{ID_TIPO_CUPON}
 order by bo.fecha_emision
  ;]]>
 	</queryString>
-	<field name="ticket_number" class="java.lang.Long"/>
-	<field name="impuestos" class="java.math.BigDecimal"/>
-	<field name="ruta" class="java.lang.String"/>
-	<field name="cliente" class="java.lang.String"/>
 	<field name="id_boleto" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
@@ -67,6 +64,15 @@ order by bo.fecha_emision
 	<field name="id_nota_debito" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
+	<field name="tipo_boleto" class="java.lang.String">
+		<fieldDescription><![CDATA[Multiple M
+Simple S]]></fieldDescription>
+	</field>
+	<field name="tipo_cupon" class="java.lang.String">
+		<fieldDescription><![CDATA[Internacional I
+NAcional N]]></fieldDescription>
+	</field>
+	<field name="ticket_number" class="java.lang.Long"/>
 	<field name="fecha_emision" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
@@ -76,9 +82,11 @@ order by bo.fecha_emision
 	<field name="importe_neto" class="java.math.BigDecimal">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
+	<field name="impuestos" class="java.math.BigDecimal"/>
 	<field name="total_boleto" class="java.math.BigDecimal">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
+	<field name="ruta" class="java.lang.String"/>
 	<field name="nombre_pasajero" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
@@ -88,13 +96,9 @@ order by bo.fecha_emision
 	<field name="descuento" class="java.math.BigDecimal">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
-	<field name="tipo_cupon" class="java.lang.String">
-		<fieldDescription><![CDATA[Internacional I
-NAcional N]]></fieldDescription>
-	</field>
-	<field name="tipo_boleto" class="java.lang.String">
-		<fieldDescription><![CDATA[Multiple M
-Simple S]]></fieldDescription>
+	<field name="cliente" class="java.lang.String"/>
+	<field name="numeracion" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<variable name="TOTAL_IMPORTE_NETO" class="java.math.BigDecimal" calculation="Sum">
 		<variableExpression><![CDATA[$F{importe_neto}]]></variableExpression>
@@ -288,7 +292,7 @@ Simple S]]></fieldDescription>
 				<textElement textAlignment="Right">
 					<font fontName="Monospaced"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{id_nota_debito}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{numeracion}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
 				<reportElement x="131" y="0" width="104" height="14" uuid="4a187750-3a67-45a1-94c3-db981895cf7e"/>

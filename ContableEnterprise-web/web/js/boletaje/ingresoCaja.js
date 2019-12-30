@@ -29,6 +29,7 @@ function IngresoCaja() {
     this.nroDeposito = null;
     this.idCuentaDeposito = null;
     this.estado;
+    this.numeracion = null ;
 }
 
 function IngresoTransaccion() {
@@ -47,6 +48,7 @@ function IngresoTransaccion() {
     this.factorCambiario = null;
     this.montoMaxCancelarBs = null;
     this.montoMaxCancelarUsd = null;
+    this.ndNumeracion = null ;
 }
 
 IngresoCaja.prototype = Object.create(IngresoCaja.prototype);

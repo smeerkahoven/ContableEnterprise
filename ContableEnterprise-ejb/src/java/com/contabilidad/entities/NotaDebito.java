@@ -286,6 +286,19 @@ public class NotaDebito extends Entidad {
     private Short combinadoCredito;
     @Column(name = "combinado_contado_tipo")
     private String combinadoContadoTipo;
+    @Column(name = "numeracion")
+    private Integer numeracion ;
+    
+    @Column(name = "id_gestion")
+    private Integer idGestion ;
+
+    public Integer getIdGestion() {
+        return idGestion;
+    }
+
+    public void setIdGestion(Integer idGestion) {
+        this.idGestion = idGestion;
+    }
 
     @Column(name = "estado")
     private String estado;
@@ -301,6 +314,16 @@ public class NotaDebito extends Entidad {
         this.idEmpresa = idEmpresa;
         this.idNotaDebito = idNotaDebito;
     }
+
+    public Integer getNumeracion() {
+        return numeracion;
+    }
+
+    public void setNumeracion(Integer numeracion) {
+        this.numeracion = numeracion;
+    }
+    
+    
 
     public Integer getIdEmpresa() {
         return idEmpresa;

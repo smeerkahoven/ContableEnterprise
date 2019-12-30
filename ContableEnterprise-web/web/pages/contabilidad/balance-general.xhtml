@@ -205,13 +205,13 @@
                                                     </thead>
                                                     <tbody>
                                                         <tr st-select-row="row" st-select-mode="multiple" 
-                                                            ng-repeat="row in display_records" ng-class="{'table-success': row.idPlanCuenta === 0 }">
+                                                            ng-repeat="row in display_records" ng-class="{'total-0': row.idPlanCuenta === 0 }">
                                                             <td>{{row.cuenta}} </td>
-                                                            <td>{{row.nivel === 5 ? printMonto(row) : '-'}} </td>
-                                                            <td>{{row.nivel === 4 ? printMonto(row) : '-'}} </td>
-                                                            <td>{{row.nivel === 3 ? printMonto(row) : '-'}} </td>
-                                                            <td>{{row.nivel === 2 ? printMonto(row) : '-'}} </td>
-                                                            <td>{{row.nivel === 1 ? printMonto(row) : '-'}} </td>
+                                                            <td align="right">{{row.nivel === 5 ? printMonto(row) : '-'}} </td>
+                                                            <td align="right">{{row.nivel === 4 ? printMonto(row) : '-'}} </td>
+                                                            <td align="right">{{row.nivel === 3 ? printMonto(row) : '-'}} </td>
+                                                            <td align="right">{{row.nivel === 2 ? printMonto(row) : '-'}} </td>
+                                                            <td align="right">{{row.nivel === 1 ? printMonto(row) : '-'}} </td>
                                                         </tr>
                                                     </tbody>
                                                 </table>
@@ -256,13 +256,13 @@
                                                         </thead>
                                                         <tbody>
                                                             <tr 
-                                                                ng-repeat="row in gridPasivos" ng-class="{'table-success': row.idPlanCuenta === 0 }">
+                                                                ng-repeat="row in gridPasivos" ng-class="{'total-0': row.idPlanCuenta === 0 }">
                                                                 <td>{{row.cuenta}} </td>
-                                                                <td>{{row.nivel === 5 ? printMonto(row) : '-'}} </td>
-                                                                <td>{{row.nivel === 4 ? printMonto(row) : '-'}} </td>
-                                                                <td>{{row.nivel === 3 ? printMonto(row) : '-'}} </td>
-                                                                <td>{{row.nivel === 2 ? printMonto(row) : '-'}} </td>
-                                                                <td>{{row.nivel === 1 ? printMonto(row) : '-'}} </td>
+                                                                <td align="right">{{row.nivel === 5 ? printMonto(row) : '-'}} </td>
+                                                                <td align="right">{{row.nivel === 4 ? printMonto(row) : '-'}} </td>
+                                                                <td align="right">{{row.nivel === 3 ? printMonto(row) : '-'}} </td>
+                                                                <td align="right">{{row.nivel === 2 ? printMonto(row) : '-'}} </td>
+                                                                <td align="right">{{row.nivel === 1 ? printMonto(row) : '-'}} </td>
                                                             </tr>
                                                         </tbody>
                                                     </table>

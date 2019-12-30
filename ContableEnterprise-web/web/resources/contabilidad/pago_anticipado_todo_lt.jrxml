@@ -9,6 +9,7 @@
 	<queryString>
 		<![CDATA[select distinct
   pa.id_pago_anticipado
+, pa.numeracion
   , cc.id_numero_gestion
  , cc.gestion
 -- , cc.tipo
@@ -39,9 +40,13 @@
 , date_format(pat.fecha_insert,'%d/%m/%y')fecha_emision
 , ndt.id_nota_debito
 , de .id_devolucion
+, nd.numeracion nd_numeracion
+, de.numeracion de_numeracion
+, pat.numeracion pat_numeracion
  from cnt_pago_anticipado pa 
  inner join cnt_pago_anticipado_transaccion pat on pat.id_pago_anticipado = pa.id_pago_anticipado
  left join cnt_nota_debito_transaccion ndt on ndt.id_nota_debito_transaccion = pat.id_nota_debito_transaccion
+ left join cnt_nota_debito nd on nd.id_nota_debito = ndt.id_nota_debito
  inner join tb_empresa em on em.id_empresa = pa.id_empresa
  inner join cnt_cliente cl on cl.id_cliente = pa.id_cliente
  left join cnt_bancos ba on ba.id_banco = pa.id_banco
@@ -52,6 +57,9 @@
 WHERE pa.id_pago_anticipado=$P{ID_PAGO}]]>
 	</queryString>
 	<field name="id_pago_anticipado" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="numeracion" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="id_numero_gestion" class="java.lang.Integer">
@@ -116,6 +124,9 @@ WHERE pa.id_pago_anticipado=$P{ID_PAGO}]]>
 	<field name="id_devolucion" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
+	<field name="nd_numeracion" class="java.lang.Integer"/>
+	<field name="de_numeracion" class="java.lang.Integer"/>
+	<field name="pat_numeracion" class="java.lang.Integer"/>
 	<variable name="TOTAL_TRANS" class="java.math.BigDecimal" calculation="Sum">
 		<variableExpression><![CDATA[$F{estado_trx}=="A"?0: $F{monto_trx}]]></variableExpression>
 	</variable>
@@ -132,7 +143,7 @@ WHERE pa.id_pago_anticipado=$P{ID_PAGO}]]>
 				<textElement textAlignment="Right">
 					<font fontName="Monospaced" size="12" isBold="false" isItalic="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Pago Anticipado #"+$F{id_pago_anticipado}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Pago Anticipado #"+$F{numeracion}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="76" y="4" width="147" height="12" uuid="ca94cafc-2689-4783-b095-d2e97d8258be"/>
@@ -311,7 +322,7 @@ WHERE pa.id_pago_anticipado=$P{ID_PAGO}]]>
 				<textElement textAlignment="Left">
 					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[$F{id_pago_anticipado_transaccion}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{pat_numeracion}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true">
 				<reportElement x="147" y="0" width="307" height="12" uuid="e21c8439-99da-44dc-af8f-77175da24e9e"/>
@@ -319,7 +330,7 @@ WHERE pa.id_pago_anticipado=$P{ID_PAGO}]]>
 					<font fontName="Monospaced" size="10" isBold="false" pdfFontName="Courier" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{descripcion} + 
-( $F{id_nota_debito}!= null? " - ND : " + $F{id_nota_debito} : " - DE : " +$F{id_devolucion} ) 
+( $F{id_nota_debito}!= null? " - ND : " + $F{nd_numeracion} : " - DE : " +$F{de_numeracion} ) 
 +" " + ($F{estado_trx} == "A" ? "ANULADO" : "")]]></textFieldExpression>
 			</textField>
 			<textField pattern="#,##0.00">

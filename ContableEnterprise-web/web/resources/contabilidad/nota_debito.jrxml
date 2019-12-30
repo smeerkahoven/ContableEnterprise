@@ -8,6 +8,7 @@
 	</parameter>
 	<queryString>
 		<![CDATA[select nd.id_nota_debito,
+	nd.numeracion,
 	cc.gestion,cc.id_numero_gestion,
     em.tipo,
 	nd.id_cliente, upper(cl.nombre) cliente, cl.telefono_fijo,
@@ -159,7 +160,7 @@ sucursal]]></fieldDescription>
 				<textElement textAlignment="Right">
 					<font fontName="Courier 10 Pitch" size="11" isBold="false" isItalic="false" pdfFontName="Courier" isPdfEmbedded="false"/>
 				</textElement>
-				<textFieldExpression><![CDATA["Nota de Debito #"+$F{id_nota_debito}]]></textFieldExpression>
+				<textFieldExpression><![CDATA["Nota de Debito #"+$F{numeracion}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="4" y="1" width="60" height="12" uuid="1173e75e-de4a-40f3-ac13-4c65e0087764"/>

@@ -35,6 +35,7 @@ public class NotaCreditoJson {
     private String concepto;
     private String estado;
     private LinkedList<NotaCreditoTransaccionJson> transacciones;
+    private Integer numeracion ;
 
     
     public static List<NotaCreditoJson> toNotaCredito(List<NotaCredito> list){
@@ -64,6 +65,7 @@ public class NotaCreditoJson {
         data.setIdUsuario(json.getIdUsuario());
         data.setMontoAbonadoBs(json.getMontoAbonadoBs());
         data.setMontoAbonadoUsd(json.getMontoAbonadoUsd());
+        data.setNumeracion(json.getNumeracion());
 
         return data;
     }
@@ -85,10 +87,21 @@ public class NotaCreditoJson {
         json.setIdUsuario(data.getIdUsuario());
         json.setMontoAbonadoBs(data.getMontoAbonadoBs());
         json.setMontoAbonadoUsd(data.getMontoAbonadoUsd());
+        json.setNumeracion(data.getNumeracion());
         //json.setTransacciones( NotaCreditoTransaccionJson.toNotaCreditoTransaccionListJsOn(data.getNotaCreditoTransaccionList()));
 
         return json;
     }
+
+    public Integer getNumeracion() {
+        return numeracion;
+    }
+
+    public void setNumeracion(Integer numeracion) {
+        this.numeracion = numeracion;
+    }
+    
+    
 
     public Integer getIdNotaCredito() {
         return idNotaCredito;

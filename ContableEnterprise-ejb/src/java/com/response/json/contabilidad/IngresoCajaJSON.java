@@ -39,6 +39,7 @@ public class IngresoCajaJSON implements Serializable {
     private String nroDeposito;
     private Integer idCuentaDeposito;
     private String estado;
+    private Integer numeracion ;
     
     public static List<IngresoCajaJSON> toIngresoCajaList(List<IngresoCaja> list){
         LinkedList<IngresoCajaJSON> returnList = new LinkedList<>();
@@ -80,6 +81,7 @@ public class IngresoCajaJSON implements Serializable {
         caja.setMontoAbonadoUsd(json.getMontoAbonadoUsd());
         
         caja.setFactorCambiario(json.getFactorCambiario());
+        caja.setNumeracion(json.getNumeracion());
         
         return caja;
     }
@@ -110,10 +112,19 @@ public class IngresoCajaJSON implements Serializable {
         json.setNroCheque(ingreso.getNroCheque());
         json.setNroDeposito(ingreso.getNroDeposito());
         json.setNroTarjeta(ingreso.getNroTarjeta());
+        json.setNumeracion(ingreso.getNumeracion());
         
         json.setFactorCambiario(ingreso.getFactorCambiario());
         
         return json;
+    }
+
+    public Integer getNumeracion() {
+        return numeracion;
+    }
+
+    public void setNumeracion(Integer numeracion) {
+        this.numeracion = numeracion;
     }
     
     public Integer getIdIngresoCaja() {

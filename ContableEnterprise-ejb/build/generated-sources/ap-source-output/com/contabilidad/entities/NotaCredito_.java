@@ -9,21 +9,23 @@ import javax.persistence.metamodel.ListAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
-@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2019-12-16T01:24:55")
+@Generated(value="EclipseLink-2.5.2.v20140319-rNA", date="2019-12-30T03:02:47")
 @StaticMetamodel(NotaCredito.class)
 public class NotaCredito_ { 
 
     public static volatile SingularAttribute<NotaCredito, String> estado;
-    public static volatile SingularAttribute<NotaCredito, Cliente> idCliente;
     public static volatile SingularAttribute<NotaCredito, String> idUsuario;
     public static volatile SingularAttribute<NotaCredito, Integer> idNotaCredito;
-    public static volatile SingularAttribute<NotaCredito, BigDecimal> montoAbonadoBs;
-    public static volatile SingularAttribute<NotaCredito, String> concepto;
     public static volatile SingularAttribute<NotaCredito, Date> fechaEmision;
     public static volatile SingularAttribute<NotaCredito, Date> fechaInsert;
-    public static volatile SingularAttribute<NotaCredito, Integer> idEmpresa;
+    public static volatile SingularAttribute<NotaCredito, Integer> idGestion;
+    public static volatile SingularAttribute<NotaCredito, Integer> numeracion;
     public static volatile ListAttribute<NotaCredito, NotaCreditoTransaccion> notaCreditoTransaccionList;
     public static volatile SingularAttribute<NotaCredito, BigDecimal> montoAbonadoUsd;
     public static volatile SingularAttribute<NotaCredito, BigDecimal> factorCambiario;
+    public static volatile SingularAttribute<NotaCredito, Cliente> idCliente;
+    public static volatile SingularAttribute<NotaCredito, BigDecimal> montoAbonadoBs;
+    public static volatile SingularAttribute<NotaCredito, String> concepto;
+    public static volatile SingularAttribute<NotaCredito, Integer> idEmpresa;
 
 }

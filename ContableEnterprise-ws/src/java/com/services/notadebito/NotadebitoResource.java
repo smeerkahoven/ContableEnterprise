@@ -370,7 +370,7 @@ public class NotadebitoResource extends TemplateResource {
             Logger.getLogger(BoletoResource.class.getName()).log(Level.SEVERE, null, ex);
             
             response.setCode(ResponseCode.RESTFUL_ERROR.getCode());
-            response.setContent(mensajes.getProperty(RestResponse.RESTFUL_CANT_CREATE_NOTA_DEBITO));
+            response.setContent(mensajes.getProperty(RestResponse.RESTFUL_CANT_CREATE_NOTA_DEBITO)+ ":" + ex.getMessage());
         }
         
         return response;

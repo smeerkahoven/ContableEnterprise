@@ -34,8 +34,9 @@ public class NotaCreditoTransaccionJson implements Serializable {
     private Integer idNotaCredito;
 
     private Integer idNotaDebitoTransaccion;
-
+    
     private Integer idNotaDebito;
+    private Integer ndNumeracion ;
     private BigDecimal montoAdeudadoBs;
     private BigDecimal montoAdeudadoUsd;
     private BigDecimal montoTransaccionBs;
@@ -89,6 +90,8 @@ public class NotaCreditoTransaccionJson implements Serializable {
         json.setMontoTransaccionBs(data.getIdNotaTransaccion().getMontoBs());
         json.setMontoTransaccionUsd(data.getIdNotaTransaccion().getMontoUsd());
         json.setMonedaTransaccion(data.getIdNotaTransaccion().getMoneda());
+        
+        json.setNdNumeracion(data.getIdNotaTransaccion().getIdNotaDebito().getNumeracion());
 
         if (json.getMoneda().equals(Moneda.NACIONAL)) {
             json.setMonto(data.getMontoBs());
@@ -117,6 +120,16 @@ public class NotaCreditoTransaccionJson implements Serializable {
 
         return data;
     }
+
+    public Integer getNdNumeracion() {
+        return ndNumeracion;
+    }
+
+    public void setNdNumeracion(Integer ndNumeracion) {
+        this.ndNumeracion = ndNumeracion;
+    }
+    
+    
 
     public String getIdUsuario() {
         return idUsuario;

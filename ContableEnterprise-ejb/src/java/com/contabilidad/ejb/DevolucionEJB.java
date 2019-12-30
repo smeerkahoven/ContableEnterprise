@@ -8,6 +8,9 @@ package com.contabilidad.ejb;
 import com.agencia.entities.Cliente;
 import com.agencia.entities.FormasPago;
 import com.configuracion.entities.ContabilidadBoletaje;
+import com.configuracion.entities.Gestion;
+import com.configuracion.remote.GestionRemote;
+import com.configuracion.remote.NumeracionRemote;
 import com.contabilidad.entities.AsientoContable;
 import com.contabilidad.entities.ComprobanteContable;
 import com.contabilidad.entities.Devolucion;
@@ -36,8 +39,20 @@ public class DevolucionEJB extends FacadeEJB implements DevolucionRemote {
     @EJB
     private ComprobanteRemote ejbComprobante;
 
+    @EJB
+    private GestionRemote ejbGestion ;
+    
+    @EJB 
+    private NumeracionRemote ejbNumeracion ;
+    
     @Override
     public Devolucion saveDevolucionFromPagoAnticipado(Devolucion devolucion, PagoAnticipado pFromDb) throws CRUDException {
+        
+            Gestion gestion = ejbGestion.getCurrent();
+
+        if (gestion == null) {
+            throw new CRUDException("No ha iniciado una gestion. Por favor inicie una Gestion para poder continuar");
+        }
 
         Double montoDevolucion = devolucion.getMonto().doubleValue();
         Double montoMaxDevolucion = pFromDb.getMontoAnticipado().subtract(pFromDb.getMontoTotalAcreditado() != null ? pFromDb.getMontoTotalAcreditado() : BigDecimal.ZERO).doubleValue();
@@ -54,6 +69,8 @@ public class DevolucionEJB extends FacadeEJB implements DevolucionRemote {
 
         devolucion.setEstado(Estado.EMITIDO);
         devolucion.setFechaInsert(DateContable.getCurrentDate());
+        devolucion.setIdGestion(gestion.getIdGestion());
+        devolucion.setNumeracion(ejbNumeracion.getDevolucion(gestion.getIdGestion()));
 
         devolucion.setIdDevolucion(insert(devolucion));
 

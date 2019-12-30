@@ -13,7 +13,10 @@ import com.agencia.entities.FormasPago;
 import com.agencia.entities.TarjetaCredito;
 import com.configuracion.entities.CambioDolar;
 import com.configuracion.entities.ContabilidadBoletaje;
+import com.configuracion.entities.Gestion;
 import com.configuracion.remote.CambioRemote;
+import com.configuracion.remote.GestionRemote;
+import com.configuracion.remote.NumeracionRemote;
 import com.contabilidad.entities.AsientoContable;
 import com.contabilidad.entities.CargoBoleto;
 import com.contabilidad.entities.ComprobanteContable;
@@ -62,6 +65,12 @@ public class IngresoCajaEJB extends FacadeEJB implements IngresoCajaRemote {
     private ComprobanteRemote ejbComprobante;
     @EJB
     private LoggerRemote ejbLoger;
+    
+     @EJB
+    private GestionRemote ejbGestion ;
+    
+    @EJB
+    private NumeracionRemote ejbNumeracion ;
 
     //YA NO SE USA
     @Override
@@ -133,6 +142,12 @@ public class IngresoCajaEJB extends FacadeEJB implements IngresoCajaRemote {
     @Override
     public synchronized IngresoCaja createNewIngresoCaja(String idUsuario, Integer idEmpresa) throws CRUDException {
         
+        Gestion gestion = ejbGestion.getCurrent() ;
+        
+        if (gestion == null) {
+            throw new CRUDException ("No ha iniciado una gestion. Por favor inicie una Gestion para poder continuar");
+        }
+        
         User uFromDb = em.find(User.class, idUsuario);
         Optional op = Optional.ofNullable(uFromDb);
         
@@ -155,6 +170,8 @@ public class IngresoCajaEJB extends FacadeEJB implements IngresoCajaRemote {
         caja.setEstado(Estado.CREADO);
         caja.setFormaPago(FormasPago.EFECTIVO);
         caja.setFechaEmision(DateContable.getCurrentDate());
+        caja.setIdGestion(gestion.getIdGestion());
+        caja.setNumeracion(ejbNumeracion.getIngresoCaja(gestion.getIdGestion()));
         
         String fechaEmision = DateContable.getCurrentDateStr(DateContable.LATIN_AMERICA_FORMAT);
         CambioDolar diario = ejbCambio.get(fechaEmision, "CambioDolar.findFecha");

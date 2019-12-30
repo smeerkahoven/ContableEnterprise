@@ -111,6 +111,12 @@ public class NotaCredito extends Entidad {
     
     @OneToMany(mappedBy = "idNotaCredito")
     private List<NotaCreditoTransaccion> notaCreditoTransaccionList;
+    
+    @Column(name = "id_gestion")
+    private Integer idGestion ;
+    
+    @Column(name="numeracion")
+    private Integer numeracion ;
 
     public NotaCredito() {
     }
@@ -124,6 +130,24 @@ public class NotaCredito extends Entidad {
         this.idUsuario = idUsuario;
         this.fechaInsert = fechaInsert;
     }
+
+    public Integer getIdGestion() {
+        return idGestion;
+    }
+
+    public void setIdGestion(Integer idGestion) {
+        this.idGestion = idGestion;
+    }
+
+    public Integer getNumeracion() {
+        return numeracion;
+    }
+
+    public void setNumeracion(Integer numeracion) {
+        this.numeracion = numeracion;
+    }
+    
+    
 
     public Integer getIdEmpresa() {
         return idEmpresa;
